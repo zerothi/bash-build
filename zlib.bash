@@ -8,3 +8,14 @@ pack_set -s $CONFIGURE -s $MAKE_CHECK -s $MAKE_INSTALL -s $MAKE_PARALLEL \
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libz.a
+
+# Install commands that it should run
+pack_set --command "./configure" \
+    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--static"
+
+# Make commands
+pack_set --command "make"
+pack_set --command "make" \
+    --command-flag "check" \
+    --command-flag "install"

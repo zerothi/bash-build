@@ -98,6 +98,11 @@ declare -a _package
 declare -a _version
 # The directory of the extracted package
 declare -a _directory
+# A command sequence of the extracted package (executed before make commands)
+declare -a _cmd
+# A separator used for commands that can be given consequitively
+_LIST_SEP=";"
+# The counter to hold the archives
 _N_archives=-1
 
 # $1 http path
@@ -117,7 +122,10 @@ function add_package {
     [ "${#d}" -eq "${#fn}" ] && d=${fn%.$ext}
     _directory[$_N_archives]=$d
     # Save the version
-    local v=`expr match "$d" '.*[-_]\([0-9].*[0-9]\)'`
+    local v=`expr match "$d" '.*[-_]\([0-9.]*]\)'`
+    if [ -z "$v" ]; then
+	v=`expr match "$d" '[^0-9]*\([0-9.]*\)'`
+    fi
     _version[$_N_archives]=$v
     # Save the settings
     _settings[$_N_archives]=0
@@ -140,6 +148,7 @@ function pack_set {
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
+    local cmd="" ; local cmd_flags=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -148,6 +157,8 @@ function pack_set {
 	esac
 	shift
 	case $opt in
+            -C|-command)  cmd="$1" ; shift ;;
+            -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # Can be called several times
             -I|-install-prefix)  install="$1" ; shift ;;
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
@@ -159,17 +170,13 @@ function pack_set {
 	    *)
 		# We do a crude check
 		# We have an argument
-		$(isnumber $opt)
-		if [ $? -eq 0 ]; then # We have a number
-		    index=$opt
-		else
-		    index=$(get_index $opt)
-		fi
+		index=$(get_index $opt)
 		shift $#
 		echo "We break now on $opt and $#"
 	esac
     done
     # We now have index to be the correct spanning
+    [ ! -z "$cmd" ]        && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     [ ! -z "$install" ]    && _install_prefix[$index]=$install
     [ ! -z "$query" ]      && _install_query[$index]=$query
     [ ! -z "$alias" ]      && _alias[$index]=$alias
@@ -190,20 +197,13 @@ function pack_get {
     shift
     local index=$_N_archives # Default to this
     # We check whether a specific index is requested
-    if [ $# -gt 0 ]; then
-	# We have an argument
-	$(isnumber $1)
-	if [ $? -eq 0 ]; then # We have a number
-	    index=$1
-	else
-	    index=$(get_index $1)
-	fi
-    fi
+    [ $# -gt 0 ] && index=$(get_index $1)
     # Check that the index is valid
     [ "$index" -gt "$_N_archives" ] && return 1
     [ "$index" -lt 0 ] && return 1
     # Process what is requested
     case $opt in
+	-C|-commands)        echo ${_cmd[$index]} ;;
 	-h|-u|-url|-http)    echo ${_http[$index]} ;;
         -I|-install-prefix)  echo ${_install_prefix[$index]} ;;
         -Q|-install-query)   echo ${_install_query[$index]} ;;
@@ -220,12 +220,74 @@ function pack_get {
     esac
 }
 
+# Install the package
+function pack_install {
+    # We install the package
+    local archive=""
+    archive="$(pack_get --archive $1)"
+    [ $? -ne "0" ] && return 1
+    
+     # Check that the thing is not already installed
+    if [ ! -e $(pack_get --install-query $1) ]; then
+
+        # Show that we will install
+	install -I $1
+
+        # Download archive
+	dwn_file $1 $archive_dir
+	
+        # Extract the archive
+	pushd $compile_dir
+	extract_archive $archive_dir $1
+	pushd $(pack_get --directory $1)
+	
+        # We are now in the package directory
+	if [ $(has_setting $BUILD_DIR $1) ]; then
+	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $1)/build-tmp
+	fi
+	
+	# Run all commands
+	local cmd="$(pack_get --commands $1)"
+	local -a cmds=()
+	IFS=';' read -ra cmds <<< "$cmd"
+	for cmd in "${cmds[@]}" ; do
+	    docmd "$archive" "$cmd"
+	done
+
+	if [ $(has_setting $IS_MODULE $1) ]; then
+	# We install the module scripts here:
+	    create_module \
+		-n $(pack_get --alias $1) \
+		-v $(pack_get --version $1) \
+		-M $(pack_get --module-name $1) \
+		-P $(pack_get --install-prefix $1) \
+		-R "$(populate_requirements $archive)"
+	fi
+	popd
+
+        # Remove compilation directory
+	rm -rf $(pack_get --directory $1)
+	
+	popd
+	install -F $archive
+    fi
+
+    if [ $(has_setting $LOAD_MODULE $1) ]; then
+        # We install the module scripts here:
+	module load $(pack_get --module-name $1)
+    fi
+}
 
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
 function get_index {
     local i=0 ; local package ; local alias ; local archive
     local l=${#1}
+    $(isnumber $1)
+    if [ $? -eq 0 ]; then # We have a number
+	echo $1
+	return 0
+    fi
     while : ; do
 	archive=$(pack_get --archive $i)
 	package=$(pack_get --package $i)

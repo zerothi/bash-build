@@ -1,7 +1,7 @@
 # Install the easiest first... OpenMPI
 add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.2.tar.gz
 
-pack_set -s $BUILD_DIR -s $CONFIGURE -s $MAKE_TEST -s $MAKE_INSTALL -s $MAKE_PARALLEL \
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL \
     -s $IS_MODULE -s $LOAD_MODULE
 
 # The prefix for installation
@@ -12,3 +12,12 @@ pack_set --install-prefix \
 pack_set --install-query \
     $(pack_get --install-prefix)/bin/mpif90
 
+# Install commands that it should run
+pack_set --command "../configure" \
+    --command-flag "--prefix=$(pack_get --install-prefix)"
+
+# Make commands
+pack_set --command "make $(get_make_parallel)"
+pack_set --command "make" \
+    --command-flag "check" \
+    --command-flag "install"
