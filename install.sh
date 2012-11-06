@@ -39,11 +39,13 @@ set_c $compiler
 
 source openmpi.bash
 source zlib.bash
-#source python2.bash
-#source python3.bash
+source blas.bash
+source lapack.bash
+source python2.bash
+source python3.bash
 source hdf5.bash
-#source parallel-netcdf.bash
-#source netcdf.bash
+source parallel-netcdf.bash
+source netcdf.bash
 #source git.bash
 
 

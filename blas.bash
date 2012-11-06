@@ -13,7 +13,7 @@ pack_set --install-query \
     $(pack_get --install-prefix)/lib/libblas.a
 
 # Prepare the make file
-pack_set --command "sed -e 's/OPTS[[:space:]]*=/OPTS = $FCFLAGS/g' make.inc"
+pack_set --command "sed -e ""'s/OPTS[[:space:]]*=/OPTS = $FCFLAGS/g'"" make.inc"
 pack_set --command "sed -e 's/LOADOPTS[[:space:]]*=/LOADOPTS = $FCFLAGS/g' make.inc"
 pack_set --command "sed -e 's/_LINUX//g' make.inc"
 
@@ -21,4 +21,4 @@ pack_set --command "sed -e 's/_LINUX//g' make.inc"
 pack_set --command "make $(get_make_parallel) all"
 
 pack_set --command "mkdir -p $(pack_get --prefix)/lib/"
-pack_set --command "cp blas.a $(pack_get --prefix)/lib/"
+pack_set --command "cp blas.a $(pack_get --prefix)/lib/libblas.a"

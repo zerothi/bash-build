@@ -8,9 +8,19 @@ pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
+# Add requirments when creating the module
+pack_set \
+    --module-requirement openmpi \
+    --module-requirement zlib \
+    --module-requirement hdf5 \
+    --module-requirement parallel-netcdf
+
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "CC=${MPICC} CXX=${MPICXX" \
+pack_set \
+    --command "../configure" \
+    --command-flag "CC=${MPICC} CXX=${MPICXX}" \
+    --command-flag "CPPFLAGS=-I$(pack_get --install-prefix hdf5)/include" \
+    --command-flag "LDFLAGS=-L$(pack_get --install-prefix hdf5)/lib $LDFLAGS -L$(pack_get --install-prefix pnetcdf)/lib" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static" \
@@ -22,7 +32,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
-
 
 
 

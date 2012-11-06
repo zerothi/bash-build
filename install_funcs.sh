@@ -3,12 +3,7 @@
 
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
-let "CONFIGURE=1 << 1"
-let "MAKE_INSTALL=1 << 2"
-let "MAKE_TEST=1 << 3"
-let "MAKE_CHECK=1 << 4"
-let "MAKE_PARALLEL=1 << 5"
-let "MAKE_TESTS=1 << 6"
+let "MAKE_PARALLEL=1 << 1"
 let "IS_MODULE=1 << 7"
 let "LOAD_MODULE=1 << 8"
 
@@ -100,6 +95,8 @@ declare -a _version
 declare -a _directory
 # A command sequence of the extracted package (executed before make commands)
 declare -a _cmd
+# A module sequence which is the requirements for the package
+declare -a _mod_req
 # A separator used for commands that can be given consequitively
 _LIST_SEP=";"
 # The counter to hold the archives
@@ -122,7 +119,7 @@ function add_package {
     [ "${#d}" -eq "${#fn}" ] && d=${fn%.$ext}
     _directory[$_N_archives]=$d
     # Save the version
-    local v=`expr match "$d" '.*[-_]\([0-9.]*]\)'`
+    local v=`expr match "$d" '[^-_]*[-_]\([0-9.]*\)'`
     if [ -z "$v" ]; then
 	v=`expr match "$d" '[^0-9]*\([0-9.]*\)'`
     fi
@@ -148,7 +145,7 @@ function pack_set {
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
-    local cmd="" ; local cmd_flags=""
+    local cmd="" ; local cmd_flags="" ; local req=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -158,8 +155,9 @@ function pack_set {
 	shift
 	case $opt in
             -C|-command)  cmd="$1" ; shift ;;
-            -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # Can be called several times
+            -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
+            -R|-module-requirement)  req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
             -v|-version)  version="$1" ; shift ;;
@@ -177,14 +175,15 @@ function pack_set {
     done
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ]        && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
-    [ ! -z "$install" ]    && _install_prefix[$index]=$install
-    [ ! -z "$query" ]      && _install_query[$index]=$query
-    [ ! -z "$alias" ]      && _alias[$index]=$alias
-    [ ! -z "$version" ]    && _version[$index]=$version
-    [ ! -z "$directory" ]  && _directory[$index]=$directory
-    [ 0 -ne "$settings" ]  && _settings[$index]=$settings
-    [ ! -z "$mod_name" ]   && _mod_name[$index]=$mod_name
-    [ ! -z "$package" ]    && _package[$index]=$package
+    [ ! -z "$req" ]        && _mod_req[$index]="${_mod_req[$index]}$req"
+    [ ! -z "$install" ]    && _install_prefix[$index]="$install"
+    [ ! -z "$query" ]      && _install_query[$index]="$query"
+    [ ! -z "$alias" ]      && _alias[$index]="$alias"
+    [ ! -z "$version" ]    && _version[$index]="$version"
+    [ ! -z "$directory" ]  && _directory[$index]="$directory"
+    [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
+    [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
+    [ ! -z "$package" ]    && _package[$index]="$package"
 }
 
 # This function allows for setting data related to a package
@@ -205,6 +204,7 @@ function pack_get {
     case $opt in
 	-C|-commands)        echo ${_cmd[$index]} ;;
 	-h|-u|-url|-http)    echo ${_http[$index]} ;;
+	-R|-module-requirement) echo ${_mod_req[$index]} ;;
         -I|-install-prefix)  echo ${_install_prefix[$index]} ;;
         -Q|-install-query)   echo ${_install_query[$index]} ;;
         -a|-alias)           echo ${_alias[$index]} ;;
@@ -231,7 +231,7 @@ function pack_install {
     if [ ! -e $(pack_get --install-query $1) ]; then
 
         # Show that we will install
-	install -I $1
+	msg_install --start $1
 
         # Download archive
 	dwn_file $1 $archive_dir
@@ -254,23 +254,35 @@ function pack_install {
 	    docmd "$archive" "$cmd"
 	done
 
-	if [ $(has_setting $IS_MODULE $1) ]; then
-	# We install the module scripts here:
-	    create_module \
-		-n $(pack_get --alias $1) \
-		-v $(pack_get --version $1) \
-		-M $(pack_get --module-name $1) \
-		-P $(pack_get --install-prefix $1) \
-		-R "$(populate_requirements $archive)"
-	fi
 	popd
 
         # Remove compilation directory
 	rm -rf $(pack_get --directory $1)
 	
 	popd
-	install -F $archive
+	install --finish $1
     fi
+
+    if [ $(has_setting $IS_MODULE $1) ]; then
+        # Create the list of requirements
+	local req=""
+	cmds=("$(pack_get --module-requirement $1)")
+	# Clear the requirement if it is not found
+	[ -z "${cmds[0]}" ] && cmds=()
+	if [ "${#cmds[@]}" -ne 0 ]; then
+	    for cmd in "${cmds[@]}" ; do
+		reqs="$reqs -R $(pack_get --module-name $cmd)"
+	    done
+	fi
+	
+        # We install the module scripts here:
+	create_module \
+	    -n $(pack_get --alias $1) \
+	    -v $(pack_get --version $1) \
+	    -M $(pack_get --module-name $1) \
+	    -P $(pack_get --install-prefix $1) $reqs
+    fi
+
 
     if [ $(has_setting $LOAD_MODULE $1) ]; then
         # We install the module scripts here:
@@ -460,14 +472,18 @@ EOF
 # Init installation
 # Pretty prints some information about the installation
 #   $1 : the package name or index
-function install {
+function msg_install {
     local n=""
-    while getopts ":d:f:h" opt; do
+    while [ $# -gt 1 ]; do
+	local opt=$1
 	case $opt in
-            F)  n="Finished" ;;
-            I)  n="Installing" ;;
+	    --*) opt=${opt:1} ;;
+	esac ; shift
+	case $opt in
+	    -finish|-F) n="Finished" ;;
+	    -start|-S) n="Installing" ;;
 	esac
-    done ; shift $((OPTIND-1)) ; OPTIND=1
+    done
     local cmd=$(arc_cmd $(pack_get --ext $1) )
     echo " ================================== "
     echo "            $n"
@@ -489,11 +505,8 @@ function docmd {
     echo 
     echo " # ================================================================"
     if [[ "$ar" != "" ]] ; then
-        echo " # Archive: $(pack_get --archive $ar)"
+        echo " # Archive: $(pack_get --package $ar) ($(pack_get --version $ar))"
     fi
-    echo " # LDFLAGS: "$LDFLAGS
-    echo " # INCFLAGS: "$INCFLAGS
-    echo " # LIBS: "$LIBS
     echo " # PWD: "$(pwd)
     echo " # CMD: "${cmd[@]}
     echo " # ================================================================"

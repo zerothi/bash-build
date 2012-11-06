@@ -83,22 +83,3 @@ function populate_add_LIBS {
     echo ${args[@]}
 }
 
-
-# This script needs to have install_funcs loaded
-# Function for population the CONF_ARGS array for configure arguments
-function populate_requirements {
-    local -a args=()
-    case $(pack_get --package $1) in
-	hdf5*)
-	    args=(
-		$(pack_get --module-name zlib)
-	    );;
-	netcdf*)
-	    args=(
-		$(pack_get --module-name zlib)
-		$(pack_get --module-name hdf5)
-		$(pack_get --module-name parallel-netcdf)
-	    );;
-    esac
-    echo ${args[@]}
-}
