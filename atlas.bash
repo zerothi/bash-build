@@ -25,9 +25,7 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 
 # Make commands
 pack_set --command "make"
-pack_set --command "make check"
-pack_set --command "make ptcheck"
-pack_set --command "make time"
+pack_set --command "make check ptcheck time"
 pack_set --command "make install"
 
 # Create the ATLAS lapack
@@ -35,7 +33,7 @@ pack_set --command "mkdir -p tmp"
 pack_set --command "cd tmp"
 pack_set --command "$AR x ../lib/liblapack.a"
 pack_set --command "cp $(pack_get --prefix lapack)/lib/liblapack.a ../liblapack.a"
-pack_set --command "ar r ../liblapack.a '*.o'"
+pack_set --command "$AR r ../liblapack.a *.o"
 pack_set --command "cd .."
 pack_set --command "ranlib liblapack.a"
 pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"

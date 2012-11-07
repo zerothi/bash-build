@@ -15,8 +15,6 @@ else
 fi
 
 source install_funcs.sh
-source install_conf_flags.sh
-
 
 archive_dir=$(pwd)/archives
 compile_dir=$(pwd)/compile
@@ -39,14 +37,16 @@ set_c $compiler
 
 source openmpi.bash
 source zlib.bash
+#source git.bash
 source blas.bash
 source lapack.bash
+source atlas.bash
 source python2.bash
 source python3.bash
 source hdf5.bash
 source parallel-netcdf.bash
 source netcdf.bash
-#source git.bash
+
 
 
 if [ 0 -eq 1 ]; then
@@ -84,3 +84,12 @@ create_module \
     -L "$(pack_get --module-name zlib)" \
     -L "$(pack_get --module-name hdf5)" \
     -L "$(pack_get --module-name netcdf)"
+
+# We install the module scripts here:
+create_module \
+    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    -v $(date +'%j-%g') \
+    -M npa/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name blas)" \
+    -L "$(pack_get --module-name lapack)"

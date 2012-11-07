@@ -19,8 +19,8 @@ pack_set \
 pack_set \
     --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "CPPFLAGS=-I$(pack_get --install-prefix hdf5)/include" \
-    --command-flag "LDFLAGS=-L$(pack_get --install-prefix hdf5)/lib $LDFLAGS -L$(pack_get --install-prefix pnetcdf)/lib" \
+    --command-flag "CPPFLAGS='-I$(pack_get --install-prefix hdf5)/include -I$(pack_get --install-prefix pnetcdf)/include'" \
+    --command-flag "LDFLAGS='-L$(pack_get --install-prefix hdf5)/lib -L$(pack_get --install-prefix pnetcdf)/lib $LDFLAGS'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static" \
@@ -48,6 +48,8 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIFC}" \
+    --command-flag "FCFLAGS='$FCFLAGS -DgFortran'" \
+    --command-flag "CPPFLAGS='$CPPFLAGS -DgFortran -I$(pack_get --install-prefix netcdf)/include'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static"

@@ -4,8 +4,9 @@
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
-let "IS_MODULE=1 << 7"
-let "LOAD_MODULE=1 << 8"
+let "VERSION_TIME_STAMP=1 << 2"
+let "IS_MODULE=1 << 3"
+let "LOAD_MODULE=1 << 4"
 
 _prefix=""
 # Instalation path
@@ -202,19 +203,21 @@ function pack_get {
     [ "$index" -lt 0 ] && return 1
     # Process what is requested
     case $opt in
-	-C|-commands)        echo ${_cmd[$index]} ;;
-	-h|-u|-url|-http)    echo ${_http[$index]} ;;
-	-R|-module-requirement) echo ${_mod_req[$index]} ;;
-        -I|-install-prefix)  echo ${_install_prefix[$index]} ;;
-        -Q|-install-query)   echo ${_install_query[$index]} ;;
-        -a|-alias)           echo ${_alias[$index]} ;;
-	-A|-archive)         echo ${_archive[$index]} ;;
-        -v|-version)         echo ${_version[$index]} ;;
-        -d|-directory)       echo ${_directory[$index]} ;;
-        -s|-settings)        echo ${_settings[$index]} ;;
-        -m|-module-name)     echo ${_mod_name[$index]} ;;
-        -p|-package)         echo ${_package[$index]} ;;
-        -e|-ext)             echo ${_ext[$index]} ;;
+	-C|-commands)        echo "${_cmd[$index]}" ;;
+	-h|-u|-url|-http)    echo "${_http[$index]}" ;;
+	-R|-module-requirement) 
+                             echo "${_mod_req[$index]}" ;;
+        -I|-install-prefix|-prefix) 
+                             echo "${_install_prefix[$index]}" ;;
+        -Q|-install-query)   echo "${_install_query[$index]}" ;;
+        -a|-alias)           echo "${_alias[$index]}" ;;
+	-A|-archive)         echo "${_archive[$index]}" ;;
+        -v|-version)         echo "${_version[$index]}" ;;
+        -d|-directory)       echo "${_directory[$index]}" ;;
+        -s|-settings)        echo "${_settings[$index]}" ;;
+        -m|-module-name)     echo "${_mod_name[$index]}" ;;
+        -p|-package)         echo "${_package[$index]}" ;;
+        -e|-ext)             echo "${_ext[$index]}" ;;
 	*)
 	    doerr $1 "No option for pack_get found for $1"
     esac
@@ -222,32 +225,42 @@ function pack_get {
 
 # Install the package
 function pack_install {
+    local idx=$_N_archives
+    if [ $# -ne 0 ]; then
+	idx=$1
+    fi
+    
     # We install the package
     local archive=""
-    archive="$(pack_get --archive $1)"
+    archive="$(pack_get --archive $idx)"
     [ $? -ne "0" ] && return 1
+
+    # Update version for the package in case of time-stamping
+    if [ $(has_setting $VERSION_TIME_STAMP $idx) ]; then
+	pack_set --version "$(get_file_time $archive_dir/$(pack_get --archive $idx))" $idx
+    fi    
     
      # Check that the thing is not already installed
-    if [ ! -e $(pack_get --install-query $1) ]; then
+    if [ ! -e $(pack_get --install-query $idx) ]; then
 
         # Show that we will install
-	msg_install --start $1
+	msg_install --start $idx
 
         # Download archive
-	dwn_file $1 $archive_dir
+	dwn_file $idx $archive_dir
 	
         # Extract the archive
 	pushd $compile_dir
-	extract_archive $archive_dir $1
-	pushd $(pack_get --directory $1)
+	extract_archive $archive_dir $idx
+	pushd $(pack_get --directory $idx)
 	
         # We are now in the package directory
-	if [ $(has_setting $BUILD_DIR $1) ]; then
-	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $1)/build-tmp
+	if [ $(has_setting $BUILD_DIR $idx) ]; then
+	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $idx)/build-tmp
 	fi
 	
 	# Run all commands
-	local cmd="$(pack_get --commands $1)"
+	local cmd="$(pack_get --commands $idx)"
 	local -a cmds=()
 	IFS=';' read -ra cmds <<< "$cmd"
 	for cmd in "${cmds[@]}" ; do
@@ -257,16 +270,16 @@ function pack_install {
 	popd
 
         # Remove compilation directory
-	rm -rf $(pack_get --directory $1)
+	rm -rf $(pack_get --directory $idx)
 	
 	popd
-	install --finish $1
+	msg_install --finish $idx
     fi
 
-    if [ $(has_setting $IS_MODULE $1) ]; then
+    if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
 	local req=""
-	cmds=("$(pack_get --module-requirement $1)")
+	cmds=("$(pack_get --module-requirement $idx)")
 	# Clear the requirement if it is not found
 	[ -z "${cmds[0]}" ] && cmds=()
 	if [ "${#cmds[@]}" -ne 0 ]; then
@@ -277,16 +290,16 @@ function pack_install {
 	
         # We install the module scripts here:
 	create_module \
-	    -n $(pack_get --alias $1) \
-	    -v $(pack_get --version $1) \
-	    -M $(pack_get --module-name $1) \
-	    -P $(pack_get --install-prefix $1) $reqs
+	    -n $(pack_get --alias $idx) \
+	    -v $(pack_get --version $idx) \
+	    -M $(pack_get --module-name $idx) \
+	    -P $(pack_get --install-prefix $idx) $reqs
     fi
 
 
-    if [ $(has_setting $LOAD_MODULE $1) ]; then
+    if [ $(has_setting $LOAD_MODULE $idx) ]; then
         # We install the module scripts here:
-	module load $(pack_get --module-name $1)
+	module load $(pack_get --module-name $idx)
     fi
 }
 
@@ -510,7 +523,7 @@ function docmd {
     echo " # PWD: "$(pwd)
     echo " # CMD: "${cmd[@]}
     echo " # ================================================================"
-    ${cmd[@]}
+    eval ${cmd[@]}
     local st=$?
     echo "STATUS = $st"
     if (( $st != 0 )) ; then
@@ -582,13 +595,12 @@ function _add_module_if_usage {
 }
 
 
-
-#init_install mfr_4.11.12.tar.gz
-#init_install mfr.4.11.12.zip
-#init_install mfr-4.11.12.zip
-
-#set_module_path ./
-#create_module -n mfr -v 4.11.12 -p ./test/stnoeh -H "sNTAOH ESA" -W " TNHAOSNE H" -r "as/212 aosnetuh/33"
+# Takes one, optionally two arguments
+# $1 is the file..
+function get_file_time {
+    local fdate=$(stat -c "%y" $1)
+    echo `date +"%j-%g" --date="$fdate"`    
+}
 
 # Check for a number
 function isnumber { 

@@ -1,4 +1,3 @@
-# Now we can install NetCDF (we need the C version to be first added!)
 add_package http://git-core.googlecode.com/files/git-1.8.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL \
