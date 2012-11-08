@@ -7,6 +7,7 @@ let "MAKE_PARALLEL=1 << 1"
 let "VERSION_TIME_STAMP=1 << 2"
 let "IS_MODULE=1 << 3"
 let "LOAD_MODULE=1 << 4"
+let "UPDATE_MODULE_NAME=1 << 5"
 
 _prefix=""
 # Instalation path
@@ -136,6 +137,13 @@ function add_package {
     _package[$_N_archives]=$package
     # Save the alias for the package, defaulted to package
     _alias[$_N_archives]=$package
+    # Update version for the package in case of time-stamping
+    if [ $(has_setting $VERSION_TIME_STAMP $_N_archives) ]; then
+        # Download the archive
+	dwn_file $_N_archives $archive_dir
+	v="$(get_file_time $archive_dir/$(pack_get --archive $_N_archives))"
+	_version[$_N_archives]="$v"
+    fi
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
 }
@@ -171,7 +179,6 @@ function pack_set {
 		# We have an argument
 		index=$(get_index $opt)
 		shift $#
-		echo "We break now on $opt and $#"
 	esac
     done
     # We now have index to be the correct spanning
@@ -219,7 +226,7 @@ function pack_get {
         -p|-package)         echo "${_package[$index]}" ;;
         -e|-ext)             echo "${_ext[$index]}" ;;
 	*)
-	    doerr $1 "No option for pack_get found for $1"
+	    doerr $1 "No option for pack_get found for $1" ;;
     esac
 }
 
@@ -235,11 +242,12 @@ function pack_install {
     archive="$(pack_get --archive $idx)"
     [ $? -ne "0" ] && return 1
 
-    # Update version for the package in case of time-stamping
-    if [ $(has_setting $VERSION_TIME_STAMP $idx) ]; then
-	pack_set --version "$(get_file_time $archive_dir/$(pack_get --archive $idx))" $idx
-    fi    
-    
+
+    # Update the module name now
+    if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
+	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
+    fi
+        
      # Check that the thing is not already installed
     if [ ! -e $(pack_get --install-query $idx) ]; then
 
@@ -370,24 +378,26 @@ function get_make_parallel {
 function create_module {
     local name;local version;local path; local help; local whatis
     local require=""; local conflict=""; local load=""
-    while getopts ":n:v:P:M:H:W:R:C:L:h" opt; do
+    while [ $# -gt 0 ]; do
+	local opt="$1" # Save the option passed
 	case $opt in
-            n)  name="$OPTARG" ;;
-            v)  version="$OPTARG" ;;
-            P)  path="$OPTARG" ;;
-            M)  mod="$OPTARG" ;;
-            R)  require="$require $OPTARG" ;; # Can be optioned several times
-            L)  load="$load $OPTARG" ;; # Can be optioned several times
-            C)  conflict="$conflict $OPTARG" ;; # Can be optioned several times
-            H)  help="$OPTARG" ;;
-            W)  whatis="$OPTARG" ;;
-            h)  create_module_usage 0 ;;
-            \?) echo "Invalid option: -$OPTARG"
-		create_module_usage 1 ;;
-            :)  echo "Option -$OPTARG requires an argument."
-		create_module_usage 1 ;;
+	    --*) opt=${opt:1} ;;
 	esac
-    done ; shift $((OPTIND-1)) ; OPTIND=1
+	shift
+	case $opt in
+	    -n|-name)  name="$1" ; shift ;;
+	    -v|-version)  version="$1" ; shift ;;
+	    -P|-path)  path="$1" ; shift ;;
+	    -M|-module-name)  mod="$1" ; shift ;;
+	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
+	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
+	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
+	    -H|-help)  help="$1" ; shift ;;
+	    -W|-what-is)  whatis="$1" ; shift ;;
+	    *)
+		doerr "$opt" "Option for create_module $opt was not recognized"
+	esac
+    done
     require=${require% } ; load=${load% } ; conflict=${conflict% }
 
     # Create the file to which we need to install the module script
@@ -414,7 +424,7 @@ module-whatis "Loads \$modulename (\$version), compiler \$compiler."
 
 EOF
     # Add pre loaders if needed
-    if [ -n "$load" ]; then
+    if [ ! -z "$load" ]; then
 	cat <<EOF >> $mfile
 # This module will load the following modules
 module load $load
@@ -423,7 +433,7 @@ EOF
     fi
 
     # Add requirement if needed
-    if [ -n "$require" ]; then
+    if [ ! -z "$require" ]; then
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 prereq $require
@@ -431,7 +441,7 @@ prereq $require
 EOF
     fi
     # Add conflict if needed
-    if [ -n "$conflict" ]; then
+    if [ ! -z "$conflict" ]; then
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 conflict $conflict
@@ -525,8 +535,8 @@ function docmd {
     echo " # ================================================================"
     eval ${cmd[@]}
     local st=$?
-    echo "STATUS = $st"
     if (( $st != 0 )) ; then
+	echo "STATUS = $st"
         exit $st;
     fi
 }
@@ -599,10 +609,23 @@ function _add_module_if_usage {
 # $1 is the file..
 function get_file_time {
     local fdate=$(stat -c "%y" $1)
-    echo `date +"%j-%g" --date="$fdate"`    
+    echo `date +"%g-%j" --date="$fdate"`    
 }
 
 # Check for a number
 function isnumber { 
     printf '%d' "$1" &>/dev/null
+}
+
+
+# Update the package version number by looking at the date in the file
+function pack_set_file_version {
+    local idx=$_N_archives
+    [ $# -gt 0 ] && idx=$1
+    # Download the archive
+    dwn_file $idx $archive_dir
+    local v="$(get_file_time $archive_dir/$(pack_get --archive $idx))"
+    pack_set --version "$v"
+     # Default the module name to this:
+    pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx
 }

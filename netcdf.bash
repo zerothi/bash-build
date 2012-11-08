@@ -44,12 +44,19 @@ pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 
+#    --command-flag "FCFLAGS='$FCFLAGS -DgFortran'" \
+#    --command-flag "CFLAGS='$CFLAGS -DgFortran'" \
+#    --command-flag "LDFLAGS='-L$(pack_get --install-prefix netcdf)/lib/'" \
+#    --command-flag "FFLAGS='$FFLAGS $(pack_get --install-prefix netcdf)/lib/libnetcdf.a'" \
+
+tmp=$(pack_get --install-prefix hdf5)/lib/libhdf5
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIFC}" \
-    --command-flag "FCFLAGS='$FCFLAGS -DgFortran'" \
-    --command-flag "CPPFLAGS='$CPPFLAGS -DgFortran -I$(pack_get --install-prefix netcdf)/include'" \
+    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
+    --command-flag "CPPFLAGS='$CPPFLAGS -I$(pack_get --install-prefix netcdf)/include -DgFortran'" \
+    --command-flag "LIBS='$(pack_get --install-prefix netcdf)/lib/libnetcdf.a $(pack_get --install-prefix pnetcdf)/lib/libpnetcdf.a ${tmp}hl_fortran.a ${tmp}_fortran.a ${tmp}_hl.a ${tmp}.a $(pack_get --install-prefix zlib)/lib/libz.a -lcurl'" \
+    --command-flag "FCFLAGS='$FCFLAGS $(pack_get --install-prefix netcdf)/lib/libnetcdf.a'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static"

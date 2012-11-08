@@ -40,29 +40,13 @@ source zlib.bash
 #source git.bash
 source blas.bash
 source lapack.bash
-source atlas.bash
+#source atlas.bash
 source python2.bash
 source python3.bash
 source hdf5.bash
 source parallel-netcdf.bash
 source netcdf.bash
 
-
-
-if [ 0 -eq 1 ]; then
-echo After all sourcing:
-echo $_N_archives
-echo URL: ${_http[@]}
-echo ARCHIVES: ${_archive[@]}
-echo EXT: ${_ext[@]}
-echo DIRECTORY: ${_directory[@]}
-echo PACKAGE: ${_package[@]}
-echo ALIAS: ${_alias[@]}
-
-echo PREFIX: ${_install_prefix[@]}
-echo $_package
-echo $_version
-fi 
 # Set the umask 5 means read and execute
 #umask 0
 
@@ -71,13 +55,15 @@ i=0
 while : ; do
     pack_install $i
     [ $? -ne 0 ] && break
+    module list
+    which mpif90
     i=$((i+1))
 done
 
 # We install the module scripts here:
 create_module \
     -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
-    -v $(date +'%j-%g') \
+    -v $(date +'%g-%j') \
     -M npa/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name openmpi)" \
@@ -88,8 +74,8 @@ create_module \
 # We install the module scripts here:
 create_module \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
-    -v $(date +'%j-%g') \
-    -M npa/$(get_c) \
+    -v $(date +'%g-%j') \
+    -M npa/math/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name blas)" \
     -L "$(pack_get --module-name lapack)"

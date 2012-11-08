@@ -12,7 +12,7 @@ pack_set --install-query \
     $(pack_get --install-prefix)/lib/libatlas.a
 
 # Prepare the make file
-pack_set --command "sed -e 's/ThrChk = 1/ThrChk = 0/' ../CONFIG/src/config.c"
+pack_set --command "sed -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"
 
 # Configure command
 pack_set --command "../configure -Fa alg '-fPIC'" \

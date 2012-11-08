@@ -1,9 +1,10 @@
 # Then install BLAS
 add_package http://www.netlib.org/blas/blas.tgz
+pack_set_file_version
 pack_set --directory BLAS
-
-pack_set -s $MAKE_PARALLEL -s $VERSION_TIME_STAMP \
-    -s $IS_MODULE -s $LOAD_MODULE
+pack_set --alias blas
+pack_set -s $MAKE_PARALLEL  \
+    -s $IS_MODULE
 
 pack_set --install-prefix \
     $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)

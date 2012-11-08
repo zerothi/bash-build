@@ -11,7 +11,7 @@ pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIFC}" \
+    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-mpi=$(pack_get --install-prefix openmpi)" \
     --command-flag "--enable-fortran"
