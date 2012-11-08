@@ -314,31 +314,24 @@ function pack_install {
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
 function get_index {
-    local i=0 ; local package ; local alias ; local archive
+    local i ; local lookup
     local l=${#1}
     $(isnumber $1)
     if [ $? -eq 0 ]; then # We have a number
 	echo $1
 	return 0
     fi
-    while : ; do
-	archive=$(pack_get --archive $i)
-	package=$(pack_get --package $i)
-	alias=$(pack_get --alias $i)
-	if [ "x${archive:0:$l}" == "x$1" ]; then
-	    echo $i
-	    return 0
-	fi
-	if [ "x${package:0:$l}" == "x$1" ]; then
-	    echo $i
-	    return 0
-	fi
-	if [ "x${alias:0:$l}" == "x$1" ]; then
-	    echo $i
-	    return 0
-	fi
-	i=$((i+1))
-	[ "$i" -gt "$_N_archives" ] && break
+    for lookup in archive package alias ; do
+	i=0
+	while : ; do
+	    local tmp=$(pack_get --$lookup $i)
+	    if [ "x${tmp:0:$l}" == "x$1" ]; then
+		echo $i
+		return 0
+	    fi
+	    i=$((i+1))
+	    [ "$i" -gt "$_N_archives" ] && break
+	done
     done
     doerr $1 "Could not find the archive in the list..."
 }
@@ -425,28 +418,34 @@ module-whatis "Loads \$modulename (\$version), compiler \$compiler."
 EOF
     # Add pre loaders if needed
     if [ ! -z "$load" ]; then
-	cat <<EOF >> $mfile
+	    cat <<EOF >> $mfile
 # This module will load the following modules
-module load $load
-
 EOF
+	for tmp in $load ; do
+	    echo "module load $tmp" >> $mfile
+	done
+	echo "" >> $mfile
     fi
 
     # Add requirement if needed
     if [ ! -z "$require" ]; then
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
-prereq $require
-
 EOF
+	for tmp in "$require" ; do
+	    echo "prereq $tmp" >> $mfile
+	done
+	echo "" >> $mfile
     fi
     # Add conflict if needed
     if [ ! -z "$conflict" ]; then
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
-conflict $conflict
-
 EOF
+	for tmp in "$conflict" ; do
+	    echo "conflict $tmp" >> $mfile
+	done
+	echo "" >> $mfile
     fi
     # Add paths if they are available
     _add_module_if -d "$path/bin" $mfile \

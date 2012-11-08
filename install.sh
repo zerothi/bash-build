@@ -47,6 +47,7 @@ source hdf5.bash
 source parallel-netcdf.bash
 source netcdf.bash
 
+
 # Set the umask 5 means read and execute
 #umask 0
 
@@ -56,7 +57,6 @@ while : ; do
     pack_install $i
     [ $? -ne 0 ] && break
     module list
-    which mpif90
     i=$((i+1))
 done
 
@@ -64,18 +64,29 @@ done
 create_module \
     -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M npa/$(get_c) \
+    -M npa/mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name openmpi)" \
     -L "$(pack_get --module-name zlib)" \
     -L "$(pack_get --module-name hdf5)" \
+    -L "$(pack_get --module-name pnetcdf)" \
     -L "$(pack_get --module-name netcdf)"
 
-# We install the module scripts here:
 create_module \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M npa/math/$(get_c) \
+    -M npa/blas.lapack/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name blas)" \
     -L "$(pack_get --module-name lapack)"
+
+exit 0
+create_module \
+    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M npa/python.numpy.scipy.scientific/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name python)" \
+    -L "$(pack_get --module-name numpy)" \
+    -L "$(pack_get --module-name scipy)" \
+    -L "$(pack_get --module-name scientificpython)"

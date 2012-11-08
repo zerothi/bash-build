@@ -11,7 +11,8 @@ pack_set --install-query \
     $(pack_get --install-prefix)/lib/libhdf5.a
 
 # Add requirments when creating the module
-pack_set --module-requirement zlib
+pack_set --module-requirement openmpi \
+    --module-requirement zlib
 
 # Install commands that it should run
 pack_set --command "../configure" \
