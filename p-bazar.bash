@@ -11,7 +11,7 @@ if [ "${tmp:0:1}" == "2" ]; then
 	$(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
     pack_set --module-name \
-	$(pack_get --package $idx)/$(pack_get --version)/$tmp/$(get_c)
+	$(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
     
     pack_set --install-query \
 	$(pack_get --install-prefix)/bin/bzr

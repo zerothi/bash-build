@@ -4,6 +4,6 @@ add_package http://python-distribute.org/distribute_setup.py
 
 pack_set --directory "./"
 pack_set --command "$(get_parent_exec) distribute_setup.py"
-pack_set --install-query "/always/install"
+pack_set --install-query $(pack_get --install-prefix $(get_parent))/lib/python$pV/site-packages/setuptools.pth
 
 pack_install

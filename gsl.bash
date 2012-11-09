@@ -13,7 +13,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 # Install commands that it should run
 tmp=$(pack_get --install-prefix atlas)/lib/lib
 pack_set --command "../configure" \
-    --command-flag "LIBS='${tmp}f77blas.a ${tmp}cblas.a ${tmp}atlas.a" \
+    --command-flag "LIBS='${tmp}f77blas.a ${tmp}cblas.a ${tmp}atlas.a'" \
     --command-flag "LDFLAGS='-L$(pack_get --install-prefix atlas)/lib'" \
     --command-flag "--prefix $(pack_get --install-prefix)"
 

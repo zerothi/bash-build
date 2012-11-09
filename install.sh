@@ -34,10 +34,12 @@ set_c $compiler
 # Set the umask 5 means read and execute
 #umask 0
 
+source gnuplot.bash
+
 source blas.bash
 source lapack.bash
-#source atlas.bash
-#source gsl.bash
+source atlas.bash
+source gsl.bash
 source zlib.bash
 source openmpi.bash
 #source git.bash
@@ -45,10 +47,11 @@ source scalapack.bash
 source hdf5.bash
 source parallel-netcdf.bash
 source netcdf.bash
+source xmgrace.bash
 
 # These are "parent" installations...
 source python2.bash
-source python3.bash
+#source python3.bash
 
 
 
@@ -85,13 +88,10 @@ create_module \
     -L "$(pack_get --module-name lapack)" \
     -L "$(pack_get --module-name scalapack)"
 
-exit 0
 create_module \
-    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    -n "\"Nick Papior Andersen's default application script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M python.numpy.scipy.scientific/$(get_c) \
+    -M default.gnuplot.grace/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name python)" \
-    -L "$(pack_get --module-name numpy)" \
-    -L "$(pack_get --module-name scipy)" \
-    -L "$(pack_get --module-name scientificpython)"
+    -L "$(pack_get --module-name gnuplot)" \
+    -L "$(pack_get --module-name grace)"

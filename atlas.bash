@@ -21,8 +21,9 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--incdir=$(pack_get --prefix)/include" \
     --command-flag "--libdir=$(pack_get --prefix)/lib" \
+    --command-flag "--dylibs -m 3066.596 -t 4" \
     --command-flag "-b 64 -Si latune 1" \
-    --command-flag "-Ss pmake \"\$(MAKE) $(get_make_parallel)\""
+    --command-flag "-Ss pmake '\$(MAKE) $(get_make_parallel)'"
 
 # Make commands
 pack_set --command "make"
