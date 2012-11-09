@@ -1,8 +1,9 @@
 # Then install HDF5
+module purge
+module load $(pack_get --module-name openmpi) $(pack_get --module-name zlib)
 add_package http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.9.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL \
-    -s $IS_MODULE -s $LOAD_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-prefix \
     $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
@@ -32,3 +33,6 @@ pack_set --command "make $(get_make_parallel)"
 # make check fails due to a bug in the test suite....
 pack_set --command "make" \
     --command-flag "install"
+
+
+pack_install

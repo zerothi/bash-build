@@ -1,12 +1,11 @@
 # Install Python 3.3.0
-
+module purge
 add_package http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tgz
 
 pack_set --alias python
 
 # The settings
-pack_set -s $BUILD_DIR  -s $MAKE_PARALLEL \
-    -s $IS_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # The installation directory
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
@@ -20,5 +19,16 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
+
+pack_install
+
+# Install all relevant python packages
+# Load the python just installed
+module load $(pack_get --module-name)
+# The lookup name in the list for version number etc...
+set_parent python-3
+set_parent_exec python3
+# Install all python packages
+source python-install.bash
+clear_parent

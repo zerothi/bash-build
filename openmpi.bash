@@ -1,8 +1,8 @@
 # Install the easiest first... OpenMPI
+module purge
 add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.2.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL \
-    -s $IS_MODULE -s $LOAD_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # The prefix for installation
 pack_set --install-prefix \
@@ -20,3 +20,6 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
+
+
+pack_install

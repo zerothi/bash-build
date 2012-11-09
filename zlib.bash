@@ -1,8 +1,8 @@
 # First install zlib, which is a simple library
+module purge
 add_package http://zlib.net/zlib-1.2.7.tar.gz 
 
-pack_set -s $MAKE_PARALLEL \
-    -s $IS_MODULE -s $LOAD_MODULE
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 # The installation directory
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
@@ -19,3 +19,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
+
+
+pack_install

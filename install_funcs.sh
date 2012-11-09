@@ -19,10 +19,26 @@ _c=""
 function set_c { _c=$1 ; }
 function get_c { echo $_c ; }
 
+_parent_package=""
+# The parent package (for instance Python)
+function set_parent { _parent_package=$1 ; }
+function clear_parent { _parent_package="" ; }
+function get_parent { echo $_parent_package ; }
+
+_parent_exec=""
+# The parent package (for instance Python)
+function set_parent_exec { _parent_exec=$1 ; }
+function get_parent_exec { echo $_parent_exec ; }
+
 _modulepath=""
 # Module path for creating the modules
 function set_module_path { _modulepath=$1 ; }
 function get_module_path { echo $_modulepath ; }
+
+_buildpath="./"
+# Path for downloading and extracting the packages
+function set_build_path { _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
+function get_build_path { echo $_buildpath ; }
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
@@ -43,6 +59,8 @@ function arc_cmd {
 	echo "tar xf"
     elif [ "x$ext" == "xzip" ]; then
 	echo unzip
+    elif [ "x$ext" == "xpy" ]; then
+	echo "ln -fs"
     else
 	doerr "Unrecognized extension $ext in [bz2,tgz,gz,tar,zip]"
     fi
@@ -140,8 +158,8 @@ function add_package {
     # Update version for the package in case of time-stamping
     if [ $(has_setting $VERSION_TIME_STAMP $_N_archives) ]; then
         # Download the archive
-	dwn_file $_N_archives $archive_dir
-	v="$(get_file_time $archive_dir/$(pack_get --archive $_N_archives))"
+	dwn_file $_N_archives $(get_build_path)/.archives
+	v="$(get_file_time $(get_build_path)/.archives/$(pack_get --archive $_N_archives))"
 	_version[$_N_archives]="$v"
     fi
     # Default the module name to this:
@@ -255,11 +273,11 @@ function pack_install {
 	msg_install --start $idx
 
         # Download archive
-	dwn_file $idx $archive_dir
+	dwn_file $idx $(get_build_path)/.archives
 	
         # Extract the archive
-	pushd $compile_dir
-	extract_archive $archive_dir $idx
+	pushd $(get_build_path)/.compile
+	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
 	
         # We are now in the package directory
@@ -282,20 +300,20 @@ function pack_install {
 	
 	popd
 	msg_install --finish $idx
+    else
+	msg_install --already-installed $idx
     fi
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
-	local req=""
-	cmds=("$(pack_get --module-requirement $idx)")
+	local reqs=""
+	cmds="$(pack_get --module-requirement $idx)"
 	# Clear the requirement if it is not found
-	[ -z "${cmds[0]}" ] && cmds=()
-	if [ "${#cmds[@]}" -ne 0 ]; then
-	    for cmd in "${cmds[@]}" ; do
+	if [ ! -z "$cmds" ]; then
+	    for cmd in "$cmds" ; do
 		reqs="$reqs -R $(pack_get --module-name $cmd)"
 	    done
 	fi
-	
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
@@ -325,7 +343,7 @@ function get_index {
 	i=0
 	while : ; do
 	    local tmp=$(pack_get --$lookup $i)
-	    if [ "x${tmp:0:$l}" == "x$1" ]; then
+	    if [ "x$(lc ${tmp:0:$l})" == "x$(lc $1)" ]; then
 		echo $i
 		return 0
 	    fi
@@ -458,6 +476,10 @@ EOF
 	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
     _add_module_if -d "$path/man" $mfile \
 	"prepend-path MANPATH  \$basepath/man"
+    for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
+	_add_module_if -d "$path/lib/python$PV/site-packages" $mfile \
+	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
+    done
 }
 
 # Append to module file dependent on the existance of a
@@ -504,6 +526,7 @@ function msg_install {
 	case $opt in
 	    -finish|-F) n="Finished" ;;
 	    -start|-S) n="Installing" ;;
+	    -already-installed) n="Already installed" ;;
 	esac
     done
     local cmd=$(arc_cmd $(pack_get --ext $1) )
@@ -514,6 +537,8 @@ function msg_install {
     echo " Ext CMD : $cmd"
     echo " Package : $(pack_get --package $1)"
     echo " Version : $(pack_get --version $1)"
+    echo " Currently loaded modules:"
+    module list
     echo " ================================== "
 }
 
@@ -555,7 +580,7 @@ function _get_true_index {
 }
 
 # Return the lowercase equivalent of the argument
-function lc { echo $1 | tr '[A-Z]' '[a-z]' ; }
+function lc { echo "$1" | tr '[A-Z]' '[a-z]' ; }
 
 # Make an error and exit
 function exit_on_error {
@@ -622,8 +647,8 @@ function pack_set_file_version {
     local idx=$_N_archives
     [ $# -gt 0 ] && idx=$1
     # Download the archive
-    dwn_file $idx $archive_dir
-    local v="$(get_file_time $archive_dir/$(pack_get --archive $idx))"
+    dwn_file $idx $(get_build_path)/.archives
+    local v="$(get_file_time $(get_build_path)/.archives/$(pack_get --archive $idx))"
     pack_set --version "$v"
      # Default the module name to this:
     pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx

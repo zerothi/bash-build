@@ -1,10 +1,11 @@
 # Then install BLAS
+module purge
 add_package http://www.netlib.org/blas/blas.tgz
 pack_set_file_version
 pack_set --directory BLAS
 pack_set --alias blas
-pack_set -s $MAKE_PARALLEL  \
-    -s $IS_MODULE
+
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-prefix \
     $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
@@ -25,3 +26,5 @@ pack_set --command "make $(get_make_parallel) all"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp blas.a $(pack_get --install-prefix)/lib/libblas.a"
+
+pack_install

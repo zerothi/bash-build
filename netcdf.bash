@@ -1,8 +1,9 @@
 # Now we can install NetCDF (we need the C version to be first added!)
+module purge
+module load $(pack_get --module-name openmpi) $(pack_get --module-name zlib)  $(pack_get --module-name hdf5)
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL \
-    -s $IS_MODULE -s $LOAD_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
 
@@ -33,6 +34,7 @@ pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
 
+pack_install
 
 
 # Install the FORTRAN headers
@@ -66,3 +68,5 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
+
+pack_install

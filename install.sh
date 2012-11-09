@@ -16,11 +16,8 @@ fi
 
 source install_funcs.sh
 
-archive_dir=$(pwd)/archives
-compile_dir=$(pwd)/compile
-# Create directories
-mkdir -p $archive_dir
-mkdir -p $compile_dir
+# Create the build path for downloading and creating the stuff
+set_build_path $(pwd)
 
 # Initialize the installation path
 set_installation_path $install_path
@@ -34,37 +31,35 @@ set_c $compiler
 # Begin installation of various packages
 # List of archives
 # The order is the installation order
+# Set the umask 5 means read and execute
+#umask 0
 
-source openmpi.bash
-source zlib.bash
-#source git.bash
 source blas.bash
 source lapack.bash
 #source atlas.bash
-source python2.bash
-source python3.bash
+#source gsl.bash
+source zlib.bash
+source openmpi.bash
+#source git.bash
+source scalapack.bash
 source hdf5.bash
 source parallel-netcdf.bash
 source netcdf.bash
 
+# These are "parent" installations...
+source python2.bash
+source python3.bash
 
-# Set the umask 5 means read and execute
-#umask 0
 
-i=0
-# Start installation loop
-while : ; do
-    pack_install $i
-    [ $? -ne 0 ] && break
-    module list
-    i=$((i+1))
-done
+
+# Initialize the module read path
+set_module_path $install_path/modules-npa
 
 # We install the module scripts here:
 create_module \
     -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M npa/mpi.zlib.hdf5.netcdf/$(get_c) \
+    -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name openmpi)" \
     -L "$(pack_get --module-name zlib)" \
@@ -75,16 +70,26 @@ create_module \
 create_module \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M npa/blas.lapack/$(get_c) \
+    -M blas.lapack/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name blas)" \
     -L "$(pack_get --module-name lapack)"
+
+create_module \
+    -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M mpi.blas.lapack.scalapack/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name openmpi)" \
+    -L "$(pack_get --module-name blas)" \
+    -L "$(pack_get --module-name lapack)" \
+    -L "$(pack_get --module-name scalapack)"
 
 exit 0
 create_module \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M npa/python.numpy.scipy.scientific/$(get_c) \
+    -M python.numpy.scipy.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name python)" \
     -L "$(pack_get --module-name numpy)" \
