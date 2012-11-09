@@ -1,6 +1,4 @@
 # Then install LAPACK
-module purge
-module load $(pack_get --module-name blas)
 add_package http://www.netlib.org/lapack/lapack-3.4.2.tgz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -32,6 +30,5 @@ pack_set --command "make $(get_make_parallel) lapacklib lapackelib"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp liblapack.a liblapacke.a $(pack_get --install-prefix)/lib/"
-
 
 pack_install

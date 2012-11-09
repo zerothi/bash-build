@@ -1,5 +1,4 @@
 # First install zlib, which is a simple library
-module purge
 add_package http://zlib.net/zlib-1.2.7.tar.gz 
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

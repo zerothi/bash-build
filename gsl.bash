@@ -1,6 +1,4 @@
 # Install gsl
-module purge
-module load $(pack_get --module-name atlas)
 add_package ftp://ftp.gnu.org/gnu/gsl/gsl-1.15.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -11,11 +9,24 @@ pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_ge
 pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 
 # Install commands that it should run
-tmp=$(pack_get --install-prefix atlas)/lib/lib
-pack_set --command "../configure" \
-    --command-flag "LIBS='${tmp}f77blas.a ${tmp}cblas.a ${tmp}atlas.a'" \
-    --command-flag "LDFLAGS='-L$(pack_get --install-prefix atlas)/lib'" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+tmp=$(get_c)
+if [ "${tmp:0:5}" == "intel" ]; then
+    pack_set --command "../configure" \
+	--command-flag "LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'" \
+	--command-flag "LDFLAGS='-L$MKL_PATH/lib/intel64'" \
+	--command-flag "--prefix $(pack_get --install-prefix)"
+
+elif [ "${tmp:0:3}" == "gnu" ]; then
+    pack_set --module-requirement atlas
+    tmp=$(pack_get --install-prefix atlas)/lib/lib
+    pack_set --command "../configure" \
+	--command-flag "LIBS='${tmp}f77blas.a ${tmp}cblas.a ${tmp}atlas.a'" \
+	--command-flag "LDFLAGS='-L$(pack_get --install-prefix atlas)/lib'" \
+	--command-flag "--prefix $(pack_get --install-prefix)"
+
+else
+    doerr gsl "Have not adapted a correct BLAS/LAPACK library"
+fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

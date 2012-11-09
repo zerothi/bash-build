@@ -20,13 +20,13 @@ if [ "${tmp:0:5}" == "intel" ]; then
     tmp=$(pack_get --alias)-$(pack_get --version).site.cfg
     cat << EOF > $tmp
 [DEFAULT]
-library_dirs = $(pack_get --install-prefix $(get_parent))/lib:/usr/local/lib:/usr/lib64:
+library_dirs = $(pack_get --install-prefix $(get_parent))/lib:$(pack_get --install-prefix numpy)/lib/python$pV/site-packages/numpy/core/:/usr/local/lib:/usr/lib64:
 include_dirs = $(pack_get --install-prefix numpy)/lib/python$pV/site-packages/numpy/core/include/numpy:$(pack_get --install-prefix $(get_parent))/include
 [mkl]
-library_dirs = /opt/intel/composerxe-2011.4.191/mkl/lib/intel64/
+library_dirs = $MKL_PATH/lib/intel64/
 mkl_libs = mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_core, mkl_mc 
 lapack_libs = mkl_lapack95_lp64
-include_dirs = /opt/intel/composerxe-2011.4.191/mkl/include/intel64/lp64/
+include_dirs = $MKL_PATH/include/intel64/lp64/
 EOF
     pack_set --command "cp $(pwd)/$tmp site.cfg"
     pack_set --command "rm $(pwd)/$tmp"
@@ -35,10 +35,8 @@ EOF
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    module load $(pack_get --module-name atlas)
-    # Add requirments when creating the module
-    pack_set --module-requirement $(get_parent) \
-	--module-requirement atlas
+    # Add requirements when creating the module
+    pack_set --module-requirement atlas
 
     pack_set --command "$(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=unix" \

@@ -6,7 +6,6 @@ let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
 let "VERSION_TIME_STAMP=1 << 2"
 let "IS_MODULE=1 << 3"
-let "LOAD_MODULE=1 << 4"
 let "UPDATE_MODULE_NAME=1 << 5"
 
 _prefix=""
@@ -260,7 +259,6 @@ function pack_install {
     archive="$(pack_get --archive $idx)"
     [ $? -ne "0" ] && return 1
 
-
     # Update the module name now
     if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
@@ -269,6 +267,18 @@ function pack_install {
      # Check that the thing is not already installed
     if [ ! -e $(pack_get --install-query $idx) ]; then
 
+        # Create the list of requirements
+	local module_loads=""
+	cmds="$(pack_get --module-requirement $idx)"
+	# Clear the requirement if it is not found
+	if [ ! -z "$cmds" ]; then
+	    for cmd in $cmds ; do
+		module_loads="$module_loads $(pack_get --module-name $cmd)"
+	    done
+	fi
+	[ ! -z "$module_loads" ] && \
+	    module load $module_loads
+	
         # Show that we will install
 	msg_install --start $idx
 
@@ -300,6 +310,10 @@ function pack_install {
 	
 	popd
 	msg_install --finish $idx
+
+	[ ! -z $module_loads ] && \
+	    module unload $module_loads
+
     else
 	msg_install --already-installed $idx
     fi
@@ -320,12 +334,6 @@ function pack_install {
 	    -v $(pack_get --version $idx) \
 	    -M $(pack_get --module-name $idx) \
 	    -P $(pack_get --install-prefix $idx) $reqs
-    fi
-
-
-    if [ $(has_setting $LOAD_MODULE $idx) ]; then
-        # We install the module scripts here:
-	module load $(pack_get --module-name $idx)
     fi
 }
 

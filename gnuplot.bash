@@ -1,5 +1,4 @@
 # Install gnuplot, which is a simple library
-module purge
 add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/4.6.1/gnuplot-4.6.1.tar.gz
 
 pack_set -s $IS_MODULE

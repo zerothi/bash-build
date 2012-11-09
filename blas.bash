@@ -1,5 +1,4 @@
 # Then install BLAS
-module purge
 add_package http://www.netlib.org/blas/blas.tgz
 pack_set_file_version
 pack_set --directory BLAS

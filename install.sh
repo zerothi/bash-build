@@ -35,16 +35,16 @@ set_c $compiler
 #umask 0
 
 source gnuplot.bash
-
 source blas.bash
 source lapack.bash
-source atlas.bash
+#source atlas.bash
 source gsl.bash
 source zlib.bash
 source openmpi.bash
 #source git.bash
 source scalapack.bash
 source hdf5.bash
+source hdf5-serial.bash
 source parallel-netcdf.bash
 source netcdf.bash
 source xmgrace.bash

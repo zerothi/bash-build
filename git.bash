@@ -1,4 +1,3 @@
-module purge
 add_package http://git-core.googlecode.com/files/git-1.8.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

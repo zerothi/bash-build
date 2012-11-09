@@ -27,8 +27,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 	--command-flag "--compiler=intelem"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    module load $(pack_get --module-name atlas)
-    # Add requirments when creating the module
+    # Add requirements when creating the module
     pack_set --module-requirement atlas
 
     pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf)' $(get_parent_exec) setup.py build" \

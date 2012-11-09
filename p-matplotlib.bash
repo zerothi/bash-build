@@ -12,8 +12,7 @@ pack_set --module-name \
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement $(get_parent) \
-    --module-requirement numpy \
-    --module-requirement scipy
+    --module-requirement numpy
 
 pack_set --command "$(get_parent_exec) setup.py config"
 pack_set --command "$(get_parent_exec) setup.py build"

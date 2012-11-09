@@ -1,6 +1,4 @@
 # Then install ScaLAPACK
-module purge
-module load $(pack_get --module-name openmpi) $(pack_get --module-name blas) $(pack_get --module-name lapack)
 add_package http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
 
 pack_set -s $IS_MODULE
@@ -11,7 +9,9 @@ pack_set --install-prefix \
 pack_set --install-query \
     $(pack_get --install-prefix)/lib/libscalapack.a
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement openmpi \
+    --module-requirement blas \
+    --module-requirement lapack
 
 # Prepare the make file
 tmp="sed -i -e"

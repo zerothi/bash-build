@@ -1,6 +1,4 @@
 # Install the Parallel NetCDF (requires bison)
-module purge
-module load $(pack_get --module-name openmpi)
 add_package http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.3.1.tar.bz2
 
 pack_set --alias pnetcdf

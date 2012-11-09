@@ -1,5 +1,4 @@
 # Install Python 3.3.0
-module purge
 add_package http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tgz
 
 pack_set --alias python
@@ -24,8 +23,6 @@ pack_set --command "make install"
 pack_install
 
 # Install all relevant python packages
-# Load the python just installed
-module load $(pack_get --module-name)
 # The lookup name in the list for version number etc...
 set_parent python-3
 set_parent_exec python3

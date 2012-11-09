@@ -1,5 +1,7 @@
 # This script will install all python packages
+module load $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print "{0}.{1}".format(sys.version_info[0],sys.version_info[1])')
+module unload $(pack_get --module-name $(get_parent))
 source p-distribute.bash
 source p-bazar.bash
 source p-nose.bash

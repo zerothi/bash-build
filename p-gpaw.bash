@@ -17,8 +17,6 @@ pack_set --module-requirement openmpi \
     --module-requirement scipy \
     --module-requirement matplotlib
 
-module load $(pack_get --module-name openmpi)
-
 # Check for Intel MKL or not
 tmp=$(get_c)
 file=$(pack_get --alias)-$(pack_get --version).site.cfg
@@ -32,8 +30,8 @@ platform_id = "Xeon"
 EOF
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    module load $(pack_get --module-name atlas)
-    module load $(pack_get --module-name scalapack)
+    pack_set --module-requirement atlas \
+	--module-requirement scalapack
     cat << EOF > $file
 compiler = '$CC $CFLAGS '
 mpicompiler = '$MPICC $CFLAGS '
@@ -70,8 +68,6 @@ pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_install
-
-module unload $(pack_get --module-name openmpi)
 
 # Add the installation of the gpaw setups
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))

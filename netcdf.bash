@@ -1,6 +1,4 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-module purge
-module load $(pack_get --module-name openmpi) $(pack_get --module-name zlib)  $(pack_get --module-name hdf5)
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -44,12 +42,15 @@ pack_set --alias netcdf
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version netcdf)/$(get_c)
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
+# Add requirments when creating the module
+pack_set \
+    --module-requirement openmpi \
+    --module-requirement zlib \
+    --module-requirement hdf5 \
+    --module-requirement parallel-netcdf \
+    --module-requirement netcdf
 
-#    --command-flag "FCFLAGS='$FCFLAGS -DgFortran'" \
-#    --command-flag "CFLAGS='$CFLAGS -DgFortran'" \
-#    --command-flag "LDFLAGS='-L$(pack_get --install-prefix netcdf)/lib/'" \
-#    --command-flag "FFLAGS='$FFLAGS $(pack_get --install-prefix netcdf)/lib/libnetcdf.a'" \
+pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 
 tmp=$(pack_get --install-prefix hdf5)/lib/libhdf5
 # Install commands that it should run

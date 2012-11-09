@@ -14,8 +14,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set --module-requirement $(get_parent) \
     --module-requirement numpy \
-    --module-requirement scipy \
-    --module-requirement matplotlib
+    --module-requirement scipy
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
