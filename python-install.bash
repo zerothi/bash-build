@@ -2,19 +2,23 @@
 module load $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print "{0}.{1}".format(sys.version_info[0],sys.version_info[1])')
 module unload $(pack_get --module-name $(get_parent))
-source p-distribute.bash
-source p-bazar.bash
-source p-nose.bash
-source p-cython.bash
-source p-mpi4py.bash
-source p-numpy.bash
-source p-scipy.bash
-source p-matplotlib.bash
-source p-scientificpython.bash
-source p-ase.bash
-source p-gpaw.bash
-source p-inelastica.bash
-source p-inelastica-dev.bash
+source python/distribute.bash
+source python/bazar.bash
+source python/nose.bash
+source python/cython.bash
+source python/mpi4py.bash
+source python/numpy.bash
+source python/scipy.bash
+source python/numexpr.bash
+source python/h5py.bash
+source python/pytables.bash
+source python/qutip.bash
+source python/matplotlib.bash
+source python/scientificpython.bash
+source python/ase.bash
+source python/gpaw.bash
+source python/inelastica.bash
+source python/inelastica-dev.bash
 
 
 # Initialize the module read path
