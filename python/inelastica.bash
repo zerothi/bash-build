@@ -10,6 +10,7 @@ pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 
 pack_set --module-requirement $(get_parent) \
+    --module-requirement netcdf-serial \
     --module-requirement numpy \
     --module-requirement scientificpython
 
