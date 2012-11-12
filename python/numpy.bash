@@ -62,8 +62,8 @@ EOF
     pack_set --command "cp $(pwd)/$tmp site.cfg"
     pack_set --command "rm $(pwd)/$tmp"
     # Correct the ATLAS understanding of the stuff
-    pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n    section = 'atlas_threads'\n    _lib_lapack = ['lapack_atlas']/g\" numpy/distutils/system_info.py"
-    pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n    section = 'atlas_threads'\n    _lib_lapack = ['lapack_atlas']/g\" numpy/distutils/system_info.py"
+    pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = ['lapack_atlas']/g\" numpy/distutils/system_info.py"
+    pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = ['lapack_atlas']/g\" numpy/distutils/system_info.py"
     pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = ['lapack_atlas']/g\" numpy/distutils/system_info.py"
     pack_set --command "$(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=unix" \
