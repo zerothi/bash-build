@@ -2,7 +2,7 @@
 #source libs/guile.bash
 source libs/blas.bash
 source libs/lapack.bash
-#source libs/atlas.bash
+source libs/atlas.bash
 source libs/gsl.bash
 source libs/zlib.bash
 source libs/openmpi.bash
