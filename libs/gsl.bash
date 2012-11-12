@@ -3,9 +3,6 @@ add_package ftp://ftp.gnu.org/gnu/gsl/gsl-1.15.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-# The installation directory
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 
 # Install commands that it should run
@@ -17,6 +14,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
+    pack_set --module-requirement lapack
     pack_set --module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib/lib
     pack_set --command "../configure" \

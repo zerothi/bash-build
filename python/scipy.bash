@@ -36,7 +36,8 @@ EOF
 	--command-flag "--fcompiler=intelem" 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # Add requirements when creating the module
-    pack_set --module-requirement atlas
+    pack_set --module-requirement lapack \
+	--module-requirement atlas
 
     pack_set --command "$(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=unix" \

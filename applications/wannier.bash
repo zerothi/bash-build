@@ -10,7 +10,8 @@ tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     tmp="-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a"
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --module-requirement atlas
+    pack_set --module-requirement lapack \
+	--module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib
     tmp="$tmp/liblapack_atlas.a $tmp/libcblas.a $tmp/libf77blas.a $tmp/libatlas.a"
 fi

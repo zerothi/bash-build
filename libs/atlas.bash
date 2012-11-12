@@ -1,5 +1,6 @@
 # Then install Atlas
 add_package http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.0/atlas3.10.0.tar.bz2
+
 pack_set --directory ATLAS
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
