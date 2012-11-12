@@ -27,7 +27,8 @@ pack_set --command "rm $(pwd)/$(pack_get --alias)-$(pack_get --version).sys"
 
 
 # Make commands
-pack_set --command "make $(get_make_parallel) wannier lib"
+pack_set --command "make $(get_make_parallel) wannier"
+pack_set --command "make lib"
 pack_set --command "make test"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
 pack_set --command "cp wannier90.x $(pack_get --install-prefix)/bin/"
