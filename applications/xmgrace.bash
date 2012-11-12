@@ -12,7 +12,6 @@ pack_set --module-requirement netcdf-serial
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "CC=${MPICC}" \
     --command-flag "LDFLAGS='$($(pack_get --install-prefix netcdf-serial)/bin/nc-config --libs)'" \
     --command-flag "CPPFLAGS='$($(pack_get --install-prefix netcdf-serial)/bin/nc-config --cflags) $CPPFLAGS'" \
     --command-flag "--enable-netcdf --without-fftw" \
