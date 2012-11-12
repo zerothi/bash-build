@@ -6,7 +6,8 @@ let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
 let "VERSION_TIME_STAMP=1 << 2"
 let "IS_MODULE=1 << 3"
-let "UPDATE_MODULE_NAME=1 << 5"
+let "UPDATE_MODULE_NAME=1 << 4"
+let "PRELOAD_MODULE=1 << 5"
 
 _prefix=""
 # Instalation path
@@ -163,6 +164,7 @@ function add_package {
     fi
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
+    _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
 }
 
 # This function allows for setting data related to a package
@@ -267,6 +269,17 @@ function pack_install {
      # Check that the thing is not already installed
     if [ ! -e $(pack_get --install-query $idx) ]; then
 
+	# If the module should be preloaded (for configures which checks that the path exists)
+	if [ $(has_setting $PRELOAD_MODULE) ]; then
+	    create_module --force \
+		-n $(pack_get --alias $idx) \
+		-v $(pack_get --version $idx) \
+		-M $(pack_get --module-name $idx) \
+		-P $(pack_get --install-prefix $idx)
+	    # Load module for preloading
+	    module load $(pack_get --module-name $idx)
+	fi
+
         # Create the list of requirements
 	local module_loads=""
 	cmds="$(pack_get --module-requirement $idx)"
@@ -310,9 +323,15 @@ function pack_install {
 	
 	popd
 	msg_install --finish $idx
-
-	[ ! -z $module_loads ] && \
+	
+	# Unload the requirement modules
+	[ ! -z "$module_loads" ] && \
 	    module unload $module_loads
+
+	# Unload the module itself in case of PRELOADING
+	if [ $(has_setting $PRELOAD_MODULE) ]; then
+	    module unload $(pack_get --module-name $idx)
+	fi
 
     else
 	msg_install --already-installed $idx
@@ -324,7 +343,7 @@ function pack_install {
 	cmds="$(pack_get --module-requirement $idx)"
 	# Clear the requirement if it is not found
 	if [ ! -z "$cmds" ]; then
-	    for cmd in "$cmds" ; do
+	    for cmd in $cmds ; do
 		reqs="$reqs -R $(pack_get --module-name $cmd)"
 	    done
 	fi
@@ -347,7 +366,7 @@ function get_index {
 	echo $1
 	return 0
     fi
-    for lookup in archive package alias ; do
+    for lookup in alias archive package ; do
 	i=0
 	while : ; do
 	    local tmp=$(pack_get --$lookup $i)
@@ -396,6 +415,7 @@ function get_make_parallel {
 #   -W <what is message>
 function create_module {
     local name;local version;local path; local help; local whatis
+    local force=0
     local require=""; local conflict=""; local load=""
     while [ $# -gt 0 ]; do
 	local opt="$1" # Save the option passed
@@ -413,6 +433,7 @@ function create_module {
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -H|-help)  help="$1" ; shift ;;
 	    -W|-what-is)  whatis="$1" ; shift ;;
+	    -F|-force)  force=1 ;;
 	    *)
 		doerr "$opt" "Option for create_module $opt was not recognized"
 	esac
@@ -474,18 +495,18 @@ EOF
 	echo "" >> $mfile
     fi
     # Add paths if they are available
-    _add_module_if -d "$path/bin" $mfile \
+    _add_module_if -F $force -d "$path/bin" $mfile \
 	"prepend-path PATH             \$basepath/bin"
-    _add_module_if -d "$path/man" $mfile \
+    _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH          \$basepath/man"
-    _add_module_if -d "$path/lib64" $mfile \
+    _add_module_if -F $force -d "$path/lib64" $mfile \
 	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
-    _add_module_if -d "$path/lib" $mfile \
+    _add_module_if -F $force -d "$path/lib" $mfile \
 	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
-    _add_module_if -d "$path/man" $mfile \
+    _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH  \$basepath/man"
     for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
-	_add_module_if -d "$path/lib/python$PV/site-packages" $mfile \
+	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
 }
@@ -497,11 +518,12 @@ EOF
 #   $1 module file to append to
 #   $2-? append this in one line to the file
 function _add_module_if {
-    local d="";local f=""
-    while getopts ":d:f:h" opt; do
+    local d="";local f="" ;local F=0;
+    while getopts ":d:f:F:h" opt; do
 	case $opt in
             d)  d="$OPTARG" ;;
             f)  f="$OPTARG" ;;
+            F)  F="$OPTARG" ;;
             h)  _add_module_if_usage 0 ;;
             \?) echo "Invalid option: -$OPTARG"
 		_add_module_if_usage 1 ;;
@@ -512,6 +534,7 @@ function _add_module_if {
     local mf="$1" ; shift
     local check=""
     [ -n "$d" ] && check=$d ; [ -n "$f" ] && check=$f
+    [ "$F" -ne "0" ] && check=$HOME # Force the check to succed
     if [ -e $check ]; then
 	cat <<EOF >> $mf
 $@
@@ -525,28 +548,35 @@ EOF
 # Pretty prints some information about the installation
 #   $1 : the package name or index
 function msg_install {
-    local n=""
+    local n="" ; local action=0
     while [ $# -gt 1 ]; do
 	local opt=$1
 	case $opt in
 	    --*) opt=${opt:1} ;;
 	esac ; shift
 	case $opt in
-	    -finish|-F) n="Finished" ;;
-	    -start|-S) n="Installing" ;;
-	    -already-installed) n="Already installed" ;;
+	    -start|-S) n="Installing" ; action=1 ;;
+	    -finish|-F) n="Finished" ; action=2 ;;
+	    -already-installed) n="Already installed" ; action=3 ;;
 	esac
     done
     local cmd=$(arc_cmd $(pack_get --ext $1) )
     echo " ================================== "
     echo "            $n"
-    echo " File    : $(pack_get --archive $1)"
-    echo " Ext     : $(pack_get --ext $1)"
-    echo " Ext CMD : $cmd"
+    if [ "$action" -eq "1" ]; then
+	echo " File    : $(pack_get --archive $1)"
+	echo " Ext     : $(pack_get --ext $1)"
+	echo " Ext CMD : $cmd"
+    fi
     echo " Package : $(pack_get --package $1)"
     echo " Version : $(pack_get --version $1)"
-    echo " Currently loaded modules:"
-    module list
+    if [ "$action" -eq "1" ]; then
+	echo " Currently loaded modules:"
+	module list
+	if [ "$?" -ne "0" ]; then
+	    doerr "module list" "Could not show module loaded files"
+	fi
+    fi
     echo " ================================== "
 }
 

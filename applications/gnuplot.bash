@@ -3,9 +3,6 @@ add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/4.6.1/gnupl
 
 pack_set -s $IS_MODULE
 
-# The installation directory
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/bin/gnuplot
 
 # Install commands that it should run

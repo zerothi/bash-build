@@ -4,15 +4,12 @@ pack_set --directory ATLAS
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-prefix \
-    $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 pack_set --module-requirement lapack
-pack_set --install-query \
-    $(pack_get --install-prefix)/lib/libatlas.a
+
+pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
 
 # Prepare the make file
-pack_set --command "sed -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"
+pack_set --command "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"
 
 # Configure command
 pack_set --command "../configure -Fa alg '-fPIC'" \

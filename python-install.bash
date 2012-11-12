@@ -8,12 +8,12 @@ source python/nose.bash
 source python/cython.bash
 source python/mpi4py.bash
 source python/numpy.bash
-source python/scipy.bash
-source python/numexpr.bash
-source python/h5py.bash
-source python/pytables.bash
-source python/qutip.bash
+source python/scipy.bash # [numpy]
+source python/numexpr.bash # [numpy]
+source python/h5py.bash # [numpy,hdf5-serial]
+#source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/matplotlib.bash
+source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/scientificpython.bash
 source python/ase.bash
 source python/gpaw.bash

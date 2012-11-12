@@ -7,10 +7,14 @@ pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_ge
 
 pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
 
-pack_set --install-query $(pack_get --install-prefix $(get_parent))/bin/nosetests
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
 
 # Add requirments when creating the module
-pack_set --module-requirement $(get_parent)
+pack_set --module-requirement $(get_parent) \
+    --module-requirement cython \
+    --module-requirement numpy \
+    --module-requirement scipy \
+    --module-requirement matplotlib
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \

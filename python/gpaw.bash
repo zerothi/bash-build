@@ -70,15 +70,20 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 pack_install
 
 # Add the installation of the gpaw setups
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-0.9.9672.tar.gz
-
-pack_set -s $IS_MODULE
-
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
-
-pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
-
-pack_set --install-query $(pack_get --install-prefix)/
-
-pack_install
+for v in 0.5.3574 0.6.6300 0.8.7929 0.9.9672 ; do
+    
+    tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
+    add_package http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
+    
+    pack_set -s $IS_MODULE
+    
+    pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)
+    
+    pack_set --module-name $(pack_get --package)/$(pack_get --version)
+    
+    pack_set --install-query $(pack_get --install-prefix)/
+    pack_set --command "mkdir -p $(pack_get --install-prefix)"
+    pack_set --command "cp -r ./* $(pack_get --install-prefix)/"
+    
+    pack_install
+done

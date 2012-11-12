@@ -34,26 +34,16 @@ set_c $compiler
 # Set the umask 5 means read and execute
 #umask 0
 
-source gnuplot.bash
-source blas.bash
-source lapack.bash
-#source atlas.bash
-source gsl.bash
-source zlib.bash
-source openmpi.bash
-#source git.bash
-source scalapack.bash
-source hdf5.bash
-source hdf5-serial.bash
-source parallel-netcdf.bash
-source netcdf.bash
-source xmgrace.bash
+
+# Install all libraries
+source libs.bash
 
 # These are "parent" installations...
 source python2.bash
 #source python3.bash
 
-
+# We have installed all libraries needed for doing application installs
+source apps.bash
 
 # Initialize the module read path
 set_module_path $install_path/modules-npa

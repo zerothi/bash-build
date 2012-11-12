@@ -19,14 +19,14 @@ if [ "${tmp:0:5}" == "intel" ]; then
     if [ -z "$MKL_PATH" ]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
-    cat << EOF > $(pack_get --alias)-$(pack_get --version).site.cfg
+    cat << EOF > $tmp
 [mkl]
 library_dirs = $MKL_PATH/lib/intel64/
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include
 mkl_libs = mkl_rt, mkl_core, mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_mc 
 lapack_libs = mkl_lapack95_lp64
-
 EOF
+
     pack_set --command "cp $(pwd)/$tmp site.cfg"
     pack_set --command "rm $(pwd)/$tmp"
     tmp="-static -mkl -openmp -fp-model strict -fomit-frame-pointer"
@@ -43,7 +43,7 @@ elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
 
     tmp=$(pack_get --alias)-$(pack_get --version).site.cfg
-    cat << EOF > $(pack_get --alias)-$(pack_get --version).site.cfg
+    cat << EOF > $tmp
 [DEFAULT]
 library_dirs = $(pack_get --install-prefix atlas)/lib
 include_dirs = $(pack_get --install-prefix atlas)/include

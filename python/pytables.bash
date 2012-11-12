@@ -10,7 +10,7 @@ pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_ge
 
 pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
 
-pack_set --install-query $(pack_get --install-prefix $(get_parent))/bin/nosetests
+pack_set --install-query $(pack_get --install-prefix)/soteu
 
 # Add requirments when creating the module
 pack_set --module-requirement $(get_parent) \
@@ -18,10 +18,13 @@ pack_set --module-requirement $(get_parent) \
     --module-requirement zlib \
     --module-requirement hdf5-serial \
     --module-requirement numpy \
-    --module-requirement numexpr
+    --module-requirement numexpr-2
 
     
 # Install commands that it should run
+pack_set --command "$(get_parent_exec) setup.py build" \
+    --command-flag "--hdf5=$(pack_get --install-prefix hdf5-serial)" \
+    --command-flag "--cflags='$CFLAGS'"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     
