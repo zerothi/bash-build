@@ -15,7 +15,8 @@ pack_set --module-requirement openmpi \
     --module-requirement $(get_parent) \
     --module-requirement numpy \
     --module-requirement scipy \
-    --module-requirement matplotlib
+    --module-requirement matplotlib \
+    --module-requirement ase
 
 # Check for Intel MKL or not
 tmp=$(get_c)

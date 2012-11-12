@@ -12,6 +12,7 @@ source libs/hdf5.bash
 source libs/hdf5-serial.bash
 source libs/parallel-netcdf.bash
 source libs/netcdf.bash
+source libs/netcdf-serial.bash
 source libs/fftw2.bash
 source libs/fftw2-serial.bash
 source libs/fftw3.bash
