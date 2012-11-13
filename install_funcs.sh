@@ -159,7 +159,7 @@ function add_package {
     if [ $(has_setting $VERSION_TIME_STAMP $_N_archives) ]; then
         # Download the archive
 	dwn_file $_N_archives $(get_build_path)/.archives
-	v="$(get_file_time $(get_build_path)/.archives/$(pack_get --archive $_N_archives))"
+	v="$(get_file_time %g-%j $(get_build_path)/.archives/$(pack_get --archive $_N_archives))"
 	_version[$_N_archives]="$v"
     fi
     # Default the module name to this:
@@ -672,8 +672,9 @@ function _add_module_if_usage {
 # Takes one, optionally two arguments
 # $1 is the file..
 function get_file_time {
-    local fdate=$(stat -c "%y" $1)
-    echo `date +"%g-%j" --date="$fdate"`    
+    local format="$1"
+    local fdate=$(stat -c "%y" $2)
+    echo `date +"$format" --date="$fdate"`    
 }
 
 # Check for a number
@@ -688,7 +689,7 @@ function pack_set_file_version {
     [ $# -gt 0 ] && idx=$1
     # Download the archive
     dwn_file $idx $(get_build_path)/.archives
-    local v="$(get_file_time $(get_build_path)/.archives/$(pack_get --archive $idx))"
+    local v="$(get_file_time %g-%j $(get_build_path)/.archives/$(pack_get --archive $idx))"
     pack_set --version "$v"
      # Default the module name to this:
     pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx

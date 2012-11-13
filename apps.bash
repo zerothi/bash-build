@@ -1,4 +1,5 @@
 #source applications/git.bash
+source applications/lammps.bash
 source applications/gnuplot.bash
 source applications/xmgrace.bash
 source applications/dftb.bash

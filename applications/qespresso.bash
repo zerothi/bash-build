@@ -48,7 +48,7 @@ for v in \
 	--command-flag "--prefix=$(pack_get --install-prefix)" 
 
     for EXE in bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt ; do
-	pack_set --command "make $EXE"
+	pack_set --command "make $(get_make_parallel) $EXE"
     done
 
 # Make commands

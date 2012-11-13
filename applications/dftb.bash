@@ -57,7 +57,7 @@ pack_set --command "sed -i -e 's/ARCH[[:space:]]*=.*/ARCH = $cc/g' Makefile.user
 # Install commands that it should run
 pack_set --command "cd prg_dftb"
 pack_set --command "make distclean"
-pack_set --command "make"
+pack_set --command "make $(get_make_parallel)"
 
 # Make commands
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
