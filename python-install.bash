@@ -22,6 +22,7 @@ source python/inelastica-dev.bash
 
 
 # Initialize the module read path
+old_path=$(get_module_path)
 set_module_path $install_path/modules-npa
 
 
@@ -63,3 +64,5 @@ create_module \
     -L "$(pack_get --module-name ase)" \
     -L "$(pack_get --module-name gpaw)" \
     -L "$(pack_get --module-name inelastica)"
+
+set_module_path $old_path
