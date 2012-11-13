@@ -12,7 +12,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 BLAS = $MKL_PATH/lib/libmkl_blas95_lp64.a\n\
 LAPACK = $MKL_PATH/lib/libmkl_lapack95_lp64.a' Makefile"
     
-elif [ "${tmp:0:2}" == "gnu" ]; then
+elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib
     pack_set --command "sed -i '1 a\
