@@ -4,6 +4,7 @@ source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
 source libs/gsl.bash
+#source libs/boost.bash
 source libs/zlib.bash
 source libs/ctl.bash
 source libs/harminv.bash

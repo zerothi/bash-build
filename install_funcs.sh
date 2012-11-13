@@ -574,7 +574,6 @@ function msg_install {
     fi	
     echo " Version : $(pack_get --version $1)"
     if [ "$action" -eq "1" ]; then
-	echo " Currently loaded modules:"
 	module list
 	if [ "$?" -ne "0" ]; then
 	    doerr "module list" "Could not show module loaded files"
