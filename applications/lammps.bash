@@ -47,9 +47,22 @@ LINKFLAGS =	-O
 LIB =           -lpthread -mkl=sequential
 EOF
 
+elif [ "${tmp:0:3}" == "gnu" ]; then 
+    cat <<EOF >> $tmp_file
+LINKFLAGS =	-O
+LIB =           -lpthread 
+EOF
+
+else
+    doerror lammps "Could not recognize the compiler: $(get_c)"
+fi
+
+
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make $(get_make_parallel) makelib"
+pack_set --command "cp $(pwd)/$tmp_file MAKE/Makefile.npa"
+pack_set --command "make $(get_make_parallel) npa"
+pack_set --command "make makelib"
+pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
 pack_set --command "asonteuhasonteuh"
 
 
