@@ -568,7 +568,7 @@ function msg_install {
 	echo " Ext     : $(pack_get --ext $1)"
 	echo " Ext CMD : $cmd"
     fi
-    echo " Package : $(pack_get --package $1)"
+    echo " Package : $(pack_get --package $1) [$(pack_get --alias $1)]"
     echo " Version : $(pack_get --version $1)"
     if [ "$action" -eq "1" ]; then
 	echo " Currently loaded modules:"
