@@ -7,7 +7,7 @@ pack_set --alias python
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # The installation directory
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python3
 

@@ -1,6 +1,7 @@
 #source applications/git.bash
 source applications/lammps.bash
 source applications/gnuplot.bash
+source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
 source applications/dftb.bash

@@ -5,7 +5,7 @@ pack_set --alias hdf5-serial
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libhdf5.a
 

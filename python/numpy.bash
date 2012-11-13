@@ -3,7 +3,7 @@ add_package http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/f2py
 pack_set --module-requirement $(get_parent)

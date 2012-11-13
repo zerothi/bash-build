@@ -3,7 +3,7 @@ add_package http://downloads.sourceforge.net/project/boost/boost/1.52.0/boost_1_
 
 pack_set --version 1.52.0
 
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set -s $IS_MODULE
 

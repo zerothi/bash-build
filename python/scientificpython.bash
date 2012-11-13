@@ -3,7 +3,7 @@ add_package https://sourcesup.renater.fr/frs/download.php/4153/ScientificPython-
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Scientific
 

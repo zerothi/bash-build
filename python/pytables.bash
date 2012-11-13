@@ -9,7 +9,7 @@ pack_set --package pytables
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/soteu
 
