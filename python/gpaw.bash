@@ -27,8 +27,7 @@ platform_id = "Xeon"
 EOF
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --module-requirement lapack \
-	--module-requirement atlas \
+    pack_set --module-requirement atlas \
 	--module-requirement scalapack
     cat << EOF > $file
 compiler = '$CC $CFLAGS '

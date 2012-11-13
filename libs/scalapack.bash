@@ -5,9 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libscalapack.a
 
-pack_set --module-requirement openmpi \
-    --module-requirement blas \
-    --module-requirement lapack
+pack_set --module-requirement openmpi
 
 # Prepare the make file
 tmp="sed -i -e"
@@ -28,5 +26,9 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp libscalapack.a $(pack_get --install-prefix)/lib/"
 
-
+# Blas and LAPACK are only needed for testing purposes
+module load $(pack_get --module-name blas)
+module load $(pack_get --module-name lapack)
 pack_install
+module unload $(pack_get --module-name blas)
+module unload $(pack_get --module-name lapack)

@@ -14,7 +14,6 @@ if [ "${tmp:0:5}" == "intel" ]; then
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --module-requirement lapack
     pack_set --module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib/lib
     pack_set --command "../configure" \

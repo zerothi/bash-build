@@ -23,8 +23,7 @@ for v in \
 	tmp_lib="$tmp_lib LAPACK_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a'"
 
     elif [ "${tmp:0:3}" == "gnu" ]; then
-	pack_set --module-requirement lapack \
-	    --module-requirement atlas \
+	pack_set --module-requirement atlas \
 	    --module-requirement scalapack
 	tmp="$(pack_get --install-prefix atlas)"
 	tmp_lib="$tmp_lib BLAS_LIBS='$tmp/lib/libf77blas.a $tmp/lib/libcblas.a $tmp/lib/libatlas.a'"

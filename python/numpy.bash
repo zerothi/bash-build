@@ -36,8 +36,7 @@ EOF
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # Add requirments when creating the module
-    pack_set --module-requirement lapack \
-	--module-requirement atlas
+    pack_set --module-requirement atlas
 
     tmp=$(pack_get --alias)-$(pack_get --version).site.cfg
     cat << EOF > $tmp

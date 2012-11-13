@@ -19,8 +19,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # Add requirements when creating the module
-    pack_set --module-requirement lapack \
-	--module-requirement atlas
+    pack_set --module-requirement atlas
 
     pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=unix"

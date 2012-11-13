@@ -28,8 +28,7 @@ LIBOPT = -L$MKL_PATH/lib/intel64
 EOF
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --module-requirement lapack \
-	--module-requirement atlas
+    pack_set --module-requirement atlas
     cc=gnu
     tmp=$(pack_get --alias)-$(pack_get --version).$cc
     
