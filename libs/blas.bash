@@ -9,7 +9,7 @@ pack_set --alias blas
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/libblas.a
 
 # Prepare the make file

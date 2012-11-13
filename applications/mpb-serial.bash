@@ -7,13 +7,13 @@ add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 pack_set -s $IS_MODULE
 
 pack_set --alias mpb-serial
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/bin/mpbi
 
 pack_set --module-requirement libctl \
     --module-requirement zlib \
     --module-requirement hdf5-serial \
-    --module-requirement fftw-serial-2
+    --module-requirement fftw-2
 
 # Check for Intel MKL or not
 tmp=$(get_c)

@@ -7,14 +7,9 @@ if [ "${tmp:0:1}" == "2" ]; then
     
     pack_set -s $IS_MODULE
     
-    pack_set --install-prefix \
-	$(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
-
-    pack_set --module-name \
-	$(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
+    pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
     
-    pack_set --install-query \
-	$(pack_get --install-prefix)/bin/bzr
+    pack_set --install-query $(pack_get --install-prefix)/bin/bzr
     
     # Add requirments when creating the module
     pack_set --module-requirement $(get_parent)

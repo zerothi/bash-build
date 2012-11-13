@@ -11,11 +11,11 @@ for v in \
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
     pack_set --module-requirement openmpi 
-    pack_set --module-requirement fftw-serial-3
+    pack_set --module-requirement fftw-3
 
 # Check for Intel MKL or not
     tmp=$(get_c)
-    tmp_lib="FFT_LIBS='$(pack_get --install-prefix fftw-serial-3)/lib/libfftw3.a'"
+    tmp_lib="FFT_LIBS='$(pack_get --install-prefix fftw-3)/lib/libfftw3.a'"
     if [ "${tmp:0:5}" == "intel" ]; then
 	tmp_lib="$tmp_lib BLAS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'"
 	tmp_lib="$tmp_lib BLACS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blacs_openmpi_lp64.a'"

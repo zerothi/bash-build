@@ -12,7 +12,7 @@ pack_set --directory \
 pack_set --install-query $(pack_get --install-prefix)/bin/lmp
 
 pack_set --module-requirement openmpi \
-    --module-requirement fftw-serial-3
+    --module-requirement fftw-3
 
 
 tmp_file=lammps-$(pack_get --version).make
@@ -32,9 +32,9 @@ LMP_INC =	-DLAMMPS_GZIP
 MPI_INC =       
 MPI_PATH = 
 MPI_LIB =      
-FFT_INC =       -DFFT_FFTW3 -I$(pack_get --install-prefix fftw-serial-3)/include
+FFT_INC =       -DFFT_FFTW3 -I$(pack_get --install-prefix fftw-3)/include
 FFT_PATH = 
-FFT_LIB =	$(pack_get --install-prefix fftw-serial-3)/lib/libfftw3.a
+FFT_LIB =	$(pack_get --install-prefix fftw-3)/lib/libfftw3.a
 JPG_INC =       
 JPG_PATH = 	
 JPG_LIB =

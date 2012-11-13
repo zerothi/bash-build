@@ -5,12 +5,10 @@ pack_set --alias pnetcdf
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/libpnetcdf.a
 
 pack_set --module-requirement openmpi
-
-pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 # Install commands that it should run
 pack_set --command "../configure" \

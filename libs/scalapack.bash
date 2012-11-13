@@ -3,11 +3,7 @@ add_package http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-prefix \
-    $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
-
-pack_set --install-query \
-    $(pack_get --install-prefix)/lib/libscalapack.a
+pack_set --install-query $(pack_get --install-prefix)/lib/libscalapack.a
 
 pack_set --module-requirement openmpi \
     --module-requirement blas \

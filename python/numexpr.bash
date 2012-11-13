@@ -5,8 +5,8 @@ for http in http://numexpr.googlecode.com/files/numexpr-1.4.2.tar.gz \
     add_package $http
 
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
-    pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
-    pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
+    pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+
     pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
     
     # Add requirments when creating the module

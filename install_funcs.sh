@@ -192,6 +192,7 @@ function pack_set {
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
 	    -m|-module-name)  mod_name="$1" ; shift ;;
+	    -prefix-and-module)  mod_name="$1" ; install="$(get_installation_path)/$1" ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
 	    *)
 		# We do a crude check

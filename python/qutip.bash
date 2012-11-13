@@ -3,9 +3,7 @@ add_package https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
-
-pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
 

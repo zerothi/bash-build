@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/xcrysden
 
-pack_set --module-requirement fftw-serial-3
+pack_set --module-requirement fftw-3
 tmp_file=$(pack_get --package)-$(pack_get --version).make
 
 cat <<EOF > $tmp_file
@@ -26,13 +26,13 @@ TCL_LIB      = -ltcl8.5
 TK_LIB       = -ltk8.5
 GLU_LIB      = -lGLU
 GL_LIB       = -lGL
-FFTW3_LIB    = -L$(pack_get --install-prefix fftw-serial-3)/lib -lfftw3
+FFTW3_LIB    = -L$(pack_get --install-prefix fftw-3)/lib -lfftw3
 
 # Include directories
 TCL_INCDIR      = 
 TK_INCDIR       = 
 GL_INCDIR       = 
-FFTW3_INCDIR    = -I$(pack_get --install-prefix fftw-serial-3)/include
+FFTW3_INCDIR    = -I$(pack_get --install-prefix fftw-3)/include
 EOF
 if [ -e /usr/include/tcl8.5 ]; then
     cat <<EOF >> $tmp_file

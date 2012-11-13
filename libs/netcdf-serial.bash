@@ -4,7 +4,7 @@ add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --alias netcdf-serial
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
@@ -31,7 +31,7 @@ add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --alias netcdf-serial
-echo $(pack_get --version netcdf-serial)
+
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version netcdf-serial)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a

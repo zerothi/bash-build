@@ -3,9 +3,7 @@ add_package http://cython.org/release/Cython-0.17.1.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
-
-pack_set --module-name $(pack_get --package)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/cython
 

@@ -3,11 +3,7 @@ add_package http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.9.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-prefix \
-    $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
-
-pack_set --install-query \
-    $(pack_get --install-prefix)/lib/libhdf5.a
+pack_set --install-query $(pack_get --install-prefix)/lib/libhdf5.a
 
 # Add requirments when creating the module
 pack_set --module-requirement openmpi \
