@@ -1,16 +1,15 @@
 # Install
 add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/mpb
+pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
 
 pack_set --module-requirement openmpi \
+    --module-requirement libctl \
     --module-requirement zlib \
     --module-requirement hdf5 \
-    --module-requirement fftw-2 \
-    --module-requirement gmp \
-    --module-requirement guile
+    --module-requirement fftw-2
 
 # Check for Intel MKL or not
 tmp=$(get_c)
@@ -18,17 +17,20 @@ if [ "${tmp:0:5}" == "intel" ]; then
     tmp="--with-blas='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'"
     tmp="$tmp --with-lapack='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a'"
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --module-requirement lapack
-    pack_set --module-requirement atlas
+    pack_set --module-requirement lapack \
+	--module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib
-    tmp="--with-blas='$tmp/libcblas.a $tmp/libf77blas.a $tmp/libatlas.a' --with-lapack='$tmp/liblapack_atlas.a"
+    tmp="--with-blas='$tmp/libcblas.a $tmp/libf77blas.a $tmp/libatlas.a' --with-lapack='$tmp/liblapack_atlas.a'"
 fi
+# Add the CTL library
+tmp="$tmp --with-libctl=$(pack_get --install-prefix libctl)/share/libctl"
+
 
 tmp_ld=""
 tmp_cpp=""
 for cmd in $(pack_get --module-requirement) ; do
     tmp_ld="$tmp_ld -L$(pack_get --install-prefix $cmd)/lib"
-    tmp_cpp="$tmp_ld -I$(pack_get --install-prefix $cmd)/include"
+    tmp_cpp="$tmp_cpp -I$(pack_get --install-prefix $cmd)/include"
 done
 
 # Install commands that it should run
@@ -49,7 +51,8 @@ pack_set --command "make" \
 pack_set --command "make distclean"
 pack_set --command "./configure" \
     --command-flag "CC=$MPICC CXX=$MPICXX" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1'" \
+    --command-flag "LDFLAGS='$tmp_ld'" \
+    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $tmp_cpp'" \
     --command-flag "--with-inv-symmetry" \
     --command-flag "--with-mpi" \
     --command-flag "--prefix=$(pack_get --install-prefix) $tmp" 

@@ -5,6 +5,8 @@ source libs/lapack.bash
 source libs/atlas.bash
 source libs/gsl.bash
 source libs/zlib.bash
+source libs/ctl.bash
+source libs/harminv.bash
 source libs/openmpi.bash
 #source libs/git.bash
 source libs/scalapack.bash

@@ -568,9 +568,9 @@ function msg_install {
 	echo " Ext     : $(pack_get --ext $1)"
 	echo " Ext CMD : $cmd"
     fi
-    echo " Package : $(pack_get --package $1) [$(pack_get --alias $1)]"
+    echo " Package : $(pack_get --package $1)"
     if [ "$(pack_get --package $1)" != "$(pack_get --alias $1)" ]; then
-	echo " Alias : $(pack_get --alias $1)"
+	echo " Alias   : $(pack_get --alias $1)"
     fi	
     echo " Version : $(pack_get --version $1)"
     if [ "$action" -eq "1" ]; then
@@ -593,7 +593,7 @@ function docmd {
     echo 
     echo " # ================================================================"
     if [[ "$ar" != "" ]] ; then
-        echo " # Archive: $(pack_get --package $ar) ($(pack_get --version $ar))"
+        echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
     fi
     echo " # PWD: "$(pwd)
     echo " # CMD: "${cmd[@]}

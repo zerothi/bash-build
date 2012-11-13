@@ -1,17 +1,18 @@
 # Install
 tmp="$(hostname)"
 if [ "${tmp:0:2}" == "n-" ]; then
-    add_package http://ab-initio.mit.edu/meep/meep-1.2.tar.gz
-    
+    add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
+
     pack_set -s $IS_MODULE
+
+    pack_set --alias mpb-serial
+    pack_set --install-prefix $(get_installation_path)/$(pack_get --alias)/$(pack_get --version)/$(get_c)
+    pack_set --install-query $(pack_get --install-prefix)/bin/mpbi
     
-    pack_set --install-query $(pack_get --install-prefix)/bin/meep-mpi
-    
-    pack_set --module-requirement openmpi \
+    pack_set --module-requirement libctl \
 	--module-requirement zlib \
-	--module-requirement hdf5 \
-	--module-requirement fftw-2 \
-	--module-requirement libctl
+	--module-requirement hdf5-serial \
+	--module-requirement fftw-serial-2
     
 # Check for Intel MKL or not
     tmp=$(get_c)
@@ -24,8 +25,9 @@ if [ "${tmp:0:2}" == "n-" ]; then
 	tmp=$(pack_get --install-prefix atlas)/lib
 	tmp="--with-blas='$tmp/libcblas.a $tmp/libf77blas.a $tmp/libatlas.a' --with-lapack='$tmp/liblapack_atlas.a'"
     fi
-    pack_set --module-requirement harminv
+# Add the CTL library
     tmp="$tmp --with-libctl=$(pack_get --install-prefix libctl)/share/libctl"
+    
     
     tmp_ld=""
     tmp_cpp=""
@@ -37,10 +39,23 @@ if [ "${tmp:0:2}" == "n-" ]; then
 # Install commands that it should run
     pack_set --command "autoconf configure.ac > configure"
     pack_set --command "./configure" \
-	--command-flag "CC='$MPICC' CXX='$MPICXX'" \
 	--command-flag "LDFLAGS='$tmp_ld'" \
 	--command-flag "CPPFLAGS='-DH5_USE_16_API=1 $tmp_cpp'" \
-	--command-flag "--with-mpi" \
+	--command-flag "--without-mpi" \
+	--command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
+    
+# Make commands
+    pack_set --command "make $(get_make_parallel)"
+    pack_set --command "make" \
+	--command-flag "install"
+    
+# Install the inversion symmetric part
+    pack_set --command "make distclean"
+    pack_set --command "./configure" \
+	--command-flag "LDFLAGS='$tmp_ld'" \
+	--command-flag "CPPFLAGS='-DH5_USE_16_API=1 $tmp_cpp'" \
+	--command-flag "--with-inv-symmetry" \
+	--command-flag "--without-mpi" \
 	--command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
     
 # Make commands
@@ -49,6 +64,5 @@ if [ "${tmp:0:2}" == "n-" ]; then
 	--command-flag "install"
     
     pack_install
-
+    
 fi
-
