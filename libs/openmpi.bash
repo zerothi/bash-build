@@ -6,9 +6,16 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
+tmp=$(hostname)
+tmp_flags=""
+if [ "${tmp:0:2}" == "n-" ]; then
+    tmp_flags="--with-tm=/opt/torque"
+fi
+tmp_flags=""
+
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --install-prefix) $tmp_flags"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
