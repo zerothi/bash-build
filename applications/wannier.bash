@@ -1,3 +1,6 @@
+tmp=$(hostname)
+[ "${tmp:0:2}" != "n-" ] && return 0
+
 for v in 1.1 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 

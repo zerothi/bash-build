@@ -2,6 +2,7 @@
 source applications/lammps.bash
 source applications/gnuplot.bash
 source applications/xmgrace.bash
+source applications/xcrysden.bash
 source applications/dftb.bash
 source applications/qespresso.bash
 source applications/mpb.bash # [gmp,libunistring,guile]

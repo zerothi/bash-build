@@ -1,4 +1,7 @@
+tmp=$(hostname)
+[ "${tmp:0:2}" != "n-" ] && return 0
 # http://qe-forge.org/gf/download/frsrelease/116/211/espresso-5.0.tar.gz \
+
 for v in \
     http://qe-forge.org/gf/download/frsrelease/116/347/espresso-5.0.1.tar.gz ; do
     add_package $v
