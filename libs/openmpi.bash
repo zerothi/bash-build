@@ -8,10 +8,9 @@ pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
 tmp=$(hostname)
 tmp_flags=""
-if [ "${tmp:0:2}" == "n-" ]; then
+if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management system
     tmp_flags="--with-tm=/opt/torque"
 fi
-tmp_flags=""
 
 # Install commands that it should run
 pack_set --command "../configure" \

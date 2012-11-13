@@ -1,5 +1,8 @@
 #source libs/gmp.bash
 #source libs/guile.bash
+
+source libs/openmpi.bash
+
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
@@ -8,8 +11,7 @@ source libs/gsl.bash
 source libs/zlib.bash
 source libs/ctl.bash
 source libs/harminv.bash
-source libs/openmpi.bash
-#source libs/git.bash
+
 source libs/scalapack.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
