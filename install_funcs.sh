@@ -442,7 +442,7 @@ function create_module {
     require=${require% } ; load=${load% } ; conflict=${conflict% }
 
     # Create the file to which we need to install the module script
-    local mfile=$_modulepath/$mod
+    local mfile=$(get_module_path)/$mod
 
     # First create directory if it does not exist:
     mkdir -p $(dirname $mfile)

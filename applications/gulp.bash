@@ -1,3 +1,6 @@
+tmp=$(hostname)
+[ "${tmp:0:2}" != "n-" ] && return 0
+
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp_4.0.tar.gz
 
 pack_set -s $IS_MODULE
@@ -50,3 +53,20 @@ pack_set --command "cp gulp $(pack_get --install-prefix)/bin/"
 pack_set --command "cp ../libgulp.a $(pack_get --install-prefix)/lib/"
 
 pack_install
+
+old_path=$(get_module_path)
+set_module_path $install_path/modules-npa-apps
+
+tmp_load=""
+for cmd in $(pack_get --module-requirement) ; do
+    tmp_load="$tmp_load -L \"$(pack_get --module-name $cmd)\""
+done
+
+create_module \
+    -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
+    -v $(pack_get --version) \
+    -M $(pack_get --alias).$(pack_get --version).$(get_c) \
+    -P "/directory/should/not/exist" $tmp_load \
+    -L $(pack_get --module-name)
+
+set_module_path $old_path

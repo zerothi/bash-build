@@ -25,17 +25,17 @@ source python/inelastica-dev.bash
 old_path=$(get_module_path)
 set_module_path $install_path/modules-npa
 
-
 create_module \
     -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M python$pV.numpy.scipy.scientific.matplotlib/$(get_c) \
+    -M python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
     -L "$(pack_get --module-name python-$pV)" \
+    -L "$(pack_get --module-name cython)" \
     -L "$(pack_get --module-name numpy)" \
     -L "$(pack_get --module-name scipy)" \
-    -L "$(pack_get --module-name scientificpython)" \
-    -L "$(pack_get --module-name matplotlib)"
+    -L "$(pack_get --module-name numexpr)" \
+    -L "$(pack_get --module-name scientificpython)"
 
 
 create_module \
@@ -43,26 +43,26 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.mpi4py.numpy.scipy.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name python-$pV)" \
-    -L "$(pack_get --module-name cython)" \
-    -L "$(pack_get --module-name mpi4py)" \
-    -L "$(pack_get --module-name numpy)" \
-    -L "$(pack_get --module-name scipy)" \
-    -L "$(pack_get --module-name scientificpython)" \
-    -L "$(pack_get --module-name matplotlib)"
+    -L python$pV.basic.mpi4py/$(get_c) \
+    -L "$(pack_get --module-name mpi4py)"
 
 
 create_module \
     -n "\"Nick Papior Andersen's DFT python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
-    -M python$pV.numpy.scipy.scientific.ase.gpaw.inelastica/$(get_c) \
+    -M python$pV.basic.ase.gpaw.inelastica/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name python-$pV)" \
-    -L "$(pack_get --module-name numpy)" \
-    -L "$(pack_get --module-name scipy)" \
-    -L "$(pack_get --module-name scientificpython)" \
+    -L python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
     -L "$(pack_get --module-name ase)" \
     -L "$(pack_get --module-name gpaw)" \
     -L "$(pack_get --module-name inelastica)"
+
+create_module \
+    -n "\"Nick Papior Andersen's Photonics python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.basic.qutip/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
+    -L "$(pack_get --module-name qutip)"
 
 set_module_path $old_path
