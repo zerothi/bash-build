@@ -15,10 +15,9 @@ if [ "${tmp:0:5}" == "intel" ]; then
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
-    tmp=$(pack_get --install-prefix atlas)/lib/lib
     pack_set --command "../configure" \
-	--command-flag "LIBS='${tmp}f77blas.a ${tmp}cblas.a ${tmp}atlas.a'" \
-	--command-flag "LDFLAGS='-L$(pack_get --install-prefix atlas)/lib'" \
+	--command-flag "LIBS='-lf77blas -lcblas -latlas'" \
+	--command-flag "LDFLAGS='$(list --LDFLAGS $(pack_get --module-requirement))'" \
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 else

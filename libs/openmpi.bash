@@ -10,6 +10,8 @@ tmp=$(hostname)
 tmp_flags=""
 if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management system
     tmp_flags="--with-tm=/opt/torque"
+    # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
+    # so no need for using libnuma
 fi
 
 # Install commands that it should run

@@ -33,7 +33,15 @@ set_c $compiler
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
-
+_DEBUG=0
+if [ $_DEBUG -ne 0 ]; then
+    add_package abc.tar.gz
+    add_package def.tar.gz
+    add_package ghi.tar.gz
+    echo $(list --prefix 'PRE' abc def ghi )
+    echo $(list --prefix 'PRE' --suffix 'SUF'  abc def ghi )
+    echo $(list --Wlrpath --LDFLAGS   abc def ghi )
+fi
 
 # Install all libraries
 source libs.bash

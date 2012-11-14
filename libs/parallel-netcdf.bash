@@ -14,6 +14,7 @@ pack_set --module-requirement openmpi
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
+    --command-flag "CFLAGS='$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-mpi=$(pack_get --install-prefix openmpi)" \
     --command-flag "--enable-fortran"

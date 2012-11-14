@@ -19,8 +19,8 @@ elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
     tmp=$(pack_get --install-prefix atlas)/lib
     pack_set --command "sed -i '1 a\
-BLAS = $tmp/libf77blas.a $tmp/libcblas.a $tmp/libatlas.a\n\
-LAPACK = $tmp/liblapack_atlas.a' Makefile"
+BLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas\n\
+LAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas' Makefile"
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
@@ -54,19 +54,11 @@ pack_set --command "cp ../libgulp.a $(pack_get --install-prefix)/lib/"
 
 pack_install
 
-old_path=$(get_module_path)
-set_module_path $install_path/modules-npa-apps
-
-tmp_load=""
-for cmd in $(pack_get --module-requirement) ; do
-    tmp_load="$tmp_load -L \"$(pack_get --module-name $cmd)\""
-done
-
 create_module \
+    --module-path $install_path/modules-npa-apps \
     -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version).$(get_c) \
-    -P "/directory/should/not/exist" $tmp_load \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement)) \
     -L $(pack_get --module-name)
-
-set_module_path $old_path

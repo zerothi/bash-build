@@ -15,6 +15,8 @@ pack_set --command "../configure" \
     --command-flag "F77=${MPIF90} F90=${MPIF90} FC=${MPIF90}" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
+    --command-flag "CFLAGS='$CFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "FCFLAGS='$FCFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
     --command-flag --enable-parallel \
     --command-flag --disable-shared \
     --command-flag --enable-static \

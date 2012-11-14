@@ -4,9 +4,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw_mpi.a
 
-# FFTW doesn't really need the OpenMPI linking
-#pack_set --module-requirement openmpi
-
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "--enable-mpi" \

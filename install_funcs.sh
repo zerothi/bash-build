@@ -250,6 +250,62 @@ function pack_get {
     esac
 }
 
+# Function to return a list of space seperated quantities with prefix and suffix
+function list {
+    local suf="" ; local pre="" ; local lcmd=""
+    local cmd ; local retval=""
+    # First we collect all options
+    local opts=""
+    while : ; do
+	local opt=$1 # Save the option passed
+	case $opt in
+	    --*) opt=${opt:1} ;;
+	    -*) ;;
+	    *)  break ;;
+	esac
+	shift
+	case $opt in
+	    -prefix|-p)    pre="$1" ; shift ;;
+	    -suffix|-s)    suf="$1" ; shift ;;
+	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
+	    *)
+		opts="$opts $opt" ;;
+	esac
+    done
+    local args=""
+    while [ $# -gt 0 ]; do
+	args="$args $1"
+	shift
+    done
+    for opt in $opts ; do
+	case $opt in
+	    -Wlrpath)      pre="-Wl,-rpath=" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
+	    -LDFLAGS)      pre="-L" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
+	    -INCDIRS)      pre="-I" ; suf="/include" ; lcmd="pack_get --install-prefix " ;;
+	    *)
+		doerr "$opt" "No option for list found for $opt" ;;
+	esac
+	for cmd in $args ; do
+	    if [ ! -z "$lcmd" ]; then
+		retval="$retval $pre$($lcmd $cmd)$suf"
+	    else
+		retval="$retval $pre$cmd$suf"
+	    fi
+	done
+    done
+    if [ -z "$retval" ]; then
+	for cmd in $args ; do
+	    if [ ! -z "$lcmd" ]; then
+		retval="$retval $pre$($lcmd $cmd)$suf"
+	    else
+		retval="$retval $pre$cmd$suf"
+	    fi
+	done
+    fi
+    echo "$retval"
+}
+
+
 # Install the package
 function pack_install {
     local idx=$_N_archives
@@ -416,6 +472,7 @@ function get_make_parallel {
 #   -W <what is message>
 function create_module {
     local name;local version;local path; local help; local whatis
+    local mod_path=""
     local force=0
     local require=""; local conflict=""; local load=""
     while [ $# -gt 0 ]; do
@@ -428,6 +485,7 @@ function create_module {
 	    -n|-name)  name="$1" ; shift ;;
 	    -v|-version)  version="$1" ; shift ;;
 	    -P|-path)  path="$1" ; shift ;;
+	    -p|-module-path)  mod_path="$1" ; shift ;;
 	    -M|-module-name)  mod="$1" ; shift ;;
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
@@ -442,7 +500,11 @@ function create_module {
     require=${require% } ; load=${load% } ; conflict=${conflict% }
 
     # Create the file to which we need to install the module script
-    local mfile=$(get_module_path)/$mod
+    if [ -z "$mod_path" ]; then
+	local mfile=$(get_module_path)/$mod
+    else
+	local mfile=$mod_path/$mod
+    fi
 
     # First create directory if it does not exist:
     mkdir -p $(dirname $mfile)
@@ -500,10 +562,11 @@ EOF
 	"prepend-path PATH             \$basepath/bin"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH          \$basepath/man"
-    _add_module_if -F $force -d "$path/lib64" $mfile \
-	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
-    _add_module_if -F $force -d "$path/lib" $mfile \
-	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
+    # The LD_LIBRARY_PATH is DANGEROUS!
+    #_add_module_if -F $force -d "$path/lib64" $mfile \
+#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
+#    _add_module_if -F $force -d "$path/lib" $mfile \
+#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH  \$basepath/man"
     for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do

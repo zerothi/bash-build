@@ -24,7 +24,7 @@ LN = \$(FC90)
 LNOPT = -mkl=parallel -openmp
 LIB_LAPACK = $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a
 LIB_BLAS = $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a
-LIBOPT = -L$MKL_PATH/lib/intel64
+LIBOPT = -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64
 EOF
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
@@ -40,10 +40,10 @@ CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
 LN = \$(FC90) 
 LNOPT = -fopenmp
-ATLASDIR = $(pack_get --install-prefix atlas)/lib
-LIB_LAPACK = \$(ATLASDIR)/liblapack_atlas.a
-LIB_BLAS = \$(ATLASDIR)/libf77blas.a \$(ATLASDIR)/libcblas.a \$(ATLASDIR)/libatlas.a
-LIBOPT = -L\$(ATLASDIR)
+ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)
+LIB_LAPACK = \$(ATLASOPT) -llapack_atlas
+LIB_BLAS   =  \$(ATLASOPT) -lf77blas -lcblas -latlas
+LIBOPT     = \$(ATLASOPT)
 EOF
 
 else
@@ -67,20 +67,11 @@ pack_set --command "cp _obj_$cc/dftb+ $(pack_get --install-prefix)/bin/"
 
 pack_install
 
-
-old_path=$(get_module_path)
-set_module_path $install_path/modules-npa-apps
-
-tmp_load=""
-for cmd in $(pack_get --module-requirement) ; do
-    tmp_load="$tmp_load -L \"$(pack_get --module-name $cmd)\""
-done
-
 create_module \
+    --module-path $install_path/modules-npa-apps \
     -n "\"Nick Papior Andersen's script for loading DFTB: $(get_c)\"" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version).$(get_c) \
-    -P "/directory/should/not/exist" $tmp_load \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement)) \
     -L $(pack_get --module-name)
-
-set_module_path $old_path

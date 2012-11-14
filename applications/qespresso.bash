@@ -15,7 +15,7 @@ for v in \
 
 # Check for Intel MKL or not
     tmp=$(get_c)
-    tmp_lib="FFT_LIBS='$(pack_get --install-prefix fftw-3)/lib/libfftw3.a'"
+    tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw3) -lfftw3'"
     if [ "${tmp:0:5}" == "intel" ]; then
 	tmp_lib="$tmp_lib BLAS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'"
 	tmp_lib="$tmp_lib BLACS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blacs_openmpi_lp64.a'"
@@ -25,27 +25,22 @@ for v in \
     elif [ "${tmp:0:3}" == "gnu" ]; then
 	pack_set --module-requirement atlas \
 	    --module-requirement scalapack
-	tmp="$(pack_get --install-prefix atlas)"
-	tmp_lib="$tmp_lib BLAS_LIBS='$tmp/lib/libf77blas.a $tmp/lib/libcblas.a $tmp/lib/libatlas.a'"
-	tmp_lib="$tmp_lib BLACS_LIBS='$(pack_get --install-prefix)/lib/libscalapack.a'"
-	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(pack_get --install-prefix)/lib/libscalapack.a'"
-	tmp_lib="$tmp_lib LAPACK_LIBS='$tmp/lib/liblapack_atlas.a'"
-    fi
+	tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
+	tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+	tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
 
-    tmp_ld=""
-    tmp_cpp=""
-    for cmd in $(pack_get --module-requirement) ; do
-	tmp_ld="$tmp_ld -L$(pack_get --install-prefix $cmd)/lib"
-	tmp_cpp="$tmp_cpp -I$(pack_get --install-prefix $cmd)/include"
-    done
+    else
+	doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
+    fi
 
 # Install commands that it should run
     pack_set --command "./configure" \
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='$FCFLAGS'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$tmp_ld'" \
-	--command-flag "CPPFLAGS='$tmp_cpp'" \
+	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-requirement))'" \
+	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-requirement))'" \
 	--command-flag "--enable-parallel" \
 	--command-flag "--prefix=$(pack_get --install-prefix)" 
 
@@ -59,22 +54,14 @@ for v in \
 
     pack_install
 
-    old_path=$(get_module_path)
-    set_module_path $install_path/modules-npa-apps
-    
-    tmp_load=""
-    for cmd in $(pack_get --module-requirement) ; do
-	tmp_load="$tmp_load -L \"$(pack_get --module-name $cmd)\""
-    done
-    
     create_module \
+	--module-path $install_path/modules-npa-apps \
 	-n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
 	-v $(pack_get --version) \
 	-M $(pack_get --alias).$(pack_get --version).$(get_c) \
-	-P "/directory/should/not/exist" $tmp_load \
-	-L $(pack_get --module-name)
-    
-    set_module_path $old_path
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement)) \
+	-L $(pack_get --module-name) 
 
 done
 
