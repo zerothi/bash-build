@@ -4,6 +4,7 @@ source ~/.bashrc
 module purge
 
 # We have here the installation of all the stuff for gray....
+source install_funcs.sh
 
 # Use ln to link to this file
 if [ $# -ne 0 ]; then
@@ -13,8 +14,6 @@ else
     [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
     source compiler.sh
 fi
-
-source install_funcs.sh
 
 # Create the build path for downloading and creating the stuff
 set_build_path $(pwd)
@@ -35,6 +34,12 @@ set_c $compiler
 #umask 0
 _DEBUG=0
 if [ $_DEBUG -ne 0 ]; then
+    echo get CFLAGS $(edit_env --get CFLAGS)
+    $(edit_env --prepend '-hollo' CFLAGS)
+    echo get PREPEND CFLAGS $(edit_env --get CFLAGS)
+    $(edit_env --append '-hollo' CFLAGS)
+    echo get APPEND CFLAGS $(edit_env --get CFLAGS)
+    echo ""
     add_package abc.tar.gz
     add_package def.tar.gz
     add_package ghi.tar.gz
