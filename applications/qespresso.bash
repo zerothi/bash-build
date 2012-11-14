@@ -15,7 +15,7 @@ for v in \
 
 # Check for Intel MKL or not
     tmp=$(get_c)
-    tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw3) -lfftw3'"
+    tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
     if [ "${tmp:0:5}" == "intel" ]; then
 	tmp_lib="$tmp_lib BLAS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'"
 	tmp_lib="$tmp_lib BLACS_LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blacs_openmpi_lp64.a'"
