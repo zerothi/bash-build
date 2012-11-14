@@ -357,6 +357,8 @@ function pack_install {
 	
         # Extract the archive
 	pushd $(get_build_path)/.compile
+	# Remove directory if already existing
+	rm -rf $(pack_get --directory $idx)
 	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
 	

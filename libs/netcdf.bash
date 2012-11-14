@@ -12,12 +12,18 @@ pack_set \
     --module-requirement hdf5 \
     --module-requirement parallel-netcdf
 
+
+# bugfix for the iter test!
+pack_set \
+    --command "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"
+
 # Install commands that it should run
 pack_set \
     --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-requirement))'" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "CFLAGS='$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static" \
@@ -56,6 +62,8 @@ pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
     --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement netcdf))/include -DgFortran'" \
+    --command-flag "CFLAGS='$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "FCFLAGS='$FCFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
     --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lcurl'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \

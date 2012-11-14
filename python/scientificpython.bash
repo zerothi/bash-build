@@ -13,20 +13,22 @@ pack_set --module-requirement netcdf-serial \
 
 # Check for Intel MKL or not
 tmp=$(get_c)
+tmp_cflags=""
+tmp_compiler=""
 if [ "${tmp:0:5}" == "intel" ]; then
-    pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=intelem"
+    tmp_compiler="intelem"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # Add requirements when creating the module
     pack_set --module-requirement atlas
-
-    pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=unix"
-
+    tmp_cflags="$(list --LDFLAGS --Wlrpath netcdf-serial atlas)"
+    tmp_compiler=unix
 fi
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
+pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' CFLAGS='$CFLAGS $tmp_cflags' $(get_parent_exec) setup.py build" \
+    --command-flag "--compiler=$tmp_compiler"
+
+pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' CFLAGS='$CFLAGS $tmp_cflags' $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_install
