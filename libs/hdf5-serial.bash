@@ -16,8 +16,6 @@ pack_set --module-requirement zlib
 pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
-    --command-flag "CFLAGS='$CFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
-    --command-flag "FCFLAGS='$FCFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static" \
     --command-flag "--enable-fortran" \

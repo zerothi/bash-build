@@ -10,14 +10,13 @@ tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "../configure" \
 	--command-flag "LIBS='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'" \
-	--command-flag "LDFLAGS='-L$MKL_PATH/lib/intel64'" \
+	--command-flag "LDFLAGS='$(list --prefix -L $MKL_PATH/lib/intel64) $(list --prefix -Wl,-rpath= $MKL_PATH/lib/intel64)'" \
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
     pack_set --command "../configure" \
-	--command-flag "LIBS='-lf77blas -lcblas -latlas'" \
-	--command-flag "LDFLAGS='$(list --LDFLAGS $(pack_get --module-requirement))'" \
+	--command-flag "LIBS='$(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas'" \
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 else

@@ -230,24 +230,50 @@ function pack_get {
     [ "$index" -lt 0 ] && return 1
     # Process what is requested
     case $opt in
-	-C|-commands)        echo "${_cmd[$index]}" ;;
-	-h|-u|-url|-http)    echo "${_http[$index]}" ;;
+	-C|-commands)        echo -n "${_cmd[$index]}" ;;
+	-h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
 	-R|-module-requirement) 
-                             echo "${_mod_req[$index]}" ;;
+                             echo -n "${_mod_req[$index]}" ;;
         -I|-install-prefix|-prefix) 
-                             echo "${_install_prefix[$index]}" ;;
-        -Q|-install-query)   echo "${_install_query[$index]}" ;;
-        -a|-alias)           echo "${_alias[$index]}" ;;
-	-A|-archive)         echo "${_archive[$index]}" ;;
-        -v|-version)         echo "${_version[$index]}" ;;
-        -d|-directory)       echo "${_directory[$index]}" ;;
-        -s|-settings)        echo "${_settings[$index]}" ;;
-        -m|-module-name)     echo "${_mod_name[$index]}" ;;
-        -p|-package)         echo "${_package[$index]}" ;;
-        -e|-ext)             echo "${_ext[$index]}" ;;
+                             echo -n "${_install_prefix[$index]}" ;;
+        -Q|-install-query)   echo -n "${_install_query[$index]}" ;;
+        -a|-alias)           echo -n "${_alias[$index]}" ;;
+	-A|-archive)         echo -n "${_archive[$index]}" ;;
+        -v|-version)         echo -n "${_version[$index]}" ;;
+        -d|-directory)       echo -n "${_directory[$index]}" ;;
+        -s|-settings)        echo -n "${_settings[$index]}" ;;
+        -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
+        -p|-package)         echo -n "${_package[$index]}" ;;
+        -e|-ext)             echo -n "${_ext[$index]}" ;;
 	*)
 	    doerr $1 "No option for pack_get found for $1" ;;
     esac
+}
+
+
+# Function for editing environment variables
+# Mainly used for receiving and appending to variables
+function edit_env {
+    local opt=$1 # Save the option passed
+    case $opt in
+	--*) opt=${opt:1} ;;
+    esac
+    shift
+    local echo_env=0
+    local append="" ; local prepend=""
+    case $opt in
+	-g|-get)           echo_env=1 ;;
+	-p|-prepend)       prepend="$1" ; shift ;;
+	-a|-append)        append="$1" ; shift ;;
+	*)
+	    doerr $1 "No option for edit_env found for $1" ;;
+    esac
+    local env=$1
+    shift
+    [ "$echo_env" -ne "0" ] && echo -n "${!env}" && return 0
+    # Process what is requested
+    [ ! -z "$append" ] && export ${!env}="${!env}$append"
+    [ ! -z "$prepend" ] && eval "export $env='$prepend${!env}'"
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix
@@ -302,7 +328,7 @@ function list {
 	    fi
 	done
     fi
-    echo "$retval"
+    echo -n "$retval"
 }
 
 
@@ -326,6 +352,19 @@ function pack_install {
      # Check that the thing is not already installed
     if [ ! -e $(pack_get --install-query $idx) ]; then
 
+	# Append all relevant requirements to the relevant environment variables
+	# Perhaps this could be generalized with options specifying the ENV_VARS
+	old_fcflags="$FCFLAGS"
+	export FCFLAGS="$FCFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_fflags="$FFLAGS"
+	export FFLAGS="$FFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_cflags="$CFLAGS"
+	export CFLAGS="$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_cppflags="$CPPFLAGS"
+	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement $idx))"
+	old_ldflags="$LDFLAGS"
+	export LDFLAGS="$LDFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if [ $(has_setting $PRELOAD_MODULE) ]; then
 	    create_module --force \
@@ -338,16 +377,8 @@ function pack_install {
 	fi
 
         # Create the list of requirements
-	local module_loads=""
-	cmds="$(pack_get --module-requirement $idx)"
-	# Clear the requirement if it is not found
-	if [ ! -z "$cmds" ]; then
-	    for cmd in $cmds ; do
-		module_loads="$module_loads $(pack_get --module-name $cmd)"
-	    done
-	fi
-	[ ! -z "$module_loads" ] && \
-	    module load $module_loads
+	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
+	[ ! -z "$module_loads" ] && module load $module_loads
 	
         # Show that we will install
 	msg_install --start $idx
@@ -384,13 +415,18 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	[ ! -z "$module_loads" ] && \
-	    module unload $module_loads
+	[ ! -z "$module_loads" ] && module unload $module_loads
 
 	# Unload the module itself in case of PRELOADING
 	if [ $(has_setting $PRELOAD_MODULE) ]; then
 	    module unload $(pack_get --module-name $idx)
 	fi
+
+	export FCFLAGS="$old_fcflags"
+	export FFLAGS="$old_fflags"
+	export CFLAGS="$old_cflags"
+	export CPPFLAGS="$old_cppflags"
+	export LDFLAGS="$old_ldflags"
 
     else
 	msg_install --already-installed $idx
@@ -398,14 +434,7 @@ function pack_install {
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
-	local reqs=""
-	cmds="$(pack_get --module-requirement $idx)"
-	# Clear the requirement if it is not found
-	if [ ! -z "$cmds" ]; then
-	    for cmd in $cmds ; do
-		reqs="$reqs -R $(pack_get --module-name $cmd)"
-	    done
-	fi
+	local reqs="$(list --prefix '-R ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
@@ -657,7 +686,7 @@ function docmd {
     local cmd=($*)
     echo 
     echo " # ================================================================"
-    if [[ "$ar" != "" ]] ; then
+    if [ ! -z "$ar" ] ; then
         echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
     fi
     echo " # PWD: "$(pwd)

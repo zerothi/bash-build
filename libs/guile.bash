@@ -8,8 +8,6 @@ pack_set --module-requirement gmp
 
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-requirement)/include'" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS $(pack_get --module-requirement) $(list --Wlrpath $(pack_get --module-requirement)'" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
