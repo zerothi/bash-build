@@ -118,7 +118,7 @@ declare -a _cmd
 # A module sequence which is the requirements for the package
 declare -a _mod_req
 # A separator used for commands that can be given consequitively
-_LIST_SEP=";"
+_LIST_SEP='Ø'
 # The counter to hold the archives
 _N_archives=-1
 
@@ -370,7 +370,7 @@ function pack_install {
 	# Run all commands
 	local cmd="$(pack_get --commands $idx)"
 	local -a cmds=()
-	IFS=';' read -ra cmds <<< "$cmd"
+	IFS="$_LIST_SEP" read -ra cmds <<< "$cmd"
 	for cmd in "${cmds[@]}" ; do
 	    docmd "$archive" "$cmd"
 	done

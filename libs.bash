@@ -6,6 +6,9 @@ source libs/openmpi.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
+source libs/suitesparse_config.bash
+source libs/amd.bash
+source libs/umfpack.bash
 source libs/gsl.bash
 #source libs/boost.bash
 source libs/zlib.bash
