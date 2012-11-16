@@ -203,7 +203,7 @@ function pack_set {
     done
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ]        && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
-    [ ! -z "$req" ]        && _mod_req[$index]="${_mod_req[$index]}$req"
+    [ ! -z "$req" ]        && _mod_req[$index]="${_mod_req[$index]} $req"
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     [ ! -z "$alias" ]      && _alias[$index]="$alias"
@@ -305,6 +305,7 @@ function list {
     done
     for opt in $opts ; do
 	case $opt in
+	    -pack-module-reqs)      pre="--module-requirement " ; suf="" ; args="$(pack_get --module-requirement $args) $args" ;;
 	    -Wlrpath)      pre="-Wl,-rpath=" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
 	    -LDFLAGS)      pre="-L" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
 	    -INCDIRS)      pre="-I" ; suf="/include" ; lcmd="pack_get --install-prefix " ;;

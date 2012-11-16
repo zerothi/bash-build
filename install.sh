@@ -42,10 +42,19 @@ if [ $_DEBUG -ne 0 ]; then
     echo ""
     add_package abc.tar.gz
     add_package def.tar.gz
+    pack_set --module-requirement abc
     add_package ghi.tar.gz
-    echo $(list --prefix 'PRE' abc def ghi )
-    echo $(list --prefix 'PRE' --suffix 'SUF'  abc def ghi )
-    echo $(list --Wlrpath --LDFLAGS   abc def ghi )
+    pack_set $(list --pack-module-reqs def)
+    echo PRE ALL: $(list --prefix 'PRE' abc def ghi )
+    echo PRE SUF ALL: $(list --prefix 'PRE' --suffix 'SUF'  abc def ghi )
+    echo Wlrpath LDFLAGS $(list --Wlrpath --LDFLAGS   abc def ghi )
+    echo ""
+    echo Module reqs: $(list --pack-module-reqs def)
+    echo Assert Module reqs: $(pack_get --module-requirement ghi)
+    echo ""
+    tmp="${FCFLAGS// -/ }"
+    echo $tmp
+    echo SPLIT of FLAGS "$(list --prefix ,\'- --suffix \' ${tmp:1})"
 fi
 
 # Install all libraries

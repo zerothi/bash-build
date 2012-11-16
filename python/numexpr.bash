@@ -12,7 +12,7 @@ for http in http://numexpr.googlecode.com/files/numexpr-1.4.2.tar.gz \
     # Add requirments when creating the module
     pack_set --module-requirement $(get_parent) \
 	--module-requirement cython \
-	--module-requirement numpy
+	$(list --pack-module-reqs numpy)
     
     # Install commands that it should run
     pack_set --command "mkdir -p" \

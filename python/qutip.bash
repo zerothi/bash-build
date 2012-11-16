@@ -10,8 +10,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 # Add requirments when creating the module
 pack_set --module-requirement $(get_parent) \
     --module-requirement cython \
-    --module-requirement numpy \
-    --module-requirement scipy \
+    $(list --pack-module-reqs scipy) \
     --module-requirement matplotlib
     
 # Install commands that it should run

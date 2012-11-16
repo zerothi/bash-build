@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set --module-requirement $(get_parent) \
     --module-requirement netcdf-serial \
-    --module-requirement numpy \
+    $(list --pack-module-reqs numpy) \
     --module-requirement scientificpython
 
 # Check for Intel MKL or not
