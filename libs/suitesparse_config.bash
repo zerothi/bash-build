@@ -2,9 +2,16 @@ add_package http://www.cise.ufl.edu/research/sparse/UFconfig/SuiteSparse_config-
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --alias SSconfig
+pack_set --alias SS_config
 pack_set --directory SuiteSparse_config
 pack_set --install-query $(pack_get --install-prefix)/lib/libsuitesparseconfig.a
+
+mk=SuiteSparse_config.mk
+pack_set --command "sed -i -e 's|^[[:space:]]*\(F77\)[[:space:]]*=.*|\1 = $F77|' $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*\(F77FLAGS\)[[:space:]]*=.*|\1 = $FFLAGS|' $mk"
+pack_set --command "echo 'CC = $CC' >> $mk"
+pack_set --command "echo 'CFLAGS = $CFLAGS' >> $mk"
+pack_set --command "echo 'FFLAGS = $FFLAGS' >> $mk"
 
 
 pack_set --command "make $(get_make_parallel)"
@@ -19,18 +26,27 @@ pack_install
 
 
 # We create the suitesparse_config makefile for all related packages!
+# This needs to be runned every time, and thus we create a new package!
 add_package http://www.cise.ufl.edu/research/sparse/UFconfig/SuiteSparse_config-4.0.2.tar.gz
+
+pack_set --alias SS_config_make
 pack_set --directory SuiteSparse_config
 pack_set --install-query /directory/does/not/exist
 
 # Edit the mk file to comply with the standards
 mk=SuiteSparse_config.mk
-pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix SSconfig)/include/ \1|' $mk"
+pack_set --command "echo 'CC = $CC' >> $mk"
+pack_set --command "echo 'CFLAGS = $CFLAGS' >> $mk"
+pack_set --command "echo 'FFLAGS = $FFLAGS' >> $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*\(F77\)[[:space:]]*=.*|\1 = $F77|' $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*\(F77FLAGS\)[[:space:]]*=.*|\1 = $FFLAGS|' $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix ss_config)/include/ \1|' $mk"
 pack_set --command "sed -i -e 's|^\(INSTALL_LIB\)[[:space:]]*=.*|\1 = /supply \1 on the make line|' $mk"
 pack_set --command "sed -i -e 's|^\(INSTALL_INCLUDE\)[[:space:]]*=.*|\1 = /supply \1 on the make line|' $mk"
 
-# For the moment leave out the CHOLMOD package
-pack_set --command "sed -i -e 's|^\(UMFPACK_CONFIG\)[[:space:]]*=.*|\1 = -DNCHOLMOD|' $mk"
+# Configure the SS make file for compliance with the rest of the installation.
+pack_set --command "sed -i -e 's|^\(UMFPACK_CONFIG\)[[:space:]]*=.*|\1 = |' $mk"
+pack_set --command "sed -i -e 's|^\(CHOLMOD_CONFIG\)[[:space:]]*=.*|\1 = -DNPARTITION |' $mk"
 
 # Check for Intel MKL or not
 tmp=$(get_c)

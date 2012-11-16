@@ -5,7 +5,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --directory AMD
 pack_set --install-query $(pack_get --install-prefix)/lib/libamd.a
 
-pack_set --module-requirement suitesparse_config
+pack_set --module-requirement ss_config
 
 pack_set --command "sed -i -e 's|^include ../SuiteSparse_config/\(.*\)|include ../\1|' *[Mm]akefile"
 pack_set --command "sed -i -e 's|^include ../../SuiteSparse_config/\(.*\)|include ../../\1|' */*[Mm]akefile"
@@ -44,7 +44,7 @@ pack_install
 add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-2.3.1.tar.gz
 pack_set --directory AMD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias AMD-path
+pack_set --alias AMD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

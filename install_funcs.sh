@@ -403,6 +403,7 @@ function pack_install {
 	local -a cmds=()
 	IFS="$_LIST_SEP" read -ra cmds <<< "$cmd"
 	for cmd in "${cmds[@]}" ; do
+	    [ -z "${cmd// /}" ] && continue # Skip the empty commands...
 	    docmd "$archive" "$cmd"
 	done
 

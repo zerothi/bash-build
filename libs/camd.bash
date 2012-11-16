@@ -1,16 +1,11 @@
-add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-5.6.1.tar.gz
-
+add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-2.3.1.tar.gz
+            
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --directory UMFPACK
-pack_set --install-query $(pack_get --install-prefix)/lib/libumfpack.a
+pack_set --directory CAMD
+pack_set --install-query $(pack_get --install-prefix)/lib/libcamd.a
 
-pack_set --module-requirement ss_config \
-    --module-requirement amd \
-    --module-requirement colamd \
-    --module-requirement camd \
-    --module-requirement ccolamd \
-    --module-requirement cholmod
+pack_set --module-requirement ss_config
 
 pack_set --command "sed -i -e 's|^include ../SuiteSparse_config/\(.*\)|include ../\1|' *[Mm]akefile"
 pack_set --command "sed -i -e 's|^include ../../SuiteSparse_config/\(.*\)|include ../../\1|' */*[Mm]akefile"
@@ -21,13 +16,9 @@ pack_set --command "sed -i -e 's|-I../../SuiteSparse_config||g' */*[Mm]akefile"
 pack_set --command "sed -i -e 's|../SuiteSparse_config/SuiteSparse_config.h||g' *[Mm]akefile"
 pack_set --command "sed -i -e 's|../../SuiteSparse_config/SuiteSparse_config.h||g' */*[Mm]akefile"
 
-pack_set --command "sed -i -e 's|../AMD/Include/amd[^[:space:]]*.h|.|g' *[Mm]akefile"
-pack_set --command "sed -i -e 's|../../AMD/Include/amd[^[:space:]]*.h|.|g' */*[Mm]akefile"
-
-pack_set --command "sed -i -e 's|^CONFIG[[:space:]]*=.*|CONFIG = |g' */*[Mm]akefile" # Only used for update checks
 
 # Make commands
-pack_set --command "make $(get_make_parallel) library"
+pack_set --command "make $(get_make_parallel) all"
 # Install commands that it should run
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
@@ -39,14 +30,14 @@ pack_install
 
 
 
-# Add the UMFPACK include directory to the path (we need to run this EVERY time)
-add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-5.6.1.tar.gz
-pack_set --directory UMFPACK
+# Add the AMD include directory to the path
+add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-2.3.1.tar.gz
+pack_set --directory CAMD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias UMFPACK-make
+pack_set --alias CAMD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk
-pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix UMFPACK)/include \1|' $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix CAMD)/include \1|' $mk"
 
 pack_install
