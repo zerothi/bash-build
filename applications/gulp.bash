@@ -17,7 +17,6 @@ LAPACK = $MKL_PATH/lib/libmkl_lapack95_lp64.a' Makefile"
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
-    tmp=$(pack_get --install-prefix atlas)/lib
     pack_set --command "sed -i '1 a\
 BLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas\n\
 LAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas' Makefile"
@@ -26,7 +25,8 @@ else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
 
 fi
-    pack_set --command "sed -i '1 a\
+
+pack_set --command "sed -i '1 a\
 OPT = \n\
 OPT1 = $CFLAGS\n\
 OPT2 = -ffloat-store\n\

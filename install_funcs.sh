@@ -12,33 +12,33 @@ let "PRELOAD_MODULE=1 << 5"
 _prefix=""
 # Instalation path
 function set_installation_path { _prefix=$1 ; }
-function get_installation_path { echo $_prefix ; }
+function get_installation_path { echo -n $_prefix ; }
 
 _c=""
 # Instalation path
 function set_c { _c=$1 ; }
-function get_c { echo $_c ; }
+function get_c { echo -n $_c ; }
 
 _parent_package=""
 # The parent package (for instance Python)
 function set_parent { _parent_package=$1 ; }
 function clear_parent { _parent_package="" ; }
-function get_parent { echo $_parent_package ; }
+function get_parent { echo -n $_parent_package ; }
 
 _parent_exec=""
 # The parent package (for instance Python)
 function set_parent_exec { _parent_exec=$1 ; }
-function get_parent_exec { echo $_parent_exec ; }
+function get_parent_exec { echo -n $_parent_exec ; }
 
 _modulepath=""
 # Module path for creating the modules
 function set_module_path { _modulepath=$1 ; }
-function get_module_path { echo $_modulepath ; }
+function get_module_path { echo -n $_modulepath ; }
 
 _buildpath="./"
 # Path for downloading and extracting the packages
 function set_build_path { _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
-function get_build_path { echo $_buildpath ; }
+function get_build_path { echo -n $_buildpath ; }
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
@@ -50,17 +50,17 @@ export NPROCS=$_n_procs
 function arc_cmd {
     local ext="$1"
     if [ "x$ext" == "xbz2" ]; then
-	echo "tar jxf"
+	echo -n "tar jxf"
     elif [ "x$ext" == "xgz" ]; then
-	echo "tar zxf"
+	echo -n "tar zxf"
     elif [ "x$ext" == "xtgz" ]; then
-	echo "tar zxf"
+	echo -n "tar zxf"
     elif [ "x$ext" == "xtar" ]; then
-	echo "tar xf"
+	echo -n "tar xf"
     elif [ "x$ext" == "xzip" ]; then
-	echo unzip
+	echo -n unzip
     elif [ "x$ext" == "xpy" ]; then
-	echo "ln -fs"
+	echo -n "ln -fs"
     else
 	doerr "Unrecognized extension $ext in [bz2,tgz,gz,tar,zip]"
     fi
@@ -75,8 +75,9 @@ function dwn_file {
     if [ $# -gt 1 ]; then
 	subdir=$2
     fi
-    [ -e $subdir/$(pack_get --archive $1) ] && return 0
-    wget $(pack_get --url $1) -O $subdir/$(pack_get --archive $1)
+    local archive=$(pack_get --archive $1)
+    [ -e $subdir/$archive ] && return 0
+    wget $(pack_get --url $1) -O $subdir/$archive
 }
 
 
@@ -87,8 +88,9 @@ function dwn_file {
 function extract_archive {
     local d=$(pack_get --directory $2)
     local cmd=$(arc_cmd $(pack_get --ext $2) )
+    local archive=$(pack_get --archive $2)
     [ -d $1/$d ] && rm -rf $1/$d
-    docmd $(pack_get --archive $2) $cmd $1/$(pack_get --archive $2)
+    docmd $archive $cmd $1/$archive
 }
 
 # Local variables for archives to be installed
@@ -132,7 +134,7 @@ function add_package {
     local fn=$(basename $url)
     _archive[$_N_archives]=$fn
     # Save the type of archive
-    local ext=$(echo $fn | awk -F. '{print $NF}')
+    local ext=$(echo -n $fn | awk -F. '{print $NF}')
     _ext[$_N_archives]=$ext
     # Infer what the directory is
     local d=${fn%.*tar.$ext}
@@ -155,13 +157,6 @@ function add_package {
     _package[$_N_archives]=$package
     # Save the alias for the package, defaulted to package
     _alias[$_N_archives]=$package
-    # Update version for the package in case of time-stamping
-    if [ $(has_setting $VERSION_TIME_STAMP $_N_archives) ]; then
-        # Download the archive
-	dwn_file $_N_archives $(get_build_path)/.archives
-	v="$(get_file_time %g-%j $(get_build_path)/.archives/$(pack_get --archive $_N_archives))"
-	_version[$_N_archives]="$v"
-    fi
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
@@ -225,9 +220,6 @@ function pack_get {
     local index=$_N_archives # Default to this
     # We check whether a specific index is requested
     [ $# -gt 0 ] && index=$(get_index $1)
-    # Check that the index is valid
-    [ "$index" -gt "$_N_archives" ] && return 1
-    [ "$index" -lt 0 ] && return 1
     # Process what is requested
     case $opt in
 	-C|-commands)        echo -n "${_cmd[$index]}" ;;
@@ -341,8 +333,7 @@ function pack_install {
     fi
     
     # We install the package
-    local archive=""
-    archive="$(pack_get --archive $idx)"
+    local archive="$(pack_get --archive $idx)"
     [ $? -ne "0" ] && return 1
 
     # Update the module name now
@@ -450,22 +441,23 @@ function pack_install {
 # $1 is the shortname for what to search for
 function get_index {
     local i ; local lookup
-    local l=${#1}
+    local l=${#1} ; local lc_name=$(lc $1)
     $(isnumber $1)
-    if [ $? -eq 0 ]; then # We have a number
-	echo $1
+    if [ "$?" -eq "0" ]; then # We have a number
+	[ "$1" -gt "$_N_archives" ] && return 1
+	[ "$1" -lt 0 ] && return 1
+	echo -n "$1"
 	return 0
     fi
     for lookup in alias archive package ; do
 	i=0
-	while : ; do
+	while [ "$i" -le "$_N_archives" ]; do
 	    local tmp=$(pack_get --$lookup $i)
-	    if [ "x$(lc ${tmp:0:$l})" == "x$(lc $1)" ]; then
-		echo $i
+	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
+		echo -n "$i"
 		return 0
 	    fi
 	    i=$((i+1))
-	    [ "$i" -gt "$_N_archives" ] && break
 	done
     done
     doerr $1 "Could not find the archive in the list..."
@@ -477,8 +469,8 @@ function get_index {
 function has_setting {
     local tmp
     let "tmp=$1 & $(pack_get -s $2)"
-    [ $tmp -gt 0 ] && echo true
-    echo ""
+    [ $tmp -gt 0 ] && echo -n "true" && return 0
+    echo -n ""
 }
     
 # Returns the -j <procs> flag for the make command
@@ -486,9 +478,9 @@ function has_setting {
 #   $1 : <index of archive>
 function get_make_parallel {
     if [ $(has_setting $MAKE_PARALLEL $1) ]; then
-	echo "-j $_n_procs"
+	echo -n "-j $_n_procs"
     else
-	echo ""
+	echo -n ""
     fi
 }
 

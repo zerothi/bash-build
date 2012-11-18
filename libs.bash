@@ -13,14 +13,6 @@ source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
 
-# A sparse library
-source libs/suitesparse_config.bash
-source libs/camd.bash
-source libs/amd.bash
-source libs/colamd.bash
-source libs/ccolamd.bash
-source libs/cholmod.bash
-source libs/umfpack.bash
 
 # Some specific libraries
 source libs/gsl.bash
@@ -36,3 +28,64 @@ source libs/hdf5-serial.bash
 source libs/parallel-netcdf.bash
 source libs/netcdf.bash
 source libs/netcdf-serial.bash
+
+# A sparse library
+source libs/suitesparse_config.bash
+source libs/camd.bash
+source libs/amd.bash
+source libs/colamd.bash
+source libs/ccolamd.bash
+source libs/cholmod.bash
+source libs/umfpack.bash
+
+
+# We install the module scripts here:
+create_module \
+    --module-path $install_path/modules-npa \
+    -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M mpi.zlib.hdf5.netcdf/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name openmpi)" \
+    -L "$(pack_get --module-name zlib)" \
+    -L "$(pack_get --module-name hdf5)" \
+    -L "$(pack_get --module-name pnetcdf)" \
+    -L "$(pack_get --module-name netcdf)"
+
+create_module \
+    --module-path $install_path/modules-npa \
+    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M blas.lapack/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name blas)" \
+    -L "$(pack_get --module-name lapack)"
+
+create_module \
+    --module-path $install_path/modules-npa \
+    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M atlas/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name atlas)"
+
+create_module \
+    --module-path $install_path/modules-npa \
+    -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M mpi.blas.lapack.scalapack/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name openmpi)" \
+    -L "$(pack_get --module-name blas)" \
+    -L "$(pack_get --module-name lapack)" \
+    -L "$(pack_get --module-name scalapack)"
+
+create_module \
+    --module-path $install_path/modules-npa \
+    -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M mpi.atlas.scalapack/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -L "$(pack_get --module-name openmpi)" \
+    -L "$(pack_get --module-name atlas)" \
+    -L "$(pack_get --module-name scalapack)"
