@@ -7,9 +7,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Scientific
 
-pack_set --module-requirement netcdf-serial \
-    --module-requirement $(get_parent) \
-    $(list --pack-module-reqs numpy)
+pack_set --module-requirement netcdf-serial $(list --pack-module-reqs numpy)
 
 # Check for Intel MKL or not
 tmp=$(get_c)

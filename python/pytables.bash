@@ -14,11 +14,9 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/tables
 
 # Add requirments when creating the module
-pack_set --module-requirement $(get_parent) \
+pack_set $(list --pack-module-reqs numpy) \
     --module-requirement cython \
-    --module-requirement zlib \
-    --module-requirement hdf5-serial \
-    --module-requirement numpy \
+    $(list --pack-module-reqs hdf5-serial) \
     --module-requirement numexpr-2
 
     

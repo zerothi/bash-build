@@ -9,8 +9,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \
     $(list --pack-module-reqs ase) \
-    --module-requirement matplotlib \
-    --module-requirement hdf5
+    $(list --pack-module-reqs matplotlib) \
+    $(list --pack-module-reqs hdf5)
 
 # Check for Intel MKL or not
 tmp=$(get_c)

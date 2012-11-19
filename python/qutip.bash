@@ -8,9 +8,8 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
 
 # Add requirments when creating the module
-pack_set --module-requirement $(get_parent) \
+pack_set $(list --pack-module-reqs scipy) \
     --module-requirement cython \
-    $(list --pack-module-reqs scipy) \
     --module-requirement matplotlib
     
 # Install commands that it should run
