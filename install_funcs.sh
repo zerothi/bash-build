@@ -4,10 +4,9 @@
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
-let "VERSION_TIME_STAMP=1 << 2"
-let "IS_MODULE=1 << 3"
-let "UPDATE_MODULE_NAME=1 << 4"
-let "PRELOAD_MODULE=1 << 5"
+let "IS_MODULE=1 << 2"
+let "UPDATE_MODULE_NAME=1 << 3"
+let "PRELOAD_MODULE=1 << 4"
 
 _prefix=""
 # Instalation path
@@ -223,29 +222,55 @@ function pack_get {
 	--*) opt=${opt:1} ;;
     esac
     shift
-    local index=$_N_archives # Default to this
     # We check whether a specific index is requested
-    [ $# -gt 0 ] && index=$(get_index $1)
-    # Process what is requested
-    case $opt in
-	-C|-commands)        echo -n "${_cmd[$index]}" ;;
-	-h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
-	-R|-module-requirement) 
-                             echo -n "${_mod_req[$index]}" ;;
-        -I|-install-prefix|-prefix) 
-                             echo -n "${_install_prefix[$index]}" ;;
-        -Q|-install-query)   echo -n "${_install_query[$index]}" ;;
-        -a|-alias)           echo -n "${_alias[$index]}" ;;
-	-A|-archive)         echo -n "${_archive[$index]}" ;;
-        -v|-version)         echo -n "${_version[$index]}" ;;
-        -d|-directory)       echo -n "${_directory[$index]}" ;;
-        -s|-settings)        echo -n "${_settings[$index]}" ;;
-        -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
-        -p|-package)         echo -n "${_package[$index]}" ;;
-        -e|-ext)             echo -n "${_ext[$index]}" ;;
-	*)
-	    doerr $1 "No option for pack_get found for $1" ;;
-    esac
+    if [ $# -gt 0 ]; then
+	while [ $# -gt 0 ]; do
+	    index=$(get_index $1)
+	    shift
+            # Process what is requested
+	    case $opt in
+		-C|-commands)        echo -n "${_cmd[$index]}" ;;
+		-h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
+		-R|-module-requirement) 
+                                     echo -n "${_mod_req[$index]}" ;;
+		-I|-install-prefix|-prefix) 
+                                     echo -n "${_install_prefix[$index]}" ;;
+		-Q|-install-query)   echo -n "${_install_query[$index]}" ;;
+		-a|-alias)           echo -n "${_alias[$index]}" ;;
+		-A|-archive)         echo -n "${_archive[$index]}" ;;
+		-v|-version)         echo -n "${_version[$index]}" ;;
+		-d|-directory)       echo -n "${_directory[$index]}" ;;
+		-s|-settings)        echo -n "${_settings[$index]}" ;;
+		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
+		-p|-package)         echo -n "${_package[$index]}" ;;
+		-e|-ext)             echo -n "${_ext[$index]}" ;;
+		*)
+		    doerr $1 "No option for pack_get found for $1" ;;
+	    esac
+	done
+    else
+	local index=$_N_archives # Default to this
+        # Process what is requested
+	case $opt in
+	    -C|-commands)        echo -n "${_cmd[$index]}" ;;
+	    -h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
+	    -R|-module-requirement) 
+                                 echo -n "${_mod_req[$index]}" ;;
+	    -I|-install-prefix|-prefix) 
+                                 echo -n "${_install_prefix[$index]}" ;;
+	    -Q|-install-query)   echo -n "${_install_query[$index]}" ;;
+	    -a|-alias)           echo -n "${_alias[$index]}" ;;
+	    -A|-archive)         echo -n "${_archive[$index]}" ;;
+	    -v|-version)         echo -n "${_version[$index]}" ;;
+	    -d|-directory)       echo -n "${_directory[$index]}" ;;
+	    -s|-settings)        echo -n "${_settings[$index]}" ;;
+	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
+	    -p|-package)         echo -n "${_package[$index]}" ;;
+	    -e|-ext)             echo -n "${_ext[$index]}" ;;
+	    *)
+		doerr $1 "No option for pack_get found for $1" ;;
+	esac
+    fi
 }
 
 

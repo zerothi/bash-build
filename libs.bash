@@ -46,11 +46,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name openmpi)" \
-    -L "$(pack_get --module-name zlib)" \
-    -L "$(pack_get --module-name hdf5)" \
-    -L "$(pack_get --module-name pnetcdf)" \
-    -L "$(pack_get --module-name netcdf)"
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement netcdf))
 
 create_module \
     --module-path $install_path/modules-npa \
@@ -58,16 +54,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name blas)" \
-    -L "$(pack_get --module-name lapack)"
-
-create_module \
-    --module-path $install_path/modules-npa \
-    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
-    -v $(date +'%g-%j') \
-    -M atlas/$(get_c) \
-    -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name atlas)"
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' blas lapack)
 
 create_module \
     --module-path $install_path/modules-npa \

@@ -5,20 +5,16 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/xmgrace
 
-pack_set --module-requirement netcdf-serial \
-    --module-requirement fftw-2
-
+pack_set $(list --pack-module-reqs netcdf-serial fftw-2)
 
 # The motif library are in the following packages:
 # lesstif2-dev
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$($(pack_get --install-prefix netcdf-serial)/bin/nc-config --libs)'" \
-    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw -lnetcdff -lnetcdf'" \
-    --command-flag "CPPFLAGS='$($(pack_get --install-prefix netcdf-serial)/bin/nc-config --cflags) $(list --INCDIRS $(pack_get --module-requirement)) $CPPFLAGS'" \
-    --command-flag "CFLAGS='$CFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
-    --command-flag "FCFLAGS='$FCFLAGS $(list --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-requirement)) $CPPFLAGS'" \
     --command-flag "--enable-netcdf" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--enable-grace-home=$(pack_get --install-prefix)"
