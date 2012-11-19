@@ -12,11 +12,17 @@ if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management
     tmp_flags="--with-tm=/opt/torque"
     # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
     # so no need for using libnuma
+elif [ "${tmp:0:4}" == "surt" ]; then
+    tmp_flags="CPPFLAGS='-I/usr/include/torque'"
+
+elif [ "${tmp:0:4}" == "thul" ]; then
+    tmp_flags="CPPFLAGS='-I/usr/local/include'"
+
 fi
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix) $tmp_flags"
+pack_set --command "../configure $tmp_flags" \
+    --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
