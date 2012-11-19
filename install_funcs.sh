@@ -172,7 +172,7 @@ function pack_set {
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
-    local cmd="" ; local cmd_flags="" ; local req=""
+    local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -187,6 +187,7 @@ function pack_set {
             -R|-module-requirement)  req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
+	    -index-alias)  idx_alias="$1" ; shift ;;
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
@@ -206,6 +207,7 @@ function pack_set {
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     [ ! -z "$alias" ]      && unset _index[_alias[$index]] && _alias[$index]="$alias" && _index[$(lc ${_alias[$index]})]=$index
+    [ ! -z "$idx_alias" ]  && _index[$idx_alias]="$index"
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"

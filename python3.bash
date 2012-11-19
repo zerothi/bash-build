@@ -2,6 +2,7 @@
 add_package http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tgz
 
 pack_set --alias python
+pack_set --index-alias python-3
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
