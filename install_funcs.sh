@@ -119,6 +119,8 @@ declare -a _directory
 declare -a _cmd
 # A module sequence which is the requirements for the package
 declare -a _mod_req
+# Local variables for hash tables of index (speed up of execution)
+declare -A _index
 # A separator used for commands that can be given consequitively
 _LIST_SEP='Ø'
 # The counter to hold the archives
@@ -157,6 +159,8 @@ function add_package {
     _package[$_N_archives]=$package
     # Save the alias for the package, defaulted to package
     _alias[$_N_archives]=$package
+    # Save the hash look-up
+    _index[$(lc ${_alias[$_N_archives]})]=$_N_archives
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
@@ -201,7 +205,7 @@ function pack_set {
     [ ! -z "$req" ]        && _mod_req[$index]="${_mod_req[$index]} $req"
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
-    [ ! -z "$alias" ]      && _alias[$index]="$alias"
+    [ ! -z "$alias" ]      && unset _index[_alias[$index]] && _alias[$index]="$alias" && _index[$(lc ${_alias[$index]})]=$index
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
@@ -449,6 +453,10 @@ function get_index {
 	echo -n "$1"
 	return 0
     fi
+    i=${_index[$lc_name]}
+    [ -z "${i// /}" ] && i=-1
+    echo "$lc_name $i" >> error.cfg
+    [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ] && echo -n "$i" && return 0
     for lookup in alias archive package ; do
 	i=0
 	while [ "$i" -le "$_N_archives" ]; do

@@ -2,6 +2,7 @@ add_package http://www.fftw.org/fftw-3.3.2.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
+pack_set --alias fftw-3
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw3_mpi.a
 
 # Install commands that it should run
