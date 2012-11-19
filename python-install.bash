@@ -30,12 +30,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L "$(pack_get --module-name python-$pV)" \
-    -L "$(pack_get --module-name cython)" \
-    -L "$(pack_get --module-name numpy)" \
-    -L "$(pack_get --module-name scipy)" \
-    -L "$(pack_get --module-name numexpr)" \
-    -L "$(pack_get --module-name scientificpython)"
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) numexpr-2 cython)
 
 
 create_module \
@@ -43,26 +38,20 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.mpi4py.numpy.scipy.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L python$pV.basic.mpi4py/$(get_c) \
-    -L "$(pack_get --module-name mpi4py)"
-
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) cython matplotlib mpi4py)
 
 create_module \
     -n "\"Nick Papior Andersen's DFT python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M python$pV.basic.ase.gpaw.inelastica/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
-    -L "$(pack_get --module-name ase)" \
-    -L "$(pack_get --module-name gpaw)" \
-    -L "$(pack_get --module-name inelastica)"
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) ase gpaw inelastica)
 
 create_module \
     -n "\"Nick Papior Andersen's Photonics python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M python$pV.basic.qutip/$(get_c) \
     -P "/directory/should/not/exist" \
-    -L python$pV.cython.numpy.scipy.numexpr.scientific/$(get_c) \
-    -L "$(pack_get --module-name qutip)"
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) cython numexpr-2 qutip)
 
 set_module_path $old_path
