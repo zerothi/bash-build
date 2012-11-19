@@ -10,8 +10,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 # Add requirments when creating the module
 pack_set --module-requirement $(get_parent) \
     --module-requirement zlib \
-    --module-requirement hdf5-serial \
-    $(list --path--module-reqs numpy)
+    --module-requirement hdf5-serial $(list --pack-module-reqs numpy)
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \

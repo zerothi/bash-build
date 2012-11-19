@@ -7,27 +7,26 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 
-pack_set --module-requirement $(get_parent) \
-    --module-requirement netcdf-serial \
-    $(list --pack-module-reqs numpy) \
+pack_set \
+    --module-requirement netcdf-serial $(list --pack-module-reqs numpy) \
     --module-requirement scientificpython
 
 # Check for Intel MKL or not
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
-    pack_set --command "$(get_parent_exec) setup.py config" \
+    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--fcompiler=intelem" \
 	--command-flag "--compiler=intelem"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    pack_set --command "$(get_parent_exec) setup.py config" \
+    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--fcompiler=gnu95" \
 	--command-flag "--compiler=unix"
 
 fi
 
-pack_set --command "$(get_parent_exec) setup.py build"
-pack_set --command "$(get_parent_exec) setup.py install" \
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 

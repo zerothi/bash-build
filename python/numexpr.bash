@@ -8,11 +8,12 @@ for http in http://numexpr.googlecode.com/files/numexpr-1.4.2.tar.gz \
     pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
     pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
+    tmp="$(pack_get --alias)-$(pack_get --version)"
+    pack_set --index-alias ${tmp:0:9}
     
     # Add requirments when creating the module
-    pack_set --module-requirement $(get_parent) \
-	--module-requirement cython \
-	$(list --pack-module-reqs numpy)
+    pack_set $(list --pack-module-reqs numpy) \
+	--module-requirement cython
     
     # Install commands that it should run
     pack_set --command "mkdir -p" \

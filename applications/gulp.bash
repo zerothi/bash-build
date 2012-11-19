@@ -12,14 +12,12 @@ pack_set --directory $(pack_get --directory)/Src
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
-BLAS = $MKL_PATH/lib/libmkl_blas95_lp64.a\n\
-LAPACK = $MKL_PATH/lib/libmkl_lapack95_lp64.a' Makefile"
+LIBS = -L$MKL_PATH/lib/ -Wl,-rpath=$MKL_PATH/lib -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
     pack_set --command "sed -i '1 a\
-BLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas\n\
-LAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas' Makefile"
+LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
@@ -34,7 +32,8 @@ BAGGER = \n\
 RUNF90 = $FC\n\
 RUNCC = $CC\n\
 FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
-LIBS = \n\
+BLAS = \n\
+LAPACK = \n\
 CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 ETIME = \n\
 GULPENV = \n\
