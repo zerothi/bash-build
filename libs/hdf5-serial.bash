@@ -1,5 +1,5 @@
 # Then install HDF5
-add_package http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.9.tar.gz
+add_package http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.10.tar.gz
 
 pack_set --alias hdf5-serial
 

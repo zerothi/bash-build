@@ -30,4 +30,6 @@ fi
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+module load $(pack_get --module-name pcre) $(pack_get --module-name swig)
 pack_install
+module unload $(pack_get --module-name pcre) $(pack_get --module-name swig)

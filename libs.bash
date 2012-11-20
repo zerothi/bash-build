@@ -22,6 +22,8 @@ source libs/harminv.bash
 
 # Install bison
 source libs/bison.bash
+source libs/pcre.bash
+source libs/swig.bash
 
 source libs/zlib.bash
 source libs/scalapack.bash

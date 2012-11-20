@@ -2,7 +2,7 @@
 module load $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print "{0}.{1}".format(sys.version_info[0],sys.version_info[1])')
 module unload $(pack_get --module-name $(get_parent))
-source python/distribute.bash
+#source python/distribute.bash
 source python/bazar.bash
 source python/nose.bash
 source python/cython.bash
@@ -12,14 +12,14 @@ source python/scipy.bash # [numpy]
 source python/numexpr.bash # [numpy]
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
-source python/matplotlib.bash
-source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/scientificpython.bash
-source python/ase.bash
-source python/gpaw.bash
 source python/inelastica.bash
 source python/inelastica-dev.bash
 
+source python/matplotlib.bash
+source python/qutip.bash # [numpy,scipy,cython,matplotlib]
+source python/ase.bash
+source python/gpaw.bash
 
 # Initialize the module read path
 old_path=$(get_module_path)
