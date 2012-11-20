@@ -20,6 +20,8 @@ source libs/gsl.bash
 source libs/ctl.bash
 source libs/harminv.bash
 
+# Install bison
+source libs/bison.bash
 
 source libs/zlib.bash
 source libs/scalapack.bash

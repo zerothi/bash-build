@@ -50,6 +50,8 @@ function arc_cmd {
     local ext="$1"
     if [ "x$ext" == "xbz2" ]; then
 	echo -n "tar jxf"
+    elif [ "x$ext" == "xxz" ]; then
+	echo -n "tar Jxf"
     elif [ "x$ext" == "xgz" ]; then
 	echo -n "tar zxf"
     elif [ "x$ext" == "xtgz" ]; then
