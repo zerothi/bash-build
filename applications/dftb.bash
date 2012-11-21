@@ -1,9 +1,9 @@
-tmp=$(hostname)
-[ "${tmp:0:2}" != "n-" ] && return 0
-
 add_package http://www.student.dtu.dk/~nicpa/packages/dftb+_1.2.1.tar.gz
 
 pack_set -s $IS_MODULE
+
+pack_set --host-reject ntch \
+	--host-reject zeroth
 
 pack_set --install-query $(pack_get --install-prefix)/bin/dftb+
 pack_set --directory $(pack_get --directory)_src

@@ -32,7 +32,7 @@ set_c $compiler
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
-_DEBUG=0
+_DEBUG=1
 if [ $_DEBUG -ne 0 ]; then
     echo get CFLAGS $(edit_env --get CFLAGS)
     $(edit_env --prepend '-hollo' CFLAGS)
@@ -55,6 +55,8 @@ if [ $_DEBUG -ne 0 ]; then
     tmp="${FCFLAGS// -/ }"
     echo $tmp
     echo SPLIT of FLAGS "$(list --prefix ,\'- --suffix \' ${tmp:1})"
+	echo 
+	echo $(pack_get --module-requirement def)
 fi
 
 # Install all libraries

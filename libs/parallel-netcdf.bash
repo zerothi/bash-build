@@ -25,6 +25,9 @@ pack_set --command "make" \
     --command-flag "install"
 
 
-module load $(pack_get --module-name bison)
+tmp=$(which bison)
+[ -z "$tmp" ] && \
+	module load $(pack_get --module-name bison)
 pack_install
-module unload $(pack_get --module-name bison)
+[ -z "$tmp" ] && \
+	module unload $(pack_get --module-name bison)

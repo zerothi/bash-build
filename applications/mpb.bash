@@ -1,12 +1,11 @@
 # Install
-tmp="$(hostname)"
-[ "${tmp:0:2}" != "n-" ] && return 0
-
 add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
+
+pack_set --host-only "n-"
 
 pack_set --module-requirement openmpi \
     --module-requirement libctl \

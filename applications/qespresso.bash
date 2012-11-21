@@ -1,5 +1,3 @@
-tmp=$(hostname)
-[ "${tmp:0:2}" != "n-" ] && return 0
 # http://qe-forge.org/gf/download/frsrelease/116/211/espresso-5.0.tar.gz \
 
 for v in \
@@ -7,6 +5,8 @@ for v in \
     add_package $v
     
     pack_set -s $IS_MODULE
+
+	pack_set --host-reject "ntch"
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
