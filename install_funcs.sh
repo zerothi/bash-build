@@ -229,7 +229,7 @@ function pack_set {
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
 	[ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
-	[ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]$reject_h"
+	[ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 }
 
 # This function allows for setting data related to a package
@@ -262,8 +262,8 @@ function pack_get {
 		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 		-p|-package)         echo -n "${_package[$index]}" ;;
 		-e|-ext)             echo -n "${_ext[$index]}" ;;
-		-host-only)          echo -n "${_only_host[$index]" ;;
-		-host-reject)        echo -n "${_reject_host[$index]" ;;
+		-host-only)          echo -n "${_only_host[$index]}" ;;
+		-host-reject)        echo -n "${_reject_host[$index]}" ;;
 	    *)
 		    doerr $1 "No option for pack_get found for $1" ;;
 	    esac
@@ -287,8 +287,8 @@ function pack_get {
 	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 	    -p|-package)         echo -n "${_package[$index]}" ;;
 	    -e|-ext)             echo -n "${_ext[$index]}" ;;
-		-host-only)          echo -n "${_only_host[$index]" ;;
-		-host-reject)        echo -n "${_reject_host[$index]" ;;
+		-host-only)          echo -n "${_only_host[$index]}" ;;
+		-host-reject)        echo -n "${_reject_host[$index]}" ;;
 	    *)
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
