@@ -220,7 +220,7 @@ function pack_set {
 	esac
     done
     # We now have index to be the correct spanning
-    [ ! -z "$cmd" ]        && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
+    [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
 	req="$(echo "$req" | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
@@ -272,8 +272,9 @@ function pack_get {
 		-host-only)          echo -n "${_only_host[$index]}" ;;
 		-host-reject)        echo -n "${_reject_host[$index]}" ;;
 		*)
-		    doerr $1 "No option for pack_get found for $1" ;;
+		    doerr "$1" "No option for pack_get found for $1" ;;
 	    esac
+	    [ $# -gt 0 ] && echo -n " "
 	done
     else
 	local index=$_N_archives # Default to this

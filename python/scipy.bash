@@ -32,4 +32,4 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
 
 module load $(pack_get --module-name pcre swig)
 pack_install
-module unload $(pack_get --module-name pcre) $(pack_get --module-name swig)
+module unload $(pack_get --module-name pcre swig)
