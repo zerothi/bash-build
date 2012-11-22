@@ -474,10 +474,12 @@ function pack_install {
 	
         # Extract the archive
 	pushd $(get_build_path)/.compile
+	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
 	rm -rf $(pack_get --directory $idx)
 	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
+	[ $? -ne 0 ] && exit 1
 	
         # We are now in the package directory
 	if [ $(has_setting $BUILD_DIR $idx) ]; then
