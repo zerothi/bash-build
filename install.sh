@@ -55,8 +55,9 @@ if [ $_DEBUG -ne 0 ]; then
     tmp="${FCFLAGS// -/ }"
     echo $tmp
     echo SPLIT of FLAGS "$(list --prefix ,\'- --suffix \' ${tmp:1})"
-	echo 
-	echo $(pack_get --module-requirement def)
+    echo " Check: " 
+    echo $(pack_get --module-requirement def)
+    echo "Done with DEBUG"
 fi
 
 # Install all libraries
