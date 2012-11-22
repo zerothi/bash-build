@@ -8,6 +8,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/gulp
 
 pack_set --directory $(pack_get --directory)/Src
 
+pack_set --module-requirement openmpi
+
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
@@ -24,6 +26,7 @@ else
 fi
 
 pack_set --command "sed -i '1 a\
+DEFS=-DMPI
 OPT = \n\
 OPT1 = $CFLAGS\n\
 OPT2 = -ffloat-store\n\
