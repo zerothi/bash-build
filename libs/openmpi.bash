@@ -13,7 +13,7 @@ if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management
     # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
     # so no need for using libnuma
 elif [ "${tmp:0:4}" == "surt" ]; then
-    tmp_flags="CPPFLAGS='-I/usr/include/torque'"
+    tmp_flags="CPPFLAGS='-I/usr/include/torque' --with-openib-dir=/lib64"
 
 elif [ "${tmp:0:4}" == "thul" ]; then
     tmp_flags="CPPFLAGS='-I/usr/local/include'"
