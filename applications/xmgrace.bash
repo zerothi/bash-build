@@ -3,7 +3,7 @@ add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.23.t
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/xmgrace
+pack_set --install-query $(pack_get --install-prefix)/bin/grace
 
 pack_set $(list --pack-module-reqs netcdf-serial fftw-2)
 
