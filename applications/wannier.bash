@@ -10,7 +10,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/wannier90.x
 # Check for Intel MKL or not
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
-    tmp="-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a"
+    tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas

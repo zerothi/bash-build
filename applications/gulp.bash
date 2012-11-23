@@ -13,12 +13,12 @@ pack_set --module-requirement openmpi
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
-LIBS = -L$MKL_PATH/lib/ -Wl,-rpath=$MKL_PATH/lib -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
+    LIBS = -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
     pack_set --command "sed -i '1 a\
-LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"
+    LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
@@ -26,7 +26,7 @@ else
 fi
 
 pack_set --command "sed -i '1 a\
-DEFS=-DMPI
+DEFS=-DMPI\n\
 OPT = \n\
 OPT1 = $CFLAGS\n\
 OPT2 = -ffloat-store\n\
