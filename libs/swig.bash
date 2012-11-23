@@ -2,6 +2,7 @@ add_package http://prdownloads.sourceforge.net/swig/swig-2.0.8.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --host-reject "n-"
 pack_set --install-query $(pack_get --install-prefix)/bin/swig
 pack_set --module-requirement pcre
 

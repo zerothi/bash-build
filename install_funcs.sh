@@ -8,6 +8,10 @@ let "IS_MODULE=1 << 2"
 let "UPDATE_MODULE_NAME=1 << 3"
 let "PRELOAD_MODULE=1 << 4"
 
+# We will create a local name of the host
+_host="$(hostname -s)"
+function get_hostname { echo -n "$_host" ; }
+
 _prefix=""
 # Instalation path
 function set_installation_path { _prefix=$1 ; }
@@ -47,7 +51,7 @@ export NPROCS=$_n_procs
 # Based on the extension which command should be called
 # to extract the archive
 function arc_cmd {
-    local ext="$1"
+    local ext="$(lc $1)"
     if [ "x$ext" == "xbz2" ]; then
 	echo -n "tar jxf"
     elif [ "x$ext" == "xxz" ]; then
@@ -59,11 +63,11 @@ function arc_cmd {
     elif [ "x$ext" == "xtar" ]; then
 	echo -n "tar xf"
     elif [ "x$ext" == "xzip" ]; then
-	echo -n unzip
+	echo -n "unzip"
     elif [ "x$ext" == "xpy" ]; then
 	echo -n "ln -fs"
     else
-	doerr "Unrecognized extension $ext in [bz2,tgz,gz,tar,zip]"
+	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py]"
     fi
 }
 
@@ -74,7 +78,7 @@ function arc_cmd {
 function dwn_file {
     local subdir=./
     if [ $# -gt 1 ]; then
-	subdir=$2
+	subdir="$2"
     fi
     local archive=$(pack_get --archive $1)
     [ -e $subdir/$archive ] && return 0
@@ -90,7 +94,7 @@ function extract_archive {
     local d=$(pack_get --directory $2)
     local cmd=$(arc_cmd $(pack_get --ext $2) )
     local archive=$(pack_get --archive $2)
-    [ -d $1/$d ] && rm -rf $1/$d
+    [ -d "$1/$d" ] && rm -rf "$1/$d"
     docmd $archive $cmd $1/$archive
 }
 
@@ -120,10 +124,14 @@ declare -a _directory
 declare -a _cmd
 # A module sequence which is the requirements for the package
 declare -a _mod_req
+# Variable for holding information about "non-installation" hosts
+declare -a _reject_host
+# A variable that contains all the hosts that it will be installed on
+declare -a _only_host
 # Local variables for hash tables of index (speed up of execution)
 declare -A _index
 # A separator used for commands that can be given consequitively
-_LIST_SEP='Ø'
+_LIST_SEP='ø'
 # The counter to hold the archives
 _N_archives=-1
 
@@ -165,6 +173,9 @@ function add_package {
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
+    # Install default values
+    _reject_host[$_N_archives]=""
+    _only_host[$_N_archives]=""
 }
 
 # This function allows for setting data related to a package
@@ -174,6 +185,7 @@ function pack_set {
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
+    local reject_h="" ; local only_h=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -185,7 +197,10 @@ function pack_set {
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
-            -R|-module-requirement)  req="$req $1" ; shift ;; # called several times
+            -R|-module-requirement)  
+		local tmp="$(pack_get --module-requirement $1)"
+		[ ! -z "$tmp" ] && req="$req $tmp"
+		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
 	    -index-alias)  idx_alias="$1" ; shift ;;
@@ -195,6 +210,8 @@ function pack_set {
 	    -m|-module-name)  mod_name="$1" ; shift ;;
 	    -prefix-and-module)  mod_name="$1" ; install="$(get_installation_path)/$1" ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
+	    -host-only)  only_h="$only_h $1" ; shift ;; # Can be called several times
+	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
 	    *)
 		# We do a crude check
 		# We have an argument
@@ -203,8 +220,12 @@ function pack_set {
 	esac
     done
     # We now have index to be the correct spanning
-    [ ! -z "$cmd" ]        && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
-    [ ! -z "$req" ]        && _mod_req[$index]="${_mod_req[$index]} $req"
+    [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
+    if [ ! -z "$req" ]; then
+	req="${_mod_req[$index]}$req"
+	req="$(echo "$req" | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
+	_mod_req[$index]="$req"
+    fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     [ ! -z "$alias" ]      && unset _index[_alias[$index]] && _alias[$index]="$alias" && _index[$(lc ${_alias[$index]})]=$index
@@ -214,6 +235,8 @@ function pack_set {
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
+    [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
+    [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 }
 
 # This function allows for setting data related to a package
@@ -246,9 +269,12 @@ function pack_get {
 		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 		-p|-package)         echo -n "${_package[$index]}" ;;
 		-e|-ext)             echo -n "${_ext[$index]}" ;;
+		-host-only)          echo -n "${_only_host[$index]}" ;;
+		-host-reject)        echo -n "${_reject_host[$index]}" ;;
 		*)
-		    doerr $1 "No option for pack_get found for $1" ;;
+		    doerr "$1" "No option for pack_get found for $1" ;;
 	    esac
+	    [ $# -gt 0 ] && echo -n " "
 	done
     else
 	local index=$_N_archives # Default to this
@@ -257,9 +283,9 @@ function pack_get {
 	    -C|-commands)        echo -n "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
 	    -R|-module-requirement) 
-                                 echo -n "${_mod_req[$index]}" ;;
+                echo -n "${_mod_req[$index]}" ;;
 	    -I|-install-prefix|-prefix) 
-                                 echo -n "${_install_prefix[$index]}" ;;
+                echo -n "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   echo -n "${_install_query[$index]}" ;;
 	    -a|-alias)           echo -n "${_alias[$index]}" ;;
 	    -A|-archive)         echo -n "${_archive[$index]}" ;;
@@ -269,6 +295,8 @@ function pack_get {
 	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 	    -p|-package)         echo -n "${_package[$index]}" ;;
 	    -e|-ext)             echo -n "${_ext[$index]}" ;;
+	    -host-only)          echo -n "${_only_host[$index]}" ;;
+	    -host-reject)        echo -n "${_reject_host[$index]}" ;;
 	    *)
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
@@ -330,10 +358,22 @@ function list {
     done
     for opt in $opts ; do
 	case $opt in
-	    -pack-module-reqs)      pre="--module-requirement " ; suf="" ; args="$(pack_get --module-requirement $args) $args" ;;
-	    -Wlrpath)      pre="-Wl,-rpath=" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
-	    -LDFLAGS)      pre="-L" ; suf="/lib" ; lcmd="pack_get --install-prefix " ;;
-	    -INCDIRS)      pre="-I" ; suf="/include" ; lcmd="pack_get --install-prefix " ;;
+	    -pack-module-reqs)      
+		pre="--module-requirement " 
+		suf=""
+		args="$(pack_get --module-requirement $args) $args" ;;
+	    -Wlrpath)
+		pre="-Wl,-rpath=" 
+		suf="/lib" 
+		lcmd="pack_get --install-prefix " ;;
+	    -LDFLAGS)   
+		pre="-L"  
+		suf="/lib" 
+		lcmd="pack_get --install-prefix " ;;
+	    -INCDIRS) 
+		pre="-I" 
+		suf="/include" 
+		lcmd="pack_get --install-prefix " ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
@@ -368,7 +408,29 @@ function pack_install {
     # We install the package
     local archive="$(pack_get --archive $idx)"
     [ $? -ne "0" ] && return 1
-
+	
+    # Check that we can install on this host
+    local run=0
+    local tmp="$(pack_get --host-only $idx)"
+    if [ ! -z "$tmp" ]; then
+	for host in $tmp ; do
+	    local lh="${#host}"
+	    [ "$host" == "${_host:0:$lh}" ] && \
+		run=1
+	done
+	[ $run -eq 0 ] && return 1
+    fi
+    local tmp="$(pack_get --host-reject $idx)"
+    if [ ! -z "$tmp" ]; then
+	run=1
+	for host in $tmp ; do
+	    local lh="${#host}"
+	    [ "$host" == "${_host:0:$lh}" ] && \
+		run=0
+	done
+	[ $run -eq 0 ] && return 1
+    fi
+    
     # Update the module name now
     if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
@@ -413,10 +475,12 @@ function pack_install {
 	
         # Extract the archive
 	pushd $(get_build_path)/.compile
+	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
 	rm -rf $(pack_get --directory $idx)
 	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
+	[ $? -ne 0 ] && exit 1
 	
         # We are now in the package directory
 	if [ $(has_setting $BUILD_DIR $idx) ]; then

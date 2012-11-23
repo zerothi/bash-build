@@ -1,11 +1,10 @@
-tmp=$(hostname)
-[ "${tmp:0:2}" != "n-" ] && return 0
-
 for v in 1.1 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --host-reject "ntch"
+pack_set --host-reject "zeroth"
 pack_set --install-query $(pack_get --install-prefix)/bin/wannier90.x
 
 # Check for Intel MKL or not

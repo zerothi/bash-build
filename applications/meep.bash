@@ -1,8 +1,8 @@
 # Install
-tmp="$(hostname)"
-[ "${tmp:0:2}" != "n-" ] && return 0
-
 add_package http://ab-initio.mit.edu/meep/meep-1.2.tar.gz
+
+pack_set --host-reject ntch \
+	--host-reject zeroth
 
 pack_set -s $IS_MODULE
 

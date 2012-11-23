@@ -5,7 +5,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/molden
 
-
 pack_set --command "sed -i -e 's/CC[[:space:]]*=.*/CC = $CC/g' makefile"
 pack_set --command "sed -i -e 's/FC[[:space:]]*=.*/FC = $FC/g' makefile"
 

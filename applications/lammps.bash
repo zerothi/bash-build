@@ -1,10 +1,11 @@
-tmp=$(hostname)
-[ "${tmp:0:2}" != "n-" ] && return 0
-
+rm .archives/lammps.tar.gz
 add_package http://lammps.sandia.gov/tars/lammps.tar.gz
 
 pack_set_file_version
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+
+pack_set --host-reject ntch \
+	--host-reject zeroth
 
 pack_set --directory \
     lammps-"$(get_file_time %m%b%y $(get_build_path)/.archives/$(pack_get --archive $idx))"/src

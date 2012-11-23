@@ -9,7 +9,7 @@ pack_set --module-requirement ss_config \
     --module-requirement amd \
     --module-requirement colamd \
     --module-requirement camd \
-    --module-requirement ccolamd \
+    --module-requirement ccolamd
 
 
 pack_set --command "sed -i -e 's|^include ../SuiteSparse_config/\(.*\)|include ../\1|' *[Mm]akefile"

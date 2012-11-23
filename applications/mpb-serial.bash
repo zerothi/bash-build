@@ -1,10 +1,9 @@
 # Install
-tmp="$(hostname)"
-[ "${tmp:0:2}" != "n-" ] && return 0
-
 add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 
 pack_set -s $IS_MODULE
+
+pack_set --host-only "n-"
 
 pack_set --alias mpb-serial
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)

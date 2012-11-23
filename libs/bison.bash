@@ -1,3 +1,5 @@
+tmp=$(which bison)
+[ ! -z "$tmp" ] && return 0
 add_package http://ftp.gnu.org/gnu/bison/bison-2.6.5.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
