@@ -6,6 +6,8 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
+pack_set --host-reject surt --host-reject thul
+
 tmp=$(hostname)
 tmp_flags=""
 if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management system
@@ -13,7 +15,7 @@ if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management
     # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
     # so no need for using libnuma
 elif [ "${tmp:0:4}" == "surt" ]; then
-    tmp_flags="CPPFLAGS='-I/usr/include/torque' --with-openib-dir=/lib64"
+    tmp_flags="CPPFLAGS='-I/usr/include/torque' --with-openib-libdir=/usr/lib64"
 
 elif [ "${tmp:0:4}" == "thul" ]; then
     tmp_flags="CPPFLAGS='-I/usr/local/include'"

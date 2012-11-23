@@ -1,7 +1,7 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
 add_package https://github.com/downloads/matplotlib/matplotlib/matplotlib-1.2.0.tar.gz
 
-pack_set --host-reject surt
+pack_set --host-reject thul --host-reject surt
 pack_set -s $IS_MODULE
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)

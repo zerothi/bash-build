@@ -20,7 +20,7 @@ cat <<EOF > $tmp_file
 include ../MAKE/Makefile.linux
 SHELL=/bin/sh
 CC =	     $MPICXX
-CCFLAGS =    $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))
+CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-requirement))
 SHFLAGS =	-fPIC
 DEPFLAGS =	-M
 LINK =		\$(CC)
@@ -32,7 +32,7 @@ LMP_INC =	-DLAMMPS_GZIP
 MPI_INC =       
 MPI_PATH = 
 MPI_LIB =      
-FFT_INC =       -DFFT_FFTW3 $(list --INCDIRS --LDFLAGS --Wlrpath fftw-3)
+FFT_INC =       -DFFT_FFTW3 $(list --INCDIRS fftw-3)
 FFT_PATH = 
 FFT_LIB =	-lfftw3
 JPG_INC =       
@@ -43,13 +43,13 @@ EOF
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     cat <<EOF >> $tmp_file
-LINKFLAGS =	
+LINKFLAGS =	-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))
 LIB =           -lstdc++ -lpthread -mkl=sequential
 EOF
 
 elif [ "${tmp:0:3}" == "gnu" ]; then 
     cat <<EOF >> $tmp_file
-LINKFLAGS =	
+LINKFLAGS =	$(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))
 LIB =           -lstdc++ -lpthread 
 EOF
 

@@ -43,16 +43,17 @@ include_dirs = $tmp_inc
 [mkl]
 library_dirs = $MKL_PATH/lib/intel64/
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include
-mkl_libs = mkl_rt, mkl_core, mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_mc 
+mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_mc, mkl_core, iomp5
 lapack_libs = mkl_lapack95_lp64
 EOF
     pack_set --command "cp $(pwd)/$cfg site.cfg"
     pack_set --command "rm $(pwd)/$cfg"
-    tmp="-static -mkl -openmp -fp-model strict -fomit-frame-pointer"
-    pack_set --command "sed -i -e \"s/cc_exe = 'icc/cc_exe = 'icc ${CFLAGS//-O3/-O2} $tmp/g\" numpy/distutils/intelccompiler.py"
+    tmp="-static -mkl -openmp -fp-model strict -fomit-frame-pointer -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH -I$(pack_get --install-prefix ss_config)/include"
+    pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $tmp:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's/\"ar\",/\"xiar\",/g' numpy/distutils/fcompiler/intel.py"
-    pack_set --command "sed -i -e 's/opt = \[\]/opt = \[\"${FCFLAGS//-O3/-O2} $tmp\"\]/g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${FCFLAGS//-O3/-O2} $tmp\"\]:g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${CFLAGS//-O3/-O2} $tmp\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
@@ -79,7 +80,7 @@ EOF
     pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
     pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    tmp="${FCFLAGS// -/ }"
+    tmp="${FCFLAGS// -/ } -I$(pack_get --install-prefix ss_config)/include"
     # Remove the leading "-" for a flag
     tmp="${tmp:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"

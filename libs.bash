@@ -2,7 +2,8 @@
 #source libs/guile.bash
 
 # Library used by MANY packages
-source libs/openmpi.bash
+source libs/openmpi-niflheim.bash
+#source libs/openmpi.bash
 
 # Default fftw libs
 source libs/fftw2.bash

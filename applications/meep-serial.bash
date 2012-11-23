@@ -3,8 +3,8 @@ add_package http://ab-initio.mit.edu/meep/meep-1.2.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject ntch \
-	--host-reject zeroth
+pack_set --host-reject ntch --host-reject zeroth \
+	--host-reject thul --host-reject surt
 
 pack_set --alias meep-serial
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)

@@ -15,6 +15,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
+    export LD_RUN_PATH="$MKL_PATH/lib/intel64"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # The atlas requirement should come from numpy
@@ -33,3 +34,4 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
 module load $(pack_get --module-name pcre swig)
 pack_install
 module unload $(pack_get --module-name pcre swig)
+export LD_RUN_PATH=""

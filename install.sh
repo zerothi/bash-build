@@ -32,7 +32,7 @@ set_c $compiler
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
-_DEBUG=1
+_DEBUG=0
 if [ $_DEBUG -ne 0 ]; then
     echo get CFLAGS $(edit_env --get CFLAGS)
     $(edit_env --prepend '-hollo' CFLAGS)

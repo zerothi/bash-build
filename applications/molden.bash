@@ -1,6 +1,9 @@
 # Install grace, which is a simple library
 add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.0.tar.gz
 
+pack_set --host-reject thul \
+	--host-reject surt
+
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/molden

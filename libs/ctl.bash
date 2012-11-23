@@ -1,9 +1,8 @@
 # We will only install this on the super computer
 add_package http://ab-initio.mit.edu/libctl/libctl-3.2.1.tar.gz
 
-pack_set --host-reject ntch \
-    --host-reject zeroth \
-    --host-reject surt
+pack_set --host-reject ntch --host-reject zeroth \
+    --host-reject thul --host-reject surt
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

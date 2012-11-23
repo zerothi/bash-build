@@ -5,7 +5,8 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
 
-pack_set --host-only "n-"
+pack_set --host-reject ntch --host-reject zeroth \
+	--host-reject thul --host-reject surt
 
 pack_set --module-requirement openmpi \
     --module-requirement libctl \
