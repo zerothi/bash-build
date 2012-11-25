@@ -10,7 +10,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 pack_set --module-requirement openmpi \
     $(list --pack-module-reqs ase) \
     $(list --pack-module-reqs matplotlib) \
-    $(list --pack-module-reqs hdf5)
+    $(list --pack-module-reqs h5py)
 
 # Check for Intel MKL or not
 tmp=$(get_c)
@@ -20,7 +20,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 compiler = '$CC $CFLAGS -mkl=sequential'
 mpicompiler = '$MPICC $CFLAGS '
 libraries = ['mkl_scalapack_lp64','mkl_blacs_openmpi_lp64']
-extra_link_args = ['-mkl=sequential']
+extra_link_args = ['-L$MKL_PATH/lib/intel64','-Wl,-rpath=$MKL_PATH/lib/intel64','-mkl=sequential']
 platform_id = "Xeon"
 EOF
 
@@ -53,6 +53,8 @@ libraries += ['hdf5_hl','hdf5']
 library_dirs += ['$(pack_get --install-prefix zlib)/lib']
 libraries += ['z']
 
+# Add all directories for inclusion
+include_dirs += [''$(list --prefix ,\' --suffix /include\' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))]
 EOF
 
 
