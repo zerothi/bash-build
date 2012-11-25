@@ -11,8 +11,8 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libharminv.a
     # Check for Intel MKL or not
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
-    tmp="--with-blas='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a'" 
-    tmp="$tmp --with-lapack='-mkl=sequential $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a'" 
+    tmp="--with-blas='$MKL_LIB -mkl=sequential -lmkl_blas95_lp64'" 
+    tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas

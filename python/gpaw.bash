@@ -17,10 +17,10 @@ tmp=$(get_c)
 file=$(pack_get --alias)-$(pack_get --version).site.cfg
 if [ "${tmp:0:5}" == "intel" ]; then
     cat << EOF > $file
-compiler = '$CC $CFLAGS -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -mkl=sequential'
-mpicompiler = '$MPICC $CFLAGS -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64'
+compiler = '$CC $CFLAGS $MKL_LIB -mkl=sequential'
+mpicompiler = '$MPICC $CFLAGS $MKL_LIB'
 libraries = ['mkl_scalapack_lp64','mkl_blacs_openmpi_lp64','mkl_lapack95_lp64','mkl_blas95_lp64']
-extra_link_args = ['-L$MKL_PATH/lib/intel64','-Wl,-rpath=$MKL_PATH/lib/intel64','-mkl=sequential']
+extra_link_args = ['$MKL_LIB','-mkl=sequential']
 platform_id = "Xeon"
 EOF
 

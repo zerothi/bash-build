@@ -43,7 +43,7 @@ EOF
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     cat <<EOF >> $tmp_file
-LINKFLAGS =	-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))
+LINKFLAGS =	$MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))
 LIB =           -lstdc++ -lpthread -mkl=sequential
 EOF
 
