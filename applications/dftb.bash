@@ -22,9 +22,9 @@ CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
 LN = \$(FC90) 
 LNOPT = -mkl=parallel -openmp
-LIB_LAPACK = $MKL_PATH/lib/intel64/libmkl_lapack95_lp64.a
-LIB_BLAS = $MKL_PATH/lib/intel64/libmkl_blas95_lp64.a
-LIBOPT = -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64
+LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64
+LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64
+LIBOPT = $MKL_LIB
 EOF
     
 elif [ "${tmp:0:3}" == "gnu" ]; then

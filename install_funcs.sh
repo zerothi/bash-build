@@ -465,15 +465,17 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
-	[ ! -z "$module_loads" ] && module load $module_loads
+    for mod in $module_loads ; do
+        module load $mod
+    done
 	
-        # Show that we will install
+    # Show that we will install
 	msg_install --start $idx
 
-        # Download archive
+    # Download archive
 	dwn_file $idx $(get_build_path)/.archives
 	
-        # Extract the archive
+    # Extract the archive
 	pushd $(get_build_path)/.compile
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
@@ -505,7 +507,9 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	[ ! -z "$module_loads" ] && module unload $module_loads
+    for mod in $module_loads ; do
+        module unload $mod
+    done
 
 	# Unload the module itself in case of PRELOADING
 	if [ $(has_setting $PRELOAD_MODULE) ]; then

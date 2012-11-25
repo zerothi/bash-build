@@ -8,15 +8,16 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
 # Add requirments when creating the module
-pack_set  $(list --pack-module-reqs numpy) \
+pack_set $(list --pack-module-reqs numpy) \
     --module-requirement zlib \
     --module-requirement hdf5-serial
+
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \
-    --command-flag "--hdf5=$(pack_get --install-prefix hdf5-serial)" \
+    --command-flag "--hdf5=$(pack_get --install-prefix hdf5-serial)"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_install

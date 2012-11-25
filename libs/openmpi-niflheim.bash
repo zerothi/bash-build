@@ -37,7 +37,7 @@ elif [ "${host:0:4}" == "thul" ]; then
 fi
 module load $mod
 tmp=$(which mpif90)
-pack_set --install-prefix ${tmp//bin/}
+pack_set --install-prefix ${tmp//bin*/}
 module unload $mod
 
 create_module \

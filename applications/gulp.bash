@@ -13,7 +13,7 @@ pack_set --module-requirement openmpi
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
-    LIBS = -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
+    LIBS = $MKL_LIB -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
@@ -31,8 +31,8 @@ OPT = \n\
 OPT1 = $CFLAGS\n\
 OPT2 = -ffloat-store\n\
 BAGGER = \n\
-RUNF90 = $FC\n\
-RUNCC = $CC\n\
+RUNF90 = $MPIFC\n\
+RUNCC = $MPICC\n\
 FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 BLAS = \n\
 LAPACK = \n\

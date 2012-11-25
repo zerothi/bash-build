@@ -22,7 +22,10 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 
 # Make commands
 pack_set --command "make"
-pack_set --command "make check ptcheck time"
+tmp=$(get_hostname)
+if [ "${tmp:0:5}" != "intel" ]; then
+    pack_set --command "make check ptcheck time"
+fi
 pack_set --command "make install"
 
 # Create the ATLAS lapack

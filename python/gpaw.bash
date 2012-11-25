@@ -17,16 +17,16 @@ tmp=$(get_c)
 file=$(pack_get --alias)-$(pack_get --version).site.cfg
 if [ "${tmp:0:5}" == "intel" ]; then
     cat << EOF > $file
-compiler = '$CC $CFLAGS -mkl=sequential'
-mpicompiler = '$MPICC $CFLAGS '
-libraries = ['mkl_scalapack_lp64','mkl_blacs_openmpi_lp64']
+compiler = '$CC $CFLAGS -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64 -mkl=sequential'
+mpicompiler = '$MPICC $CFLAGS -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64'
+libraries = ['mkl_scalapack_lp64','mkl_blacs_openmpi_lp64','mkl_lapack95_lp64','mkl_blas95_lp64']
 extra_link_args = ['-L$MKL_PATH/lib/intel64','-Wl,-rpath=$MKL_PATH/lib/intel64','-mkl=sequential']
 platform_id = "Xeon"
 EOF
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas \
-	--module-requirement scalapack
+        --module-requirement scalapack
     cat << EOF > $file
 compiler = '$CC $CFLAGS '
 mpicompiler = '$MPICC $CFLAGS '
@@ -37,6 +37,7 @@ EOF
 
 fi
 
+tmp="$(list --prefix ,\' --suffix /include\' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))"
 cat << EOF >> $file
 include_dirs += ['$(pack_get --install-prefix openmpi)/include']
 extra_compile_args = '$CFLAGS -std=c99'.split(' ')
@@ -47,15 +48,15 @@ if scalapack:
     define_macros += [('GPAW_NO_UNDERSCORE_CSCALAPACK', '1')]
 
 hdf5 = True
-include_dirs += ['$(pack_get --install-prefix hdf5)/include']
 library_dirs += ['$(pack_get --install-prefix hdf5)/lib']
 libraries += ['hdf5_hl','hdf5']
 library_dirs += ['$(pack_get --install-prefix zlib)/lib']
 libraries += ['z']
 
 # Add all directories for inclusion
-include_dirs += [''$(list --prefix ,\' --suffix /include\' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))]
+include_dirs += [${tmp:2}]
 EOF
+echo ${tmp:2}
 
 
 pack_set --command "cp $(pwd)/$file customize.py"
