@@ -24,7 +24,7 @@ pack_set --command "make" \
     --command-flag "install"
 
 
-tmp=$(which bison 2&>1)
+tmp="$(which bison)"
 [ "${tmp:0:1}" != "/" ] && \
 	module load $(pack_get --module-name bison)
 pack_install

@@ -1,4 +1,4 @@
-tmp="$(which bison 2&>1)"
+tmp="$(which bison)"
 [ "${tmp:0:1}" == "/" ] && return 0
 add_package http://ftp.gnu.org/gnu/bison/bison-2.6.5.tar.xz
 
@@ -15,6 +15,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-tmp="$(which bison 2&>1)"
+tmp="$(which bison)"
 [ "${tmp:0:1}" != "/" ] && \
     pack_install

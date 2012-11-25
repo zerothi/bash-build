@@ -548,7 +548,7 @@ function get_index {
     fi
     i=${_index[$lc_name]}
     [ -z "${i// /}" ] && i=-1
-    echo "$lc_name $i" >> error.cfg
+    #echo "$lc_name $i" >> error.cfg
     [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ] && echo -n "$i" && return 0
     for lookup in alias archive package ; do
 	i=0
