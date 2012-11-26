@@ -80,9 +80,9 @@ EOF
     pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
     pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    tmp="${FCFLAGS// -/ } -I$(pack_get --install-prefix ss_config)/include"
+    tmp="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
     # Remove the leading "-" for a flag
-    tmp="${tmp:1}"
+    [ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
     tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2})"
     # Remove the first " ," from the line
