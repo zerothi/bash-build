@@ -4,6 +4,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --host-reject "n-"
 pack_set --host-reject "zeroth"
+pack_set --host-reject "ntch-2857"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/swig
 pack_set --module-requirement pcre

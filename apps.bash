@@ -15,6 +15,8 @@ source applications/wannier.bash
 
 source applications/gulp.bash
 
+source applications/siesta-stable.bash
+
 
 # Create a module with default all plotting tools
 create_module \
