@@ -13,7 +13,7 @@ pack_set --module-requirement openmpi
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
-    LIBS = $MKL_LIB -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
+    LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --module-requirement atlas
