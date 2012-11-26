@@ -1,10 +1,10 @@
-add_package http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-3.1.tgz
+add_package http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz
 
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/siesta
 
-pack_set --module-requirement openmpi --module-requirement netcdf-serial
+pack_set --module-requirement openmpi --module-requirement netcdf
 
 # Change to directory:
 pack_set --directory $(pack_get --directory)/Obj
@@ -31,11 +31,11 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=${FCFLAGS//-fno-second-underscore/}\n\
-FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF\n\
+FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
@@ -57,7 +57,7 @@ if [ "${tmp:0:5}" == "intel" ]; then
 LDFLAGS=-L$MKL_LIB -Wl,-rpath=$MKL_LIB $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
 \n\
-LIBS=-lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64 -lnetcdff -lnetcdf\n\
+LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64\n\
 ' arch.make"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
@@ -67,7 +67,7 @@ elif [ "${tmp:0:3}" == "gnu" ]; then
 LDFLAGS=$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
 \n\
-LIBS=-lscalapack -llapack_atlas -lf77blas -lcblas -latlas -lnetcdff -lnetcdf\n\
+LIBS=\$(ADDLIB) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas\n\
 ' arch.make"
 
 else
@@ -75,17 +75,16 @@ else
 
 fi
 
-# Fix the long lines in the Makefile
-pack_set --command "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
-> tmp.F90\n\
-\t\@awk '{if (length>80) { cur=78; \\\\\\\\\n\\\
-\t\tprintf \\\"%s\&\\\\\\n\\\",substr(\\\$\\\$0,0,78); \\\\\\\\\n\\\
-\t\twhile(length-cur>78) { cur=cur+76 ; \\\\\\\\\n\\\
-\t\tprintf \\\"\&%s\&\\\\\\n\\\",substr(\\\$\\\$0,cur-76,76) \\\\\\\\\n\\\
-\t\t} printf \\\"\&%s\\\\\\n\\\",substr(\\\$\\\$0,cur)} else { print \\\$\\\$0 }}' tmp.F90 > compinfo.F90/\" Makefile"
-pack_set --command "make siesta"
+
+# Correct an error for the GNU compiler:
+pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_ts_contour.f90"
+
+
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+
+pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
+
 pack_set --command "make clean"
 
 pack_set --command "make transiesta"
@@ -93,6 +92,11 @@ pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"
 pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/"
+pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
+
+pack_set --command "cd ../TBTrans_rep"
+pack_set --command "siesta_install --tbtrans"
+pack_set --command "make"
+pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
 pack_install
