@@ -35,7 +35,7 @@ FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz -lcurl\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
@@ -96,6 +96,7 @@ pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 
 pack_set --command "cd ../TBTrans_rep"
 pack_set --command "siesta_install --tbtrans"
+pack_set --command "make dep"
 pack_set --command "make"
 pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 

@@ -31,6 +31,7 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=${FCFLAGS//-fno-second-underscore/}\n\
+:q
 FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF\n\
 \n\
 ARFLAGS_EXTRA=\n\
