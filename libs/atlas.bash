@@ -3,6 +3,7 @@ add_package http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.0/at
 
 pack_set --directory ATLAS
 
+pack_set --host-reject surt
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
@@ -23,7 +24,7 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 # Make commands
 pack_set --command "make"
 tmp=$(get_hostname)
-if [ "${tmp:0:5}" != "intel" ]; then
+if [ "${tmp:0:4}" != "surt" ]; then
     pack_set --command "make check ptcheck time"
 fi
 pack_set --command "make install"

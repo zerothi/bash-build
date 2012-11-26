@@ -54,10 +54,10 @@ MPI_INCLUDE=.\n\
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
     pack_set --command "sed -i '1 a\
-LDFLAGS=-L$MKL_LIB -Wl,-rpath=$MKL_LIB $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
+LDFLAGS=$MKL_LIB $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
 \n\
-LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64\n\
+LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64 -mkl=cluster\n\
 ' arch.make"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
