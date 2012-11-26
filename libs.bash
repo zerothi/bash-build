@@ -3,7 +3,6 @@
 
 # Library used by MANY packages
 source libs/openmpi-niflheim.bash
-#source libs/openmpi.bash
 
 # Default fftw libs
 source libs/fftw2.bash
@@ -35,13 +34,7 @@ source libs/netcdf.bash
 source libs/netcdf-serial.bash
 
 # A sparse library
-source libs/suitesparse_config.bash
-source libs/camd.bash
-source libs/amd.bash
-source libs/colamd.bash
-source libs/ccolamd.bash
-source libs/cholmod.bash
-source libs/umfpack.bash
+source libs/suitesparse.bash
 
 
 # We install the module scripts here:
