@@ -56,7 +56,7 @@ for v in \
     pack_install
 
     create_module \
-    	--module-path $install_path/modules-npa-apps \
+    	--module-path $(get_installation_path)/modules-npa-apps \
     	-n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
     	-v $(pack_get --version) \
     	-M $(pack_get --alias).$(pack_get --version).$(get_c) \
