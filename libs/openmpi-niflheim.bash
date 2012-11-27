@@ -37,13 +37,13 @@ elif [ "${host:0:4}" == "thul" ]; then
 fi
 module load $mod
 tmp=$(which mpif90)
-pack_set --install-prefix ${tmp//bin*/}
+pack_set --install-prefix ${tmp//\/bin*/}
 module unload $mod
 
 create_module \
     -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
     -v $(pack_get --version) \
     -M $(pack_get --alias)/$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
+    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     -L $mod
 
