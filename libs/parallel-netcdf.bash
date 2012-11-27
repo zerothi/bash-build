@@ -26,7 +26,9 @@ pack_set --command "make" \
 
 tmp="$(which bison 2>/dev/null)"
 [ "${tmp:0:1}" != "/" ] && \
+    module load $(get_default_modules) && \
 	module load $(pack_get --module-name bison)
 pack_install
 [ "${tmp:0:1}" != "/" ] && \
-	module unload $(pack_get --module-name bison)
+	module unload $(pack_get --module-name bison) && \
+    module unload $(get_default_modules)
