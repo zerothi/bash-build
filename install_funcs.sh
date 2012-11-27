@@ -2,8 +2,8 @@
 # different libraries.
 
 # Default debugging variables
-TIMING=0
-DEBUG=0
+[ -z "$TIMING" ] && TIMING=0
+[ -z "$DEBUG" ]  && DEBUG=0
 
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
@@ -46,6 +46,11 @@ _buildpath="./"
 # Path for downloading and extracting the packages
 function set_build_path { _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
 function get_build_path { echo -n $_buildpath ; }
+
+_def_module_reqs=""
+# Path for downloading and extracting the packages
+function set_default_modules { _def_module_reqs="$1" ; }
+function get_default_modules { echo -n "$_def_module_reqs" ; }
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
@@ -181,6 +186,7 @@ function add_package {
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
     # Install default values
+    _mod_req[$_N_archives]=""
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
     [ $TIMING -ne 0 ] && _add_package_T=$((_add_package_T+`date +%s`-time))
@@ -482,7 +488,7 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
-	for mod in $module_loads ; do
+	for mod in $_def_module_reqs $module_loads ; do
             module load $mod
 	done
 	
@@ -524,7 +530,7 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	for mod in $module_loads ; do
+	for mod in $_def_module_reqs $module_loads ; do
             module unload $mod
 	done
 
@@ -545,7 +551,7 @@ function pack_install {
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
+	local reqs="$(list --prefix '-R ' $_def_module_reqs) $(list --prefix '-R ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
@@ -781,9 +787,11 @@ function msg_install {
 	    -start|-S) n="Installing" ; action=1 ;;
 	    -finish|-F) n="Finished" ; action=2 ;;
 	    -already-installed) n="Already installed" ; action=3 ;;
+	    -message) n="$1" ; action=4 ;;
 	esac
     done
-    local cmd=$(arc_cmd $(pack_get --ext $1) )
+    [ "$action" -ne "4" ] && \
+	local cmd=$(arc_cmd $(pack_get --ext $1) )
     echo " ================================== "
     echo "            $n"
     if [ "$action" -eq "1" ]; then
@@ -791,11 +799,13 @@ function msg_install {
 	echo " Ext     : $(pack_get --ext $1)"
 	echo " Ext CMD : $cmd"
     fi
-    echo " Package : $(pack_get --package $1)"
-    if [ "$(pack_get --package $1)" != "$(pack_get --alias $1)" ]; then
-	echo " Alias   : $(pack_get --alias $1)"
-    fi	
-    echo " Version : $(pack_get --version $1)"
+    if [ "$action" -ne "4" ]; then
+	echo " Package : $(pack_get --package $1)"
+	if [ "$(pack_get --package $1)" != "$(pack_get --alias $1)" ]; then
+	    echo " Alias   : $(pack_get --alias $1)"
+	fi	
+	echo " Version : $(pack_get --version $1)"
+    fi
     if [ "$action" -eq "1" ]; then
 	module list
 	if [ "$?" -ne "0" ]; then

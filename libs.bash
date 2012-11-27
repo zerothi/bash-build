@@ -1,3 +1,4 @@
+msg_install --message "Installing all libraries..."
 #source libs/gmp.bash
 #source libs/guile.bash
 
@@ -39,38 +40,38 @@ source libs/suitesparse.bash
 
 # We install the module scripts here:
 create_module \
-    --module-path $install_path/modules-npa \
+    --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
-    -P "/directory/should/not/exist" \
+    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement netcdf))
 
 create_module \
-    --module-path $install_path/modules-npa \
+    --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \
-    -P "/directory/should/not/exist" \
+    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' blas lapack)
 
 create_module \
-    --module-path $install_path/modules-npa \
+    --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.blas.lapack.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" \
+    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     -L "$(pack_get --module-name openmpi)" \
     -L "$(pack_get --module-name blas)" \
     -L "$(pack_get --module-name lapack)" \
     -L "$(pack_get --module-name scalapack)"
 
 create_module \
-    --module-path $install_path/modules-npa \
-    -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
+    --module-path $(get_installation_path)/modules-npa \
+    -n "\"Nick Papior Andersen's parallel fast math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.atlas.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" \
+    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     -L "$(pack_get --module-name openmpi)" \
     -L "$(pack_get --module-name atlas)" \
     -L "$(pack_get --module-name scalapack)"

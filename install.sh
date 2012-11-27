@@ -20,14 +20,8 @@ fi
 # Create the build path for downloading and creating the stuff
 set_build_path $(pwd)
 
-# Initialize the installation path
-set_installation_path $install_path
-
 # Initialize the module read path
-set_module_path $install_path/modules
-
-# Initialize the compiler directory
-set_c $compiler
+set_module_path $(get_installation_path)/modules
 
 # Begin installation of various packages
 # List of archives
@@ -59,6 +53,9 @@ if [ $DEBUG -ne 0 ]; then
     echo SPLIT of FLAGS "$(list --prefix ,\'- --suffix \' ${tmp:1})"
     echo " Check: " 
     echo $(pack_get --module-requirement def)
+    echo ""
+    tmp=""
+    echo LIST of emptyness: "$(list --prefix '-R ' $tmp)"
     echo "Done with DEBUG"
 fi
 

@@ -1,3 +1,5 @@
+msg_install --message "Installing the SUITE SPARSE libraries..."
+
 # A sparse library
 source libs/suitesparse_config.bash
 source libs/camd.bash

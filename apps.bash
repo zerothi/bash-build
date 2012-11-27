@@ -1,4 +1,6 @@
 #source applications/git.bash
+msg_install --message "Installing the applications..."
+
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
 
@@ -29,6 +31,6 @@ create_module \
     --module-path $install_path/modules-npa-apps \
     -n "\"Nick Papior Andersen's script for loading GUI: $(get_c)\"" \
     -v $(pack_get --version) \
-    -M gnuplot.molden.xmgrace.xcrysden/$(get_c) \
+    -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' gnuplot molden $(pack_get --module-requirement grace) grace $(pack_get --module-requirement xcrysden) xcrysden)

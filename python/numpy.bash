@@ -41,17 +41,19 @@ if [ "${tmp:0:5}" == "intel" ]; then
 library_dirs = $tmp_lib
 include_dirs = $tmp_inc
 [mkl]
-library_dirs = $MKL_PATH/lib/intel64/
-include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include
-mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_mc, mkl_core, iomp5
+library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64
+include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
+libraries = -liomp5
+mkl_libs = mkl_rt, mkl_def, mkl_intel_lp64, mkl_intel_thread, mkl_mc, mkl_core
 lapack_libs = mkl_lapack95_lp64
+blas_libs = mkl_blas95_lp64
 EOF
     pack_set --command "cp $(pwd)/$cfg site.cfg"
     pack_set --command "rm $(pwd)/$cfg"
-    tmp="-static -mkl -openmp -fp-model strict -fomit-frame-pointer -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH -I$(pack_get --install-prefix ss_config)/include"
+    tmp="-static -mkl -openmp -fp-model strict -fomit-frame-pointer $MKL_LIB -I$(pack_get --install-prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $tmp:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
-    pack_set --command "sed -i -e 's/\"ar\",/\"xiar\",/g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's/\"ar\",/\"$AR\",/g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${FCFLAGS//-O3/-O2} $tmp\"\]:g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${CFLAGS//-O3/-O2} $tmp\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
