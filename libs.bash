@@ -13,7 +13,9 @@ source libs/fftw3.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
+source libs/scalapack.bash
 
+timings For basic math libraries and OpenMPI
 
 # Some specific libraries
 source libs/gsl.bash
@@ -26,17 +28,21 @@ source libs/bison.bash
 source libs/pcre.bash
 source libs/swig.bash
 
+timings For specific/requested libraries 
+
 source libs/zlib.bash
-source libs/scalapack.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
 source libs/parallel-netcdf.bash
 source libs/netcdf.bash
 source libs/netcdf-serial.bash
 
+timings For netcdf and related libraries
+
 # A sparse library
 source libs/suitesparse.bash
 
+timings For sparse libraries
 
 # We install the module scripts here:
 create_module \

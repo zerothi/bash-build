@@ -955,6 +955,9 @@ function timings {
     echo ""
     if [ $TIMING -ne 0 ]; then
 	echo "###############################################"
+	[ $# -ne 0 ] && \
+	    echo "    $@" && \
+	    echo "-----------------------------------------------"
 	echo " Timing for the installation routine:"
 	echo "  add_package    : $(get_timing $_add_package_T)"
 	echo "  pack_set       : $(get_timing $_pack_set_T)"

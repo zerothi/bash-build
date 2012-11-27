@@ -8,21 +8,30 @@ module unload $(get_default_modules)
 #source python/distribute.bash
 source python/bazar.bash
 source python/nose.bash
+
+timings For python default packages
+
 source python/cython.bash
 source python/mpi4py.bash
 source python/numpy.bash
 source python/scipy.bash # [numpy]
 source python/numexpr.bash # [numpy]
+source python/scientificpython.bash
+source python/matplotlib.bash
+
+timings For python default scientific packages
+
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
-source python/scientificpython.bash
 source python/inelastica.bash
 source python/inelastica-dev.bash
 
-source python/matplotlib.bash
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/ase.bash
 source python/gpaw.bash
+
+timings For python special packages
+
 
 # Initialize the module read path
 old_path=$(get_module_path)
