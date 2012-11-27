@@ -35,10 +35,13 @@ elif [ "${host:0:4}" == "thul" ]; then
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi
 fi
+
+module load $(get_default_modules)
 module load $mod
 tmp=$(which mpif90)
 pack_set --install-prefix ${tmp//\/bin*/}
 module unload $mod
+module unload $(get_default_modules)
 
 create_module \
     -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \

@@ -6,7 +6,7 @@ pack_set --host-reject ntch
 
 pack_set --install-query $(pack_get --install-prefix)/bin/gulp
 
-pack_set --directory $(pack_get --directory)/Src
+pack_set --command "cd Src"
 
 pack_set --module-requirement openmpi
 

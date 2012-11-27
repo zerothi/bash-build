@@ -1,8 +1,10 @@
 msg_install --message "Installing the python-packages..."
 # This script will install all python packages
+module load $(get_default_modules)
 module load $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print "{0}.{1}".format(sys.version_info[0],sys.version_info[1])')
 module unload $(pack_get --module-name $(get_parent))
+module unload $(get_default_modules)
 #source python/distribute.bash
 source python/bazar.bash
 source python/nose.bash
@@ -24,7 +26,7 @@ source python/gpaw.bash
 
 # Initialize the module read path
 old_path=$(get_module_path)
-set_module_path $install_path/modules-npa
+set_module_path $(get_installation_path)/modules-npa
 
 create_module \
     -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \

@@ -28,7 +28,7 @@ source applications/gulp.bash
 
 # Create a module with default all plotting tools
 create_module \
-    --module-path $install_path/modules-npa-apps \
+    --module-path $(get_installation_path)/modules-npa-apps \
     -n "\"Nick Papior Andersen's script for loading GUI: $(get_c)\"" \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \

@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 pack_set --module-requirement openmpi --module-requirement netcdf-serial
 
 # Change to directory:
-pack_set --directory $(pack_get --directory)/Obj
+pack_set --command "cd Obj"
 
 # Setup the compilation scheme
 pack_set --command "../Src/obj_setup.sh"

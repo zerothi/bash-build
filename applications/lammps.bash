@@ -7,7 +7,8 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 pack_set --host-reject ntch \
     --host-reject zeroth
 
-pack_set --directory 'lammps-*/src'
+pack_set --directory 'lammps-*'
+pack_set --command 'cd src'
 
 pack_set --install-query $(pack_get --install-prefix)/bin/lmp
 

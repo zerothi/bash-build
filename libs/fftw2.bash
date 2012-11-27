@@ -16,6 +16,8 @@ pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
 
+module load $(get_default_modules)
 module load $(pack_get --module-name openmpi)
 pack_install
 module unload $(pack_get --module-name openmpi)
+module unload $(get_default_modules)

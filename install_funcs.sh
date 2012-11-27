@@ -145,10 +145,11 @@ _LIST_SEP='ø'
 _N_archives=-1
 
 # $1 http path
-_add_package_T=0
+_add_package_T=0.0
 function add_package {
+    do_debug --enter add_package
     # Do a timing
-    [ $TIMING -ne 0 ] && local time=`date +%s`
+    [ $TIMING -ne 0 ] && local time=$(add_timing)
     _N_archives=$(( _N_archives + 1 ))
     # Save the url 
     local url=$1
@@ -189,13 +190,15 @@ function add_package {
     _mod_req[$_N_archives]=""
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
-    [ $TIMING -ne 0 ] && _add_package_T=$((_add_package_T+`date +%s`-time))
+    [ $TIMING -ne 0 ] && _add_package_T=$(add_timing $_add_package_T $time)
+    do_debug --return add_package
 }
 
 # This function allows for setting data related to a package
-_pack_set_T=0
+_pack_set_T=0.0
 function pack_set {
-    [ $TIMING -ne 0 ] && local time=`date +%s`
+    do_debug --enter pack_set
+    [ $TIMING -ne 0 ] && local time=$(add_timing)
     local index=$_N_archives # Default to this
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
@@ -253,14 +256,16 @@ function pack_set {
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
-    [ $TIMING -ne 0 ] && _pack_set_T=$((_pack_set_T+`date +%s`-time))
+    [ $TIMING -ne 0 ] && _pack_set_T=$(add_timing $_pack_set_T $time)
+    do_debug --return pack_set
 }
 
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
-_pack_get_T=0
+_pack_get_T=0.0
 function pack_get {
-    [ $TIMING -ne 0 ] && local time=`date +%s`
+    do_debug --enter pack_get
+    [ $TIMING -ne 0 ] && local time=$(add_timing)
     local opt=$1 # Save the option passed
     case $opt in
 	--*) opt=${opt:1} ;;
@@ -320,7 +325,8 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
-    [ $TIMING -ne 0 ] && _pack_get_T=$((_pack_get_T+`date +%s`-time))
+    [ $TIMING -ne 0 ] && _pack_get_T=$(add_timing $_pack_get_T $time)
+    do_debug --return pack_get
 }
 
 
@@ -350,9 +356,10 @@ function edit_env {
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix
-_list_T=0
+_list_T=0.0
 function list {
-    local time=`date +%s`
+    do_debug --enter list
+    local time=$(add_timing)
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
     # First we collect all options
@@ -417,12 +424,14 @@ function list {
 	done
     fi
     echo -n "$retval"
-    [ $TIMING -ne 0 ] && _list_T=$((_listT+`date +%s`-time))
+    [ $TIMING -ne 0 ] && _list_T=$(add_timing $_list_T $time)
+    do_debug --return list
 }
 
 
 # Install the package
 function pack_install {
+    do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
 	idx=$1
@@ -559,13 +568,15 @@ function pack_install {
 	    -M $(pack_get --module-name $idx) \
 	    -P $(pack_get --install-prefix $idx) $reqs
     fi
+    do_debug --return pack_install
 }
 
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
-_get_index_T=0
+_get_index_T=0.0
 function get_index {
-    local time=`date +%s`
+    do_debug --enter get_index
+    local time=$(add_timing)
     local i ; local lookup
     local l=${#1} ; local lc_name=$(lc $1)
     $(isnumber $1)
@@ -573,26 +584,34 @@ function get_index {
 	[ "$1" -gt "$_N_archives" ] && return 1
 	[ "$1" -lt 0 ] && return 1
 	echo -n "$1"
-	[ $TIMING -ne 0 ] && _get_index_T=$((_get_index_T+`date +%s`-time))
+	[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+	do_debug --return get_index
 	return 0
     fi
     i=${_index[$lc_name]}
     [ -z "${i// /}" ] && i=-1
     #echo "$lc_name $i" >> error.cfg
-    [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ] && echo -n "$i" && return 0
+    if [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ]; then
+	echo -n "$i"
+	[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+	do_debug --return get_index
+	return 0
+    fi
     for lookup in alias archive package ; do
 	i=0
 	while [ "$i" -le "$_N_archives" ]; do
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		echo -n "$i"
-		[ $TIMING -ne 0 ] && _get_index_T=$((_get_index_T+`date +%s`-time))
+		[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+		do_debug --return get_index
 		return 0
 	    fi
 	    i=$((i+1))
 	done
     done
     doerr $1 "Could not find the archive in the list..."
+    do_debug --return get_index
 }
 
 # Has setting returns 1 for success and 0 for fail
@@ -627,9 +646,10 @@ function get_make_parallel {
 #   -r <module requirement> 
 #   -H <help message> 
 #   -W <what is message>
-_create_module_T=0
+_create_module_T=0.0
 function create_module {
-    local time=`date +%s`
+    do_debug --enter create_module
+    local time=$(add_timing)
     local name;local version;local path; local help; local whatis
     local mod_path=""
     local force=0
@@ -732,7 +752,8 @@ EOF
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
-    [ $TIMING -ne 0 ] && _create_module_T=$((_create_module_T+`date +%s`-time))
+    [ $TIMING -ne 0 ] && _create_module_T=$(add_timing $_create_module_T $time)
+    do_debug --return create_module
 }
 
 # Append to module file dependent on the existance of a
@@ -741,9 +762,9 @@ EOF
 #   -f <file>
 #   $1 module file to append to
 #   $2-? append this in one line to the file
-__add_module_if_T=0
+__add_module_if_T=0.0
 function _add_module_if {
-    local time=`date +%s`
+    local time=$(add_timing)
     local d="";local f="" ;local F=0;
     while getopts ":d:f:F:h" opt; do
 	case $opt in
@@ -765,10 +786,10 @@ function _add_module_if {
 	cat <<EOF >> $mf
 $@
 EOF
-	[ $TIMING -ne 0 ] && __add_module_if_T=$((__add_module_if_T+`date +%s`-time))
+	[ $TIMING -ne 0 ] && __add_module_if_T=$(add_timing $__add_module_if_T $time)
 	return 0
     fi
-    [ $TIMING -ne 0 ] && __add_module_if_T=$((__add_module_if_T+`date +%s`-time))
+    [ $TIMING -ne 0 ] && __add_module_if_T=$(add_timing $__add_module_if_T $time)
     return 1
 }
 
@@ -935,16 +956,73 @@ function timings {
     if [ $TIMING -ne 0 ]; then
 	echo "###############################################"
 	echo " Timing for the installation routine:"
-	echo "  add_package    : $_add_package_T s"
-	echo "  pack_set       : $_pack_set_T s"
-	echo "  pack_get       : $_pack_get_T s"
-	echo "  list           : $_list_T s"
-	echo "  get_index      : $_get_index_T s"
-	echo "  create_module  : $_create_module_T s"
-	echo "  _add_module_if : $__add_module_if_T s"
+	echo "  add_package    : $(get_timing $_add_package_T)"
+	echo "  pack_set       : $(get_timing $_pack_set_T)"
+	echo "  pack_get       : $(get_timing $_pack_get_T)"
+	echo "  list           : $(get_timing $_list_T)"
+	echo "  get_index      : $(get_timing $_get_index_T)"
+	echo "  create_module  : $(get_timing $_create_module_T)"
+	echo "  _add_module_if : $(get_timing $__add_module_if_T)"
 	echo "###############################################"
     else
 	echo " Timing for the installation routines has not been recorded (use TIMING>0)"
     fi
     echo ""
+}
+
+function add_timing {
+    if [ $# -eq 0 ]; then
+	echo -n `date +%s-%N`
+    else
+	# The current time that has runned...
+	#echo $@ >> timing
+	local run_s="${1%%\.*}"
+	local run_ns="${1##*\.}"
+	run_ns=`expr "$run_ns" : '0*\(.*\)'`
+	[ -z "$run_ns" ] && run_ns=0
+	#echo run_s $run_s run_ns $run_ns >> timing
+	local old_s="${2%%-*}"
+	local old_ns="${2##*-}"
+	old_ns=`expr "$old_ns" : '0*\(.*\)'`
+	[ -z "$old_ns" ] && old_ns=0
+	#echo old_s $old_s old_ns $old_ns >> timing
+	local n_s=`date +%s-%N`
+	local new_s="${n_s%%-*}"
+	local new_ns="${n_s##*-}"
+	new_ns=`expr "$new_ns" : '0*\(.*\)'`
+	[ -z "$new_ns" ] && new_ns=0
+	#echo new_s $new_s new_ns $new_ns >> timing
+	if [ "$old_ns" -gt "$new_ns" ]; then
+	    echo -n $((new_s-old_s+run_s)).$((999999999-new_ns+old_ns+run_ns))
+	else
+	    echo -n $((new_s-old_s+run_s)).$((new_ns-old_ns+run_ns))
+	fi
+    fi
+}
+
+function get_timing {
+    local run_s="${1%%\.*}"
+    local run_ns="${1##*\.}"
+    if [ "$run_ns" -gt 1000000000 ]; then
+	run_s=$((run_s+run_ns/1000000000))
+	run_ns=$((run_ns-run_ns/1000000000*1000000000))
+    fi
+    printf '%15s s, %4s ms' $run_s $((run_ns/1000000))
+}
+
+
+function do_debug {
+    [ $DEBUG -eq 0 ] && return 0
+    local n=""
+    while [ $# -gt 1 ]; do
+	local opt=$1
+	case $opt in
+	    --*) opt=${opt:1} ;;
+	esac ; shift
+	case $opt in
+	    -enter) n="enter routine: $1" ; shift ;;
+	    -return) n="return from routine: $1" ; shift ;;
+	esac
+    done
+    echo $n >> DEBUG
 }
