@@ -1,8 +1,8 @@
 add_package http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --install-prefix)/bin/siesta
+pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
@@ -35,7 +35,7 @@ FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz -lcurl\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
@@ -82,12 +82,22 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
-pack_set --command "make siesta"
+pack_set --command "make libmpi_f90.a"
+pack_set --command "make libfdf.a"
+pack_set --command "make libxmlparser.a"
+pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
+pack_set --command "make FoX/.FoX"
+pack_set --command "make $(get_make_parallel) siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
-pack_set --command "make transiesta"
+pack_set --command "make libmpi_f90.a"
+pack_set --command "make libfdf.a"
+pack_set --command "make libxmlparser.a"
+pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
+pack_set --command "make FoX/.FoX"
+pack_set --command "make $(get_make_parallel) transiesta"
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"

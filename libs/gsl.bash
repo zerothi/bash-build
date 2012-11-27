@@ -5,6 +5,8 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 
+pack_set --host-reject "ntch-2857" --host-reject zeroth
+
 # Install commands that it should run
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then

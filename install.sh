@@ -6,6 +6,8 @@ module purge
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
+TIMING=1
+
 # Use ln to link to this file
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
@@ -32,8 +34,8 @@ set_c $compiler
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
-_DEBUG=0
-if [ $_DEBUG -ne 0 ]; then
+
+if [ $DEBUG -ne 0 ]; then
     echo get CFLAGS $(edit_env --get CFLAGS)
     $(edit_env --prepend '-hollo' CFLAGS)
     echo get PREPEND CFLAGS $(edit_env --get CFLAGS)
@@ -63,6 +65,8 @@ fi
 # Install all libraries
 source libs.bash
 
+timings
+
 # These are "parent" installations...
 source python2.bash
 #source python3.bash
@@ -70,3 +74,5 @@ source python2.bash
 # We have installed all libraries needed for doing application installs
 source apps.bash
 
+
+timings

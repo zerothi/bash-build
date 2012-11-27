@@ -12,6 +12,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 pack_set \
     --command "../configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--disable-dap" \
     --command-flag "--disable-netcdf-4" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static"

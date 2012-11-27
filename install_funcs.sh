@@ -1,6 +1,10 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
+# Default debugging variables
+TIMING=0
+DEBUG=0
+
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
@@ -136,7 +140,10 @@ _LIST_SEP='ø'
 _N_archives=-1
 
 # $1 http path
+_add_package_T=0
 function add_package {
+    # Do a timing
+    [ $TIMING -ne 0 ] && local time=`date +%s`
     _N_archives=$(( _N_archives + 1 ))
     # Save the url 
     local url=$1
@@ -176,10 +183,13 @@ function add_package {
     # Install default values
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
+    [ $TIMING -ne 0 ] && _add_package_T=$((_add_package_T+`date +%s`-time))
 }
 
 # This function allows for setting data related to a package
+_pack_set_T=0
 function pack_set {
+    [ $TIMING -ne 0 ] && local time=`date +%s`
     local index=$_N_archives # Default to this
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
@@ -223,7 +233,7 @@ function pack_set {
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
-	req="$(echo "$req" | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
+	req="$(echo $req | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
 	_mod_req[$index]="$req"
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
@@ -237,11 +247,14 @@ function pack_set {
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
+    [ $TIMING -ne 0 ] && _pack_set_T=$((_pack_set_T+`date +%s`-time))
 }
 
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
+_pack_get_T=0
 function pack_get {
+    [ $TIMING -ne 0 ] && local time=`date +%s`
     local opt=$1 # Save the option passed
     case $opt in
 	--*) opt=${opt:1} ;;
@@ -301,6 +314,7 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
+    [ $TIMING -ne 0 ] && _pack_get_T=$((_pack_get_T+`date +%s`-time))
 }
 
 
@@ -330,7 +344,9 @@ function edit_env {
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix
+_list_T=0
 function list {
+    local time=`date +%s`
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
     # First we collect all options
@@ -395,6 +411,7 @@ function list {
 	done
     fi
     echo -n "$retval"
+    [ $TIMING -ne 0 ] && _list_T=$((_listT+`date +%s`-time))
 }
 
 
@@ -465,17 +482,17 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
-    for mod in $module_loads ; do
-        module load $mod
-    done
+	for mod in $module_loads ; do
+            module load $mod
+	done
 	
-    # Show that we will install
+        # Show that we will install
 	msg_install --start $idx
 
-    # Download archive
+        # Download archive
 	dwn_file $idx $(get_build_path)/.archives
 	
-    # Extract the archive
+        # Extract the archive
 	pushd $(get_build_path)/.compile
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
@@ -507,9 +524,9 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-    for mod in $module_loads ; do
-        module unload $mod
-    done
+	for mod in $module_loads ; do
+            module unload $mod
+	done
 
 	# Unload the module itself in case of PRELOADING
 	if [ $(has_setting $PRELOAD_MODULE) ]; then
@@ -540,7 +557,9 @@ function pack_install {
 
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
+_get_index_T=0
 function get_index {
+    local time=`date +%s`
     local i ; local lookup
     local l=${#1} ; local lc_name=$(lc $1)
     $(isnumber $1)
@@ -548,6 +567,7 @@ function get_index {
 	[ "$1" -gt "$_N_archives" ] && return 1
 	[ "$1" -lt 0 ] && return 1
 	echo -n "$1"
+	[ $TIMING -ne 0 ] && _get_index_T=$((_get_index_T+`date +%s`-time))
 	return 0
     fi
     i=${_index[$lc_name]}
@@ -560,6 +580,7 @@ function get_index {
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		echo -n "$i"
+		[ $TIMING -ne 0 ] && _get_index_T=$((_get_index_T+`date +%s`-time))
 		return 0
 	    fi
 	    i=$((i+1))
@@ -600,7 +621,9 @@ function get_make_parallel {
 #   -r <module requirement> 
 #   -H <help message> 
 #   -W <what is message>
+_create_module_T=0
 function create_module {
+    local time=`date +%s`
     local name;local version;local path; local help; local whatis
     local mod_path=""
     local force=0
@@ -703,6 +726,7 @@ EOF
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
+    [ $TIMING -ne 0 ] && _create_module_T=$((_create_module_T+`date +%s`-time))
 }
 
 # Append to module file dependent on the existance of a
@@ -711,7 +735,9 @@ EOF
 #   -f <file>
 #   $1 module file to append to
 #   $2-? append this in one line to the file
+__add_module_if_T=0
 function _add_module_if {
+    local time=`date +%s`
     local d="";local f="" ;local F=0;
     while getopts ":d:f:F:h" opt; do
 	case $opt in
@@ -733,8 +759,11 @@ function _add_module_if {
 	cat <<EOF >> $mf
 $@
 EOF
+	[ $TIMING -ne 0 ] && __add_module_if_T=$((__add_module_if_T+`date +%s`-time))
 	return 0
-    fi; return 1
+    fi
+    [ $TIMING -ne 0 ] && __add_module_if_T=$((__add_module_if_T+`date +%s`-time))
+    return 1
 }
 
 
@@ -807,9 +836,9 @@ function docmd {
 # Return the latest index, or the provided one, if any
 function _get_true_index {
     if [ $# -eq 0 ]; then
-	echo $_N_archives
+	echo -n "$_N_archives"
     else
-	echo $1
+	echo -n "$1"
     fi
 }
 
@@ -868,7 +897,7 @@ function _add_module_if_usage {
 function get_file_time {
     local format="$1"
     local fdate=$(stat -c "%y" $2)
-    echo `date +"$format" --date="$fdate"`    
+    echo -n "`date +"$format" --date="$fdate"`"
 }
 
 # Check for a number
@@ -887,4 +916,25 @@ function pack_set_file_version {
     pack_set --version "$v"
      # Default the module name to this:
     pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx
+}
+
+
+# Print a debugging message for the timings
+function timings {
+    echo ""
+    if [ $TIMING -ne 0 ]; then
+	echo "###############################################"
+	echo " Timing for the installation routine:"
+	echo "  add_package    : $_add_package_T s"
+	echo "  pack_set       : $_pack_set_T s"
+	echo "  pack_get       : $_pack_get_T s"
+	echo "  list           : $_list_T s"
+	echo "  get_index      : $_get_index_T s"
+	echo "  create_module  : $_create_module_T s"
+	echo "  _add_module_if : $__add_module_if_T s"
+	echo "###############################################"
+    else
+	echo " Timing for the installation routines has not been recorded (use TIMING>0)"
+    fi
+    echo ""
 }
