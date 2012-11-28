@@ -1,4 +1,5 @@
 #source applications/git.bash
+source applications/spbs.bash
 msg_install --message "Installing the applications..."
 
 source applications/siesta-stable.bash

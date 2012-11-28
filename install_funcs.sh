@@ -3,7 +3,14 @@
 
 # Default debugging variables
 [ -z "$TIMING" ] && TIMING=0
+_NS=1000000000
 [ -z "$DEBUG" ]  && DEBUG=0
+
+_HAS_HASH=1
+if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
+    _HAS_HASH=0
+fi
+
 
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
@@ -75,8 +82,10 @@ function arc_cmd {
 	echo -n "unzip"
     elif [ "x$ext" == "xpy" ]; then
 	echo -n "ln -fs"
+    elif [ "x$ext" == "xlocal" ]; then
+	echo -n "echo"
     else
-	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py]"
+	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local]"
     fi
 }
 
@@ -85,6 +94,8 @@ function arc_cmd {
 # $1 http path 
 # $2 outdirectory
 function dwn_file {
+    local ext=$(pack_get --ext $1)
+    [ "x$ext" == "xlocal" ] && return 0
     local subdir=./
     if [ $# -gt 1 ]; then
 	subdir="$2"
@@ -104,6 +115,8 @@ function extract_archive {
     local cmd=$(arc_cmd $(pack_get --ext $2) )
     local archive=$(pack_get --archive $2)
     [ -d "$1/$d" ] && rm -rf "$1/$d"
+    local ext=$(pack_get --ext $1)
+    [ "x$ext" == "xlocal" ] && return 0
     docmd $archive $cmd $1/$archive
 }
 
@@ -138,7 +151,8 @@ declare -a _reject_host
 # A variable that contains all the hosts that it will be installed on
 declare -a _only_host
 # Local variables for hash tables of index (speed up of execution)
-declare -A _index
+[ $_HAS_HASH -eq 1 ] && \
+    declare -A _index
 # A separator used for commands that can be given consequitively
 _LIST_SEP='ø'
 # The counter to hold the archives
@@ -182,7 +196,8 @@ function add_package {
     # Save the alias for the package, defaulted to package
     _alias[$_N_archives]=$package
     # Save the hash look-up
-    _index[$(lc ${_alias[$_N_archives]})]=$_N_archives
+    [ $_HAS_HASH -eq 1 ] && \
+	_index[$(lc ${_alias[$_N_archives]})]=$_N_archives
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
@@ -196,6 +211,7 @@ function add_package {
 
 # This function allows for setting data related to a package
 _pack_set_T=0.0
+_pack_set_mr_T=0.0
 function pack_set {
     do_debug --enter pack_set
     [ $TIMING -ne 0 ] && local time=$(add_timing)
@@ -217,6 +233,7 @@ function pack_set {
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
             -R|-module-requirement)  
+		[ $TIMING -ne 0 ] && local timemr=$(add_timing)
 		local tmp="$(pack_get --module-requirement $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
 		req="$req $1" ; shift ;; # called several times
@@ -243,12 +260,22 @@ function pack_set {
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
 	req="$(echo $req | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
+	[ $TIMING -ne 0 ] && _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
 	_mod_req[$index]="$req"
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
-    [ ! -z "$alias" ]      && unset _index[_alias[$index]] && _alias[$index]="$alias" && _index[$(lc ${_alias[$index]})]=$index
-    [ ! -z "$idx_alias" ]  && _index[$idx_alias]="$index"
+    if [ ! -z "$alias" ]; then
+	[ $_HAS_HASH -eq 1 ] && \
+	    unset _index[_alias[$index]] 
+	_alias[$index]="$alias"
+	[ $_HAS_HASH -eq 1 ] && \
+	    _index[$(lc ${_alias[$index]})]=$index
+    fi
+    if [ ! -z "$idx_alias" ]; then
+	[ $_HAS_HASH -eq 1 ] && \
+	    _index[$idx_alias]="$index"
+    fi
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
@@ -404,6 +431,7 @@ function list {
 		suf="/include" 
 		lcmd="pack_get --install-prefix " ;;
 	    *)
+		[ $TIMING -ne 0 ] && _list_T=$(add_timing $_list_T $time)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
 	for cmd in $args ; do
@@ -447,7 +475,7 @@ function pack_install {
     if [ ! -z "$tmp" ]; then
 	for host in $tmp ; do
 	    local lh="${#host}"
-	    [ "$host" == "${_host:0:$lh}" ] && \
+	    [ "x$host" == "x${_host:0:$lh}" ] && \
 		run=1
 	done
 	[ $run -eq 0 ] && return 1
@@ -457,7 +485,7 @@ function pack_install {
 	run=1
 	for host in $tmp ; do
 	    local lh="${#host}"
-	    [ "$host" == "${_host:0:$lh}" ] && \
+	    [ "x$host" == "x${_host:0:$lh}" ] && \
 		run=0
 	done
 	[ $run -eq 0 ] && return 1
@@ -511,7 +539,10 @@ function pack_install {
 	pushd $(get_build_path)/.compile
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
-	rm -rf $(pack_get --directory $idx)
+	local d=$(pack_get --directory $idx)
+	if [ "x$d" != "x." ] || [ "x$d" != "x./" ]; then
+	    rm -rf $(pack_get --directory $idx)
+	fi
 	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
 	[ $? -ne 0 ] && exit 1
@@ -533,7 +564,10 @@ function pack_install {
 	popd
 
         # Remove compilation directory
-	rm -rf $(pack_get --directory $idx)
+	local d=$(pack_get --directory $idx)
+	if [ "x$d" != "x." ] || [ "x$d" != "x./" ]; then
+	    rm -rf $(pack_get --directory $idx)
+	fi
 	
 	popd
 	msg_install --finish $idx
@@ -588,7 +622,11 @@ function get_index {
 	do_debug --return get_index
 	return 0
     fi
-    i=${_index[$lc_name]}
+    if [ $_HAS_HASH -eq 1 ]; then
+	i=${_index[$lc_name]}
+    else
+	i=-1
+    fi
     [ -z "${i// /}" ] && i=-1
     #echo "$lc_name $i" >> error.cfg
     if [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ]; then
@@ -610,6 +648,7 @@ function get_index {
 	    i=$((i+1))
 	done
     done
+    [ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
     doerr $1 "Could not find the archive in the list..."
     do_debug --return get_index
 }
@@ -961,6 +1000,7 @@ function timings {
 	echo " Timing for the installation routine:"
 	echo "  add_package    : $(get_timing $_add_package_T)"
 	echo "  pack_set       : $(get_timing $_pack_set_T)"
+	echo "  pack_set_mr    : $(get_timing $_pack_set_mr_T)"
 	echo "  pack_get       : $(get_timing $_pack_get_T)"
 	echo "  list           : $(get_timing $_list_T)"
 	echo "  get_index      : $(get_timing $_get_index_T)"
@@ -996,19 +1036,20 @@ function add_timing {
 	[ -z "$new_ns" ] && new_ns=0
 	#echo new_s $new_s new_ns $new_ns >> timing
 	if [ "$old_ns" -gt "$new_ns" ]; then
-	    echo -n $((new_s-old_s+run_s)).$((999999999-new_ns+old_ns+run_ns))
+	    local div_ns=$(($_NS-new_ns+old_ns+run_ns))
 	else
-	    echo -n $((new_s-old_s+run_s)).$((new_ns-old_ns+run_ns))
+	    local div_ns=$((new_ns-old_ns+run_ns))
 	fi
+	echo -n $((new_s-old_s+run_s+div_ns/$_NS)).$((div_ns-div_ns/$_NS*$_NS))
     fi
 }
 
 function get_timing {
     local run_s="${1%%\.*}"
     local run_ns="${1##*\.}"
-    if [ "$run_ns" -gt 1000000000 ]; then
-	run_s=$((run_s+run_ns/1000000000))
-	run_ns=$((run_ns-run_ns/1000000000*1000000000))
+    if [ "$run_ns" -gt $_NS ]; then
+	run_s=$((run_s+run_ns/$_NS))
+	run_ns=$((run_ns-run_ns/$_NS*$_NS))
     fi
     printf '%15s s, %4s ms' $run_s $((run_ns/1000000))
 }
