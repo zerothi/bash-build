@@ -4,6 +4,7 @@ add_package http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.0/at
 pack_set --directory ATLAS
 
 pack_set --host-reject surt
+pack_set --host-reject thul
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
