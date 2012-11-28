@@ -7,9 +7,9 @@ pack_set --install-query $(pack_get --install-prefix $(get_parent))/bin/nosetest
 pack_set --module-requirement $(get_parent)
 
 # Install commands that it should run
-pack_set --command "sed -i -e 's/^\(packages[^\]]*\)/\1,\'nose.tools\'/' setup.py"
+pack_set --command "sed -i -e \"s/\('nose.sphinx'\)/\1,'nose.tools'/\" setup.py"
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install"
-    
+
 pack_install
