@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 #    --host-reject ntch-2857
 
 pack_set --directory .
-pack_set --prefix-and-module $(get_installation_path)/$(pack_get --package)
+pack_set --prefix-and-module $(pack_get --package)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/spbs
 
@@ -89,6 +89,7 @@ echo "NPROCS=\$(wc -l \$PBS_NODEFILE)"
 echo ""
 EOF
 
+pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp $(pwd)/$script $(pack_get --install-prefix)/bin/spbs"
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/spbs"
 
