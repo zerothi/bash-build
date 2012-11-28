@@ -196,8 +196,11 @@ function add_package {
     # Save the alias for the package, defaulted to package
     _alias[$_N_archives]=$package
     # Save the hash look-up
-    [ $_HAS_HASH -eq 1 ] && \
-	_index[$(lc ${_alias[$_N_archives]})]=$_N_archives
+    if [ $_HAS_HASH -eq 1 ]; then
+	local tmp=${_index[$(lc ${_alias[$_N_archives]})]}
+	[ -z "$tmp" ] && \
+	    _index[$(lc ${_alias[$_N_archives]})]=$_N_archives
+    fi
     # Default the module name to this:
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
@@ -458,7 +461,9 @@ function list {
 
 
 # Install the package
+_pack_install_T=0.0
 function pack_install {
+    local time=$(add_timing)
     do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
@@ -499,19 +504,6 @@ function pack_install {
      # Check that the thing is not already installed
     if [ ! -e $(pack_get --install-query $idx) ]; then
 
-	# Append all relevant requirements to the relevant environment variables
-	# Perhaps this could be generalized with options specifying the ENV_VARS
-	old_fcflags="$FCFLAGS"
-	export FCFLAGS="$FCFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
-	old_fflags="$FFLAGS"
-	export FFLAGS="$FFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
-	old_cflags="$CFLAGS"
-	export CFLAGS="$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
-	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement $idx))"
-	old_ldflags="$LDFLAGS"
-	export LDFLAGS="$LDFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
-
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if [ $(has_setting $PRELOAD_MODULE) ]; then
 	    create_module --force \
@@ -528,6 +520,19 @@ function pack_install {
 	for mod in $_def_module_reqs $module_loads ; do
             module load $mod
 	done
+
+	# Append all relevant requirements to the relevant environment variables
+	# Perhaps this could be generalized with options specifying the ENV_VARS
+	old_fcflags="$FCFLAGS"
+	export FCFLAGS="$FCFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_fflags="$FFLAGS"
+	export FFLAGS="$FFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_cflags="$CFLAGS"
+	export CFLAGS="$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	old_cppflags="$CPPFLAGS"
+	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement $idx))"
+	old_ldflags="$LDFLAGS"
+	export LDFLAGS="$LDFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
 	
         # Show that we will install
 	msg_install --start $idx
@@ -573,7 +578,7 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	for mod in $_def_module_reqs $module_loads ; do
+	for mod in $module_loads $_def_module_reqs ; do
             module unload $mod
 	done
 
@@ -602,6 +607,7 @@ function pack_install {
 	    -M $(pack_get --module-name $idx) \
 	    -P $(pack_get --install-prefix $idx) $reqs
     fi
+    [ $TIMING -ne 0 ] && _pack_install_T=$(add_timing $_pack_install_T $time)
     do_debug --return pack_install
 }
 
@@ -999,6 +1005,7 @@ function timings {
 	    echo "-----------------------------------------------"
 	echo " Timing for the installation routine:"
 	echo "  add_package    : $(get_timing $_add_package_T)"
+	echo "  pack_install   : $(get_timing $_pack_install_T)"
 	echo "  pack_set       : $(get_timing $_pack_set_T)"
 	echo "  pack_set_mr    : $(get_timing $_pack_set_mr_T)"
 	echo "  pack_get       : $(get_timing $_pack_get_T)"

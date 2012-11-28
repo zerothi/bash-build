@@ -6,6 +6,7 @@ pack_set -s $IS_MODULE
 #    --host-reject ntch-2857
 
 pack_set --directory .
+pack_set --version npa
 pack_set --prefix-and-module $(pack_get --package)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/spbs

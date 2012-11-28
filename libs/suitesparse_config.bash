@@ -68,4 +68,5 @@ fi
 
 pack_set --command "cp SuiteSparse_config.mk ../"
 
+echo ${_alias[@]}
 pack_install

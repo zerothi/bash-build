@@ -11,7 +11,7 @@ pack_set --module-requirement netcdf-serial $(list --pack-module-reqs numpy)
 
 # Check for Intel MKL or not
 tmp=$(get_c)
-tmp_cflags=""
+tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial)"
 tmp_compiler=""
 if [ "${tmp:0:5}" == "intel" ]; then
     tmp_compiler="intelem"
@@ -19,14 +19,19 @@ if [ "${tmp:0:5}" == "intel" ]; then
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # Add requirements when creating the module
     pack_set --module-requirement atlas
-    tmp_cflags="$(list --LDFLAGS --Wlrpath netcdf-serial atlas)"
+    tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
     tmp_compiler=unix
+else
+    doerr Scientificpython "Could not determine compiler..."
 fi
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' CFLAGS='$CFLAGS $tmp_cflags' $(get_parent_exec) setup.py build" \
+pack_set --command "sed -i -e 's|^\(extra_compile_args[[:space:]]*=.*\)|\1\nextra_link_args = [\"$tmp_flags\"]|' setup.py"
+pack_set --command "sed -i -e 's|\(extra_compile_args[[:space:]]*=[[:space:]]*extra_compile_args\)|\1,extra_link_args=extra_link_args|' setup.py"
+
+pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build" \
     --command-flag "--compiler=$tmp_compiler"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' CFLAGS='$CFLAGS $tmp_cflags' $(get_parent_exec) setup.py install" \
+pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_install
