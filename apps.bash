@@ -35,9 +35,9 @@ timings For Photonics group installation
 
 # Create a module with default all plotting tools
 create_module \
-    --module-path $(get_installation_path)/modules-npa-apps \
+    --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's script for loading GUI: $(get_c)\"" \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' gnuplot molden $(pack_get --module-requirement grace) grace $(pack_get --module-requirement xcrysden) xcrysden)
+    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement gnuplot) gnuplot $(pack_get --module-requirement molden) molden $(pack_get --module-requirement grace) grace $(pack_get --module-requirement xcrysden) xcrysden)
