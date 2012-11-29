@@ -7,6 +7,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/fdf2fit
 
 pack_set $(list --pack-module-reqs netcdf-serial fftw-2)
 
+pack_set --host-reject surt
+
 # The motif library are in the following packages:
 # lesstif2-dev
 
