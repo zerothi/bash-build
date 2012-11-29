@@ -58,11 +58,13 @@ create_module \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
     $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) scipy ase gpaw inelastica)
 
-create_module \
-    -n "\"Nick Papior Andersen's Photonics python script for: $(get_c)\"" \
-    -v $(date +'%g-%j') \
-    -M python$pV.basic.qutip/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) cython numexpr-2 qutip)
+if [ "$(get_hostname)" != "thul" ] && [ "$(get_hostname)" != "surt" ]; then
+    create_module \
+        -n "\"Nick Papior Andersen's Photonics python script for: $(get_c)\"" \
+        -v $(date +'%g-%j') \
+        -M python$pV.basic.qutip/$(get_c) \
+        -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
+        $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) cython numexpr-2 qutip)
+fi
 
 set_module_path $old_path

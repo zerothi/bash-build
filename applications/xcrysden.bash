@@ -3,8 +3,6 @@ add_package http://www.xcrysden.org/download/xcrysden-1.5.53.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject surt
-
 pack_set --install-query $(pack_get --install-prefix)/bin/xcrysden
 
 pack_set --module-requirement fftw-3
@@ -24,8 +22,8 @@ FC     = $FC
 X_LIB     = -lXmu -lX11 
 X_INCDIR  = 
 
-TCL_LIB      = -ltcl8.4
-TK_LIB       = -ltk8.4
+TCL_LIB      = -ltcl8.5
+TK_LIB       = -ltk8.5
 GLU_LIB      = -lGLU
 GL_LIB       = -lGL
 FFTW3_LIB    = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3
@@ -36,10 +34,14 @@ TK_INCDIR       =
 GL_INCDIR       = 
 FFTW3_INCDIR    = $(list --INCDIRS fftw-3)
 EOF
-if [ -e /usr/include/tcl8.4 ]; then
+if [ -e /usr/include/tcl8.5 ]; then
     cat <<EOF >> $tmp_file
-TCL_INCDIR      = -I/usr/include/tcl8.4
+TCL_INCDIR      = -I/usr/include/tcl8.5
 EOF
+fi
+tmp=$(get_hostname)
+if [ "$tmp" == "thul" ]; then
+    sed -i -e 's/8.5/8.4/g' $tmp_file
 fi
 
 # Install commands that it should run

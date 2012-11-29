@@ -37,25 +37,28 @@ if [ "${tmp:0:5}" == "intel" ]; then
     if [ -z "$MKL_PATH" ]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
+    sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $cfg
     cat << EOF >> $cfg
-library_dirs = $tmp_lib
-include_dirs = $tmp_inc
+library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64
+include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
 [mkl]
 library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
-mkl_libs = mkl_rt
+mkl_libs = mkl_rt,mkl_intel_lp64,mkl_intel_thread,mkl_core
 lapack_libs = mkl_lapack95_lp64
 blas_libs = mkl_blas95_lp64
 EOF
     pack_set --command "cp $(pwd)/$cfg site.cfg"
     pack_set --command "rm $(pwd)/$cfg"
-    tmp="$INTEL_LIB $MKL_LIB -mkl=sequential -fp-model strict -fomit-frame-pointer -I$(pack_get --install-prefix ss_config)/include"
+    tmp="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict -fomit-frame-pointer -I$(pack_get --install-prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $tmp:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
+    pack_set --command "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $tmp|g' numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's/\"ar\",/\"$AR\",/g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${FCFLAGS//-O3/-O2} $tmp\"\]:g' numpy/distutils/fcompiler/intel.py"
-    pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${CFLAGS//-O3/-O2} $tmp\"\]|g' numpy/distutils/fcompiler/intel.py"
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+    pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${FCFLAGS//-O3/-O2} $tmp\"\]|g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e \"/'linker_so'/s|\(.-shared.\)|\1,'-L${tmp_lib//:/ -L}','-Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=}','$tmp'|g\" numpy/distutils/fcompiler/intel.py"
+    pack_set --command "$(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
 
@@ -89,7 +92,7 @@ EOF
     # Remove the first " ," from the line
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+    pack_set --command "$(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=unix" \
 	--command-flag "--fcompiler=gnu95" 
 
@@ -100,7 +103,7 @@ fi
 
 # Install commands that it should run
 # We need to unset the LDFLAGS as numpy will not be able to link to itself if set!
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
+pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_install

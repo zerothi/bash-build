@@ -12,14 +12,14 @@ pack_set $(list --pack-module-reqs numpy)
 # Check for Intel MKL or not
 tmp=$(get_c)
 if [ "${tmp:0:5}" == "intel" ]; then
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
+    pack_set --command "$(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
     export LD_RUN_PATH="$MKL_PATH/lib/intel64"
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
     # The atlas requirement should come from numpy
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
+    pack_set --command "$(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=unix" \
 	--command-flag "--fcompiler=gnu95" 
 
@@ -28,7 +28,7 @@ else
 fi
 
 # Install commands that it should run
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
+pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 module load $(get_default_modules)
