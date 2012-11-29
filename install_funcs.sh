@@ -208,7 +208,7 @@ function add_package {
     _mod_req[$_N_archives]=""
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
-    [ $TIMING -ne 0 ] && _add_package_T=$(add_timing $_add_package_T $time)
+    [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
     do_debug --return add_package
 }
 
@@ -263,7 +263,7 @@ function pack_set {
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
 	req="$(echo $req | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
-	[ $TIMING -ne 0 ] && _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
+	[ $TIMING -ne 0 ] && export _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
 	_mod_req[$index]="$req"
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
@@ -286,7 +286,7 @@ function pack_set {
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
-    [ $TIMING -ne 0 ] && _pack_set_T=$(add_timing $_pack_set_T $time)
+    [ $TIMING -ne 0 ] && export _pack_set_T=$(add_timing $_pack_set_T $time)
     do_debug --return pack_set
 }
 
@@ -355,7 +355,7 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
-    [ $TIMING -ne 0 ] && _pack_get_T=$(add_timing $_pack_get_T $time)
+    [ $TIMING -ne 0 ] && export _pack_get_T=$(add_timing $_pack_get_T $time)
     do_debug --return pack_get
 }
 
@@ -455,7 +455,7 @@ function list {
 	done
     fi
     echo -n "$retval"
-    [ $TIMING -ne 0 ] && _list_T=$(add_timing $_list_T $time)
+    [ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
     do_debug --return list
 }
 
@@ -607,7 +607,7 @@ function pack_install {
 	    -M $(pack_get --module-name $idx) \
 	    -P $(pack_get --install-prefix $idx) $reqs
     fi
-    [ $TIMING -ne 0 ] && _pack_install_T=$(add_timing $_pack_install_T $time)
+    [ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
     do_debug --return pack_install
 }
 
@@ -624,7 +624,7 @@ function get_index {
 	[ "$1" -gt "$_N_archives" ] && return 1
 	[ "$1" -lt 0 ] && return 1
 	echo -n "$1"
-	[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
 	return 0
     fi
@@ -637,7 +637,7 @@ function get_index {
     #echo "$lc_name $i" >> error.cfg
     if [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ]; then
 	echo -n "$i"
-	[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
 	return 0
     fi
@@ -647,14 +647,14 @@ function get_index {
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		echo -n "$i"
-		[ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+		[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 		do_debug --return get_index
 		return 0
 	    fi
 	    i=$((i+1))
 	done
     done
-    [ $TIMING -ne 0 ] && _get_index_T=$(add_timing $_get_index_T $time)
+    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
     doerr $1 "Could not find the archive in the list..."
     do_debug --return get_index
 }
@@ -797,7 +797,7 @@ EOF
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
-    [ $TIMING -ne 0 ] && _create_module_T=$(add_timing $_create_module_T $time)
+    [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
     do_debug --return create_module
 }
 
@@ -831,10 +831,10 @@ function _add_module_if {
 	cat <<EOF >> $mf
 $@
 EOF
-	[ $TIMING -ne 0 ] && __add_module_if_T=$(add_timing $__add_module_if_T $time)
+	[ $TIMING -ne 0 ] && export __add_module_if_T=$(add_timing $__add_module_if_T $time)
 	return 0
     fi
-    [ $TIMING -ne 0 ] && __add_module_if_T=$(add_timing $__add_module_if_T $time)
+    [ $TIMING -ne 0 ] && export __add_module_if_T=$(add_timing $__add_module_if_T $time)
     return 1
 }
 
