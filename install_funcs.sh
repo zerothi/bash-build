@@ -150,6 +150,8 @@ declare -a _mod_req
 declare -a _reject_host
 # A variable that contains all the hosts that it will be installed on
 declare -a _only_host
+# Logical variable determins whether the package has been installed
+declare -a _installed
 # Local variables for hash tables of index (speed up of execution)
 [ $_HAS_HASH -eq 1 ] && \
     declare -A _index
@@ -202,6 +204,7 @@ function add_package {
 	    _index[$(lc ${_alias[$_N_archives]})]=$_N_archives
     fi
     # Default the module name to this:
+    _installed[$_N_archives]=0
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
     # Install default values
@@ -596,6 +599,8 @@ function pack_install {
     else
 	msg_install --already-installed $idx
     fi
+
+    _installed[$idx]=1
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements

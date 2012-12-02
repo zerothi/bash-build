@@ -13,7 +13,8 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
 # Make commands
 pack_set --command "make $(get_make_parallel) molden"
 pack_set --command "cp molden $(pack_get --install-prefix)/bin/"
-if [ "$(get_hostname)" != "surt" ] && [ "$(get_hostname)" != "thul" ]; then
+if [ "$(get_hostname)" != "surt" ] && [ "$(get_hostname)" != "thul" ] \
+	&& [ "$(get_hostname)" != "zeroth" ]; then
     pack_set --command "make $(get_make_parallel) gmolden"
     pack_set --command "cp gmolden $(pack_get --install-prefix)/bin/"
 fi
