@@ -1,4 +1,7 @@
-add_package http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz
+for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz \
+    http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-427.tar.gz ; do
+
+add_package $pack
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
@@ -82,6 +85,7 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+pack_set --command "siesta_install --siesta"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
@@ -92,6 +96,7 @@ pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
+pack_set --command "siesta_install --transiesta"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
@@ -110,6 +115,23 @@ pack_set --command "make dep"
 pack_set --command "make"
 pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
+pack_set --command "cd ../Bands"
+pack_set --command "make all"
+pack_set --command "cp new.gnubands.o $(pack_get --install-prefix)/bin/gnubands"
+pack_set --command "cp eigfat2plot.o $(pack_get --install-prefix)/bin/eigfat2plot"
+
+pack_set --command "cd ../Contrib/APostnikov"
+pack_set --command "make all"
+pack_set --command "cp *xsf fmpdos $(pack_get --install-prefix)/bin/"
+
+pack_set --command "cd ../../Denchar/Src"
+pack_set --command "make denchar"
+pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
+
+pack_set --command "cd ../../Eig2DOS"
+pack_set --command "make"
+pack_set --command "cp Eig2DOS $(pack_get --install-prefix)/bin/"
+
 pack_install
 
 
@@ -122,3 +144,4 @@ create_module \
     $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement)) \
     -L $(pack_get --module-name)
 
+done
