@@ -161,7 +161,7 @@ _LIST_SEP='ø'
 _N_archives=-1
 
 # $1 http path
-_add_package_T=0.0
+export _add_package_T=0.0
 function add_package {
     do_debug --enter add_package
     # Do a timing
@@ -216,8 +216,8 @@ function add_package {
 }
 
 # This function allows for setting data related to a package
-_pack_set_T=0.0
-_pack_set_mr_T=0.0
+export _pack_set_T=0.0
+export _pack_set_mr_T=0.0
 function pack_set {
     do_debug --enter pack_set
     [ $TIMING -ne 0 ] && local time=$(add_timing)
@@ -295,7 +295,7 @@ function pack_set {
 
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
-_pack_get_T=0.0
+export _pack_get_T=0.0
 function pack_get {
     do_debug --enter pack_get
     [ $TIMING -ne 0 ] && local time=$(add_timing)
@@ -389,7 +389,7 @@ function edit_env {
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix
-_list_T=0.0
+export _list_T=0.0
 function list {
     do_debug --enter list
     local time=$(add_timing)
@@ -464,7 +464,7 @@ function list {
 
 
 # Install the package
-_pack_install_T=0.0
+export _pack_install_T=0.0
 function pack_install {
     local time=$(add_timing)
     do_debug --enter pack_install
@@ -618,7 +618,7 @@ function pack_install {
 
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
-_get_index_T=0.0
+export _get_index_T=0.0
 function get_index {
     do_debug --enter get_index
     local time=$(add_timing)
@@ -696,7 +696,7 @@ function get_make_parallel {
 #   -r <module requirement> 
 #   -H <help message> 
 #   -W <what is message>
-_create_module_T=0.0
+export _create_module_T=0.0
 function create_module {
     do_debug --enter create_module
     local time=$(add_timing)
@@ -812,7 +812,7 @@ EOF
 #   -f <file>
 #   $1 module file to append to
 #   $2-? append this in one line to the file
-__add_module_if_T=0.0
+export __add_module_if_T=0.0
 function _add_module_if {
     local time=$(add_timing)
     local d="";local f="" ;local F=0;
