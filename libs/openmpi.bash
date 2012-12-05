@@ -7,6 +7,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
 pack_set --host-reject surt --host-reject thul
+pack_set --host-reject slid
 
 tmp=$(hostname)
 tmp_flags=""
