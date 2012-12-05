@@ -150,8 +150,10 @@ declare -a _mod_req
 declare -a _reject_host
 # A variable that contains all the hosts that it will be installed on
 declare -a _only_host
-# Logical variable determins whether the package has been installed
+# Logical variable determines whether the package has been installed
 declare -a _installed
+# Adds this to the environment variable in the creation of the modules
+declare -a _mod_env
 # Local variables for hash tables of index (speed up of execution)
 [ $_HAS_HASH -eq 1 ] && \
     declare -A _index

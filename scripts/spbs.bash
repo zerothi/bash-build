@@ -25,7 +25,9 @@ _hostname="\$(hostname -s)"
 single_paffinity=1
 walltime=01:00:00
 nodes=1
-if [ "x\$_hostname" == "xthul" ]; then
+if [ "x\$_hostname" == "xslid" ]; then
+    ppn=4
+elif [ "x\$_hostname" == "xthul" ]; then
     ppn=8
 elif [ "x\$_hostname" == "xsurt" ]; then
     ppn=16
@@ -67,6 +69,8 @@ function _spbs_help {
     echo ""
     printf "\$format" "--name|-N" "The name of the PBS job"
     printf "\$format" "--walltime|-W" "The time of execution [hh:mm:ss]."
+    printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-hh,-mm can be combined)"
+    printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-hh,-mm can be combined)"
     printf "\$format" "--nodes|-n" "Number of nodes requested"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
     printf "\$format" "--message-begin" "Mail when the job begins"
@@ -92,6 +96,8 @@ while [ \$# -ne 0 ]; do
     case \$opt in 
         -name|-N) name="\$1" ; shift ;;
         -walltime|-W) walltime="\$1" ; shift ;;
+        -hours|-hh) walltime="\$1:\${walltime#*:}" ; shift ;;
+        -minutes|-mm) walltime="\${walltime%%:*}:\$1:\${walltime##*:}" ; shift ;;
         -nodes|-n) nodes="\$1" ; shift ;;
         -processors-per-node|-ppn) ppn="\$1" ; shift ;;
         -message-begin) message="b\$message" ;;
