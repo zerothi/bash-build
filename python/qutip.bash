@@ -3,7 +3,7 @@ add_package https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject thul --host-reject surt
+pack_set --host-reject thul --host-reject surt --host-reject slid
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
