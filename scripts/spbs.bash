@@ -131,6 +131,7 @@ _spbs_add_PBS_option -j "\$inout" "Combines the stdout and stderr output to the 
 echo ''
 _spbs_add_line 'source $HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
 _spbs_add_line 'module purge' "Clear list of defaulted modules"
+_spbs_add_line 'module load npa-cluster-setup' "Enables the NPA modules"
 echo ''
 _spbs_add_line 'date' "Show the date and time of execution"
 _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution folder"
