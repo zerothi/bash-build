@@ -325,6 +325,7 @@ function pack_get {
 		-v|-version)         echo -n "${_version[$index]}" ;;
 		-d|-directory)       echo -n "${_directory[$index]}" ;;
 		-s|-settings)        echo -n "${_settings[$index]}" ;;
+		-installed)          echo -n "${_installed[$index]}" ;;
 		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 		-p|-package)         echo -n "${_package[$index]}" ;;
 		-e|-ext)             echo -n "${_ext[$index]}" ;;
@@ -351,6 +352,7 @@ function pack_get {
 	    -v|-version)         echo -n "${_version[$index]}" ;;
 	    -d|-directory)       echo -n "${_directory[$index]}" ;;
 	    -s|-settings)        echo -n "${_settings[$index]}" ;;
+	    -installed)          echo -n "${_installed[$index]}" ;;
 	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 	    -p|-package)         echo -n "${_package[$index]}" ;;
 	    -e|-ext)             echo -n "${_ext[$index]}" ;;
@@ -606,7 +608,7 @@ function pack_install {
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' $_def_module_reqs) $(list --prefix '-R ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
+	local reqs="$(list --prefix '-R ' $_def_module_reqs) $(list --prefix '-R ' $(pack_get --module-requirement $idx))"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
@@ -703,6 +705,7 @@ function create_module {
     do_debug --enter create_module
     local time=$(add_timing)
     local name;local version;local path; local help; local whatis
+    local env=""
     local mod_path=""
     local force=0
     local require=""; local conflict=""; local load=""
@@ -721,6 +724,9 @@ function create_module {
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
+	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
+	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
+	    -append-ENV)      env="$env a$1" ; shift ;; # Can be optioned several times
 	    -H|-help)  help="$1" ; shift ;;
 	    -W|-what-is)  whatis="$1" ; shift ;;
 	    -F|-force)  force=1 ;;
@@ -763,7 +769,10 @@ EOF
 # This module will load the following modules
 EOF
 	for tmp in $load ; do
-	    echo "module load $tmp" >> $mfile
+	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+		local tmp_load=$(pack_get --module-name $tmp)
+		echo "module load $tmp_load" >> $mfile
+	    fi
 	done
 	echo "" >> $mfile
     fi
@@ -774,7 +783,10 @@ EOF
 # List the requirements for loading which this module does want to use
 EOF
 	for tmp in "$require" ; do
-	    echo "prereq $tmp" >> $mfile
+	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+		local tmp_load=$(pack_get --module-name $tmp)
+		echo "prereq $tmp_load" >> $mfile
+	    fi
 	done
 	echo "" >> $mfile
     fi
@@ -784,7 +796,35 @@ EOF
 # List the conflicts which this module does not want to take part in
 EOF
 	for tmp in "$conflict" ; do
-	    echo "conflict $tmp" >> $mfile
+	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+		local tmp_load=$(pack_get --module-name $tmp)
+		echo "conflict $tmp_load" >> $mfile
+	    fi
+	done
+	echo "" >> $mfile
+    fi
+    # Add conflict if needed
+    if [ ! -z "$env" ]; then
+	cat <<EOF >> $mfile
+# Adds any specific environment variables
+EOF
+	for tmp in "$env" ; do
+	    # Partition into [s|a|p]
+	    local opt=${tmp:0:1}
+	    local lenv=${tmp%%=*}
+	    lenv=${lenv:1}
+	    local lval=${tmp##*=}
+            # Add paths if they are available
+	    if [ "$opt" == "s" ]; then
+		_add_module_if -F $force -d "$lval" $mfile \
+		    "set-path $lenv $lval"
+	    elif [ "$opt" == "p" ]; then
+		_add_module_if -F $force -d "$lval" $mfile \
+		    "prepend-path $lenv $lval"
+	    elif [ "$opt" == "a" ]; then
+		_add_module_if -F $force -d "$lval" $mfile \
+		    "append-path $lenv $lval"
+	    fi		
 	done
 	echo "" >> $mfile
     fi
