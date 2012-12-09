@@ -153,7 +153,7 @@ declare -a _only_host
 # Logical variable determines whether the package has been installed
 declare -a _installed
 # Adds this to the environment variable in the creation of the modules
-declare -a _mod_env
+declare -a _mod_opts
 # Local variables for hash tables of index (speed up of execution)
 [ $_HAS_HASH -eq 1 ] && \
     declare -A _index
@@ -228,7 +228,7 @@ function pack_set {
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
-    local reject_h="" ; local only_h=""
+    local reject_h="" ; local only_h="" ; local mod_opt=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -252,6 +252,7 @@ function pack_set {
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
 	    -m|-module-name)  mod_name="$1" ; shift ;;
+	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
 	    -prefix-and-module)  mod_name="$1" ; install="$(get_installation_path)/$1" ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
 	    -host-only)  only_h="$only_h $1" ; shift ;; # Can be called several times
@@ -284,6 +285,7 @@ function pack_set {
 	[ $_HAS_HASH -eq 1 ] && \
 	    _index[$idx_alias]="$index"
     fi
+    [ ! -z "$mod_opt" ]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
@@ -327,6 +329,7 @@ function pack_get {
 		-s|-settings)        echo -n "${_settings[$index]}" ;;
 		-installed)          echo -n "${_installed[$index]}" ;;
 		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
+		-module-opt)         echo -n "${_mod_opts[$index]}" ;;
 		-p|-package)         echo -n "${_package[$index]}" ;;
 		-e|-ext)             echo -n "${_ext[$index]}" ;;
 		-host-only)          echo -n "${_only_host[$index]}" ;;
@@ -353,6 +356,7 @@ function pack_get {
 	    -d|-directory)       echo -n "${_directory[$index]}" ;;
 	    -s|-settings)        echo -n "${_settings[$index]}" ;;
 	    -installed)          echo -n "${_installed[$index]}" ;;
+	    -module-opt)         echo -n "${_mod_opts[$index]}" ;;
 	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
 	    -p|-package)         echo -n "${_package[$index]}" ;;
 	    -e|-ext)             echo -n "${_ext[$index]}" ;;
@@ -614,7 +618,7 @@ function pack_install {
 	    -n $(pack_get --alias $idx) \
 	    -v $(pack_get --version $idx) \
 	    -M $(pack_get --module-name $idx) \
-	    -P $(pack_get --install-prefix $idx) $reqs
+	    -P $(pack_get --install-prefix $idx) $reqs $(pack_get --module-opt $idx)
     fi
     [ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
     do_debug --return pack_install
@@ -769,7 +773,7 @@ EOF
 # This module will load the following modules
 EOF
 	for tmp in $load ; do
-	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+	    if [ $(pack_get --installed $tmp) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "module load $tmp_load" >> $mfile
 	    fi
@@ -782,7 +786,7 @@ EOF
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 EOF
-	for tmp in "$require" ; do
+	for tmp in $require ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "prereq $tmp_load" >> $mfile
@@ -795,7 +799,7 @@ EOF
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 EOF
-	for tmp in "$conflict" ; do
+	for tmp in $conflict ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "conflict $tmp_load" >> $mfile
@@ -808,7 +812,7 @@ EOF
 	cat <<EOF >> $mfile
 # Adds any specific environment variables
 EOF
-	for tmp in "$env" ; do
+	for tmp in $env ; do
 	    # Partition into [s|a|p]
 	    local opt=${tmp:0:1}
 	    local lenv=${tmp%%=*}
@@ -817,7 +821,7 @@ EOF
             # Add paths if they are available
 	    if [ "$opt" == "s" ]; then
 		_add_module_if -F $force -d "$lval" $mfile \
-		    "set-path $lenv $lval"
+		    "setenv $lenv $lval"
 	    elif [ "$opt" == "p" ]; then
 		_add_module_if -F $force -d "$lval" $mfile \
 		    "prepend-path $lenv $lval"

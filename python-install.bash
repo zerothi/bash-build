@@ -29,6 +29,7 @@ source python/inelastica-dev.bash
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/ase.bash
 source python/gpaw.bash
+source python/gpaw-setups.bash
 
 timings For python special packages
 
