@@ -88,7 +88,7 @@ EOF
     # Remove the leading "-" for a flag
     [ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2})"
+    tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2} -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # Remove the first " ," from the line
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
