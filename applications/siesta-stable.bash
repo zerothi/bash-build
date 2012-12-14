@@ -14,14 +14,15 @@ pack_set --command "../Src/obj_setup.sh"
 
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+pack_set --command "echo '# Ensure the mpi path: \$(which mpif90)'"
 pack_set --command "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
 SIESTA_ARCH=x86_64-linux-Intel\n\
 \n\
-FPP=$(pack_get --install-prefix openmpi)/bin/mpif90\n\
+FPP=mpif90\n\
 FPP_OUTPUT= \n\
-FC=$(pack_get --install-prefix openmpi)/bin/mpif90\n\
+FC=mpif90\n\
 FC_SERIAL=$FC\n\
 AR=$AR\n\
 RANLIB=ranlib\n\

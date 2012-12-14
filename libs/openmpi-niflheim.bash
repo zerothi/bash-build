@@ -8,13 +8,7 @@ else
     return 0
 fi
 
-# Install the easiest first... OpenMPI
-add_package ThisModueExists/openmpi-hpc.tar.gz
-
-pack_set --package openmpi
-pack_set --alias openmpi
-pack_set --version hpc
-pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
+# Figure out the module we require to use...
 
 c=$(get_c)
 # Determine the name of the local module:
@@ -38,6 +32,15 @@ fi
 
 # Enable the reading of the "hidden" package...
 add_hidden_package $mod
+
+
+# Install the easiest first... OpenMPI
+add_package ThisModueExists/openmpi-hpc.tar.gz
+
+pack_set --package openmpi
+pack_set --alias openmpi
+pack_set --version hpc
+pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 module load $(get_default_modules)
 module load $mod
