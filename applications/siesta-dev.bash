@@ -1,5 +1,6 @@
 for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz \
-    http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-427.tar.gz ; do
+    http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
+    ; do
 
 add_package $pack
 
