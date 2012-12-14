@@ -9,11 +9,11 @@ else
 fi
 
 # Install the easiest first... OpenMPI
-add_package ThisModueExists/openmpi-niflheim.tar.gz
+add_package ThisModueExists/openmpi-hpc.tar.gz
 
 pack_set --package openmpi
 pack_set --alias openmpi
-pack_set --version niflheim
+pack_set --version hpc
 pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 c=$(get_c)
