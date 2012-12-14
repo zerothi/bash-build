@@ -64,15 +64,25 @@ function set_default_modules { _def_module_reqs="$1"
     # Create the default packages so that they can be loaded...
     if [ ! -z "$1" ]; then
 	for mod in $1 ; do
-	    add_package path_to_module/${mod%/*}-${mod#*/}.tar.gz
-	    pack_set --alias $mod
-	    pack_set --index-alias $mod
-	    pack_set --installed 1 # Make sure it is "installed"
-	    pack_set --module-name $mod
+	    add_hidden_package $mod
 	done
     fi
 }
 function get_default_modules { echo -n "$_def_module_reqs" ; }
+
+# This function takes one argument
+# It is the name of the module that is "hidden", i.e. not
+# installed by these scripts. 
+# It enables to look them up in the index and thus 
+# to use them on equal footing as the others...
+function add_hidden_package {
+    local mod="$1"
+    add_package path_to_module/${mod%/*}-${mod#*/}.tar.gz
+    pack_set --alias $mod
+    pack_set --index-alias $mod
+    pack_set --installed 1 # Make sure it is "installed"
+    pack_set --module-name $mod
+}
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
@@ -502,10 +512,14 @@ function pack_install {
     if [ $# -ne 0 ]; then
 	idx=$1
     fi
-    
+
+    # First a simple check that it hasn't already been installed...
+    if [ -e $(pack_get --install-query $idx) ]; then
+	_installed[$idx]=1
+    fi
+
     # We install the package
     local archive="$(pack_get --archive $idx)"
-    [ $? -ne "0" ] && return 1
 	
     # Check that we can install on this host
     local run=1
@@ -538,8 +552,8 @@ function pack_install {
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
     fi
         
-     # Check that the thing is not already installed
-    if [ ! -e $(pack_get --install-query $idx) ]; then
+     # Check that the package is not already installed
+    if [ $(pack_get --installed $idx) -eq 0 ]; then
 
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if [ $(has_setting $PRELOAD_MODULE) ]; then
@@ -634,6 +648,7 @@ function pack_install {
 	msg_install --already-installed $idx
     fi
 
+    # For sure it is now installed...
     _installed[$idx]=1
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
