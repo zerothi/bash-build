@@ -1,5 +1,4 @@
-for pack in \ 
-    http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
+for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
     ; do
 
 add_package $pack
