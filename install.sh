@@ -3,6 +3,10 @@
 source ~/.bashrc
 module purge
 
+# We need to load this every time... :(
+# Enables all modules that gets added...
+module load npa-cluster-setup
+
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
