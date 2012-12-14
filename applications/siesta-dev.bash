@@ -1,4 +1,4 @@
-for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-424.tgz \
+for pack in \ 
     http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
     ; do
 
@@ -18,7 +18,6 @@ pack_set --command "../Src/obj_setup.sh"
 
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
-pack_set --command "echo '# Ensure the mpi path: \$(which mpif90)'"
 pack_set --command "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
