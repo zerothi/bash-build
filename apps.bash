@@ -39,4 +39,7 @@ create_module \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement gnuplot) gnuplot $(pack_get --module-requirement molden) molden $(pack_get --module-requirement grace) grace $(pack_get --module-requirement xcrysden) xcrysden)
+    $(list --prefix '-L ' $(pack_get --module-requirement gnuplot) gnuplot) \
+    $(list --prefix '-L ' $(pack_get --module-requirement molden) molden) \
+    $(list --prefix '-L ' $(pack_get --module-requirement grace) grace) \
+    $(list --prefix '-L ' $(pack_get --module-requirement xcrysden) xcrysden)

@@ -56,7 +56,6 @@ libraries += ['z']
 # Add all directories for inclusion
 include_dirs += [${tmp:2}]
 EOF
-echo ${tmp:2}
 
 
 pack_set --command "cp $(pwd)/$file customize.py"

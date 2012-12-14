@@ -11,6 +11,10 @@ if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
     _HAS_HASH=0
 fi
 
+_ERROR_FILE=ERROR
+# Clean the error file
+rm -f $_ERROR_FILE
+
 
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
@@ -25,38 +29,49 @@ function get_hostname { echo -n "$_host" ; }
 
 _prefix=""
 # Instalation path
-function set_installation_path { _prefix=$1 ; }
+function set_installation_path {          _prefix=$1 ; }
 function get_installation_path { echo -n $_prefix ; }
 
 _c=""
 # Instalation path
-function set_c { _c=$1 ; }
+function set_c {          _c=$1 ; }
 function get_c { echo -n $_c ; }
 
 _parent_package=""
 # The parent package (for instance Python)
-function set_parent { _parent_package=$1 ; }
-function clear_parent { _parent_package="" ; }
+function set_parent {          _parent_package=$1 ; }
+function clear_parent {        _parent_package="" ; }
 function get_parent { echo -n $_parent_package ; }
 
 _parent_exec=""
 # The parent package (for instance Python)
-function set_parent_exec { _parent_exec=$1 ; }
+function set_parent_exec {          _parent_exec=$1 ; }
 function get_parent_exec { echo -n $_parent_exec ; }
 
 _modulepath=""
 # Module path for creating the modules
-function set_module_path { _modulepath=$1 ; }
+function set_module_path {          _modulepath=$1 ; }
 function get_module_path { echo -n $_modulepath ; }
 
 _buildpath="./"
 # Path for downloading and extracting the packages
-function set_build_path { _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
+function set_build_path {          _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
 function get_build_path { echo -n $_buildpath ; }
 
 _def_module_reqs=""
 # Path for downloading and extracting the packages
-function set_default_modules { _def_module_reqs="$1" ; }
+function set_default_modules { _def_module_reqs="$1"
+    # Create the default packages so that they can be loaded...
+    if [ ! -z "$1" ]; then
+	for mod in $1 ; do
+	    add_package path_to_module/${mod%/*}-${mod#*/}.tar.gz
+	    pack_set --alias $mod
+	    pack_set --index-alias $mod
+	    pack_set --installed 1 # Make sure it is "installed"
+	    pack_set --module-name $mod
+	done
+    fi
+}
 function get_default_modules { echo -n "$_def_module_reqs" ; }
 
 # Figure out the number of cores on the machine
@@ -111,13 +126,17 @@ function dwn_file {
 # $1 subdirectory of archive
 # $2 index or name of archive
 function extract_archive {
-    local d=$(pack_get --directory $2)
-    local cmd=$(arc_cmd $(pack_get --ext $2) )
-    local archive=$(pack_get --archive $2)
-    [ -d "$1/$d" ] && rm -rf "$1/$d"
-    local ext=$(pack_get --ext $1)
+    local alias="$2"
+    local d=$(pack_get --directory $alias)
+    local cmd=$(arc_cmd $(pack_get --ext $alias) )
+    local archive=$(pack_get --archive $alias)
+    # If a previous extraction already exists (delete it!)
+    if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
+	[ -d "$1/$d" ] && rm -rf "$1/$d"
+    fi
+    local ext=$(pack_get --ext $alias)
     [ "x$ext" == "xlocal" ] && return 0
-    docmd $archive $cmd $1/$archive
+    docmd "$archive" $cmd $1/$archive
 }
 
 # Local variables for archives to be installed
@@ -228,7 +247,7 @@ function pack_set {
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
-    local reject_h="" ; local only_h=""
+    local reject_h="" ; local only_h="" ; local inst=2
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt=$1
@@ -248,6 +267,7 @@ function pack_set {
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
 	    -index-alias)  idx_alias="$1" ; shift ;;
+	    -installed)  inst=1 ; shift ;;
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
@@ -272,6 +292,7 @@ function pack_set {
 	_mod_req[$index]="$req"
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
+    [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
 	[ $_HAS_HASH -eq 1 ] && \
@@ -482,27 +503,31 @@ function pack_install {
     [ $? -ne "0" ] && return 1
 	
     # Check that we can install on this host
-    local run=0
+    local run=1
     local tmp="$(pack_get --host-only $idx)"
     if [ ! -z "$tmp" ]; then
+	run=0
 	for host in $tmp ; do
 	    local lh="${#host}"
 	    [ "x$host" == "x${_host:0:$lh}" ] && \
-		run=1
+		run=1 && break
 	done
-	[ $run -eq 0 ] && return 1
     fi
     local tmp="$(pack_get --host-reject $idx)"
     if [ ! -z "$tmp" ]; then
-	run=1
+	# Run should be 1 when we get here...
 	for host in $tmp ; do
 	    local lh="${#host}"
 	    [ "x$host" == "x${_host:0:$lh}" ] && \
-		run=0
+		run=0 && break
 	done
-	[ $run -eq 0 ] && return 1
     fi
-    
+    if [ $run -eq 0 ]; then
+	[ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
+	do_debug --return pack_install
+	return 1
+    fi
+
     # Update the module name now
     if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
@@ -546,19 +571,19 @@ function pack_install {
 
         # Download archive
 	dwn_file $idx $(get_build_path)/.archives
-	
+
         # Extract the archive
 	pushd $(get_build_path)/.compile
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
 	local d=$(pack_get --directory $idx)
-	if [ "x$d" != "x." ] || [ "x$d" != "x./" ]; then
+	if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
 	    rm -rf $(pack_get --directory $idx)
 	fi
 	extract_archive $(get_build_path)/.archives $idx
 	pushd $(pack_get --directory $idx)
 	[ $? -ne 0 ] && exit 1
-	
+
         # We are now in the package directory
 	if [ $(has_setting $BUILD_DIR $idx) ]; then
 	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $idx)/build-tmp
@@ -577,7 +602,7 @@ function pack_install {
 
         # Remove compilation directory
 	local d=$(pack_get --directory $idx)
-	if [ "x$d" != "x." ] || [ "x$d" != "x./" ]; then
+	if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
 	    rm -rf $(pack_get --directory $idx)
 	fi
 	
@@ -664,7 +689,7 @@ function get_index {
 	done
     done
     [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-    doerr $1 "Could not find the archive in the list..."
+    doerr "$1" "Could not find the archive in the list..."
     do_debug --return get_index
 }
 
@@ -782,7 +807,7 @@ EOF
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 EOF
-	for tmp in "$require" ; do
+	for tmp in $require ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "prereq $tmp_load" >> $mfile
@@ -795,7 +820,7 @@ EOF
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 EOF
-	for tmp in "$conflict" ; do
+	for tmp in $conflict ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "conflict $tmp_load" >> $mfile
@@ -808,7 +833,7 @@ EOF
 	cat <<EOF >> $mfile
 # Adds any specific environment variables
 EOF
-	for tmp in "$env" ; do
+	for tmp in $env ; do
 	    # Partition into [s|a|p]
 	    local opt=${tmp:0:1}
 	    local lenv=${tmp%%=*}
@@ -932,7 +957,7 @@ function msg_install {
 # Do the cmd 
 # This will automatically check for the error
 function docmd {
-    local ar=$1
+    local ar="$1"
     shift
     local cmd=($*)
     echo 
@@ -980,6 +1005,7 @@ function exit_on_error {
 function doerr {
     local prefix="ERROR: "
     for ln in "$@" ; do
+        echo "${prefix}${ln}" >> $_ERROR_FILE
         echo "${prefix}${ln}"
         prefix="       "
     done ; exit 1

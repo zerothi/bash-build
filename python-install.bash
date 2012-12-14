@@ -41,30 +41,30 @@ create_module \
     -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) scientificpython scipy cython numexpr-2 matplotlib)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython) scientificpython scipy cython numexpr-2 matplotlib)
 
 create_module \
     -n "\"Nick Papior Andersen's parallel python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M python$pV.cython.mpi4py.numpy.scipy.scientific/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) scientificpython scipy cython mpi4py)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython) scientificpython scipy cython mpi4py)
 
 create_module \
     -n "\"Nick Papior Andersen's DFT python script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M python$pV.numpy.scipy.scientific.ase.gpaw.inelastica/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) scientificpython scipy ase gpaw inelastica)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython) scientificpython scipy ase gpaw inelastica)
 
-if [ "$(get_hostname)" != "thul" ] && [ "$(get_hostname)" != "surt" ]; then
+if [ $(pack_get --installed qutip) -eq 1 ]; then
     create_module \
-        -n "\"Nick Papior Andersen's Photonics python script for: $(get_c)\"" \
+        -n "\"Nick Papior Andersen's Photonics python script for QuTip: $(get_c)\"" \
         -v $(date +'%g-%j') \
-        -M python$pV.basic.qutip/$(get_c) \
-        -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-        $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement scientificpython) scientificpython cython numexpr-2 qutip)
+        -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
+        -P "/directory/should/not/exist" \
+        $(list --prefix '-L ' $(pack_get --module-requirement scientificpython) scientificpython cython numexpr-2 qutip)
 fi
 
 set_module_path $old_path

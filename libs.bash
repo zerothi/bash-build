@@ -51,7 +51,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement netcdf))
+    $(list --prefix '-L ' $(pack_get --module-requirement netcdf))
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
@@ -59,7 +59,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' --loop-cmd 'pack_get --module-name' blas lapack)
+    $(list --prefix '-L ' blas lapack)
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
@@ -67,10 +67,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M mpi.blas.lapack.scalapack/$(get_c) \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    -L "$(pack_get --module-name openmpi)" \
-    -L "$(pack_get --module-name blas)" \
-    -L "$(pack_get --module-name lapack)" \
-    -L "$(pack_get --module-name scalapack)"
+    $(list --prefix '-L ' openmpi blas lapack scalapack)
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
@@ -78,6 +75,4 @@ create_module \
     -v $(date +'%g-%j') \
     -M mpi.atlas.scalapack/$(get_c) \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    -L "$(pack_get --module-name openmpi)" \
-    -L "$(pack_get --module-name atlas)" \
-    -L "$(pack_get --module-name scalapack)"
+    $(list --prefix '-L ' openmpi atlas scalapack)
