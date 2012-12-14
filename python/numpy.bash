@@ -7,7 +7,11 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 pack_set --install-query $(pack_get --install-prefix)/bin/f2py
 pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 $(list --pack-module-reqs umfpack)
-
+# Check for Intel MKL or not
+tmp=$(get_c)
+if [ "${tmp:0:3}" == "gnu" ]; then
+    pack_set --module-requirement atlas
+fi
 
 cfg=$(pack_get --alias)-$(pack_get --version).site.cfg
 tmp_lib=$(list --prefix ':' --suffix '/lib' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))
@@ -19,9 +23,9 @@ tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
 cat << EOF > $cfg
-[fftw3]
-fftw3_libs   = fftw3
 [fftw]
+fftw3_libs   = fftw3
+[fftw3]
 fftw3_libs   = fftw3
 [amd]
 amd_libs = amd
@@ -48,8 +52,8 @@ mkl_libs = mkl_rt,mkl_intel_lp64,mkl_intel_thread,mkl_core
 lapack_libs = mkl_lapack95_lp64
 blas_libs = mkl_blas95_lp64
 EOF
-    pack_set --command "cp $(pwd)/$cfg site.cfg"
-    pack_set --command "rm $(pwd)/$cfg"
+    pack_set --command "mv $(pwd)/$cfg site.cfg"
+
     tmp="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict -fomit-frame-pointer -I$(pack_get --install-prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $tmp:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
@@ -63,8 +67,6 @@ EOF
 	--command-flag "--fcompiler=intelem" 
 
 elif [ "${tmp:0:3}" == "gnu" ]; then
-    # Add requirements when creating the module
-    pack_set --module-requirement atlas
 
     cat << EOF >> $cfg
 library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib
@@ -76,8 +78,7 @@ atlas_libs = f77blas,cblas,atlas
 [lapack]
 lapack_libs = lapack_atlas
 EOF
-    pack_set --command "cp $(pwd)/$cfg site.cfg"
-    pack_set --command "rm $(pwd)/$cfg"
+    pack_set --command "mv $(pwd)/$cfg site.cfg"
 
     # Correct the ATLAS understanding of the stuff
     pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
