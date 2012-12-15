@@ -41,14 +41,13 @@ JPG_PATH =
 JPG_LIB =
 EOF
 
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if [ $(is_c intel) ]; then
     cat <<EOF >> $tmp_file
 LINKFLAGS =	$MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))
 LIB =           -lstdc++ -lpthread -mkl=sequential
 EOF
 
-elif [ "${tmp:0:3}" == "gnu" ]; then 
+elif [ $(is_c gnu) ]; then 
     cat <<EOF >> $tmp_file
 LINKFLAGS =	$(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))
 LIB =           -lstdc++ -lpthread 

@@ -54,8 +54,7 @@ MPI_INCLUDE=.\n\
 ' arch.make"
 
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if [ $(is_c intel) ]; then
     pack_set --command "sed -i '1 a\
 LDFLAGS=$MKL_LIB $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
@@ -63,7 +62,7 @@ FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
 LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential\n\
 ' arch.make"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif [ $(is_c gnu) ]; then
     pack_set --module-requirement atlas
     pack_set --module-requirement scalapack
     pack_set --command "sed -i '1 a\

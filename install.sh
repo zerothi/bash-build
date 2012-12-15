@@ -60,6 +60,12 @@ if [ $DEBUG -ne 0 ]; then
     echo ""
     tmp=""
     echo LIST of emptyness: "$(list --prefix '-R ' $tmp)"
+    echo Check for is_c:
+    if [ $(is_c $(get_c)) ]; then
+	echo Success on is_c
+    else
+	echo Fail on is_c
+    fi
     echo "Done with DEBUG"
 fi
 

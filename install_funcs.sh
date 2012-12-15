@@ -114,6 +114,18 @@ function arc_cmd {
     fi
 }
 
+# Check the compiler...
+# Takes one argument:
+# #1 : the compiler string to search from the beginning of the compiler-name...
+function is_c {
+    local check="$1"
+    local l="${#check}"
+    if [ "${_c:0:$l}" == "$check" ]; then
+	return 0
+    fi
+    return 1	
+}
+
 #
 # Using wget we will collect the giving file
 # $1 http path 

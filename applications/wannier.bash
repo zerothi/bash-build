@@ -8,11 +8,10 @@ pack_set --host-reject "zeroth"
 pack_set --install-query $(pack_get --install-prefix)/bin/wannier90.x
 
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if [ $(is_c intel) ]; then
     tmp="$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif [ $(is_c gnu) ]; then
     pack_set --module-requirement atlas
     tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas"
 

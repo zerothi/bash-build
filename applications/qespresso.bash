@@ -14,16 +14,15 @@ for v in \
     pack_set --module-requirement fftw-3
 
 # Check for Intel MKL or not
-    tmp=$(get_c)
     tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
-    if [ "${tmp:0:5}" == "intel" ]; then
+    if [ $(is_c intel) ]; then
         tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	    tmp_lib="$tmp_lib BLAS_LIBS='$tmp -mkl=sequential -lmkl_blas95_lp64'"
     	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -mkl=sequential -lmkl_blacs_openmpi_lp64'"
     	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -mkl=sequential -lmkl_scalapack_lp64'"
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=sequential -lmkl_lapack95_lp64'"
 
-    elif [ "${tmp:0:3}" == "gnu" ]; then
+    elif [ $(is_c gnu) ]; then
     	pack_set --module-requirement atlas \
 	        --module-requirement scalapack
     	tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
