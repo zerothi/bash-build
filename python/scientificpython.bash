@@ -10,13 +10,12 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 pack_set --module-requirement netcdf-serial $(list --pack-module-reqs numpy)
 
 # Check for Intel MKL or not
-tmp=$(get_c)
 tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial)"
 tmp_compiler=""
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     tmp_compiler="intelem"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     # Add requirements when creating the module
     pack_set --module-requirement atlas
     tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"

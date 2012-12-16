@@ -25,8 +25,7 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 
 # Make commands
 pack_set --command "make"
-tmp=$(get_hostname)
-if [ "${tmp:0:4}" != "surt" ]; then
+if $(is_host surt) ; then
     pack_set --command "make check ptcheck time"
 fi
 pack_set --command "make install"

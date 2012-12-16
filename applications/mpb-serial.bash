@@ -17,12 +17,11 @@ pack_set --module-requirement libctl \
     --module-requirement fftw-2
 
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     tmp="--with-blas='$MKL_LIB -mkl=sequential -lmkl_blas95_lp64'"
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     tmp="--with-blas='$(list --LDFLAGS --Wlrpath atlas) -lcblas -lf77blas -latlas'"
     tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"

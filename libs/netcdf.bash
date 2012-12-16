@@ -48,8 +48,7 @@ pack_set --module-requirement openmpi \
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 
 tmp_cppflags=""
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     tmp_cppflags="-DgFortran"
 fi
 

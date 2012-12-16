@@ -11,13 +11,12 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libharminv.a
 
-    # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+# Check for Intel MKL or not
+if $(is_c intel) ; then
     tmp="--with-blas='$MKL_LIB -mkl=sequential -lmkl_blas95_lp64'" 
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     tmp="--with-blas='$(list --Wlrpath $(pack_get --module-requirement)) -lcblas -lf77blas -latlas'"
     tmp="$tmp --with-lapack='$(list --Wlrpath $(pack_get --module-requirement)) -llapack_atlas'"

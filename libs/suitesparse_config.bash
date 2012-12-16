@@ -49,12 +49,11 @@ pack_set --command "sed -i -e 's|^\(UMFPACK_CONFIG\)[[:space:]]*=.*|\1 = |' $mk"
 pack_set --command "sed -i -e 's|^\(CHOLMOD_CONFIG\)[[:space:]]*=.*|\1 = -DNPARTITION |' $mk"
 
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lmkl_blas95_lp64|' $mk"
     pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -lmkl_lapack95_lp64|' $mk"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     # Add requirments when creating the module
     pack_set --module-requirement atlas
 
@@ -62,7 +61,7 @@ elif [ "${tmp:0:3}" == "gnu" ]; then
     pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -llapack_atlas|' $mk"
 
 else
-    doerr $(pack_get --package) "Has not been configured with $tmp compiler"
+    doerr $(pack_get --package) "Has not been configured with $(get_c) compiler"
 
 fi
 

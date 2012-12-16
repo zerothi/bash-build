@@ -41,8 +41,7 @@ if [ -e /usr/include/tcl8.5 ]; then
 TCL_INCDIR      = -I/usr/include/tcl8.5
 EOF
 fi
-tmp=$(get_hostname)
-if [ "$tmp" == "thul" ]; then
+if $(is_host thul) ; then
     sed -i -e 's/8.5/8.4/g' $tmp_file
 fi
 

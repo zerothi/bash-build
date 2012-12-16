@@ -43,6 +43,9 @@ if [ $DEBUG -ne 0 ]; then
     add_package abc.tar.gz
     add_package def.tar.gz
     pack_set --module-requirement abc
+    for tmp in pack_get --module-requirement ; do
+	echo Checking $tmp
+    done
     add_package ghi.tar.gz
     pack_set $(list --pack-module-reqs def)
     echo PRE ALL: $(list --prefix 'PRE' abc def ghi )
@@ -61,10 +64,15 @@ if [ $DEBUG -ne 0 ]; then
     tmp=""
     echo LIST of emptyness: "$(list --prefix '-R ' $tmp)"
     echo Check for is_c:
-    if [ $(is_c $(get_c)) ]; then
+    if $(is_c $(get_c)) ; then
 	echo Success on is_c
     else
 	echo Fail on is_c
+    fi
+    if  $(is_c random) ; then
+	echo Fail on is_c
+    else
+	echo Success on is_c
     fi
     echo "Done with DEBUG"
 fi

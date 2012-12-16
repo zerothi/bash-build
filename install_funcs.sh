@@ -120,10 +120,22 @@ function arc_cmd {
 function is_c {
     local check="$1"
     local l="${#check}"
-    if [ "${_c:0:$l}" == "$check" ]; then
+    if [ "x${_c:0:$l}" == "x$check" ]; then
 	return 0
     fi
-    return 1	
+    return 1
+}
+
+# Check the host...
+# Takes one argument:
+# #1 : the host string to search from the beginning of the host-name...
+function is_host {
+    local check="$1"
+    local l="${#check}"
+    if [ "x${_host:0:$l}" == "x$check" ]; then
+	return 0
+    fi
+    return 1
 }
 
 #
@@ -273,7 +285,7 @@ function pack_set {
     local mod_opt=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
-	local opt=$1
+	local opt="$1"
 	case $opt in
 	    --*) opt=${opt:1} ;;
 	esac
@@ -311,6 +323,7 @@ function pack_set {
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
+	# Remove dublicates:
 	req="$(echo $req | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
 	[ $TIMING -ne 0 ] && export _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
 	_mod_req[$index]="$req"
@@ -489,7 +502,7 @@ function list {
 		suf="/include" 
 		lcmd="pack_get --install-prefix " ;;
 	    *)
-		[ $TIMING -ne 0 ] && _list_T=$(add_timing $_list_T $time)
+		[ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
 	for cmd in $args ; do
@@ -539,18 +552,18 @@ function pack_install {
     if [ ! -z "$tmp" ]; then
 	run=0
 	for host in $tmp ; do
-	    local lh="${#host}"
-	    [ "x$host" == "x${_host:0:$lh}" ] && \
+	    if $(is_host $host) ; then
 		run=1 && break
+	    fi
 	done
     fi
     local tmp="$(pack_get --host-reject $idx)"
     if [ ! -z "$tmp" ]; then
 	# Run should be 1 when we get here...
 	for host in $tmp ; do
-	    local lh="${#host}"
-	    [ "x$host" == "x${_host:0:$lh}" ] && \
+	    if $(is_host $host) ; then
 		run=0 && break
+	    fi
 	done
     fi
     if [ $run -eq 0 ]; then
@@ -558,6 +571,14 @@ function pack_install {
 	do_debug --return pack_install
 	return 1
     fi
+    
+    # Make sure that every package before is installed...
+    for tmp in $(pack_get --module-requirement $idx) ; do
+	[ -z "$tmp" ] && break
+	if [ $(pack_get --installed $tmp) -eq 0 ]; then
+	    pack_install $tmp
+	fi
+    done
 
     # Update the module name now
     if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
@@ -580,22 +601,26 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
-	for mod in $_def_module_reqs $module_loads ; do
-            module load $mod
-	done
+	if [ ! -z "$_def_module_reqs" ]; then
+	    module load $_def_module_reqs
+	fi
+	if [ ! -z "$module_loads" ]; then
+            module load $module_loads
+	fi
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
+	local tmp="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
 	old_fcflags="$FCFLAGS"
-	export FCFLAGS="$FCFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	export FCFLAGS="$FCFLAGS $tmp"
 	old_fflags="$FFLAGS"
-	export FFLAGS="$FFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	export FFLAGS="$FFLAGS $tmp"
 	old_cflags="$CFLAGS"
-	export CFLAGS="$CFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	export CFLAGS="$CFLAGS $tmp"
 	old_cppflags="$CPPFLAGS"
 	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement $idx))"
 	old_ldflags="$LDFLAGS"
-	export LDFLAGS="$LDFLAGS $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	export LDFLAGS="$LDFLAGS $tmp"
 	
         # Show that we will install
 	msg_install --start $idx
@@ -665,7 +690,7 @@ function pack_install {
 
     if [ $(has_setting $IS_MODULE $idx) ]; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' $_def_module_reqs) $(list --prefix '-R ' $(pack_get --module-requirement $idx))"
+	local reqs="$(list --prefix '-R ' $_def_module_reqs $(pack_get --module-requirement $idx))"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \

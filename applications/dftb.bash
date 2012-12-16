@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/dftb+
 pack_set --directory $(pack_get --directory)_src
 
 # Check for Intel MKL or not
-if [ $(is_c intel) ]; then
+if $(is_c intel) ; then
     cc=intel
     tmp=$(pack_get --alias)-$(pack_get --version).$cc
 
@@ -26,7 +26,7 @@ LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64
 LIBOPT = $MKL_LIB
 EOF
     
-elif [ $(is_c gnu) ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     cc=gnu
     tmp=$(pack_get --alias)-$(pack_get --version).$cc

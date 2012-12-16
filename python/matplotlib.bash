@@ -7,7 +7,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
-pack_set $(list --pack-module-reqs numpy)
+pack_set --module-requirement numpy
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"

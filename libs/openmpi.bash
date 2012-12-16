@@ -9,16 +9,15 @@ pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 pack_set --host-reject surt --host-reject thul
 pack_set --host-reject slid
 
-tmp=$(hostname)
 tmp_flags=""
-if [ "${tmp:0:2}" == "n-" ]; then # enables the linking to the torque management system
+if $(is_host n-) ; then # enables the linking to the torque management system
     tmp_flags="--with-tm=/opt/torque"
     # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
     # so no need for using libnuma
-elif [ "${tmp:0:4}" == "surt" ]; then
+elif $(is_host surt) ; then
     tmp_flags="CPPFLAGS='-I/usr/include/torque' --with-openib-libdir=/usr/lib64"
 
-elif [ "${tmp:0:4}" == "thul" ]; then
+elif $(is_host thul) ; then
     tmp_flags="CPPFLAGS='-I/usr/local/include'"
 
 fi

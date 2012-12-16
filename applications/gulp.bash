@@ -10,11 +10,11 @@ pack_set --command "cd Src"
 
 pack_set --module-requirement openmpi
 
-if [ $(is_c intel) ]; then
+if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
     LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
-elif [ $(is_c gnu) ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     pack_set --command "sed -i '1 a\
     LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"

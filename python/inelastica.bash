@@ -10,13 +10,12 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 pack_set --module-requirement netcdf-serial $(list --pack-module-reqs scientificpython)
 
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--fcompiler=intelem" \
 	--command-flag "--compiler=intelem"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--fcompiler=gnu95" \
 	--command-flag "--compiler=unix"

@@ -8,8 +8,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/f2py
 pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 $(list --pack-module-reqs umfpack)
 # Check for Intel MKL or not
-tmp=$(get_c)
-if [ "${tmp:0:3}" == "gnu" ]; then
+if $(is_c gnu) ; then
     pack_set --module-requirement atlas
 fi
 
@@ -36,7 +35,7 @@ libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig
 EOF
 
 # Check for Intel MKL or not
-if [ $(is_c intel) ]; then
+if $(is_c intel) ; then
     if [ -z "$MKL_PATH" ]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
@@ -65,7 +64,7 @@ EOF
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
 
-elif [ "$(is_c gnu)" ]; then
+elif $(is_c gnu) ; then
 
     cat << EOF >> $cfg
 library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib
@@ -89,34 +88,10 @@ EOF
     [ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
     tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2} L${tmp_lib//:/ L} Wl,-rpath=${tmp_lib//:/ Wl,-rpath=})"
-    # Remove the first " ," from the line
-    cat << EOF > gnuccompiler.py
-from distutils.unixccompiler import UnixCCompiler
-
-class GNUCCompiler(UnixCCompiler):
-    """ A modified GNU C compiler compatible with an gcc built Python."""
-    compiler_type = 'gnu'
-    cc_exe = 'gcc'
-    cc_args = '-fPIC $tmp'
-
-    def __init__ (self, verbose=0, dry_run=0, force=0):
-        UnixCCompiler.__init__ (self, verbose,dry_run, force)
-        self.cc_exe = 'gcc -fPIC $tmp'
-        compiler = self.cc_exe
-        self.set_executables(compiler=compiler,
-                             compiler_so=compiler,
-                             compiler_cxx=compiler,
-                             linker_exe=compiler,
-                             linker_so=compiler + ' -shared ')
-
-EOF
-    pack_set --command "mv $(pwd)/gnuccompiler.py numpy/distutils/"
-    pack_set --command "echo 'compiler_class[\'gnu\'] = (\'gnuccompiler\',\'GNUCCompiler\',\'gcc\'' >> numpy/distutils/ccompiler.py"
-    pack_set --command "echo 'ccompiler.default_compilers += ((\'linux.*\',\'gnu\'))' >> numpy/distutils/ccompiler.py"
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
-    pack_set --command "$(get_parent_exec) setup.py config" \
-	--command-flag "--compiler=gnu" \
+    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+	--command-flag "--compiler=unix" \
 	--command-flag "--fcompiler=gnu95" 
 
 else

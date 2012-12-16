@@ -8,14 +8,13 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 pack_set --host-reject "ntch-2857" --host-reject zeroth
 
 # Install commands that it should run
-tmp=$(get_c)
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     pack_set --command "../configure" \
 	--command-flag "LIBS='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64'" \
 	--command-flag "LDFLAGS='$MKL_LIB'" \
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     pack_set --command "../configure" \
 	--command-flag "LIBS='$(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas'" \

@@ -13,9 +13,8 @@ pack_set --module-requirement openmpi \
     $(list --pack-module-reqs h5py)
 
 # Check for Intel MKL or not
-tmp=$(get_c)
 file=$(pack_get --alias)-$(pack_get --version).site.cfg
-if [ "${tmp:0:5}" == "intel" ]; then
+if $(is_c intel) ; then
     cat << EOF > $file
 compiler = '$CC $CFLAGS $MKL_LIB -mkl=sequential'
 mpicompiler = '$MPICC $CFLAGS $MKL_LIB'
@@ -24,7 +23,7 @@ extra_link_args = ['$MKL_LIB','-mkl=sequential']
 platform_id = "Xeon"
 EOF
 
-elif [ "${tmp:0:3}" == "gnu" ]; then
+elif $(is_c gnu) ; then
     pack_set --module-requirement atlas \
         --module-requirement scalapack
     cat << EOF > $file
