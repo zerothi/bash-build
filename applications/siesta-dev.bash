@@ -95,8 +95,8 @@ pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
-pack_set --command "../Src/obj_setup.sh"
 # We have not created a test for the check of already installed files...
+#pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"

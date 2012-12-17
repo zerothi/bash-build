@@ -136,6 +136,7 @@ _spbs_add_line 'source $HOME/.bashrc' "Source the home .bashrc to edit ENV varia
 _spbs_add_line 'module purge' "Clear list of defaulted modules"
 _spbs_add_line 'module load npa-cluster-setup' "Enables the NPA modules"
 echo ''
+_spbs_add_line 'ulimit -s unlimited' "Make the stack-size unlimited"
 _spbs_add_line 'date' "Show the date and time of execution"
 _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution folder"
 _spbs_add_line 'NPROCS=\$(wc -l \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"

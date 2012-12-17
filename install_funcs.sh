@@ -5,6 +5,7 @@
 [ -z "$TIMING" ] && TIMING=0
 _NS=1000000000
 [ -z "$DEBUG" ]  && DEBUG=0
+[ -z "$FORCEMODULE" ]  && FORCEMODULE=0
 
 _HAS_HASH=1
 if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
@@ -543,9 +544,16 @@ function pack_install {
 	_installed[$idx]=1
     fi
 
-    # We install the package
-    local archive="$(pack_get --archive $idx)"
-	
+    # If it is installed...
+    if [ $(pack_get --installed $idx) -eq 1 ]; then
+	msg_install --already-installed $idx
+	if [ $FORCEMODULE -eq 0 ]; then
+	    [ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
+	    do_debug --return pack_install
+	    return 0
+	fi
+    fi
+
     # Check that we can install on this host
     local run=1
     local tmp="$(pack_get --host-only $idx)"
@@ -585,7 +593,7 @@ function pack_install {
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
     fi
         
-     # Check that the package is not already installed
+    # Check that the package is not already installed
     if [ $(pack_get --installed $idx) -eq 0 ]; then
 
 	# If the module should be preloaded (for configures which checks that the path exists)
@@ -651,7 +659,7 @@ function pack_install {
 	IFS="$_LIST_SEP" read -ra cmds <<< "$cmd"
 	for cmd in "${cmds[@]}" ; do
 	    [ -z "${cmd// /}" ] && continue # Skip the empty commands...
-	    docmd "$archive" "$cmd"
+	    docmd "$idx" "$cmd"
 	done
 
 	popd
@@ -681,8 +689,6 @@ function pack_install {
 	export CPPFLAGS="$old_cppflags"
 	export LDFLAGS="$old_ldflags"
 
-    else
-	msg_install --already-installed $idx
     fi
 
     # For sure it is now installed...
