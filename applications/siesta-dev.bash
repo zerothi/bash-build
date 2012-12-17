@@ -1,5 +1,5 @@
 for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
-    ; do
+    http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-428.tar.gz ; do
 
 add_package $pack
 
@@ -33,7 +33,7 @@ SP_KIND=4\n\
 DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
-FFLAGS=${FCFLAGS//-fno-second-underscore/}\n\
+FFLAGS=$FCFLAGS\n\
 FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
