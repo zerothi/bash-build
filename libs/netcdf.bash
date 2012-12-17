@@ -47,10 +47,7 @@ pack_set --module-requirement openmpi \
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 
-tmp_cppflags=""
-if $(is_c intel) ; then
-    tmp_cppflags="-DgFortran"
-fi
+tmp_cppflags="-DgFortran"
 
 # Install commands that it should run
 pack_set --command "../configure" \
