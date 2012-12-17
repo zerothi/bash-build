@@ -590,7 +590,7 @@ function pack_install {
     done
 
     # Update the module name now
-    if [ $(has_setting $UPDATE_MODULE_NAME $idx) ]; then
+    if $(has_setting $UPDATE_MODULE_NAME $idx) ; then
 	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
     fi
         
@@ -598,7 +598,7 @@ function pack_install {
     if [ $(pack_get --installed $idx) -eq 0 ]; then
 
 	# If the module should be preloaded (for configures which checks that the path exists)
-	if [ $(has_setting $PRELOAD_MODULE) ]; then
+	if $(has_setting $PRELOAD_MODULE) ; then
 	    create_module --force \
 		-n $(pack_get --alias $idx) \
 		-v $(pack_get --version $idx) \
@@ -610,12 +610,7 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
-	if [ ! -z "$_def_module_reqs" ]; then
-	    module load $_def_module_reqs
-	fi
-	if [ ! -z "$module_loads" ]; then
-            module load $module_loads
-	fi
+	module load $_def_module_reqs $module_loads
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
@@ -650,7 +645,7 @@ function pack_install {
 	[ $? -ne 0 ] && exit 1
 
         # We are now in the package directory
-	if [ $(has_setting $BUILD_DIR $idx) ]; then
+	if $(has_setting $BUILD_DIR $idx) ; then
 	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $idx)/build-tmp
 	fi
 	
@@ -680,7 +675,7 @@ function pack_install {
 	done
 
 	# Unload the module itself in case of PRELOADING
-	if [ $(has_setting $PRELOAD_MODULE) ]; then
+	if $(has_setting $PRELOAD_MODULE) ; then
 	    module unload $(pack_get --module-name $idx)
 	fi
 
@@ -695,9 +690,9 @@ function pack_install {
     # For sure it is now installed...
     _installed[$idx]=1
 
-    if [ $(has_setting $IS_MODULE $idx) ]; then
+    if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' $_def_module_reqs $(pack_get --module-requirement $idx))"
+	local reqs="$(list --prefix '-R ' $(pack_get --module-requirement $idx))"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
@@ -763,15 +758,15 @@ function get_index {
 function has_setting {
     local tmp
     let "tmp=$1 & $(pack_get -s $2)"
-    [ $tmp -gt 0 ] && echo -n "true" && return 0
-    echo -n ""
+    [ $tmp -gt 0 ] && return 0
+    return 1
 }
     
 # Returns the -j <procs> flag for the make command
 # If the MAKE_PARALLEL setting has been enabled.
 #   $1 : <index of archive>
 function get_make_parallel {
-    if [ $(has_setting $MAKE_PARALLEL $1) ]; then
+    if $(has_setting $MAKE_PARALLEL $1) ; then
 	echo -n "-j $_n_procs"
     else
 	echo -n ""
