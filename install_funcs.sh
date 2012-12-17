@@ -534,16 +534,20 @@ function list {
 export _pack_install_T=0.0
 function pack_install {
     local time=$(add_timing)
+    local mod_reqs=""
     do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
-	idx=$(get_index $1)
+	idx=$(get_index $1) ; shift
     fi
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
 	_installed[$idx]=1
     fi
+
+    # Save the module requirements for later...
+    mod_reqs="$(pack_get --module-requirement $idx)"
 
     # If it is installed...
     if [ $(pack_get --installed $idx) -eq 1 ]; then
@@ -582,7 +586,7 @@ function pack_install {
     fi
     
     # Make sure that every package before is installed...
-    for tmp in $(pack_get --module-requirement $idx) ; do
+    for tmp in $mod_reqs ; do
 	[ -z "$tmp" ] && break
 	if [ $(pack_get --installed $tmp) -eq 0 ]; then
 	    pack_install $tmp
@@ -609,12 +613,15 @@ function pack_install {
 	fi
 
         # Create the list of requirements
-	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --module-requirement $idx))"
+	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
+	#echo Will load: $_def_module_reqs $module_loads
+	#module avail
 	module load $_def_module_reqs $module_loads
+	#module list
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement $idx))"
+	local tmp="$(list --LDFLAGS --Wlrpath $mod_reqs)"
 	old_fcflags="$FCFLAGS"
 	export FCFLAGS="$FCFLAGS $tmp"
 	old_fflags="$FFLAGS"
@@ -622,7 +629,7 @@ function pack_install {
 	old_cflags="$CFLAGS"
 	export CFLAGS="$CFLAGS $tmp"
 	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement $idx))"
+	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs)"
 	old_ldflags="$LDFLAGS"
 	export LDFLAGS="$LDFLAGS $tmp"
 	
@@ -692,7 +699,7 @@ function pack_install {
 
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' $(pack_get --module-requirement $idx))"
+	local reqs="$(list --prefix '-R ' $mod_reqs)"
         # We install the module scripts here:
 	create_module \
 	    -n $(pack_get --alias $idx) \
