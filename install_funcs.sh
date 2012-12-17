@@ -83,6 +83,7 @@ function add_hidden_package {
     pack_set --index-alias $mod
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
+    pack_set --version ${mod#*/}
 }
 
 # Figure out the number of cores on the machine
@@ -264,7 +265,7 @@ function add_package {
     _mod_name[$_N_archives]=$package/$v/$(get_c)
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
     # Install default values
-    _mod_req[$_N_archives]=""
+    _mod_req[$_N_archives]="$(get_default_modules)"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
     [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
@@ -536,7 +537,7 @@ function pack_install {
     do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
-	idx=$1
+	idx=$(get_index $1)
     fi
 
     # First a simple check that it hasn't already been installed...

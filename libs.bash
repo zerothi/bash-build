@@ -50,7 +50,7 @@ create_module \
     -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
+    -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
 create_module \
@@ -58,21 +58,21 @@ create_module \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' blas lapack)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement blas) blas lapack)
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.blas.lapack.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' openmpi blas lapack scalapack)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi blas lapack scalapack)
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's parallel fast math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M mpi.atlas.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' openmpi atlas scalapack)
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi atlas scalapack)

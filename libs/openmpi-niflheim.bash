@@ -33,13 +33,12 @@ add_hidden_package $mod
 
 
 # Install the easiest first... OpenMPI
-add_package ThisModueExists/openmpi-hpc.tar.gz
+addn_package here/openmpi-hpc.tar.gz
 
 pack_set --package openmpi
 pack_set --alias openmpi
 pack_set --version hpc
-pack_set --installed
-pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --installed 1
 
 
 module load $(get_default_modules)
