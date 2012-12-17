@@ -71,5 +71,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement)) \
     -L $(pack_get --alias) 

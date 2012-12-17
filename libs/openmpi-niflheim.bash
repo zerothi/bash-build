@@ -38,7 +38,9 @@ add_package ThisModueExists/openmpi-hpc.tar.gz
 pack_set --package openmpi
 pack_set --alias openmpi
 pack_set --version hpc
+pack_set --installed
 pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
+
 
 module load $(get_default_modules)
 module load $mod
