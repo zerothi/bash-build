@@ -51,7 +51,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" $(list --prefix '-L ' $(get_default_modules)) \
-    $(list --prefix '-L ' $(pack_get --module-requirement netcdf))
+    $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
