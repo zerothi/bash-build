@@ -257,8 +257,8 @@ function add_package {
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
 	local tmp=${_index[$(lc ${_alias[$_N_archives]})]}
-	[ -z "$tmp" ] && \
-	    _index[$(lc ${_alias[$_N_archives]})]=$_N_archives
+	[ ! -z "$tmp" ] && \
+	    _index[$(lc ${_alias[$_N_archives]})]="$tmp $_N_archives"
     fi
     # Default the module name to this:
     _installed[$_N_archives]=0
