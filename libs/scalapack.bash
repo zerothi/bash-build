@@ -30,7 +30,6 @@ pack_set --command "cp libscalapack.a $(pack_get --install-prefix)/lib/"
 module load $(get_default_modules)
 module load $(pack_get --module-name blas)
 module load $(pack_get --module-name lapack)
-pack_install
 module unload $(pack_get --module-name blas)
 module unload $(pack_get --module-name lapack)
 module unload $(get_default_modules)

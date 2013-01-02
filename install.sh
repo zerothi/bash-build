@@ -90,4 +90,6 @@ source apps.bash
 # We have installed all libraries needed for doing application installs
 source scripts.bash
 
+install_all
+
 timings

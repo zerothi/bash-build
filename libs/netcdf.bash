@@ -29,7 +29,6 @@ pack_set \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
-pack_install
 
 
 # Install the FORTRAN headers
@@ -63,4 +62,3 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
-pack_install

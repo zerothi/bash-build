@@ -16,4 +16,3 @@ pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
 
-pack_install

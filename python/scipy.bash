@@ -32,7 +32,6 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 
 module load $(get_default_modules)
 module load $(pack_get --module-name pcre swig)
-pack_install
 module unload $(pack_get --module-name pcre swig)
 module unload $(get_default_modules)
 export LD_RUN_PATH=""

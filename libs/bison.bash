@@ -17,4 +17,3 @@ pack_set --command "make" \
 
 tmp="$(which bison)"
 [ "${tmp:0:1}" != "/" ] && \
-    pack_install

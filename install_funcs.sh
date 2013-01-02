@@ -530,6 +530,13 @@ function list {
 }
 
 
+function install_all {
+    local i=0
+    for i in `seq 0 $_N_archives` ; do
+	pack_install $i
+    done
+}
+
 # Install the package
 export _pack_install_T=0.0
 function pack_install {
@@ -717,7 +724,16 @@ export _get_index_T=0.0
 function get_index {
     do_debug --enter get_index
     local time=$(add_timing)
-    local i ; local lookup
+    local i ; local lookup ; local all=0
+    while [ $# -gt 1 ]; do
+	local opt=$1
+	case $opt in
+	    --*) opt=${opt:1} ; shift ;;
+	esac
+	case $opt in
+	    -all|-a) all=1  ;;
+	esac
+    done
     local l=${#1} ; local lc_name=$(lc $1)
     $(isnumber $1)
     if [ "$?" -eq "0" ]; then # We have a number
@@ -729,7 +745,17 @@ function get_index {
 	return 0
     fi
     if [ $_HAS_HASH -eq 1 ]; then
-	i=${_index[$lc_name]}
+	if [ $all -eq 1 ]; then
+	    echo -n "${_index[$lc_name]}"
+	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	    do_debug --return get_index
+	    return 0
+	else
+            # Select the latest per default..
+	    for v in ${_index[$lc_name]} ; do
+		i=$v
+	    done
+	fi
     else
 	i=-1
     fi
@@ -742,8 +768,7 @@ function get_index {
 	return 0
     fi
     for lookup in alias archive package ; do
-	i=0
-	while [ "$i" -le "$_N_archives" ]; do
+	for i in `seq 0 $_N_archives` ; do
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		echo -n "$i"
@@ -751,7 +776,6 @@ function get_index {
 		do_debug --return get_index
 		return 0
 	    fi
-	    i=$((i+1))
 	done
     done
     [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)

@@ -52,7 +52,6 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp gulp $(pack_get --install-prefix)/bin/"
 pack_set --command "cp ../libgulp.a $(pack_get --install-prefix)/lib/"
 
-pack_install
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \

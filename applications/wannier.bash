@@ -41,7 +41,6 @@ pack_set --command "cp libwannier.a $(pack_get --install-prefix)/lib/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/inc/"
 pack_set --command "cp src/*.mod $(pack_get --install-prefix)/inc/"
 
-pack_install
 
 
 

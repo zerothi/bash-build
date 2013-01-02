@@ -21,4 +21,3 @@ pack_set --command "./bootstrap.sh" \
 pack_set --command "./b2 stage"
 pack_set --command "./b2 install"
 
-pack_install

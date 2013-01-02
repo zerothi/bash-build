@@ -22,7 +22,6 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
     --command-flag "INSTALL_INCLUDE='$(pack_get --install-prefix)/include/'" \
     --command-flag "install"
 
-pack_install
 
 
 # We create the suitesparse_config makefile for all related packages!
@@ -67,4 +66,3 @@ fi
 
 pack_set --command "cp SuiteSparse_config.mk ../"
 
-pack_install

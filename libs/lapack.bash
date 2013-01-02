@@ -27,4 +27,3 @@ pack_set --command "make $(get_make_parallel) lapacklib lapackelib"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp liblapack.a liblapacke.a $(pack_get --install-prefix)/lib/"
 
-pack_install

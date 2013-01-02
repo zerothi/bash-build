@@ -18,4 +18,3 @@ pack_set --command "make" \
     --command-flag "install"
 
 
-pack_install

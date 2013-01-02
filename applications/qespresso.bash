@@ -52,7 +52,6 @@ for v in \
     pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
     pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
 
-    pack_install
 
     create_module \
     	--module-path $(get_installation_path)/modules-npa-apps \

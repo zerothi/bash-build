@@ -18,5 +18,4 @@ for v in 0.5.3574 0.6.6300 0.8.7929 0.9.9672 ; do
     pack_set --command "mkdir -p $(pack_get --install-prefix)"
     pack_set --command "cp -r ./* $(pack_get --install-prefix)/"
     
-    pack_install
 done

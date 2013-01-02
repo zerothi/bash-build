@@ -60,7 +60,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-pack_install
 
 
 create_module \

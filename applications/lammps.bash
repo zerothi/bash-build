@@ -67,7 +67,6 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --install-prefix)/bin/lmp"
 
 
-pack_install
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \

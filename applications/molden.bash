@@ -20,7 +20,6 @@ else
     pack_set --command "cp gmolden $(pack_get --install-prefix)/bin/"
 fi
 
-pack_install
 
 
 create_module \

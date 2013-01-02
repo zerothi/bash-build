@@ -34,7 +34,6 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
     --command-flag "install"
 
 pack_set --command "cp Include/cholmod_internal.h $(pack_get --install-prefix)/include"
-pack_install
 
 
 
@@ -48,4 +47,3 @@ pack_set --alias CHOLMOD-make
 mk=../SuiteSparse_config.mk
 pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix CHOLMOD)/include \1|' $mk"
 
-pack_install

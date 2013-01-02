@@ -26,4 +26,3 @@ pack_set --command "make $(get_make_parallel) all"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp blas.a $(pack_get --install-prefix)/lib/libblas.a"
 
-pack_install

@@ -22,5 +22,4 @@ for http in http://numexpr.googlecode.com/files/numexpr-1.4.2.tar.gz \
     pack_set --command "$(get_parent_exec) setup.py install" \
 	--command-flag "--prefix=$(pack_get --install-prefix)" \
 	
-    pack_install
 done

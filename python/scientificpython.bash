@@ -33,4 +33,3 @@ pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $
 pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
-pack_install

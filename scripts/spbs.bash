@@ -151,5 +151,4 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp $(pwd)/$script $(pack_get --install-prefix)/bin/spbs"
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/spbs"
 
-pack_install
 rm $(pwd)/$script
