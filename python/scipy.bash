@@ -9,8 +9,6 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set --module-requirement numpy
 
-echo $(pack_get --module-requirement scipy)
-
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
