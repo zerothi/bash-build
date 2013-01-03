@@ -44,11 +44,13 @@ if [ $DEBUG -ne 0 ]; then
     add_package abc-1.8.3.tar.gz
     add_package def-1.8.3.tar.gz
     pack_set --module-requirement abc[1.8.2]
-    for tmp in pack_get --module-requirement ; do
+    for tmp in $(pack_get --module-requirement) ; do
 	echo Checking $tmp
     done
-    echo Check version indexing...
+    echo Check version indexing:
+    echo START >> test
     echo $(pack_get --version abc[1.8.2]) $(pack_get --version abc) $(pack_get --version abc[1.8.3])
+    echo END >> test
     add_package ghi.tar.gz
     pack_set $(list --pack-module-reqs def)
     echo PRE ALL: $(list --prefix 'PRE' abc def ghi )

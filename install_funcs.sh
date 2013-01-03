@@ -257,6 +257,7 @@ function add_package {
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
 	local tmp="${_index[$(lc $package)]}"
+	echo added $tmp >> test
 	if [ ! -z "$tmp" ]; then
 	    _index[$(lc $package)]="$tmp $_N_archives"
 	else
@@ -271,6 +272,7 @@ function add_package {
     _mod_req[$_N_archives]="$(get_default_modules)"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
+    msg_install --message "Added $package[$v] to the install list"
     [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
     do_debug --return add_package
 }
@@ -306,7 +308,7 @@ function pack_set {
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
-	    -index-alias)  idx_alias="$1" ; shift ;;
+	    -index-alias)  idx_alias="$1" ; shift ;; ## opted for deletion...
 	    -installed)  inst=1 ; shift ;;
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
@@ -337,13 +339,30 @@ function pack_set {
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
-	[ $_HAS_HASH -eq 1 ] && \
-	    unset _index[_alias[$index]] 
+	if [ $_HAS_HASH -eq 1 ]; then
+	    local tmp=""
+	    for v in ${_index[${_alias[$index]}]} ; do
+		if [ "$v" -ne "$index" ]; then
+		    tmp="$tmp $v"
+		fi
+	    done
+	    if [ -z "$tmp" ]; then
+		unset _index[${_alias[$index]}]
+	    else
+		_index[${_alias[$index]}]="$tmp"
+	    fi
+	fi
 	_alias[$index]="$alias"
-	[ $_HAS_HASH -eq 1 ] && \
-	    _index[$(lc ${_alias[$index]})]=$index
+	if [ $_HAS_HASH -eq 1 ]; then
+	    tmp=${_index[$(lc ${_alias[$index]})]}
+	    if [ -z "$tmp" ]; then
+		_index[$(lc ${_alias[$index]})]=$index
+	    else
+		_index[$(lc ${_alias[$index]})]="$tmp $index"
+	    fi
+	fi
     fi
-    if [ ! -z "$idx_alias" ]; then
+    if [ ! -z "$idx_alias" ]; then  ## opted for deletion... (superseeded by explicit version comparisons...)
 	[ $_HAS_HASH -eq 1 ] && \
 	    _index[$idx_alias]="$index"
     fi
@@ -466,7 +485,7 @@ function list {
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
     # First we collect all options
-    local opts=""
+    local opts="" ; local space=" "
     while : ; do
 	local opt=$1 # Save the option passed
 	case $opt in
@@ -479,6 +498,7 @@ function list {
 	    -prefix|-p)    pre="$1" ; shift ;;
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
+	    -no-space|-X)  space="" ;;
 	    *)
 		opts="$opts $opt" ;;
 	esac
@@ -512,18 +532,18 @@ function list {
 	esac
 	for cmd in $args ; do
 	    if [ ! -z "$lcmd" ]; then
-		retval="$retval $pre$($lcmd $cmd)$suf"
+		retval="$retval$space$pre$($lcmd $cmd)$suf"
 	    else
-		retval="$retval $pre$cmd$suf"
+		retval="$retval$space$pre$cmd$suf"
 	    fi
 	done
     done
     if [ -z "$retval" ]; then
 	for cmd in $args ; do
 	    if [ ! -z "$lcmd" ]; then
-		retval="$retval $pre$($lcmd $cmd)$suf"
+		retval="$retval$space$pre$($lcmd $cmd)$suf"
 	    else
-		retval="$retval $pre$cmd$suf"
+		retval="$retval$space$pre$cmd$suf"
 	    fi
 	done
     fi
@@ -642,6 +662,8 @@ function pack_install {
 	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs)"
 	old_ldflags="$LDFLAGS"
 	export LDFLAGS="$LDFLAGS $tmp"
+	old_ld_lib_path="$LD_LIBRARY_PATH"
+	export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs)"
 	
         # Show that we will install
 	msg_install --start $idx
@@ -701,6 +723,7 @@ function pack_install {
 	export CFLAGS="$old_cflags"
 	export CPPFLAGS="$old_cppflags"
 	export LDFLAGS="$old_ldflags"
+	export LD_LIBRARY_PATH="$old_ld_lib_path"
 
     fi
 
@@ -776,7 +799,7 @@ function get_index {
     fi
     [ -z "${i// /}" ] && i=-1
     #echo "$lc_name $i" >> error.cfg
-    if [ "$i" -ge "0" ] && [ "$_N_archives" -le "$i" ]; then
+    if [ "0" -le "$i" ] && [ "$i" -le "$_N_archives" ]; then
 	echo -n "$i"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
@@ -787,7 +810,6 @@ function get_index {
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		if [ ! -z "$version" ]; then
-		    echo "CHECK $(pack_get --version $v) $version" >> test
 		    if [ "$(pack_get --version $v)" == "$version" ]; then
 			echo -n "$i"
 		    else
@@ -902,7 +924,7 @@ module-whatis "Loads \$modulename (\$version), compiler \$compiler."
 
 EOF
     # Add pre loaders if needed
-    if [ ! -z "$load" ]; then
+    if [ ! -z "${load// /}" ]; then
 	    cat <<EOF >> $mfile
 # This module will load the following modules
 EOF
@@ -916,7 +938,7 @@ EOF
     fi
 
     # Add requirement if needed
-    if [ ! -z "$require" ]; then
+    if [ ! -z "${require// /}" ]; then
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 EOF
@@ -929,7 +951,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [ ! -z "$conflict" ]; then
+    if [ ! -z "${conflict// /}" ]; then
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 EOF
@@ -1065,6 +1087,7 @@ function msg_install {
     fi
     echo " ================================== "
 }
+
 
 
 # Do the cmd 

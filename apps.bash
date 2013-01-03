@@ -31,6 +31,7 @@ source applications/meep-serial.bash # [gmp,libunistring,guile]
 
 timings For Photonics group installation
 
+install_all
 
 # Create a module with default all plotting tools
 create_module \

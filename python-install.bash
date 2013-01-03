@@ -31,6 +31,8 @@ source python/gpaw-setups.bash
 
 timings For python special packages
 
+install_all
+
 
 # Initialize the module read path
 old_path=$(get_module_path)

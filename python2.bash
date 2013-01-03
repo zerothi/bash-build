@@ -2,7 +2,6 @@
 add_package http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
 
 pack_set --alias python
-pack_set --index-alias python-2
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -20,7 +19,7 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
-pack_install
+install_all
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \
@@ -36,7 +35,7 @@ create_module \
 # Load the python just installed
 
 # The lookup name in the list for version number etc...
-set_parent python-2
+set_parent python[$(pack_get --version)]
 set_parent_exec python
 # Install all python packages
 source python-install.bash

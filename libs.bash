@@ -44,6 +44,8 @@ source libs/suitesparse.bash
 
 timings For sparse libraries
 
+install_all
+
 # We install the module scripts here:
 create_module \
     --module-path $(get_installation_path)/modules-npa \
@@ -76,3 +78,4 @@ create_module \
     -M mpi.atlas.scalapack/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi atlas scalapack)
+
