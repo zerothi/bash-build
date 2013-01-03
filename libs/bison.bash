@@ -14,6 +14,3 @@ pack_set --command "./configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
-
-tmp="$(which bison)"
-[ "${tmp:0:1}" != "/" ] && \
