@@ -256,9 +256,12 @@ function add_package {
     _alias[$_N_archives]=$package
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
-	local tmp=${_index[$(lc ${_alias[$_N_archives]})]}
-	[ ! -z "$tmp" ] && \
-	    _index[$(lc ${_alias[$_N_archives]})]="$tmp $_N_archives"
+	local tmp="${_index[$(lc $package)]}"
+	if [ ! -z "$tmp" ]; then
+	    _index[$(lc $package)]="$tmp $_N_archives"
+	else
+	    _index[$(lc $package)]="$_N_archives"
+	fi
     fi
     # Default the module name to this:
     _installed[$_N_archives]=0
@@ -734,12 +737,16 @@ function get_index {
 	    -all|-a) all=1  ;;
 	esac
     done
-    local l=${#1} ; local lc_name=$(lc $1)
-    $(isnumber $1)
+    # Save the thing that we want to process...
+    local name=$(echo "$1"    | awk 'BEGIN { FS = "[\[\]]" } { print $1 }')
+    local version=$(echo "$1" | awk 'BEGIN { FS = "[\[\]]" } { print $2 }')
+    echo "HELLO $1 $name $version" >> test
+    local l=${#name} ; local lc_name=$(lc $name)
+    $(isnumber $name)
     if [ "$?" -eq "0" ]; then # We have a number
-	[ "$1" -gt "$_N_archives" ] && return 1
-	[ "$1" -lt 0 ] && return 1
-	echo -n "$1"
+	[ "$name" -gt "$_N_archives" ] && return 1
+	[ "$name" -lt 0 ] && return 1
+	echo -n "$name"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
 	return 0
@@ -751,9 +758,21 @@ function get_index {
 	    do_debug --return get_index
 	    return 0
 	else
+	    local v
+	    i=-1
             # Select the latest per default..
+	    echo "CHECK-list $lc_name ${_index[$lc_name]}" >> test
 	    for v in ${_index[$lc_name]} ; do
-		i=$v
+		if [ ! -z "$version" ]; then
+		    echo "CHECK $v $(pack_get --version $v) $version" >> test
+		    if [ "$(pack_get --version $v)" == "$version" ]; then
+			echo "SUCCESS $(pack_get --version $v) $version" >> test
+			i=$v
+			break
+		    fi
+		else
+		    i=$v
+		fi
 	    done
 	fi
     else
@@ -771,6 +790,14 @@ function get_index {
 	for i in `seq 0 $_N_archives` ; do
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
+		if [ ! -z "$version" ]; then
+		    echo "CHECK $(pack_get --version $v) $version" >> test
+		    if [ "$(pack_get --version $v)" == "$version" ]; then
+			echo -n "$i"
+		    else
+			continue # We need to continue the loop as the version did not match...
+		    fi
+		fi
 		echo -n "$i"
 		[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 		do_debug --return get_index
@@ -779,7 +806,7 @@ function get_index {
 	done
     done
     [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-    doerr "$1" "Could not find the archive in the list..."
+    doerr "$name" "Could not find the archive in the list..."
     do_debug --return get_index
 }
 

@@ -1,5 +1,7 @@
 # Then install HDF5
-add_package http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.8.10.tar.gz
+for p in 1.8.9 1.8.10 ; do
+
+add_package http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$p/src/hdf5-$p.tar.gz
 
 pack_set --alias hdf5-serial
 
@@ -27,3 +29,4 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
+done

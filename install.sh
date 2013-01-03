@@ -34,18 +34,21 @@ set_module_path $(get_installation_path)/modules
 #umask 0
 
 if [ $DEBUG -ne 0 ]; then
-    echo get CFLAGS $(edit_env --get CFLAGS)
-    $(edit_env --prepend '-hollo' CFLAGS)
-    echo get PREPEND CFLAGS $(edit_env --get CFLAGS)
-    $(edit_env --append '-hollo' CFLAGS)
-    echo get APPEND CFLAGS $(edit_env --get CFLAGS)
+    #echo get CFLAGS $(edit_env --get CFLAGS)
+    #$(edit_env --prepend '-hollo' CFLAGS)
+    #echo get PREPEND CFLAGS $(edit_env --get CFLAGS)
+    #$(edit_env --append '-hollo' CFLAGS)
+    #echo get APPEND CFLAGS $(edit_env --get CFLAGS)
     echo ""
-    add_package abc.tar.gz
-    add_package def.tar.gz
-    pack_set --module-requirement abc
+    add_package abc-1.8.2.tar.gz
+    add_package abc-1.8.3.tar.gz
+    add_package def-1.8.3.tar.gz
+    pack_set --module-requirement abc[1.8.2]
     for tmp in pack_get --module-requirement ; do
 	echo Checking $tmp
     done
+    echo Check version indexing...
+    echo $(pack_get --version abc[1.8.2]) $(pack_get --version abc) $(pack_get --version abc[1.8.3])
     add_package ghi.tar.gz
     pack_set $(list --pack-module-reqs def)
     echo PRE ALL: $(list --prefix 'PRE' abc def ghi )

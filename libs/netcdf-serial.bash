@@ -7,7 +7,7 @@ pack_set --alias netcdf-serial
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 # Add requirments when creating the module
-pack_set --module-requirement hdf5-serial
+pack_set --module-requirement hdf5-serial[1.8.9]
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
@@ -35,9 +35,7 @@ add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 # Add requirments when creating the module
-pack_set \
-    --module-requirement hdf5-serial \
-    --module-requirement netcdf-serial
+pack_set --module-requirement netcdf-serial
 
 pack_set --alias netcdf-fortran-serial
 pack_set --install-prefix $(get_installation_path)/$(pack_get --alias netcdf-serial)/$(pack_get --version netcdf-serial)/$(get_c)
