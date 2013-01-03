@@ -108,6 +108,7 @@ pack_set --command "cd ../Util/TBTrans"
 pack_set --command "make"
 pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/"
 
+pack_install
 
 
 create_module \

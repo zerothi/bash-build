@@ -2,11 +2,12 @@
 
 for v in \
     http://qe-forge.org/gf/download/frsrelease/116/347/espresso-5.0.1.tar.gz ; do
+
     add_package $v
     
     pack_set -s $IS_MODULE
 
-	pack_set --host-reject "ntch"
+    pack_set --host-reject "ntch"
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
@@ -52,6 +53,7 @@ for v in \
     pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
     pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
 
+    pack_install
 
     create_module \
     	--module-path $(get_installation_path)/modules-npa-apps \

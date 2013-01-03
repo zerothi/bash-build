@@ -8,3 +8,4 @@ source libs/colamd.bash
 source libs/ccolamd.bash
 source libs/cholmod.bash
 source libs/umfpack.bash
+

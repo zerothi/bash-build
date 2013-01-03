@@ -135,7 +135,7 @@ pack_set --command "cd ../../Eig2DOS"
 pack_set --command "make"
 pack_set --command "cp Eig2DOS $(pack_get --install-prefix)/bin/"
 
-
+pack_install
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \

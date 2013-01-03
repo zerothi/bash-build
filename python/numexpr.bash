@@ -13,7 +13,7 @@ for http in http://numexpr.googlecode.com/files/numexpr-1.4.2.tar.gz \
     pack_set --index-alias ${tmp:0:9}
     
     # Add requirments when creating the module
-    pack_set $(list --pack-module-reqs numpy) \
+    pack_set --module-requirement numpy \
 	--module-requirement cython
     
     # Install commands that it should run

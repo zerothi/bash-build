@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5[1.8.9] \
-    --module-requirement parallel-netcdf
+    --module-requirement pnetcdf
 
 
 # bugfix for the iter test!

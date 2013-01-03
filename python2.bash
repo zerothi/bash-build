@@ -19,7 +19,7 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
-install_all
+pack_install
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \

@@ -50,6 +50,7 @@ pack_set --command "cp $(pwd)/$tmp_file Make.sys"
 pack_set --command "make xcrysden"
 pack_set --command "prefix=$(pack_get --install-prefix) make install"
 
+pack_install
 
 if [ $(pack_get --installed) -eq 1 ]; then
     create_module \

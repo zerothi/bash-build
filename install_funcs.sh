@@ -172,7 +172,7 @@ function extract_archive {
     fi
     local ext=$(pack_get --ext $alias)
     [ "x$ext" == "xlocal" ] && return 0
-    docmd "$archive" $cmd $1/$archive
+    docmd "$alias" $cmd $1/$archive
 }
 
 # Local variables for archives to be installed
@@ -257,7 +257,6 @@ function add_package {
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
 	local tmp="${_index[$(lc $package)]}"
-	echo added $tmp >> test
 	if [ ! -z "$tmp" ]; then
 	    _index[$(lc $package)]="$tmp $_N_archives"
 	else
@@ -323,7 +322,7 @@ function pack_set {
 		# We do a crude check
 		# We have an argument
 		index=$(get_index $opt)
-		shift $#
+		shift $# ;; 
 	esac
     done
     # We now have index to be the correct spanning
@@ -331,34 +330,34 @@ function pack_set {
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]}$req"
 	# Remove dublicates:
-	req="$(echo $req | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
-	[ $TIMING -ne 0 ] && export _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
+	req="$(rem_dup $req)"
 	_mod_req[$index]="$req"
+	[ $TIMING -ne 0 ] && export _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
+	local tmp="" ; local v=""
+	local lc_name="$(lc ${_alias[$index]})"
 	if [ $_HAS_HASH -eq 1 ]; then
-	    local tmp=""
-	    for v in ${_index[${_alias[$index]}]} ; do
-		if [ "$v" -ne "$index" ]; then
-		    tmp="$tmp $v"
-		fi
+	    for v in ${_index[$lc_name]} ; do
+		[ "$v" -ne "$index" ] && tmp="$tmp $v"
 	    done
 	    if [ -z "$tmp" ]; then
-		unset _index[${_alias[$index]}]
+		unset _index[$lc_name]
 	    else
-		_index[${_alias[$index]}]="$tmp"
+		_index[$lc_name]="$tmp"
 	    fi
 	fi
 	_alias[$index]="$alias"
+	local lc_name="$(lc $alias)"
 	if [ $_HAS_HASH -eq 1 ]; then
-	    tmp=${_index[$(lc ${_alias[$index]})]}
+	    tmp="${_index[$lc_name]}"
 	    if [ -z "$tmp" ]; then
-		_index[$(lc ${_alias[$index]})]=$index
+		_index[$lc_name]="$index"
 	    else
-		_index[$(lc ${_alias[$index]})]="$tmp $index"
+		_index[$lc_name]="$tmp $index"
 	    fi
 	fi
     fi
@@ -384,15 +383,19 @@ export _pack_get_T=0.0
 function pack_get {
     do_debug --enter pack_get
     [ $TIMING -ne 0 ] && local time=$(add_timing)
-    local opt=$1 # Save the option passed
+    local opt="$1" # Save the option passed
     case $opt in
-	--*) opt=${opt:1} ;;
+	--*) opt="${opt:1}" ;;
+	-*) ;;
+	*)
+	    doerr "$1" "Could not determine the option for pack_get" ;;	    
     esac
     shift
     # We check whether a specific index is requested
     if [ $# -gt 0 ]; then
 	while [ $# -gt 0 ]; do
-	    index=$(get_index $1)
+	    local index=$(get_index $1)
+	    #echo $1 $index >&2
 	    shift
             # Process what is requested
 	    case $opt in
@@ -554,8 +557,20 @@ function list {
 
 
 function install_all {
+    # First we collect all options
     local i=0
-    for i in `seq 0 $_N_archives` ; do
+    while [ $# -ne 0 ]; do
+	local opt="$1" # Save the option passed
+	case $opt in
+	    --*) opt="${opt:1}" ;;
+	esac
+	shift
+	case $opt in
+	    -from|-f)    i="$(get_index $1)" ; shift ;;
+	    *) shift ;;
+	esac
+    done
+    for i in `seq $i $_N_archives` ; do
 	pack_install $i
     done
 }
@@ -662,8 +677,8 @@ function pack_install {
 	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs)"
 	old_ldflags="$LDFLAGS"
 	export LDFLAGS="$LDFLAGS $tmp"
-	old_ld_lib_path="$LD_LIBRARY_PATH"
-	export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs)"
+	#old_ld_lib_path="$LD_LIBRARY_PATH"
+	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs)"
 	
         # Show that we will install
 	msg_install --start $idx
@@ -723,7 +738,7 @@ function pack_install {
 	export CFLAGS="$old_cflags"
 	export CPPFLAGS="$old_cppflags"
 	export LDFLAGS="$old_ldflags"
-	export LD_LIBRARY_PATH="$old_ld_lib_path"
+	#export LD_LIBRARY_PATH="$old_ld_lib_path"
 
     fi
 
@@ -763,7 +778,7 @@ function get_index {
     # Save the thing that we want to process...
     local name=$(echo "$1"    | awk -F'[\\[\\]]' '{ print $1 }')
     local version=$(echo "$1" | awk -F'[\\[\\]]' '{ print $2 }')
-    local l=${#name} ; local lc_name=$(lc $name)
+    local l=${#name} ; local lc_name="$(lc $name)"
     $(isnumber $name)
     if [ "$?" -eq "0" ]; then # We have a number
 	[ "$name" -gt "$_N_archives" ] && return 1
@@ -780,7 +795,7 @@ function get_index {
 	    do_debug --return get_index
 	    return 0
 	else
-	    local v
+	    local v=""
 	    i=-1
             # Select the latest per default..
 	    for v in ${_index[$lc_name]} ; do
@@ -798,7 +813,7 @@ function get_index {
 	i=-1
     fi
     [ -z "${i// /}" ] && i=-1
-    #echo "$lc_name $i" >> error.cfg
+    #echo "$lc_name $i" >&2
     if [ "0" -le "$i" ] && [ "$i" -le "$_N_archives" ]; then
 	echo -n "$i"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
@@ -894,7 +909,9 @@ function create_module {
 		doerr "$opt" "Option for create_module $opt was not recognized"
 	esac
     done
-    require=${require% } ; load=${load% } ; conflict=${conflict% }
+    require="$(rem_dup $require)"
+    load="$(rem_dup $load)"
+    conflict="$(rem_dup $conflict)"
 
     # Create the file to which we need to install the module script
     if [ -z "$mod_path" ]; then
@@ -924,7 +941,7 @@ module-whatis "Loads \$modulename (\$version), compiler \$compiler."
 
 EOF
     # Add pre loaders if needed
-    if [ ! -z "${load// /}" ]; then
+    if [ ! -z "$load" ]; then
 	    cat <<EOF >> $mfile
 # This module will load the following modules
 EOF
@@ -938,7 +955,7 @@ EOF
     fi
 
     # Add requirement if needed
-    if [ ! -z "${require// /}" ]; then
+    if [ ! -z "$require" ]; then
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 EOF
@@ -951,7 +968,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [ ! -z "${conflict// /}" ]; then
+    if [ ! -z "$conflict" ]; then
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 EOF
@@ -1285,4 +1302,8 @@ function do_debug {
 	esac
     done
     echo $n >> DEBUG
+}
+
+function rem_dup {
+    echo -n "$(echo $@ | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
 }

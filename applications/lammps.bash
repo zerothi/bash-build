@@ -59,13 +59,14 @@ fi
 
 
 # Make commands
-pack_set --command "cp $(pwd)/$tmp_file MAKE/Makefile.npa"
+pack_set --command "mv $(pwd)/$tmp_file MAKE/Makefile.npa"
 pack_set --command "make $(get_make_parallel) npa"
 pack_set --command "make makelib"
 pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --install-prefix)/bin/lmp"
 
+pack_install
 
 
 create_module \

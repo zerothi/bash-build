@@ -31,7 +31,6 @@ source applications/meep-serial.bash # [gmp,libunistring,guile]
 
 timings For Photonics group installation
 
-install_all
 
 # Create a module with default all plotting tools
 create_module \
@@ -41,6 +40,4 @@ create_module \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement gnuplot) gnuplot) \
-    $(list --prefix '-L ' $(pack_get --module-requirement molden) molden) \
-    $(list --prefix '-L ' $(pack_get --module-requirement grace) grace) \
-    $(list --prefix '-L ' $(pack_get --module-requirement xcrysden) xcrysden)
+    $(list --prefix '-L ' $(pack_get --module-requirement molden grace xcrysden) molden grace xcrysden)

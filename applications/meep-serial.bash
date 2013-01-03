@@ -47,6 +47,8 @@ pack_set --command "make" \
     --command-flag "install"
 
 
+pack_install
+
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \
     -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \

@@ -7,14 +7,17 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
-pack_set $(list --pack-module-reqs numpy)
+pack_set --module-requirement numpy
+
+echo $(pack_get --module-requirement scipy)
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
-    export LD_RUN_PATH="$MKL_PATH/lib/intel64"
+    # TODO
+    #export LD_RUN_PATH="$MKL_PATH/lib/intel64"
 
 elif $(is_c gnu) ; then
     # The atlas requirement should come from numpy
@@ -30,8 +33,10 @@ fi
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+# TODO
 module load $(get_default_modules)
 module load $(pack_get --module-name pcre swig)
 module unload $(pack_get --module-name pcre swig)
 module unload $(get_default_modules)
-export LD_RUN_PATH=""
+# TODO
+#export LD_RUN_PATH=""

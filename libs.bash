@@ -1,9 +1,11 @@
 msg_install --message "Installing all libraries..."
-#source libs/gmp.bash
-#source libs/guile.bash
 
 # Library used by MANY packages
 source libs/openmpi-hpc.bash
+
+#source libs/gmp.bash
+#source libs/guile.bash
+
 
 # Default fftw libs
 source libs/fftw2.bash

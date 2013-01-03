@@ -11,7 +11,7 @@ pack_set --directory $(pack_get --directory)_src
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     cc=intel
-    tmp=$(pack_get --alias)-$(pack_get --version).$cc
+    tmp=$(pack_get --alias)-$(pack_get --version).make
 
     cat <<EOF > $tmp
 FC90 = $FC
@@ -64,6 +64,7 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp _obj_$cc/dftb+ $(pack_get --install-prefix)/bin/"
 
+pack_install
 
 create_module \
     --module-path $(get_installation_path)/modules-npa-apps \

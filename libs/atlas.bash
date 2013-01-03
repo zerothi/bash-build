@@ -40,7 +40,7 @@ pack_set --command "cd .."
 pack_set --command "ranlib liblapack.a"
 pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
 
-
+# TODO
 # It does depend on LAPACK, only for testing purposes!
 module load $(get_default_modules)
 module load $(pack_get --module-name lapack)

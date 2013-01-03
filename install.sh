@@ -79,7 +79,15 @@ if [ $DEBUG -ne 0 ]; then
     else
 	echo Success on is_c
     fi
+    echo Duplicate removal:
+    echo $(rem_dup 1290 0935 1 4- 81 1290 senthu seuth stneo[2314] seuth[243])
     echo "Done with DEBUG"
+
+    #
+    #for i in "${!_index[@]}"
+    #do
+#	echo "value: ${_index[$i]}\tkey: $i"
+ #   done
 fi
 
 # Install all libraries
