@@ -1,5 +1,5 @@
-for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz ; do
-#    http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-428.tar.gz ; do
+for pack in http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-trunk-427.tgz \
+    http://www.icmab.es/dmmis/leem/siesta/CodeAccess/Code/siesta-trunk-428.tgz ; do
 
 add_package $pack
 
@@ -38,7 +38,7 @@ FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lhdf5hl_fortran -lhdf5_fortran -lz\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\

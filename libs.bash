@@ -3,7 +3,7 @@ msg_install --message "Installing all libraries..."
 #source libs/guile.bash
 
 # Library used by MANY packages
-source libs/openmpi-niflheim.bash
+source libs/openmpi-hpc.bash
 
 # Default fftw libs
 source libs/fftw2.bash
