@@ -738,9 +738,8 @@ function get_index {
 	esac
     done
     # Save the thing that we want to process...
-    local name=$(echo "$1"    | awk 'BEGIN { FS = "[\[\]]" } { print $1 }')
-    local version=$(echo "$1" | awk 'BEGIN { FS = "[\[\]]" } { print $2 }')
-    echo "HELLO $1 $name $version" >> test
+    local name=$(echo "$1"    | awk -F'[\\[\\]]' '{ print $1 }')
+    local version=$(echo "$1" | awk -F'[\\[\\]]' '{ print $2 }')
     local l=${#name} ; local lc_name=$(lc $name)
     $(isnumber $name)
     if [ "$?" -eq "0" ]; then # We have a number
@@ -761,17 +760,14 @@ function get_index {
 	    local v
 	    i=-1
             # Select the latest per default..
-	    echo "CHECK-list $lc_name ${_index[$lc_name]}" >> test
 	    for v in ${_index[$lc_name]} ; do
 		if [ ! -z "$version" ]; then
-		    echo "CHECK $v $(pack_get --version $v) $version" >> test
 		    if [ "$(pack_get --version $v)" == "$version" ]; then
-			echo "SUCCESS $(pack_get --version $v) $version" >> test
-			i=$v
+			i="$v"
 			break
 		    fi
 		else
-		    i=$v
+		    i="$v"
 		fi
 	    done
 	fi
