@@ -3,6 +3,8 @@ add_package https://wiki.fysik.dtu.dk/ase-files/python-ase-3.6.0.2515.tar.gz
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject ntch
+
 pack_set --alias ase
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)

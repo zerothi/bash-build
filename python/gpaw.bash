@@ -3,6 +3,8 @@ add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-0.9.0.8965.tar.gz
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject "ntch-2857"
+
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw

@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
 
 pack_set --host-reject ntch --host-reject zeroth \
-	--host-reject thul --host-reject surt \
+    --host-reject thul --host-reject surt \
     --host-reject slid
 
 pack_set --module-requirement openmpi \
