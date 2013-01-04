@@ -4,4 +4,4 @@ set_default_modules ""
 
 source scripts/spbs.bash
 
-install_all
+install_all --from spbs

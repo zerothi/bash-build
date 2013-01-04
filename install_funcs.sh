@@ -881,7 +881,7 @@ function create_module {
     local name;local version;local path; local help; local whatis
     local env=""
     local mod_path=""
-    local force=0
+    local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
     while [ $# -gt 0 ]; do
 	local opt="$1" # Save the option passed
@@ -948,10 +948,13 @@ EOF
 	    if [ $(pack_get --installed $tmp) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "module load $tmp_load" >> $mfile
+	    elif [ $force -eq 0 ]; then
+		no_install=1
 	    fi
 	done
 	echo "" >> $mfile
     fi
+    
 
     # Add requirement if needed
     if [ ! -z "${require// /}" ]; then
@@ -962,6 +965,8 @@ EOF
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "prereq $tmp_load" >> $mfile
+	    elif [ $force -eq 0 ]; then
+		no_install=1
 	    fi
 	done
 	echo "" >> $mfile
@@ -975,6 +980,8 @@ EOF
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		echo "conflict $tmp_load" >> $mfile
+	    elif [ $force -eq 0 ]; then
+		no_install=1
 	    fi
 	done
 	echo "" >> $mfile
@@ -1020,6 +1027,9 @@ EOF
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
+    if [ $no_install -eq 1 ] && [ $force -eq 0 ]; then
+	rm $mfile
+    fi
     [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
     do_debug --return create_module
 }
