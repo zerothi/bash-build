@@ -941,7 +941,7 @@ module-whatis "Loads \$modulename (\$version), compiler \$compiler."
 
 EOF
     # Add pre loaders if needed
-    if [ ! -z "$load" ]; then
+    if [ ! -z "${load// /}" ]; then
 	    cat <<EOF >> $mfile
 # This module will load the following modules
 EOF
@@ -955,7 +955,7 @@ EOF
     fi
 
     # Add requirement if needed
-    if [ ! -z "$require" ]; then
+    if [ ! -z "${require// /}" ]; then
 	cat <<EOF >> $mfile
 # List the requirements for loading which this module does want to use
 EOF
@@ -968,7 +968,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [ ! -z "$conflict" ]; then
+    if [ ! -z "${conflict// /}" ]; then
 	cat <<EOF >> $mfile
 # List the conflicts which this module does not want to take part in
 EOF
@@ -981,7 +981,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [ ! -z "$env" ]; then
+    if [ ! -z "${env// /}" ]; then
 	cat <<EOF >> $mfile
 # Adds any specific environment variables
 EOF
@@ -1083,7 +1083,7 @@ function msg_install {
     [ "$action" -ne "4" ] && \
 	local cmd=$(arc_cmd $(pack_get --ext $1) )
     echo " ================================== "
-    echo "            $n"
+    echo "   $n"
     if [ "$action" -eq "1" ]; then
 	echo " File    : $(pack_get --archive $1)"
 	echo " Ext     : $(pack_get --ext $1)"
