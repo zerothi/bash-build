@@ -39,6 +39,7 @@ pack_set --package openmpi
 pack_set --alias openmpi
 pack_set --version hpc
 pack_set --installed 1
+pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 
 module load $(get_default_modules)

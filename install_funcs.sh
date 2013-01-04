@@ -813,7 +813,7 @@ function get_index {
 	i=-1
     fi
     [ -z "${i// /}" ] && i=-1
-    #echo "$lc_name $i" >&2
+    #echo "$lc_name $version $i $l" >&2
     if [ "0" -le "$i" ] && [ "$i" -le "$_N_archives" ]; then
 	echo -n "$i"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
@@ -825,10 +825,9 @@ function get_index {
 	    local tmp=$(pack_get --$lookup $i)
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		if [ ! -z "$version" ]; then
-		    if [ "$(pack_get --version $v)" == "$version" ]; then
-			echo -n "$i"
-		    else
-			continue # We need to continue the loop as the version did not match...
+		    if [ "$(pack_get --version $i)" != "$version" ]; then
+            # We need to continue the loop as the version did not match...
+			continue 
 		    fi
 		fi
 		echo -n "$i"
