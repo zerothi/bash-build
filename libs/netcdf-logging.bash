@@ -1,4 +1,4 @@
-if $(is_host zerothi) ; then
+if $(is_host zerothi) || $(is_host ntch-2) ; then
 
 # Now we can install NetCDF (we need the C version to be first added!)
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.gz
