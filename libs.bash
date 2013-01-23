@@ -37,6 +37,7 @@ source libs/hdf5.bash
 source libs/hdf5-serial.bash
 source libs/parallel-netcdf.bash
 source libs/netcdf.bash
+source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
 timings For netcdf and related libraries
