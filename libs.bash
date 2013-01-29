@@ -47,6 +47,8 @@ source libs/suitesparse.bash
 
 timings For sparse libraries
 
+#source libs/mumps.bash
+
 install_all
 
 # We install the module scripts here:
