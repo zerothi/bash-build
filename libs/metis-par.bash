@@ -1,5 +1,6 @@
 # First install zlib, which is a simple library
-add_package http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz
+add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.2.tar.gz
+http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.0.2.tar.gz
 
 pack_set --alias mumps
 
