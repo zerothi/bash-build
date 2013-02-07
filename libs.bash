@@ -43,7 +43,7 @@ source libs/netcdf-serial.bash
 timings For netcdf and related libraries
 
 # A sparse library
-#source libs/suitesparse.bash
+source libs/suitesparse.bash
 
 timings For sparse libraries
 

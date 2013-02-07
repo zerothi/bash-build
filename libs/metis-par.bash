@@ -2,6 +2,8 @@ add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.2.ta
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --host-reject surt --host-reject thul
+
 pack_set --install-query $(pack_get --install-prefix)/lib/libparmetis.a
 
 pack_set --module-requirement openmpi
