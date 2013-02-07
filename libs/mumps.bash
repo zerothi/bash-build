@@ -1,120 +1,83 @@
-# First install zlib, which is a simple library
 add_package http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz
 
 pack_set --alias mumps
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $IS_MODULE
 
 # Required as the version has just been set
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmumps.a
 
+pack_set --module-requirement parmetis
+
 if $(is_c gnu) ; then
     pack_set --module-requirement atlas
     pack_set --module-requirement scalapack
-elif $(is_c intel) ; then
-#
-#  This file is part of MUMPS 4.10.0, built on Tue May 10 12:56:32 UTC 2011
-#
-#Begin orderings
-
-# NOTE that PORD is distributed within MUMPS by default. If you would like to
-# use other orderings, you need to obtain the corresponding package and modify
-# the variables below accordingly.
-# For example, to have Metis available within MUMPS:
-#          1/ download Metis and compile it
-#          2/ uncomment (suppress # in first column) lines
-#             starting with LMETISDIR,  LMETIS
-#          3/ add -Dmetis in line ORDERINGSF
-#             ORDERINGSF  = -Dpord -Dmetis
-#          4/ Compile and install MUMPS
-#             make clean; make   (to clean up previous installation)
-#
-#          Metis/ParMetis and SCOTCH/PT-SCOTCH (ver 5.1 and later) orderings are now available for MUMPS.
-#
-
-#SCOTCHDIR  = ${HOME}/scotch_5.1_esmumps
-#ISCOTCH    = -I$(SCOTCHDIR)/include 
-# You have to choose one among the following two lines depending on
-# the type of analysis you want to perform. If you want to perform only
-# sequential analysis choose the first (remember to add -Dscotch in the ORDERINGSF
-# variable below); for both parallel and sequential analysis choose the second 
-# line (remember to add -Dptscotch in the ORDERINGSF variable below)
-
-#LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
-#LSCOTCH    = -L$(SCOTCHDIR)/lib -lptesmumps -lptscotch -lptscotcherr
-
-
-LPORDDIR = $(topdir)/PORD/lib/
-IPORD    = -I$(topdir)/PORD/include/
-LPORD    = -L$(LPORDDIR) -lpord
-
-#LMETISDIR = /local/metis/
-#IMETIS    = # Should be provided if you use parmetis
-
-# You have to choose one among the following two lines depending on
-# the type of analysis you want to perform. If you want to perform only
-# sequential analysis choose the first (remember to add -Dmetis in the ORDERINGSF
-# variable below); for both parallel and sequential analysis choose the second 
-# line (remember to add -Dparmetis in the ORDERINGSF variable below)
-
-#LMETIS    = -L$(LMETISDIR) -lmetis
-#LMETIS    = -L$(LMETISDIR) -lparmetis -lmetis
-
-# The following variables will be used in the compilation process.
-# Please note that -Dptscotch and -Dparmetis imply -Dscotch and -Dmetis respectively.
-#ORDERINGSF = -Dscotch -Dmetis -Dpord -Dptscotch -Dparmetis
-ORDERINGSF  = -Dpord
-ORDERINGSC  = $(ORDERINGSF)
-
-LORDERINGS = $(LMETIS) $(LPORD) $(LSCOTCH)
-IORDERINGSF = $(ISCOTCH)
-IORDERINGSC = $(IMETIS) $(IPORD) $(ISCOTCH)
-
-#End orderings
-########################################################################
-################################################################################
-
-PLAT    =
-LIBEXT  = .a
-OUTC    = -o 
-OUTF    = -o 
-RM = /bin/rm -f
-CC = icc
-FC = ifort
-FL = ifort
-AR = xiar vr 
-#RANLIB = ranlib
-RANLIB  = echo
-SCALAP  = /local/SCALAPACK/libscalapack.a /local/BLACS/LIB/blacs_MPI-LINUX-0.a   /local/BLACS/LIB/blacsF77init_MPI-LINUX-0.a  /local/BLACS/LIB/blacs_MPI-LINUX-0.a
-INCPAR = -I/usr/local/include
-# LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
-LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llammpio -llamf77mpi -lmpi -llam -lutil -ldl -lpthread
-#LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
-INCSEQ = -I$(topdir)/libseq
-LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-#LIBBLAS = -L/usr/lib/xmm/ -lf77blas -latlas
-LIBBLAS = -L/local/BLAS -lblas
-LIBOTHERS = -lpthread
-#Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
-CDEFS   = -DAdd_
-
-#Begin Optimized options
-OPTF    = -O  -DALLOW_NON_INIT -nofor_main
-OPTL    = -O -nofor_main
-OPTC    = -O
-#End Optimized options
-INCS = $(INCPAR)
-LIBS = $(LIBPAR)
-LIBSEQNEEDED =
-
-    
 fi
+
+pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
+
+# We will create our own makefile from scratch (the included ones are ****)
+if $(is_c gnu) ; then
+    pack_set --command "sed -i '1 a\
+SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
+LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
+elif $(is_c intel) ; then
+    pack_set --command "sed -i '1 a\
+SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
+LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+fi
+
+pack_set --command "sed -i '1 a\
+LMETISDIR = $(pack_get --install-prefix parmetis) \n\
+IMETIS = $(list --INCDIRS parmetis) \n\
+LMETIS = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis -lmetis \n\
+\n\
+LPORDDIR = \$(topdir)/PORD/lib\n\
+IPORD = -I\$(topdir)/PORD/include\n\
+LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
+\n\
+ORDERINGSF = -Dpord -Dmetis -Dparmetis \n\
+ORDERINGSC = \$(ORDERINGSF) \n\
+\n\
+LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
+IORDERINGSF = \$(ISCOTCH) \n\
+IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
+\n\
+\n\
+PLAT = \n\
+LIBEXT = .a \n\
+OUTC = -o \n\
+OUTF = -o \n\
+RM = /bin/rm -f \n\
+CC = $MPICC \n\
+FC = $MPIF90 \n\
+FL = $MPIF90 \n\
+AR = $AR vr \n\
+RANLIB = ranlib \n\
+\n\
+LIBSEQ = -L\$(topdir)/libseq -Wl,-rpath=\$(topdir)/libseq -lmpiseq \n\
+INCSEQ = -I\$(topdir)/libseq \n\
+\n\
+LIBPAR = \$(SCALAP)\n\
+\n\
+LIBOTHERS = \n\
+\n\
+#Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)\n\
+CDEFS   = -DAdd_ \n\
+CDEFS   =  \n\
+\n\
+#Begin Optimized options\n\
+OPTF    = -O -DALLOW_NON_INIT -nofor-main\n\
+OPTL    = -O -nofor-main\n\
+OPTC    = -O\n\
+\n\
+INCS = \$(INCPAR) \n\
+LIBS = \$(LIBPAR) \n\
+LIBSEQNEEDED = \n' Makefile.inc"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "check" \
-    --command-flag "install"
+pack_set --command "make install"
 
