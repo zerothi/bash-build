@@ -127,6 +127,7 @@ done
 
 echo "#!/bin/sh"
 _spbs_add_PBS_option -N "\$name" "The name of the PBS script"
+_spbs_add_PBS_option -q "\$queue" "The queue that the script is submitted to"
 _spbs_add_PBS_option -l "nodes=\$nodes:ppn=\$ppn" "Determines the processors, nodes = computers, ppn = cores used on each computer [nodes=2:ppn=4] => 8 cpu's"
 _spbs_add_PBS_option -l "walltime=\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 _spbs_add_PBS_option -m "\$message" "Mail upon [a] = PBS abort, [e] = execution error, [b] = begin execution."
