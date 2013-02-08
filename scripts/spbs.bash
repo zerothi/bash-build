@@ -65,14 +65,15 @@ function _spbs_add_line {
 
 
 function _spbs_help {
-    local format="    %30s :  %s\n"
+    local format="    %25s :  %s\n"
     echo "Usage of \$(basename \$0): Aid in the creation of PBS scripts."
     echo ""
     printf "\$format" "--name|-N" "The name of the PBS job"
     printf "\$format" "--queue|-q" "Queue the job should be submitted to, only specifying queue will clear walltime."
     printf "\$format" "--walltime|-W" "The time of execution [hh:mm:ss]."
-    printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-hh,-mm can be combined)"
-    printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-hh,-mm can be combined)"
+    printf "\$format" "--days|-dd" "The time of execution in days. (-W,-dd,-hh,-mm can be combined)"
+    printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-dd,-hh,-mm can be combined)"
+    printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--nodes|-n" "Number of nodes requested"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
     printf "\$format" "--message-begin" "Mail when the job begins"
@@ -99,6 +100,7 @@ while [ \$# -ne 0 ]; do
         -name|-N) name="\$1" ; shift ;;
         -queue|-q) queue="\$1" ; shift ;;
         -walltime|-W) walltime="\$1" ; shift ;;
+        -days|-dd) walltime="\$((\$1*24)):\${walltime#*:}" ; shift ;;
         -hours|-hh) walltime="\$1:\${walltime#*:}" ; shift ;;
         -minutes|-mm) walltime="\${walltime%%:*}:\$1:\${walltime##*:}" ; shift ;;
         -nodes|-n) nodes="\$1" ; shift ;;
