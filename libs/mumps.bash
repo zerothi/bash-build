@@ -9,7 +9,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmumps.a
 
-pack_set --module-requirement parmetis
+pack_set --module-requirement parmetis[3.2.0]
 
 if $(is_c gnu) ; then
     pack_set --module-requirement atlas
@@ -66,7 +66,7 @@ LIBOTHERS = \n\
 \n\
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)\n\
 CDEFS   = -DAdd_ \n\
-CDEFS   =  \n\
+#CDEFS   = -D \n\
 \n\
 #Begin Optimized options\n\
 OPTF    = -O -DALLOW_NON_INIT -nofor-main\n\
@@ -78,6 +78,9 @@ LIBS = \$(LIBPAR) \n\
 LIBSEQNEEDED = \n' Makefile.inc"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_set --command "make $(get_make_parallel) alllib"
+pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
+pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
+pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "cp lib/lib*.a $(pack_get --install-prefix)/lib/"
 
