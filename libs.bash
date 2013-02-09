@@ -49,7 +49,8 @@ timings For sparse libraries
 
 #source libs/metis.bash
 source libs/metis-par.bash
-#source libs/mumps.bash
+source libs/metis-par-3.bash
+source libs/mumps.bash
 
 install_all
 
