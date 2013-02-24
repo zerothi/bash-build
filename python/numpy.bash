@@ -1,5 +1,7 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz
+# old_v 1.6.2
+for v in 1.7.0 ; do
+add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -58,6 +60,7 @@ EOF
     pack_set --command "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $tmp|g' numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's/\"ar\",/\"$AR\",/g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${FCFLAGS//-O3/-O2} $tmp\"\]:g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's:F90:F77:g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${FCFLAGS//-O3/-O2} $tmp\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e \"/'linker_so'/s|\(.-shared.\)|\1,'-L${tmp_lib//:/ -L}','-Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=}','$tmp'|g\" numpy/distutils/fcompiler/intel.py"
     pack_set --command "$(get_parent_exec) setup.py config" \
@@ -105,3 +108,4 @@ pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 
+done

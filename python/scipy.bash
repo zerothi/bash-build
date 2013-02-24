@@ -1,5 +1,7 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package http://downloads.sourceforge.net/project/scipy/scipy/0.11.0/scipy-0.11.0.tar.gz
+# new_v 0.12.0b1
+for v in 0.11.0 ; do 
+add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -38,3 +40,5 @@ module unload $(pack_get --module-name pcre swig)
 module unload $(get_default_modules)
 # TODO
 #export LD_RUN_PATH=""
+
+done

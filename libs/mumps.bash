@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 # Required as the version has just been set
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libmumps.a
+pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
 
 pack_set --module-requirement parmetis[3.2.0]
 

@@ -1,5 +1,7 @@
 # Then install Atlas
-add_package http://downloads.sourceforge.net/project/math-atlas/Stable/3.10.0/atlas3.10.0.tar.bz2
+# old_v 3.10.0
+for v in 3.10.1 ; do
+add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
 
 pack_set --directory ATLAS
 
@@ -46,3 +48,4 @@ module load $(get_default_modules)
 module load $(pack_get --module-name lapack)
 module unload $(pack_get --module-name lapack)
 module unload $(get_default_modules)
+done

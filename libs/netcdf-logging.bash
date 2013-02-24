@@ -12,7 +12,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
 # Add requirments when creating the module
-pack_set --module-requirement hdf5[1.8.9] \
+pack_set --module-requirement hdf5 \
     --module-requirement pnetcdf
 
 

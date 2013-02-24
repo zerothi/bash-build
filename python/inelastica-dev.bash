@@ -14,18 +14,16 @@ pack_set --module-requirement netcdf-serial \
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
-	--command-flag "--fcompiler=intelem" \
-	--command-flag "--compiler=intelem"
-
+    tmp="--fcompiler=intelem --compiler=intelem"
 elif $(is_c gnu) ; then
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
-	--command-flag "--fcompiler=gnu95" \
-	--command-flag "--compiler=unix"
-
+    tmp="--fcompiler=gnu95 --compiler=unix"
 fi
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+    --command-flag "$tmp"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
+    --command-flag "$tmp"
+
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 

@@ -6,7 +6,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 
 # Add requirments when creating the module
-pack_set --module-requirement hdf5[1.8.9] \
+pack_set --module-requirement hdf5 \
     --module-requirement pnetcdf
 
 

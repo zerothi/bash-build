@@ -1,5 +1,6 @@
 # Install the easiest first... OpenMPI
-add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.3.tar.gz
+# old_v  1.6.3
+add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.4.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
