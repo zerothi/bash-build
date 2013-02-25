@@ -1,7 +1,11 @@
 # Install Python 2.7.3
 add_package http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
 
-pack_set --alias python
+if $(is_host n-) ; do
+    pack_set --alias Python
+else
+    pack_set --alias python
+fi
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -35,7 +39,7 @@ create_module \
 # Load the python just installed
 
 # The lookup name in the list for version number etc...
-set_parent python[$(pack_get --version)]
+set_parent $(pack_get --alias)[$(pack_get --version)]
 set_parent_exec python
 # Install all python packages
 source python-install.bash

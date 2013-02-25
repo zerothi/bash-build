@@ -8,6 +8,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libfftw_mpi.a
 # Install commands that it should run
 pack_set --command "module load $(get_default_modules)"
 pack_set --command "module load $(pack_get --module-name openmpi)"
+
 pack_set --command "../configure" \
     --command-flag "--enable-mpi" \
     --command-flag "--prefix $(pack_get --install-prefix)"

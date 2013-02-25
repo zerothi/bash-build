@@ -9,6 +9,10 @@ pack_set --module-requirement openmpi
 
 # Prepare the make file
 tmp="sed -i -e"
+pack_set --command "module load" \
+    --command-flag "$(get_default_modules)" \
+    --command-flag "$(pack_get --module-name blas lapack)"
+
 pack_set --command "cp SLmake.inc.example SLmake.inc"
 pack_set --command "$tmp 's/FC[[:space:]]*=.*/FC = $MPIF90/g' SLmake.inc"
 pack_set --command "$tmp 's/CC[[:space:]]*=.*/CC = $MPICC/g' SLmake.inc"
@@ -26,11 +30,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp libscalapack.a $(pack_get --install-prefix)/lib/"
 
-# Blas and LAPACK are only needed for testing purposes
-#TODO
-module load $(get_default_modules)
-module load $(pack_get --module-name blas)
-module load $(pack_get --module-name lapack)
-module unload $(pack_get --module-name blas)
-module unload $(pack_get --module-name lapack)
-module unload $(get_default_modules)
+pack_set --command "module unload" \
+    --command-flag "$(pack_get --module-name lapack blas)" \
+    --command-flag "$(get_default_modules)"

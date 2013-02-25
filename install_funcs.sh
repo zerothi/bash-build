@@ -1106,7 +1106,7 @@ function msg_install {
 	echo " Version : $(pack_get --version $1)"
     fi
     if [ "$action" -eq "1" ]; then
-	module list
+	module list 2>&1
 	if [ "$?" -ne "0" ]; then
 	    doerr "module list" "Could not show module loaded files"
 	fi
