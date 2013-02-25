@@ -1,7 +1,11 @@
 # Install Python 3.3.0
 add_package http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tgz
 
-pack_set --alias python
+if $(is_host n-) ; do
+    pack_set --alias Python
+else
+    pack_set --alias python
+fi
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -33,7 +37,7 @@ create_module \
 
 # Install all relevant python packages
 # The lookup name in the list for version number etc...
-set_parent python[$(pack_get --version)]
+set_parent $(pack_get --alias)[$(pack_get --version)]
 set_parent_exec python3
 # Install all python packages
 source python-install.bash

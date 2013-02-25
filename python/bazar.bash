@@ -12,7 +12,9 @@ if [ "${tmp:0:1}" == "2" ]; then
     pack_set --install-query $(pack_get --install-prefix)/bin/bzr
     
     # Add requirments when creating the module
-    pack_set --module-requirement $(get_parent)
+    pack_set --module-requirement $(get_parent) \
+	--module-requirement cython
+    
     
     # Install commands that it should run
     pack_set --command "$(get_parent_exec) setup.py install" \
