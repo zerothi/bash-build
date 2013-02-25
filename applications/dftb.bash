@@ -1,4 +1,5 @@
-add_package http://www.student.dtu.dk/~nicpa/packages/dftb+_1.2.1.tar.gz
+for v in 1.2.1 1.2.2 ; do
+add_package http://www.student.dtu.dk/~nicpa/packages/dftb+_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -74,3 +75,5 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement)) \
     -L $(pack_get --alias)
+
+done
