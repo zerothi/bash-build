@@ -2,10 +2,10 @@
 # different libraries.
 
 # Default debugging variables
-[ -z "$TIMING" ] && TIMING=0
+: TIMING=0 #
 _NS=1000000000
-[ -z "$DEBUG" ]  && DEBUG=0
-[ -z "$FORCEMODULE" ]  && FORCEMODULE=0
+: DEBUG=0
+: FORCEMODULE=0
 
 _HAS_HASH=1
 if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
@@ -454,6 +454,13 @@ function pack_get {
     do_debug --return pack_get
 }
 
+function pack_exists {
+    local t=$(get_index $1)
+    local ret="$?"
+    [ -z "$t" ] && return 1
+    return $ret
+}
+
 
 # Function for editing environment variables
 # Mainly used for receiving and appending to variables
@@ -775,12 +782,12 @@ function get_index {
 	    -all|-a) all=1  ;;
 	esac
     done
+    [ ${#1} -eq 0 ] && return 1
     # Save the thing that we want to process...
     local name=$(echo "$1"    | awk -F'[\\[\\]]' '{ print $1 }')
     local version=$(echo "$1" | awk -F'[\\[\\]]' '{ print $2 }')
     local l=${#name} ; local lc_name="$(lc $name)"
-    $(isnumber $name)
-    if [ "$?" -eq "0" ]; then # We have a number
+    if $(isnumber $name) ; then # We have a number
 	[ "$name" -gt "$_N_archives" ] && return 1
 	[ "$name" -lt 0 ] && return 1
 	echo -n "$name"
@@ -789,6 +796,14 @@ function get_index {
 	return 0
     fi
     if [ $_HAS_HASH -eq 1 ]; then
+	if [[ ${_index[$lc_name]} ]]; then
+	    i=0
+	else
+	    do_debug --msg "HELLO not found $name"
+	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	    do_debug --return get_index
+	    return 1
+	fi
 	if [ $all -eq 1 ]; then
 	    echo -n "${_index[$lc_name]}"
 	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
@@ -838,8 +853,9 @@ function get_index {
 	done
     done
     [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-    doerr "$name" "Could not find the archive in the list..."
+    #doerr "$name" "Could not find the archive in the list..."
     do_debug --return get_index
+    return 1
 }
 
 # Has setting returns 1 for success and 0 for fail
@@ -1306,6 +1322,7 @@ function do_debug {
 	    --*) opt=${opt:1} ;;
 	esac ; shift
 	case $opt in
+	    -msg) n="$1" ; shift ;;
 	    -enter) n="enter routine: $1" ; shift ;;
 	    -return) n="return from routine: $1" ; shift ;;
 	esac

@@ -24,12 +24,21 @@ for v in \
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=sequential -lmkl_lapack95_lp64'"
 
     elif $(is_c gnu) ; then
-    	pack_set --module-requirement atlas \
+	if $(pack_exists atlas) ; then
+    	    pack_set --module-requirement atlas \
 	        --module-requirement scalapack
-    	tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-    	tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
+    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+	else
+    	    pack_set --module-requirement blas --module-requirement lapack \
+	        --module-requirement scalapack
+    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath blas) -lblas'"
+    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
+	fi
 
     else
 	    doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

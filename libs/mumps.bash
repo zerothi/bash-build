@@ -12,7 +12,11 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
 pack_set --module-requirement parmetis[3.2.0]
 
 if $(is_c gnu) ; then
-    pack_set --module-requirement atlas
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+    else
+	pack_set --module-requirement blas
+    fi
     pack_set --module-requirement scalapack
 fi
 
@@ -20,9 +24,15 @@ pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c gnu) ; then
-    pack_set --command "sed -i '1 a\
+    if $(pack_exists atlas) ; then
+	pack_set --command "sed -i '1 a\
 SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
+    else
+	pack_set --command "sed -i '1 a\
+SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
+LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
+    fi
 elif $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\

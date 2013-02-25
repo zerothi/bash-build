@@ -11,7 +11,11 @@ pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 --module-requirement umfpack
 # Check for Intel MKL or not
 if $(is_c gnu) ; then
-    pack_set --module-requirement atlas
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+    else
+	pack_set --module-requirement blas
+    fi
 fi
 
 cfg=$(pack_get --alias)-$(pack_get --version).site.cfg
@@ -68,8 +72,8 @@ EOF
 	--command-flag "--fcompiler=intelem" 
 
 elif $(is_c gnu) ; then
-
-    cat << EOF >> $cfg
+    if $(pack_exists atlas) ; then
+	cat << EOF >> $cfg
 library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib
 include_dirs = $(pack_get --install-prefix atlas)/include:$tmp_inc
 [atlas_threads]
@@ -79,24 +83,47 @@ atlas_libs = f77blas,cblas,atlas
 [lapack]
 lapack_libs = lapack_atlas
 EOF
-    pack_set --command "mv $(pwd)/$cfg site.cfg"
+
+pack_set --command "mv $(pwd)/$cfg site.cfg"
 
     # Correct the ATLAS understanding of the stuff
-    pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
-    pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
-    pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
+pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
+pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
+pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    tmp="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
+tmp="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
     # Remove the leading "-" for a flag
-    [ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
+[ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2} L${tmp_lib//:/ L} Wl,-rpath=${tmp_lib//:/ Wl,-rpath=})"
-    pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
-    pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
-	--command-flag "--compiler=unix" \
-	--command-flag "--fcompiler=gnu95" 
+tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2} L${tmp_lib//:/ L} Wl,-rpath=${tmp_lib//:/ Wl,-rpath=})"
+pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
+pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+    --command-flag "--compiler=unix" \
+    --command-flag "--fcompiler=gnu95" 
 
+    else
+	cat << EOF >> $cfg
+library_dirs = $(pack_get --install-prefix blas)/lib:$(pack_get --install-prefix lapack)/lib:$tmp_lib
+include_dirs = $(pack_get --install-prefix blas)/include:$(pack_get --install-prefix lapack)/include:$tmp_inc
+[lapack]
+lapack_libs = lapack
+EOF
+
+pack_set --command "mv $(pwd)/$cfg site.cfg"
+
+    # Add the flags to the EXTRAFLAGS for the GNU compiler
+tmp="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
+    # Remove the leading "-" for a flag
+[ "${tmp:0:1}" == "-" ] && tmp="${tmp:1}"
+    # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
+tmp="$(list --prefix ,\'- --suffix \' ${tmp//O3/O2} L${tmp_lib//:/ L} Wl,-rpath=${tmp_lib//:/ Wl,-rpath=})"
+pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${tmp:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
+pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
+    --command-flag "--compiler=unix" \
+    --command-flag "--fcompiler=gnu95" 
+    fi
 else
     doerr numpy "Has not been configured with $tmp compiler"
 

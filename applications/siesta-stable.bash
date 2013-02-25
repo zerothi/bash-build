@@ -60,13 +60,19 @@ LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl
 ' arch.make"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+	tmp="-llapack_atlas -lf77blas -lcblas -latlas"
+    else
+	pack_set --module-requirement blas --module-requirement lapack
+	tmp="-llapack -lblas"
+    fi
     pack_set --module-requirement scalapack
     pack_set --command "sed -i '1 a\
 LDFLAGS=$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --module-requirement))\n\
 \n\
-LIBS=\$(ADDLIB) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas\n\
+LIBS=\$(ADDLIB) -lscalapack $tmp\n\
 ' arch.make"
 
 else

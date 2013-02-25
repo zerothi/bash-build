@@ -15,9 +15,15 @@ if $(is_c intel) ; then
     LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas
-    pack_set --command "sed -i '1 a\
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+	pack_set --command "sed -i '1 a\
     LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"
+    else
+	pack_set --module-requirement blas --module-requirement lapack
+	pack_set --command "sed -i '1 a\
+    LIBS = $(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas' Makefile"
+    fi
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"

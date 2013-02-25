@@ -26,16 +26,26 @@ platform_id = "Xeon"
 EOF
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas \
-        --module-requirement scalapack
+    pack_set --module-requirement scalapack
     cat << EOF > $file
 compiler = '$CC $CFLAGS '
 mpicompiler = '$MPICC $CFLAGS '
 library_dirs += ['$(pack_get --install-prefix atlas)/lib']
-library_dirs += ['$(pack_get --install-prefix scalapack)/lib']
-libraries = ['scalapack','lapack_atlas','f77blas','cblas','atlas']
 EOF
-
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+	cat << EOF >> $file
+library_dirs += ['$(pack_get --install-prefix blas)/lib']
+library_dirs += ['$(pack_get --install-prefix lapack)/lib']
+libraries = ['scalapack','lapack','blas']
+EOF
+    else
+	pack_set --module-requirement lapack
+	cat << EOF >> $file
+library_dirs += ['$(pack_get --install-prefix atlas)/lib']
+libraries = ['scalapack','lapack','f77blas','cblas','atlas']
+EOF
+    fi
 fi
 
 tmp="$(list --prefix ,\' --suffix /include\' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))"

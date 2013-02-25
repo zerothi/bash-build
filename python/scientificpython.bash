@@ -18,8 +18,14 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
     # Add requirements when creating the module
-    pack_set --module-requirement atlas
-    tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
+    else $(pack_exists atlas) ; then
+	pack_set --module-requirement blas
+	pack_set --module-requirement lapack
+	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath blas lapack)"
+    fi
     tmp_compiler=unix
 else
     doerr Scientificpython "Could not determine compiler..."

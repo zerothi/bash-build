@@ -15,11 +15,18 @@ if $(is_c intel) ; then
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas
-    pack_set --command "../configure" \
-	--command-flag "LIBS='-lm $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas'" \
-	--command-flag "--prefix $(pack_get --install-prefix)"
-
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+	pack_set --command "../configure" \
+	    --command-flag "LIBS='-lm $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas'" \
+	    --command-flag "--prefix $(pack_get --install-prefix)"
+    else
+	pack_set --module-requirement blas
+	pack_set --module-requirement lapack
+	pack_set --command "../configure" \
+	    --command-flag "LIBS='-lm $(list --Wlrpath --LDFLAGS blas lapack) -llapack -lblas'" \
+	    --command-flag "--prefix $(pack_get --install-prefix)"
+    fi
 else
     doerr gsl "Have not adapted a correct BLAS/LAPACK library"
 fi

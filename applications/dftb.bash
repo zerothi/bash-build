@@ -28,7 +28,11 @@ LIBOPT = $MKL_LIB
 EOF
     
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas
+    if $(pack_exists atlas) ; then
+	pack_set --module-requirement atlas
+    else
+	pack_set --module-requirement blas --module-requirement lapack
+    fi
     cc=gnu
     tmp=$(pack_get --alias)-$(pack_get --version).$cc
     
@@ -40,10 +44,21 @@ CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
 LN = \$(FC90) 
 LNOPT = -fopenmp
+EOF
+    if $(pack_exists atlas) ; then
+	cat <<EOF >> $tmp
 ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)
 LIB_LAPACK = \$(ATLASOPT) -llapack_atlas
-LIB_BLAS   =  \$(ATLASOPT) -lf77blas -lcblas -latlas
+LIB_BLAS   = \$(ATLASOPT) -lf77blas -lcblas -latlas
 LIBOPT     = \$(ATLASOPT)
+EOF
+    else
+	cat <<EOF >> $tmp
+BLASOPT =  $(list --LDFLAGS --Wlrpath blas)
+LAPACKOPT =  $(list --LDFLAGS --Wlrpath lapack)
+LIB_LAPACK = \$(LAPACKOPT) -llapack
+LIB_BLAS   = \$(BLASOPT) -lblas
+LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)
 EOF
 
 else

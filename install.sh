@@ -81,13 +81,23 @@ if [ $DEBUG -ne 0 ]; then
     fi
     echo Duplicate removal:
     echo $(rem_dup 1290 0935 1 4- 81 1290 senthu seuth stneo[2314] seuth[243])
-    echo "Done with DEBUG"
 
-    #
-    #for i in "${!_index[@]}"
-    #do
-#	echo "value: ${_index[$i]}\tkey: $i"
- #   done
+    if $(pack_exists abc) ; then
+	echo "FOUND CORRECTLY PACKAGE abc"
+    else
+	echo "ERROR"
+    fi
+    if $(pack_exists aeudaoeusnoa) ; then
+	echo "ERROR FOUND PACKAGE aeudaoeusnoa $(get_index aeudaoeusnoa)"
+    else
+	echo "CORRECTLY DETERMINED THE PACKAGE TO NOT EXIST"
+    fi
+
+# for i in "${!_index[@]}"
+# do
+#    echo "value: ${_index[$i]}\tkey: $i"
+# done
+    echo "Done with DEBUG"
 fi
 
 # Install all libraries
