@@ -1,7 +1,7 @@
 # Install Python 2.7.3
 add_package http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
 
-if $(is_host n-) ; do
+if $(is_host n-) ; then
     pack_set --alias Python
 else
     pack_set --alias python

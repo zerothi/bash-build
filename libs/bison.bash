@@ -14,3 +14,6 @@ pack_set --command "./configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
+
+# We need to install this before we reach any other installation programs
+pack_install

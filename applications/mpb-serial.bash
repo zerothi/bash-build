@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch --host-reject zeroth \
     --host-reject thul --host-reject surt \
-    --host-reject slid
+    --host-reject slid --host-reject etse
 
 pack_set --alias mpb-serial
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)

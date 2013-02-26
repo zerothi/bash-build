@@ -11,6 +11,10 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set --module-requirement numpy
 
+if [ $(pack_get --installed swig) -eq 1 ]; then
+    pack_set --command "module load $(get_default_modules) $(pack_get --module-name pcre swig)"
+fi
+
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
@@ -33,12 +37,8 @@ fi
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
-# TODO
-module load $(get_default_modules)
-module load $(pack_get --module-name pcre swig)
-module unload $(pack_get --module-name pcre swig)
-module unload $(get_default_modules)
-# TODO
-#export LD_RUN_PATH=""
+if [ $(pack_get --installed swig) -eq 1 ]; then
+    pack_set --command "module unload $(pack_get --module-name swig pcre) $(get_default_modules)"
+fi
 
 done

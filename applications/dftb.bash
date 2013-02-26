@@ -60,7 +60,7 @@ LIB_LAPACK = \$(LAPACKOPT) -llapack
 LIB_BLAS   = \$(BLASOPT) -lblas
 LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)
 EOF
-
+    fi
 else
     doerr dftb "Could not find compiler $(get_c)"
 
