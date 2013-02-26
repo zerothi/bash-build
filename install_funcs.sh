@@ -2,10 +2,10 @@
 # different libraries.
 
 # Default debugging variables
-: TIMING=0 #
+[ -z "$TIMING" ] && TIMING=0
 _NS=1000000000
-: DEBUG=0
-: FORCEMODULE=0
+[ -z "$DEBUG" ] && DEBUG=0
+[ -z "$FORCEMODULE" ] && FORCEMODULE=0
 
 _HAS_HASH=1
 if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
