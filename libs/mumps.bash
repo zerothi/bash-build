@@ -4,6 +4,8 @@ pack_set --alias mumps
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject surt --host-reject thul
+
 # Required as the version has just been set
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
