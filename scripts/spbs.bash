@@ -35,7 +35,10 @@ elif [ "x\$_hostname" == "xsurt" ]; then
 else
     ppn=4
 fi
-if [ "xn-" == "x\${_hostname:0:2}" ]; then
+if [ "xn-" == "x\${_hostname:0:2}" ] || \
+   [ "xgray" == "x\${_hostname:0:4}" ] || \
+   [ "xhpc-fe" == "x\${_hostname:0:6}" ]
+then
     queue="fonaque"
 fi
 message=""
