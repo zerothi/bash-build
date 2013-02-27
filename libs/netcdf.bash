@@ -1,9 +1,16 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.gz
+for v in 4.3.0-rc2 4.2.1.1 ; do
+add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --alias netcdf
+pack_set --version $v
+
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
+
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5 \
@@ -35,12 +42,12 @@ pack_set --command "make install"
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias netcdf)/$(pack_get --version netcdf)/$(get_c)
+pack_set --install-prefix $(get_installation_path)/$(pack_get --alias netcdf[$v])/$(pack_get --version netcdf[$v])/$(get_c)
 
 # Add requirments when creating the module
-pack_set --module-requirement netcdf
+pack_set --module-requirement netcdf[$v]
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
+pack_set --install-query $(pack_get --install-prefix netcdf[$v])/lib/libnetcdff.a
 
 tmp_cppflags="-DgFortran"
 
@@ -58,3 +65,4 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
+done
