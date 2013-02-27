@@ -1,10 +1,12 @@
 unset tmp
 function tmp {
+    pack_set -s $IS_MODULE
     pack_set --alias vasp
     pack_set --host-reject ntch
     pack_set --directory VASP
     pack_set --prefix-and-module \
 	$(pack_get --alias)/POTCARS/$(pack_get --version)
+    pack_set --command "mkdir -p $(dirname $(pack_get --install-prefix))"
     pack_set --command "rm -rf $(pack_get --install-prefix)"
     pack_set --command "mkdir tmp"
     pack_set --command "cd tmp"
