@@ -1,8 +1,8 @@
 if [ ! -z "$MKL_PATH" ] ; then
-add_package fftw_intel-2.local
+add_package fftw-2.local
 
 pack_set --directory .
-pack_set --version 2
+pack_set --version intel
 pack_set --prefix-and-module $(pack_get --package)/$(pack_get --version)/$(get_c)
 pack_set -s $IS_MODULE
 
@@ -63,5 +63,10 @@ pack_set --command "make libintel64" \
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(get_default_modules)"
+
+# Install a link to the include files
+pack_set --command "cd $(pack_get --install-prefix)"
+# Needs to be a softlink!
+pack_set --command "ln -fs $MKL_PATH/include/fftw include"
 
 fi

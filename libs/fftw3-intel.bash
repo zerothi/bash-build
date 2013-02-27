@@ -3,8 +3,7 @@ add_package fftw_intel-3.local
 
 pack_set --directory .
 pack_set --version 3
-pack_set --prefix-and-module $(pack_get --package)/$(pack_get --version)/$(get_c)
-pack_set -s $IS_MODULE
+pack_set --install-prefix $(pack_get --install-prefix fftw[intel])
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw3xf.a
 

@@ -667,10 +667,10 @@ function pack_install {
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE) ; then
 	    create_module --force \
-		-n $(pack_get --alias $idx) \
-		-v $(pack_get --version $idx) \
-		-M $(pack_get --module-name $idx) \
-		-P $(pack_get --install-prefix $idx)
+		-n "$(pack_get --alias $idx)" \
+		-v "$(pack_get --version $idx)" \
+		-M "$(pack_get --module-name $idx)" \
+		-P "$(pack_get --install-prefix $idx)"
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
