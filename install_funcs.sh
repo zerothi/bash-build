@@ -30,7 +30,13 @@ function get_hostname { echo -n "$_host" ; }
 
 _prefix=""
 # Instalation path
-function set_installation_path {          _prefix=$1 ; }
+function set_installation_path {          
+    _prefix=$1
+    # Create the module folders
+    mkdir -p $_prefix/modules
+    mkdir -p $_prefix/modules-npa
+    mkdir -p $_prefix/modules-npa-apps
+}
 function get_installation_path { echo -n $_prefix ; }
 
 _c=""
