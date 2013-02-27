@@ -35,6 +35,9 @@ elif [ "x\$_hostname" == "xsurt" ]; then
 else
     ppn=4
 fi
+if [ "xn-" == "x\${_hostname:0:2}" ]; then
+    queue="fonaque"
+fi
 message=""
 mail=""
 inout=""

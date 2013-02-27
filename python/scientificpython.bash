@@ -21,7 +21,7 @@ elif $(is_c gnu) ; then
     if $(pack_exists atlas) ; then
 	pack_set --module-requirement atlas
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
-    else $(pack_exists atlas) ; then
+    else
 	pack_set --module-requirement blas
 	pack_set --module-requirement lapack
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath blas lapack)"
