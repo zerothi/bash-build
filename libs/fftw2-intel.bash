@@ -1,0 +1,67 @@
+if [ ! -z "$MKL_PATH" ] ; then
+add_package fftw_intel-2.local
+
+pack_set --directory .
+pack_set --version 2
+pack_set --prefix-and-module $(pack_get --package)/$(pack_get --version)/$(get_c)
+pack_set -s $IS_MODULE
+
+pack_set --install-query $(pack_get --install-prefix)/lib/libfftw2xf.a
+
+# Create the directory (we are not sure that the makefiles will do...)
+pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+
+# Install the C wrappers (in both precisions)
+pack_set --command "cd $MKL_PATH/interfaces/fftw2xc"
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_LIBNAME=libfftw2xc_SINGLE.a" \
+    --command-flag "PRECISION=MKL_SINGLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_LIBNAME=libfftw2xc_DOUBLE.a" \
+    --command-flag "PRECISION=MKL_DOUBLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+
+# Install the fortran wrappers
+pack_set --command "cd $MKL_PATH/interfaces/fftw2xf"
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "i8=no" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_LIBNAME=libfftw2xf_SINGLE.a" \
+    --command-flag "PRECISION=MKL_SINGLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "i8=no" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_LIBNAME=libfftw2xf_DOUBLE.a" \
+    --command-flag "PRECISION=MKL_DOUBLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+
+pack_set --command "cd $MKL_PATH/interfaces/fftw2x_cdft"
+pack_set --command "module load $(get_default_modules) $(pack_get --module-name openmpi)"
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "mpi=openmpi" \
+    --command-flag "interface=lp64" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "PRECISION=MKL_SINGLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+
+pack_set --command "make libintel64" \
+    --command-flag "compiler=intel" \
+    --command-flag "mpi=openmpi" \
+    --command-flag "interface=lp64" \
+    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "PRECISION=MKL_DOUBLE"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+
+pack_set --command "module unload $(pack_get --module-name openmpi) $(get_default_modules)"
+
+fi

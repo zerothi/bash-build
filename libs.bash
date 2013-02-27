@@ -10,6 +10,8 @@ source libs/openmpi-hpc.bash
 # Default fftw libs
 source libs/fftw2.bash
 source libs/fftw3.bash
+source libs/fftw2-intel.bash
+source libs/fftw3-intel.bash
 
 # Default packages for many libs
 source libs/blas.bash
