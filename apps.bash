@@ -3,6 +3,7 @@ msg_install --message "Installing the applications..."
 
 source applications/vasp.bash
 source applications/vasp-intel.bash
+source applications/vasp-potcar.bash
 
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
