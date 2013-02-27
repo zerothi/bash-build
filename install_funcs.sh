@@ -38,6 +38,11 @@ _c=""
 function set_c {          _c=$1 ; }
 function get_c { echo -n $_c ; }
 
+_crt_version=0
+# Instalation path
+function set_version_def   { _crt_version=1 ; }
+function unset_version_def { _crt_version=0 ; }
+
 _parent_package=""
 # The parent package (for instance Python)
 function set_parent {          _parent_package=$1 ; }
@@ -946,7 +951,7 @@ function create_module {
 set modulename  $name
 set version	$version
 set compiler	$(get_c)
-set basepath	$path
+set basepath	${path//$version/\$version}
 
 proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
@@ -958,7 +963,7 @@ EOF
     # Add pre loaders if needed
     if [ ! -z "${load// /}" ]; then
 	    cat <<EOF >> $mfile
-# This module will load the following modules
+# This module will load the following modules:
 EOF
 	for tmp in $load ; do
 	    if [ $(pack_get --installed $tmp) -ne 0 ]; then
@@ -975,7 +980,7 @@ EOF
     # Add requirement if needed
     if [ ! -z "${require// /}" ]; then
 	cat <<EOF >> $mfile
-# List the requirements for loading which this module does want to use
+# Requirements for the module:
 EOF
 	for tmp in $require ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
@@ -990,7 +995,7 @@ EOF
     # Add conflict if needed
     if [ ! -z "${conflict// /}" ]; then
 	cat <<EOF >> $mfile
-# List the conflicts which this module does not want to take part in
+# Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
@@ -1005,7 +1010,7 @@ EOF
     # Add conflict if needed
     if [ ! -z "${env// /}" ]; then
 	cat <<EOF >> $mfile
-# Adds any specific environment variables
+# Specific environment variables:
 EOF
 	for tmp in $env ; do
 	    # Partition into [s|a|p]
@@ -1044,7 +1049,16 @@ EOF
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
     done
     if [ $no_install -eq 1 ] && [ $force -eq 0 ]; then
-	rm $mfile
+	rm -f $mfile
+    fi
+    # If we are to create the default version module we 
+    # can add this version to the .version file:
+    if [ $_crt_version -eq 1 ]; then
+	cat <<EOF > $(dirname $mfile)/.version
+#%Module1.0
+#####################################################################
+set ModulesVersion $(basename $mfile)
+EOF
     fi
     [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
     do_debug --return create_module
