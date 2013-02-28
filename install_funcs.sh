@@ -945,12 +945,19 @@ function create_module {
     else
 	local mfile=$mod_path/$mod
     fi
+    
+    # If the file exists simply return
+    if [ -e "$mfile" ] && [ 0 -eq $force ]; then
+        [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
+        do_debug --return create_module
+        return 0
+    fi
 
     # First create directory if it does not exist:
     mkdir -p $(dirname $mfile)
     
     # Create the module file
-    cat <<EOF > $mfile
+    cat <<EOF > "$mfile"
 #%Module1.0
 #####################################################################
 
