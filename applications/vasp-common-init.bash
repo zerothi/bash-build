@@ -1,3 +1,4 @@
+pack_set -s $IS_MODULE
 pack_set --alias vasp
 pack_set --host-reject ntch
 pack_set --directory VASP
