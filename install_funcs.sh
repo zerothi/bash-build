@@ -749,6 +749,9 @@ function pack_install {
 	# Unload the module itself in case of PRELOADING
 	if $(has_setting $PRELOAD_MODULE) ; then
 	    module unload $(pack_get --module-name $idx)
+	    # We need to clean up, in order to force the
+	    # module creation.
+	    rm -f $(get_module_path)/$(pack_get --module-name $idx)
 	fi
 
 	export FCFLAGS="$old_fcflags"
@@ -1057,6 +1060,8 @@ EOF
 #	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH  \$basepath/man"
+    _add_module_if -F $force -d "$path/lib/python" $mfile \
+	"prepend-path PYTHONPATH  \$basepath/lib/python"
     for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
