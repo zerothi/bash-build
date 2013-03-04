@@ -17,6 +17,8 @@ source applications/gnuplot.bash
 source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
+source applications/vmd.bash
+source applications/vmd-text.bash
 
 timings For GUI plots installation
 
