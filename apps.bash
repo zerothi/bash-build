@@ -1,9 +1,6 @@
 #source applications/git.bash
 msg_install --message "Installing the applications..."
 
-source applications/vasp.bash
-source applications/vasp-intel.bash
-source applications/vasp-potcar.bash
 
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
@@ -27,6 +24,11 @@ source applications/qespresso.bash
 source applications/wannier.bash
 source applications/gulp.bash
 
+# Needs to be installed AFTER wannier90 :)
+#source applications/vasp.bash
+#source applications/vasp-intel.bash
+#source applications/vasp-potcar.bash
+
 timings For requested dynamics/DFT codes
 
 # Specfial photonics applications
@@ -37,7 +39,6 @@ source applications/meep-serial.bash # [gmp,libunistring,guile]
 
 timings For Photonics group installation
 
-
 # Create a module with default all plotting tools
 create_module \
     --module-path $(get_installation_path)/modules-npa \
@@ -47,3 +48,9 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement gnuplot) gnuplot) \
     $(list --prefix '-L ' $(pack_get --module-requirement molden grace xcrysden) molden grace xcrysden)
+
+
+# Things which are not linked to the compiler
+set_c ''
+source applications/gdis.bash
+source applications/povray.bash

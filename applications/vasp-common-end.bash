@@ -21,18 +21,6 @@ pack_set --command "make -f $tmp"
 pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp"
 pack_set --command "make -f $tmp clean"
 
-# Prepare next installation (apparantly this is only for the serial version)
-#pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGXHALF:' ../mymakefile"
-#pack_set --command "make -f $tmp"
-#pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspNGXHALF"
-#pack_set --command "make -f $tmp clean"
-
-# Prepare next installation (apparantly this is only for the serial version)
-#pack_set --command "sed -i -e 's:NGXHALF:NGXHALF -DwNGXHALF:' ../mymakefile"
-#pack_set --command "make -f $tmp"
-#pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspGNGXHALF"
-#pack_set --command "make -f $tmp clean"
-
 # Prepare the next installation
 pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZHALF :' ../mymakefile"
 pack_set --command "make -f $tmp"

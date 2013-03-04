@@ -277,6 +277,7 @@ function add_package {
     # Default the module name to this:
     _installed[$_N_archives]=0
     _mod_name[$_N_archives]=$package/$v/$(get_c)
+    _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
     # Install default values
     _mod_req[$_N_archives]="$(get_default_modules)"
@@ -323,7 +324,7 @@ function pack_set {
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
-	    -m|-module-name)  mod_name="$1" ; shift ;;
+	    -m|-module-name)  mod_name="${1%/}" ; shift ;;
 	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
 	    -prefix-and-module)  mod_name="$1" ; install="$(get_installation_path)/$1" ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;

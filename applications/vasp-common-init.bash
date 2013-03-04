@@ -6,6 +6,7 @@ pack_set --directory VASP
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --module-requirement openmpi
+pack_set --module-requirement wannier90[1.2]
 
 pack_set --install-query $(pack_get --install-prefix)/bin/vasp
 
@@ -28,7 +29,7 @@ CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX)
 CPP  = \$(CPP_) -DMPI \
      -DCACHE_SIZE=5000 -Davoidalloc \
      -DMPI_BLOCK=8000 -Duse_collective -DscaLAPACK \
-     -DRPROMU_DGEMV  -DRACCMU_DGEMV
+     -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90
 #PLACEHOLDER#
 FREE = -FR 
 FFLAGS = $FCFLAGS -FR -assume byterecl 
@@ -38,8 +39,10 @@ OBJ_HIGH =
 OBJ_NOOPT = 
 DEBUG  = -O0 
 INLINE = \$(OFLAG) 
+WANNIER_PATH = $(pack_get --install-prefix wannier90[1.2])/lib
+WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)
 LIB  = -L../vasp.5.lib -ldmy \
-     ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS)
+     ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS) \$(WANNIER) -lwannier
 EOF
     
 # Check for Intel MKL or not
