@@ -71,7 +71,7 @@ function _spbs_add_line {
 
 
 function _spbs_help {
-    local format="    %25s :  %s\n"
+    local format="    %24s :  %s\n"
     echo "Usage of \$(basename \$0): Aid in the creation of PBS scripts."
     echo ""
     printf "\$format" "--name|-N" "The name of the PBS job"

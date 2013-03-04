@@ -910,7 +910,7 @@ function create_module {
     do_debug --enter create_module
     local time=$(add_timing)
     local name;local version;local path; local help; local whatis
-    local env=""
+    local env="" ; local tmp=""
     local mod_path=""
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
@@ -967,14 +967,23 @@ function create_module {
 
 set modulename  $name
 set version	$version
+EOF
+    tmp="$(get_c)"
+    if [ ! -z "$tmp" ]; then
+	tmp=", compiler \$compiler"
+	cat <<EOF >> "$mfile"
 set compiler	$(get_c)
+EOF
+    fi
+    echo "x$(get_c)x"
+    cat <<EOF >> "$mfile"
 set basepath	${path//$version/\$version}
 
 proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
 }
 
-module-whatis "Loads \$modulename (\$version), compiler \$compiler."
+module-whatis "Loads \$modulename (\$version)$tmp."
 
 EOF
     # Add pre loaders if needed
@@ -991,8 +1000,7 @@ EOF
 	    fi
 	done
 	echo "" >> $mfile
-    fi
-    
+    fi    
 
     # Add requirement if needed
     if [ ! -z "${require// /}" ]; then
