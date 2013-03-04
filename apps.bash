@@ -25,9 +25,9 @@ source applications/wannier.bash
 source applications/gulp.bash
 
 # Needs to be installed AFTER wannier90 :)
-#source applications/vasp.bash
-#source applications/vasp-intel.bash
-#source applications/vasp-potcar.bash
+source applications/vasp.bash
+source applications/vasp-intel.bash
+source applications/vasp-potcar.bash
 
 timings For requested dynamics/DFT codes
 
@@ -53,4 +53,4 @@ create_module \
 # Things which are not linked to the compiler
 set_c ''
 source applications/gdis.bash
-source applications/povray.bash
+#source applications/povray.bash

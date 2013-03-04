@@ -1,15 +1,15 @@
 add_package http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Linux/povlinux-3.6.tgz
 
+pack_set --directory povray-3.6
 pack_set -s $IS_MODULE
 
 # Force the named alias
 pack_set --install-query $(pack_get --install-prefix)/bin/povray
 
 # install commands... (this will install the non-GUI version)
-pack_set --command "./install -no-arch-check <<EOF '2
-U
-$(pack_get --install-prefix)
-EOF"
+pack_set --command "echo '$(pack_get --install-prefix)' | ./install -no-arch-check U"
+
+pack_set --command "esunthoeas"
 
 pack_install
 

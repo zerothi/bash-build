@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
 
 pack_set --host-reject ntch --host-reject zeroth \
     --host-reject thul --host-reject surt \
-    --host-reject slid --hosh-reject etse
+    --host-reject slid --host-reject etse
 
 pack_set --module-requirement openmpi \
     --module-requirement libctl \
