@@ -141,7 +141,7 @@ _spbs_add_PBS_option -M "\$mail" "Mail address to send job information (defaulte
 _spbs_add_PBS_option -j "\$inout" "Combines the stdout and stderr output to the stdout (thus no error file will be created)."
 
 echo ''
-_spbs_add_line 'source $HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
+_spbs_add_line 'source \$PBS_O_HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
 _spbs_add_line 'module purge' "Clear list of defaulted modules"
 _spbs_add_line 'module load npa-cluster-setup' "Enables the NPA modules"
 echo ''
