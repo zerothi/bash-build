@@ -1,10 +1,15 @@
 # Then install HDF5
 # old_v 1.8.9
-for p in 1.8.10 ; do  #1.8.10-patch1 ; do
+for p in 1.8.10-patch1 ; do  #1.8.10-patch1 ; do
 
 add_package http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$p/src/hdf5-$p.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --alias hdf5
+pack_set --version ${p//-patch1/}
+
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libhdf5.a
 
