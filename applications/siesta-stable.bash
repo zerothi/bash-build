@@ -1,5 +1,5 @@
-add_package http://icmab.cat/leem/siesta/CodeAccess/Code/siesta-3.1.tgz
-
+for v in siesta-3.1 siesta-3.2 ; do
+add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
@@ -125,3 +125,5 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement)) \
     -L $(pack_get --alias)
+
+done
