@@ -945,10 +945,11 @@ function create_module {
 
     # Create the file to which we need to install the module script
     if [ -z "$mod_path" ]; then
-	local mfile=$(get_module_path)/$mod
+	local mfile=$(get_module_path)
     else
-	local mfile=$mod_path/$mod
+	local mfile=$mod_path
     fi
+    [ -n "$mod" ] && mfile=$mfile/$mod
     
     # If the file exists simply return
     if [ -e "$mfile" ] && [ 0 -eq $force ]; then
@@ -975,7 +976,7 @@ EOF
 set compiler	$(get_c)
 EOF
     fi
-    echo "x$(get_c)x"
+
     cat <<EOF >> "$mfile"
 set basepath	${path//$version/\$version}
 

@@ -52,5 +52,6 @@ create_module \
 
 # Things which are not linked to the compiler
 set_c ''
+set_default_modules ""
 source applications/gdis.bash
 #source applications/povray.bash
