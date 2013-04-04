@@ -1,7 +1,13 @@
 #!/bin/bash
 
+tmp=`pwd`
+
 source ~/.bashrc
 module purge
+
+# On thul and interactive nodes, sourching leads to going back
+cd $tmp
+unset tmp
 
 # We need to load this every time... :(
 # Enables all modules that gets added...

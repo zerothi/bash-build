@@ -1,6 +1,4 @@
-if $(is_host surt) ; then
-    echo "Will make link to local installation."
-elif $(is_host thul) ; then
+if $(is_host surt) || $(is_host thul) ; then
     echo "Will make link to local installation."
 else
     source libs/openmpi.bash
@@ -18,7 +16,7 @@ if $(is_host surt) ; then
     else
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi
-elif $(is_host thul) ; then
+elif $(is_host thul) || $(is_host n0) ; then
     if $(is_c intel) ; then
         mod=openmpi/1.3.3-1.el5.fys.ifort.11.1
     elif $(is_c gnu) ; then

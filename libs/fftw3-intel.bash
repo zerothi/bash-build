@@ -1,6 +1,8 @@
 if [ ! -z "$MKL_PATH" ] ; then
 add_package fftw_intel-3.local
 
+pack_set --host-reject thul
+
 pack_set --directory .
 pack_set --version 3
 pack_set --install-prefix $(pack_get --install-prefix fftw[intel])

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 source ~/.bashrc
-module purge
 
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
