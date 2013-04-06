@@ -10,6 +10,7 @@ pack_set --version $v
 
 pack_set --host-reject thul
 pack_set --host-reject surt
+pack_set --host-reject n-
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 
