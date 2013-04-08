@@ -16,14 +16,18 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libhdf5.a
 # Add requirments when creating the module
 pack_set --module-requirement zlib
 
+tmp="--command-flag --enable-fortran2003"
+if $(is_c gnu-4.1) ; then
+    unset tmp
+fi
+
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static" \
-    --command-flag "--enable-fortran" \
-    --command-flag "--enable-fortran2003"
+    --command-flag "--enable-fortran" $tmp
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
