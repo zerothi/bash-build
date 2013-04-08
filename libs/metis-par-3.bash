@@ -6,7 +6,7 @@ pack_set --alias parmetis
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --host-reject surt --host-reject thul
+pack_set $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libparmetis.a
 

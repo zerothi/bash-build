@@ -1,4 +1,4 @@
-if $(is_host surt) || $(is_host thul) || $(is_host n0) ; then
+if $(is_host surt) || $(is_host thul) || $(is_host n0) || $(is_host q0) ; then
     echo "Will make link to local installation."
 else
     source libs/openmpi.bash
@@ -16,11 +16,11 @@ if $(is_host surt) ; then
     else
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi
-elif $(is_host thul) || $(is_host n0) ; then
+elif $(is_host thul) || $(is_host n0) || $(is_host q0) ; then
     if $(is_c intel) ; then
         mod=openmpi/1.3.3-1.el5.fys.ifort.11.1
     elif $(is_c gnu) ; then
-        mod=openmpi/1.3.3-1.el5.fys.gfortran43.4.3.2
+        mod=openmpi/1.3.3-1.el5.fys.gfortran.4.1.2
     else
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi

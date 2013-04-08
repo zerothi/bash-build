@@ -2,9 +2,7 @@
 add_package http://ab-initio.mit.edu/libctl/libctl-3.2.1.tar.gz
 
 pack_set --host-reject ntch --host-reject zeroth \
-    --host-reject thul --host-reject surt \
-    --host-reject slid \
-    --host-reject etse
+    $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0)
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -4,8 +4,7 @@ add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch --host-reject zeroth \
-    --host-reject thul --host-reject surt \
-    --host-reject slid --host-reject etse
+    $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0)
 
 pack_set --alias mpb-serial
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
