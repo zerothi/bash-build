@@ -1,4 +1,4 @@
-if $(is_host surt) || $(is_host thul) ; then
+if $(is_host surt) || $(is_host thul) || $(is_host n0) ; then
     echo "Will make link to local installation."
 else
     source libs/openmpi.bash
