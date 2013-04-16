@@ -17,6 +17,11 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libhdf5.a
 pack_set --module-requirement openmpi \
     --module-requirement zlib
 
+tmp="--command-flag --enable-fortran2003"
+if $(is_c gnu-4.1) ; then
+    unset tmp
+fi
+
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
@@ -26,8 +31,7 @@ pack_set --command "../configure" \
     --command-flag --enable-parallel \
     --command-flag --disable-shared \
     --command-flag --enable-static \
-    --command-flag --enable-fortran \
-    --command-flag --enable-fortran2003
+    --command-flag --enable-fortran $tmp
 		#--enable-shared  # They are not tested with parallel
 
 # Make commands
