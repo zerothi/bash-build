@@ -35,6 +35,8 @@ source python/ase.bash
 source python/gpaw.bash
 source python/gpaw-setups.bash
 
+source python/pythtb.bash
+
 source python/phonopy.bash
 
 timings For python special packages
