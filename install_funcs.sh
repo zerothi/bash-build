@@ -472,9 +472,10 @@ function pack_get {
 }
 
 function pack_exists {
-    local t=$(get_index $1)
-    local ret="$?"
-    [ -z "$t" ] && return 1
+    local ret=$(pack_get --installed $1)
+    if [ -z "$ret" ]; then
+	return 1
+    fi
     return $ret
 }
 
