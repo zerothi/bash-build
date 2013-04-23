@@ -1,5 +1,5 @@
-if $(is_host surt) || $(is_host thul) || $(is_host n0) || $(is_host q0) || $(is_host d0) ; then
-    echo "Will make link to local installation."
+if $(is_host surt thul a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
+    echo "Will make link to local installation on Niflheim."
 else
     source libs/openmpi.bash
     return 0
@@ -8,15 +8,15 @@ fi
 # Figure out the module we require to use...
 
 # Determine the name of the local module:
-if $(is_host surt) ; then
+if $(is_host surt a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     if $(is_c intel) ; then
-        mod=openmpi/1.6.3-sl230s-tm-intel-2013.1.117-1
+        mod=openmpi/1.6.3-${NPA_NODETYPE}-tm-intel-2013.1.117-1
     elif $(is_c gnu) ; then
-        mod=openmpi/1.6.3-sl230s-tm-gfortran-1
+        mod=openmpi/1.6.3-${NPA_NODETYPE}-tm-gfortran-1
     else
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi
-elif $(is_host thul) || $(is_host n0) || $(is_host q0) $(is_host d0) ; then
+elif $(is_host surt a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     if $(is_c intel) ; then
         mod=openmpi/1.3.3-1.el5.fys.ifort.11.1
     elif $(is_c gnu) ; then
