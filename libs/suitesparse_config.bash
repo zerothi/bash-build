@@ -54,7 +54,7 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
     # Add requirments when creating the module
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 
 	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lf77blas -lcblas|' $mk"

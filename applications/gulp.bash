@@ -15,7 +15,7 @@ if $(is_c intel) ; then
     LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' Makefile"
     
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
     LIBS = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"

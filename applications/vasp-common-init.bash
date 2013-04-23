@@ -75,7 +75,7 @@ CPP += -DHOST=\"gfortran\"
 LINK = -fopenmp 
 SCA = $(list --Wlrpath --LDFLAGS scalapack) -lscalapack 
 EOF
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	cat <<EOF >> $tmp
 BLAS = $(list --Wlrpath --LDFLAGS atlas) -lcblas -lf77blas -latlas 

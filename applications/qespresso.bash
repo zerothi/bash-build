@@ -29,7 +29,7 @@ for v in \
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=sequential -lmkl_lapack95_lp64'"
 
     elif $(is_c gnu) ; then
-	if $(pack_exists atlas) ; then
+	if [ $(pack_installed atlas) -eq 1 ] ; then
     	    pack_set --module-requirement atlas \
 	        --module-requirement scalapack
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"

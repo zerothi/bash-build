@@ -28,7 +28,7 @@ LIBOPT = $MKL_LIB
 EOF
     
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
     else
 	pack_set --module-requirement blas --module-requirement lapack
@@ -45,7 +45,7 @@ CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
 LN = \$(FC90) 
 LNOPT = -fopenmp
 EOF
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	cat <<EOF >> $tmp
 ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)
 LIB_LAPACK = \$(ATLASOPT) -llapack_atlas

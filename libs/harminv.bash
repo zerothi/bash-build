@@ -14,7 +14,7 @@ if $(is_c intel) ; then
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
 
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp="--with-blas='$(list --Wlrpath atlas) -lcblas -lf77blas -latlas'"
 	tmp="$tmp --with-lapack='$(list --Wlrpath atlas) -llapack_atlas'"

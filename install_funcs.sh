@@ -471,12 +471,12 @@ function pack_get {
     do_debug --return pack_get
 }
 
-function pack_exists {
+function pack_installed {
     local ret=$(pack_get --installed $1)
     if [ -z "$ret" ]; then
-	return 1
+	echo 0
     fi
-    return $ret
+    echo $ret
 }
 
 
