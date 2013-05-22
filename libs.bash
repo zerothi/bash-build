@@ -38,6 +38,7 @@ timings For specific/requested libraries
 source libs/zlib.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
+source libs/h5utils-serial.bash
 source libs/parallel-netcdf.bash
 source libs/netcdf.bash
 source libs/netcdf-logging.bash
