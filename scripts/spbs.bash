@@ -23,24 +23,18 @@ cat <<EOF > $script
 _hostname="\$(hostname -s)"
 
 # Set default options:
-single_paffinity=1
+single_paffinity=0
 walltime=01:00:00
 nodes=1
-if [ "x\$_hostname" == "xslid" ]; then
-    ppn=4
-elif [ "x\$_hostname" == "xthul" ]; then
-    ppn=8
-elif [ "x\$_hostname" == "xsurt" ]; then
-    ppn=16
-else
-    ppn=4
-fi
+ppn=1
+
 if [ "xn-" == "x\${_hostname:0:2}" ] || \
    [ "xgray" == "x\${_hostname:0:4}" ] || \
    [ "xhpc-fe" == "x\${_hostname:0:6}" ]
 then
-    queue="fonaque"
+    queue="fotonano"
 fi
+
 message=""
 mail=""
 inout=""
