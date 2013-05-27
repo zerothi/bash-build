@@ -11,7 +11,7 @@ pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 --module-requirement umfpack
 # Check for Intel MKL or not
 if $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
     else
 	pack_set --module-requirement blas
@@ -72,7 +72,7 @@ EOF
 	--command-flag "--fcompiler=intelem" 
 
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	cat << EOF >> $cfg
 library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib
 include_dirs = $(pack_get --install-prefix atlas)/include:$tmp_inc

@@ -62,7 +62,7 @@ LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl
 ' arch.make"
 
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp="-llapack_atlas -lf77blas -lcblas -latlas"
     else

@@ -15,7 +15,7 @@ if $(is_c intel) ; then
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 elif $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "../configure" \
 	    --command-flag "LIBS='-lm $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas'" \

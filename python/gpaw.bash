@@ -32,7 +32,7 @@ compiler = '$CC $CFLAGS '
 mpicompiler = '$MPICC $CFLAGS '
 library_dirs += ['$(pack_get --install-prefix atlas)/lib']
 EOF
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	cat << EOF >> $file
 library_dirs += ['$(pack_get --install-prefix blas)/lib']

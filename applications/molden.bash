@@ -3,6 +3,8 @@ add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set $(list --prefix "--host-reject " thul surt a0 b0 c0 d0 g0 m0 n0 q0 p0)
+
 pack_set --install-query $(pack_get --install-prefix)/bin/molden
 
 pack_set --command "sed -i -e 's/CC[[:space:]]*=.*/CC = $CC/g' makefile"

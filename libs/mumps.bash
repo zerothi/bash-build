@@ -15,7 +15,7 @@ pack_set \
 pack_set --module-requirement parmetis[3.2.0]
 
 if $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
     else
 	pack_set --module-requirement blas
@@ -27,7 +27,7 @@ pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c gnu) ; then
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --command "sed -i '1 a\
 SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"

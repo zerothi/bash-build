@@ -18,7 +18,7 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
     # Add requirements when creating the module
-    if $(pack_exists atlas) ; then
+    if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
     else

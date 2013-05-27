@@ -143,11 +143,16 @@ function is_c {
 # Takes one argument:
 # #1 : the host string to search from the beginning of the host-name...
 function is_host {
-    local check="$1"
-    local l="${#check}"
-    if [ "x${_host:0:$l}" == "x$check" ]; then
-	return 0
-    fi
+    local check=""
+    local l=""
+    while [ $# -gt 0 ]; do
+	check="$1"
+	l="${#check}"
+	shift
+	if [ "x${_host:0:$l}" == "x$check" ]; then
+            return 0
+        fi
+    done
     return 1
 }
 
@@ -466,11 +471,12 @@ function pack_get {
     do_debug --return pack_get
 }
 
-function pack_exists {
-    local t=$(get_index $1)
-    local ret="$?"
-    [ -z "$t" ] && return 1
-    return $ret
+function pack_installed {
+    local ret=$(pack_get --installed $1)
+    if [ -z "$ret" ]; then
+	echo 0
+    fi
+    echo $ret
 }
 
 

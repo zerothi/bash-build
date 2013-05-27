@@ -11,8 +11,11 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/libpnetcdf.a
 
 pack_set --module-requirement openmpi
-if $(pack_exists bison) ; then
+if [ $(pack_installed bison) -eq 1 ]; then
     pack_set --command "module load $(get_default_modules) $(pack_get --module-name bison)"
+fi
+if [ $(pack_installed flex) -eq 1 ]; then
+    pack_set --command "module load $(get_default_modules) $(pack_get --module-name flex)"
 fi
 
 # Install commands that it should run
@@ -28,6 +31,9 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-if $(pack_exists bison) ; then
+if [ $(pack_installed flex) -eq 1 ] ; then
+    pack_set --command "module unload $(pack_get --module-name flex) $(get_default_modules)"
+fi
+if [ $(pack_installed bison) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name bison) $(get_default_modules)"
 fi
