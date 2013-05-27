@@ -1,6 +1,6 @@
-for pack in http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-429.tgz ; do # From version 429 we have phonon transport...
+for v in siesta-trunk-429.tgz siesta-ts-dev-454.tar.gz ; do
 
-add_package $pack
+add_package http://www.student.dtu.dk/~nicpa/packages/$v
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
