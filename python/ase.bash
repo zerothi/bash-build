@@ -1,5 +1,6 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package https://wiki.fysik.dtu.dk/ase-files/python-ase-3.6.0.2515.tar.gz
+for v in 3.6.0.2515 3.7.1.3184 ; do
+add_package https://wiki.fysik.dtu.dk/ase-files/python-ase-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -17,3 +18,4 @@ pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+done

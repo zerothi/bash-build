@@ -122,3 +122,13 @@ source scripts.bash
 install_all
 
 timings
+
+
+# When dealing with additional sets of instructions spec files
+# can come in handy.
+# For instance to add an include directory to all cpp files do
+# gcc -dumpspecs > specs
+# Edit specs in line *cpp:
+# and add -I<folder>
+# Per default will gcc read specs in the folder of generic libraries:
+# gcc -print-libgcc-file-name (dir)

@@ -1,5 +1,6 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-0.9.0.8965.tar.gz
+for v in 0.9.0.8965 ; do
+add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -10,7 +11,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(ge
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \
-    --module-requirement ase \
+    --module-requirement ase[3.6] \
     --module-requirement matplotlib \
     --module-requirement h5py
 
@@ -75,3 +76,4 @@ pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+done
