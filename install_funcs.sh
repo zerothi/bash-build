@@ -24,10 +24,6 @@ let "IS_MODULE=1 << 2"
 let "UPDATE_MODULE_NAME=1 << 3"
 let "PRELOAD_MODULE=1 << 4"
 
-# We will create a local name of the host
-_host="$(hostname -s)"
-function get_hostname { echo -n "$_host" ; }
-
 _prefix=""
 # Instalation path
 function set_installation_path {          
@@ -38,11 +34,6 @@ function set_installation_path {
     mkdir -p $_prefix/modules-npa-apps
 }
 function get_installation_path { echo -n $_prefix ; }
-
-_c=""
-# Instalation path
-function set_c {          _c=$1 ; }
-function get_c { echo -n $_c ; }
 
 _crt_version=0
 # Instalation path
@@ -82,6 +73,17 @@ function set_default_modules { _def_module_reqs="$1"
 }
 function get_default_modules { echo -n "$_def_module_reqs" ; }
 
+# Add any auxillary commands
+source install_aux.sh
+
+# Add the compiler stuff 
+source install_compiler.sh
+
+# Add host information
+source install_hostinfo.sh
+
+
+
 # This function takes one argument
 # It is the name of the module that is "hidden", i.e. not
 # installed by these scripts. 
@@ -96,11 +98,6 @@ function add_hidden_package {
     pack_set --module-name $mod
     pack_set --version ${mod#*/}
 }
-
-# Figure out the number of cores on the machine
-_n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
-export NPROCS=$_n_procs
-
 
 # Based on the extension which command should be called
 # to extract the archive
@@ -127,34 +124,6 @@ function arc_cmd {
     fi
 }
 
-# Check the compiler...
-# Takes one argument:
-# #1 : the compiler string to search from the beginning of the compiler-name...
-function is_c {
-    local check="$1"
-    local l="${#check}"
-    if [ "x${_c:0:$l}" == "x$check" ]; then
-	return 0
-    fi
-    return 1
-}
-
-# Check the host...
-# Takes one argument:
-# #1 : the host string to search from the beginning of the host-name...
-function is_host {
-    local check=""
-    local l=""
-    while [ $# -gt 0 ]; do
-	check="$1"
-	l="${#check}"
-	shift
-	if [ "x${_host:0:$l}" == "x$check" ]; then
-            return 0
-        fi
-    done
-    return 1
-}
 
 #
 # Using wget we will collect the giving file
@@ -400,9 +369,8 @@ export _pack_get_T=0.0
 function pack_get {
     do_debug --enter pack_get
     [ $TIMING -ne 0 ] && local time=$(add_timing)
-    local opt="$1" # Save the option passed
+    local opt="$(trim_em $1)" # Save the option passed
     case $opt in
-	--*) opt="${opt:1}" ;;
 	-*) ;;
 	*)
 	    doerr "$1" "Could not determine the option for pack_get" ;;	    
@@ -483,10 +451,7 @@ function pack_installed {
 # Function for editing environment variables
 # Mainly used for receiving and appending to variables
 function edit_env {
-    local opt=$1 # Save the option passed
-    case $opt in
-	--*) opt=${opt:1} ;;
-    esac
+    local opt=$(trim_em $1) # Save the option passed
     shift
     local echo_env=0
     local append="" ; local prepend=""
@@ -515,9 +480,8 @@ function list {
     # First we collect all options
     local opts="" ; local space=" "
     while : ; do
-	local opt=$1 # Save the option passed
+	local opt=$(trim_em $1) # Save the option passed
 	case $opt in
-	    --*) opt=${opt:1} ;;
 	    -*) ;;
 	    *)  break ;;
 	esac
@@ -585,10 +549,7 @@ function install_all {
     # First we collect all options
     local i=0
     while [ $# -ne 0 ]; do
-	local opt="$1" # Save the option passed
-	case $opt in
-	    --*) opt="${opt:1}" ;;
-	esac
+	local opt="$(trim_em $1)" # Save the option passed
 	shift
 	case $opt in
 	    -from|-f)    i="$(get_index $1)" ; shift ;;
@@ -795,18 +756,15 @@ function get_index {
     local time=$(add_timing)
     local i ; local lookup ; local all=0
     while [ $# -gt 1 ]; do
-	local opt=$1
-	case $opt in
-	    --*) opt=${opt:1} ; shift ;;
-	esac
+	local opt=$(trim_em $1) ; shift
 	case $opt in
 	    -all|-a) all=1  ;;
 	esac
     done
     [ ${#1} -eq 0 ] && return 1
     # Save the thing that we want to process...
-    local name=$(echo "$1"    | awk -F'[\\[\\]]' '{ print $1 }')
-    local version=$(echo "$1" | awk -F'[\\[\\]]' '{ print $2 }')
+    local name=$(var_spec "$1")
+    local version=$(var_spec -s "$1")
     local l=${#name} ; local lc_name="$(lc $name)"
     if $(isnumber $name) ; then # We have a number
 	[ "$name" -gt "$_N_archives" ] && return 1
@@ -915,17 +873,13 @@ export _create_module_T=0.0
 function create_module {
     do_debug --enter create_module
     local time=$(add_timing)
-    local name;local version;local path; local help; local whatis
+    local name;local version;local path; local help; local whatis; local opt
     local env="" ; local tmp=""
     local mod_path=""
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
     while [ $# -gt 0 ]; do
-	local opt="$1" # Save the option passed
-	case $opt in
-	    --*) opt=${opt:1} ;;
-	esac
-	shift
+	opt="$(trim_em $1)" ; shift
 	case $opt in
 	    -n|-name)  name="$1" ; shift ;;
 	    -v|-version)  version="$1" ; shift ;;
@@ -1142,10 +1096,7 @@ EOF
 function msg_install {
     local n="" ; local action=0
     while [ $# -gt 1 ]; do
-	local opt=$1
-	case $opt in
-	    --*) opt=${opt:1} ;;
-	esac ; shift
+	local opt=$(trim_em $1) ; shift
 	case $opt in
 	    -start|-S) n="Installing" ; action=1 ;;
 	    -finish|-F) n="Finished" ; action=2 ;;
@@ -1216,9 +1167,6 @@ function _get_true_index {
     fi
 }
 
-# Return the lowercase equivalent of the argument
-function lc { echo "$1" | tr '[A-Z]' '[a-z]' ; }
-
 # Make an error and exit
 function exit_on_error {
     if [ "$1" -ne "0" ]; then
@@ -1264,20 +1212,6 @@ function _add_module_if_usage {
     printf $f_format "" "-d" "the directory that needs to be checked"     
     printf $f_format "" "-f" "the file that needs to be checked"     
     exit $1
-}
-
-
-# Takes one, optionally two arguments
-# $1 is the file..
-function get_file_time {
-    local format="$1"
-    local fdate=$(stat -c "%y" $2)
-    echo -n "`date +"$format" --date="$fdate"`"
-}
-
-# Check for a number
-function isnumber { 
-    printf '%d' "$1" &>/dev/null
 }
 
 
@@ -1376,8 +1310,4 @@ function do_debug {
 	esac
     done
     echo $n >> DEBUG
-}
-
-function rem_dup {
-    echo -n "$(echo $@ | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
 }
