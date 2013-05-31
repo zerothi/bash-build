@@ -1,4 +1,4 @@
-# Install grace, which is a simple library
+# Install grace
 add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.23.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

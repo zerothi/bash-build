@@ -37,6 +37,7 @@ SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
     fi
 elif $(is_c intel) ; then
+    tmp_flag="-nofor-main"
     pack_set --command "sed -i '1 a\
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
@@ -82,8 +83,8 @@ CDEFS   = -DAdd_ \n\
 #CDEFS   = -D \n\
 \n\
 #Begin Optimized options\n\
-OPTF    = -O -DALLOW_NON_INIT -nofor-main\n\
-OPTL    = -O -nofor-main\n\
+OPTF    = -O -DALLOW_NON_INIT $tmp_flag\n\
+OPTL    = -O $tmp_flag\n\
 OPTC    = -O\n\
 \n\
 INCS = \$(INCPAR) \n\

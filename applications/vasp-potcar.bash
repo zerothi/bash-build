@@ -10,7 +10,7 @@ function tmp {
     pack_set --command "rm -rf $(pack_get --install-prefix)"
     pack_set --command "mkdir tmp"
     pack_set --command "cd tmp"
-    pack_set --command "tar xvfz ../potpaw_$(pack_get --version).t*"
+    pack_set --command "tar xfz ../potpaw_$(pack_get --version).t*"
     pack_set --command "cd ../"
     # The file permissions are not expected to be correct (we correct them
     # here)
