@@ -3,6 +3,7 @@ for p in 1.12.1 ; do
 
 add_package http://ab-initio.mit.edu/h5utils/h5utils-$p.tar.gz
 
+pack_set --host-reject "ntch"
 pack_set --alias h5utils-serial
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE

@@ -611,6 +611,7 @@ function pack_install {
 	done
     fi
     if [ $run -eq 0 ]; then
+	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
 	[ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
 	do_debug --return pack_install
 	return 1

@@ -16,6 +16,9 @@ tmp=$(pack_get --alias)-$(pack_get --version).make
 pack_set --command "tar xvfz vasp.5.3.3.tar.gz"
 pack_set --command "tar xvfz vasp.5.lib.tar.gz"
 
+# Correct the VDW algorithm
+pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
+
 # Start with creating a template makefile.
 # The cache size is determined from the L1 cache (E5-2650 have ~64KB
 # However, it has been investigated that a CACHE_SIZE of ~ 5000 is good for this
