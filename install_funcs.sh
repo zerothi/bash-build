@@ -277,10 +277,7 @@ function pack_set {
     local mod_opt=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
-	local opt="$1"
-	case $opt in
-	    --*) opt=${opt:1} ;;
-	esac
+	local opt="$(trim_em $1)"
 	shift
 	case $opt in
             -C|-command)  cmd="$1" ; shift ;;
@@ -1300,10 +1297,7 @@ function do_debug {
     [ $DEBUG -eq 0 ] && return 0
     local n=""
     while [ $# -gt 1 ]; do
-	local opt=$1
-	case $opt in
-	    --*) opt=${opt:1} ;;
-	esac ; shift
+	local opt=$(trim_em $1) ; shift
 	case $opt in
 	    -msg) n="$1" ; shift ;;
 	    -enter) n="enter routine: $1" ; shift ;;
