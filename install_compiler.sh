@@ -37,24 +37,34 @@ function set_c_flags {
     local idx=$1 ; shift
     _c_cO[$idx]="$@"
     [ $idx -ge 10 ] && return 0
-    for i in `seq $((idx+1)) 10` ; do
-	if [ "x${_c_cO[$i]}" == "x" ]; then
-	    set_c_flags $i $@
-	fi
-    done
+    local i=$((idx+1))
+    if [ "x${_c_cO[$i]}" == "x" ]; then
+	set_c_flags $i $@
+    fi
 }
 # This will only set the Fortran FLAGS
 function set_f_flags {
     local idx=$1 ; shift
     _c_fO[$idx]="$@"
     [ $idx -ge 10 ] && return 0
-    for i in `seq $((idx+1)) 10` ; do
-	if [ "x${_c_fO[$i]}" == "x" ]; then
-	    set_f_flags $i $@
-	fi
-    done
+    local i=$((idx+1))
+    if [ "x${_c_fO[$i]}" == "x" ]; then
+	set_f_flags $i $@
+    fi
 }
 
 # Updates the corresponding environment variable with 
 # the optimization level
-    
+function update_flags {
+    update_c_flags $@
+    update_f_flags $@
+}
+
+function update_c_flags {
+    while true ; do
+	# Process what is requested
+	local opt=$(trim_em $1)
+    done
+    update_c_flags $@
+    update_f_flags $@
+}
