@@ -14,7 +14,7 @@ function tmp {
     pack_set --command "cd ../"
     # The file permissions are not expected to be correct (we correct them
     # here)
-    pack_set --command "chmod -R 0644 tmp/*/POTCAR"
+    pack_set --command "chmod 0644 tmp/*/POTCAR"
     pack_set --command "mv tmp $(pack_get --install-prefix)"
     pack_set --module-opt "--set-ENV POTCARS=$(pack_get --install-prefix)"
     # We only check for one
