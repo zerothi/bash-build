@@ -22,16 +22,23 @@ pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp"
 pack_set --command "make -f $tmp clean"
 
 # Prepare the next installation
-pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZHALF :' ../mymakefile"
+pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZhalf :' ../mymakefile"
 pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspNGZHALF"
+pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspNGZhalf"
 pack_set --command "make -f $tmp clean"
 
 # Prepare the next installation
-pack_set --command "sed -i -e 's:NGZHALF:NGZHALF -DwNGZHALF:' ../mymakefile"
+pack_set --command "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
 pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspGNGZHALF"
+pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspGNGZhalf"
 pack_set --command "make -f $tmp clean"
+
+# Copy over the vdw_kernel
+vdw=vdw_kernel.bindat
+pack_set --command "mkdir -p $(pack_get --install-prefix)/data"
+pack_set --command "cp $vdw $(pack_get --install-prefix)/data/$vdw"
+# Add an ENV-flag for the kernel to be copied
+pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --install-prefix)/data/$vdw"
 
 pack_install
 

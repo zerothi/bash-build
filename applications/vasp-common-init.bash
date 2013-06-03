@@ -8,7 +8,7 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --module-requirement openmpi
 pack_set --module-requirement wannier90[1.2]
 
-pack_set --install-query $(pack_get --install-prefix)/bin/vasp
+pack_set --install-query $(pack_get --install-prefix)/bin/vaspGNGZhalf
 
 tmp=$(pack_get --alias)-$(pack_get --version).make
 
