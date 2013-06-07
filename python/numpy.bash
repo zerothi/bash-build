@@ -1,5 +1,4 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-# old_v 1.6.2
 for v in 1.7.0 ; do
 add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 

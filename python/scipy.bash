@@ -1,6 +1,5 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-# new_v 0.12.0b1
-for v in 0.11.0 ; do 
+for v in 0.12.0 0.11.0 ; do 
 add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE
