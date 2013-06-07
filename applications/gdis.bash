@@ -1,4 +1,5 @@
 # Gdis needs libgtkglext1-dev for installation
+# libgtk2.0-dev
 
 for v in 0.91b ; do 
 add_package http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz

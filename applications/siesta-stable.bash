@@ -114,6 +114,19 @@ pack_set --command "cd ../Util/TBTrans"
 pack_set --command "make"
 pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/"
 
+pack_set --command "cd ../WFS"
+pack_set --command "make"
+pack_set --command "cp info_wfsx $(pack_get --install-prefix)/bin/"
+pack_set --command "cp readwf $(pack_get --install-prefix)/bin/"
+pack_set --command "cp readwfx $(pack_get --install-prefix)/bin/"
+pack_set --command "cp wfs2wfsx $(pack_get --install-prefix)/bin/"
+pack_set --command "cp wfsx2wfs $(pack_get --install-prefix)/bin/"
+
+pack_set --command "cd ../HSX"
+pack_set --command "make"
+pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
+pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
+
 pack_install
 
 
