@@ -4,6 +4,7 @@ msg_install --message "Installing the applications..."
 
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
+source applications/siesta-scf.bash
 
 timings For SIESTA installation
 
