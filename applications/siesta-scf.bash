@@ -4,7 +4,7 @@ add_package http://www.student.dtu.dk/~nicpa/packages/$v
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
+pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
@@ -90,12 +90,7 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 pack_set --command "siesta_install -v scf --siesta"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) siesta"
+pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
@@ -103,23 +98,18 @@ pack_set --command "make clean"
 # We have not created a test for the check of already installed files...
 #pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) transiesta"
+pack_set --command "make transiesta"
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"
 pack_set --command "make"
 pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 
-pack_set --command "cd ../TBTrans_rep"
-pack_set --command "siesta_install -v scf --tbtrans"
-pack_set --command "make dep"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
+#pack_set --command "cd ../TBTrans_rep"
+#pack_set --command "siesta_install -v scf --tbtrans"
+#pack_set --command "make dep"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
 pack_set --command "cd ../Bands"
 pack_set --command "make all"
