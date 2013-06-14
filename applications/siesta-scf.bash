@@ -1,4 +1,4 @@
-for v in siesta-scf-491.tar.gz ; do
+for v in siesta-scf-493.tar.gz ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/$v
 
@@ -101,9 +101,9 @@ pack_set --command "make clean"
 pack_set --command "make transiesta"
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../Util/TBTrans"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
+#pack_set --command "cd ../Util/TBTrans"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 
 #pack_set --command "cd ../TBTrans_rep"
 #pack_set --command "siesta_install -v scf --tbtrans"
@@ -111,7 +111,7 @@ pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 #pack_set --command "make"
 #pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
-pack_set --command "cd ../Bands"
+pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
 pack_set --command "cp new.gnubands.o $(pack_get --install-prefix)/bin/gnubands"
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/gnubands"
@@ -122,9 +122,9 @@ pack_set --command "cd ../Contrib/APostnikov"
 pack_set --command "make all"
 pack_set --command "cp *xsf fmpdos $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../../Denchar/Src"
-pack_set --command "make denchar"
-pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
+#pack_set --command "cd ../../Denchar/Src"
+#pack_set --command "make denchar"
+#pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../../Eig2DOS"
 pack_set --command "make"
