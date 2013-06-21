@@ -214,7 +214,11 @@ function add_package {
     _http[$_N_archives]=$url
     # Save the archive name
     local fn=$(basename $url)
-    _archive[$_N_archives]=$fn
+    if [ $# -gt 1 ]; then
+	_archive[$_N_archives]=$2
+    else
+        _archive[$_N_archives]=$fn
+    fi
     # Save the type of archive
     local ext=$(echo -n $fn | awk -F. '{print $NF}')
     _ext[$_N_archives]=$ext

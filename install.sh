@@ -106,6 +106,11 @@ if [ $DEBUG -ne 0 ]; then
     echo "Done with DEBUG"
 fi
 
+# Install the lua-libraries
+source lua/lua.bash
+
+install_all
+
 # Install all libraries
 source libs.bash
 
