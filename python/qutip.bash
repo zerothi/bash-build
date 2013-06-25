@@ -1,5 +1,9 @@
 tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz
+for p in \
+    https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz \
+    https://dl.dropboxusercontent.com/u/2244215/QuTiP-DEV-2.2.0.zip ; do
+    
+add_package $p
 
 pack_set -s $IS_MODULE
 
@@ -19,3 +23,4 @@ pack_set --module-requirement scipy \
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     
+done
