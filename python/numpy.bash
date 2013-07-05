@@ -51,7 +51,7 @@ include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_
 [mkl]
 library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
-mkl_libs = mkl_rt,mkl_intel_lp64,mkl_intel_thread,mkl_core
+mkl_libs = mkl_rt,mkl_intel_lp64,mkl_gf_lp64,mkl_intel_thread,mkl_core,mkl_def
 lapack_libs = mkl_lapack95_lp64
 blas_libs = mkl_blas95_lp64
 EOF
