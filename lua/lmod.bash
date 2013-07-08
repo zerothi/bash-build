@@ -23,3 +23,5 @@ pack_set --command "make pre-install"
 # Make install lua
 pack_set --command "make install"
 
+#pack_set --module-opt --
+
