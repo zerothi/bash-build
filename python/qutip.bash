@@ -13,7 +13,10 @@ pack_set --host-reject thul --host-reject surt \
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
+tmp=$(pack_get --alias)
+tmp=${tmp//-DEV/}
+
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$tmp
 
 # Add requirments when creating the module
 pack_set --module-requirement scipy \
