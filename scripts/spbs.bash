@@ -87,8 +87,8 @@ function _spbs_help {
     printf "\$format" "--mail-address|-mail" "Redirect the mails to given mail address."
     printf "\$format" "--mix-in-out|-joe" "The stderr and stdout will be directed to stdout."
     printf "\$format" "--no-paffinity|--paffinity" "Do (not) create the paffinity ENV when on a single node."
-    printf "\$format" "--access-policy" "Set the access policy for the job, can be (SHARED|SINGLEUSER|SINGLEJOB|SINGLETASK)."
-    printf "\$format" "--alone" "Require to occupy a full node alone."
+#    printf "\$format" "--access-policy" "Set the access policy for the job, can be (SHARED|SINGLEUSER|SINGLEJOB|SINGLETASK)."
+#    printf "\$format" "--alone" "Require to occupy a full node alone."
     printf "\$format" "--flag-explanations" "Add flag explanations in the PBS script."
 }
 
@@ -120,7 +120,7 @@ while [ \$# -ne 0 ]; do
         -paffinity) single_paffinity=1 ;;
         -no-paffinity) single_paffinity=0 ;;
         -flag-explanations) show_flag=1 ;;
-        -access-policy) access_policy="\$1" ; shift ;; 
+#        -access-policy) access_policy="\$1" ; shift ;; 
         -help|-h) _spbs_help ; exit 0 ;;
         *)
             echo "Could not recognize flag: \$opt"
@@ -151,11 +151,12 @@ _spbs_add_PBS_option -l "walltime=\$walltime" "The allowed execution time. Will 
 _spbs_add_PBS_option -m "\$message" "Mail upon [a] = PBS abort, [e] = execution error, [b] = begin execution."
 _spbs_add_PBS_option -M "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."
 _spbs_add_PBS_option -j "\$inout" "Combines the stdout and stderr output to the stdout (thus no error file will be created)."
-if [ "x\$access_policy" == "xSHARED
+if [ "x\$access_policy" != "xSHARED" ]; then
 _spbs_add_PBS_option -l "NACCESSPOLICY=\$access_policy" "Determines the access policy of the jobs. SHARED: everybody can run simultaneously. \\
 SINGLEUSER: only the same user can run. \\
 SINGLETASK: only one task from the same job can run. \\
 SINGLEJOB: only one job can run."
+fi
 
 echo ''
 _spbs_add_line 'source \$PBS_O_HOME/.bashrc' "Source the home .bashrc to edit ENV variables"

@@ -1,5 +1,6 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-4.2.1.1.tar.gz
+for v in 4.2.1.1 4.3.0 ; do
+add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -56,3 +57,4 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
+done

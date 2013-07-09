@@ -2,7 +2,7 @@
 # old_v  1.6.4
 
 # Newest 1.6.5
-add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.4.tar.gz
+add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.5.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
