@@ -1,10 +1,9 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
 # old_v 
-for v in 1.4.2 2.0.1 ; do
+for v in 1.4.2 2.1 ; do
     add_package http://numexpr.googlecode.com/files/numexpr-$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
-    pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+    pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
     # This devious thing will never install the same place!!!!!
     pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages

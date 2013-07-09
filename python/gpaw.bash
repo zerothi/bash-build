@@ -1,4 +1,5 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
+[ ${pV:0:1} == "3" ] && return 0
+
 for v in 0.9.0.8965 ; do
 add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
 
@@ -6,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --host-reject "ntch-2857"
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 

@@ -4,6 +4,7 @@ msg_install --message "Installing the python-packages..."
 echo "##### $(pack_get --module-name $(get_parent)) #####"
 module load $(get_default_modules) $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print "{0}.{1}".format(sys.version_info[0],sys.version_info[1])')
+IpV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 module unload $(pack_get --module-name $(get_parent)) $(get_default_modules)
 
 echo $(get_default_modules)
@@ -14,7 +15,6 @@ source python/bazar.bash
 source python/nose.bash
 
 timings For python default packages
-
 
 source python/mpi4py.bash
 source python/numpy.bash

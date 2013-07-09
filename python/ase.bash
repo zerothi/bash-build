@@ -1,4 +1,5 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
+[ ${pV:0:1} == "3" ] && return 0
+
 for v in 3.6.0.2515 3.7.1.3184 ; do
 add_package https://wiki.fysik.dtu.dk/ase-files/python-ase-$v.tar.gz
 
@@ -8,7 +9,7 @@ pack_set --host-reject ntch
 
 pack_set --alias ase
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 

@@ -1,4 +1,3 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
 for p in \
     https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz \
     https://dl.dropboxusercontent.com/u/2244215/QuTiP-DEV-2.2.0.zip ; do
@@ -11,7 +10,7 @@ pack_set -s $IS_MODULE
 
 pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 p_name=$($(lc pack_get --alias))
 p_name=${p_name//-DEV/}

@@ -1,10 +1,9 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-for v in 1.7.1 1.7.0 ; do
+for v in 1.7.1 ; do
 add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/bin/f2py
 pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 --module-requirement umfpack
@@ -124,7 +123,7 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
     --command-flag "--fcompiler=gnu95" 
     fi
 else
-    doerr numpy "Has not been configured with recognized compiler"
+    doerr numpy "Have not been configured with recognized compiler"
 
 fi
 

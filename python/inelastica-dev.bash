@@ -1,11 +1,11 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-151.tar.gz
+[ ${pV:0:1} == "3" ] && return 0
 
+add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-151.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --alias Inelastica-DEV
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 

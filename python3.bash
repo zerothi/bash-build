@@ -1,5 +1,5 @@
-# Install Python 3.3.0
-add_package http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tgz
+# Install Python 3.3.2
+add_package http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tgz
 
 if $(is_host n-) ; then
     pack_set --alias Python
@@ -36,6 +36,7 @@ create_module \
     -L $(pack_get --alias) 
 
 # Install all relevant python packages
+
 # The lookup name in the list for version number etc...
 set_parent $(pack_get --alias)[$(pack_get --version)]
 set_parent_exec python3

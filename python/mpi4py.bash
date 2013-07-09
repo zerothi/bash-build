@@ -1,4 +1,3 @@
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
 add_package http://mpi4py.googlecode.com/files/mpi4py-1.3.tar.gz
 
 pack_set -s $IS_MODULE
@@ -6,7 +5,7 @@ pack_set -s $IS_MODULE
 pack_set --module-requirement $(get_parent) \
     --module-requirement openmpi
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)/__init__.py
 

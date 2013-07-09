@@ -1,12 +1,11 @@
 # This module requires that libfreetype6-dev be installed as well as
 # libpng(12)-dev
 
-tmp=$(pack_get --alias $(get_parent))-$(pack_get --version $(get_parent))
-add_package https://github.com/downloads/matplotlib/matplotlib/matplotlib-1.2.0.tar.gz
+add_package https://github.com/downloads/matplotlib/matplotlib/matplotlib-1.2.1.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$tmp/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
