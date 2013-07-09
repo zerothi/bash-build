@@ -1,5 +1,5 @@
 for v in 1.7 ; do
-    add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-1.6/phonopy-$v.tar.gz
+    add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-1.7/phonopy-$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
     pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)

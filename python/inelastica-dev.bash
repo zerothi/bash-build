@@ -1,4 +1,4 @@
-[ ${pV:0:1} == "3" ] && return 0
+[ "x${pV:0:1}" == "x3" ] && return 0
 
 add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-151.tar.gz
 

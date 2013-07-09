@@ -1,4 +1,4 @@
-[ ${pV:0:1} == "3" ] && return 0
+[ "x${pV:0:1}" == "x3" ] && return 0
 
 for v in 0.9.0.8965 ; do
 add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz

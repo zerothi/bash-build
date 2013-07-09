@@ -1,4 +1,4 @@
-[ ${pV:0:1} == "3" ] && return 0
+[ "x${pV:0:1}" == "x3" ] && return 0
 
 # Add the installation of the gpaw setups
 for v in 0.8.7929 0.9.9672 ; do

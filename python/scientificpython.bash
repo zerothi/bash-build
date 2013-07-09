@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 add_package https://sourcesup.renater.fr/frs/download.php/4153/ScientificPython-2.9.2.tar.gz
 
 pack_set -s $IS_MODULE

@@ -4,7 +4,11 @@ add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar
 pack_set -s $IS_MODULE
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-pack_set --install-query $(pack_get --install-prefix)/bin/f2py
+if [ "x${pV:0:1}" == "x3" ]; then
+    pack_set --install-query $(pack_get --install-prefix)/bin/f2py3
+else
+    pack_set --install-query $(pack_get --install-prefix)/bin/f2py
+fi
 pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 --module-requirement umfpack
 # Check for Intel MKL or not
