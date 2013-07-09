@@ -138,7 +138,7 @@ function dwn_file {
     fi
     local archive=$(pack_get --archive $1)
     [ -e $subdir/$archive ] && return 0
-    wget $(pack_get --url $1) -O $subdir/$archive
+    wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
 }
 
 

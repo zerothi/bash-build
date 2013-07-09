@@ -1,4 +1,5 @@
-[ ${pV:0:1} == "3" ] && return 0
+[ "x${pV:0:1}" == "x3" ] && return 0
+echo $pV and ${pV:0:1}
 
 # We only accept bzr installation on python 2.x
 add_package https://launchpad.net/bzr/2.5/2.5.1/+download/bzr-2.5.1.tar.gz

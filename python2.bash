@@ -43,3 +43,40 @@ set_parent_exec python
 # Install all python packages
 source python-install.bash
 clear_parent
+
+
+# Initialize the module read path
+old_path=$(get_module_path)
+set_module_path $(get_installation_path)/modules-npa
+
+create_module \
+    -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scientificpython scipy cython numexpr-2) scientificpython scipy cython numexpr-2 matplotlib)
+
+create_module \
+    -n "\"Nick Papior Andersen's parallel python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.mpi4py.numpy.scipy.scientific/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scientificpython scipy mpi4py) scientificpython scipy cython mpi4py)
+
+create_module \
+    -n "\"Nick Papior Andersen's DFT python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.numpy.scipy.scientific.ase.gpaw.inelastica/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scientificpython scipy ase gpaw inelastica) scientificpython scipy ase gpaw inelastica)
+
+if [ $(pack_get --installed qutip) -eq 1 ]; then
+    create_module \
+        -n "\"Nick Papior Andersen's Photonics python script for QuTip: $(get_c)\"" \
+        -v $(date +'%g-%j') \
+        -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
+        -P "/directory/should/not/exist" \
+        $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scientificpython qutip numexpr-2) scientificpython cython numexpr-2 qutip)
+fi
+
+set_module_path $old_path

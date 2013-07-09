@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 for p in \
     https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz \
     https://dl.dropboxusercontent.com/u/2244215/QuTiP-DEV-2.2.0.zip ; do
@@ -8,7 +10,7 @@ add_package $p
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
+#pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 

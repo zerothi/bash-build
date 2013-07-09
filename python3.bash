@@ -43,3 +43,32 @@ set_parent_exec python3
 # Install all python packages
 source python-install.bash
 clear_parent
+
+# Initialize the module read path
+old_path=$(get_module_path)
+set_module_path $(get_installation_path)/modules-npa
+
+create_module \
+    -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scipy cython numexpr-2) scipy cython numexpr-2 matplotlib)
+
+create_module \
+    -n "\"Nick Papior Andersen's parallel python script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.mpi4py.numpy.scipy/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement scipy mpi4py) scipy cython mpi4py)
+
+if [ $(pack_get --installed qutip) -eq 1 ]; then
+    create_module \
+        -n "\"Nick Papior Andersen's Photonics python script for QuTip: $(get_c)\"" \
+        -v $(date +'%g-%j') \
+        -M python$pV.cython.numexpr.qutip/$(get_c) \
+        -P "/directory/should/not/exist" \
+        $(list --prefix '-L ' $(get_default_modules) $(pack_get --module-requirement qutip numexpr-2) cython numexpr-2 qutip)
+fi
+
+exit 0

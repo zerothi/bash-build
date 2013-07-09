@@ -1,4 +1,4 @@
-[ ${pV:0:1} == "3" ] && return 0
+[ "x${pV:0:1}" == "x3" ] && return 0
 
 add_package http://downloads.sourceforge.net/project/inelastica/1.1/Inelastica-1.1.tar.gz
 
