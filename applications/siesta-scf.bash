@@ -1,4 +1,4 @@
-exit 0
+return 0
 for v in siesta-scf-493.tar.gz ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/$v
