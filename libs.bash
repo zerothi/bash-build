@@ -44,6 +44,9 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
+source libs/udunits.bash
+source libs/nco.bash
+
 timings For netcdf and related libraries
 
 # A sparse library
