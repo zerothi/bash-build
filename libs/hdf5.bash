@@ -1,6 +1,5 @@
 # Then install HDF5
-# old_v 1.8.9
-for p in 1.8.10-patch1 1.8.11 ; do  #1.8.10-patch1 ; do
+for p in 1.8.11 ; do
 
 add_package http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$p/src/hdf5-$p.tar.gz
 

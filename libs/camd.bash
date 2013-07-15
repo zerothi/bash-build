@@ -1,4 +1,5 @@
-add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-2.3.1.tar.gz
+v=2.3.1
+add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-$v.tar.gz
             
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -30,7 +31,7 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the AMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-2.3.1.tar.gz
+add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-$v.tar.gz
 pack_set --directory CAMD
 pack_set --install-query /directory/does/not/exist
 pack_set --alias CAMD-make
