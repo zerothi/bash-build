@@ -1,4 +1,4 @@
-add_package http://www.fftw.org/fftw-3.3.2.tar.gz
+add_package http://www.fftw.org/fftw-3.3.3.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

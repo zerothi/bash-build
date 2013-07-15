@@ -1,4 +1,4 @@
-add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.0.2.tar.gz
+add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

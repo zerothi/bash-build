@@ -1,4 +1,5 @@
-add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-5.6.1.tar.gz
+v=5.6.2
+add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -39,7 +40,7 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the UMFPACK include directory to the path (we need to run this EVERY time)
-add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-5.6.1.tar.gz
+add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-$v.tar.gz
 pack_set --directory UMFPACK
 pack_set --install-query /directory/does/not/exist
 pack_set --alias UMFPACK-make

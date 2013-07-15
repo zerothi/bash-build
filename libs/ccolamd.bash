@@ -1,4 +1,5 @@
-add_package http://www.cise.ufl.edu/research/sparse/ccolamd/CCOLAMD-2.8.0.tar.gz
+v=2.8.0
+add_package http://www.cise.ufl.edu/research/sparse/ccolamd/CCOLAMD-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -30,7 +31,7 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the CCOLAMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/ccolamd/CCOLAMD-2.8.0.tar.gz
+add_package http://www.cise.ufl.edu/research/sparse/ccolamd/CCOLAMD-$v.tar.gz
 pack_set --directory CCOLAMD
 pack_set --install-query /directory/does/not/exist
 pack_set --alias CCOLAMD-make

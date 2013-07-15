@@ -1,4 +1,5 @@
-add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-2.3.1.tar.gz
+v=2.3.1
+add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -40,7 +41,7 @@ pack_set --command "cp Include/amd_internal.h $(pack_get --install-prefix)/inclu
 
 
 # Add the AMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-2.3.1.tar.gz
+add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-$v.tar.gz
 pack_set --directory AMD
 pack_set --install-query /directory/does/not/exist
 pack_set --alias AMD-make

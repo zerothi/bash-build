@@ -1,7 +1,7 @@
 # First install zlib, which is a simple library
-add_package http://downloads.sourceforge.net/project/boost/boost/1.52.0/boost_1_52_0.tar.bz2
+add_package http://downloads.sourceforge.net/project/boost/boost/1.54.0/boost_1_54_0.tar.bz2
 
-pack_set --version 1.52.0
+pack_set --version 1.54.0
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
