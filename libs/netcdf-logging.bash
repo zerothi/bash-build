@@ -1,4 +1,8 @@
-if $(is_host zerothi) || $(is_host ntch-2) ; then
+if $(is_host zerothi) ; then
+    v=
+else
+    return 0
+fi
 
 # Now we can install NetCDF (we need the C version to be first added!)
 v=4.3.0
@@ -66,5 +70,3 @@ pack_set --command "../configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
-
-fi

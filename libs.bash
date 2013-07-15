@@ -72,6 +72,14 @@ create_module \
 
 create_module \
     --module-path $(get_installation_path)/modules-npa \
+    -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
+    -v $(date +'%g-%j') \
+    -M hdf5.netcdf.utils/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
+
+create_module \
+    --module-path $(get_installation_path)/modules-npa \
     -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \

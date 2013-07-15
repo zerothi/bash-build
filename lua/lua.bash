@@ -1,6 +1,7 @@
 if ! $(is_host zerothi-QM) ; then
     return 0
 fi
+
 add_package http://www.lua.org/ftp/lua-5.2.2.tar.gz
 
 pack_set -s $IS_MODULE
@@ -26,3 +27,6 @@ lua_V=5.2
 source lua/filesystem.bash
 source lua/posix.bash
 source lua/lmod.bash
+
+install_all
+
