@@ -17,7 +17,6 @@ pack_set \
     --command "../configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-dap" \
-    --command-flag "--enable-static" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static"
