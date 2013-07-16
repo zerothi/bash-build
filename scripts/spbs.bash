@@ -89,7 +89,7 @@ function _spbs_help {
     printf "\$format" "--no-paffinity|--paffinity" "Do (not) create the paffinity ENV when on a single node."
 #    printf "\$format" "--access-policy" "Set the access policy for the job, can be (SHARED|SINGLEUSER|SINGLEJOB|SINGLETASK)."
 #    printf "\$format" "--alone" "Require to occupy a full node alone."
-    printf "\$format" "--flag-explanations" "Add flag explanations in the PBS script."
+    printf "\$format" "--flag-explanations|-fe" "Add flag explanations in the PBS script."
 }
 
 
@@ -119,7 +119,7 @@ while [ \$# -ne 0 ]; do
         -mix-in-out|-joe) inout=oe ;;
         -paffinity) single_paffinity=1 ;;
         -no-paffinity) single_paffinity=0 ;;
-        -flag-explanations) show_flag=1 ;;
+        -flag-explanations|-fe) show_flag=1 ;;
 #        -access-policy) access_policy="\$1" ; shift ;; 
         -help|-h) _spbs_help ; exit 0 ;;
         *)
@@ -163,7 +163,7 @@ _spbs_add_line 'source \$PBS_O_HOME/.bashrc' "Source the home .bashrc to edit EN
 _spbs_add_line 'module purge' "Clear list of defaulted modules"
 _spbs_add_line 'module load npa-cluster-setup' "Enables the NPA modules"
 echo ''
-_spbs_add_line 'ulimit -s unlimited' "Make the stack-size unlimited"
+_spbs_add_line 'ulimit -s unlimited' "Ensure the stack-size unlimited"
 _spbs_add_line 'date' "Show the date and time of execution"
 _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution folder"
 if [ \$has_np_cmd -eq 1 ]; then
