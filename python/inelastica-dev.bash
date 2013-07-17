@@ -1,6 +1,7 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-151.tar.gz
+for v in 151 191 ; do
+add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -27,3 +28,4 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+done
