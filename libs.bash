@@ -54,7 +54,7 @@ source libs/suitesparse.bash
 
 timings For sparse libraries
 
-#source libs/metis.bash
+source libs/metis.bash
 source libs/metis-par.bash
 source libs/metis-par-3.bash
 source libs/mumps.bash

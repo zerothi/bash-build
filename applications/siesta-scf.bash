@@ -7,6 +7,7 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
+pack_set --module-requirement metis
 
 # Change to directory:
 pack_set --command "cd Obj"
@@ -33,11 +34,11 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
-FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
+FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4 -DON_DOMAIN_DECOMP\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lmetis\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
