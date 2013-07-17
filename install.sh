@@ -5,6 +5,9 @@ tmp=`pwd`
 source ~/.bashrc
 module purge
 
+# Ensure that there is not multiple threads running
+export OMP_NUM_THREADS=1
+
 # On thul and interactive nodes, sourching leads to going back
 cd $tmp
 unset tmp
