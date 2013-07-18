@@ -1,6 +1,11 @@
 
 # File for auxillary commands used in the command line tools
 
+# Print simple string (shortcut for printf "%s" "$1")
+function _ps {
+    printf "%s" "$@"
+}
+
 # Trimmer for options or any other type of variable which has
 # an em-dash in front
 function trim_em {
@@ -8,7 +13,7 @@ function trim_em {
     case $opt in
 	--*) opt=${opt:1} ;;
     esac
-    printf "%s" "$opt"
+    _ps "$opt"
 }
 
 # A variable is passed to var_spec
@@ -20,32 +25,35 @@ function trim_em {
 #  $(var_spec foo[bar]) == foo
 #  $(var_spec foo) == foo
 #  $(var_spec -s foo) == ''
+#  $(var_spec -s foo bar[rab]) == ' rab'
 function var_spec {
     local v=1
-    while [ $# -gt 1 ]; do
-	local opt=$(trim_em $1)
+    while [ $# -gt 0 ]; do
+	local opt=$(trim_em "$1")
 	case $opt in
-	    -var|-v) v=1  ;;
-	    -spec|-s) v=2  ;;
+	    -var|-v) v=1 ; shift ;;
+	    -spec|-s) v=2 ; shift ;;
 	esac
+        # We add field separators
+	[ $v -eq 1 ] && _ps $(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')
+	[ $v -eq 2 ] && _ps $(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')
 	shift
+	# Add delimiter
+	[ $# -gt 0 ] && _ps " "
     done
-    # We add field separators
-    [ $v -eq 1 ] && echo -n $(echo -n $1 | awk -F'[\\[\\]]' '{ print $1}')
-    [ $v -eq 2 ] && echo -n $(echo -n $1 | awk -F'[\\[\\]]' '{ print $2}')
 }
 
 # Returns the lowercase of the argument (only translating A-Z)
 #
 # Example:
 #  $(lc fOObaR) == foobar
-function lc { echo "$1" | tr '[A-Z]' '[a-z]' ; }
+function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
 
 # Returns the file time in a simple format
 function get_file_time {
     local format="$1"
     local fdate=$(stat -c "%y" $2)
-    echo -n "`date +"$format" --date="$fdate"`"
+    _ps "`date +"$format" --date="$fdate"`"
 }
 
 # Routine for used in if statements (by checking the return value)
@@ -68,7 +76,8 @@ function isnumber {
 #  3. awk one-liner for not printing any dublicates
 #  4. translate '\n' to ' '
 function rem_dup {
-    echo -n "$(echo $@ | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' ')"
+    # Apparently we cannot use _ps here!!!!
+    echo -n "$@" | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' '
 }
 
 

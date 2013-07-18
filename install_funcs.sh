@@ -197,7 +197,7 @@ declare -a _mod_opts
 # Local variables for hash tables of index (speed up of execution)
 [ $_HAS_HASH -eq 1 ] && \
     declare -A _index
-# A separator used for commands that can be given consequitively
+# A separator used for commands that can be given consequetively
 _LIST_SEP='ø'
 # The counter to hold the archives
 _N_archives=-1
@@ -209,47 +209,63 @@ function add_package {
     # Do a timing
     [ $TIMING -ne 0 ] && local time=$(add_timing)
     _N_archives=$(( _N_archives + 1 ))
+    # Collect options
+    local d=""
+    local v=""
+    local fn=""
+    local package=""
+    local alias=""
+    while [ $# -gt 1 ]; do
+	local opt=$(trim_em $1) 
+	shift
+	case $opt in
+	    -archive|-A) fn=$1 ; shift ;;
+	    -directory|-d) d=$1 ; shift ;;
+	    -version|-v) v=$1 ; shift ;;
+	    -package|-p) package=$1 ; shift ;;
+	    -alias|-a) alias=$1 ; shift ;;
+	    *) doerr "$opt" "Not a recognized option for add_package" ;;
+	esac
+    done
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
     # Save the archive name
-    local fn=$(basename $url)
-    if [ $# -gt 1 ]; then
-	_archive[$_N_archives]=$2
-    else
-        _archive[$_N_archives]=$fn
-    fi
+    [ -z "$fn" ] && fn=$(basename $url)
+    _archive[$_N_archives]=$fn
     # Save the type of archive
-    local ext=$(echo -n $fn | awk -F. '{print $NF}')
+    local ext=$(_ps $fn | awk -F. '{print $NF}')
     _ext[$_N_archives]=$ext
     # Infer what the directory is
-    local d=${fn%.*tar.$ext}
-    [ "${#d}" -eq "${#fn}" ] && d=${fn%.$ext}
+    local archive_d=${fn%.*tar.$ext}
+    [ "${#archive_d}" -eq "${#fn}" ] && archive_d=${fn%.$ext}
+    [ -z "$d" ] && d=$archive_d
     _directory[$_N_archives]=$d
     # Save the version
-    local v=`expr match "$d" '[^-_]*[-_]\([0-9.]*\)'`
+    [ -z "$v" ] && v=`expr match "$archive_d" '[^-_]*[-_]\([0-9.]*\)'`
     if [ -z "$v" ]; then
-	v=`expr match "$d" '[^0-9]*\([0-9.]*\)'`
+	v=`expr match "$archive_d" '[^0-9]*\([0-9.]*\)'`
     fi
     _version[$_N_archives]=$v
     # Save the settings
     _settings[$_N_archives]=0
     # Save the package name...
-    local package=${d%$v}
+    [ -z "$package" ] && package=${d%$v}
     local len=${#package}
     if [[ ${package:$len-1} =~ [\-\._] ]]; then
 	package=${package:0:$len-1}
     fi
     _package[$_N_archives]=$package
     # Save the alias for the package, defaulted to package
-    _alias[$_N_archives]=$package
+    [ -z "$alias" ] && alias=$package
+    _alias[$_N_archives]=$alias
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
-	local tmp="${_index[$(lc $package)]}"
+	local tmp="${_index[$(lc $alias)]}"
 	if [ ! -z "$tmp" ]; then
-	    _index[$(lc $package)]="$tmp $_N_archives"
+	    _index[$(lc $alias)]="$tmp $_N_archives"
 	else
-	    _index[$(lc $package)]="$_N_archives"
+	    _index[$(lc $alias)]="$_N_archives"
 	fi
     fi
     # Default the module name to this:
@@ -315,7 +331,7 @@ function pack_set {
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     if [ ! -z "$req" ]; then
-	req="${_mod_req[$index]}$req"
+	req="${_mod_req[$index]} $req"
 	# Remove dublicates:
 	req="$(rem_dup $req)"
 	_mod_req[$index]="$req"
@@ -388,7 +404,7 @@ function pack_get {
 		-C|-commands)        echo -n "${_cmd[$index]}" ;;
 		-h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
 		-R|-module-requirement) 
-                                     echo -n "${_mod_req[$index]}" ;;
+                                     _ps "${_mod_req[$index]}" ;;
 		-I|-install-prefix|-prefix) 
                                      echo -n "${_install_prefix[$index]}" ;;
 		-Q|-install-query)   echo -n "${_install_query[$index]}" ;;
@@ -675,7 +691,7 @@ function pack_install {
 	dwn_file $idx $(get_build_path)/.archives
 
         # Extract the archive
-	pushd $(get_build_path)/.compile
+	pushd $(get_build_path)/.compile 1> /dev/null
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
 	local d=$(pack_get --directory $idx)
@@ -683,12 +699,13 @@ function pack_install {
 	    rm -rf $(pack_get --directory $idx)
 	fi
 	extract_archive $(get_build_path)/.archives $idx
-	pushd $(pack_get --directory $idx)
+	pushd $(pack_get --directory $idx) 1> /dev/null
 	[ $? -ne 0 ] && exit 1
 
         # We are now in the package directory
 	if $(has_setting $BUILD_DIR $idx) ; then
-	    rm -rf build-tmp ; mkdir -p build-tmp ; popd ; pushd $(pack_get --directory $idx)/build-tmp
+	    rm -rf build-tmp ; mkdir -p build-tmp ; popd 1> /dev/null 
+	    pushd $(pack_get --directory $idx)/build-tmp 1> /dev/null
 	fi
 	
 	# Run all commands
@@ -700,7 +717,7 @@ function pack_install {
 	    docmd "$idx" "$cmd"
 	done
 
-	popd
+	popd 1> /dev/null
 
         # Remove compilation directory
 	local d=$(pack_get --directory $idx)
@@ -708,7 +725,7 @@ function pack_install {
 	    rm -rf $(pack_get --directory $idx)
 	fi
 	
-	popd
+	popd 1> /dev/null
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
@@ -1163,9 +1180,9 @@ function docmd {
 # Return the latest index, or the provided one, if any
 function _get_true_index {
     if [ $# -eq 0 ]; then
-	echo -n "$_N_archives"
+	_ps "$_N_archives"
     else
-	echo -n "$1"
+	_ps "$1"
     fi
 }
 
@@ -1282,7 +1299,7 @@ function add_timing {
 	else
 	    local div_ns=$((new_ns-old_ns+run_ns))
 	fi
-	echo -n $((new_s-old_s+run_s+div_ns/$_NS)).$((div_ns-div_ns/$_NS*$_NS))
+	_ps $((new_s-old_s+run_s+div_ns/$_NS)).$((div_ns-div_ns/$_NS*$_NS))
     fi
 }
 

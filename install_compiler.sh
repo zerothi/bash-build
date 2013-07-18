@@ -2,9 +2,9 @@
 # We here contain any information that could be relevant for compiler setups
 
 _c=""
-# Instalation path
-function set_c {          _c=$1 ; }
-function get_c { echo -n $_c ; }
+# Set compiler name
+function set_c { _c="$1" ; }
+function get_c { printf "%s" "$_c" ; }
 
 # Check the compiler...
 # Takes one argument:
@@ -23,7 +23,12 @@ declare -a _c_fO
 declare -a _c_cO
 
 # Sets the compiler optimization levels for the C and F compiler
-# It will allow 10 levels (to comply with more differences in compilations)
+# Currently it does not retain any information about the levels.
+# However the array will setup like this:
+#  0 == default flags
+#  idx == level flags
+# If idx does not exist, or the level has a zero length value it will
+# return what is the default flag.
 # 
 # Example:
 #  set_flags 1 -xHost -O3 ...
