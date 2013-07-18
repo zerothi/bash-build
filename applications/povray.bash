@@ -9,8 +9,6 @@ pack_set --install-query $(pack_get --install-prefix)/bin/povray
 # install commands... (this will install the non-GUI version)
 pack_set --command "echo '$(pack_get --install-prefix)' | ./install -no-arch-check U"
 
-pack_set --command "esunthoeas"
-
 pack_install
 
 create_module \

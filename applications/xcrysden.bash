@@ -56,6 +56,11 @@ pack_set --command "cp $(pwd)/$tmp_file Make.sys"
 pack_set --command "make xcrysden"
 pack_set --command "prefix=$(pack_get --install-prefix) make install"
 
+# Add the XCRYSDEN TOP DIR env
+#pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --install-prefix)"
+#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --install-prefix)/scripts"
+#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --install-prefix)/util"
+
 pack_install
 
 if [ $(pack_get --installed) -eq 1 ]; then

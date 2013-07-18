@@ -995,7 +995,7 @@ EOF
 	done
 	echo "" >> $mfile
     fi
-    # Add conflict if needed
+    # Add specific envs if needed
     if [ ! -z "${env// /}" ]; then
 	cat <<EOF >> $mfile
 # Specific environment variables:
