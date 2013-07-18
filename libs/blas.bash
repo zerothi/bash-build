@@ -1,15 +1,16 @@
 # Then install BLAS
-add_package http://www.netlib.org/blas/blas.tgz
+add_package \
+    --package blas \
+    --directory BLAS \
+    http://www.netlib.org/blas/blas.tgz
 
 pack_set_file_version
 
-pack_set --directory BLAS
-pack_set --alias blas
-
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-# Required as the version has just been set
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+
+# Required as the version has just been set
 pack_set --install-query $(pack_get --install-prefix)/lib/libblas.a
 
 # Prepare the make file

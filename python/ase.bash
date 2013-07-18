@@ -1,13 +1,13 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
 for v in 3.6.0.2515 3.7.1.3184 ; do
-add_package https://wiki.fysik.dtu.dk/ase-files/python-ase-$v.tar.gz
+add_package \
+    --package ase \
+    https://wiki.fysik.dtu.dk/ase-files/python-ase-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch
-
-pack_set --alias ase
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 

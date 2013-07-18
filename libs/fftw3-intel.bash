@@ -1,10 +1,13 @@
 if [ ! -z "$MKL_PATH" ] ; then
 add_package fftw_intel-3.local
 
-pack_set --host-reject thul
-
 pack_set --directory .
 pack_set --version 3
+pack_set --host-reject thul
+
+# Notice that we install this along with fftw2 from intel
+# The names are not overlapping, hence we do not need
+# to change the version numbering
 pack_set --install-prefix $(pack_get --install-prefix fftw[intel])
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw3xf.a

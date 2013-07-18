@@ -39,10 +39,11 @@ pack_set --command "cp Include/cholmod_internal.h $(pack_get --install-prefix)/i
 
 
 # Add the CHOLMOD include directory to the path (we need to run this EVERY time)
-add_package http://www.cise.ufl.edu/research/sparse/cholmod/CHOLMOD-$v.tar.gz
+add_package \
+    --package CHOLMOD-make \
+    http://www.cise.ufl.edu/research/sparse/cholmod/CHOLMOD-$v.tar.gz
 pack_set --directory CHOLMOD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias CHOLMOD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

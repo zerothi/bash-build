@@ -6,9 +6,6 @@ add_package http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --alias gdis
-pack_set --version $v
-
 pack_set $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0 n-)
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)

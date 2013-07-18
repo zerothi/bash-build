@@ -1,9 +1,10 @@
-add_package https://github.com/keplerproject/luafilesystem/archive/master.zip
+add_package \
+    --package lua-filesystem \
+    --directory luafilesystem-master \
+    --archive lua-filesystem.zip \
+    https://github.com/keplerproject/luafilesystem/archive/master.zip
 
 pack_set --module-requirement lua
-
-pack_set --alias lua-filesystem
-pack_set --directory luafilesystem-master
 
 pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/lfs.so
 

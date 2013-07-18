@@ -1,14 +1,13 @@
 # Then install H5 utils
 for p in 1.12.1 ; do
 
-add_package http://ab-initio.mit.edu/h5utils/h5utils-$p.tar.gz
+add_package \
+    --package h5utils-serial \
+    http://ab-initio.mit.edu/h5utils/h5utils-$p.tar.gz
 
 pack_set --host-reject "ntch"
-pack_set --alias h5utils-serial
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
-
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/h5totxt
 

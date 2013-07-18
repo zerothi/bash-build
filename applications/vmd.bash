@@ -1,12 +1,13 @@
-add_package http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.1/files/final/vmd-1.9.1.bin.LINUXAMD64.opengl.tar.gz
+v=1.9.1
+add_package \
+    --package vmd \
+    --version $v \
+    http://www.ks.uiuc.edu/Research/vmd/vmd-$v/files/final/vmd-$v.bin.LINUXAMD64.opengl.tar.gz
 
 pack_set -s $IS_MODULE
 
 # Force the named alias
-pack_set --alias vmd
-pack_set --version 1.9.1
 pack_set --directory vmd-$(pack_get --version)
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/vmd
 

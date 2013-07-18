@@ -1,21 +1,19 @@
-msg_install --message "Installing the python-packages..."
+msg_install \
+    --message \
+    "Installing the python-packages for $(pack_get --module-name $(get_parent))"
 # This script will install all python packages
 
-echo "##### $(pack_get --module-name $(get_parent)) #####"
 module load $(get_default_modules) $(pack_get --module-name $(get_parent))
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
 IpV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 module unload $(pack_get --module-name $(get_parent)) $(get_default_modules)
-
-echo $(get_default_modules)
 
 #source python/distribute.bash
 source python/cython.bash
 source python/bazar.bash
 source python/nose.bash
 
-timings For python default packages
-
+# Generic scientific libraries
 source python/mpi4py.bash
 source python/numpy.bash
 source python/scipy.bash # [numpy]
@@ -23,10 +21,10 @@ source python/numexpr.bash # [numpy]
 source python/scientificpython.bash
 source python/matplotlib.bash
 
-timings For python default scientific packages
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
+
 source python/inelastica.bash
 source python/inelastica-dev.bash
 
@@ -38,7 +36,5 @@ source python/gpaw-setups.bash
 source python/pythtb.bash
 
 source python/phonopy.bash
-
-timings For python special packages
 
 install_all --from $(get_parent)

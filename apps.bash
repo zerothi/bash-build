@@ -1,12 +1,9 @@
 #source applications/git.bash
 msg_install --message "Installing the applications..."
 
-
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
 source applications/siesta-scf.bash
-
-timings For SIESTA installation
 
 source applications/lammps.bash
 
@@ -18,8 +15,7 @@ source applications/xcrysden.bash
 source applications/vmd.bash
 source applications/vmd-text.bash
 
-timings For GUI plots installation
-
+# DFT codes
 source applications/dftb.bash
 source applications/qespresso.bash
 source applications/wannier.bash
@@ -30,15 +26,11 @@ source applications/vasp.bash
 source applications/vasp-intel.bash
 source applications/vasp-potcar.bash
 
-timings For requested dynamics/DFT codes
-
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
 source applications/mpb-serial.bash # [gmp,libunistring,guile]
 source applications/meep.bash # [gmp,libunistring,guile]
 source applications/meep-serial.bash # [gmp,libunistring,guile]
-
-timings For Photonics group installation
 
 # Create a module with default all plotting tools
 create_module \
@@ -52,7 +44,11 @@ create_module \
 
 
 # Things which are not linked to the compiler
-set_c ''
-set_default_modules ""
-source applications/gdis.bash
-#source applications/povray.bash
+$(
+    # Put it inside a new group
+    set_c ''
+    set_default_modules ""
+    source applications/gdis.bash
+    #source applications/povray.bash
+)
+

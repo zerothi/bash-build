@@ -1,13 +1,13 @@
 # Install
-add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
+add_package \
+    --package mpb-serial \
+    http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch --host-reject zeroth \
     $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0)
 
-pack_set --alias mpb-serial
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/bin/mpbi
 
 pack_set --module-requirement libctl \

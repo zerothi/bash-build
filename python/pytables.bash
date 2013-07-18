@@ -2,10 +2,9 @@ tmp=$(hostname)
 [ "${tmp:0:2}" != "n-" ] && return 0
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-add_package http://downloads.sourceforge.net/project/pytables/pytables/2.4.0/tables-2.4.0.tar.gz
-
-pack_set --alias pytables
-pack_set --package pytables
+add_package \
+    --package pytables \
+    http://downloads.sourceforge.net/project/pytables/pytables/2.4.0/tables-2.4.0.tar.gz
 
 pack_set -s $IS_MODULE
 

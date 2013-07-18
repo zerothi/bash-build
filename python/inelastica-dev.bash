@@ -1,11 +1,12 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
 for v in 151 191 ; do
-add_package http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
+add_package \
+    --package Inelastica-DEV \
+    http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --alias Inelastica-DEV
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica

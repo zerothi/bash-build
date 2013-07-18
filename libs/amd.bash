@@ -41,10 +41,11 @@ pack_set --command "cp Include/amd_internal.h $(pack_get --install-prefix)/inclu
 
 
 # Add the AMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/amd/AMD-$v.tar.gz
+add_package \
+    --package AMD-make \
+    http://www.cise.ufl.edu/research/sparse/amd/AMD-$v.tar.gz
 pack_set --directory AMD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias AMD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

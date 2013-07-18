@@ -40,10 +40,11 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the UMFPACK include directory to the path (we need to run this EVERY time)
-add_package http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-$v.tar.gz
+add_package \
+    --package UMFPACK-make \
+    http://www.cise.ufl.edu/research/sparse/umfpack/UMFPACK-$v.tar.gz
 pack_set --directory UMFPACK
 pack_set --install-query /directory/does/not/exist
-pack_set --alias UMFPACK-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

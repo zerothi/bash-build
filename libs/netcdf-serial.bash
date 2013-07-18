@@ -1,11 +1,10 @@
 # Now we can install NetCDF (we need the C version to be first added!)
 for v in 4.3.0 ; do
-add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
+add_package \
+    --package netcdf-serial \
+    http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
-
-pack_set --alias netcdf-serial
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5-serial

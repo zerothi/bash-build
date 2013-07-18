@@ -6,13 +6,11 @@ fi
 
 # Now we can install NetCDF (we need the C version to be first added!)
 v=4.3.0
-add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
+add_package \
+    --package netcdf-logging \
+    http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
-
-pack_set --alias netcdf-logging
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
 

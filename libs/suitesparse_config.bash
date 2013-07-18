@@ -1,10 +1,11 @@
 v=4.2.1
-add_package http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
+add_package \
+    --alias SS_config \
+    --directory SuiteSparse_config \
+    http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --alias SS_config
-pack_set --directory SuiteSparse_config
 pack_set --install-query $(pack_get --install-prefix)/lib/libsuitesparseconfig.a
 
 mk=SuiteSparse_config.mk
@@ -27,9 +28,10 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 # We create the suitesparse_config makefile for all related packages!
 # This needs to be runned every time, and thus we create a new package!
-add_package http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
+add_package \
+    --package SS_config_make \
+    http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
 
-pack_set --alias SS_config_make
 pack_set --directory SuiteSparse_config
 pack_set --install-query /directory/does/not/exist
 

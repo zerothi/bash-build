@@ -3,9 +3,9 @@ msg_install --message "Installing all libraries..."
 # Library used by MANY packages
 source libs/openmpi-hpc.bash
 
+
 #source libs/gmp.bash
 #source libs/guile.bash
-
 
 # Default fftw libs
 source libs/fftw2.bash
@@ -19,8 +19,6 @@ source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
 
-timings For basic math libraries and OpenMPI
-
 # Some specific libraries
 source libs/gsl.bash
 #source libs/boost.bash
@@ -33,8 +31,7 @@ source libs/flex.bash
 source libs/pcre.bash
 source libs/swig.bash
 
-timings For specific/requested libraries 
-
+# Install generic libraries
 source libs/zlib.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
@@ -47,19 +44,15 @@ source libs/netcdf-serial.bash
 #source libs/udunits.bash
 #source libs/nco.bash
 
-timings For netcdf and related libraries
-
 # A sparse library
 source libs/suitesparse.bash
-
-timings For sparse libraries
 
 source libs/metis.bash
 source libs/metis-par.bash
 source libs/metis-par-3.bash
 source libs/mumps.bash
 
-install_all
+install_all --from openmpi
 
 # We install the module scripts here:
 create_module \

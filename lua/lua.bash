@@ -28,5 +28,5 @@ source lua/filesystem.bash
 source lua/posix.bash
 source lua/lmod.bash
 
-install_all
+install_all --from lua
 

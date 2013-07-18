@@ -2,11 +2,13 @@
 #  libtoolize/libtool
 #  automake
 
-add_package https://github.com/luaposix/luaposix/archive/master.zip lua-posix.zip
+add_package \
+    --archive lua-posix.zip \
+    --directory luaposix-master \
+    https://github.com/luaposix/luaposix/archive/master.zip
 
 pack_set --module-requirement lua
 
-pack_set --directory luaposix-master
 pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/posix_c.so
 
 # bootstrap

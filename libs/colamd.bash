@@ -31,10 +31,11 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the COLAMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/colamd/COLAMD-$v.tar.gz
+add_package \
+    --package COLAMD-make \
+    http://www.cise.ufl.edu/research/sparse/colamd/COLAMD-$v.tar.gz
 pack_set --directory COLAMD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias COLAMD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

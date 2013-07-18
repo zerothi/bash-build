@@ -1,12 +1,13 @@
-add_package http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.1/files/final/vmd-1.9.1.bin.LINUXPPC64.text.tar.gz
+v=1.9.1
+add_package \
+    --package vmd-text \
+    --version $v \
+    http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.1/files/final/vmd-$v.bin.LINUXPPC64.text.tar.gz
 
 pack_set -s $IS_MODULE
 
 # Force the named alias
-pack_set --alias vmd-text
-pack_set --version 1.9.1
 pack_set --directory vmd-$(pack_get --version)
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/vmd
 

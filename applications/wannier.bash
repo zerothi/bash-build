@@ -1,4 +1,4 @@
-for v in 1.1 1.2 ; do
+for v in 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

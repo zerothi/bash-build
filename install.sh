@@ -112,8 +112,6 @@ fi
 # Install the lua-libraries
 source lua/lua.bash
 
-install_all
-
 # Install all libraries
 source libs.bash
 
@@ -128,8 +126,6 @@ source apps.bash
 source scripts.bash
 
 install_all
-
-timings
 
 
 # When dealing with additional sets of instructions spec files

@@ -1,13 +1,12 @@
 # This package requires that flex and bison is installed
 
 # Install the Parallel NetCDF
-add_package http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.3.1.tar.bz2
-
-pack_set --alias pnetcdf
+add_package \
+    --package pnetcdf \
+    http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.3.1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --install-query $(pack_get --install-prefix)/lib/libpnetcdf.a
 
 pack_set --module-requirement openmpi

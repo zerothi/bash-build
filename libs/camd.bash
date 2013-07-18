@@ -31,10 +31,11 @@ pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
 
 
 # Add the AMD include directory to the path
-add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-$v.tar.gz
+add_package \
+    --package CAMD-make \
+    http://www.cise.ufl.edu/research/sparse/camd/CAMD-$v.tar.gz
 pack_set --directory CAMD
 pack_set --install-query /directory/does/not/exist
-pack_set --alias CAMD-make
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk

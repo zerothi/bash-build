@@ -1,8 +1,9 @@
-add_package http://www.fftw.org/fftw-2.1.5.tar.gz
+add_package \
+    --alias fftw-2 \
+    http://www.fftw.org/fftw-2.1.5.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --alias fftw-2
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw_mpi.a
 
 # Install commands that it should run

@@ -1,5 +1,7 @@
 for v in 5.3.3 ; do
-add_package http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
+add_package \
+    --package vasp \
+    http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
 
 pack_set --version $(pack_get --version)-fftw3.3.2
 pack_set --module-requirement fftw-3
