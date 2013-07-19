@@ -81,6 +81,138 @@ function rem_dup {
 }
 
 
+# Based on the extension which command should be called
+# to extract the archive
+function arc_cmd {
+    local ext="$(lc $1)"
+    if [ "x$ext" == "xbz2" ]; then
+	_ps "tar jxf"
+    elif [ "x$ext" == "xxz" ]; then
+	_ps "tar Jxf"
+    elif [ "x$ext" == "xgz" ]; then
+	_ps "tar zxf"
+    elif [ "x$ext" == "xtgz" ]; then
+	_ps "tar zxf"
+    elif [ "x$ext" == "xtar" ]; then
+	_ps "tar xf"
+    elif [ "x$ext" == "xzip" ]; then
+	_ps "unzip"
+    elif [ "x$ext" == "xpy" ]; then
+	_ps "ln -fs"
+    elif [ "x$ext" == "xlocal" ]; then
+	_ps "echo"
+    else
+	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local]"
+    fi
+}
+
+# Extract file 
+# $1 subdirectory of archive
+# $2 index or name of archive
+function extract_archive {
+    local alias="$2"
+    local d=$(pack_get --directory $alias)
+    local cmd=$(arc_cmd $(pack_get --ext $alias) )
+    local archive=$(pack_get --archive $alias)
+    # If a previous extraction already exists (delete it!)
+    if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
+	[ -d "$1/$d" ] && rm -rf "$1/$d"
+    fi
+    local ext=$(pack_get --ext $alias)
+    [ "x$ext" == "xlocal" ] && return 0
+    docmd "$alias" $cmd $1/$archive
+}
+
+# Using wget we will collect the giving file
+# $1 http path 
+# $2 outdirectory
+function dwn_file {
+    local ext=$(pack_get --ext $1)
+    [ "x$ext" == "xlocal" ] && return 0
+    local subdir=./
+    if [ $# -gt 1 ]; then
+	subdir="$2"
+    fi
+    local archive=$(pack_get --archive $1)
+    [ -e $subdir/$archive ] && return 0
+    wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
+}
+
+# Function to return a list of space seperated quantities with prefix and suffix
+export _list_T=0.0
+function list {
+    do_debug --enter list
+    local time=$(add_timing)
+    local suf="" ; local pre="" ; local lcmd=""
+    local cmd ; local retval=""
+    # First we collect all options
+    local opts="" ; local space=" "
+    while : ; do
+	local opt=$(trim_em $1) # Save the option passed
+	case $opt in
+	    -*) ;;
+	    *)  break ;;
+	esac
+	shift
+	case $opt in
+	    -prefix|-p)    pre="$1" ; shift ;;
+	    -suffix|-s)    suf="$1" ; shift ;;
+	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
+	    -no-space|-X)  space="" ;;
+	    *)
+		opts="$opts $opt" ;;
+	esac
+    done
+    local args=""
+    while [ $# -gt 0 ]; do
+	args="$args $1"
+	shift
+    done
+    for opt in $opts ; do
+	case $opt in
+	    -pack-module-reqs)      
+		pre="--module-requirement " 
+		suf=""
+		args="$(pack_get --module-requirement $args) $args" ;;
+	    -Wlrpath)
+		pre="-Wl,-rpath=" 
+		suf="/lib" 
+		lcmd="pack_get --install-prefix " ;;
+	    -LDFLAGS)   
+		pre="-L"  
+		suf="/lib" 
+		lcmd="pack_get --install-prefix " ;;
+	    -INCDIRS) 
+		pre="-I" 
+		suf="/include" 
+		lcmd="pack_get --install-prefix " ;;
+	    *)
+		[ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
+		doerr "$opt" "No option for list found for $opt" ;;
+	esac
+	for cmd in $args ; do
+	    if [ ! -z "$lcmd" ]; then
+		retval="$retval$space$pre$($lcmd $cmd)$suf"
+	    else
+		retval="$retval$space$pre$cmd$suf"
+	    fi
+	done
+    done
+    if [ -z "$retval" ]; then
+	for cmd in $args ; do
+	    if [ ! -z "$lcmd" ]; then
+		retval="$retval$space$pre$($lcmd $cmd)$suf"
+	    else
+		retval="$retval$space$pre$cmd$suf"
+	    fi
+	done
+    fi
+    _ps "$retval"
+    [ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
+    do_debug --return list
+}
+
+
 if [ $DEBUG -gt 0 ]; then
     echo Debugging var_spec
     echo $(var_spec foo[bar])

@@ -33,7 +33,7 @@ function set_installation_path {
     mkdir -p $_prefix/modules-npa
     mkdir -p $_prefix/modules-npa-apps
 }
-function get_installation_path { echo -n $_prefix ; }
+function get_installation_path { _ps $_prefix ; }
 
 _crt_version=0
 # Instalation path
@@ -71,7 +71,7 @@ function set_default_modules { _def_module_reqs="$1"
 	done
     fi
 }
-function get_default_modules { echo -n "$_def_module_reqs" ; }
+function get_default_modules { _ps "$_def_module_reqs" ; }
 
 # Add any auxillary commands
 source install_aux.sh
@@ -99,66 +99,7 @@ function add_hidden_package {
     pack_set --version ${mod#*/}
 }
 
-# Based on the extension which command should be called
-# to extract the archive
-function arc_cmd {
-    local ext="$(lc $1)"
-    if [ "x$ext" == "xbz2" ]; then
-	echo -n "tar jxf"
-    elif [ "x$ext" == "xxz" ]; then
-	echo -n "tar Jxf"
-    elif [ "x$ext" == "xgz" ]; then
-	echo -n "tar zxf"
-    elif [ "x$ext" == "xtgz" ]; then
-	echo -n "tar zxf"
-    elif [ "x$ext" == "xtar" ]; then
-	echo -n "tar xf"
-    elif [ "x$ext" == "xzip" ]; then
-	echo -n "unzip"
-    elif [ "x$ext" == "xpy" ]; then
-	echo -n "ln -fs"
-    elif [ "x$ext" == "xlocal" ]; then
-	echo -n "echo"
-    else
-	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local]"
-    fi
-}
 
-
-#
-# Using wget we will collect the giving file
-# $1 http path 
-# $2 outdirectory
-function dwn_file {
-    local ext=$(pack_get --ext $1)
-    [ "x$ext" == "xlocal" ] && return 0
-    local subdir=./
-    if [ $# -gt 1 ]; then
-	subdir="$2"
-    fi
-    local archive=$(pack_get --archive $1)
-    [ -e $subdir/$archive ] && return 0
-    wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
-}
-
-
-#
-# Extract file 
-# $1 subdirectory of archive
-# $2 index or name of archive
-function extract_archive {
-    local alias="$2"
-    local d=$(pack_get --directory $alias)
-    local cmd=$(arc_cmd $(pack_get --ext $alias) )
-    local archive=$(pack_get --archive $alias)
-    # If a previous extraction already exists (delete it!)
-    if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
-	[ -d "$1/$d" ] && rm -rf "$1/$d"
-    fi
-    local ext=$(pack_get --ext $alias)
-    [ "x$ext" == "xlocal" ] && return 0
-    docmd "$alias" $cmd $1/$archive
-}
 
 # Local variables for archives to be installed
 declare -a _http
@@ -201,6 +142,76 @@ declare -a _mod_opts
 _LIST_SEP='ø'
 # The counter to hold the archives
 _N_archives=-1
+
+
+_def_module_reqs=""
+_build_install_path="--package --version"
+_build_module_path="--package --version"
+# Denote how the module paths and installation paths
+# should be
+function build_set {
+    do_debug --enter build_set
+    # We set up default parameters for creating the 
+    # default package directory
+    local ip=$_build_install_path
+    local mp=$_build_module_path
+    local def_m=""
+    while [ $# -gt 1 ]; do
+	local opt=$(trim_em $1) 
+	shift
+	case $opt in
+	    -installation-path|-ip) ip="$1" ; shift ;;
+	    -module-path|-mp) mp="$1" ; shift ;;
+	    -default-module) def_m="$def_m $1" ; shift ;;
+	    *) doerr "$opt" "Not a recognized option for build_set" ;;
+	esac
+    done
+    _def_module_reqs="$def_m"
+    _build_install_path="$ip"
+    _build_module_path="$mp"
+    do_debug --return build_set
+}
+
+# Retrieval of different variables
+function build_get {
+    do_debug --enter build_get
+    # We set up default parameters for creating the 
+    # default package directory
+    local opt=$(trim_em $1) 
+    case $opt in
+	-installation-path|-ip) _ps "$_build_install_path" ;;
+	-module-path|-mp) _ps "$_build_module_path" ;;
+	-default-module) _ps "$_def_module_reqs" ;; 
+	*) doerr "$opt" "Not a recognized option for build_get" ;;
+    esac
+    do_debug --return build_get
+}
+
+# Routine for shortcutting a list of values
+# through the pack_get 
+# i.e.
+# pack_list --list-flags "-s /" --package dir
+# returns $(pack_get --package)/dir/
+function pack_list {
+    local opt=""
+    local lf=""
+    while : ; do
+	opt=$(trim_em $1)
+	case $opt in
+	    -list-flags|-lf) shift ; lf="$1" ; shift ;;
+	    *) break ;;
+	esac
+    done
+    local ret=""
+    while [ $# -gt 0 ]; do
+	opt=$(trim_em $1) ; shift
+	case $opt in
+	    -*) ret="$ret$(list $lf -c "pack_get $opt" $_N_archives)" ;;
+	     *) ret="$ret$(list $lf $opt)" ;;
+	esac
+    done
+    _ps "$ret"
+}
 
 # $1 http path
 export _add_package_T=0.0
@@ -270,9 +281,12 @@ function add_package {
     fi
     # Default the module name to this:
     _installed[$_N_archives]=0
-    _mod_name[$_N_archives]=$package/$v/$(get_c)
+    _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $_build_module_path)
+    #$package/$v/$(get_c)
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
-    _install_prefix[$_N_archives]=$(get_installation_path)/$package/$v/$(get_c)
+    _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
+    _install_prefix[$_N_archives]=$(pack_list -lf "-X -s /" $_build_install_path)
+    _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     # Install default values
     _mod_req[$_N_archives]="$(get_default_modules)"
     _reject_host[$_N_archives]=""
@@ -458,10 +472,8 @@ function pack_get {
 
 function pack_installed {
     local ret=$(pack_get --installed $1)
-    if [ -z "$ret" ]; then
-	echo 0
-    fi
-    echo $ret
+    [ -z "$ret" ] && ret=0
+    _ps $ret
 }
 
 
@@ -487,79 +499,6 @@ function edit_env {
     [ ! -z "$prepend" ] && eval "export $env='$prepend${!env}'"
 }
 
-# Function to return a list of space seperated quantities with prefix and suffix
-export _list_T=0.0
-function list {
-    do_debug --enter list
-    local time=$(add_timing)
-    local suf="" ; local pre="" ; local lcmd=""
-    local cmd ; local retval=""
-    # First we collect all options
-    local opts="" ; local space=" "
-    while : ; do
-	local opt=$(trim_em $1) # Save the option passed
-	case $opt in
-	    -*) ;;
-	    *)  break ;;
-	esac
-	shift
-	case $opt in
-	    -prefix|-p)    pre="$1" ; shift ;;
-	    -suffix|-s)    suf="$1" ; shift ;;
-	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
-	    -no-space|-X)  space="" ;;
-	    *)
-		opts="$opts $opt" ;;
-	esac
-    done
-    local args=""
-    while [ $# -gt 0 ]; do
-	args="$args $1"
-	shift
-    done
-    for opt in $opts ; do
-	case $opt in
-	    -pack-module-reqs)      
-		pre="--module-requirement " 
-		suf=""
-		args="$(pack_get --module-requirement $args) $args" ;;
-	    -Wlrpath)
-		pre="-Wl,-rpath=" 
-		suf="/lib" 
-		lcmd="pack_get --install-prefix " ;;
-	    -LDFLAGS)   
-		pre="-L"  
-		suf="/lib" 
-		lcmd="pack_get --install-prefix " ;;
-	    -INCDIRS) 
-		pre="-I" 
-		suf="/include" 
-		lcmd="pack_get --install-prefix " ;;
-	    *)
-		[ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
-		doerr "$opt" "No option for list found for $opt" ;;
-	esac
-	for cmd in $args ; do
-	    if [ ! -z "$lcmd" ]; then
-		retval="$retval$space$pre$($lcmd $cmd)$suf"
-	    else
-		retval="$retval$space$pre$cmd$suf"
-	    fi
-	done
-    done
-    if [ -z "$retval" ]; then
-	for cmd in $args ; do
-	    if [ ! -z "$lcmd" ]; then
-		retval="$retval$space$pre$($lcmd $cmd)$suf"
-	    else
-		retval="$retval$space$pre$cmd$suf"
-	    fi
-	done
-    fi
-    echo -n "$retval"
-    [ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
-    do_debug --return list
-}
 
 
 function install_all {
