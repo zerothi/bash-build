@@ -213,6 +213,26 @@ function list {
 }
 
 
+# Debugging function for printing out every available
+# information about a package
+function pack_print {
+    # It will only take one argument...
+    local pack=$_N_archives
+    [ $# -gt 0 ] && pack=$1
+    echo " >> >> >> >> Package information"
+    echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
+    echo " V  : $(pack_get -v $pack)"
+    echo " DIR: $(pack_get -d $pack)"
+    echo " URL: $(pack_get -http $pack)"
+    echo " OUT: $(pack_get -A $pack)"
+    echo " CMD: $(pack_get -commands $pack)"
+    echo " IP : $(pack_get -install-prefix $pack)"
+    echo " MN : $(pack_get -module-name $pack)"
+    echo " IQ : $(pack_get -install-query $pack)"
+    echo " REQ: $(pack_get -module-requirement $pack)"
+    echo "                                 << << << <<"
+}
+
 if [ $DEBUG -gt 0 ]; then
     echo Debugging var_spec
     echo $(var_spec foo[bar])

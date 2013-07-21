@@ -61,17 +61,6 @@ _buildpath="./"
 function set_build_path {          _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
 function get_build_path { echo -n $_buildpath ; }
 
-_def_module_reqs=""
-# Path for downloading and extracting the packages
-function set_default_modules { _def_module_reqs="$1"
-    # Create the default packages so that they can be loaded...
-    if [ ! -z "$1" ]; then
-	for mod in $1 ; do
-	    add_hidden_package $mod
-	done
-    fi
-}
-function get_default_modules { _ps "$_def_module_reqs" ; }
 
 # Add any auxillary commands
 source install_aux.sh
@@ -83,7 +72,6 @@ source install_compiler.sh
 source install_hostinfo.sh
 
 
-
 # This function takes one argument
 # It is the name of the module that is "hidden", i.e. not
 # installed by these scripts. 
@@ -91,12 +79,12 @@ source install_hostinfo.sh
 # to use them on equal footing as the others...
 function add_hidden_package {
     local mod="$1"
-    add_package path_to_module/${mod%/*}-${mod#*/}.tar.gz
-    pack_set --alias $mod
+    add_package --alias $mod \
+	--version ${mod#*/} \
+	path_to_module/${mod%/*}-${mod#*/}.tar.gz
     pack_set --index-alias $mod
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
-    pack_set --version ${mod#*/}
 }
 
 
@@ -153,8 +141,8 @@ function build_set {
     do_debug --enter build_set
     # We set up default parameters for creating the 
     # default package directory
-    local ip=$_build_install_path
-    local mp=$_build_module_path
+    local ip=""
+    local mp=""
     local def_m=""
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
@@ -162,13 +150,16 @@ function build_set {
 	case $opt in
 	    -installation-path|-ip) ip="$1" ; shift ;;
 	    -module-path|-mp) mp="$1" ; shift ;;
-	    -default-module) def_m="$def_m $1" ; shift ;;
+	    -default-module) 
+		def_m="$def_m $1" 
+		add_hidden_package $1
+		shift ;;
 	    *) doerr "$opt" "Not a recognized option for build_set" ;;
 	esac
     done
-    _def_module_reqs="$def_m"
-    _build_install_path="$ip"
-    _build_module_path="$mp"
+    [ ! -z "$def_m" ] && _def_module_reqs="$def_m"
+    [ ! -z "$ip" ] && _build_install_path="$ip"
+    [ ! -z "$mp" ] && _build_module_path="$mp"
     do_debug --return build_set
 }
 
@@ -282,13 +273,13 @@ function add_package {
     # Default the module name to this:
     _installed[$_N_archives]=0
     _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $_build_module_path)
-    #$package/$v/$(get_c)
+    #_mod_name[$_N_archives]=$package/$v/$(get_c)
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
     _install_prefix[$_N_archives]=$(pack_list -lf "-X -s /" $_build_install_path)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     # Install default values
-    _mod_req[$_N_archives]="$(get_default_modules)"
+    _mod_req[$_N_archives]="$(build_get --default-module)"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
     msg_install --message "Added $package[$v] to the install list"
@@ -415,53 +406,51 @@ function pack_get {
 	    shift
             # Process what is requested
 	    case $opt in
-		-C|-commands)        echo -n "${_cmd[$index]}" ;;
-		-h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
+		-C|-commands)        _ps "${_cmd[$index]}" ;;
+		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
 		-I|-install-prefix|-prefix) 
-                                     echo -n "${_install_prefix[$index]}" ;;
-		-Q|-install-query)   echo -n "${_install_query[$index]}" ;;
-		-a|-alias)           echo -n "${_alias[$index]}" ;;
-		-A|-archive)         echo -n "${_archive[$index]}" ;;
-		-v|-version)         echo -n "${_version[$index]}" ;;
-		-d|-directory)       echo -n "${_directory[$index]}" ;;
-		-s|-settings)        echo -n "${_settings[$index]}" ;;
-		-installed)          echo -n "${_installed[$index]}" ;;
-		-m|-module-name)     echo -n "${_mod_name[$index]}" ;;
-		-module-opt)         echo -n "${_mod_opts[$index]}" ;;
-		-p|-package)         echo -n "${_package[$index]}" ;;
-		-e|-ext)             echo -n "${_ext[$index]}" ;;
-		-host-only)          echo -n "${_only_host[$index]}" ;;
-		-host-reject)        echo -n "${_reject_host[$index]}" ;;
+                                     _ps "${_install_prefix[$index]}" ;;
+		-Q|-install-query)   _ps "${_install_query[$index]}" ;;
+		-a|-alias)           _ps "${_alias[$index]}" ;;
+		-A|-archive)         _ps "${_archive[$index]}" ;;
+		-v|-version)         _ps "${_version[$index]}" ;;
+		-d|-directory)       _ps "${_directory[$index]}" ;;
+		-s|-settings)        _ps "${_settings[$index]}" ;;
+		-installed)          _ps "${_installed[$index]}" ;;
+		-m|-module-name)     _ps "${_mod_name[$index]}" ;;
+		-module-opt)         _ps "${_mod_opts[$index]}" ;;
+		-p|-package)         _ps "${_package[$index]}" ;;
+		-e|-ext)             _ps "${_ext[$index]}" ;;
+		-host-only)          _ps "${_only_host[$index]}" ;;
+		-host-reject)        _ps "${_reject_host[$index]}" ;;
 		*)
 		    doerr "$1" "No option for pack_get found for $1" ;;
 	    esac
-	    [ $# -gt 0 ] && echo -n " "
+	    [ $# -gt 0 ] && _ps " "
 	done
     else
 	local index=$_N_archives # Default to this
         # Process what is requested
 	case $opt in
-	    -C|-commands)        echo -n "${_cmd[$index]}" ;;
-	    -h|-u|-url|-http)    echo -n "${_http[$index]}" ;;
-	    -R|-module-requirement) 
-                echo -n "${_mod_req[$index]}" ;;
-	    -I|-install-prefix|-prefix) 
-                echo -n "${_install_prefix[$index]}" ;;
-	    -Q|-install-query)   echo -n "${_install_query[$index]}" ;;
-	    -a|-alias)           echo -n "${_alias[$index]}" ;;
-	    -A|-archive)         echo -n "${_archive[$index]}" ;;
-	    -v|-version)         echo -n "${_version[$index]}" ;;
-	    -d|-directory)       echo -n "${_directory[$index]}" ;;
-	    -s|-settings)        echo -n "${_settings[$index]}" ;;
-	    -installed)          echo -n "${_installed[$index]}" ;;
-	    -module-opt)         echo -n "${_mod_opts[$index]}" ;;
-	    -m|-module-name)     echo -n "${_mod_name[$index]}" ;;
-	    -p|-package)         echo -n "${_package[$index]}" ;;
-	    -e|-ext)             echo -n "${_ext[$index]}" ;;
-	    -host-only)          echo -n "${_only_host[$index]}" ;;
-	    -host-reject)        echo -n "${_reject_host[$index]}" ;;
+	    -C|-commands)        _ps "${_cmd[$index]}" ;;
+	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
+	    -R|-module-requirement) _ps "${_mod_req[$index]}" ;;
+	    -I|-install-prefix|-prefix) _ps "${_install_prefix[$index]}" ;;
+	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
+	    -a|-alias)           _ps "${_alias[$index]}" ;;
+	    -A|-archive)         _ps "${_archive[$index]}" ;;
+	    -v|-version)         _ps "${_version[$index]}" ;;
+	    -d|-directory)       _ps "${_directory[$index]}" ;;
+	    -s|-settings)        _ps "${_settings[$index]}" ;;
+	    -installed)          _ps "${_installed[$index]}" ;;
+	    -module-opt)         _ps "${_mod_opts[$index]}" ;;
+	    -m|-module-name)     _ps "${_mod_name[$index]}" ;;
+	    -p|-package)         _ps "${_package[$index]}" ;;
+	    -e|-ext)             _ps "${_ext[$index]}" ;;
+	    -host-only)          _ps "${_only_host[$index]}" ;;
+	    -host-reject)        _ps "${_reject_host[$index]}" ;;
 	    *)
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
@@ -493,7 +482,7 @@ function edit_env {
     esac
     local env=$1
     shift
-    [ "$echo_env" -ne "0" ] && echo -n "${!env}" && return 0
+    [ "$echo_env" -ne "0" ] && _ps "${!env}" && return 0
     # Process what is requested
     [ ! -z "$append" ] && export ${!env}="${!env}$append"
     [ ! -z "$prepend" ] && eval "export $env='$prepend${!env}'"
@@ -727,7 +716,7 @@ function get_index {
     if $(isnumber $name) ; then # We have a number
 	[ "$name" -gt "$_N_archives" ] && return 1
 	[ "$name" -lt 0 ] && return 1
-	echo -n "$name"
+	_ps "$name"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
 	return 0
@@ -742,7 +731,7 @@ function get_index {
 	    return 1
 	fi
 	if [ $all -eq 1 ]; then
-	    echo -n "${_index[$lc_name]}"
+	    _ps "${_index[$lc_name]}"
 	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	    do_debug --return get_index
 	    return 0
@@ -767,7 +756,7 @@ function get_index {
     [ -z "${i// /}" ] && i=-1
     #echo "$lc_name $version $i $l" >&2
     if [ "0" -le "$i" ] && [ "$i" -le "$_N_archives" ]; then
-	echo -n "$i"
+	_ps "$i"
 	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 	do_debug --return get_index
 	return 0
@@ -782,7 +771,7 @@ function get_index {
 			continue 
 		    fi
 		fi
-		echo -n "$i"
+		_ps "$i"
 		[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
 		do_debug --return get_index
 		return 0
@@ -810,9 +799,9 @@ function has_setting {
 #   $1 : <index of archive>
 function get_make_parallel {
     if $(has_setting $MAKE_PARALLEL $1) ; then
-	echo -n "-j $_n_procs"
+	_ps "-j $_n_procs"
     else
-	echo -n ""
+	_ps ""
     fi
 }
 
@@ -1059,24 +1048,30 @@ function msg_install {
 	    -start|-S) n="Installing" ; action=1 ;;
 	    -finish|-F) n="Finished" ; action=2 ;;
 	    -already-installed) n="Already installed" ; action=3 ;;
-	    -message) n="$1" ; action=4 ;;
+	    -message) n="$1" ; shift ; action=4 ;;
+	    *) break ;;
 	esac
     done
+    if [ $# -gt 0 ]; then
+	local pack=$1
+    else
+	local pack=$_N_archives
+    fi
     [ "$action" -ne "4" ] && \
-	local cmd=$(arc_cmd $(pack_get --ext $1) )
+	local cmd=$(arc_cmd $(pack_get --ext $pack) )
     echo " ================================== "
     echo "   $n"
     if [ "$action" -eq "1" ]; then
-	echo " File    : $(pack_get --archive $1)"
-	echo " Ext     : $(pack_get --ext $1)"
+	echo " File    : $(pack_get --archive $pack)"
+	echo " Ext     : $(pack_get --ext $pack)"
 	echo " Ext CMD : $cmd"
     fi
     if [ "$action" -ne "4" ]; then
-	echo " Package : $(pack_get --package $1)"
-	if [ "$(pack_get --package $1)" != "$(pack_get --alias $1)" ]; then
-	    echo " Alias   : $(pack_get --alias $1)"
+	echo " Package : $(pack_get --package $pack)"
+	if [ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]; then
+	    echo " Alias   : $(pack_get --alias $pack)"
 	fi	
-	echo " Version : $(pack_get --version $1)"
+	echo " Version : $(pack_get --version $pack)"
     fi
     if [ "$action" -eq "1" ]; then
 	module list 2>&1
@@ -1213,7 +1208,7 @@ function timings {
 
 function add_timing {
     if [ $# -eq 0 ]; then
-	echo -n `date +%s-%N`
+	_ps `date +%s-%N`
     else
 	# The current time that has runned...
 	#echo $@ >> timing

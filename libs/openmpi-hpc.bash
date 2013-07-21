@@ -40,18 +40,18 @@ pack_set --installed 1
 pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
 
 
-module load $(get_default_modules)
+module load $(build_get --default-module)
 module load $mod
 tmp=$(which mpif90)
 pack_set --install-prefix ${tmp//\/bin*/}
 module unload $mod
-module unload $(get_default_modules)
+module unload $(build_get --default-module)
 
 create_module \
     -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
     -v $(pack_get --version) \
     -M $(pack_get --alias)/$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(get_default_modules)) \
+    $(list --prefix '-L ' $(build_get --default-module)) \
     -L $mod
 

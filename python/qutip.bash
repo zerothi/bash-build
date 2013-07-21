@@ -12,8 +12,6 @@ pack_set -s $IS_MODULE
 
 #pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 p_name=$(lc $(pack_get --alias))
 p_name=${p_name//-DEV/}
 

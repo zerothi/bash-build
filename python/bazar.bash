@@ -5,8 +5,6 @@ add_package https://launchpad.net/bzr/2.5/2.5.1/+download/bzr-2.5.1.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/bin/bzr
 
 # Add requirments when creating the module

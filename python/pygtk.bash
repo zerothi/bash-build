@@ -5,8 +5,6 @@ pack_set -s $IS_MODULE
 pack_set --host-reject thul --host-reject surt \
     --host-reject slid --host-reject ntch
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
 
 # This module requires a lot of modules:

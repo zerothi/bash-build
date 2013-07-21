@@ -45,8 +45,8 @@ pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
 
 # TODO
 # It does depend on LAPACK, only for testing purposes!
-module load $(get_default_modules)
+module load $(build_get --default-module)
 module load $(pack_get --module-name lapack)
 module unload $(pack_get --module-name lapack)
-module unload $(get_default_modules)
+module unload $(build_get --default-module)
 done

@@ -3,14 +3,12 @@ add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement numpy
 
 if [ $(pack_get --installed swig) -eq 1 ]; then
-    pack_set --command "module load $(get_default_modules) $(pack_get --module-name pcre swig)"
+    pack_set --command "module load $(build_get --default-module) $(pack_get --module-name pcre swig)"
 fi
 
 # Check for Intel MKL or not
@@ -36,7 +34,7 @@ pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 if [ $(pack_get --installed swig) -eq 1 ]; then
-    pack_set --command "module unload $(pack_get --module-name swig pcre) $(get_default_modules)"
+    pack_set --command "module unload $(pack_get --module-name swig pcre) $(build_get --default-module)"
 fi
 
 done

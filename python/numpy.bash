@@ -3,7 +3,6 @@ add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 if [ "x${pV:0:1}" == "x3" ]; then
     pack_set --install-query $(pack_get --install-prefix)/bin/f2py3
 else

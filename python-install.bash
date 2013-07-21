@@ -8,6 +8,10 @@ pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[
 IpV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 module unload $(pack_get --module-name $(get_parent)) $(get_default_modules)
 
+build_set --module-path "--package --version $IpV $(get_c)"
+build_set --installation-path \
+    "$(get_installation_path) --package --version $IpV $(get_c)"
+
 #source python/distribute.bash
 source python/cython.bash
 source python/bazar.bash
@@ -38,3 +42,7 @@ source python/pythtb.bash
 source python/phonopy.bash
 
 install_all --from $(get_parent)
+
+build_set --module-path "--package --version $(get_c)"
+build_set --installation-path \
+    "$(get_installation_path) --package --version $(get_c)"

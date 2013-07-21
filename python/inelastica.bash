@@ -4,8 +4,6 @@ add_package http://downloads.sourceforge.net/project/inelastica/1.1/Inelastica-1
 
 pack_set -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 
 pack_set --module-requirement netcdf-serial \

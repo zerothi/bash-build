@@ -7,8 +7,6 @@ pack_set -s $IS_MODULE
 
 pack_set --host-reject "ntch-2857"
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
-
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \
