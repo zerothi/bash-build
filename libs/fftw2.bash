@@ -22,4 +22,3 @@ pack_set --command "make" \
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(build_get --default-module)"
 
-pack_install
