@@ -2,7 +2,8 @@
 # libgtk2.0-dev
 
 for v in 0.91b ; do 
-add_package http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
+add_package --version $v \
+    http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
 
 pack_set -s $IS_MODULE
 

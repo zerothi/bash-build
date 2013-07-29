@@ -10,7 +10,7 @@ add_package $p
 
 pack_set -s $IS_MODULE
 
-#pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
+pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$IpV/$(get_c)
 
