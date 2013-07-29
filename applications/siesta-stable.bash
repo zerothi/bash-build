@@ -92,6 +92,7 @@ pack_set --command "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 # Create install directory
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+pack_set --command "make version"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
@@ -102,6 +103,7 @@ pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
+pack_set --command "make version"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"

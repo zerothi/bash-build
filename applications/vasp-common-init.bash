@@ -7,13 +7,13 @@ pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 pack_set --module-requirement openmpi
 pack_set --module-requirement wannier90[1.2]
 
-pack_set --install-query $(pack_get --install-prefix)/bin/vaspGNGZhalf
+pack_set --install-query $(pack_get --install-prefix)/bin/vasp_tstGNGZhalf
 
 tmp=$(pack_get --alias)-$(pack_get --version).make
 
-# We can start by unpacking the stuff..
-pack_set --command "tar xvfz vasp.5.3.3.tar.gz"
-pack_set --command "tar xvfz vasp.5.lib.tar.gz"
+# We can start by unpacking the stuff.
+pack_set --command "tar xfz vasp.5.3.3.tar.gz"
+pack_set --command "tar xfz vasp.5.lib.tar.gz"
 
 # Correct the VDW algorithm
 pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"

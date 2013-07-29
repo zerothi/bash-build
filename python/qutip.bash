@@ -10,7 +10,7 @@ add_package $p
 
 pack_set -s $IS_MODULE
 
-#pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
+pack_set $(list --prefix '--host-reject ' thul surt ntch zeroth)
 
 p_name=$(lc $(pack_get --alias))
 p_name=${p_name//-DEV/}

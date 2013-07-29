@@ -89,6 +89,7 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+pack_set --command "make version"
 pack_set --command "siesta_install --siesta"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
@@ -103,6 +104,7 @@ pack_set --command "make clean"
 # We have not created a test for the check of already installed files...
 #pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
+pack_set --command "make version"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
