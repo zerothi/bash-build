@@ -1,4 +1,4 @@
-for v in siesta-scf-523.tar.gz ; do
+for v in siesta-scf-524.tar.gz ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/$v
 
@@ -83,11 +83,6 @@ else
 
 fi
 
-
-# Correct an error for the GNU compiler:
-pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_ts_contour.f90"
-
-
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 # This should ensure a correct handling of the version info...
@@ -120,9 +115,7 @@ pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
 pack_set --command "cp new.gnubands.o $(pack_get --install-prefix)/bin/gnubands"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/gnubands"
 pack_set --command "cp eigfat2plot.o $(pack_get --install-prefix)/bin/eigfat2plot"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/eigfat2plot"
 
 pack_set --command "cd ../Contrib/APostnikov"
 pack_set --command "make all"
@@ -148,6 +141,8 @@ pack_set --command "cd ../HSX"
 pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
+
+pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
 
 pack_install
 
