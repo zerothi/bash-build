@@ -1,6 +1,5 @@
-# Install the easiest first... OpenMPI
+# apt-get libc6-dev
 
-# Newest 1.6.5
 add_package http://www.open-mpi.org/software/ompi/v1.6/downloads/openmpi-1.6.5.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -10,6 +9,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
 pack_set --host-reject surt --host-reject thul
 pack_set --host-reject slid
+
+pack_set --module-requirement hwloc
 
 tmp_flags=""
 if $(is_host n-) ; then # enables the linking to the torque management system
@@ -26,12 +27,11 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --install-prefix)" \
+	--command-flag "--with-hwloc=$(pack_get --install-prefix hwloc)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-# Required libs:
-#  libc6-dev

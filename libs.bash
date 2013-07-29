@@ -1,5 +1,7 @@
 msg_install --message "Installing all libraries..."
 
+source libs/hwloc.bash
+
 # Library used by MANY packages
 source libs/openmpi-hpc.bash
 
@@ -15,9 +17,11 @@ source libs/fftw3-intel.bash
 
 # Default packages for many libs
 source libs/blas.bash
+source libs/cblas.bash
 source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
+source libs/plasma.bash
 
 # Some specific libraries
 source libs/gsl.bash
@@ -52,7 +56,7 @@ source libs/metis-par.bash
 source libs/metis-par-3.bash
 source libs/mumps.bash
 
-install_all --from openmpi
+install_all --from hwloc
 
 # We install the module scripts here:
 create_module \
