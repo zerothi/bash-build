@@ -1,4 +1,4 @@
-for v in siesta-scf-522.tar.gz ; do
+for v in siesta-scf-523.tar.gz ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/$v
 
@@ -90,11 +90,16 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+# This should ensure a correct handling of the version info...
+pack_set --command "make version"
+
 pack_set --command "siesta_install -v scf --siesta"
 pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
+
+pack_set --command "make version"
 
 # We have not created a test for the check of already installed files...
 #pack_set --command "../Src/obj_setup.sh"
