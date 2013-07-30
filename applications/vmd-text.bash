@@ -9,6 +9,8 @@ pack_set -s $IS_MODULE
 # Force the named alias
 pack_set --directory vmd-$(pack_get --version)
 
+pack_set --host-reject ntch
+
 pack_set --install-query $(pack_get --install-prefix)/bin/vmd
 
 # Install commands that it should run

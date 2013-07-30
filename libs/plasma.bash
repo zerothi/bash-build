@@ -37,7 +37,7 @@ LIBLAPACK = $(list --LDFLAGS --Wlrpath lapack) -llapack\n' $tmp"
 
 elif $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
-CFLAGS  += -DPLASMA_WITH_MKL -openmp \n\
+CFLAGS  += -DPLASMA_WITH_MKL -openmp -I$MKL_PATH/include \n\
 FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
