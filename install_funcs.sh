@@ -558,20 +558,29 @@ function pack_install {
 	    fi
 	done
     fi
-    if [ $run -eq 0 ]; then
-	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
-	[ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
-	do_debug --return pack_install
-	return 1
-    fi
-    
+
     # Make sure that every package before is installed...
     for tmp in $mod_reqs ; do
 	[ -z "$tmp" ] && break
 	if [ $(pack_get --installed $tmp) -eq 0 ]; then
 	    pack_install $tmp
 	fi
+	# Capture packages that has been rejected.
+	# If it depends on rejected packages, it must itself be rejected.
+	if [ $(pack_get --installed $tmp) -eq -1 ]; then
+	    run=0
+	    break
+	fi
     done
+
+    if [ $run -eq 0 ]; then
+	# Notify other required stuff that this can not be installed.
+	pack_set --installed -1 $idx
+	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
+	[ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
+	do_debug --return pack_install
+	return 1
+    fi
 
     # Update the module name now
     if $(has_setting $UPDATE_MODULE_NAME $idx) ; then
