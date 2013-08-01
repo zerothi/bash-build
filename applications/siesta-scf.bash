@@ -7,7 +7,10 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
-pack_set --module-requirement metis
+[ $(pack_get --installed metis) -eq 0 ] && pack_install metis
+if [ $(pack_get --installed metis) -eq 1 ]; then
+    pack_set --module-requirement metis
+fi
 
 # Change to directory:
 pack_set --command "cd Obj"
@@ -17,6 +20,13 @@ pack_set --command "../Src/obj_setup.sh"
 
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+
+if [ $(pack_get --installed metis) -eq 1 ]; then
+    pack_set --command "sed -i '1 a\
+FPPFLAGS += -DON_DOMAIN_DECOMP\n\
+ADDLIB += -lmetis' arch.make"
+fi
+
 pack_set --command "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
@@ -34,11 +44,11 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
-FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4 -DON_DOMAIN_DECOMP\n\
+FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lmetis\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
@@ -52,6 +62,7 @@ MPI_INCLUDE=.\n\
 .f90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 ' arch.make"
+
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
