@@ -3,7 +3,7 @@
 
 # We will create a local name of the host
 _host="$(hostname -s)"
-function get_hostname { echo -n "$_host" ; }
+function get_hostname { _ps "$_host" ; }
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')

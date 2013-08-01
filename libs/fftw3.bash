@@ -6,10 +6,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw3_mpi.a
 
-pack_set --command "module load $(build_get --default-module)"
-pack_set --command "module load $(pack_get --module-name openmpi)"
 # Install commands that it should run
-pack_set --command "module load $(build_get --default-module) $(pack_get --module-name openmpi)"
+pack_set --command "module load $(pack_get --module-requirement openmpi) $(pack_get --module-name openmpi)"
 
 pack_set --command "../configure" \
     --command-flag "--enable-mpi" \
@@ -20,4 +18,4 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-pack_set --command "module unload $(pack_get --module-name openmpi) $(build_get --default-module)"
+pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-requirement openmpi)"

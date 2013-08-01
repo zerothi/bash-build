@@ -34,7 +34,7 @@ pack_set --command "make libintel64" \
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
 pack_set --command "cd $MKL_PATH/interfaces/fftw3x_cdft"
-pack_set --command "module load $(build_get --default-module) $(pack_get --module-name openmpi)"
+pack_set --command "module load $(pack_get --module-requirement openmpi) $(pack_get --module-name openmpi)"
 
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
@@ -42,7 +42,7 @@ pack_set --command "make libintel64" \
     --command-flag "interface=lp64" \
     --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib"
 
-pack_set --command "module unload $(pack_get --module-name openmpi) $(build_get --default-module)"
+pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-requirement openmpi)"
 
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
