@@ -980,13 +980,17 @@ EOF
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
 	"prepend-path PATH             \$basepath/bin"
+    _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
+	"prepend-path PKG_CONFIG_PATH  \$basepath/lib/pkgconfig"
+    _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
+	"prepend-path PKG_CONFIG_PATH  \$basepath/lib64/pkgconfig"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH          \$basepath/man"
     # The LD_LIBRARY_PATH is DANGEROUS!
-    #_add_module_if -F $force -d "$path/lib64" $mfile \
-#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
 #    _add_module_if -F $force -d "$path/lib" $mfile \
 #	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
+#    _add_module_if -F $force -d "$path/lib64" $mfile \
+#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"prepend-path MANPATH  \$basepath/man"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
