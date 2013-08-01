@@ -79,9 +79,11 @@ source install_hostinfo.sh
 # to use them on equal footing as the others...
 function add_hidden_package {
     local mod="$1"
-    add_package --alias $mod \
-	--version ${mod#*/} \
-	path_to_module/${mod%/*}-${mod#*/}.tar.gz
+    local package="${mod%/*}"
+    local version="${mod#*/}"
+    add_package --package $package \
+	--version $version \
+	path_to_module/$package-$version.tar.gz
     pack_set --index-alias $mod
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
@@ -264,10 +266,11 @@ function add_package {
     # Save the hash look-up
     if [ $_HAS_HASH -eq 1 ]; then
 	local tmp="${_index[$(lc $alias)]}"
+    local lc_name="$(lc $alias)"
 	if [ ! -z "$tmp" ]; then
-	    _index[$(lc $alias)]="$tmp $_N_archives"
+	    _index[$lc_name]="$tmp $_N_archives"
 	else
-	    _index[$(lc $alias)]="$_N_archives"
+	    _index[$lc_name]="$_N_archives"
 	fi
     fi
     # Default the module name to this:
