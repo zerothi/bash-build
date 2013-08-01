@@ -319,7 +319,7 @@ function pack_set {
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
 	    -index-alias)  idx_alias="$1" ; shift ;; ## opted for deletion...
-	    -installed)  inst=1 ; shift ;;
+	    -installed)  inst="$1" ; shift ;;
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
