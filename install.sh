@@ -27,17 +27,18 @@ else
 fi
 
 if [ -z "$(build_get --installation-path)" ]; then
-    msg_install "The installation path has not been set."
+    msg_install --message "The installation path has not been set."
     echo "I do not dare to guess where to place it..."
     echo "Please set it in your source file."
     exit 1
 fi
 
 if [ -z "$(build_get --module-path)" ]; then
-    msg_install "The module path has not been set."
-    msg_install "Will set it to: $(build_get --installation-path)/modules"
+    msg_install --message "The module path has not been set."
+    msg_install --message "Will set it to: $(build_get --installation-path)/modules"
     build_set --module-path "$(build_get --installation-path)/modules"
 fi
+
 
 # Begin installation of various packages
 # List of archives
