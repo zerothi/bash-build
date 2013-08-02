@@ -45,8 +45,8 @@ source python-install.bash
 clear_parent
 
 # Initialize the module read path
-old_path=$(get_module_path)
-set_module_path $(get_installation_path)/modules-npa
+old_path=$(build_get --module-path)
+build_set --module-path $(get_installation_path)/modules-npa
 
 create_module \
     -n "\"Nick Papior Andersen's basic python script for: $(get_c)\"" \
@@ -70,5 +70,7 @@ if [ $(pack_get --installed qutip) -eq 1 ]; then
         -P "/directory/should/not/exist" \
         $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr-2) cython numexpr-2 qutip)
 fi
+
+build_set --module-path $old_path
 
 exit 0

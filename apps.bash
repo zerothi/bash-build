@@ -47,7 +47,7 @@ create_module \
 $(
     # Put it inside a new group
     set_c ''
-    set_default_modules ""
+    build_set --default-module ""
     source applications/gdis.bash
     #source applications/povray.bash
 )

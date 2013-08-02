@@ -51,17 +51,6 @@ _parent_exec=""
 function set_parent_exec {          _parent_exec=$1 ; }
 function get_parent_exec { echo -n $_parent_exec ; }
 
-_modulepath=""
-# Module path for creating the modules
-function set_module_path {          _modulepath=$1 ; }
-function get_module_path { echo -n $_modulepath ; }
-
-_buildpath="./"
-# Path for downloading and extracting the packages
-function set_build_path {          _buildpath=$1 ; for d in $1 $1/.archives $1/.compile ; do mkdir -p $d ; done ; }
-function get_build_path { echo -n $_buildpath ; }
-
-
 # Add any auxillary commands
 source install_aux.sh
 
@@ -70,7 +59,6 @@ source install_compiler.sh
 
 # Add host information
 source install_hostinfo.sh
-
 
 # This function takes one argument
 # It is the name of the module that is "hidden", i.e. not
@@ -133,9 +121,20 @@ _LIST_SEP='ø'
 # The counter to hold the archives
 _N_archives=-1
 
-
+# The place of all the archives
+_archives="$(pwd)/.archives"
+# Place to build all the packages
+_buildpath="$(pwd)/.compile"
+# The prefix of the installation directory
+_prefix=""
+# The module prefix installation directory
+_modulepath=""
+# The default module requirements
 _def_module_reqs=""
+# The construction of the installation path is this
 _build_install_path="--package --version"
+# The construction of the module path is this (typically the same as the installation
+# path)
 _build_module_path="--package --version"
 # Denote how the module paths and installation paths
 # should be
@@ -143,15 +142,34 @@ function build_set {
     do_debug --enter build_set
     # We set up default parameters for creating the 
     # default package directory
-    local ip=""
-    local mp=""
     local def_m=""
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
 	case $opt in
-	    -installation-path|-ip) ip="$1" ; shift ;;
-	    -module-path|-mp) mp="$1" ; shift ;;
+	    -archive-path|-ap)
+		_archives="$1"
+		shift ;;
+	    -installation-path|-ip) 
+		_prefix="$1" 
+                # Create the module folders
+		mkdir -p $_prefix/modules
+		mkdir -p $_prefix/modules-npa
+		mkdir -p $_prefix/modules-npa-apps
+    		shift ;;
+	    -module-path|-mp) 
+		_modulepath="$1"
+		shift ;;
+	    -build-path|-bp) 
+		_buildpath="$1" 
+		mkdir -p $_buildpath
+		shift ;;
+	    -build-installation-path|-bip) 
+		_build_install_path="$1"
+		shift ;;
+	    -build-module-path|-bmp) 
+		_build_module_path="$1" 
+		shift ;;
 	    -default-module) 
 		def_m="$def_m $1" 
 		add_hidden_package $1
@@ -160,8 +178,6 @@ function build_set {
 	esac
     done
     [ ! -z "$def_m" ] && _def_module_reqs="$def_m"
-    [ ! -z "$ip" ] && _build_install_path="$ip"
-    [ ! -z "$mp" ] && _build_module_path="$mp"
     do_debug --return build_set
 }
 
@@ -172,8 +188,12 @@ function build_get {
     # default package directory
     local opt=$(trim_em $1) 
     case $opt in
-	-installation-path|-ip) _ps "$_build_install_path" ;;
-	-module-path|-mp) _ps "$_build_module_path" ;;
+	-archive-path|-ap) _ps "$_archives" ;;
+	-installation-path|-ip) _ps "$_prefix" ;;
+	-module-path|-mp) _ps "$_modulepath" ;;
+	-build-path|-bp) _ps "$_buildpath" ;;
+	-build-installation-path|-bip) _ps "$_build_install_path" ;;
+	-build-module-path|-bmp) _ps "$_build_module_path" ;;
 	-default-module) _ps "$_def_module_reqs" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get" ;;
     esac
@@ -628,17 +648,17 @@ function pack_install {
 	msg_install --start $idx
 
         # Download archive
-	dwn_file $idx $(get_build_path)/.archives
+	dwn_file $idx $(build_get --archive-path)
 
         # Extract the archive
-	pushd $(get_build_path)/.compile 1> /dev/null
+	pushd $(build_get --build-path) 1> /dev/null
 	[ $? -ne 0 ] && exit 1
 	# Remove directory if already existing
 	local d=$(pack_get --directory $idx)
 	if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
 	    rm -rf $(pack_get --directory $idx)
 	fi
-	extract_archive $(get_build_path)/.archives $idx
+	extract_archive $(build_get --archive-path) $idx
 	pushd $(pack_get --directory $idx) 1> /dev/null
 	[ $? -ne 0 ] && exit 1
 
@@ -678,7 +698,7 @@ function pack_install {
 	    module unload $(pack_get --module-name $idx)
 	    # We need to clean up, in order to force the
 	    # module creation.
-	    rm -f $(get_module_path)/$(pack_get --module-name $idx)
+	    rm -f $(build_get --module-path)/$(pack_get --module-name $idx)
 	fi
 
 	export FCFLAGS="$old_fcflags"
@@ -864,7 +884,7 @@ function create_module {
 
     # Create the file to which we need to install the module script
     if [ -z "$mod_path" ]; then
-	local mfile=$(get_module_path)
+	local mfile=$(build_get --module-path)
     else
 	local mfile=$mod_path
     fi
@@ -1189,8 +1209,8 @@ function pack_set_file_version {
     local idx=$_N_archives
     [ $# -gt 0 ] && idx=$1
     # Download the archive
-    dwn_file $idx $(get_build_path)/.archives
-    local v="$(get_file_time %g-%j $(get_build_path)/.archives/$(pack_get --archive $idx))"
+    dwn_file $idx $(build_get --archive-path)
+    local v="$(get_file_time %g-%j $(build_get --archive-path)/$(pack_get --archive $idx))"
     pack_set --version "$v"
      # Default the module name to this:
     pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx

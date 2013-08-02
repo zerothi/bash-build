@@ -26,11 +26,18 @@ else
     source compiler.sh
 fi
 
-# Create the build path for downloading and creating the stuff
-set_build_path $(pwd)
+if [ -z "$(build_get --installation-path)" ]; then
+    msg_install "The installation path has not been set."
+    echo "I do not dare to guess where to place it..."
+    echo "Please set it in your source file."
+    exit 1
+fi
 
-# Initialize the module read path
-set_module_path $(get_installation_path)/modules
+if [ -z "$(build_get --module-path)" ]; then
+    msg_install "The module path has not been set."
+    msg_install "Will set it to: $(build_get --installation-path)/modules"
+    build_set --module-path "$(build_get --installation-path)/modules"
+fi
 
 # Begin installation of various packages
 # List of archives
