@@ -9,12 +9,13 @@ add_package \
 
 pack_set --module-requirement lua
 
+pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/posix_c.so
+
+[ $(pack_get --installed help2man) -eq 1 ] && \
+    pack_set --module-requirement help2man
 [ $(pack_get --installed autoconf) -eq 1 ] && \
     pack_set --module-requirement autoconf
 
-pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/posix_c.so
-
-# bootstrap
 pack_set --command "./bootstrap"
 
 # Configure the package

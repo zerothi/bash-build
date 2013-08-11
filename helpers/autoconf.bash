@@ -1,4 +1,4 @@
-add_package http://www.student.dtu.dk/~nicpa/packages/autoconf-2.69.tar.gz
+add_package http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
