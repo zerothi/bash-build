@@ -13,6 +13,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/autoconf
 [ $(pack_get --installed m4) -eq 1 ] && \
     pack_set --module-requirement m4
 
+pack_set --module-opt "--set-ENV AUTOCONF=$(pack_get --install-prefix)/bin/autoconf"
+
 pack_set --command "autoreconf -vi"
 
 # Install commands that it should run
