@@ -133,9 +133,6 @@ source apps.bash
 # We have installed all libraries needed for doing application installs
 source scripts.bash
 
-install_all
-
-
 # When dealing with additional sets of instructions spec files
 # can come in handy.
 # For instance to add an include directory to all cpp files do
