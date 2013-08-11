@@ -27,11 +27,7 @@ let "UPDATE_MODULE_NAME=1 << 3"
 let "PRELOAD_MODULE=1 << 4"
 
 _prefix=""
-
 _crt_version=0
-# Instalation path
-function set_version_def   { _crt_version=1 ; }
-function unset_version_def { _crt_version=0 ; }
 
 _parent_package=""
 # The parent package (for instance Python)
@@ -176,7 +172,13 @@ function build_set {
 		    *)
 			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
 		esac
-		;;	    
+		;;
+	    -default-module-version)
+		_crt_version=1
+		;;
+	    -non-default-module-version)
+		_crt_version=0
+		;;
 	    *) doerr "$opt" "Not a recognized option for build_set" ;;
 	esac
     done
@@ -519,16 +521,16 @@ function edit_env {
 
 function install_all {
     # First we collect all options
-    local i=0
+    local j=0
     while [ $# -ne 0 ]; do
 	local opt="$(trim_em $1)" # Save the option passed
 	shift
 	case $opt in
-	    -from|-f)    i="$(get_index $1)" ; shift ;;
+	    -from|-f)    j="$(get_index $1)" ; shift ;;
 	    *) shift ;;
 	esac
     done
-    for i in `seq $i $_N_archives` ; do
+    for i in `seq $j $_N_archives` ; do
 	pack_install $i
     done
 }
@@ -615,7 +617,7 @@ function pack_install {
     if [ $(pack_get --installed $idx) -eq 0 ]; then
 
 	# If the module should be preloaded (for configures which checks that the path exists)
-	if $(has_setting $PRELOAD_MODULE) ; then
+	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
 		-n "$(pack_get --alias $idx)" \
 		-v "$(pack_get --version $idx)" \
@@ -698,7 +700,7 @@ function pack_install {
 	done
 
 	# Unload the module itself in case of PRELOADING
-	if $(has_setting $PRELOAD_MODULE) ; then
+	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    module unload $(pack_get --module-name $idx)
 	    # We need to clean up, in order to force the
 	    # module creation.
@@ -715,7 +717,7 @@ function pack_install {
     fi
 
     # For sure it is now installed...
-    _installed[$idx]=1
+    pack_set --installed 1 $idx
 
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements

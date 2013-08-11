@@ -3,11 +3,11 @@
 
 add_package \
     --package matplotlib \
-    https://github.com/matplotlib/matplotlib/archive/v1.2.1.tar.gz
+    https://github.com/matplotlib/matplotlib/archive/v1.3.0.tar.gz
 
 pack_set --directory matplotlib-$(pack_get --version)
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
 

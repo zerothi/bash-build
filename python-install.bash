@@ -12,7 +12,12 @@ build_set --build-module-path "--package --version $IpV $(get_c)"
 build_set --build-installation-path \
     "$(build_get --installation-path) --package --version $IpV $(get_c)"
 
-#source python/distribute.bash
+# Packages installed in "python-home"
+source python/distribute.bash
+source python/pyparsing.bash
+source python/tornado.bash
+source python/dateutil.bash
+
 source python/cython.bash
 source python/bazar.bash
 source python/nose.bash
@@ -20,11 +25,15 @@ source python/nose.bash
 # Generic scientific libraries
 source python/mpi4py.bash
 source python/numpy.bash
-source python/scipy.bash # [numpy]
-source python/numexpr.bash # [numpy]
+source python/scipy.bash
+source python/numexpr.bash
 source python/scientificpython.bash
 source python/matplotlib.bash
+source python/bottleneck.bash
+source python/sympy.bash
+source python/pandas.bash
 
+install_all --from python
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
