@@ -34,7 +34,7 @@ source applications/meep-serial.bash # [gmp,libunistring,guile]
 
 # Create a module with default all plotting tools
 create_module \
-    --module-path $(build_get --installation-path)/modules-npa \
+    --module-path $(build_get --module-path)-npa \
     -n "Nick Papior Andersen's script for loading GUI: $(get_c)" \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
