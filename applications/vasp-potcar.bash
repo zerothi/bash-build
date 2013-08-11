@@ -9,6 +9,7 @@ function tmp {
     pack_set --directory VASP
     pack_set --prefix-and-module \
 	$(pack_get --alias)/POTCARS/$(pack_get --version)
+    pack_set --module-opt "--lua-family vasp-potcar"
     pack_set --command "mkdir -p $(dirname $(pack_get --install-prefix))"
     pack_set --command "rm -rf $(pack_get --install-prefix)"
     pack_set --command "mkdir tmp"

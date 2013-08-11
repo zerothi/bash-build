@@ -12,6 +12,9 @@ if [ $(pack_get --installed metis) -eq 1 ]; then
     pack_set --module-requirement metis
 fi
 
+# Add the lua family
+pack_set --module-opt "--lua-family siesta"
+
 # Change to directory:
 pack_set --command "cd Obj"
 
@@ -158,8 +161,8 @@ pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
 pack_install
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa-apps \
-    -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \

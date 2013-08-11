@@ -10,7 +10,7 @@ module unload $(pack_get --module-name $(get_parent)) $(build_get --default-modu
 
 build_set --build-module-path "--package --version $IpV $(get_c)"
 build_set --build-installation-path \
-    "$(get_installation_path) --package --version $IpV $(get_c)"
+    "$(build_get --installation-path) --package --version $IpV $(get_c)"
 
 #source python/distribute.bash
 source python/cython.bash
@@ -45,4 +45,4 @@ install_all --from $(get_parent)
 
 build_set --build-module-path "--package --version $(get_c)"
 build_set --build-installation-path \
-    "$(get_installation_path) --package --version $(get_c)"
+    "$(build_get --installation-path) --package --version $(get_c)"

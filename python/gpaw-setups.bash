@@ -9,6 +9,8 @@ for v in 0.8.7929 0.9.9672 ; do
 	pack_set --host-reject "zeroth"
     fi
     pack_set -s $IS_MODULE
+
+    pack_set --module-opt "--lua-family gpaw-setups"
     
     pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 

@@ -45,7 +45,7 @@ pack_set --command "make install"
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias netcdf-logging)/$(pack_get --version netcdf-logging)/$(get_c)
+pack_set --install-prefix $(build_get --installation-path)/$(pack_get --alias netcdf-logging)/$(pack_get --version netcdf-logging)/$(get_c)
 
 # Add requirments when creating the module
 pack_set --module-requirement netcdf-logging

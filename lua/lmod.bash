@@ -2,15 +2,14 @@
 #  libtoolize/libtool
 #  automake
 
-add_package http://downloads.sourceforge.net/project/lmod/Lmod-5.1.0.tar.bz2
-
-pack_set -s $IS_MODULE
+add_package http://downloads.sourceforge.net/project/lmod/Lmod-5.1.1.tar.bz2
 
 pack_set --alias lmod
 pack_set --prefix-and-module $(pack_get --alias)/$(get_c)
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --install-prefix)/lmod
+pack_set --install-query \
+    $(pack_get --install-prefix)/$(pack_get --alias)/$(pack_get --version)/init/bash
 
 # Configure the package
 pack_set --command "./configure" \
@@ -22,6 +21,4 @@ pack_set --command "make pre-install"
 
 # Make install lua
 pack_set --command "make install"
-
-#pack_set --module-opt --
 

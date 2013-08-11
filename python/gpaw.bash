@@ -7,6 +7,8 @@ pack_set -s $IS_MODULE
 
 pack_set --host-reject "ntch-2857"
 
+pack_set --module-opt "--lua-family gpaw"
+
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \

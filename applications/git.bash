@@ -2,6 +2,8 @@ add_package http://git-core.googlecode.com/files/git-1.8.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --module-opt "--lua-family git"
+
 pack_set --install-query $(pack_get --install-prefix)/bin/git
 pack_set --module-requirement zlib
 

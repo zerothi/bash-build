@@ -9,6 +9,8 @@ pack_set -s $IS_MODULE
 
 pack_set $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0 n-)
 
+pack_set --module-opt "--lua-family gdis"
+
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 
 # Force the named alias
@@ -24,8 +26,8 @@ pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/gdis"
 pack_install
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa-apps \
-    -n "\"Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \

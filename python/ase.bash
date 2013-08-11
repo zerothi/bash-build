@@ -7,6 +7,8 @@ add_package \
 
 pack_set -s $IS_MODULE
 
+pack_set --module-opt "--lua-family ase"
+
 pack_set --host-reject ntch
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)

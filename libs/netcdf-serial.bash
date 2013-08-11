@@ -38,7 +38,7 @@ pack_set --module-requirement netcdf-serial
 
 pack_set --alias netcdf-fortran-serial
 
-pack_set --install-prefix $(get_installation_path)/$(pack_get --alias netcdf-serial)/$(pack_get --version netcdf-serial)/$(get_c)
+pack_set --install-prefix $(build_get --installation-path)/$(pack_get --alias netcdf-serial)/$(pack_get --version netcdf-serial)/$(get_c)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 

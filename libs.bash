@@ -60,40 +60,40 @@ install_all --from hwloc
 
 # We install the module scripts here:
 create_module \
-    --module-path $(get_installation_path)/modules-npa \
-    -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa \
+    -n "Nick Papior Andersen's module script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa \
-    -n "\"Nick Papior Andersen's module script for: $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa \
+    -n "Nick Papior Andersen's module script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M hdf5.netcdf.utils/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa \
-    -n "\"Nick Papior Andersen's basic math script for: $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa \
+    -n "Nick Papior Andersen's basic math script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M blas.lapack/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement blas) blas lapack)
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa \
-    -n "\"Nick Papior Andersen's parallel math script for: $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa \
+    -n "Nick Papior Andersen's parallel math script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M mpi.blas.lapack.scalapack/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi blas lapack scalapack)
 
 create_module \
-    --module-path $(get_installation_path)/modules-npa \
-    -n "\"Nick Papior Andersen's parallel fast math script for: $(get_c)\"" \
+    --module-path $(build_get --module-path)-npa \
+    -n "Nick Papior Andersen's parallel fast math script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M mpi.atlas.scalapack/$(get_c) \
     -P "/directory/should/not/exist" \

@@ -16,6 +16,8 @@ _ERROR_FILE=ERROR
 # Clean the error file
 rm -f $_ERROR_FILE
 
+# Whether we should create TCL or LUA module files
+_module_format='TCL'
 
 # List of options for archival stuff
 let "BUILD_DIR=1 << 0"
@@ -25,15 +27,6 @@ let "UPDATE_MODULE_NAME=1 << 3"
 let "PRELOAD_MODULE=1 << 4"
 
 _prefix=""
-# Instalation path
-function set_installation_path {          
-    _prefix=$1
-    # Create the module folders
-    mkdir -p $_prefix/modules
-    mkdir -p $_prefix/modules-npa
-    mkdir -p $_prefix/modules-npa-apps
-}
-function get_installation_path { _ps $_prefix ; }
 
 _crt_version=0
 # Instalation path
@@ -152,13 +145,13 @@ function build_set {
 		shift ;;
 	    -installation-path|-ip) 
 		_prefix="$1" 
-                # Create the module folders
-		mkdir -p $_prefix/modules
-		mkdir -p $_prefix/modules-npa
-		mkdir -p $_prefix/modules-npa-apps
     		shift ;;
 	    -module-path|-mp) 
 		_modulepath="$1"
+                # Create the module folders
+		mkdir -p $_modulepath
+		mkdir -p $_modulepath-npa
+		mkdir -p $_modulepath-npa-apps
 		shift ;;
 	    -build-path|-bp) 
 		_buildpath="$1" 
@@ -174,6 +167,16 @@ function build_set {
 		def_m="$def_m $1" 
 		add_hidden_package $1
 		shift ;;
+	    -module-format)
+		_module_format="$1"
+		shift
+		case $_module_format in
+		    TCL) ;;
+		    LUA) ;;
+		    *)
+			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
+		esac
+		;;	    
 	    *) doerr "$opt" "Not a recognized option for build_set" ;;
 	esac
     done
@@ -345,7 +348,7 @@ function pack_set {
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
 	    -m|-module-name)  mod_name="${1%/}" ; shift ;;
 	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
-	    -prefix-and-module)  mod_name="$1" ; install="$(get_installation_path)/$1" ; shift ;;
+	    -prefix-and-module)  mod_name="$1" ; install="$(build_get --installation-path)/$1" ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
 	    -host-only)  only_h="$only_h $1" ; shift ;; # Can be called several times
 	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
@@ -857,6 +860,8 @@ function create_module {
     local mod_path=""
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
+    local lua_family=""
+    local fm_comment="#"
     while [ $# -gt 0 ]; do
 	opt="$(trim_em $1)" ; shift
 	case $opt in
@@ -871,6 +876,7 @@ function create_module {
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
 	    -append-ENV)      env="$env a$1" ; shift ;; # Can be optioned several times
+	    -lua-family) lua_family="$1" ; shift ;; # If using the Lmod, we create a family name, else nothing is happening...
 	    -H|-help)  help="$1" ; shift ;;
 	    -W|-what-is)  whatis="$1" ; shift ;;
 	    -F|-force)  force=1 ;;
@@ -889,6 +895,15 @@ function create_module {
 	local mfile=$mod_path
     fi
     [ -n "$mod" ] && mfile=$mfile/$mod
+    case $_module_format in
+	TCL) 
+	    fm_comment="#"
+	    ;;
+	LUA)
+	    fm_comment="--"
+	    mfile="$mfile.lua"
+	    ;;
+    esac
     
     # If the file exists simply return
     if [ -e "$mfile" ] && [ 0 -eq $force ]; then
@@ -901,23 +916,57 @@ function create_module {
     mkdir -p $(dirname $mfile)
     
     # Create the module file
-    cat <<EOF > "$mfile"
+    case $_module_format in
+	TCL)
+	    cat <<EOF > "$mfile"
 #%Module1.0
 #####################################################################
 
-set modulename  $name
+set modulename  "$name"
 set version	$version
 EOF
+	    ;;
+	LUA)
+	    cat <<EOF > "$mfile"
+$fm_comment LUA file for Lmod
+
+local modulename    = "$name"
+local version       = "$version"
+EOF
+	    ;;
+	*)
+	    doerr "create_module" "Unknown module type, [TCL,LUA]"
+	    ;;
+    esac
     tmp="$(get_c)"
     if [ ! -z "$tmp" ]; then
-	tmp=", compiler \$compiler"
-	cat <<EOF >> "$mfile"
+	case $_module_format in
+	    TCL)
+		cat <<EOF >> "$mfile"
 set compiler	$(get_c)
 EOF
+		;;
+	    LUA) tmp=", compiler \$compiler"
+		cat <<EOF >> "$mfile"
+local compiler      = "$(get_c)"
+EOF
+		;;
+	esac
     fi
 
-    cat <<EOF >> "$mfile"
+    case $_module_format in
+	TCL) cat <<EOF >> "$mfile"
 set basepath	${path//$version/\$version}
+EOF
+	    ;;
+	LUA) cat <<EOF >> "$mfile"
+local basepath      = "${path%$version*}" .. version .. "${path#*$version}"
+EOF
+	    ;;
+    esac
+
+    case $_module_format in
+	TCL) cat <<EOF >> "$mfile"
 
 proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
@@ -926,15 +975,28 @@ proc ModulesHelp { } {
 module-whatis "Loads \$modulename (\$version)$tmp."
 
 EOF
+	    ;;
+	LUA) cat <<EOF >> "$mfile"
+
+help("    Loads " .. modulename .. " (" .. version .. ")")
+whatis("Loads " .. modulename .. " (" .. version .. ") using " .. compiler .. " compiler.")
+
+EOF
+	    ;;
+    esac
+
     # Add pre loaders if needed
     if [ ! -z "${load// /}" ]; then
-	    cat <<EOF >> $mfile
-# This module will load the following modules:
+	cat <<EOF >> "$mfile"
+$fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
 	    if [ $(pack_get --installed $tmp) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		echo "module load $tmp_load" >> $mfile
+		case $_module_format in 
+		    TCL) echo "module load $tmp_load" >> "$mfile" ;;
+		    LUA) echo "load(\"$tmp_load\")" >> "$mfile" ;;
+		esac
 	    elif [ $force -eq 0 ]; then
 		no_install=1
 	    fi
@@ -945,12 +1007,15 @@ EOF
     # Add requirement if needed
     if [ ! -z "${require// /}" ]; then
 	cat <<EOF >> $mfile
-# Requirements for the module:
+$fm_comment Requirements for the module:
 EOF
 	for tmp in $require ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		echo "prereq $tmp_load" >> $mfile
+		case $_module_format in 
+		    TCL) echo "prereq $tmp_load" >> "$mfile" ;;
+		    LUA) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
+		esac
 	    elif [ $force -eq 0 ]; then
 		no_install=1
 	    fi
@@ -960,12 +1025,15 @@ EOF
     # Add conflict if needed
     if [ ! -z "${conflict// /}" ]; then
 	cat <<EOF >> $mfile
-# Modules which is in conflict with this module:
+$fm_comment Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
 	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		echo "conflict $tmp_load" >> $mfile
+		case $_module_format in 
+		    TCL) echo "conflict $tmp_load" >> "$mfile" ;;
+		    LUA) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
+		esac
 	    elif [ $force -eq 0 ]; then
 		no_install=1
 	    fi
@@ -975,7 +1043,7 @@ EOF
     # Add specific envs if needed
     if [ ! -z "${env// /}" ]; then
 	cat <<EOF >> $mfile
-# Specific environment variables:
+$fm_comment Specific environment variables:
 EOF
 	for tmp in $env ; do
 	    # Partition into [s|a|p]
@@ -985,55 +1053,106 @@ EOF
 	    local lval=${tmp##*=}
             # Add paths if they are available
 	    if [ "$opt" == "s" ]; then
-		_add_module_if -F $force -d "$lval" $mfile \
-		    "setenv $lenv $lval"
+		opt="$(_module_fmt_routine --set-env $lenv $lval)"
 	    elif [ "$opt" == "p" ]; then
-		_add_module_if -F $force -d "$lval" $mfile \
-		    "prepend-path $lenv $lval"
+		opt="$(_module_fmt_routine --prepend-path $lenv $lval)"
 	    elif [ "$opt" == "a" ]; then
-		_add_module_if -F $force -d "$lval" $mfile \
-		    "append-path $lenv $lval"
+		opt="$(_module_fmt_routine --append-path $lenv $lval)"
+	    else
+		opt=""
 	    fi		
+	    [ ! -z "$opt" ] && \
+		_add_module_if -F $force -d "$lval" "$mfile" "$opt" 
 	done
 	echo "" >> $mfile
     fi
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
-	"prepend-path PATH             \$basepath/bin"
+	"$(_module_fmt_routine --prepend-path PATH $path/bin)"
     _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
-	"prepend-path PKG_CONFIG_PATH  \$basepath/lib/pkgconfig"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib/pkgconfig)"
     _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
-	"prepend-path PKG_CONFIG_PATH  \$basepath/lib64/pkgconfig"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib64/pkgconfig)"
     _add_module_if -F $force -d "$path/man" $mfile \
-	"prepend-path MANPATH          \$basepath/man"
+	"$(_module_fmt_routine --prepend-path MANPATH $path/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
 #    _add_module_if -F $force -d "$path/lib" $mfile \
-#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib"
+#       "$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
 #    _add_module_if -F $force -d "$path/lib64" $mfile \
-#	"prepend-path LD_LIBRARY_PATH  \$basepath/lib64"
-    _add_module_if -F $force -d "$path/man" $mfile \
-	"prepend-path MANPATH  \$basepath/man"
+#       "$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
-	"prepend-path PYTHONPATH  \$basepath/lib/python"
+	"$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python)"
     for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "prepend-path PYTHONPATH  \$basepath/lib/python$PV/site-packages"
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python$PV/site-packages)"
     done
+    if [ ! -z "$lua_family" ]; then
+	case $_module_format in
+	    LUA)
+		cat <<EOF >> "$mfile"
+
+
+$fm_comment Add family:
+family("$lua_family")
+EOF
+		;;
+	esac
+    fi
+    
     if [ $no_install -eq 1 ] && [ $force -eq 0 ]; then
 	rm -f $mfile
     fi
     # If we are to create the default version module we 
     # can add this version to the .version file:
     if [ $_crt_version -eq 1 ]; then
-	cat <<EOF > $(dirname $mfile)/.version
+	case $_module_format in
+	    TCL)
+		cat <<EOF > $(dirname $mfile)/.version
 #%Module1.0
 #####################################################################
 set ModulesVersion $(basename $mfile)
 EOF
+		;;
+	    LUA)
+		pushd $(dirname $mfile)
+		ln -s $(basename $mfile) default
+		popd
+		;;
+	esac
     fi
     [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
     do_debug --return create_module
 }
+
+# Returns the module specific routine call
+function _module_fmt_routine {
+    local lval="" ; local lenv=""
+    while [ $# -gt 0 ]; do
+	opt="$(trim_em $1)" ; shift
+	case "$opt" in
+	    -prepend-path)
+		case $_module_format in
+		    TCL) _ps "prepend-path $1 $2" ;;
+		    LUA) _ps "prepend_path(\"$1\",\"$2\")" ;;
+		esac
+		shift ; shift ;;
+	    -append-path)
+		case $_module_format in
+		    TCL) _ps "append-path $1 $2" ;;
+		    LUA) _ps "append_path(\"$1\",\"$2\")" ;;
+		esac
+		shift ; shift ;;
+	    -set-env)
+		case $_module_format in
+		    TCL) _ps "setenv $1 $2" ;;
+		    LUA) _ps "setenv(\"$1\",\"$2\",true)" ;;
+		esac
+		shift ; shift ;;
+	esac
+    done
+}
+		
+		
 
 # Append to module file dependent on the existance of a
 # directory or file
