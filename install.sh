@@ -113,6 +113,10 @@ if [ $DEBUG -ne 0 ]; then
     echo "Done with DEBUG"
 fi
 
+# Install the helper
+source helpers.bash
+
+
 # Install the lua-libraries
 source lua/lua.bash
 

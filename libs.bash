@@ -5,7 +5,6 @@ source libs/hwloc.bash
 # Library used by MANY packages
 source libs/openmpi-hpc.bash
 
-
 #source libs/gmp.bash
 #source libs/guile.bash
 
@@ -28,12 +27,6 @@ source libs/gsl.bash
 #source libs/boost.bash
 source libs/ctl.bash
 source libs/harminv.bash
-
-# Install bison
-source libs/bison.bash
-source libs/flex.bash
-source libs/pcre.bash
-source libs/swig.bash
 
 # Install generic libraries
 source libs/zlib.bash
