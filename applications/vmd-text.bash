@@ -1,5 +1,6 @@
 v=1.9.1
 add_package \
+    --no-default-modules \
     --package vmd-text \
     --version $v \
     http://www.ks.uiuc.edu/Research/vmd/vmd-1.9.1/files/final/vmd-$v.bin.LINUXPPC64.text.tar.gz

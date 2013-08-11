@@ -1,6 +1,7 @@
 unset tmp
 function tmp {
     add_package \
+	--no-default-modules \
 	--package vasp \
 	--version $2 \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip

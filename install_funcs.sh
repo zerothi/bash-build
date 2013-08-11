@@ -237,11 +237,10 @@ function add_package {
     [ $TIMING -ne 0 ] && local time=$(add_timing)
     _N_archives=$(( _N_archives + 1 ))
     # Collect options
-    local d=""
-    local v=""
-    local fn=""
-    local package=""
+    local d="" ; local v=""
+    local fn="" ; local package=""
     local alias=""
+    local no_def_mod=0
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
@@ -250,6 +249,7 @@ function add_package {
 	    -directory|-d) d=$1 ; shift ;;
 	    -version|-v) v=$1 ; shift ;;
 	    -package|-p) package=$1 ; shift ;;
+	    -no-default-modules) no_def_mod=1 ;;
 	    -alias|-a) alias=$1 ; shift ;;
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
@@ -305,7 +305,8 @@ function add_package {
     _install_prefix[$_N_archives]=$(pack_list -lf "-X -s /" $_build_install_path)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     # Install default values
-    _mod_req[$_N_archives]="$(build_get --default-module)"
+    _mod_req[$_N_archives]=""
+    [ $no_def_mod -eq 0 ] && _mod_req[$_N_archives]="$(build_get --default-module)"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
     msg_install --message "Added $package[$v] to the install list"

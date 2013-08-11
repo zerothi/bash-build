@@ -1,5 +1,6 @@
 v=1.9.1
 add_package \
+    --no-default-modules \
     --package vmd \
     --version $v \
     http://www.ks.uiuc.edu/Research/vmd/vmd-$v/files/final/vmd-$v.bin.LINUXAMD64.opengl.tar.gz

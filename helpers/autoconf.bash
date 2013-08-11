@@ -1,4 +1,3 @@
-# Retrieve version of autoconf
 add_package http://www.student.dtu.dk/~nicpa/packages/autoconf-2.69.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -10,6 +9,9 @@ lv=${tmp#*.}
 [ $lv -gt 68 ] && pack_set --host-reject "$(get_hostname)"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/autoconf
+
+[ $(pack_get --installed m4) -eq 1 ] && \
+    pack_set --module-requirement m4
 
 pack_set --command "autoreconf -vi"
 

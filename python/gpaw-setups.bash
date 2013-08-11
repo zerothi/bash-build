@@ -2,7 +2,8 @@
 
 # Add the installation of the gpaw setups
 for v in 0.8.7929 0.9.9672 ; do
-    add_package http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
+    add_package --no-default-modules \
+	http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
     
     pack_set --host-reject "ntch-2857"
     if [ "$v" != "0.9.9672" ]; then
