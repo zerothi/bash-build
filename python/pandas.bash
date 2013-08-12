@@ -9,13 +9,11 @@ pack_set $(list --prefix ' --module-requirement ' numpy numexpr[2] scipy pytable
 
 if $(is_c intel) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=intelem" \
-	--command-flag "--fcompiler=intelem" 
+	--command-flag "--compiler=intelem"
 
 elif $(is_c gnu) ; then
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=unix" \
-	--command-flag "--fcompiler=gnu95" 
+	--command-flag "--compiler=unix"
 
 else
     doerr $(pack_get --package) "Could not recognize the compiler: $(get_c)"

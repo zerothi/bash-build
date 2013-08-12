@@ -31,9 +31,7 @@ source python/scientificpython.bash
 source python/matplotlib.bash
 source python/bottleneck.bash
 source python/sympy.bash
-source python/pandas.bash
-
-install_all --from python
+#source python/pandas.bash
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]

@@ -9,7 +9,7 @@ pack_set --directory matplotlib-$(pack_get --version)
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy
 
