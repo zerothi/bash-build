@@ -1,3 +1,8 @@
+if ! $(is_host zerothi-QM) ; then
+    # Currently we do not install this other places than locally...
+    return 0
+fi
+
 add_package http://www.lua.org/ftp/lua-5.2.2.tar.gz
 
 pack_set -s $IS_MODULE
