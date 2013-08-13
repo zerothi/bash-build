@@ -1,4 +1,4 @@
-add_package http://www.student.dtu.dk/~nicpa/packages/m4-1.4.16.tar.gz
+add_package http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -13,7 +13,8 @@ mv=${tmp#*.}
 
 pack_set --install-query $(pack_get --install-prefix)/bin/m4
 
-pack_set --command "./bootstrap"
+[ $(pack_get --installed help2man) -eq 1 ] && \
+    pack_set --module-requirement help2man
 
 # Install commands that it should run
 pack_set --command "./configure" \
