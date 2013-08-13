@@ -3,6 +3,7 @@ add_package http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 tmp=`autoconf --version | head -1 | awk '{print $4}'`
+[ -z "${tmp// /}" ] && tmp=1.1
 gv=${tmp%.*}
 lv=${tmp#*.}
 [ $gv -gt 2 ] && pack_set --host-reject "$(get_hostname)"

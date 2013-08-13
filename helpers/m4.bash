@@ -3,6 +3,7 @@ add_package http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 tmp=`m4 --version | head -1 | awk '{print $4}'`
+[ -z "${tmp// /}" ] && tmp=1.1.1
 gv=${tmp%.*.*}
 tmp=${tmp#*.}
 lv=${tmp%.*}
