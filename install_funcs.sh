@@ -7,9 +7,8 @@ _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 
-_HAS_HASH=1
 if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
-    _HAS_HASH=0
+    do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
 fi
 
 _ERROR_FILE=ERROR
@@ -25,6 +24,20 @@ let "MAKE_PARALLEL=1 << 1"
 let "IS_MODULE=1 << 2"
 let "UPDATE_MODULE_NAME=1 << 3"
 let "PRELOAD_MODULE=1 << 4"
+
+
+# Name of setup (lookup-purposes)
+declare -a _b_name
+# installation prefix
+declare -a _b_prefix
+# module installation prefix
+declare -a _b_mod_prefix
+# how to build the full installation path
+declare -a _b_build_prefix
+# how to build the full module path
+declare -a _b_build_mod_prefix
+# Pointers of lookup
+declare -A _b_index
 
 _prefix=""
 _crt_version=0
@@ -78,6 +91,8 @@ declare -a _install_prefix
 declare -a _install_query
 # An aliased name
 declare -a _alias
+# The module installation prefix (in case we have several different module paths)
+declare -a _mod_prefix
 # The module name (when one which to load it must be (module load _mod_name[i])
 declare -a _mod_name
 # The extension of the archive
@@ -103,8 +118,7 @@ declare -a _installed
 # Adds this to the environment variable in the creation of the modules
 declare -a _mod_opts
 # Local variables for hash tables of index (speed up of execution)
-[ $_HAS_HASH -eq 1 ] && \
-    declare -A _index
+declare -A _index
 # A separator used for commands that can be given consequetively
 _LIST_SEP='ø'
 # The counter to hold the archives
@@ -289,28 +303,28 @@ function add_package {
     [ -z "$alias" ] && alias=$package
     _alias[$_N_archives]=$alias
     # Save the hash look-up
-    if [ $_HAS_HASH -eq 1 ]; then
-	local tmp="${_index[$(lc $alias)]}"
+    local tmp="${_index[$(lc $alias)]}"
     local lc_name="$(lc $alias)"
-	if [ ! -z "$tmp" ]; then
-	    _index[$lc_name]="$tmp $_N_archives"
-	else
-	    _index[$lc_name]="$_N_archives"
-	fi
+    if [ ! -z "$tmp" ]; then
+	_index[$lc_name]="$tmp $_N_archives"
+    else
+	_index[$lc_name]="$_N_archives"
     fi
     # Default the module name to this:
     _installed[$_N_archives]=0
     _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $_build_module_path)
     #_mod_name[$_N_archives]=$package/$v/$(get_c)
+    _mod_prefix[$_N_archives]="$(build_get --module-path)"
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
-    _install_prefix[$_N_archives]=$(pack_list -lf "-X -s /" $_build_install_path)
+    _install_prefix[$_N_archives]=$(build_get --installation-path)/$(pack_list -lf "-X -s /" $_build_install_path)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && _mod_req[$_N_archives]="$(build_get --default-module)"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
+    #pack_print $_N_archives
     msg_install --message "Added $package[$v] to the install list"
     [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
     do_debug --return add_package
@@ -328,6 +342,7 @@ function pack_set {
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=2
+    local mod_prefix=""
     local mod_opt=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
@@ -337,6 +352,7 @@ function pack_set {
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
+            -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
             -R|-module-requirement)  
 		[ $TIMING -ne 0 ] && local timemr=$(add_timing)
 		local tmp="$(pack_get --module-requirement $1)"
@@ -377,35 +393,31 @@ function pack_set {
     if [ ! -z "$alias" ]; then
 	local tmp="" ; local v=""
 	local lc_name="$(lc ${_alias[$index]})"
-	if [ $_HAS_HASH -eq 1 ]; then
-	    for v in ${_index[$lc_name]} ; do
-		[ "$v" -ne "$index" ] && tmp="$tmp $v"
-	    done
-	    if [ -z "$tmp" ]; then
-		unset _index[$lc_name]
-	    else
-		_index[$lc_name]="$tmp"
-	    fi
+	for v in ${_index[$lc_name]} ; do
+	    [ "$v" -ne "$index" ] && tmp="$tmp $v"
+	done
+	if [ -z "$tmp" ]; then
+	    unset _index[$lc_name]
+	else
+	    _index[$lc_name]="$tmp"
 	fi
 	_alias[$index]="$alias"
 	local lc_name="$(lc $alias)"
-	if [ $_HAS_HASH -eq 1 ]; then
-	    tmp="${_index[$lc_name]}"
-	    if [ -z "$tmp" ]; then
-		_index[$lc_name]="$index"
-	    else
-		_index[$lc_name]="$tmp $index"
-	    fi
+	tmp="${_index[$lc_name]}"
+	if [ -z "$tmp" ]; then
+	    _index[$lc_name]="$index"
+	else
+	    _index[$lc_name]="$tmp $index"
 	fi
     fi
     if [ ! -z "$idx_alias" ]; then  ## opted for deletion... (superseeded by explicit version comparisons...)
-	[ $_HAS_HASH -eq 1 ] && \
-	    _index[$idx_alias]="$index"
+	_index[$idx_alias]="$index"
     fi
     [ ! -z "$mod_opt" ]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
+    [ ! -z "$mod_prefix" ]   && _mod_prefix[$index]="$mod_prefix"
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
@@ -439,6 +451,8 @@ function pack_get {
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
+		-MP|-module-prefix) 
+                                     _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
                                      _ps "${_install_prefix[$index]}" ;;
 		-Q|-install-query)   _ps "${_install_query[$index]}" ;;
@@ -466,6 +480,7 @@ function pack_get {
 	    -C|-commands)        _ps "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 	    -R|-module-requirement) _ps "${_mod_req[$index]}" ;;
+	    -MI|-module-prefix) _ps "${_mod_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
 	    -a|-alias)           _ps "${_alias[$index]}" ;;
@@ -622,6 +637,7 @@ function pack_install {
 		-n "$(pack_get --alias $idx)" \
 		-v "$(pack_get --version $idx)" \
 		-M "$(pack_get --module-name $idx)" \
+		-p "$(pack_get --module-prefix $idx)" \
 		-P "$(pack_get --install-prefix $idx)"
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
@@ -724,10 +740,11 @@ function pack_install {
 	local reqs="$(list --prefix '-R ' $mod_reqs)"
         # We install the module scripts here:
 	create_module \
-	    -n $(pack_get --alias $idx) \
-	    -v $(pack_get --version $idx) \
-	    -M $(pack_get --module-name $idx) \
-	    -P $(pack_get --install-prefix $idx) $reqs $(pack_get --module-opt $idx)
+	    -n "$(pack_get --alias $idx)" \
+	    -v "$(pack_get --version $idx)" \
+	    -M "$(pack_get --module-name $idx)" \
+	    -p "$(pack_get --module-prefix $idx)" \
+	    -P "$(pack_get --install-prefix $idx)" $reqs $(pack_get --module-opt $idx)
     fi
     [ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
     do_debug --return pack_install
@@ -759,37 +776,33 @@ function get_index {
 	do_debug --return get_index
 	return 0
     fi
-    if [ $_HAS_HASH -eq 1 ]; then
-	if [[ ${_index[$lc_name]} ]]; then
-	    i=0
-	else
-	    do_debug --msg "HELLO not found $name"
-	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	    do_debug --return get_index
-	    return 1
-	fi
-	if [ $all -eq 1 ]; then
-	    _ps "${_index[$lc_name]}"
-	    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	    do_debug --return get_index
-	    return 0
-	else
-	    local v=""
-	    i=-1
-            # Select the latest per default..
-	    for v in ${_index[$lc_name]} ; do
-		if [ ! -z "$version" ]; then
-		    if [ "$(pack_get --version $v)" == "$version" ]; then
-			i="$v"
-			break
-		    fi
-		else
-		    i="$v"
-		fi
-	    done
-	fi
+    if [[ ${_index[$lc_name]} ]]; then
+	i=0
     else
+	do_debug --msg "HELLO not found $name"
+	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	do_debug --return get_index
+	return 1
+    fi
+    if [ $all -eq 1 ]; then
+	_ps "${_index[$lc_name]}"
+	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	do_debug --return get_index
+	return 0
+    else
+	local v=""
 	i=-1
+            # Select the latest per default..
+	for v in ${_index[$lc_name]} ; do
+	    if [ ! -z "$version" ]; then
+		if [ "$(pack_get --version $v)" == "$version" ]; then
+		    i="$v"
+		    break
+		fi
+	    else
+		i="$v"
+	    fi
+	done
     fi
     [ -z "${i// /}" ] && i=-1
     #echo "$lc_name $version $i $l" >&2
@@ -805,7 +818,7 @@ function get_index {
 	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
 		if [ ! -z "$version" ]; then
 		    if [ "$(pack_get --version $i)" != "$version" ]; then
-            # We need to continue the loop as the version did not match...
+                        # We need to continue the loop as the version did not match...
 			continue 
 		    fi
 		fi

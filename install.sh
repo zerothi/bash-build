@@ -46,76 +46,8 @@ fi
 # Set the umask 5 means read and execute
 #umask 0
 
-if [ $DEBUG -ne 0 ]; then
-    #echo get CFLAGS $(edit_env --get CFLAGS)
-    #$(edit_env --prepend '-hollo' CFLAGS)
-    #echo get PREPEND CFLAGS $(edit_env --get CFLAGS)
-    #$(edit_env --append '-hollo' CFLAGS)
-    #echo get APPEND CFLAGS $(edit_env --get CFLAGS)
-    echo ""
-    add_package abc-1.8.2.tar.gz
-    add_package abc-1.8.3.tar.gz
-    add_package def-1.8.3.tar.gz
-    pack_set --module-requirement abc[1.8.2]
-    for tmp in $(pack_get --module-requirement) ; do
-	echo Checking $tmp
-    done
-    echo Check version indexing:
-    echo START >> test
-    echo $(pack_get --version abc[1.8.2]) $(pack_get --version abc) $(pack_get --version abc[1.8.3])
-    echo END >> test
-    add_package ghi.tar.gz
-    pack_set $(list --pack-module-reqs def)
-    echo PRE ALL: $(list --prefix 'PRE' abc def ghi )
-    echo PRE SUF ALL: $(list --prefix 'PRE' --suffix 'SUF'  abc def ghi )
-    echo Wlrpath LDFLAGS $(list --Wlrpath --LDFLAGS   abc def ghi )
-    echo ""
-    echo Module reqs: $(list --pack-module-reqs def)
-    echo Assert Module reqs: $(pack_get --module-requirement ghi)
-    echo ""
-    tmp="${FCFLAGS// -/ }"
-    echo $tmp
-    echo SPLIT of FLAGS "$(list --prefix ,\'- --suffix \' ${tmp:1})"
-    echo " Check: " 
-    echo $(pack_get --module-requirement def)
-    echo ""
-    tmp=""
-    echo LIST of emptyness: "$(list --prefix '-R ' $tmp)"
-    echo Check for is_c:
-    if $(is_c $(get_c)) ; then
-	echo Success on is_c
-    else
-	echo Fail on is_c
-    fi
-    if  $(is_c random) ; then
-	echo Fail on is_c
-    else
-	echo Success on is_c
-    fi
-    echo Duplicate removal:
-    echo $(rem_dup 1290 0935 1 4- 81 1290 senthu seuth stneo[2314] seuth[243])
-
-    if $(pack_exists abc) ; then
-	echo "FOUND CORRECTLY PACKAGE abc"
-    else
-	echo "ERROR"
-    fi
-    if $(pack_exists aeudaoeusnoa) ; then
-	echo "ERROR FOUND PACKAGE aeudaoeusnoa $(get_index aeudaoeusnoa)"
-    else
-	echo "CORRECTLY DETERMINED THE PACKAGE TO NOT EXIST"
-    fi
-
-# for i in "${!_index[@]}"
-# do
-#    echo "value: ${_index[$i]}\tkey: $i"
-# done
-    echo "Done with DEBUG"
-fi
-
 # Install the helper
 source helpers.bash
-
 
 # Install the lua-libraries
 source lua/lua.bash
