@@ -1,11 +1,9 @@
 if [ ! -z "$MKL_PATH" ] ; then
-add_package fftw-2.local
+add_package --version intel fftw-2.local
 
-pack_set --version intel
 pack_set --directory .
 pack_set --host-reject surt
 
-pack_set --prefix-and-module $(pack_get --package)/$(pack_get --version)/$(get_c)
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libfftw2xf_DOUBLE.a

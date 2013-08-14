@@ -1,13 +1,14 @@
 unset tmp
 function tmp {
     add_package \
+	--directory VASP \
 	--no-default-modules \
 	--package vasp \
 	--version $2 \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
+
     pack_set -s $IS_MODULE
     pack_set --host-reject ntch
-    pack_set --directory VASP
     pack_set --prefix-and-module \
 	$(pack_get --alias)/POTCARS/$(pack_get --version)
     pack_set --module-opt "--lua-family vasp-potcar"

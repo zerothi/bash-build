@@ -4,10 +4,6 @@ add_package \
     --version 1.54.0 \
     http://downloads.sourceforge.net/project/boost/boost/1.54.0/boost_1_54_0.tar.bz2
 
-pack_set --version 1.54.0
-
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libboost_python.a

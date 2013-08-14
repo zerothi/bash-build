@@ -2,7 +2,7 @@
 # libgtk2.0-dev
 
 for v in 0.91b ; do 
-add_package --version $v \
+add_package --build generic --version $v \
     http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -10,8 +10,6 @@ pack_set -s $IS_MODULE
 pack_set $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0 n-)
 
 pack_set --module-opt "--lua-family gdis"
-
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 
 # Force the named alias
 pack_set --install-query $(pack_get --install-prefix)/bin/gdis
