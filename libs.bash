@@ -60,13 +60,16 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
-create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's module script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M hdf5.netcdf.utils/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
+tmp=$(get_index nco)
+if [ $? -eq 0 ]; then
+    create_module \
+	--module-path $(build_get --module-path)-npa \
+	-n "Nick Papior Andersen's module script for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M hdf5.netcdf.utils/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
+fi
 
 create_module \
     --module-path $(build_get --module-path)-npa \
@@ -91,4 +94,3 @@ create_module \
     -M mpi.atlas.scalapack/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi atlas scalapack)
-
