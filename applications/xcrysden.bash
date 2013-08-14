@@ -20,7 +20,7 @@ pack_set --module-requirement fftw-3
 tmp=Make.sys
 pack_set --command "echo '# NPA-script' > $tmp"
 
-pack_sed --command "sed -i '1 a\
+pack_set --command "sed -i '1 a\
 MAKE = make \n\
 CFLAGS = $CFLAGS\n\
 CC     = $CC \n\
