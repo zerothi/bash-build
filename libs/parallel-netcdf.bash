@@ -10,10 +10,10 @@ pack_set -s $BUILD_DIR -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/lib/libpnetcdf.a
 
 pack_set --module-requirement openmpi
-if [ $(pack_installed bison) -eq 1 ]; then
+if [ $(pack_get --installed bison) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-requirement bison) $(pack_get --module-name bison)"
 fi
-if [ $(pack_installed flex) -eq 1 ]; then
+if [ $(pack_get --installed flex) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-requirement flex) $(pack_get --module-name flex)"
 fi
 
@@ -30,9 +30,9 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-if [ $(pack_installed flex) -eq 1 ] ; then
+if [ $(pack_get --installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-requirement flex)"
 fi
-if [ $(pack_installed bison) -eq 1 ] ; then
+if [ $(pack_get --installed bison) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name bison) $(pack_get --module-requirement bison)"
 fi

@@ -2,12 +2,8 @@ add_package bash-PBS.local
 
 pack_set -s $IS_MODULE
 
-#pack_set --host-reject zeroth \
-#    --host-reject ntch-2857
-
 pack_set --directory .
 pack_set --version npa
-pack_set --prefix-and-module $(pack_get --package)
 
 # Always install this package (easy updates)
 pack_set --install-query /directory/does/not/exist

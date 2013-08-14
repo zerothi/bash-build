@@ -1,10 +1,11 @@
-tmp="$(which flex)"
-[ "${tmp:0:1}" == "/" ] && return 0
 add_package --build generic http://prdownloads.sourceforge.net/flex/flex-2.5.37.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/flex
+
+tmp="$(which flex 2>/dev/null)"
+[ "${tmp:0:1}" == "/" ] && pack_set --host-reject $(get_hostname)
 
 # Install commands that it should run
 pack_set --command "./configure" \

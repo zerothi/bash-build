@@ -35,13 +35,93 @@ function var_spec {
 	    -spec|-s) v=2 ; shift ;;
 	esac
         # We add field separators
-	[ $v -eq 1 ] && _ps $(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')
-	[ $v -eq 2 ] && _ps $(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')
+	if [ $v -eq 1 ]; then
+	    opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')"
+	    _ps "${opt// /}"
+	elif [ $v -eq 2 ]; then
+	    opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
+	    _ps "${opt// /}"
+	fi
 	shift
 	# Add delimiter
-	[ $# -gt 0 ] && _ps " "
+	[ $# -gt 0 ] && _ps ""
     done
 }
+
+# routine for obtaining the versioning number of some string
+# It currently must be formatted like: <major>.<minor>.<rev>
+function str_version {
+    local Mv='' ; local mv='' ; local rv='' ; local fourth=''
+    local opt=all
+    if [ $# -eq 2 ]; then
+	opt=$(trim_em $1)
+	shift
+    fi
+    local str="${1// /}"
+    # Check which type of versioning we have
+    case $str in
+	*.*.*)
+	    Mv="${str%.*.*}"
+	    str="${str#*.}"
+	    mv="${str%.*}"
+	    rv="${str#*.}"
+	    ;;
+	*.*)
+	    Mv="${str%.*}"
+	    mv="${str#*.}"
+	    ;;
+	*)
+	    doerr "$str" "Unknown type of version string"
+    esac
+    case $opt in 
+	all|-all)
+	    _ps "$Mv $mv $rv" ;;
+	major|-major|-1)
+	    _ps "$Mv" ;;
+	minor|-minor|-2)
+	    _ps "$mv" ;;
+	rev|-rev|-3)
+	    _ps "$rv" ;;
+	*)
+	    doerr "$opt" "Unknown print-out of version"
+    esac	    
+}
+
+function vrs_cmp {
+    for o in -1 -2 -3 ; do
+	local lv=$(str_version $o $1)
+	local rv=$(str_version $o $2)
+	[ -z "$lv" ] && break
+	[ -z "$rv" ] && break
+	if $(isnumber $lv) && $(isnumber $rv ) ; then
+	    [ $lv -gt $rv ] && _ps "1" && return 0
+	    [ $lv -lt $rv ] && _ps "-1" && return 0
+	else
+	    # Currently we do not do character versioning
+	    # properly
+	    [ "$lv" == "$rv" ] && _ps "0" && return 0
+	fi
+    done
+    _ps "0"
+    return 0
+
+    local lMv=$(str_version -1 $1)
+    local lmv=$(str_version -2 $1)
+    local lrv=$(str_version -3 $1)
+    [ -z "$lrv" ] && lrv=1
+    local rMv=$(str_version -1 $2)
+    local rmv=$(str_version -2 $2)
+    local rrv=$(str_version -3 $2)
+    [ -z "$rrv" ] && rrv=1
+    [ $lMv -gt $rMv ] && _ps "1" && return 0
+    [ $lMv -lt $rMv ] && _ps "-1" && return 0
+    [ $lmv -gt $rmv ] && _ps "1" && return 0
+    [ $lmv -lt $rmv ] && _ps "-1" && return 0
+    [ $lrv -gt $rrv ] && _ps "1" && return 0
+    [ $lrv -lt $rrv ] && _ps "-1" && return 0
+    _ps "0"
+}    
+
 
 # Returns the lowercase of the argument (only translating A-Z)
 #

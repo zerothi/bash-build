@@ -1,7 +1,6 @@
 msg_install --message "Installing the scripts..."
 
-set_c ""
-build_set --default-module ""
+build_set --default-build generic-empty
 
 source scripts/spbs.bash
 

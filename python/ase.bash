@@ -3,6 +3,7 @@
 for v in 3.6.0.2515 3.7.1.3184 ; do
 add_package \
     --package ase \
+    --version $v \
     https://wiki.fysik.dtu.dk/ase-files/python-ase-$v.tar.gz
 
 pack_set -s $IS_MODULE

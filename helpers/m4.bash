@@ -2,15 +2,12 @@ add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-tmp=`m4 --version | head -1 | awk '{print $4}'`
-[ -z "${tmp// /}" ] && tmp=1.1.1
-gv=${tmp%.*.*}
-tmp=${tmp#*.}
-lv=${tmp%.*}
-mv=${tmp#*.}
-[ $gv -gt 1 ] && pack_set --host-reject "$(get_hostname)"
-[ $lv -gt 4 ] && pack_set --host-reject "$(get_hostname)"
-[ $mv -gt 15 ] && pack_set --host-reject "$(get_hostname)"
+p_V=$(pack_get --version)
+c_V=`m4 --version | head -1 | awk '{print $4}'`
+[ -z "${c_V// /}" ] && c_V=1.1.1
+if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
+    pack_set --host-reject "$(get_hostname)"
+fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/m4
 

@@ -2,7 +2,7 @@
 #  libtoolize/libtool
 #  automake
 
-add_package --build generic-no-version \
+add_package --build generic-empty \
     --package lmod \
     http://downloads.sourceforge.net/project/lmod/Lmod-5.1.1.tar.bz2
 

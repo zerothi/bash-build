@@ -27,24 +27,25 @@ let "PRELOAD_MODULE=1 << 3"
 # A separator used for commands that can be given consequetively
 _LIST_SEP='ø'
 
-
+# The index of the default build...
+_b_def_idx=0
 # Name of setup (lookup-purposes)
 declare -a _b_name
 # source file
 declare -a _b_source
 # build path
 declare -a _b_build_path
-_b_build_path[0]=$(pwd)/.compile
+_b_build_path[$_b_def_idx]=$(pwd)/.compile
 # installation prefix
 declare -a _b_prefix
 # module installation prefix
 declare -a _b_mod_prefix
 # how to build the full installation path
 declare -a _b_build_prefix
-_b_build_prefix[0]="--package --version"
+_b_build_prefix[$_b_def_idx]="--package --version"
 # how to build the full module path
 declare -a _b_build_mod_prefix
-_b_build_mod_prefix[0]="--package --version"
+_b_build_mod_prefix[$_b_def_idx]="--package --version"
 # default modules for this build
 declare -a _b_def_mod_reqs
 # Pointers of lookup
@@ -128,8 +129,12 @@ function build_set {
 		    def_mod_first=0
 		    _b_def_mod_reqs[$b_idx]=""
 		fi
+		local tmp=$(get_index $1)
+		[ -z "$tmp" ] && tmp=-1
+		if [ $tmp -lt 0 ]; then
+		    add_hidden_package "$1"
+		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
-		add_hidden_package $1
 		shift ;;
 	    -module-format)
 		_module_format="$1"
@@ -140,6 +145,13 @@ function build_set {
 		    *)
 			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
 		esac
+		;;
+	    -default-build)
+		local switch_idx=$(get_index --hash-array "_b_index" $1)
+		[ -z "$switch_idx" ] && \
+		    doerr "$1" "Unrecognized build"
+		shift
+		_b_def_idx=$switch_idx
 		;;
 	    -default-module-version)
 		_crt_version=1
@@ -175,6 +187,7 @@ function build_get {
 	-build-path|-bp) _ps "${_b_build_path[$b_idx]}" ;;
 	-build-installation-path|-bip) _ps "${_b_build_prefix[$b_idx]}" ;;
 	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
+	-default-build) _ps "$_b_def_idx" ;; 
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get" ;;
@@ -186,10 +199,10 @@ function new_build {
     # Simple command to initialize a new build
     _N_b=$((_N_b+1))
     # Initialize all the stuff
-    _b_prefix[$_N_b]="${_b_prefix[0]}"
-    _b_mod_prefix[$_N_b]="${_b_mod_prefix[0]}"
-    _b_build_prefix[$_N_b]="${_b_build_prefix[0]}"
-    _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[0]}"
+    _b_prefix[$_N_b]="${_b_prefix[$_b_def_idx]}"
+    _b_mod_prefix[$_N_b]="${_b_mod_prefix[$_b_def_idx]}"
+    _b_build_prefix[$_N_b]="${_b_build_prefix[$_b_def_idx]}"
+    _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
     # Read in options
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1)
@@ -215,6 +228,12 @@ function new_build {
 	    -build-path|-bp)
 		_b_build_path[$_N_b]="$1" ; mkdir -p $1 ; shift ;;
 	    -default-module)
+		local tmp=$(get_index $1)
+		[ -z "$tmp" ] && tmp=-1
+		if [ $tmp -lt 0 ]; then
+		    echo Adding hidding package $1
+		    add_hidden_package "$1"
+		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1" ; shift ;;
 	    -source)
 		_b_source[$_N_b]="$(readlink -f $1)" ; shift
@@ -330,8 +349,8 @@ function add_package {
     local d="" ; local v=""
     local fn="" ; local package=""
     local alias="" 
-    # Default to first entry
-    local b_name="${_b_name[0]}"
+    # Default to default index
+    local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
@@ -506,7 +525,7 @@ function pack_set {
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
     [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
-    [ ! -z "$mod_prefix" ]   && _mod_prefix[$index]="$mod_prefix"
+    [ ! -z "$mod_prefix" ] && _mod_prefix[$index]="$mod_prefix"
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
@@ -532,7 +551,9 @@ function pack_get {
     if [ $# -gt 0 ]; then
 	while [ $# -gt 0 ]; do
 	    local index=$(get_index $1)
-	    #echo $1 $index >&2
+	    [ -z "${index// /}" ] && \
+		doerr pack_get "Could not find index of $1"
+	    #echo "pack_get: lookup($1) idx($index)" >&2
 	    shift
             # Process what is requested
 	    case $opt in
@@ -736,7 +757,7 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-	#echo Will load: $module_loads
+#echo Will load: $module_loads $mod_reqs
 	#module avail
 	module load $module_loads
 	#module list
@@ -858,9 +879,11 @@ function get_index {
     done
     [ ${#1} -eq 0 ] && return 1
     # Save the thing that we want to process...
-    local name=$(var_spec "$1")
-    local version=$(var_spec -s "$1")
+    local name=$(var_spec $1)
+    local version=$(var_spec -s $1)
     local l=${#name} ; local lc_name="$(lc $name)"
+    #[ ! -z "$version" ] && \
+#	echo "get_index: name($name) version($version)" >&2
     # do full variable (for ${!...})
     var="$var[$lc_name]"
     if $(isnumber $name) ; then # We have a number
@@ -892,7 +915,7 @@ function get_index {
         # Select the latest per default..
 	for v in $idx ; do
 	    if [ ! -z "$version" ]; then
-		if [ "$(pack_get --version $v)" == "$version" ]; then
+		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
 		    i="$v"
 		    break
 		fi
@@ -1433,13 +1456,18 @@ function _add_module_if_usage {
 # Update the package version number by looking at the date in the file
 function pack_set_file_version {
     local idx=$_N_archives
-    [ $# -gt 0 ] && idx=$1
+    [ $# -gt 0 ] && idx=$(get_index $1)
     # Download the archive
     dwn_file $idx $(build_get --archive-path)
     local v="$(get_file_time %g-%j $(build_get --archive-path)/$(pack_get --archive $idx))"
     pack_set --version "$v"
      # Default the module name to this:
-    pack_set --module-name $(pack_get --package $idx)/$v/$(get_c) $idx
+    local b_name="$(pack_get --build $idx)"
+    local tmp="$(build_get --build-module-path[$b_name])"
+    tmp=$(pack_list -lf "-X -p /" $tmp)
+    tmp=${tmp%/}
+    tmp=${tmp#/}
+    pack_set --module-name $tmp $idx
 }
 
 
