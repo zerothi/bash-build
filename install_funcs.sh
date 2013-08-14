@@ -676,7 +676,7 @@ function pack_install {
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
-	_installed[$idx]=1
+	pack_set --installed 1 $idx
     fi
 
     # Save the module requirements for later...
@@ -842,21 +842,23 @@ function pack_install {
 	export LDFLAGS="$old_ldflags"
 	#export LD_LIBRARY_PATH="$old_ld_lib_path"
 
-    fi
+        # For sure it is now installed...
+	pack_set --installed 1 $idx
 
-    # For sure it is now installed...
-    pack_set --installed 1 $idx
+    fi
 
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
 	local reqs="$(list --prefix '-R ' $mod_reqs)"
-        # We install the module scripts here:
-	create_module \
-	    -n "$(pack_get --alias $idx)" \
-	    -v "$(pack_get --version $idx)" \
-	    -M "$(pack_get --module-name $idx)" \
-	    -p "$(pack_get --module-prefix $idx)" \
-	    -P "$(pack_get --install-prefix $idx)" $reqs $(pack_get --module-opt $idx)
+	if [ $(pack_get --installed $idx) -eq 1 ]; then
+            # We install the module scripts here:
+	    create_module \
+		-n "$(pack_get --alias $idx)" \
+		-v "$(pack_get --version $idx)" \
+		-M "$(pack_get --module-name $idx)" \
+		-p "$(pack_get --module-prefix $idx)" \
+		-P "$(pack_get --install-prefix $idx)" $reqs $(pack_get --module-opt $idx)
+	fi
     fi
     [ $TIMING -ne 0 ] && export _pack_install_T=$(add_timing $_pack_install_T $time)
     do_debug --return pack_install
@@ -1037,6 +1039,14 @@ function create_module {
 	    mfile="$mfile.lua"
 	    ;;
     esac
+
+    # Check that all that is required and needs to be loaded is installed
+    for mod in $require $load ; do
+	[ $(pack_get --installed $mod) -eq 1 ] && continue
+        [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
+        do_debug --return create_module
+	return 0
+    done
     
     # If the file exists simply return
     if [ -e "$mfile" ] && [ 0 -eq $force ]; then
