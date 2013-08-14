@@ -6,8 +6,8 @@ add_package http://lammps.sandia.gov/tars/lammps.tar.gz
 pack_set_file_version
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch \
-    --host-reject zeroth
+#pack_set --host-reject ntch \
+#    --host-reject zeroth
 
 pack_set --module-opt "--lua-family lammps"
 
@@ -19,51 +19,48 @@ pack_set --install-query $(pack_get --install-prefix)/bin/lmp
 pack_set --module-requirement openmpi \
     --module-requirement fftw-3
 
+tmp=MAKE/Makefile.npa
+pack_set --command "echo '# NPA-script' > $tmp"
 
-tmp_file=lammps-$(pack_get --version).make
-cat <<EOF > $tmp_file
-include ../MAKE/Makefile.linux
-SHELL=/bin/sh
-CC =	     $MPICXX
-CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-requirement))
-SHFLAGS =	-fPIC
-DEPFLAGS =	-M
-LINK =		\$(CC)
-SIZE =		size
-ARCHIVE =	$AR
-ARFLAGS =	-rc
-SHLIBFLAGS =	-shared
-LMP_INC =	-DLAMMPS_GZIP
-MPI_INC =       
-MPI_PATH = 
-MPI_LIB =      
-FFT_INC =       -DFFT_FFTW3 $(list --INCDIRS fftw-3)
-FFT_PATH = 
-FFT_LIB =	-lfftw3
-JPG_INC =       
-JPG_PATH = 	
-JPG_LIB =
-EOF
+pack_set --command "sed -i '1 a\
+include ../MAKE/Makefile.linux\n\
+SHELL=/bin/sh\n\
+CC =         $MPICXX\n\
+CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-requirement))\n\
+SHFLAGS =    -fPIC\n\
+DEPFLAGS =   -M\n\
+LINK =	     \$(CC)\n\
+SIZE =	     size\n\
+ARCHIVE =    $AR\n\
+ARFLAGS =    -rc\n\
+SHLIBFLAGS = -shared\n\
+LMP_INC =    -DLAMMPS_GZIP\n\
+MPI_INC =      \n\
+MPI_PATH =     \n\
+MPI_LIB =      \n\
+FFT_INC =    -DFFT_FFTW3 $(list --INCDIRS fftw-3)\n\
+FFT_PATH =     \n\
+FFT_LIB =    -lfftw3\n\
+JPG_INC =      \n\
+JPG_PATH =     \n\
+JPG_LIB = ' $tmp"
+
 
 if $(is_c intel) ; then
-    cat <<EOF >> $tmp_file
-LINKFLAGS =	$MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))
-LIB =           -lstdc++ -lpthread -mkl=sequential
-EOF
+    pack_set --command "sed -i '$ a\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
+LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
-    cat <<EOF >> $tmp_file
-LINKFLAGS =	$(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))
-LIB =           -lstdc++ -lpthread 
-EOF
+    pack_set --command "sed -i '$ a\
+LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
+LIB =        -lstdc++ -lpthread ' $tmp"
 
 else
     doerror lammps "Could not recognize the compiler: $(get_c)"
 fi
 
-
 # Make commands
-pack_set --command "mv $(pwd)/$tmp_file MAKE/Makefile.npa"
 pack_set --command "make $(get_make_parallel) npa"
 pack_set --command "make makelib"
 pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"

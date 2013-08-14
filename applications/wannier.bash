@@ -25,15 +25,14 @@ else
 
 fi
 
-cat << EOF > $(pack_get --alias)-$(pack_get --version).sys
-F90 = $FC
-FCOPTS = $FCFLAGS $tmp
-LDOPTS = $FCFLAGS $tmp
-LIBS = $tmp -lpthread
-EOF
-pack_set --command "cp $(pwd)/$(pack_get --alias)-$(pack_get --version).sys make.sys"
-pack_set --command "rm $(pwd)/$(pack_get --alias)-$(pack_get --version).sys"
+tmp=make.sys
+pack_set --command "rm -f $tmp"
 
+pack_set --command "sed -i '1 a\
+F90 = $FC \n\
+FCOPTS = $FCFLAGS $tmp\n\
+LDOPTS = $FCFLAGS $tmp\n\
+LIBS = $tmp -lpthread ' $tmp"
 
 # Make commands
 pack_set --command "make $(get_make_parallel) wannier"

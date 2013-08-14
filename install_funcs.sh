@@ -562,6 +562,10 @@ function pack_get {
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
+		-module-name-requirement) 
+		    for m in ${_mod_req[$index]} ; do
+			_ps "$(pack_get --module-name $m)"
+		    done ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -591,6 +595,10 @@ function pack_get {
 	    -C|-commands)        _ps "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 	    -R|-module-requirement) _ps "${_mod_req[$index]}" ;;
+	    -module-name-requirement)
+		for m in ${_mod_req[$index]} ; do
+		    _ps "$(pack_get --module-name $m)"
+		done ;;
 	    -MI|-module-prefix) _ps "${_mod_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
@@ -716,12 +724,13 @@ function pack_install {
     # Make sure that every package before is installed...
     for tmp in $mod_reqs ; do
 	[ -z "$tmp" ] && break
-	if [ $(pack_get --installed $tmp) -eq 0 ]; then
-	    pack_install $tmp
+	tmp_idx=$(get_index $tmp)
+	if [ $(pack_get --installed $tmp_idx) -eq 0 ]; then
+	    pack_install $tmp_idx
 	fi
 	# Capture packages that has been rejected.
 	# If it depends on rejected packages, it must itself be rejected.
-	if [ $(pack_get --installed $tmp) -eq -1 ]; then
+	if [ $(pack_get --installed $tmp_idx) -eq -1 ]; then
 	    run=0
 	    break
 	fi
@@ -1042,6 +1051,7 @@ function create_module {
 
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
+	[ -z "${mod// /}" ] && continue
 	[ $(pack_get --installed $mod) -eq 1 ] && continue
         [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
         do_debug --return create_module

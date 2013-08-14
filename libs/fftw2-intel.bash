@@ -47,7 +47,7 @@ pack_set --command "make libintel64" \
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
 pack_set --command "cd $MKL_PATH/interfaces/fftw2x_cdft"
-pack_set --command "module load $(pack_get --module-requirement openmpi) $(pack_get --module-name openmpi)"
+pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "mpi=openmpi" \
@@ -64,7 +64,7 @@ pack_set --command "make libintel64" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
-pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-requirement openmpi)"
+pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
 
 # Install a link to the include files
 pack_set --command "cd $(pack_get --install-prefix)"

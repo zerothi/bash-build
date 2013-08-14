@@ -19,7 +19,9 @@ if $(is_c gnu) ; then
     fi
 fi
 
-cfg=$(pack_get --alias)-$(pack_get --version).site.cfg
+file=site.cfg
+pack_set --command "echo '#' > $file"
+
 tmp_lib=$(list --prefix ':' --suffix '/lib' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))
 tmp_lib=${tmp_lib// /}
 tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64
@@ -28,36 +30,33 @@ tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --install-p
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
-cat << EOF > $cfg
-[fftw]
-fftw3_libs   = fftw3
-[fftw3]
-fftw3_libs   = fftw3
-[amd]
-amd_libs = amd
-[umfpack]
-umfpack_libs = umfpack
-[DEFAULT]
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig
-EOF
+pack_set --command "sed -i '1 a\
+[fftw]\n\
+fftw3_libs   = fftw3\n\
+[fftw3]\n\
+fftw3_libs   = fftw3\n\
+[amd]\n\
+amd_libs = amd\n\
+[umfpack]\n\
+umfpack_libs = umfpack\n\
+[DEFAULT]\n\
+libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig' $file"
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     if [ -z "$MKL_PATH" ]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
-    sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $cfg
-    cat << EOF >> $cfg
-library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64
-include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
-[mkl]
-library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64
-include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include
-mkl_libs = mkl_rt,mkl_intel_lp64,mkl_gf_lp64,mkl_intel_thread,mkl_core,mkl_def
-lapack_libs = mkl_lapack95_lp64
-blas_libs = mkl_blas95_lp64
-EOF
-    pack_set --command "mv $(pwd)/$cfg site.cfg"
+    pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
+    pack_set --command "sed -i '$ a\
+library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
+include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n\
+[mkl]\n\
+library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64\n\
+include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n\
+mkl_libs = mkl_rt,mkl_intel_lp64,mkl_gf_lp64,mkl_intel_thread,mkl_core,mkl_def\n\
+lapack_libs = mkl_lapack95_lp64\n\
+blas_libs = mkl_blas95_lp64' $file"
 
     p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict -fomit-frame-pointer -I$(pack_get --install-prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
@@ -74,18 +73,15 @@ EOF
 
 elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
-	cat << EOF >> $cfg
-library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib
-include_dirs = $(pack_get --install-prefix atlas)/include:$tmp_inc
-[atlas_threads]
-atlas_threads_libs = ptf77blas,ptcblas,atlas
-[atlas]
-atlas_libs = f77blas,cblas,atlas
-[lapack]
-lapack_libs = lapack_atlas
-EOF
-
-pack_set --command "mv $(pwd)/$cfg site.cfg"
+	pack_set --command "sed -i '$ a\
+library_dirs = $(pack_get --install-prefix atlas)/lib:$tmp_lib\n\
+include_dirs = $(pack_get --install-prefix atlas)/include:$tmp_inc\n\
+[atlas_threads]\n\
+atlas_threads_libs = ptf77blas,ptcblas,atlas\n\
+[atlas]\n\
+atlas_libs = f77blas,cblas,atlas\n\
+[lapack]\n\
+lapack_libs = lapack_atlas' $file" 
 
     # Correct the ATLAS understanding of the stuff
 pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
@@ -104,14 +100,11 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
     --command-flag "--fcompiler=gnu95" 
 
     else
-	cat << EOF >> $cfg
-library_dirs = $(pack_get --install-prefix blas)/lib:$(pack_get --install-prefix lapack)/lib:$tmp_lib
-include_dirs = $(pack_get --install-prefix blas)/include:$(pack_get --install-prefix lapack)/include:$tmp_inc
-[lapack]
-lapack_libs = lapack
-EOF
-
-pack_set --command "mv $(pwd)/$cfg site.cfg"
+	pack_set --command "sed -i '$ a\
+library_dirs = $(pack_get --install-prefix blas)/lib:$(pack_get --install-prefix lapack)/lib:$tmp_lib\n\
+include_dirs = $(pack_get --install-prefix blas)/include:$(pack_get --install-prefix lapack)/include:$tmp_inc\n\
+[lapack]\n\
+lapack_libs = lapack' $file"
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
 p_flags="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
@@ -131,9 +124,7 @@ else
 fi
 
 # Install commands that it should run
-# We need to unset the LDFLAGS as numpy will not be able to link to itself if set!
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
-
 
 done

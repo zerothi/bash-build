@@ -1,3 +1,5 @@
+pack_set --command "cd vasp.5.lib"
+
 # Now tmp will hold the makefile name
 tmp=makefile.linux_ifc_P4
 

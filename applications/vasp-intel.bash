@@ -7,11 +7,11 @@ add_package \
 pack_set --module-requirement fftw[intel]
 
 source applications/vasp-common-init.bash
-cat <<EOF >> $tmp
-FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \
-      $(pack_get --install-prefix fftw[intel])/lib/libfftw3xf.a
-INCS    = -I$(pack_get --install-prefix fftw[intel])/include
-EOF
+
+pack_set --command "sed -i '$ a\
+FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\n\
+      $(pack_get --install-prefix fftw[intel])/lib/libfftw3xf.a\n\
+INCS    = -I$(pack_get --install-prefix fftw[intel])/include' $file"
 
 source applications/vasp-common-end.bash
 

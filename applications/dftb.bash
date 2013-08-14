@@ -14,20 +14,25 @@ pack_set --directory $(pack_get --directory)_src
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     cc=intel
-    tmp=$(pack_get --alias)-$(pack_get --version).make
+elif $(is_c gnu) ; then
+    cc=gnu
+fi
+tmp=sysmakes/make.$cc
+pack_set --command "echo '#' > $tmp"
 
-    cat <<EOF > $tmp
-FC90 = $FC
-FC90OPT = $FCFLAGS -openmp -mkl=parallel
-CPP = cpp -traditional
-CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC
-CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
-LN = \$(FC90) 
-LNOPT = -mkl=parallel -openmp
-LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64
-LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64
-LIBOPT = $MKL_LIB
-EOF
+# Check for Intel MKL or not
+if $(is_c intel) ; then
+    pack_set --command "sed -i '1 a\
+FC90 = $FC\n\
+FC90OPT = $FCFLAGS -openmp -mkl=parallel\n\
+CPP = cpp -traditional\n\
+CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
+CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
+LN = \$(FC90) \n\
+LNOPT = -mkl=parallel -openmp\n\
+LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
+LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n\
+LIBOPT = $MKL_LIB' $tmp"
     
 elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
@@ -35,41 +40,35 @@ elif $(is_c gnu) ; then
     else
 	pack_set --module-requirement blas --module-requirement lapack
     fi
-    cc=gnu
-    tmp=$(pack_get --alias)-$(pack_get --version).$cc
-    
-    cat <<EOF > $tmp
-FC90 = $FC
-FC90OPT = $FCFLAGS -fopenmp
-CPP = cpp -traditional
-CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC
-CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general
-LN = \$(FC90) 
-LNOPT = -fopenmp
-EOF
+    pack_set --command "sed -i '1 a\
+FC90 = $FC\n\
+FC90OPT = $FCFLAGS -fopenmp\n\
+CPP = cpp -traditional\n\
+CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
+CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
+LN = \$(FC90) \n\
+LNOPT = -fopenmp' $tmp"
+
     if [ $(pack_installed atlas) -eq 1 ] ; then
-	cat <<EOF >> $tmp
-ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)
-LIB_LAPACK = \$(ATLASOPT) -llapack_atlas
-LIB_BLAS   = \$(ATLASOPT) -lf77blas -lcblas -latlas
-LIBOPT     = \$(ATLASOPT)
-EOF
+	pack_set --command "sed -i '$ a\
+ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)\n\
+LIB_LAPACK = \$(ATLASOPT) -llapack_atlas\n\
+LIB_BLAS   = \$(ATLASOPT) -lf77blas -lcblas -latlas\n\
+LIBOPT     = \$(ATLASOPT)' $tmp"
     else
-	cat <<EOF >> $tmp
-BLASOPT =  $(list --LDFLAGS --Wlrpath blas)
-LAPACKOPT =  $(list --LDFLAGS --Wlrpath lapack)
-LIB_LAPACK = \$(LAPACKOPT) -llapack
-LIB_BLAS   = \$(BLASOPT) -lblas
-LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)
-EOF
+	pack_set --command "sed -i '$ a\
+BLASOPT =  $(list --LDFLAGS --Wlrpath blas)\n\
+LAPACKOPT =  $(list --LDFLAGS --Wlrpath lapack)\n\
+LIB_LAPACK = \$(LAPACKOPT) -llapack\n\
+LIB_BLAS   = \$(BLASOPT) -lblas\n\
+LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)' $tmp"
     fi
+
 else
     doerr dftb "Could not find compiler $(get_c)"
 
 fi
 
-# Copy over makefile
-pack_set --command "mv $(pwd)/$tmp sysmakes/make.$cc"
 pack_set --command "mv Makefile.user.template Makefile.user"
 pack_set --command "sed -i -e 's/ARCH[[:space:]]*=.*/ARCH = $cc/g' Makefile.user"
 
