@@ -1,4 +1,4 @@
-add_package http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
+add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

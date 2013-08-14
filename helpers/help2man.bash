@@ -1,7 +1,8 @@
 # Retrieve version of autoconf
-add_package http://ftp.gnu.org/gnu/help2man/help2man-1.43.3.tar.gz
+add_package --build generic http://ftp.gnu.org/gnu/help2man/help2man-1.43.3.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+
 # This is a three tagged version
 tmp=`help2man --version | head -1 | awk '{print $4}'`
 [ -z "$tmp" ] && tmp=1.10.1

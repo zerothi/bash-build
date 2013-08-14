@@ -1,6 +1,6 @@
 tmp="$(which flex)"
 [ "${tmp:0:1}" == "/" ] && return 0
-add_package http://prdownloads.sourceforge.net/flex/flex-2.5.37.tar.gz
+add_package --build generic http://prdownloads.sourceforge.net/flex/flex-2.5.37.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -2,10 +2,11 @@
 #  libtoolize/libtool
 #  automake
 
-add_package \
-    --archive lua-posix.zip \
-    --directory luaposix-master \
-    https://github.com/luaposix/luaposix/archive/master.zip
+add_package --build generic \
+    --archive lua-posix-5.1.29.tar.gz \
+    --version 5.1.29 \
+    --directory luaposix-release-v29 \
+    https://github.com/luaposix/luaposix/archive/release-v29.tar.gz
 
 pack_set --module-requirement lua
 
@@ -15,8 +16,6 @@ pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/posix_c
     pack_set --module-requirement help2man
 [ $(pack_get --installed autoconf) -eq 1 ] && \
     pack_set --module-requirement autoconf
-
-pack_set --command "./bootstrap"
 
 # Configure the package
 pack_set --command "./configure" \

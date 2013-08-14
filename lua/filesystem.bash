@@ -1,8 +1,5 @@
-add_package \
-    --package lua-filesystem \
-    --directory luafilesystem-master \
-    --archive lua-filesystem.zip \
-    https://github.com/keplerproject/luafilesystem/archive/master.zip
+add_package --build generic \
+    https://github.com/downloads/keplerproject/luafilesystem/luafilesystem-1.6.2.tar.gz
 
 pack_set --module-requirement lua
 

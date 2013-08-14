@@ -156,6 +156,10 @@ pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 
+# Install the TS-analyzer
+pack_set --command "cd ../TSAnalyzeSort"
+pack_set --command "cp tsanalyzesort.py $(pack_get --install-prefix)/bin/"
+
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
 
 pack_install

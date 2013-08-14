@@ -3,7 +3,7 @@ if ! $(is_host zerothi-QM) ; then
     return 0
 fi
 
-add_package http://www.lua.org/ftp/lua-5.2.2.tar.gz
+add_package --build generic http://www.lua.org/ftp/lua-5.2.2.tar.gz
 
 pack_set -s $IS_MODULE
 

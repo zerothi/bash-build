@@ -1,4 +1,4 @@
-add_package ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
+add_package --build generic ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.31.tar.gz
 
 pack_set --host-reject n-
 pack_set --host-reject ntch-2857

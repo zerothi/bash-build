@@ -226,6 +226,7 @@ function pack_print {
     echo " URL: $(pack_get -http $pack)"
     echo " OUT: $(pack_get -A $pack)"
     echo " CMD: $(pack_get -commands $pack)"
+    echo " MP : $(pack_get -module-prefix $pack)"
     echo " IP : $(pack_get -install-prefix $pack)"
     echo " MN : $(pack_get -module-name $pack)"
     echo " IQ : $(pack_get -install-query $pack)"

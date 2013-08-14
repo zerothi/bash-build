@@ -2,10 +2,10 @@
 #  libtoolize/libtool
 #  automake
 
-add_package http://downloads.sourceforge.net/project/lmod/Lmod-5.1.1.tar.bz2
+add_package --build generic-no-version \
+    --package lmod \
+    http://downloads.sourceforge.net/project/lmod/Lmod-5.1.1.tar.bz2
 
-pack_set --alias lmod
-pack_set --prefix-and-module $(pack_get --alias)/$(get_c)
 pack_set --module-requirement lua
 
 pack_set --install-query \

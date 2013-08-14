@@ -22,36 +22,47 @@ _module_format='TCL'
 let "BUILD_DIR=1 << 0"
 let "MAKE_PARALLEL=1 << 1"
 let "IS_MODULE=1 << 2"
-let "UPDATE_MODULE_NAME=1 << 3"
-let "PRELOAD_MODULE=1 << 4"
+let "PRELOAD_MODULE=1 << 3"
+
+# A separator used for commands that can be given consequetively
+_LIST_SEP='ø'
 
 
 # Name of setup (lookup-purposes)
 declare -a _b_name
+# source file
+declare -a _b_source
+# build path
+declare -a _b_build_path
+_b_build_path[0]=$(pwd)/.compile
 # installation prefix
 declare -a _b_prefix
 # module installation prefix
 declare -a _b_mod_prefix
 # how to build the full installation path
 declare -a _b_build_prefix
+_b_build_prefix[0]="--package --version"
 # how to build the full module path
 declare -a _b_build_mod_prefix
+_b_build_mod_prefix[0]="--package --version"
+# default modules for this build
+declare -a _b_def_mod_reqs
 # Pointers of lookup
 declare -A _b_index
+_N_b=-1
 
-_prefix=""
 _crt_version=0
 
 _parent_package=""
 # The parent package (for instance Python)
-function set_parent {          _parent_package=$1 ; }
-function clear_parent {        _parent_package="" ; }
-function get_parent { echo -n $_parent_package ; }
+function set_parent {       _parent_package=$1 ; }
+function clear_parent {     _parent_package="" ; }
+function get_parent { _ps "$_parent_package" ; }
 
 _parent_exec=""
 # The parent package (for instance Python)
-function set_parent_exec {          _parent_exec=$1 ; }
-function get_parent_exec { echo -n $_parent_exec ; }
+function set_parent_exec {       _parent_exec=$1 ; }
+function get_parent_exec { _ps "$_parent_exec" ; }
 
 # Add any auxillary commands
 source install_aux.sh
@@ -61,6 +72,166 @@ source install_compiler.sh
 
 # Add host information
 source install_hostinfo.sh
+
+# The place of all the archives
+_archives="$(pwd)/.archives"
+
+# Denote how the module paths and installation paths should be
+function build_set {
+    do_debug --enter build_set
+    # We set up default parameters for creating the 
+    # default package directory
+    local def_mod_first=1
+    while [ $# -gt 0 ]; do
+	local opt=$(trim_em $1)
+	local spec=$(var_spec -s $opt)
+	if [ -z "$spec" ]; then
+	    local b_idx=0
+	else
+	    local b_idx=$(get_index --hash-array "_b_index" $spec)
+	fi
+	if [ -z "$b_idx" ]; then
+	    doerr "$spec" "Unrecognized build, please create it first"
+	    exit 1
+	fi
+	opt=$(var_spec $opt)
+	shift
+	case $opt in
+	    -archive-path|-ap)
+		_archives="$1"
+		shift ;;
+	    -installation-path|-ip)
+		[ $b_idx -eq 0 ] && _prefix="$1"
+		_b_prefix[$b_idx]="$1"
+		mkdir -p $1
+    		shift ;;
+	    -module-path|-mp) 
+		[ $b_idx -eq 0 ] && _modulepath="$1"
+		_b_mod_prefix[$b_idx]="$1"
+                # Create the module folders
+		mkdir -p $1
+		shift ;;
+	    -build-path|-bp) 
+		_buildpath="$1" 
+		mkdir -p $_buildpath
+		shift ;;
+	    -build-installation-path|-bip) 
+		[ $b_idx -eq 0 ] && _build_install_path="$1"
+		_b_build_prefix[$b_idx]="$1"
+		shift ;;
+	    -build-module-path|-bmp) 
+		[ $b_idx -eq 0 ] && _build_module_path="$1"
+		_b_build_mod_prefix[$b_idx]="$1"
+		shift ;;
+	    -default-module) 
+		if [ $def_mod_first -eq 1 ]; then
+		    def_mod_first=0
+		    _b_def_mod_reqs[$b_idx]=""
+		fi
+		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
+		add_hidden_package $1
+		shift ;;
+	    -module-format)
+		_module_format="$1"
+		shift
+		case $_module_format in
+		    TCL) ;;
+		    LUA) ;;
+		    *)
+			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
+		esac
+		;;
+	    -default-module-version)
+		_crt_version=1
+		;;
+	    -non-default-module-version)
+		_crt_version=0
+		;;
+	    *) doerr "$opt" "Not a recognized option for build_set" ;;
+	esac
+    done
+    do_debug --return build_set
+}
+
+# Retrieval of different variables
+function build_get {
+    do_debug --enter build_get
+    # We set up default parameters for creating the 
+    # default package directory
+    local opt=$(trim_em $1)
+    local spec=$(var_spec -s $opt)
+    if [ -z "$spec" ]; then
+	local b_idx=0
+    else
+	local b_idx=$(get_index --hash-array "_b_index" $spec)
+    fi
+    [ -z "$b_idx" ] && doerr "Build index" "Build not existing"
+    opt=$(var_spec $opt)
+    shift
+    case $opt in
+	-archive-path|-ap) _ps "$_archives" ;;
+	-installation-path|-ip) _ps "${_b_prefix[$b_idx]}" ;;
+	-module-path|-mp) _ps "${_b_mod_prefix[$b_idx]}" ;;
+	-build-path|-bp) _ps "${_b_build_path[$b_idx]}" ;;
+	-build-installation-path|-bip) _ps "${_b_build_prefix[$b_idx]}" ;;
+	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
+	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
+	-source) _ps "${_b_source[$b_idx]}" ;; 
+	*) doerr "$opt" "Not a recognized option for build_get" ;;
+    esac
+    do_debug --return build_get
+}
+
+function new_build {
+    # Simple command to initialize a new build
+    _N_b=$((_N_b+1))
+    # Initialize all the stuff
+    _b_prefix[$_N_b]="${_b_prefix[0]}"
+    _b_mod_prefix[$_N_b]="${_b_mod_prefix[0]}"
+    _b_build_prefix[$_N_b]="${_b_build_prefix[0]}"
+    _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[0]}"
+    # Read in options
+    while [ $# -gt 1 ]; do
+	local opt=$(trim_em $1)
+	shift
+	case $opt in 
+	    # As a bonus, supplying name several time
+	    # creates aliases! :)
+	    -name) 
+		_b_index[$1]=$_N_b
+		_b_name[$_N_b]="$1" ; shift ;;
+	    -installation-path) 
+		_b_prefix[$_N_b]="$1"
+		mkdir -p $1
+		shift ;;
+	    -module-path) 
+		_b_mod_prefix[$_N_b]="$1" 
+		mkdir -p $1
+		shift ;;
+	    -build-installation-path|-bip) 
+		_b_build_prefix[$_N_b]="$1" ; shift ;;
+	    -build-module-path|-bmp)
+		_b_build_mod_prefix[$_N_b]="$1" ; shift ;;
+	    -build-path|-bp)
+		_b_build_path[$_N_b]="$1" ; mkdir -p $1 ; shift ;;
+	    -default-module)
+		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1" ; shift ;;
+	    -source)
+		_b_source[$_N_b]="$(readlink -f $1)" ; shift
+		[ ! -e ${_b_source[$_N_b]} ] && \
+		    doerr "${_b_source[$_N_b]}" "Source file does not exist"
+		;;
+	    *)
+		doerr "$opt" "Unrecognized option in new_build"
+		;;
+	esac
+    done
+    if [ $# -gt 0 ]; then
+	_b_index[$1]=$_N_b
+	_b_name[$_N_b]="$1"
+	shift
+    fi
+}
 
 # This function takes one argument
 # It is the name of the module that is "hidden", i.e. not
@@ -78,8 +249,6 @@ function add_hidden_package {
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
 }
-
-
 
 # Local variables for archives to be installed
 declare -a _http
@@ -117,107 +286,12 @@ declare -a _only_host
 declare -a _installed
 # Adds this to the environment variable in the creation of the modules
 declare -a _mod_opts
+# The name of the build attached to this
+declare -a _build
 # Local variables for hash tables of index (speed up of execution)
 declare -A _index
-# A separator used for commands that can be given consequetively
-_LIST_SEP='ø'
 # The counter to hold the archives
 _N_archives=-1
-
-# The place of all the archives
-_archives="$(pwd)/.archives"
-# Place to build all the packages
-_buildpath="$(pwd)/.compile"
-# The prefix of the installation directory
-_prefix=""
-# The module prefix installation directory
-_modulepath=""
-# The default module requirements
-_def_module_reqs=""
-# The construction of the installation path is this
-_build_install_path="--package --version"
-# The construction of the module path is this (typically the same as the installation
-# path)
-_build_module_path="--package --version"
-# Denote how the module paths and installation paths
-# should be
-function build_set {
-    do_debug --enter build_set
-    # We set up default parameters for creating the 
-    # default package directory
-    local def_m=""
-    while [ $# -gt 1 ]; do
-	local opt=$(trim_em $1) 
-	shift
-	case $opt in
-	    -archive-path|-ap)
-		_archives="$1"
-		shift ;;
-	    -installation-path|-ip) 
-		_prefix="$1" 
-    		shift ;;
-	    -module-path|-mp) 
-		_modulepath="$1"
-                # Create the module folders
-		mkdir -p $_modulepath
-		mkdir -p $_modulepath-npa
-		mkdir -p $_modulepath-npa-apps
-		shift ;;
-	    -build-path|-bp) 
-		_buildpath="$1" 
-		mkdir -p $_buildpath
-		shift ;;
-	    -build-installation-path|-bip) 
-		_build_install_path="$1"
-		shift ;;
-	    -build-module-path|-bmp) 
-		_build_module_path="$1" 
-		shift ;;
-	    -default-module) 
-		def_m="$def_m $1" 
-		add_hidden_package $1
-		shift ;;
-	    -module-format)
-		_module_format="$1"
-		shift
-		case $_module_format in
-		    TCL) ;;
-		    LUA) ;;
-		    *)
-			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
-		esac
-		;;
-	    -default-module-version)
-		_crt_version=1
-		;;
-	    -non-default-module-version)
-		_crt_version=0
-		;;
-	    *) doerr "$opt" "Not a recognized option for build_set" ;;
-	esac
-    done
-    [ ! -z "$def_m" ] && _def_module_reqs="$def_m"
-    do_debug --return build_set
-}
-
-# Retrieval of different variables
-function build_get {
-    do_debug --enter build_get
-    # We set up default parameters for creating the 
-    # default package directory
-    local opt=$(trim_em $1) 
-    case $opt in
-	-archive-path|-ap) _ps "$_archives" ;;
-	-installation-path|-ip) _ps "$_prefix" ;;
-	-module-path|-mp) _ps "$_modulepath" ;;
-	-build-path|-bp) _ps "$_buildpath" ;;
-	-build-installation-path|-bip) _ps "$_build_install_path" ;;
-	-build-module-path|-bmp) _ps "$_build_module_path" ;;
-	-default-module) _ps "$_def_module_reqs" ;; 
-	*) doerr "$opt" "Not a recognized option for build_get" ;;
-    esac
-    do_debug --return build_get
-}
 
 # Routine for shortcutting a list of values
 # through the pack_get 
@@ -255,12 +329,15 @@ function add_package {
     # Collect options
     local d="" ; local v=""
     local fn="" ; local package=""
-    local alias=""
+    local alias="" 
+    # Default to first entry
+    local b_name="${_b_name[0]}"
     local no_def_mod=0
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
 	case $opt in
+	    -build) b_name="$1" ; shift ;;
 	    -archive|-A) fn=$1 ; shift ;;
 	    -directory|-d) d=$1 ; shift ;;
 	    -version|-v) v=$1 ; shift ;;
@@ -270,6 +347,8 @@ function add_package {
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
     done
+    # Save the build name
+    _build[$_N_archives]=$b_name
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
@@ -312,19 +391,29 @@ function add_package {
     fi
     # Default the module name to this:
     _installed[$_N_archives]=0
-    _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $_build_module_path)
-    #_mod_name[$_N_archives]=$package/$v/$(get_c)
-    _mod_prefix[$_N_archives]="$(build_get --module-path)"
+    # Module prefix and the name of the module
+    _mod_prefix[$_N_archives]="$(build_get --module-path[$b_name])"
+    tmp="$(build_get --build-module-path[$b_name])"
+    _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $tmp)
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
-    _install_prefix[$_N_archives]=$(build_get --installation-path)/$(pack_list -lf "-X -s /" $_build_install_path)
+    # Install prefix and the installation path
+    tmp="$(build_get --build-installation-path[$b_name])"
+    _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     # Install default values
     _mod_req[$_N_archives]=""
-    [ $no_def_mod -eq 0 ] && _mod_req[$_N_archives]="$(build_get --default-module)"
+    [ $no_def_mod -eq 0 ] && \
+	_mod_req[$_N_archives]="$(build_get --default-module[$b_name])"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
-    #pack_print $_N_archives
+
+    # When adding a package we need to ensure that all variables
+    # exist for the rest of the package. Hence we source the "source"
+    # Notice that the sourcing occurs several times doing the process
+    tmp="$(build_get --source[$b_name])"
+    source $tmp
+
     msg_install --message "Added $package[$v] to the install list"
     [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
     do_debug --return add_package
@@ -447,6 +536,7 @@ function pack_get {
 	    shift
             # Process what is requested
 	    case $opt in
+		-build)              _ps "${_build[$index]}" ;;
 		-C|-commands)        _ps "${_cmd[$index]}" ;;
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 		-R|-module-requirement) 
@@ -561,6 +651,8 @@ function pack_install {
 	idx=$(get_index $1) ; shift
     fi
 
+#pack_print $idx
+
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
 	_installed[$idx]=1
@@ -623,13 +715,12 @@ function pack_install {
 	return 1
     fi
 
-    # Update the module name now
-    if $(has_setting $UPDATE_MODULE_NAME $idx) ; then
-	pack_set --module-name "$(pack_get --package $idx)/$(pack_get --version $idx)/$(get_c)" $idx
-    fi
-        
     # Check that the package is not already installed
     if [ $(pack_get --installed $idx) -eq 0 ]; then
+
+	# Source the file for obtaining correct env-variables
+	local tmp=$(pack_get --build $idx)
+	source $(build_get --source[$tmp])
 
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
@@ -645,9 +736,9 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-	#echo Will load: $_def_module_reqs $module_loads
+	#echo Will load: $module_loads
 	#module avail
-	module load $_def_module_reqs $module_loads
+	module load $module_loads
 	#module list
 
 	# Append all relevant requirements to the relevant environment variables
@@ -711,7 +802,7 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	for mod in $module_loads $_def_module_reqs ; do
+	for mod in $module_loads ; do
             module unload $mod
 	done
 
@@ -720,7 +811,7 @@ function pack_install {
 	    module unload $(pack_get --module-name $idx)
 	    # We need to clean up, in order to force the
 	    # module creation.
-	    rm -f $(build_get --module-path)/$(pack_get --module-name $idx)
+	    rm -f $(pack_get --module-prefix $idx)/$(pack_get --module-name $idx)
 	fi
 
 	export FCFLAGS="$old_fcflags"
@@ -754,13 +845,15 @@ function pack_install {
 # $1 is the shortname for what to search for
 export _get_index_T=0.0
 function get_index {
-    do_debug --enter get_index
-    local time=$(add_timing)
+    #do_debug --enter get_index
+    #local time=$(add_timing)
+    local var=_index
     local i ; local lookup ; local all=0
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) ; shift
 	case $opt in
-	    -all|-a) all=1  ;;
+	    -all|-a) all=1                ;;
+	    -hash-array) var="$1" ; shift ;;
 	esac
     done
     [ ${#1} -eq 0 ] && return 1
@@ -768,32 +861,36 @@ function get_index {
     local name=$(var_spec "$1")
     local version=$(var_spec -s "$1")
     local l=${#name} ; local lc_name="$(lc $name)"
+    # do full variable (for ${!...})
+    var="$var[$lc_name]"
     if $(isnumber $name) ; then # We have a number
 	[ "$name" -gt "$_N_archives" ] && return 1
 	[ "$name" -lt 0 ] && return 1
 	_ps "$name"
-	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	do_debug --return get_index
+	#[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	#do_debug --return get_index
 	return 0
     fi
-    if [[ ${_index[$lc_name]} ]]; then
-	i=0
-    else
-	do_debug --msg "HELLO not found $name"
-	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	do_debug --return get_index
+    # Do full expansion.
+    local idx=${!var}
+    i=0
+    #echo $idx
+    if [ -z "$idx" ]; then
+	do_debug --msg "We did not find the requested: $name"
+	#[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	#do_debug --return get_index
 	return 1
     fi
     if [ $all -eq 1 ]; then
-	_ps "${_index[$lc_name]}"
-	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	do_debug --return get_index
+	_ps "$idx"
+	#[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+	#do_debug --return get_index
 	return 0
     else
 	local v=""
 	i=-1
-            # Select the latest per default..
-	for v in ${_index[$lc_name]} ; do
+        # Select the latest per default..
+	for v in $idx ; do
 	    if [ ! -z "$version" ]; then
 		if [ "$(pack_get --version $v)" == "$version" ]; then
 		    i="$v"
@@ -805,13 +902,10 @@ function get_index {
 	done
     fi
     [ -z "${i// /}" ] && i=-1
-    #echo "$lc_name $version $i $l" >&2
-    if [ "0" -le "$i" ] && [ "$i" -le "$_N_archives" ]; then
-	_ps "$i"
-	[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-	do_debug --return get_index
-	return 0
-    fi
+    _ps "$i"
+    return 0
+
+    doerr "$name" "Could not find the index in the list: $var"
     for lookup in alias archive package ; do
 	for i in `seq 0 $_N_archives` ; do
 	    local tmp=$(pack_get --$lookup $i)
@@ -823,15 +917,15 @@ function get_index {
 		    fi
 		fi
 		_ps "$i"
-		[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
-		do_debug --return get_index
+		#[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+		#do_debug --return get_index
 		return 0
 	    fi
 	done
     done
-    [ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
+    #[ $TIMING -ne 0 ] && export _get_index_T=$(add_timing $_get_index_T $time)
     #doerr "$name" "Could not find the archive in the list..."
-    do_debug --return get_index
+    #do_debug --return get_index
     return 1
 }
 
@@ -1246,9 +1340,6 @@ function msg_install {
     fi
     if [ "$action" -eq "1" ]; then
 	module list 2>&1
-	if [ "$?" -ne "0" ]; then
-	    doerr "module list" "Could not show module loaded files"
-	fi
     fi
     echo " ================================== "
 }
