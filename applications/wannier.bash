@@ -25,14 +25,14 @@ else
 
 fi
 
-tmp=make.sys
-pack_set --command "rm -f $tmp"
+file=make.sys
+pack_set --command "echo '# NPA' > $file"
 
 pack_set --command "sed -i '1 a\
 F90 = $FC \n\
 FCOPTS = $FCFLAGS $tmp\n\
 LDOPTS = $FCFLAGS $tmp\n\
-LIBS = $tmp -lpthread ' $tmp"
+LIBS = $tmp -lpthread ' $file"
 
 # Make commands
 pack_set --command "make $(get_make_parallel) wannier"
