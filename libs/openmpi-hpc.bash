@@ -1,4 +1,4 @@
-if $(is_host surt muspell slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
+if $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     echo "Will make link to local installation on Niflheim."
 else
     source libs/openmpi.bash
@@ -8,7 +8,7 @@ fi
 # Figure out the module we require to use...
 
 # Determine the name of the local module:
-if $(is_host surt muspell slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
+if $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     if $(is_c intel) ; then
         mod=openmpi/1.6.3-${NPA_NODETYPE}-tm-intel-2013.1.117-1
     elif $(is_c gnu) ; then
@@ -16,7 +16,7 @@ if $(is_host surt muspell slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     else
         doerr 1 "Could not determine compiler for OpenMPI on niflheim"
     fi
-elif $(is_host surt muspell slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
+elif $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     if $(is_c intel) ; then
         mod=openmpi/1.3.3-1.el5.fys.ifort.11.1
     elif $(is_c gnu) ; then

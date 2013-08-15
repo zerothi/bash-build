@@ -2,7 +2,7 @@ if [ ! -z "$MKL_PATH" ] ; then
 add_package --package fftw --version intel fftw-2.local
 
 pack_set --directory .
-pack_set --host-reject surt muspell slid
+pack_set --host-reject surt muspel slid
 
 pack_set -s $IS_MODULE
 

@@ -5,7 +5,7 @@ add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$
 
 pack_set --directory ATLAS
 
-pack_set $(list --prefix "--host-reject " surt muspell slid a0 b0 c0 d0 n0 p0 q0 g0)
+pack_set $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
@@ -25,7 +25,7 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 
 # Make commands
 pack_set --command "make"
-if $(is_host surt muspell slid) ; then
+if $(is_host surt muspel slid) ; then
     pack_set --command "make check ptcheck time"
 fi
 pack_set --command "make install"

@@ -2,7 +2,7 @@ add_package http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.24/pygtk-2.24.0.tar.b
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject --host-reject surt muspell slid \
+pack_set --host-reject --host-reject surt muspel slid \
     --host-reject slid --host-reject ntch
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(lc $(pack_get --alias))
