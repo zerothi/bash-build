@@ -264,6 +264,7 @@ function add_hidden_package {
     add_package --package $package \
 	--version $version \
 	path_to_module/$package-$version.tar.gz
+    pack_set --install-prefix HIDDEN
     pack_set --index-alias $mod
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
@@ -312,6 +313,7 @@ declare -A _index
 # The counter to hold the archives
 _N_archives=-1
 
+_install_prefix_no_path=HIDDEN
 # Routine for shortcutting a list of values
 # through the pack_get 
 # i.e.
@@ -457,6 +459,8 @@ function pack_set {
 	local opt="$(trim_em $1)"
 	shift
 	case $opt in
+	    -no-path)
+		install="$_install_prefix_no_path" ;;
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
@@ -564,7 +568,7 @@ function pack_get {
                                      _ps "${_mod_req[$index]}" ;;
 		-module-name-requirement) 
 		    for m in ${_mod_req[$index]} ; do
-			_ps "$(pack_get --module-name $m)"
+			_ps "$(pack_get --module-name $m) "
 		    done ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
@@ -594,13 +598,15 @@ function pack_get {
 	case $opt in
 	    -C|-commands)        _ps "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-	    -R|-module-requirement) _ps "${_mod_req[$index]}" ;;
+	    -R|-module-requirement)
+		                 _ps "${_mod_req[$index]}" ;;
 	    -module-name-requirement)
 		for m in ${_mod_req[$index]} ; do
-		    _ps "$(pack_get --module-name $m)"
+		    _ps "$(pack_get --module-name $m) "
 		done ;;
-	    -MI|-module-prefix) _ps "${_mod_prefix[$index]}" ;;
-	    -I|-install-prefix|-prefix) _ps "${_install_prefix[$index]}" ;;
+	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
+	    -I|-install-prefix|-prefix) 
+                                 _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
 	    -a|-alias)           _ps "${_alias[$index]}" ;;
 	    -A|-archive)         _ps "${_archive[$index]}" ;;
@@ -673,7 +679,7 @@ function install_all {
 export _pack_install_T=0.0
 function pack_install {
     local time=$(add_timing)
-    local mod_reqs=""
+    local mod_reqs="" ; local mod_reqs_paths
     do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
@@ -689,6 +695,11 @@ function pack_install {
 
     # Save the module requirements for later...
     mod_reqs="$(pack_get --module-requirement $idx)"
+    for mod in $mod_reqs ; do
+	if [ "$(pack_get --install-prefix $mod)" != "HIDDEN" ]; then
+	    mod_reqs_paths="$mod_reqs_paths $mod"
+	fi
+    done
 
     # If it is installed...
     if [ $(pack_get --installed $idx) -eq 1 ]; then
@@ -773,7 +784,7 @@ function pack_install {
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp="$(list --LDFLAGS --Wlrpath $mod_reqs)"
+	local tmp="$(list --LDFLAGS --Wlrpath $mod_reqs_paths)"
 	old_fcflags="$FCFLAGS"
 	export FCFLAGS="$FCFLAGS $tmp"
 	old_fflags="$FFLAGS"
@@ -781,11 +792,11 @@ function pack_install {
 	old_cflags="$CFLAGS"
 	export CFLAGS="$CFLAGS $tmp"
 	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs)"
+	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs_paths)"
 	old_ldflags="$LDFLAGS"
 	export LDFLAGS="$LDFLAGS $tmp"
 	#old_ld_lib_path="$LD_LIBRARY_PATH"
-	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs)"
+	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs_paths)"
 	
         # Show that we will install
 	msg_install --start $idx

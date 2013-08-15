@@ -1,5 +1,5 @@
 if [ ! -z "$MKL_PATH" ] ; then
-add_package --version intel fftw-2.local
+add_package --package fftw --version intel fftw-2.local
 
 pack_set --directory .
 pack_set --host-reject surt
