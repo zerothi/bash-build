@@ -31,14 +31,11 @@ add_hidden_package $mod
 
 
 # Install the easiest first... OpenMPI
-add_package here/openmpi-hpc.tar.gz
+add_package --package openmpi \
+    --version hpc \
+    here/openmpi-hpc.tar.gz
 
-pack_set --package openmpi
-pack_set --alias openmpi
-pack_set --version hpc
 pack_set --installed 1
-pack_set --module-name $(pack_get --alias)/$(pack_get --version)/$(get_c)
-
 
 module load $(build_get --default-module)
 module load $mod
@@ -50,7 +47,7 @@ module unload $(build_get --default-module)
 create_module \
     -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
-    -M $(pack_get --alias)/$(pack_get --version)/$(get_c) \
+    -M $(pack_get --module-name) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(build_get --default-module)) \
     -L $mod

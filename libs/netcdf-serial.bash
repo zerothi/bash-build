@@ -38,14 +38,14 @@ pack_set --module-requirement netcdf-serial
 
 pack_set --alias netcdf-fortran-serial
 
-pack_set --install-prefix $(build_get --installation-path)/$(pack_get --alias netcdf-serial)/$(pack_get --version netcdf-serial)/$(get_c)
+pack_set --install-prefix $(pack_get --install-prefix netcdf-serial)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement))'" \
-    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static"

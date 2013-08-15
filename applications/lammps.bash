@@ -26,7 +26,7 @@ pack_set --command "sed -i '1 a\
 include ../MAKE/Makefile.linux\n\
 SHELL=/bin/sh\n\
 CC =         $MPICXX\n\
-CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-requirement))\n\
+CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))\n\
 SHFLAGS =    -fPIC\n\
 DEPFLAGS =   -M\n\
 LINK =	     \$(CC)\n\
@@ -48,12 +48,12 @@ JPG_LIB = ' $tmp"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-requirement))\n\
+LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
 else

@@ -58,8 +58,8 @@ for v in \
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='$FCFLAGS'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-requirement))'" \
-	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-requirement))'" \
+	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement))'" \
+	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
 	--command-flag "--enable-parallel" \
 	--command-flag "--prefix=$(pack_get --install-prefix)" 
 

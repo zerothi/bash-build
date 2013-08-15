@@ -5,8 +5,7 @@ add_package \
     --version $(pack_get --version blas) \
     http://www.netlib.org/blas/blast-forum/cblas.tgz
 
-pack_set --install-prefix \
-    $(build_get --installation-path)/$(pack_get --alias blas)/$(pack_get --version blas)/$(get_c)
+pack_set --install-prefix $(pack_get --install-prefix blas)
 
 # Required as the version has just been set
 pack_set --install-query $(pack_get --install-prefix)/lib/libcblas.a

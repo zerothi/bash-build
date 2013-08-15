@@ -45,7 +45,7 @@ pack_set --command "make install"
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
-pack_set --install-prefix $(build_get --installation-path)/$(pack_get --alias netcdf-logging)/$(pack_get --version netcdf-logging)/$(get_c)
+pack_set --install-prefix $(pack_get --install-prefix netcdf-logging)
 
 # Add requirments when creating the module
 pack_set --module-requirement netcdf-logging
@@ -58,8 +58,8 @@ tmp_cppflags="-DgFortran"
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-requirement))'" \
-    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--disable-shared" \
     --command-flag "--enable-static"

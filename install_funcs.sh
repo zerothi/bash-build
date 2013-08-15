@@ -264,7 +264,6 @@ function add_hidden_package {
     add_package --package $package \
 	--version $version \
 	path_to_module/$package-$version.tar.gz
-    pack_set --install-prefix HIDDEN
     pack_set --index-alias $mod
     pack_set --installed 1 # Make sure it is "installed"
     pack_set --module-name $mod
@@ -313,7 +312,7 @@ declare -A _index
 # The counter to hold the archives
 _N_archives=-1
 
-_install_prefix_no_path=HIDDEN
+_install_prefix_no_path="HIDDEN"
 # Routine for shortcutting a list of values
 # through the pack_get 
 # i.e.
@@ -370,6 +369,13 @@ function add_package {
     done
     # Save the build name
     _build[$_N_archives]=$b_name
+
+    # When adding a package we need to ensure that all variables
+    # exist for the rest of the package. Hence we source the "source"
+    # Notice that the sourcing occurs several times doing the process
+    local tmp="$(build_get --source[$b_name])"
+    source $tmp
+
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
@@ -428,12 +434,6 @@ function add_package {
 	_mod_req[$_N_archives]="$(build_get --default-module[$b_name])"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
-
-    # When adding a package we need to ensure that all variables
-    # exist for the rest of the package. Hence we source the "source"
-    # Notice that the sourcing occurs several times doing the process
-    tmp="$(build_get --source[$b_name])"
-    source $tmp
 
     msg_install --message "Added $package[$v] to the install list"
     [ $TIMING -ne 0 ] && export _add_package_T=$(add_timing $_add_package_T $time)
@@ -555,7 +555,7 @@ function pack_get {
     if [ $# -gt 0 ]; then
 	while [ $# -gt 0 ]; do
 	    local index=$(get_index $1)
-	    [ -z "${index// /}" ] && \
+	    [ -z "$index" ] && \
 		doerr pack_get "Could not find index of $1"
 	    #echo "pack_get: lookup($1) idx($index)" >&2
 	    shift
@@ -566,6 +566,14 @@ function pack_get {
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
+		-module-paths-requirement) 
+		    for m in ${_mod_req[$index]} ; do
+			if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
+			    continue
+			else
+			    _ps "$m "
+			fi
+		    done ;;
 		-module-name-requirement) 
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
@@ -600,6 +608,14 @@ function pack_get {
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 	    -R|-module-requirement)
 		                 _ps "${_mod_req[$index]}" ;;
+	    -module-paths-requirement) 
+		for m in ${_mod_req[$index]} ; do
+		    if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
+			continue
+		    else
+			_ps "$m "
+		    fi
+		done ;;
 	    -module-name-requirement)
 		for m in ${_mod_req[$index]} ; do
 		    _ps "$(pack_get --module-name $m) "
@@ -695,11 +711,7 @@ function pack_install {
 
     # Save the module requirements for later...
     mod_reqs="$(pack_get --module-requirement $idx)"
-    for mod in $mod_reqs ; do
-	if [ "$(pack_get --install-prefix $mod)" != "HIDDEN" ]; then
-	    mod_reqs_paths="$mod_reqs_paths $mod"
-	fi
-    done
+    mod_reqs_paths="$(pack_get --module-paths-requirement $idx)"
 
     # If it is installed...
     if [ $(pack_get --installed $idx) -eq 1 ]; then

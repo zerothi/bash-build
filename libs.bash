@@ -38,6 +38,7 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
+install_all --from hwloc
 #source libs/udunits.bash
 #source libs/nco.bash
 

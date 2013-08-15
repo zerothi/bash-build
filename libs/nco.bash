@@ -13,9 +13,9 @@ pack_set --module-requirement gsl \
 # Install commands that it should run
 pack_set \
     --command "../configure" \
-    --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) '" \
+    --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) '" \
     --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lnetcdf '" \
-    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --module-requirement)) '" \
+    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --module-paths-requirement)) '" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-udunits2" \
