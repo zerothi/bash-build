@@ -1,15 +1,4 @@
-add_package bash-PBS.local
-
-pack_set -s $IS_MODULE
-
-pack_set --directory .
-pack_set --version npa
-
-# Always install this package (easy updates)
-pack_set --install-query /directory/does/not/exist
-
-script=spbs.sh
-
+_npa_new_name
 cat <<EOF > $script
 #!/bin/bash
 
@@ -64,7 +53,7 @@ function _spbs_add_line {
 
 
 function _spbs_help {
-    local format="    %24s :  %s\n"
+    local format="    %s :\n         %s\n"
     echo "Usage of \$(basename \$0): Aid in the creation of PBS scripts."
     echo ""
     printf "\$format" "--name|-N" "The name of the PBS job"
@@ -174,6 +163,4 @@ echo ''
 
 EOF
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/spbs"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/spbs"

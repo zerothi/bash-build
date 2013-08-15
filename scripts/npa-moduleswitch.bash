@@ -1,0 +1,82 @@
+_npa_new_name
+
+cat <<EOF > $script
+#!/bin/bash
+
+# This script enables the change between modules
+
+# First a function to kill any ENV-vars that might be contained in
+# the module env
+#function _switch_modules_clean {
+  module purge 2>/dev/null
+  # Just in case of lmod
+  module --force purge 2>/dev/null
+
+  # Unset env's from ENV-MODULES
+  unset MODULE_VERSION
+  unset MODULE_VERSION_STACK
+  unset MODULESHOME
+  unset LOADEDMODULES
+  unset MODULEPATH
+
+  # Unset env's from Lmod
+  unset MODULEPATH_ROOT
+  unset MODULEPATH
+  unset BASH_ENV
+  unset SET_TITLE_BAR
+  unset SHOST
+  unset PROMPT_COMMAND
+  for e in `env | grep _ModuleTable | awk -F = '{print $1}'` ; do
+     eval "unset $e"
+  done
+  for e in `env | grep -e LMOD -e _LMOD -e __LMOD | awk -F = '{print $1}'` ; do
+     eval "unset $e"
+  done
+  for e in `env | grep TACC | awk -F = '{print $1}'` ; do
+     eval "unset $e"
+  done
+
+  # Unset functions from ENV-MODULES
+  unset module
+
+  # Unset functions from Lmod
+  unset module
+  unset ml
+  unset clearMT
+  unset xSetTitleLmod
+#}
+EOF
+
+pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/_switch_modules_clean"
+
+_npa_new_name
+
+cat <<EOF > $script
+#!/bin/bash
+
+# Function to load Lmod
+#function switch2lmod {
+  _switch_modules_clean
+
+  source $(pack_get --install-prefix lmod)/lmod/lmod/init/bash
+  
+#}
+EOF
+
+pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/switch2lmod"
+
+_npa_new_name
+
+cat <<EOF > $script
+#!/bin/bash
+
+# Function to load Modules
+#function switch2em {
+  _switch_modules_clean
+
+  source $(pack_get --install-prefix modules)/Modules/default/init/bash
+  
+#}
+EOF
+
+pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/switch2em"

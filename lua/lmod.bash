@@ -8,8 +8,7 @@ add_package --build generic-empty \
 
 pack_set --module-requirement lua
 
-pack_set --install-query \
-    $(pack_get --install-prefix)/$(pack_get --alias)/$(pack_get --version)/init/bash
+pack_set --install-query $(pack_get --install-prefix)/lmod/$(pack_get --version)/init/bash
 
 # Configure the package
 pack_set --command "./configure" \
