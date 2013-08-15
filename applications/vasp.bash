@@ -10,7 +10,7 @@ source applications/vasp-common-init.bash
 
 # Install the correct FFT routine
 pack_set --command "sed -i '$ a\
-FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\n\
+FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\\\n\
       $(pack_get --install-prefix fftw-3)/lib/libfftw3.a\n\
 INCS    = -I$(pack_get --install-prefix fftw-3)/include' $file"
 

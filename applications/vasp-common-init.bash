@@ -29,9 +29,9 @@ SUFFIX=.f90\n\
 FC   = $MPIF90 \n\
 FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
-CPP  = \$(CPP_) -DMPI \\n\
-     -DCACHE_SIZE=5000 -Davoidalloc \\n\
-     -DMPI_BLOCK=8000 -Duse_collective -DscaLAPACK \\\n\
+CPP  = \$(CPP_) -DMPI \\\\\n\
+     -DCACHE_SIZE=5000 -Davoidalloc \\\\\n\
+     -DMPI_BLOCK=8000 -Duse_collective -DscaLAPACK \\\\\n\
      -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\
 FREE = -FR \n\
@@ -44,7 +44,7 @@ DEBUG  = -O0 \n\
 INLINE = \$(OFLAG) \n\
 WANNIER_PATH = $(pack_get --install-prefix wannier90[1.2])/lib\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
-LIB  = -L../vasp.5.lib -ldmy \\\n\
+LIB  = -L../vasp.5.lib -ldmy \\\\\n\
      ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS) \$(WANNIER) -lwannier' $file"
     
 # Check for Intel MKL or not
