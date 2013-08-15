@@ -4,7 +4,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmetis.a
 
-pack_set $(list --prefix "--host-reject " thul surt slid etse a0 b0 c0 d0 n0 p0 q0 g0)
+pack_set $(list --prefix "--host-reject " surt muspell slid a0 b0 c0 d0 n0 p0 q0 g0)
 
 # Make commands
 pack_set --command "sed -i -e 's/^cputype.*/cputype = unknown/' Makefile"

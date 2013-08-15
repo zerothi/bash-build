@@ -4,7 +4,7 @@ add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list --prefix "--host-reject " thul surt a0 b0 c0 d0 g0 m0 n0 q0 p0)
+pack_set $(list --prefix "--host-reject " surt muspell slid a0 b0 c0 d0 g0 m0 n0 q0 p0)
 
 pack_set --module-opt "--lua-family molden"
 
@@ -18,7 +18,7 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
 # Make commands
 pack_set --command "make $(get_make_parallel) molden"
 pack_set --command "cp molden $(pack_get --install-prefix)/bin/"
-if $(is_host surt) || $(is_host thul) || $(is_host zeroth) ; then
+if $(is_host surt muspell slid) || $(is_host thul) || $(is_host zeroth) ; then
     pack_set --command "echo Will not make gmolden"
 else
     pack_set --command "make $(get_make_parallel) gmolden"
