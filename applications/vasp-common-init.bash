@@ -56,7 +56,7 @@ FCL += -mkl=parallel -openmp \n\
 FFLAGS += -openmp \n\
 DEBUG += -FR \n\
 # Correct the CPP\n\
-CPP += -DHOST=\"LinuxIFC\" -DPGF90 -DIFC \n\
+CPP += -DHOST=\\\\\"LinuxIFC\\\\\" -DPGF90 -DIFC \n\
 # Setup MKL and libs\n\
 MKL_PATH =$MKL_PATH\n\
 MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
@@ -72,7 +72,7 @@ elif $(is_c gnu) ; then
 FCL += -fopenmp \n\
 FFLAGS += -fopenmp \n\
 # Correct the CPP\n\
-CPP += -DHOST=\"gfortran\" \n\
+CPP += -DHOST=\\\\\"gfortran\\\\\" \n\
 LINK = -fopenmp \n\
 SCA = $(list --Wlrpath --LDFLAGS scalapack) -lscalapack ' $file"
 

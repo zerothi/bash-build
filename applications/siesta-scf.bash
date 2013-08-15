@@ -1,6 +1,6 @@
-for v in siesta-scf-526.tar.gz ; do
+for v in 526 528 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/$v
+add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
