@@ -1,6 +1,7 @@
 unset tmp
 function tmp {
     add_package \
+	--build generic \
 	--directory VASP \
 	--no-default-modules \
 	--package vasp \
