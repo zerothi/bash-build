@@ -702,7 +702,6 @@ function pack_install {
 	idx=$(get_index $1) ; shift
     fi
 
-#pack_print $idx
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then

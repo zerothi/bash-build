@@ -9,12 +9,6 @@ cat <<EOF > $script
 # the module env
 #function _switch_modules_clean {
 
-  module purge 2>/dev/null
-  # Just in case of lmod
-  module --force purge 2>/dev/null
-  
-  export _SWITCH_NPA_MODPATH="\$MODULEPATH"
-
   # Unset env's from ENV-MODULES
   unset MODULE_VERSION
   unset MODULE_VERSION_STACK
@@ -82,6 +76,12 @@ cat <<EOF > $script
 
 # Function to load Lmod
 #function switch2lmod {
+
+  module purge 2>/dev/null
+  module --force purge 2>/dev/null
+
+  export _SWITCH_NPA_MODPATH="\$MODULEPATH"
+
   _switch_modules_clean
 
   source $(pack_get --install-prefix lmod)/lmod/lmod/init/bash
@@ -100,6 +100,12 @@ cat <<EOF > $script
 
 # Function to load Modules
 #function switch2em {
+
+  module purge 2>/dev/null
+  module --force purge 2>/dev/null
+
+  export _SWITCH_NPA_MODPATH="\$MODULEPATH"
+
   _switch_modules_clean
 
   source $(pack_get --install-prefix modules)/Modules/default/init/bash
