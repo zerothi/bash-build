@@ -43,12 +43,6 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement molden grace xcrysden) molden grace xcrysden)
 
 
-# Things which are not linked to the compiler
-$(
-    # Put it inside a new group
-    set_c ''
-    build_set --default-module ""
-    source applications/gdis.bash
-    #source applications/povray.bash
-)
+source applications/gdis.bash
+source applications/povray.bash
 

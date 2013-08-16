@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/povray
 pack_set --module-opt "--lua-family povray"
 
 # install commands... (this will install the non-GUI version)
-pack_set --command "echo '$(pack_get --install-prefix)' | ./install -no-arch-check U"
+pack_set --command "printf '%s%s\n' 'U' '$(pack_get --install-prefix)' | ./install -no-arch-check"
 
 pack_install
 

@@ -51,7 +51,7 @@ libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\"]' $file"
     fi
 fi
 
-tmp="$(list --prefix ,\' --suffix /include\' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))"
+tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"
 
 pack_set --command "sed -i '$ a\
 include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
