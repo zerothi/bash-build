@@ -1,3 +1,6 @@
+# Requires package:
+#  libreadlineX-dev
+
 add_package --build generic http://www.lua.org/ftp/lua-5.2.2.tar.gz
 
 pack_set -s $IS_MODULE
