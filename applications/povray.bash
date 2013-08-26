@@ -1,8 +1,9 @@
-add_package --package povray \
-    --directory povray-3.6 \
-    http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Linux/povlinux-3.6.tgz
+add_package \
+	--build generic \
+	--version 3.6.1 \
+	--directory povray-3.6.1 \
+	http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Unix/povray-3.6.tar.bz2
 
-pack_set --directory povray-3.6
 pack_set -s $IS_MODULE
 
 # Force the named alias
@@ -10,8 +11,17 @@ pack_set --install-query $(pack_get --install-prefix)/bin/povray
 
 pack_set --module-opt "--lua-family povray"
 
-# install commands... (this will install the non-GUI version)
-pack_set --command "printf '%s%s\n' 'U' '$(pack_get --install-prefix)' | ./install -no-arch-check"
+# Compile commands
+pack_set --command "./configure" \
+	--command-flag "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
+	--command-flag "--prefix=$(pack_get --install-prefix)"
+
+# Make commands
+pack_set --command "make"
+pack_set --command "make install"
+
+## install commands... (this will install the non-GUI version)
+#pack_set --command "printf '%s%s\n' 'U' '$(pack_get --install-prefix)' | ./install -no-arch-check"
 
 pack_install
 
