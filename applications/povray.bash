@@ -1,4 +1,6 @@
-add_package http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Linux/povlinux-3.6.tgz
+add_package --package povray \
+    --directory povray-3.6 \
+    http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Linux/povlinux-3.6.tgz
 
 pack_set --directory povray-3.6
 pack_set -s $IS_MODULE
@@ -15,9 +17,9 @@ pack_install
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
+    -n "Nick Papior Andersen's script for loading $(pack_get --package)" \
     -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
+    -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias)
