@@ -26,7 +26,7 @@ cat <<EOF > $script
   for e in \$(env | grep _ModuleTable | awk -F = '{print \$1}') ; do
      eval "unset \$e"
   done
-  for e in \$(env | grep -e LMOD -e _LMOD -e __LMOD | awk -F = '{print $\1}') ; do
+  for e in \$(env | grep -e LMOD -e _LMOD -e __LMOD | awk -F = '{print \$1}') ; do
      eval "unset \$e"
   done
   for e in \$(env | grep TACC | awk -F = '{print \$1}') ; do
@@ -82,11 +82,11 @@ cat <<EOF > $script
 
   export _SWITCH_NPA_MODPATH="\$MODULEPATH"
 
-  _switch_modules_clean
+  source $(pack_get --install-prefix)/bin/_switch_modules_clean
 
   source $(pack_get --install-prefix lmod)/lmod/lmod/init/bash
 
-  _switch_reuse_modulepath
+  source $(pack_get --install-prefix)/bin/_switch_reuse_modulepath
   
 #}
 EOF
@@ -106,11 +106,11 @@ cat <<EOF > $script
 
   export _SWITCH_NPA_MODPATH="\$MODULEPATH"
 
-  _switch_modules_clean
+  source $(pack_get --install-prefix)/bin/_switch_modules_clean
 
   source $(pack_get --install-prefix modules)/Modules/default/init/bash
 
-  _switch_reuse_modulepath
+  source $(pack_get --install-prefix)/bin/_switch_reuse_modulepath
   
 #}
 EOF
