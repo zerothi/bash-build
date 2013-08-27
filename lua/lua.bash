@@ -25,6 +25,8 @@ lua_V=5.2
 # Source all the lua-packages that will be installed
 source lua/filesystem.bash
 source lua/posix.bash
+source lua/mathx.bash
+source lua/complex.bash
 source lua/lmod.bash
 
 install_all --from lua
