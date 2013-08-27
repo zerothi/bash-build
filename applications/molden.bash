@@ -1,5 +1,6 @@
 # Install molden
-# Requires libx11-dev
+#   - libx11-dev
+#   - mesa-common-dev
 add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

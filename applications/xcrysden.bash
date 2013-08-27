@@ -4,6 +4,7 @@
 #  lesstif2-dev
 #  tk8.5-dev
 #  libxmu-headers
+#  libxmu-dev
 
 add_package http://www.xcrysden.org/download/xcrysden-1.5.53.tar.gz
 
