@@ -43,6 +43,6 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement molden grace xcrysden) molden grace xcrysden)
 
 
-source applications/gdis.bash
+#source applications/gdis.bash
 source applications/povray.bash
 
