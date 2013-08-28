@@ -4,7 +4,7 @@
 
 add_package --build generic-empty \
     --package lmod \
-    http://downloads.sourceforge.net/project/lmod/Lmod-5.1.1.tar.bz2
+    http://downloads.sourceforge.net/project/lmod/Lmod-5.1.5.tar.bz2
 
 pack_set --module-requirement lua
 
