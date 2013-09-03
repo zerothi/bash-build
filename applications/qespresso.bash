@@ -10,8 +10,6 @@ for v in \
     
     pack_set -s $IS_MODULE
 
-    pack_set --host-reject "ntch"
-
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
     pack_set --module-opt "--lua-family espresso"
@@ -53,7 +51,7 @@ for v in \
 	    doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
     fi
 
-# Install commands that it should run
+    # Install commands that it should run
     pack_set --command "./configure" \
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='$FCFLAGS'" \
@@ -71,6 +69,15 @@ for v in \
     # Prepare installation directories...
     pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
     pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
+
+    # Download and install EPW
+#    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/EPW-2.3.6.tar.gz"
+#    pack_set --command "tar xfz EPW-2.3.6.tar.gz"
+#    pack_set --command "mv EPW-2.3.6 EPW"
+#    pack_set --command "pushd EPW/src"
+#    pack_set --command "make"
+#    pack_set --command "cp ../bin/* $(pack_get --install-prefix)/bin/"
+#    pack_set --command "popd"
 
     pack_install
 
