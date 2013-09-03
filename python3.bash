@@ -12,6 +12,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/python3
 
 # Install commands that it should run
 pack_set --command "../configure" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands

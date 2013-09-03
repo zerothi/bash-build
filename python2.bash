@@ -8,10 +8,14 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --module-requirement zlib
+
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
 # Install commands that it should run
 pack_set --command "../configure" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
