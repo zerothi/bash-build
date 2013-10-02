@@ -2,8 +2,6 @@ add_package http://www.student.dtu.dk/~nicpa/packages/gulp_4.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject ntch
-
 pack_set --module-opt "--lua-family gulp"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/gulp
