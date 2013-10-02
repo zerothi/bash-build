@@ -7,8 +7,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
 
-pack_set --host-reject surt muspel slid --host-reject thul
-pack_set --host-reject slid
+pack_set --host-reject surt muspel slid
 
 pack_set --module-requirement hwloc
 
@@ -28,7 +27,7 @@ fi
 # Install commands that it should run
 pack_set --command "../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
-	--command-flag "--with-hwloc=$(pack_get --install-prefix hwloc)"
+    --command-flag "--with-hwloc=$(pack_get --install-prefix hwloc)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

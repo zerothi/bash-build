@@ -30,9 +30,11 @@ source python/distribute.bash
 source python/pyparsing.bash
 source python/tornado.bash
 source python/dateutil.bash
+source python/fastimport.bash
 
 source python/cython.bash
-source python/bazar.bash
+source python/bzr.bash
+source python/bzr-fastimport.bash
 source python/nose.bash
 
 # Generic scientific libraries
