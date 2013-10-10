@@ -57,7 +57,7 @@ source libs.bash
 
 # These are "parent" installations...
 source python2.bash
-#source python3.bash
+source python3.bash
 
 # We have installed all libraries needed for doing application installs
 source apps.bash
