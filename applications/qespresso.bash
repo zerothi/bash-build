@@ -20,6 +20,7 @@ for v in \
     pack_set --command "pushd ../"
     pack_set --command "wget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff"
     pack_set --command "patch -p0 < espresso-5.0.2-5.0.3.diff"
+    pack_set --command "rm espresso-5.0.2-5.0.3.diff"
     pack_set --command "popd"
 
 # Check for Intel MKL or not
