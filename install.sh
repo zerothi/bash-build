@@ -62,6 +62,9 @@ source python2.bash
 # We have installed all libraries needed for doing application installs
 source apps.bash
 
+# Add the default modules
+source default.bash
+
 # We have installed all libraries needed for doing application installs
 source scripts.bash
 

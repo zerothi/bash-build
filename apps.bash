@@ -40,9 +40,8 @@ create_module \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement gnuplot) gnuplot) \
-    $(list --prefix '-L ' $(pack_get --module-requirement molden grace xcrysden) molden grace xcrysden)
-
+    -RL gnuplot \
+    $(list --prefix '-RL ' molden grace xcrysden)
 
 #source applications/gdis.bash
 source applications/povray.bash
