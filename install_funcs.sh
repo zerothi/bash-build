@@ -147,10 +147,18 @@ function build_set {
 		esac
 		;;
 	    -default-build)
-		local switch_idx=$(get_index --hash-array "_b_index" $1)
-		[ -z "$switch_idx" ] && \
-		    doerr "$1" "Unrecognized build"
-		shift
+		switch_idx=0
+		if [ $# -gt 0 ]; then
+		    case $1 in
+			-*) ;;
+			*)
+			    local switch_idx=$(get_index --hash-array "_b_index" $1)
+			    [ -z "$switch_idx" ] && \
+				doerr "$1" "Unrecognized build"
+			    shift
+			    ;;
+		    esac
+		fi
 		_b_def_idx=$switch_idx
 		;;
 	    -default-module-version)
@@ -1038,11 +1046,15 @@ function create_module {
 	    -M|-module-name)  mod="$1" ; shift ;;
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
+	    -RL|-reqs+load-module) 
+		load="$load $(pack_get --module-requirement $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
 	    -append-ENV)      env="$env a$1" ; shift ;; # Can be optioned several times
 	    -lua-family) lua_family="$1" ; shift ;; # If using the Lmod, we create a family name, else nothing is happening...
+	    -echo)
+		echos="$1" ; shift ;; # Echo out to the users
 	    -H|-help)  help="$1" ; shift ;;
 	    -W|-what-is)  whatis="$1" ; shift ;;
 	    -F|-force)  force=1 ;;
@@ -1070,6 +1082,7 @@ function create_module {
 	    mfile="$mfile.lua"
 	    ;;
     esac
+    [ -z "$version" ] && version=empty
 
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
@@ -1273,6 +1286,27 @@ EOF
 		;;
 	esac
     fi
+    
+    if [ ! -z "$echos" ]; then
+	cat <<EOF >> "$mfile"
+
+
+$fm_comment echo to the user:
+EOF
+	case $_module_format in
+	    TCL)
+		cat <<EOF >> "$mfile"
+puts stderr "$echos"
+EOF
+		;;
+	    LUA)
+		cat <<EOF >> "$mfile"
+print("$echos")
+EOF
+		;;
+	esac
+    fi
+    
     
     if [ $no_install -eq 1 ] && [ $force -eq 0 ]; then
 	rm -f $mfile

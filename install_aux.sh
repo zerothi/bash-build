@@ -71,16 +71,23 @@ function str_version {
 	    mv="${str#*.}"
 	    ;;
 	*)
-	    doerr "$str" "Unknown type of version string"
+	    Mv=${str}
+	    ;;
     esac
     case $opt in 
 	all|-all)
 	    _ps "$Mv $mv $rv" ;;
 	major|-major|-1)
+	    [ -z "$Mv" ] && \
+		doerr "$str" "Unknown type of version string"	
 	    _ps "$Mv" ;;
 	minor|-minor|-2)
+	    [ -z "$mv" ] && \
+		doerr "$str" "Unknown type of version string"	
 	    _ps "$mv" ;;
 	rev|-rev|-3)
+	    [ -z "$rv" ] && \
+		doerr "$str" "Unknown type of version string"	
 	    _ps "$rv" ;;
 	*)
 	    doerr "$opt" "Unknown print-out of version"
@@ -88,12 +95,14 @@ function str_version {
 }
 
 function vrs_cmp {
+    local lhs=$1 ; shift
+    local rhs=$1 ; shift
     for o in -1 -2 -3 ; do
-	local lv=$(str_version $o $1)
-	local rv=$(str_version $o $2)
+	local lv=$(str_version $o $lhs)
+	local rv=$(str_version $o $rhs)
 	[ -z "$lv" ] && break
 	[ -z "$rv" ] && break
-	if $(isnumber $lv) && $(isnumber $rv ) ; then
+	if $(isnumber $lv) && $(isnumber $rv) ; then
 	    [ $lv -gt $rv ] && _ps "1" && return 0
 	    [ $lv -lt $rv ] && _ps "-1" && return 0
 	else
