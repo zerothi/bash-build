@@ -154,7 +154,7 @@ _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution fo
 if [ \$has_np_cmd -eq 1 ]; then
 _spbs_add_line '# \$PBS_NP is the number of processors available' "The total number of cores is precomputed for you [\$((nodes*ppn))] and saved in the env-variable PBS_NP"
 else
-_spbs_add_line 'NPROCS=\$(wc -l \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
+_spbs_add_line 'NPROCS=\$(wc -l < \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
 fi
 if [ \$nodes -eq 1 ] && [ \$single_paffinity -eq 1 ]; then
 _spbs_add_line 'export OMPI_MCA_mpi_paffinity_alone=1' "Ensure that MPI utilizes the best connection mode when on a single node DO NOT USE IF NOT OCCUPYING FULL NODE"
