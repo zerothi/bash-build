@@ -13,7 +13,7 @@ pack_set --module-requirement lua
 pack_set --install-query $(pack_get --install-prefix)/lmod/$(pack_get --version)/init/bash
 
 # Configure the package
-pack_set --command "LUA_PATH='' ./configure" \
+pack_set --command "unset LUA_PATH ; ./configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-lua-include=$(pack_get --install-prefix lua)/include"
 

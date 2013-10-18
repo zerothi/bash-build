@@ -40,6 +40,7 @@ source python/nose.bash
 # Generic scientific libraries
 source python/mpi4py.bash
 source python/numpy.bash
+source python/netcdf4.bash
 source python/scipy.bash
 source python/numexpr.bash
 source python/scientificpython.bash
@@ -47,6 +48,7 @@ source python/matplotlib.bash
 source python/bottleneck.bash
 source python/sympy.bash
 #source python/pandas.bash
+
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
