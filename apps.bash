@@ -27,6 +27,9 @@ source applications/vasp.bash
 source applications/vasp-intel.bash
 source applications/vasp-potcar.bash
 
+# The OpenMX DFT code (has a NEGF routine)
+source applications/openmx.bash
+
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
 source applications/mpb-serial.bash # [gmp,libunistring,guile]
