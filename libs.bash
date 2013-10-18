@@ -38,9 +38,8 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
-install_all --from hwloc
-#source libs/udunits.bash
-#source libs/nco.bash
+source libs/udunits.bash
+source libs/nco.bash
 
 # A sparse library
 source libs/suitesparse.bash
@@ -62,14 +61,15 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
 tmp=$(get_index nco)
-if [ $? -eq 0 ]; then
+retval=$?
+if [ $retval -eq 0 ]; then
     create_module \
 	--module-path $(build_get --module-path)-npa \
 	-n "Nick Papior Andersen's module script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M hdf5.netcdf.utils/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
+	$(list --prefix '-L ' $(pack_get --module-requirement nco) $(pack_get --module-requirement h5utils-serial) nco h5utils-serial)
 fi
 
 create_module \

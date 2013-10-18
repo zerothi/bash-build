@@ -1,5 +1,5 @@
-v=4.3.2
-add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
+v=4.3.7
+add_package http://dust.ess.uci.edu/nco/src/nco-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -16,7 +16,7 @@ pack_set \
     --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) '" \
     --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lnetcdf '" \
     --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --module-paths-requirement)) '" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix $(pack_get --install-prefix)" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-udunits2" \
     --command-flag "--enable-gsl"
