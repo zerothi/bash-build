@@ -9,7 +9,9 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
 pack_set \
     $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
 
-pack_set --module-requirement parmetis[3.2.0]
+parmetisV=3.2.0
+pack_set --module-requirement parmetis[$parmetisV]
+pack_set --module-requirement scotch
 
 if $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
@@ -41,15 +43,22 @@ LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 fi
 
 pack_set --command "sed -i '1 a\
-LMETISDIR = $(pack_get --install-prefix parmetis) \n\
-IMETIS = $(list --INCDIRS parmetis) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis -lmetis \n\
+LMETISDIR = $(pack_get --install-prefix parmetis[$parmetisV]) \n\
+IMETIS = $(list --INCDIRS parmetis[$parmetisV]) \n\
+LMETIS = $(list --LDFLAGS --Wlrpath parmetis[$parmetisV]) -lparmetis -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-ORDERINGSF = -Dpord -Dmetis -Dparmetis \n\
+SCOTCHDIR = $(pack_get --install-prefix scotch)\n\
+LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
+ISCOTCH = -I\$(SCOTCHDIR)/include \n\
+##LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
+LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr \n\
+\n\
+##ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
+ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
@@ -62,13 +71,16 @@ LIBEXT = .a \n\
 OUTC = -o \n\
 OUTF = -o \n\
 RM = /bin/rm -f \n\
+##CC = $CC \n\
+##FC = $FC \n\
+##FL = $FC \n\
 CC = $MPICC \n\
 FC = $MPIF90 \n\
 FL = $MPIF90 \n\
 AR = $AR vr \n\
 RANLIB = ranlib \n\
 \n\
-LIBSEQ = -L\$(topdir)/libseq -Wl,-rpath=\$(topdir)/libseq -lmpiseq \n\
+LIBSEQ = -L\$(topdir)/libseq -lmpiseq \n\
 INCSEQ = -I\$(topdir)/libseq \n\
 \n\
 LIBPAR = \$(SCALAP)\n\
@@ -84,8 +96,11 @@ OPTF    = -O -DALLOW_NON_INIT $tmp_flag\n\
 OPTL    = -O $tmp_flag\n\
 OPTC    = -O\n\
 \n\
+##INCS = \$(INCSEQ) \n\
+##LIBS = \$(LIBSEQ) \n\
 INCS = \$(INCPAR) \n\
 LIBS = \$(LIBPAR) \n\
+##LIBSEQNEEDED = libseqneeded \n\
 LIBSEQNEEDED = \n' Makefile.inc"
 
 # Make commands

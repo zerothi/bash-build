@@ -45,9 +45,12 @@ source libs/nco.bash
 source libs/suitesparse.bash
 
 source libs/metis.bash
-source libs/metis-par.bash
 source libs/metis-par-3.bash
+source libs/metis-par.bash
+source libs/scotch.bash
+source libs/mumps-serial.bash
 source libs/mumps.bash
+
 
 install_all --from hwloc
 
