@@ -166,7 +166,7 @@ pack_set --command "cp tsanalyzesort.py $(pack_get --install-prefix)/bin/"
 # The atom program for creating the pseudos
 pack_set --command "cd ../../Pseudo/atom"
 pack_set --command "make"
-pack_set --command "cp atm $(pack_set --install-prefix)/bin/"
+pack_set --command "cp atm $(pack_get --install-prefix)/bin/"
 
 
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
