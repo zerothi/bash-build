@@ -51,7 +51,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr-2) scipy cython numexpr-2 matplotlib)
+    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr) scipy cython numexpr matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
@@ -66,7 +66,7 @@ if [ $(pack_get --installed qutip) -eq 1 ]; then
         -v $(date +'%g-%j') \
         -M python$pV.cython.numexpr.qutip/$(get_c) \
         -P "/directory/should/not/exist" \
-        $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr-2) cython numexpr-2 qutip)
+        $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr) cython numexpr qutip)
 fi
 
 build_set --module-path $old_path

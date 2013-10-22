@@ -1,4 +1,4 @@
-add_package http://mpi4py.googlecode.com/files/mpi4py-1.3.tar.gz
+add_package http://mpi4py.googlecode.com/files/mpi4py-1.3.1.tar.gz
 
 pack_set -s $IS_MODULE
 

@@ -92,9 +92,9 @@ CDEFS   = -DAdd_ \n\
 #CDEFS   = -D \n\
 \n\
 #Begin Optimized options\n\
-OPTF    = -O -DALLOW_NON_INIT $tmp_flag\n\
-OPTL    = -O $tmp_flag\n\
-OPTC    = -O\n\
+OPTF    = $FCFLAGS -O -DALLOW_NON_INIT $tmp_flag\n\
+OPTL    = $FCFLAGS -O $tmp_flag\n\
+OPTC    = $CFLAGS -O\n\
 \n\
 ##INCS = \$(INCSEQ) \n\
 ##LIBS = \$(LIBSEQ) \n\

@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 151 224 ; do
+for v in 151 228 ; do
 add_package \
     --package Inelastica-DEV \
     http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
@@ -21,10 +21,8 @@ elif $(is_c gnu) ; then
     tmp="--fcompiler=gnu95 --compiler=unix"
 fi
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
-    --command-flag "$tmp"
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
-    --command-flag "$tmp"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config $tmp"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build $tmp"
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
