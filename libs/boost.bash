@@ -1,4 +1,3 @@
-# First install zlib, which is a simple library
 add_package \
     --package boost \
     --version 1.54.0 \

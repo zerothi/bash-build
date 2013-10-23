@@ -50,7 +50,8 @@ source libs/metis-par.bash
 source libs/scotch.bash
 source libs/mumps-serial.bash
 source libs/mumps.bash
-
+source libs/superlu.bash
+source libs/petsc.bash
 
 install_all --from hwloc
 
