@@ -21,6 +21,8 @@ source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
 source libs/plasma.bash
+source libs/arpack.bash
+source libs/parpack.bash
 
 # Some specific libraries
 source libs/gsl.bash
@@ -52,6 +54,7 @@ source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
 source libs/petsc.bash
+source libs/slepc.bash
 
 install_all --from hwloc
 

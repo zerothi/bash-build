@@ -2,7 +2,7 @@ add_package --package superlu \
     --directory SuperLU_DIST_3.3 \
     http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_3.3.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libsuperlu.a
 
@@ -56,7 +56,7 @@ BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas\n\
 fi
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_set --command "make"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp lib/libsuperlu.a $(pack_get --install-prefix)/lib/"
