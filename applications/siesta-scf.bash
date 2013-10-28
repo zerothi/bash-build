@@ -51,6 +51,8 @@ FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
+NETCDF_INCFLAGS=$(list --INCDIRS netcdf-serial)\n\
+NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf-serial)\n\
 ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
@@ -159,6 +161,17 @@ pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 # Install the TS-analyzer
 pack_set --command "cd ../TSAnalyzeSort"
 pack_set --command "cp tsanalyzesort.py $(pack_get --install-prefix)/bin/"
+
+# install the optimizer functions
+pack_set --command "cd ../Optimizer"
+pack_set --command "make swarm simplex"
+pack_set --command "cp swarm simplex $(pack_get --install-prefix)/bin/"
+
+# install grid-relevant utilities
+pack_set --command "cd ../Grid"
+files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
+pack_set --command "make $files"
+pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
 
 
 
