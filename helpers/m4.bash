@@ -3,7 +3,7 @@ add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.16.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 p_V=$(pack_get --version)
-c_V=`m4 --version | head -1 | awk '{print $4}'`
+c_V=`m4 --version 2>/dev/null| head -1 | awk '{print $4}'`
 [ -z "${c_V// /}" ] && c_V=1.1.1
 if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
