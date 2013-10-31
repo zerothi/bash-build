@@ -168,10 +168,11 @@ pack_set --command "make swarm simplex"
 pack_set --command "cp swarm simplex $(pack_get --install-prefix)/bin/"
 
 # install grid-relevant utilities
-pack_set --command "cd ../Grid"
-files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
-pack_set --command "make $files"
-pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
+# This requires that we change the libraries
+#pack_set --command "cd ../Grid"
+#files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
+#pack_set --command "make $files"
+#pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
 
 
 
