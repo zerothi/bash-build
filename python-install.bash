@@ -6,7 +6,7 @@ msg_install \
 
 pMod="$(pack_get --module-requirement $(get_parent)) $(get_parent)"
 pModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
-module load $pMods
+module load $pModNames
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
 IppV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 IpV=$(pack_get --version $(get_parent))
