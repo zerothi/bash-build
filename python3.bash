@@ -8,6 +8,8 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --module-requirement zlib
+
 pack_set --install-query $(pack_get --install-prefix)/bin/python3
 
 # Install commands that it should run
@@ -18,11 +20,9 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "senthuasontuheasn"
 pack_set --command "make install"
 
 pack_install
-
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \

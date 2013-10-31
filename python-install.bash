@@ -16,6 +16,7 @@ module unload $pModNames
 source $(build_get --source)
 new_build --name python$IpV \
     --source $(build_get --source) \
+    $(list --prefix "--default-module " $pMod) \
     --installation-path $(build_get --installation-path)/python/$IpV/packages \
     --build-module-path "--package --version $IppV $(get_c)" \
     --build-installation-path "--package --version $(get_c)" \
@@ -23,10 +24,6 @@ new_build --name python$IpV \
 
 def_idx=$(build_get --default-build)
 build_set --default-build python$IpV
-
-#build_set --build-module-path "--package --version $IpV $(get_c)"
-#build_set --build-installation-path \
-#    "$(build_get --installation-path) --package --version $IpV $(get_c)"
 
 # Packages installed in "python-home"
 source python/distribute.bash
