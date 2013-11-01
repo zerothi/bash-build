@@ -14,7 +14,6 @@ source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
 source applications/vmd.bash
-source applications/vmd-text.bash
 
 # DFT codes
 source applications/dftb.bash
