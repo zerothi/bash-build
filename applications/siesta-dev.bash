@@ -1,4 +1,4 @@
-for v in 460 464 ; do
+for v in 464 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-$v.tar.gz
 
