@@ -45,6 +45,6 @@ create_module \
     -RL gnuplot \
     $(list --prefix '-RL ' molden grace xcrysden)
 
-#source applications/gdis.bash
+source applications/gdis.bash
 source applications/povray.bash
 
