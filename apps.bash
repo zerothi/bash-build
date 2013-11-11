@@ -20,6 +20,7 @@ source applications/dftb.bash
 source applications/qespresso.bash
 source applications/wannier.bash
 source applications/gulp.bash
+source applications/dftd3.bash
 
 # Needs to be installed AFTER wannier90 :)
 source applications/vasp.bash
