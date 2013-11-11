@@ -1,6 +1,6 @@
 # apt-get libc6-dev
 
-add_package http://www.open-mpi.org/software/ompi/v1.7/downloads/openmpi-1.7.3.tar.gz
+add_package http://www.open-mpi.org/software/ompi/v1.7/downloads/openmpi-1.6.5.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
