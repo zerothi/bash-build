@@ -32,6 +32,8 @@ source python/tornado.bash
 source python/dateutil.bash
 source python/fastimport.bash
 source python/pytz.bash
+source python/pexpect.bash
+source python/ipython.bash
 
 source python/cython.bash
 source python/bzr.bash
