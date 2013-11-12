@@ -1,7 +1,7 @@
 v=2.1.24
 add_package ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/udunits2
 
@@ -10,7 +10,7 @@ pack_set --module-requirement netcdf-serial
 
 # Install commands that it should run
 pack_set \
-    --command "../configure" \
+    --command "./configure" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
