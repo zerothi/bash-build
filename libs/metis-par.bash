@@ -8,6 +8,10 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libparmetis.a
 
 pack_set --module-requirement openmpi
 
+if [ $(pack_get --installed cmake) -eq 1 ]; then
+    pack_set --command "module load $(pack_get --module-name cmake)"
+fi
+
 # Make commands 
 pack_set --command "sed -i -e 's/^\(cputype\).*/\1 = unknown/' Makefile"
 pack_set --command "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"
@@ -28,6 +32,10 @@ pack_set --command "make config prefix=$(pack_get --install-prefix)"
 pack_set --command "cd build/linux-unknown"
 pack_set --command "make"
 pack_set --command "make install"
+
+if [ $(pack_get --installed cmake) -eq 1 ]; then
+    pack_set --command "module unload $(pack_get --module-name cmake)"
+fi
 
 
 

@@ -6,6 +6,10 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libmetis.a
 
 pack_set $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
 
+if [ $(pack_get --installed cmake) -eq 1 ]; then
+    pack_set --command "module load $(pack_get --module-name cmake)"
+fi
+
 # Make commands
 pack_set --command "sed -i -e 's/^cputype.*/cputype = unknown/' Makefile"
 pack_set --command "sed -i -e 's/^systype.*/systype = linux/' Makefile"
@@ -19,5 +23,7 @@ pack_set --command "make"
 pack_set --command "make install"
 
 
-
+if [ $(pack_get --installed cmake) -eq 1 ]; then
+    pack_set --command "module unload $(pack_get --module-name cmake)"
+fi
 
