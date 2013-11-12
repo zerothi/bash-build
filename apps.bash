@@ -14,18 +14,21 @@ source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
 source applications/vmd.bash
-source applications/vmd-text.bash
 
 # DFT codes
 source applications/dftb.bash
 source applications/qespresso.bash
 source applications/wannier.bash
 source applications/gulp.bash
+source applications/dftd3.bash
 
 # Needs to be installed AFTER wannier90 :)
 source applications/vasp.bash
 source applications/vasp-intel.bash
 source applications/vasp-potcar.bash
+
+# The OpenMX DFT code (has a NEGF routine)
+source applications/openmx.bash
 
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
@@ -43,6 +46,6 @@ create_module \
     -RL gnuplot \
     $(list --prefix '-RL ' molden grace xcrysden)
 
-#source applications/gdis.bash
+source applications/gdis.bash
 source applications/povray.bash
 

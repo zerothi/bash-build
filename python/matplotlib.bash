@@ -2,10 +2,8 @@
 # libpng(12)-dev
 
 add_package \
-    --package matplotlib \
+    --archive matplotlib-1.3.0.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v1.3.0.tar.gz
-
-pack_set --directory matplotlib-$(pack_get --version)
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

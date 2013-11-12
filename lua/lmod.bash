@@ -4,7 +4,7 @@
 
 v=5.1.9
 add_package --build generic-empty \
-    --package lmod \
+    --archive lmod-$v.tar.gz \
     --directory Lmod-$v \
     https://github.com/TACC/Lmod/archive/$v.tar.gz
 

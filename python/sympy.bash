@@ -1,5 +1,10 @@
-for v in 0.7.3 ; do 
-add_package https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v.tar.gz
+v=0.7.3
+ev=""
+[ "x${pV:0:3}" == "x3.3" ] && ev=-py3.3
+
+add_package --directory sympy-$v \
+    --package sympy --version $v \
+    https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v$ev.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -22,5 +27,3 @@ fi
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
-
-done

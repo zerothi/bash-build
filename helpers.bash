@@ -9,6 +9,7 @@ source helpers/help2man.bash
 source helpers/m4.bash
 source helpers/autoconf.bash
 source helpers/automake.bash
+source helpers/libtool.bash
 
 # Install bison
 source helpers/bison.bash

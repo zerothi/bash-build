@@ -1090,7 +1090,7 @@ function create_module {
 	[ $(pack_get --installed $mod) -eq 1 ] && continue
         [ $TIMING -ne 0 ] && export _create_module_T=$(add_timing $_create_module_T $time)
         do_debug --return create_module
-	return 0
+	return 1
     done
     
     # If the file exists simply return

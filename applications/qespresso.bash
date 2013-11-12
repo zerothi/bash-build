@@ -1,9 +1,5 @@
-# http://qe-forge.org/gf/download/frsrelease/116/211/espresso-5.0.tar.gz
-# This has problems with the xspectra package which is erroneous in the tar
-# Hence we cannot install it, yet.
-# http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz
 for v in \
-    http://qe-forge.org/gf/download/frsrelease/116/347/espresso-5.0.1.tar.gz \
+    http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz \
     ; do
 
     add_package $v
@@ -16,6 +12,16 @@ for v in \
 
     pack_set --module-requirement openmpi 
     pack_set --module-requirement fftw-3
+
+    # Fetch all the packages and pack them out
+    source applications/qespresso-packages.bash
+
+    # Patch it...
+    pack_set --command "pushd ../"
+    pack_set --command "wget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff"
+    pack_set --command "patch -p0 < espresso-5.0.2-5.0.3.diff"
+    pack_set --command "rm espresso-5.0.2-5.0.3.diff"
+    pack_set --command "popd"
 
 # Check for Intel MKL or not
     tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
@@ -69,15 +75,6 @@ for v in \
     # Prepare installation directories...
     pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
     pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
-
-    # Download and install EPW
-#    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/EPW-2.3.6.tar.gz"
-#    pack_set --command "tar xfz EPW-2.3.6.tar.gz"
-#    pack_set --command "mv EPW-2.3.6 EPW"
-#    pack_set --command "pushd EPW/src"
-#    pack_set --command "make"
-#    pack_set --command "cp ../bin/* $(pack_get --install-prefix)/bin/"
-#    pack_set --command "popd"
 
     pack_install
 

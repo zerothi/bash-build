@@ -8,8 +8,6 @@ for v in 1.4.2 2.1 ; do
 
     # This devious thing will never install the same place!!!!!
     pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
-    tmpL="$(pack_get --alias)-$(pack_get --version)"
-    pack_set --index-alias ${tmpL:0:9}
     
     # Add requirments when creating the module
     pack_set --module-requirement numpy \
@@ -19,6 +17,6 @@ for v in 1.4.2 2.1 ; do
     pack_set --command "mkdir -p" \
 	--command-flag "$(pack_get --install-prefix)/lib/python$pV/site-packages"
     pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--prefix=$(pack_get --install-prefix)" \
-	
+	--command-flag "--prefix=$(pack_get --install-prefix)"
+    
 done

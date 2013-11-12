@@ -8,6 +8,8 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --module-requirement zlib
+
 pack_set --install-query $(pack_get --install-prefix)/bin/python3
 
 # Install commands that it should run
@@ -21,7 +23,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
 pack_install
-
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
@@ -50,7 +51,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr-2) scipy cython numexpr-2 matplotlib)
+    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr) scipy cython numexpr matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
@@ -65,7 +66,7 @@ if [ $(pack_get --installed qutip) -eq 1 ]; then
         -v $(date +'%g-%j') \
         -M python$pV.cython.numexpr.qutip/$(get_c) \
         -P "/directory/should/not/exist" \
-        $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr-2) cython numexpr-2 qutip)
+        $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr) cython numexpr qutip)
 fi
 
 build_set --module-path $old_path

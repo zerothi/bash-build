@@ -19,6 +19,8 @@ if $(is_c gnu) ; then
     fi
 fi
 
+# For future maybe this flag is important: NPY_SEPARATE_COMPILATION=0
+
 file=site.cfg
 pack_set --command "echo '#' > $file"
 

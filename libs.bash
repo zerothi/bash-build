@@ -21,6 +21,8 @@ source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
 source libs/plasma.bash
+source libs/arpack.bash
+source libs/parpack.bash
 
 # Some specific libraries
 source libs/gsl.bash
@@ -38,17 +40,21 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
-install_all --from hwloc
-#source libs/udunits.bash
-#source libs/nco.bash
+source libs/udunits.bash
+source libs/nco.bash
 
 # A sparse library
 source libs/suitesparse.bash
 
 source libs/metis.bash
-source libs/metis-par.bash
 source libs/metis-par-3.bash
+source libs/metis-par.bash
+source libs/scotch.bash
+source libs/mumps-serial.bash
 source libs/mumps.bash
+source libs/superlu.bash
+source libs/petsc.bash
+source libs/slepc.bash
 
 install_all --from hwloc
 
@@ -62,14 +68,15 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
 
 tmp=$(get_index nco)
-if [ $? -eq 0 ]; then
+retval=$?
+if [ $retval -eq 0 ]; then
     create_module \
 	--module-path $(build_get --module-path)-npa \
 	-n "Nick Papior Andersen's module script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M hdf5.netcdf.utils/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement nco) nco h5utils)
+	$(list --prefix '-L ' $(pack_get --module-requirement nco) $(pack_get --module-requirement h5utils-serial) nco h5utils-serial)
 fi
 
 create_module \

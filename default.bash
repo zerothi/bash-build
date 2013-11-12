@@ -32,13 +32,13 @@ create_module \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules Inelastica-DEV[224])" \
-    -RL Inelastica-DEV[224]
+    -echo "$(echo_modules Inelastica-DEV[228])" \
+    -RL Inelastica-DEV[228]
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
-    -M Inelastica.default/$(get_c) \
+    -n "Nick Papior Andersen's script for loading QuantumEspresso: $(get_c)" \
+    -M espresso.default/$(get_c) \
     -P "/directory/should/not/exist" \
     -echo "$(echo_modules espresso)" \
     -RL espresso
@@ -53,6 +53,14 @@ create_module \
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading OpenMX: $(get_c)" \
+    -M openmx.default/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -echo "$(echo_modules openmx[3.7])" \
+    -RL openmx[3.7]
+
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading VASP: $(get_c)" \
     -M vasp.default/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -61,7 +69,7 @@ create_module \
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading VASP: $(get_c)" \
+    -n "Nick Papior Andersen's script for loading plotting routines: $(get_c)" \
     -M plot.default/$(get_c) \
     -P "/directory/should/not/exist" \
     -echo "$(echo_modules gnuplot molden grace xcrysden povray vmd matplotlib)" \

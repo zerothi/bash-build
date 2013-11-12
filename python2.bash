@@ -33,7 +33,6 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias) 
 
-
 # Install all relevant python packages
 
 # The lookup name in the list for version number etc...
@@ -52,7 +51,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr-2) scientificpython scipy cython numexpr-2 matplotlib)
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr) scientificpython scipy cython numexpr matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
@@ -68,13 +67,21 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy ase gpaw inelastica) scientificpython scipy ase gpaw inelastica)
 
+create_module \
+    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
+    -M python$pV.kwant/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement kwant) kwant)
+
+
 if [ $(pack_get --installed qutip) -eq 1 ]; then
     create_module \
         -n "Nick Papior Andersen's Photonics python script for QuTip: $(get_c)" \
         -v $(date +'%g-%j') \
         -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
         -P "/directory/should/not/exist" \
-        $(list --prefix '-L ' $(pack_get --module-requirement scientificpython qutip numexpr-2) scientificpython cython numexpr-2 qutip)
+        $(list --prefix '-L ' $(pack_get --module-requirement scientificpython qutip numexpr) scientificpython cython numexpr qutip)
 fi
 
 build_set --module-path $old_path

@@ -1,5 +1,6 @@
 # Requires package:
 #  libreadlineX-dev
+unset LUA_PATH
 
 add_package --build generic http://www.lua.org/ftp/lua-5.2.2.tar.gz
 
@@ -27,6 +28,7 @@ source lua/filesystem.bash
 source lua/posix.bash
 source lua/mathx.bash
 source lua/complex.bash
+source lua/penlight.bash
 source lua/lmod.bash
 
 install_all --from lua

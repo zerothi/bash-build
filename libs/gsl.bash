@@ -1,5 +1,5 @@
 # Install gsl
-add_package ftp://ftp.gnu.org/gnu/gsl/gsl-1.15.tar.gz
+add_package ftp://ftp.gnu.org/gnu/gsl/gsl-1.16.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

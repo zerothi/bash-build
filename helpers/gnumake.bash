@@ -3,7 +3,7 @@ add_package --build generic ftp://ftp.gnu.org/gnu/make/make-3.82.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 p_V=$(pack_get --version)
-c_V=`make --version | head -1 | awk '{print $3}'`
+c_V=`make --version 2>/dev/null | head -1 | awk '{print $3}'`
 [ -z "${c_V// /}" ] && c_V=1.1.1
 if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
