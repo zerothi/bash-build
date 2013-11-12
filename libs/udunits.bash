@@ -1,3 +1,5 @@
+# The udunits2 package requires an XML library:
+#  libexpat
 v=2.1.24
 add_package ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v.tar.gz
 
