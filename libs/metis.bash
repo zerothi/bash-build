@@ -4,8 +4,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmetis.a
 
-pack_set $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
-
 if [ $(pack_get --installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"
 fi

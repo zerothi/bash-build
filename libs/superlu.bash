@@ -4,6 +4,8 @@ add_package --package superlu \
 
 pack_set -s $IS_MODULE
 
+pack_set $(list --prefix "--host-reject " surt muspel slid)
+
 pack_set --install-query $(pack_get --install-prefix)/lib/libsuperlu.a
 
 pack_set --module-requirement openmpi \

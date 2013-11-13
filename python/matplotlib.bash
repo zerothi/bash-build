@@ -3,7 +3,7 @@
 
 add_package \
     --archive matplotlib-1.3.1.tar.gz \
-    https://github.com/matplotlib/matplotlib/archive/v1.3.1.tar.gz
+    https://github.com/matplotlib/matplotlib/archive/1.3.1.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
