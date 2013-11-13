@@ -265,12 +265,12 @@ function list {
 		args="$(pack_get --module-requirement $args) $args" ;;
 	    -Wlrpath)
 		pre="-Wl,-rpath=" 
-		suf="/lib" 
-		lcmd="pack_get --install-prefix " ;;
+		suf="" 
+		lcmd="pack_get --library-path " ;;
 	    -LDFLAGS)   
 		pre="-L"  
-		suf="/lib" 
-		lcmd="pack_get --install-prefix " ;;
+		suf="" 
+		lcmd="pack_get --library-path " ;;
 	    -INCDIRS) 
 		pre="-I" 
 		suf="/include" 

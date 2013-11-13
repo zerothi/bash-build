@@ -283,6 +283,8 @@ declare -a _http
 declare -a _settings
 # Where the package is installed
 declare -a _install_prefix
+# Where the package libraries are found
+declare -a _lib_prefix
 # What to check for when installed
 declare -a _install_query
 # An aliased name
@@ -361,6 +363,7 @@ function add_package {
     # Default to default index
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
+    local lp="/lib"
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
@@ -371,6 +374,13 @@ function add_package {
 	    -version|-v) v=$1 ; shift ;;
 	    -package|-p) package=$1 ; shift ;;
 	    -no-default-modules) no_def_mod=1 ;;
+	    -lib-path|-lp) lp=$1 ; 
+		case $lp in
+		    /*) # do nothing
+			;;
+		    *) lp="/$lp"
+			;;
+		esac ; shift ;;
 	    -alias|-a) alias=$1 ; shift ;;
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
@@ -436,6 +446,7 @@ function add_package {
     tmp="$(build_get --build-installation-path[$b_name])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
+    _lib_prefix[$_N_archives]=${_install_prefix[$_N_archives]}$lp
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
@@ -461,7 +472,7 @@ function pack_set {
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=2
     local mod_prefix=""
-    local mod_opt=""
+    local mod_opt="" ; local lib=""
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt="$(trim_em $1)"
@@ -472,6 +483,13 @@ function pack_set {
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
+	    -L|-library-suffix)  lib="$1" 
+		case $lib in
+		    /*) # do nothing
+			;;
+		    *) lib="/$lib"
+			;;
+		esac ; shift ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
             -R|-module-requirement)  
 		[ $TIMING -ne 0 ] && local timemr=$(add_timing)
@@ -508,6 +526,7 @@ function pack_set {
 	[ $TIMING -ne 0 ] && export _pack_set_mr_T=$(add_timing $_pack_set_mr_T $timemr)
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
+    [ ! -z "$lib" ]        && _lib_prefix[$index]="${_install_prefix[$index]}$lib"
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
@@ -586,6 +605,7 @@ function pack_get {
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
+		-L|-library-path)    _ps "${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -629,6 +649,7 @@ function pack_get {
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
 	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
+	    -L|-library-path)    _ps "${_lib_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) 
                                  _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
