@@ -7,7 +7,8 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 # Add requirments when creating the module
 pack_set --module-requirement numpy \
     --module-requirement zlib \
-    --module-requirement hdf5-serial
+    --module-requirement hdf5-serial \
+    --module-requirement cython
 
     
 # Install commands that it should run
