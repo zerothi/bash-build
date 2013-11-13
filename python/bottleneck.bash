@@ -1,4 +1,4 @@
-for v in 0.6.0 ; do
+for v in 0.7.0 ; do
 
     add_package --package bottleneck \
 	https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-$v.tar.gz
