@@ -61,6 +61,7 @@ source python/pandas.bash
 source python/inelastica.bash
 source python/inelastica-dev.bash
 source python/inelastica-rbch.bash
+source python/inelastica-npa.bash
 
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/ase.bash
