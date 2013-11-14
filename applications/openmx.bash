@@ -50,8 +50,8 @@ CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath fftw-3 openmpi) -lfftw3\n\
-INCS = $(list --INCDIRS fftw-3 openmpi)' $file"
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3\n\
+INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # Make commands
 pack_set --command "make"
