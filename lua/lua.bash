@@ -29,6 +29,7 @@ source lua/posix.bash
 source lua/mathx.bash
 source lua/complex.bash
 source lua/penlight.bash
+source lua/peg.bash
 source lua/lmod.bash
 
 install_all --from lua
