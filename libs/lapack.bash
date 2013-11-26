@@ -1,5 +1,5 @@
 # Then install LAPACK
-add_package http://www.netlib.org/lapack/lapack-3.4.2.tgz
+add_package http://www.netlib.org/lapack/lapack-3.5.0.tgz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

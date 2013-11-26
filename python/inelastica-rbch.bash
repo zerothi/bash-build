@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 228 242 ; do
+for v in 228 243 ; do
 add_package \
     --package Inelastica-RBCH \
     http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
