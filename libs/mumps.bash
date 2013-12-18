@@ -6,9 +6,6 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
 
-pack_set \
-    $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
-
 parmetisV=3.2.0
 pack_set --module-requirement parmetis[$parmetisV]
 pack_set --module-requirement scotch

@@ -32,6 +32,8 @@ source python/tornado.bash
 source python/dateutil.bash
 source python/fastimport.bash
 source python/pytz.bash
+source python/pexpect.bash
+source python/ipython.bash
 
 source python/cython.bash
 source python/bzr.bash
@@ -59,6 +61,7 @@ source python/pandas.bash
 source python/inelastica.bash
 source python/inelastica-dev.bash
 source python/inelastica-rbch.bash
+source python/inelastica-matt.bash
 
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source python/ase.bash

@@ -1,5 +1,5 @@
 # old_v 
-for v in 1.4.2 2.1 ; do
+for v in 1.4.2 2.2.2 ; do
     [ "x${pV:0:1}" == "x3" ] && [ "x$v" == "x1.4.2" ] && continue
 
     add_package http://numexpr.googlecode.com/files/numexpr-$v.tar.gz

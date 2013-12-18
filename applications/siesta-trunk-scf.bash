@@ -1,12 +1,16 @@
-for v in 465 ; do
+for v in 447 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-$v.tar.gz
+add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-scf-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
+pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
+[ $(pack_get --installed metis) -eq 0 ] && pack_install metis
+if [ $(pack_get --installed metis) -eq 1 ]; then
+    pack_set --module-requirement metis
+fi
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
@@ -19,6 +23,13 @@ pack_set --command "../Src/obj_setup.sh"
 
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+
+if [ $(pack_get --installed metis) -eq 1 ]; then
+    pack_set --command "sed -i '1 a\
+FPPFLAGS += -DON_DOMAIN_DECOMP\n\
+ADDLIB += -lmetis' arch.make"
+fi
+
 pack_set --command "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
@@ -36,7 +47,7 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
-FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
+FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
@@ -54,6 +65,7 @@ MPI_INCLUDE=.\n\
 .f90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 ' arch.make"
+
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -85,61 +97,47 @@ else
 
 fi
 
-
-# Correct an error for the GNU compiler:
-pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_ts_contour.f90"
-
-
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+# This should ensure a correct handling of the version info...
 pack_set --command "make version"
-pack_set --command "siesta_install --siesta"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) siesta"
+
+pack_set --command "siesta_install -v scf --siesta"
+pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
+pack_set --command "make version"
+
 # We have not created a test for the check of already installed files...
 #pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
-pack_set --command "make version"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) transiesta"
+pack_set --command "make transiesta"
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../Util/TBTrans"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
+#pack_set --command "cd ../Util/TBTrans"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 
-pack_set --command "cd ../TBTrans_rep"
-pack_set --command "siesta_install --tbtrans"
-pack_set --command "make dep"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
+#pack_set --command "cd ../TBTrans_rep"
+#pack_set --command "siesta_install -v scf --tbtrans"
+#pack_set --command "make dep"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
-pack_set --command "cd ../Bands"
+pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
 pack_set --command "cp new.gnubands.o $(pack_get --install-prefix)/bin/gnubands"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/gnubands"
 pack_set --command "cp eigfat2plot.o $(pack_get --install-prefix)/bin/eigfat2plot"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/eigfat2plot"
 
 pack_set --command "cd ../Contrib/APostnikov"
 pack_set --command "make all"
 pack_set --command "cp *xsf fmpdos $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../../Denchar/Src"
-pack_set --command "make denchar"
-pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
+#pack_set --command "cd ../../Denchar/Src"
+#pack_set --command "make denchar"
+#pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../../Eig2DOS"
 pack_set --command "make"
@@ -157,6 +155,21 @@ pack_set --command "cd ../HSX"
 pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
+
+# Install the TS-analyzer
+pack_set --command "cd ../TSAnalyzeSort"
+pack_set --command "cp tsanalyzesort.py $(pack_get --install-prefix)/bin/"
+
+
+
+
+# The atom program for creating the pseudos
+pack_set --command "cd ../../Pseudo/atom"
+pack_set --command "make"
+pack_set --command "cp atm $(pack_get --install-prefix)/bin/"
+
+
+pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
 
 pack_install
 

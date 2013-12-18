@@ -1,7 +1,7 @@
 v=4.3.8
 add_package http://dust.ess.uci.edu/nco/src/nco-$v.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/ncks
 
@@ -12,9 +12,9 @@ pack_set --module-requirement gsl \
 
 # Install commands that it should run
 pack_set \
-    --command "../configure" \
+    --command "./configure" \
     --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) '" \
-    --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lnetcdf '" \
+    --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lexpat -lnetcdf '" \
     --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --module-paths-requirement)) '" \
     --command-flag "--prefix $(pack_get --install-prefix)" \
     --command-flag "--enable-netcdf-4" \

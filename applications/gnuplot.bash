@@ -1,5 +1,5 @@
 # Install gnuplot, which is a simple library
-add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/4.6.3/gnuplot-4.6.3.tar.gz
+add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/4.6.4/gnuplot-4.6.4.tar.gz
 
 pack_set -s $IS_MODULE
 

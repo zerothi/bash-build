@@ -10,7 +10,7 @@ fi
 # Determine the name of the local module:
 if $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
     if $(is_c intel) ; then
-        mod=openmpi/1.6.3-${NPA_NODETYPE}-tm-intel-2013.1.117-1
+        mod=openmpi/1.6.5-${NPA_NODETYPE}-tm-intel-2013.5.192-1
     elif $(is_c gnu) ; then
         mod=openmpi/1.6.3-${NPA_NODETYPE}-tm-gfortran-1
     else

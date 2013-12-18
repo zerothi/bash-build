@@ -1,4 +1,4 @@
-add_package https://h5py.googlecode.com/files/h5py-2.1.0.tar.gz
+add_package https://h5py.googlecode.com/files/h5py-2.2.0.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -7,7 +7,8 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 # Add requirments when creating the module
 pack_set --module-requirement numpy \
     --module-requirement zlib \
-    --module-requirement hdf5-serial
+    --module-requirement hdf5-serial \
+    --module-requirement cython
 
     
 # Install commands that it should run
