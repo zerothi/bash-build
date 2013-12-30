@@ -1,4 +1,4 @@
-add_package http://www.open-mpi.org/software/hwloc/v1.7/downloads/hwloc-1.7.2.tar.bz2
+add_package http://www.open-mpi.org/software/hwloc/v1.8/downloads/hwloc-1.8.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

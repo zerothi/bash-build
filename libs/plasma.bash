@@ -1,5 +1,5 @@
 add_package \
-    http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.5.2.tar.gz
+    http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.6.0.tar.gz
 
 pack_set -s $IS_MODULE
 

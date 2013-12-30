@@ -3,7 +3,7 @@
 # Install the Parallel NetCDF
 add_package \
     --package pnetcdf \
-    http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.3.1.tar.bz2
+    http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.4.1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
