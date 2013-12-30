@@ -817,30 +817,28 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-#echo Will load: $module_loads $mod_reqs
-	#module avail
 	module load $module_loads
-	#module list
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp="$(list --LDFLAGS --Wlrpath $mod_reqs_paths)"
+	local tmp=$(trim_spaces "$(list --LDFLAGS --Wlrpath $mod_reqs_paths)")
 	old_fcflags="$FCFLAGS"
-	export FCFLAGS="$FCFLAGS $tmp"
+	export FCFLAGS="$(trim_spaces "$FCFLAGS") $tmp"
 	old_fflags="$FFLAGS"
-	export FFLAGS="$FFLAGS $tmp"
+	export FFLAGS="$(trim_spaces "$FFLAGS") $tmp"
 	old_cflags="$CFLAGS"
-	export CFLAGS="$CFLAGS $tmp"
-	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$CPPFLAGS $(list --INCDIRS $mod_reqs_paths)"
+	export CFLAGS="$(trim_spaces "$CFLAGS") $tmp"
 	old_ldflags="$LDFLAGS"
-	export LDFLAGS="$LDFLAGS $tmp"
+	export LDFLAGS="$(trim_spaces "$LDFLAGS") $tmp"
+	tmp=$(trim_spaces "$(list --INCDIRS $mod_reqs_paths)")
+	old_cppflags="$CPPFLAGS"
+	export CPPFLAGS="$(trim_spaces "$CPPFLAGS") $tmp"
 	#old_ld_lib_path="$LD_LIBRARY_PATH"
 	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs_paths)"
-	
+
         # Show that we will install
 	msg_install --start $idx
-
+	
         # Download archive
 	dwn_file $idx $(build_get --archive-path)
 

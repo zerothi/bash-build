@@ -16,6 +16,23 @@ function trim_em {
     _ps "$opt"
 }
 
+# trim spaces
+function trim_spaces {
+    local str=$1 ; shift
+    local i=0
+    while [ $i -ne ${#str} ]; do
+	i=${#str}
+	str=${str//  / }
+    done
+    if [ ${str:0:1} == " " ]; then
+	str=${str:1}
+    fi
+    if [ ${str:${#str}-1} == " " ]; then
+	str=${str:0:${#str}-1}
+    fi
+    _ps "$str"
+}
+
 # A variable is passed to var_spec
 # which then returns the var or the spec
 #
