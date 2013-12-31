@@ -11,7 +11,7 @@ fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/m4
 
-[ $(pack_get --installed help2man) -eq 1 ] && \
+[ $(pack_installed help2man) -eq 1 ] && \
     pack_set --module-requirement help2man
 
 # Install commands that it should run

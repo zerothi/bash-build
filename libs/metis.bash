@@ -4,7 +4,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libmetis.a
 
-if [ $(pack_get --installed cmake) -eq 1 ]; then
+if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"
 fi
 
@@ -21,7 +21,7 @@ pack_set --command "make"
 pack_set --command "make install"
 
 
-if [ $(pack_get --installed cmake) -eq 1 ]; then
+if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module unload $(pack_get --module-name cmake)"
 fi
 

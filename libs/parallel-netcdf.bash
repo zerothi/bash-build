@@ -3,17 +3,17 @@
 # Install the Parallel NetCDF
 add_package \
     --package pnetcdf \
-    http://ftp.mcs.anl.gov/pub/parallel-netcdf/parallel-netcdf-1.4.1.tar.bz2
+    http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.4.1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libpnetcdf.a
 
 pack_set --module-requirement openmpi
-if [ $(pack_get --installed bison) -eq 1 ]; then
+if [ $(pack_installed bison) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
 fi
-if [ $(pack_get --installed flex) -eq 1 ]; then
+if [ $(pack_installed flex) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
 
@@ -30,9 +30,9 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-if [ $(pack_get --installed flex) -eq 1 ] ; then
+if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi
-if [ $(pack_get --installed bison) -eq 1 ] ; then
+if [ $(pack_installed bison) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
 fi

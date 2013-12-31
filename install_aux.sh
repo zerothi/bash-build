@@ -24,10 +24,10 @@ function trim_spaces {
 	i=${#str}
 	str=${str//  / }
     done
-    if [ ${str:0:1} == " " ]; then
+    if [ "${str:0:1}" == " " ]; then
 	str=${str:1}
     fi
-    if [ ${str:${#str}-1} == " " ]; then
+    if [ "${str:${#str}-1}" == " " ]; then
 	str=${str:0:${#str}-1}
     fi
     _ps "$str"

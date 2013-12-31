@@ -676,6 +676,10 @@ function pack_get {
 function pack_installed {
     local ret=$(pack_get --installed $1)
     [ -z "$ret" ] && ret=0
+    if [ $ret -eq 0 ]; then
+	pack_install $1 > /dev/null
+	ret=$(pack_get --installed $1)
+    fi
     _ps $ret
 }
 

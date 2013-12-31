@@ -11,10 +11,10 @@ fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/automake
 
-[ $(pack_get --installed m4) -eq 1 ] && \
+[ $(pack_installed m4) -eq 1 ] && \
     pack_set --module-requirement m4
 
-[ $(pack_get --installed autoconf) -eq 1 ] && \
+[ $(pack_installed autoconf) -eq 1 ] && \
     pack_set --module-requirement autoconf
 
 # Install commands that it should run

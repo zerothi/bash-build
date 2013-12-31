@@ -66,7 +66,7 @@ pack_set --command "prefix=$(pack_get --install-prefix) make install"
 
 pack_install
 
-if [ $(pack_get --installed) -eq 1 ]; then
+if [ $(pack_installed) -eq 1 ]; then
     create_module \
 	--module-path $(build_get --module-path)-npa-apps \
 	-n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \

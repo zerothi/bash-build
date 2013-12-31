@@ -20,7 +20,7 @@ source libs/cblas.bash
 source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
-source libs/plasma.bash
+#source libs/plasma.bash
 source libs/arpack.bash
 source libs/parpack.bash
 
@@ -54,9 +54,16 @@ source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
 source libs/petsc.bash
-source libs/slepc.bash
+#source libs/slepc.bash
 
 install_all --from hwloc
+
+# Libraries for DFT
+source libs/libxc.bash
+source libs/etsf_io.bash
+source libs/atompaw.bash
+
+install_all --from libxc
 
 # We install the module scripts here:
 create_module \

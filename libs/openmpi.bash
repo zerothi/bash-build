@@ -24,7 +24,7 @@ elif $(is_host thul) ; then
 
 fi
 
-if [ $(pack_get --installed flex) -eq 1 ]; then
+if [ $(pack_installed flex) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
 
@@ -42,6 +42,6 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "install"
 
-if [ $(pack_get --installed flex) -eq 1 ] ; then
+if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi

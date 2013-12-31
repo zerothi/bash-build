@@ -7,10 +7,10 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libscotch.a
 
 pack_set --module-requirement zlib --module-requirement openmpi
 
-if [ $(pack_get --installed bison) -eq 1 ]; then
+if [ $(pack_installed bison) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
 fi
-if [ $(pack_get --installed flex) -eq 1 ]; then
+if [ $(pack_installed flex) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
 
@@ -67,9 +67,9 @@ pack_set --command "make $(get_make_parallel) ptscotch"
 pack_set --command "mkdir -p $(pack_get --install-prefix)"
 pack_set --command "make install"
 
-if [ $(pack_get --installed flex) -eq 1 ] ; then
+if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi
-if [ $(pack_get --installed bison) -eq 1 ] ; then
+if [ $(pack_installed bison) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
 fi

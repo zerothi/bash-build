@@ -7,8 +7,7 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
-[ $(pack_get --installed metis) -eq 0 ] && pack_install metis
-if [ $(pack_get --installed metis) -eq 1 ]; then
+if [ $(pack_installed metis) -eq 1 ]; then
     pack_set --module-requirement metis
 fi
 
@@ -24,7 +23,7 @@ pack_set --command "../Src/obj_setup.sh"
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
 
-if [ $(pack_get --installed metis) -eq 1 ]; then
+if [ $(pack_installed metis) -eq 1 ]; then
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP\n\
 ADDLIB += -lmetis' arch.make"

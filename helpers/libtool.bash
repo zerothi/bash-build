@@ -11,10 +11,10 @@ fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/libtool
 
-[ $(pack_get --installed automake) -eq 1 ] && \
+[ $(pack_installed automake) -eq 1 ] && \
     pack_set --module-requirement automake
 
-[ $(pack_get --installed autoconf) -eq 1 ] && \
+[ $(pack_installed autoconf) -eq 1 ] && \
     pack_set --module-requirement autoconf
 
 # Install commands that it should run

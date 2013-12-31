@@ -1,4 +1,4 @@
-add_package http://ftp.abinit.org/abinit-7.0.4.tar.gz
+add_package http://ftp.abinit.org/abinit-7.4.3.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -10,7 +10,17 @@ pack_set --install-query $(pack_get --install-prefix)/bin/abinit
 
 pack_set --module-requirement openmpi
 
+tmp=
+if $(is_c gnu) ; then
+    tmp="FCFLAGS_OPENMP='-fopenmp'"
+
+elif $(is_c intel) ; then
+    tmp="FCFLAGS_OPENMP='-openmp'"
+
 pack_set --command "../configure" \
+    --command-flag "--enable-64bit-flags" \
+    --command-flag "--enable-lotf" \
+    --command-flag "--enable-mpi-inplace" \
     --command-flag "--enable-mpi --enable-mpi-io"
 
 # Make commands

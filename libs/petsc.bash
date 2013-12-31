@@ -46,7 +46,7 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "F77=$MPIF77 FFLAGS='$FFLAGS $tmp_ld'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld'" \
-    --command-flag "AR=ar" \
+    --command-flag "AR=$AR" \
     --command-flag "RANLIB=ranlib" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-fortran-interfaces=1" \
