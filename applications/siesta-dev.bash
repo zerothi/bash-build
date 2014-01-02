@@ -99,7 +99,7 @@ pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
 pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
 pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) siesta"
+pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"

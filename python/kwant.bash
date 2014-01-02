@@ -35,7 +35,7 @@ elif $(is_c gnu) ; then
 
     pack_set --command "sed -i '1 a\
 [lapack]\n\
-libraries = f77blas cblas atlas atlas_lapack\n\
+libraries = f77blas cblas atlas lapack_atlas\n\
 ' $file"
 
 else

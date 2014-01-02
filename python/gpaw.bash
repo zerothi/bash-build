@@ -5,7 +5,7 @@ add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject "ntch-2857"
+pack_set --host-reject "ntch"
 
 pack_set --module-opt "--lua-family gpaw"
 

@@ -5,7 +5,7 @@ for v in 0.8.7929 0.9.9672 ; do
     add_package --build generic \
 	http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
     
-    pack_set --host-reject "ntch-2857"
+    pack_set --host-reject "ntch"
     if [ "$v" != "0.9.9672" ]; then
 	pack_set --host-reject "zeroth"
     fi

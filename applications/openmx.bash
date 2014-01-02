@@ -31,11 +31,11 @@ elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' Makefile"
+    LIB += $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' $file"
     else
 	pack_set --module-requirement blas --module-requirement lapack
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas' Makefile"
+    LIB += $(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas' $file"
     fi
 
     pack_set --command "sed -i '1 a\
