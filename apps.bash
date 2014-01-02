@@ -31,6 +31,8 @@ source applications/vasp-potcar.bash
 source applications/openmx.bash
 source applications/openmx-pseudo.bash
 
+source applications/bigdft.bash
+
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
 source applications/mpb-serial.bash # [gmp,libunistring,guile]

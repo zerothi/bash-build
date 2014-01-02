@@ -27,8 +27,8 @@ if $(is_c gnu) ; then
 	pack_set --command "sed -i '1 a\
 CFLAGS  += -fopenmp \n\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -latlas \n\
-LIBCBLAS = $(list --LDFLAGS --Wlrpath atlas) -lcblas \n\
-LIBLAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lcblas -lf77blas -latlas \n' $tmp"
+LIBCBLAS = $(list --LDFLAGS --Wlrpath atlas) -lcblas -latlas\n\
+LIBLAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -latlas \n' $tmp"
     else
 	pack_set --command "sed -i '1 a\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath blas) -lblas \n\

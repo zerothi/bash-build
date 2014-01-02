@@ -23,9 +23,15 @@ if $(is_c intel) ; then
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement atlas
+    if [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
     tmp="--with-blas='$(list --LDFLAGS --Wlrpath atlas) -lcblas -lf77blas -latlas'"
     tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    else
+	pack_set --module-requirement blas --module-requirement lapack
+	tmp="--with-blas='$(list --LDFLAGS --Wlrpath blas) -lblas'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
+    fi
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

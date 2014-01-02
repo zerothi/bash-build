@@ -10,33 +10,29 @@ parmetisV=3.2.0
 pack_set --module-requirement parmetis[$parmetisV]
 pack_set --module-requirement scotch
 
-if $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
-	pack_set --module-requirement atlas
-    else
-	pack_set --module-requirement blas
-    fi
-    pack_set --module-requirement scalapack
-fi
-
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
     if [ $(pack_installed atlas) -eq 1 ] ; then
+	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
 SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
     else
+	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\
 SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
     fi
+
 elif $(is_c intel) ; then
     tmp_flag="-nofor-main"
     pack_set --command "sed -i '1 a\
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+
 fi
 
 pack_set --command "sed -i '1 a\

@@ -22,8 +22,7 @@ pack_set --command "sed -i -e 's/^LIB[^E].*//g;s/^[FC]C[[:space:]]*=.*//g' $file
 pack_set --command "sed -i -e 's/^CFLAGS.*//g;s:^-I/usr/local/include.*::g' $file"
 pack_set --command "sed -i -e '/-o openmx/{s/CC/FC/}' $file"
 
-if $(is_c intel) ; then
-    
+if $(is_c intel) ; then    
     pack_set --command "sed -i '1 a\
     LIB += -mkl=parallel\nCC += -openmp\nFC += -openmp -nofor_main' $file"
     

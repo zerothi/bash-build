@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 1.7.4 ; do
+for v in 1.7.6 ; do
     add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-1.7/phonopy-$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE

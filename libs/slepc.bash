@@ -20,6 +20,9 @@ if $(is_c gnu) ; then
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath lapack blas)"
 	tmp_lib="-llapack -lblas"
     fi
+elif $(is_c intel) ; then
+    tmp_lib="-mkl=sequential"
+
 fi
 
 pack_set --command "CC=$MPICC CFLAGS='$CFLAGS $tmp_ld'" \

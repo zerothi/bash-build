@@ -22,6 +22,7 @@ source libs/atlas.bash
 source libs/scalapack.bash
 #source libs/plasma.bash
 source libs/arpack.bash
+source libs/arpack-ng.bash
 source libs/parpack.bash
 
 # Some specific libraries

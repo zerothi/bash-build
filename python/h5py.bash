@@ -1,4 +1,4 @@
-add_package https://h5py.googlecode.com/files/h5py-2.2.0.tar.gz
+add_package https://h5py.googlecode.com/files/h5py-2.2.1.tar.gz
 
 pack_set -s $IS_MODULE
 
