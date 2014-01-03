@@ -3,7 +3,7 @@ add_package http://www.student.dtu.dk/~nicpa/packages/dftb+_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --host-reject ntch \
+pack_set --host-reject ntch-l \
 	--host-reject zeroth
 
 pack_set --module-opt "--lua-family dftb+"

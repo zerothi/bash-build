@@ -14,3 +14,6 @@ pack_set --command "LIBS='-lnetcdff -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lh
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
+# Correct the very strange partition of the module locations
+pack_set --command "mv $(pack_get --install-prefix)/include/*/* $(pack_get --install-prefix)/include/" 
+

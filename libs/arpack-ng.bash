@@ -1,5 +1,6 @@
 add_package \
-    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng-3.1.4.tar.gz
+    --directory arpack-ng-3.1.4 \
+    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_3.1.4.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -17,7 +18,7 @@ else
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp_flags="--with-blas='-lf77blas -lcblas -latlas'"
-	tmp_flags="$tmp_flags --with-lapack='-llapack_atlas'"
+	tmp_flags="$tmp_flags --with-lapack='-llapack_atlas -lf77blas -lcblas -latlas'"
 
     else
 	pack_set --module-requirement blas
@@ -29,12 +30,12 @@ else
 fi
 
 pack_set --command "./configure" \
-    --command-flag "F77=$FC" \
-    --command-flag "FFLAGS=$FCFLAGS" \
+    --command-flag "F77='$FC'" \
+    --command-flag "FFLAGS='$FCFLAGS'" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
-    --command-flag "CC=$CC" \
+    --command-flag "CC='$CC'" \
     --command-flag "CFLAGS='$CFLAGS'" \
-    --command-flag "MPIF77=$MPIFC" \
+    --command-flag "MPIF77='$MPIFC'" \
     --command-flag "--enable-mpi $tmp_flags" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 

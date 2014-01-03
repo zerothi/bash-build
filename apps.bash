@@ -4,7 +4,7 @@ msg_install --message "Installing the applications..."
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash
 source applications/siesta-mattias.bash
-source applications/siesta-scf.bash
+#source applications/siesta-scf.bash
 
 source applications/lammps.bash
 
@@ -23,15 +23,16 @@ source applications/gulp.bash
 source applications/dftd3.bash
 
 # Needs to be installed AFTER wannier90 :)
-source applications/vasp.bash
-source applications/vasp-intel.bash
-source applications/vasp-potcar.bash
+#source applications/vasp.bash
+#source applications/vasp-intel.bash
+#source applications/vasp-potcar.bash
 
 # The OpenMX DFT code (has a NEGF routine)
 source applications/openmx.bash
 source applications/openmx-pseudo.bash
 
 source applications/bigdft.bash
+source applications/abinit.bash
 
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]

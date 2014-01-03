@@ -3,9 +3,9 @@ add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --host-reject "ntch"
 pack_set --install-query $(pack_get --install-prefix)/bin/wannier90
 
+pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
 
 # Check for Intel MKL or not
@@ -39,11 +39,13 @@ pack_set --command "make $(get_make_parallel) wannier"
 pack_set --command "make lib"
 pack_set --command "make test"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wannier90.x $(pack_get --install-prefix)/bin/wannier90"
+pack_set --command "cp wannier90.x $(pack_get --install-prefix)/bin/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp libwannier.a $(pack_get --install-prefix)/lib/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
 pack_set --command "cp src/*.mod $(pack_get --install-prefix)/include/"
+pack_set --command "cd $(pack_get --install-prefix)/bin/"
+pack_set --command "ln -s wannier90.x wannier90"
 
 pack_install
 

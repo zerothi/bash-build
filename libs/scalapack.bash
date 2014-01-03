@@ -22,7 +22,7 @@ if [ $(pack_installed atlas) -eq 1 ]; then
     pack_set --command "module load" \
 	--command-flag "$(pack_get --module-requirement atlas)" \
 	--command-flag "$(pack_get --module-name atlas)"
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -latlas|g' SLmake.inc"
+    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|g' SLmake.inc"
     pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|g' SLmake.inc"
 
 else

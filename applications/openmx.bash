@@ -4,6 +4,8 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family openmx"
 
+pack_set --host-reject ntch-l
+
 pack_set --install-query $(pack_get --install-prefix)/bin/openmx
 
 pack_set --module-requirement openmpi --module-requirement fftw-3
@@ -27,14 +29,15 @@ if $(is_c intel) ; then
     LIB += -mkl=parallel\nCC += -openmp\nFC += -openmp -nofor_main' $file"
     
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas' $file"
     else
 	pack_set --module-requirement blas --module-requirement lapack
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas' $file"
     fi
 
     pack_set --command "sed -i '1 a\
@@ -49,7 +52,7 @@ CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3\n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3\n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # Make commands

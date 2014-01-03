@@ -58,7 +58,7 @@ source lua/lua.bash
 source libs.bash
 
 # These are "parent" installations...
-source python2.bash
+#source python2.bash
 # The _ctypes does not work yet...
 #source python3.bash
 

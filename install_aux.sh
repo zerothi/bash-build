@@ -111,10 +111,14 @@ function str_version {
     esac	    
 }
 
+# Compare version of two versions
+# If #1 >  #2 returns 1
+# If #1 == #2 returns 0
+# If #1 <  #2 returns -1
 function vrs_cmp {
     local lhs=$1 ; shift
     local rhs=$1 ; shift
-    for o in -1 -2 -3 ; do
+    for o in -1 -2 -3 -4 ; do
 	local lv=$(str_version $o $lhs)
 	local rv=$(str_version $o $rhs)
 	[ -z "$lv" ] && break
