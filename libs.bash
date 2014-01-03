@@ -20,7 +20,7 @@ source libs/cblas.bash
 source libs/lapack.bash
 source libs/atlas.bash
 source libs/scalapack.bash
-#source libs/plasma.bash
+source libs/plasma.bash
 source libs/arpack.bash
 source libs/arpack-ng.bash
 source libs/parpack.bash
@@ -55,7 +55,7 @@ source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
 source libs/petsc.bash
-#source libs/slepc.bash
+source libs/slepc.bash
 
 install_all --from hwloc
 
