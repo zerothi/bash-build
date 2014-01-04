@@ -1,11 +1,7 @@
 msg_install --message "Installing all libraries..."
 
-# these should be VENDOR specific libraries
-source libs/acml.bash
-
+# Basic libraries
 source libs/hwloc.bash
-
-# Library used by MANY packages
 source libs/openmpi-hpc.bash
 
 #source libs/gmp.bash
