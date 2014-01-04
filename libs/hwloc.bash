@@ -15,6 +15,9 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "check" \
-    --command-flag "install"
+if $(is_c intel) ; then
+    pack_set --command "make install"
+else
+    pack_set --command "make check install"
+fi
+
