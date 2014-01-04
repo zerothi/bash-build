@@ -1,5 +1,15 @@
-for c in gfortran ifort ; do
 v=5-3-1
+
+for c in gfortran ifort open64 pgi ; do
+# we don't need the pgi compiler on nilfheim
+if $(is_host surt muspel slid) ; then
+    [ "$c" == "pgi" ] && continue
+fi
+# On my machines I will only ever use gfortran and ifort (for now...)
+if $(is_host zero ntch) ; then
+    [ "$c" == "open64" ] && continue
+    [ "$c" == "pgi" ] && continue
+fi
 add_package --build vendor \
     --version ${v//-/.} \
     --package acml \
@@ -15,10 +25,7 @@ pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz
 
 pack_install
 
-done
-
 # We need to create all the different modules...
-for c in gfortran ifort ; do
 for directive in nothing fma4 ; do
 [ "$directive" == "nothing" ] && directive=""
 for mp in nothing mp ; do
@@ -34,7 +41,7 @@ add_package --build vendor \
     --alias acml-$tmp \
     --package acml \
     --directory ./ \
-    fake.local
+    acml.local
 
 pack_set -s $IS_MODULE
 
