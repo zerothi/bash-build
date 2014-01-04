@@ -89,3 +89,6 @@ pack_set --command "make install"
 pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) test"
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
+
+# Clean up the unused module
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/modules"

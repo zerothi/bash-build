@@ -47,7 +47,6 @@ pack_set --command "export PETSC_ARCH=arch-installed-petsc"
 pack_set --command "export SLEPC_DIR=\$(pwd)"
 pack_set --command "make $(get_make_parallel)"
 
-
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"
 
@@ -60,3 +59,6 @@ pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
 
 pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --install-prefix)"
+
+# Clean up the unused module
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/modules"
