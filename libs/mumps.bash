@@ -33,6 +33,9 @@ elif $(is_c intel) ; then
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
+else
+    doerr MUMPS "Could not determine compiler..."
+
 fi
 
 pack_set --command "sed -i '1 a\

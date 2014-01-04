@@ -7,8 +7,6 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libslepc.a
 pack_set --module-requirement petsc \
     --module-requirement parpack
 
-pack_set --command "export PETSC_DIR=$(pack_get --install-prefix petsc)"
-
 tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))"
 tmp_lib=
 
@@ -16,7 +14,7 @@ if $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
-	tmp_lib="-lf77blas -lcblas -latlas"
+	tmp_lib="-llapack_atlas -lf77blas -lcblas -latlas"
     else
 	pack_set --module-requirement lapack --module-requirement blas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath lapack blas)"
@@ -24,6 +22,9 @@ if $(is_c gnu) ; then
     fi
 elif $(is_c intel) ; then
     tmp_lib="-mkl=sequential"
+
+else
+    doerr slepc "Could not determine compiler..."
 
 fi
 
@@ -35,7 +36,7 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "LIBS='$tmp_ld $tmp_lib'" \
     --command-flag "AR=$AR" \
     --command-flag "RANLIB=ranlib" \
-    --command-flag "./configure" \
+    --command-flag "./configure SLEPC_DIR=\$(pwd)" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-arpack" \
     --command-flag "--with-arpack-dir=$(pack_get --install-prefix parpack)/lib" \
@@ -46,14 +47,16 @@ pack_set --command "export PETSC_ARCH=arch-installed-petsc"
 pack_set --command "export SLEPC_DIR=\$(pwd)"
 pack_set --command "make $(get_make_parallel)"
 
-pack_set --command "make test"
+
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"
 
 pack_set --command "make install"
 
-pack_set --command "unset PETSC_DIR"
+# This tests the installation (i.e. linking)
+pack_set --command "make SLEPC_DIR=$(pack_get --install-prefix) test"
+
 pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
 
-pack_install
+pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --install-prefix)"

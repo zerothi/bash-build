@@ -39,6 +39,9 @@ elif $(is_c intel) ; then
     tmp="$tmp --with-linalg-libs='$MKL_LIB $INTEL_LIB -mkl=parallel'"
     tmp_lib="$MKL_LIB -mkl=parallel"
 
+else
+    doerr abinit "Could not determine compiler..."
+
 fi
 
 dft_flavor=atompaw+wannier90

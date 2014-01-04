@@ -21,7 +21,7 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack-lib='-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
 
-else
+elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$tmp --with-blas-lib='-lf77blas -lcblas -latlas'"
@@ -35,15 +35,18 @@ else
     pack_set --module-requirement scalapack
     tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix scalapack)"
 
+else
+    doerr petsc "Could not determine compiler"
+
 fi
 
 tmp_ld="$(list --Wlrpath --LDFLAGS $(pack_get --module-requirement))"
 
 pack_set --command "./configure PETSC_DIR=\$(pwd)" \
-    --command-flag "CC=$MPICC CFLAGS='$CFLAGS $tmp_ld'" \
-    --command-flag "CXX=$MPICXX CXXFLAGS='$CFLAGS $tmp_ld'" \
-    --command-flag "FC=$MPIF90 FCFLAGS='$FCFLAGS $tmp_ld'" \
-    --command-flag "F77=$MPIF77 FFLAGS='$FFLAGS $tmp_ld'" \
+    --command-flag "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
+    --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
+    --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
+    --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld'" \
     --command-flag "AR=$AR" \
@@ -82,4 +85,7 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
+# This tests the installation (i.e. linking)
 pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) test"
+
+pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"

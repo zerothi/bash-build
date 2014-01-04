@@ -37,6 +37,9 @@ if $(is_c gnu) ; then
     tmp_openmp="-fopenmp"
 elif $(is_c intel) ; then
     tmp_openmp="-openmp"
+else
+    doerr FFTW3 "Don't know the flag of OpenMP for the compiler..."
+
 fi
 
 pack_set --command "LIB='$tmp_openmp' CFLAGS='$CFLAGS $tmp_openmp' FFLAGS='$FFLAGS $tmp_openmp' ../configure $flag" \

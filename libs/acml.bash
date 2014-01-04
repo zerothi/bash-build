@@ -56,10 +56,11 @@ pack_set --lua-family acml
 pack_set --install-query /directory/does/not/exist
 tmp=${c//gfortran/gnu}
 tmp=${tmp//ifort/intel}
-[ ! -z "$directive" ] && tmp="${tmp}_$directive"
-[ ! -z "$mp" ] && tmp="${tmp}_$mp"
+[ ! -z "$directive" ] && tmp="${tmp}-$directive"
+[ ! -z "$mp" ] && tmp="${tmp}-$mp"
 pack_set --module-name acml/${v//-/.}/$tmp
 
+# As this is only module-installations we might as well do it immediately...
 pack_install
 
 done # mp

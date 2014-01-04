@@ -28,6 +28,9 @@ elif $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
+else
+    doerr MUMPS "Could not determine compiler..."
+
 fi
 
 pack_set --command "sed -i '1 a\

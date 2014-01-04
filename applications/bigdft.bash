@@ -34,6 +34,9 @@ elif $(is_c intel) ; then
     tmp="--with-ext-linalg='-lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel'"
     tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
 
+else
+    doerr BigDFT "Could not determine compiler..."
+
 fi
 
 # There are also bindings for python

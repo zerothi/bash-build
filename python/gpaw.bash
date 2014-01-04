@@ -49,6 +49,9 @@ library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\"]' $file"
 
     fi
+else
+    doerr gpaw "Could not determine compiler..."
+
 fi
 
 tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"

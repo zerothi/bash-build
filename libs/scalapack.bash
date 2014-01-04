@@ -9,29 +9,29 @@ pack_set --module-requirement openmpi
 
 # Prepare the make file
 tmp="sed -i -e"
-
-pack_set --command "cp SLmake.inc.example SLmake.inc"
-pack_set --command "$tmp 's/FC[[:space:]]*=.*/FC = $MPIF90/g' SLmake.inc"
-pack_set --command "$tmp 's/CC[[:space:]]*=.*/CC = $MPICC/g' SLmake.inc"
-pack_set --command "$tmp 's/NOOPT[[:space:]]*=.*/NOOPT = -fPIC/g' SLmake.inc"
-pack_set --command "$tmp 's/FCFLAGS[[:space:]]*=.*/FCFLAGS = $FCFLAGS/g' SLmake.inc"
-pack_set --command "$tmp 's/CCFLAGS[[:space:]]*=.*/CCFLAGS = $CFLAGS/g' SLmake.inc"
-pack_set --command "$tmp 's/ARCH[[:space:]]*=.*/ARCH = $AR/g' SLmake.inc"
+file=SLmake.inc
+pack_set --command "cp $file.example $file"
+pack_set --command "$tmp 's/FC[[:space:]]*=.*/FC = $MPIF90/g' $file"
+pack_set --command "$tmp 's/CC[[:space:]]*=.*/CC = $MPICC/g' $file"
+pack_set --command "$tmp 's/NOOPT[[:space:]]*=.*/NOOPT = -fPIC/g' $file"
+pack_set --command "$tmp 's/FCFLAGS[[:space:]]*=.*/FCFLAGS = $FCFLAGS/g' $file"
+pack_set --command "$tmp 's/CCFLAGS[[:space:]]*=.*/CCFLAGS = $CFLAGS/g' $file"
+pack_set --command "$tmp 's/ARCH[[:space:]]*=.*/ARCH = $AR/g' $file"
 
 if [ $(pack_installed atlas) -eq 1 ]; then
     pack_set --command "module load" \
 	--command-flag "$(pack_get --module-requirement atlas)" \
 	--command-flag "$(pack_get --module-name atlas)"
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|g' SLmake.inc"
-    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|g' SLmake.inc"
+    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|g' $file"
+    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|g' $file"
 
 else
     pack_set --command "module load" \
 	--command-flag "$(pack_get --module-requirement blas lapack)" \
 	--command-flag "$(pack_get --module-name blas lapack)"
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath blas) -lblas|g' SLmake.inc"
+    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath blas) -lblas|g' $file"
     
-    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath lapack) -llapack|g' SLmake.inc"
+    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath lapack) -llapack|g' $file"
     
 fi
 

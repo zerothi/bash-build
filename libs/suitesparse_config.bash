@@ -60,8 +60,8 @@ elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 
-	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lf77blas -lcblas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -llapack_atlas|' $mk"
+	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|' $mk"
+	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|' $mk"
     else
 	pack_set --module-requirement lapack
 	pack_set --module-requirement blas

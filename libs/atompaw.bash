@@ -20,6 +20,9 @@ if $(is_c gnu) ; then
 elif $(is_c intel) ; then
     tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential"
 
+else
+    doerr AtomPAW "Could not determine compiler..."
+
 fi
 
 pack_set --command "./configure" \
