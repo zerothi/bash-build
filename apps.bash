@@ -5,6 +5,9 @@ source applications/siesta-stable.bash
 source applications/siesta-dev.bash
 source applications/siesta-mattias.bash
 source applications/siesta-scf.bash
+if $(is_host surt slid muspel) ; then
+    source applications/siesta-trunk-scf.bash
+fi
 
 source applications/lammps.bash
 

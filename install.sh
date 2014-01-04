@@ -53,7 +53,11 @@ export LMOD_IGNORE_CACHE=1
 source helpers.bash
 
 # Install the lua-libraries
-source lua/lua.bash
+if $(is_host slid muspel slid ) ; then
+    msg_install --message "Will not install LUA libraries on niflheim..."
+else
+    source lua/lua.bash
+fi
 
 # Install all libraries
 source libs.bash
