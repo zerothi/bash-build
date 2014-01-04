@@ -49,6 +49,9 @@ fi
 # We can always set the env-variable of LMOD
 export LMOD_IGNORE_CACHE=1
 
+# Vendor libraries do not depend on anything...
+source vendor.bash
+
 # Install the helper
 source helpers.bash
 

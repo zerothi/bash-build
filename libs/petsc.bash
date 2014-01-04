@@ -6,10 +6,8 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libpetsc.so
 
-pack_set --module-requirement openmpi \
-    --module-requirement parmetis \
-    --module-requirement fftw-3 \
-    --module-requirement hdf5
+pack_set \
+    $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
 
 tmp=''
 if $(is_c intel) ; then
@@ -88,10 +86,9 @@ pack_set --command "make"
 pack_set --command "make install"
 
 # This tests the installation (i.e. linking)
-pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) test"
+pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) PETSC_ARCH= test"
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
 
 # Clean up the unused module
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/modules"
-

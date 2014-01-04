@@ -21,7 +21,7 @@ if $(is_c gnu) ; then
 	tmp_lib="-llapack -lblas"
     fi
 elif $(is_c intel) ; then
-    tmp_lib="-mkl=sequential"
+    tmp_lib="-mkl=cluster"
 
 else
     doerr slepc "Could not determine compiler..."
@@ -36,7 +36,7 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "LIBS='$tmp_ld $tmp_lib'" \
     --command-flag "AR=$AR" \
     --command-flag "RANLIB=ranlib" \
-    --command-flag "./configure SLEPC_DIR=\$(pwd)" \
+    --command-flag "./configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-arpack" \
     --command-flag "--with-arpack-dir=$(pack_get --install-prefix parpack)/lib" \
@@ -45,18 +45,19 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
 # Set the arch of the build (sets the directory...)
 pack_set --command "export PETSC_ARCH=arch-installed-petsc"
 pack_set --command "export SLEPC_DIR=\$(pwd)"
-pack_set --command "make $(get_make_parallel)"
+pack_set --command "make"
 
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"
 
 pack_set --command "make install"
 
-# This tests the installation (i.e. linking)
-pack_set --command "make SLEPC_DIR=$(pack_get --install-prefix) test"
-
+# Unset architecture...
 pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
+
+# This tests the installation (i.e. linking)
+pack_set --command "make SLEPC_DIR=$(pack_get --install-prefix) test"
 
 pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --install-prefix)"
 

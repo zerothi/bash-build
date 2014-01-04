@@ -1,8 +1,5 @@
 msg_install --message "Installing all libraries..."
 
-# these should be VENDOR specific libraries
-source libs/acml.bash
-
 source libs/hwloc.bash
 
 # Library used by MANY packages
