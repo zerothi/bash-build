@@ -1,6 +1,6 @@
 for c in gfortran ifort ; do
 v=5-3-1
-add_package --build generic \
+add_package --build vendor \
     --version ${v//-/.} \
     --package acml \
     --alias acml-install \
@@ -29,7 +29,7 @@ tmp=${tmp//ifort/intel}
 [ -n "$directive" ] && tmp=${tmp}-$directive
 [ -n "$mp" ] && tmp=${tmp}-$mp
 
-add_package --build generic \
+add_package --build vendor \
     --version ${v//-/.} \
     --alias acml-$tmp \
     --package acml \

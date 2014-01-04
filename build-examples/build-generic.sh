@@ -24,3 +24,12 @@ new_build --name generic-empty \
     --source source-generic.sh \
     --build-module-path "--package" \
     --build-installation-path ""
+
+# Create a vendor buld
+new_build --name vendor \
+    --installation-path /opt/vendor \
+    --module-path /opt/modules-vendor \
+    --build-path .compile \
+    --source source-generic.sh \
+    --build-module-path "--package --version" \
+    --build-installation-path "--package --version"

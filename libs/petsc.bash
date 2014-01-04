@@ -2,7 +2,7 @@ add_package --package petsc \
     --directory petsc-3.4.3 \
     http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.4.3.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libpetsc.so
 
@@ -67,7 +67,10 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
 
 #    --command-flag "--with-mumps=1" \
 #    --command-flag "--with-mumps-lib='$(list --LDFLAGS --Wlrpath mumps) -lzmumps -ldmumps -lmumps_common -lpord'" \
-#--command-flag "--with-mumps-include=$(pack_get --install-prefix mumps)/include"
+#    --command-flag "--with-mumps-include=$(pack_get --install-prefix mumps)/include" \
+#    --command-flag "--with-ptscotch=1" \
+#    --command-flag "--with-ptscotch-lib='$(list --LDFLAGS --Wlrpath scotch) -lptscotch'" \
+#    --command-flag "--with-ptscotch-include=$(pack_get --install-prefix scotch)/include"
 
 #    --command-flag "--with-superlu_dist=1" \
 #    --command-flag "--with-superlu_dist-dir=$(pack_get --install-prefix superlu)" \
@@ -92,3 +95,5 @@ pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
 
 # Clean up the unused module
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/modules"
+
+pack_install
