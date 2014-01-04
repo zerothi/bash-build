@@ -2,7 +2,7 @@ add_package --package petsc \
     --directory petsc-3.4.3 \
     http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.4.3.tar.gz
 
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libpetsc.so
 
@@ -83,9 +83,8 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
 #    --command-flag "--with-netcdf=1" \
 #    --command-flag "--with-netcdf-dir=$(pack_get --install-prefix netcdf)" \
 
-
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_set --command "make"
 pack_set --command "make install"
 
 # This tests the installation (i.e. linking)
@@ -96,4 +95,3 @@ pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
 # Clean up the unused module
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/modules"
 
-pack_install
