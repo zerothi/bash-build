@@ -1,8 +1,7 @@
 msg_install --message "Installing all libraries..."
 
+# Basic libraries
 source libs/hwloc.bash
-
-# Library used by MANY packages
 source libs/openmpi-hpc.bash
 
 #source libs/gmp.bash
