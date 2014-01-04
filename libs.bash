@@ -2,6 +2,9 @@ msg_install --message "Installing all libraries..."
 
 source libs/hwloc.bash
 
+# ACML library... as generic as it gets
+source libs/acml.bash
+
 # Library used by MANY packages
 source libs/openmpi-hpc.bash
 

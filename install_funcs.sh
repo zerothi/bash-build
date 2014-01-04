@@ -1280,6 +1280,8 @@ EOF
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
 	"$(_module_fmt_routine --prepend-path PATH $path/bin)"
+    _add_module_if -X -d "$path" $mfile \
+	"$(_module_fmt_routine --prepend-path PATH $path)"
     _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
 	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib/pkgconfig)"
     _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
@@ -1287,10 +1289,10 @@ EOF
     _add_module_if -F $force -d "$path/man" $mfile \
 	"$(_module_fmt_routine --prepend-path MANPATH $path/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
-#    _add_module_if -F $force -d "$path/lib" $mfile \
-#       "$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
-#    _add_module_if -F $force -d "$path/lib64" $mfile \
-#       "$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
+    #_add_module_if -F $force -d "$path/lib" $mfile \
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
+ #   _add_module_if -F $force -d "$path/lib64" $mfile \
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python)"
     for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
@@ -1396,11 +1398,13 @@ export __add_module_if_T=0.0
 function _add_module_if {
     local time=$(add_timing)
     local d="";local f="" ;local F=0;
-    while getopts ":d:f:F:h" opt; do
+    local X=0
+    while getopts ":d:f:F:Xh" opt; do
 	case $opt in
             d)  d="$OPTARG" ;;
             f)  f="$OPTARG" ;;
             F)  F="$OPTARG" ;;
+	    X)  X=1 ;;
             h)  _add_module_if_usage 0 ;;
             \?) echo "Invalid option: -$OPTARG"
 		_add_module_if_usage 1 ;;
@@ -1411,7 +1415,19 @@ function _add_module_if {
     local mf="$1" ; shift
     local check=""
     [ -n "$d" ] && check=$d ; [ -n "$f" ] && check=$f
-    [ "$F" -ne "0" ] && check=$HOME # Force the check to succed
+    if [ $X -eq 1 ]; then
+	# we have expressed that this module should be created
+	# if there are any executables in the directory...
+	local keep=0
+	for lf in $check/* ; do
+	    if [ -x $lf ] && [ ! -d $lf ]; then
+		keep=1
+	    fi
+	done
+	[ $keep -eq 0 ] && check=/directory/does/not/exist
+    else
+	[ "$F" -ne "0" ] && check=$HOME # Force the check to succeed
+    fi
     if [ -e $check ]; then
 	cat <<EOF >> $mf
 $@

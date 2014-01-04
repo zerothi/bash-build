@@ -45,6 +45,7 @@ fi
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
+
 # We can always set the env-variable of LMOD
 export LMOD_IGNORE_CACHE=1
 

@@ -14,9 +14,11 @@ tmp_lib=
 
 if $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
 	tmp_lib="-lf77blas -lcblas -latlas"
     else
+	pack_set --module-requirement lapack --module-requirement blas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath lapack blas)"
 	tmp_lib="-llapack -lblas"
     fi
@@ -25,10 +27,10 @@ elif $(is_c intel) ; then
 
 fi
 
-pack_set --command "CC=$MPICC CFLAGS='$CFLAGS $tmp_ld'" \
-    --command-flag "CXX=$MPICXX CXXFLAGS='$CFLAGS $tmp_ld'" \
-    --command-flag "FC=$MPIF90 FCFLAGS='$FCFLAGS $tmp_ld'" \
-    --command-flag "F77=$MPIF77 FFLAGS='$FFLAGS $tmp_ld'" \
+pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
+    --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS'" \
+    --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS'" \
+    --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld $tmp_lib'" \
     --command-flag "AR=$AR" \
@@ -37,20 +39,21 @@ pack_set --command "CC=$MPICC CFLAGS='$CFLAGS $tmp_ld'" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-arpack" \
     --command-flag "--with-arpack-dir=$(pack_get --install-prefix parpack)/lib" \
-    --command-flag "--with-arpack-flags='-lparpack -larpack $tmp_lib'"
+    --command-flag "--with-arpack-flags='-lparpack -larpack'"
 
 # Set the arch of the build (sets the directory...)
 pack_set --command "export PETSC_ARCH=arch-installed-petsc"
 pack_set --command "export SLEPC_DIR=\$(pwd)"
-pack_set --command "make"
-
-pack_set --command "make install"
+pack_set --command "make $(get_make_parallel)"
 
 pack_set --command "make test"
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"
 
+pack_set --command "make install"
+
 pack_set --command "unset PETSC_DIR"
 pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
 
+pack_install
