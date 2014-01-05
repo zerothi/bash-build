@@ -1,5 +1,6 @@
 v=1.9.1
 add_package \
+    --build generic \
     --no-default-modules \
     --package vmd \
     --version $v \
@@ -27,9 +28,9 @@ pack_install
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
+    -n "Nick Papior Andersen's script for loading $(pack_get --package)" \
     -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
+    -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias)
