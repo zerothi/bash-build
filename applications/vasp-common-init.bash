@@ -31,7 +31,7 @@ FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
      -DCACHE_SIZE=5000 -Davoidalloc \\\\\n\
-     -DMPI_BLOCK=8000 -Duse_collective -DscaLAPACK \\\\\n\
+     -DMPI_BLOCK=60000 -Duse_collective -DscaLAPACK \\\\\n\
      -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\
 FREE = -FR \n\
