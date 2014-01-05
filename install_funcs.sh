@@ -401,7 +401,7 @@ function add_package {
     [ -z "$fn" ] && fn=$(basename $url)
     _archive[$_N_archives]=$fn
     # Save the type of archive
-    local ext=$(_ps $fn | awk -F. '{print $NF}')
+    local ext=${fn##*.}
     _ext[$_N_archives]=$ext
     # Infer what the directory is
     local archive_d=${fn%.*tar.$ext}

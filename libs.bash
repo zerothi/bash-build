@@ -18,6 +18,10 @@ source libs/blas.bash
 source libs/cblas.bash
 source libs/lapack.bash
 source libs/atlas.bash
+
+# ATLAS needs to be installed prematurely...
+install_all --from hwloc
+
 source libs/scalapack.bash
 source libs/plasma.bash
 source libs/arpack.bash
@@ -56,7 +60,7 @@ source libs/superlu.bash
 source libs/petsc.bash
 source libs/slepc.bash
 
-install_all --from hwloc
+install_all --from scalapack
 
 # Libraries for DFT
 source libs/libxc.bash

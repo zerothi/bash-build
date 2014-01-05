@@ -53,10 +53,17 @@ function var_spec {
 	esac
         # We add field separators
 	if [ $v -eq 1 ]; then
-	    opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')"
+        opt=${1%%\[*}
+	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')"
 	    _ps "${opt// /}"
 	elif [ $v -eq 2 ]; then
-	    opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
+        if [ "${1:${#1}-1}" == "]" ]; then
+            opt=${1##*\[}
+            opt=${opt//\]/}
+        else
+            opt=""
+        fi
+	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
 	    _ps "${opt// /}"
 	fi
 	shift

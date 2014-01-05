@@ -15,8 +15,8 @@ fi
 pack_set --module-opt "--lua-family siesta"
 
 # Fix the __FILE__ content in the classes
-pack_set --command "for f in Src/class* ; do sed -i -e 's:__FILE__:\"\$f\":g' \$f ; done"
-pack_set --command "sed -i -e 's:__FILE__:Fstack:g' Fstack.T90"
+pack_set --command 'for f in Src/class* ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
+pack_set --command "sed -i -e 's:__FILE__:Fstack.T90:g' Src/Fstack.T90"
 
 # Change to directory:
 pack_set --command "cd Obj"

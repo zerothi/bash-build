@@ -13,7 +13,8 @@ pack_set --module-opt "--lua-family bigdft"
 pack_set --install-query $(pack_get --install-prefix)/bin/bigdft
 
 pack_set --module-requirement openmpi \
-    --module-requirement etsf_io
+    --module-requirement etsf_io \
+    --module-requirement libxc
 
 tmp=
 if $(is_c gnu) ; then
@@ -31,7 +32,7 @@ if $(is_c gnu) ; then
     fi
 
 elif $(is_c intel) ; then
-    tmp="--with-ext-linalg='-lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel'"
+    tmp="--with-ext-linalg='-mkl=cluster -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64'"
     tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
 
 else
@@ -47,7 +48,8 @@ pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
     --command-flag "--disable-internal-libxc" \
     --command-flag "--with-etsf-io" \
     --command-flag "--with-etsf-io-path=$(pack_get --install-prefix etsf_io)" \
-    --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "--with-netcdf-path=$(pack_get --install-prefix netcdf)" \
+    --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--with-libxc-libs='$(list --LDFLAGS --Wlrpath libxc) -lxc'" \
     --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
     --command-flag "$tmp"

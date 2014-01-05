@@ -40,5 +40,5 @@ pack_set --command "cd .."
 pack_set --command "ranlib liblapack.a"
 pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
 
-pack_install
 done
+

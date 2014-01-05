@@ -1,3 +1,5 @@
+# Sadly, VASP only runs on Intel compiler...
+if $(is_c intel) ; then
 for v in 5.3.3 ; do
 add_package \
     --package vasp \
@@ -17,3 +19,5 @@ INCS    = -I$(pack_get --install-prefix fftw-3)/include' $file"
 source applications/vasp-common-end.bash
 
 done
+fi
+
