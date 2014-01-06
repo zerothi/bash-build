@@ -1318,7 +1318,7 @@ set ModulesVersion $(basename $mfile)
 EOF
 		;;
 	    LUA)
-		pushd $(dirname $mfile)
+		pushd $(dirname $mfile) 1> /dev/null
 		ln -s $(basename $mfile) default
 		popd 1> /dev/null 
 		;;
