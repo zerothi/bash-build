@@ -1,9 +1,12 @@
-if [ ! -z "$MKL_PATH" ] ; then
-add_package fftw_intel-3.local
+if ! $(is_c intel) ; then
+    return 0
+fi
+add_package --build vendor-intel \
+    --version 3 \
+    fftw_intel-3.local
 
 pack_set --directory .
-pack_set --version 3
-pack_set --host-reject thul
+pack_set --host-reject surt --host muspel --host-reject slid
 
 # Notice that we install this along with fftw2 from intel
 # The names are not overlapping, hence we do not need
@@ -46,4 +49,3 @@ pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get -
 
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
 
-fi

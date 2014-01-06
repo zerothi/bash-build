@@ -1,8 +1,13 @@
-if [ ! -z "$MKL_PATH" ] ; then
-add_package --package fftw --version intel fftw-2.local
+if ! $(is_c intel) ; then
+    return 0
+fi
+add_package --build vendor-intel \
+    --package fftw \
+    --version intel \
+    fftw-2.local
 
 pack_set --directory .
-pack_set --host-reject surt muspel slid
+pack_set --host-reject surt --host-reject muspel --host-reject slid
 
 pack_set -s $IS_MODULE
 
@@ -68,5 +73,3 @@ pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get -
 pack_set --command "cd $(pack_get --install-prefix)"
 # Needs to be a softlink!
 pack_set --command "ln -fs $MKL_PATH/include/fftw include"
-
-fi

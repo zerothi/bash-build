@@ -17,6 +17,14 @@ mkdir -p $(build_get --module-path[intel])-npa-apps
 
 build_set --default-module-version
 FORCEMODULE=1
-build_set --module-format LUA
+]build_set --module-format LUA
+
+tmp=$(get_c)
+new_build --name vendor-intel \
+    --installation-path /opt/vendor \
+    --module-path /opt/modules-vendor \
+    --source source-intel.sh \
+    --build-module-path "--package --version ${tmp//intel-/}" \
+    --build-installation-path "--package --version ${tmp//intel-/}"
 
 source build-generic.sh
