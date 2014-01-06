@@ -713,13 +713,12 @@ function install_all {
 
 # Install the package
 function pack_install {
-    local mod_reqs="" ; local mod_reqs_paths
+    local mod_reqs="" ; local mod_reqs_paths=""
     do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
     fi
-
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
@@ -762,7 +761,7 @@ function pack_install {
 
     # Make sure that every package before is installed...
     for tmp in $mod_reqs ; do
-	[ -z "$tmp" ] && break
+	[ -z "${tmp// /}" ] && break
 	tmp_idx=$(get_index $tmp)
 	if [ $(pack_get --installed $tmp_idx) -eq 0 ]; then
 	    pack_install $tmp_idx
