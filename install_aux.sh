@@ -84,6 +84,14 @@ function str_version {
     local str="${1// /}"
     # Check which type of versioning we have
     case $str in
+	*.*.*.*)
+	    Mv="${str%.*.*.*}"
+	    str="${str#*.}"
+	    mv="${str%.*.*}"
+	    str="${str#*.}"
+	    rv="${str%.*}"
+	    fourth="${str#*.}"
+	    ;;
 	*.*.*)
 	    Mv="${str%.*.*}"
 	    str="${str#*.}"
@@ -113,6 +121,10 @@ function str_version {
 	    [ -z "$rv" ] && \
 		doerr "$str" "Unknown type of version string"	
 	    _ps "$rv" ;;
+	-4)
+	    [ -z "$fourth" ] && \
+		doerr "$str" "Unknown type of version string"	
+	    _ps "$fourth" ;;
 	*)
 	    doerr "$opt" "Unknown print-out of version"
     esac	    

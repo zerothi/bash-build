@@ -6,6 +6,11 @@ pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
 pack_set --module-requirement openmpi --module-requirement netcdf-serial
 
+if [ $(vrs_cmp $(pack_get --version) "3.2") -lt 0 ]; then
+    pack_set --host-reject zero \
+	--host-reject ntch
+fi
+
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
 
