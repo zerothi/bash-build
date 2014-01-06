@@ -1320,7 +1320,7 @@ EOF
 	    LUA)
 		pushd $(dirname $mfile)
 		ln -s $(basename $mfile) default
-		popd
+		popd 1> /dev/null 
 		;;
 	esac
     fi
