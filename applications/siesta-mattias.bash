@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
-pack_set --host-reject zerothi
+pack_set --host-reject zero --host-reject ntch
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"

@@ -9,6 +9,8 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family inelastica"
 
+pack_set --host-reject ntch --host-reject zero
+
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 
 pack_set --module-requirement netcdf-serial \
