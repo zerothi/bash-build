@@ -256,10 +256,8 @@ function dwn_file {
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix
-export _list_T=0.0
 function list {
     do_debug --enter list
-    local time=$(add_timing)
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
     # First we collect all options
@@ -304,7 +302,6 @@ function list {
 		suf="/include" 
 		lcmd="pack_get --install-prefix " ;;
 	    *)
-		[ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
 	for cmd in $args ; do
@@ -325,7 +322,6 @@ function list {
 	done
     fi
     _ps "$retval"
-    [ $TIMING -ne 0 ] && export _list_T=$(add_timing $_list_T $time)
     do_debug --return list
 }
 
