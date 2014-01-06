@@ -56,7 +56,7 @@ source vendor.bash
 source helpers.bash
 
 # Install the lua-libraries
-if $(is_host slid muspel slid ) ; then
+if $(is_host slid muspel slid n-) ; then
     msg_install --message "Will not install LUA libraries on niflheim..."
 else
     source lua/lua.bash
