@@ -79,7 +79,7 @@ _archives="$(pwd)/.archives"
 
 # Denote how the module paths and installation paths should be
 function build_set {
-    do_debug --enter build_set
+    [ $DEBUG -ne 0 ] && do_debug --enter build_set
     # We set up default parameters for creating the 
     # default package directory
     local def_mod_first=1
@@ -170,12 +170,12 @@ function build_set {
 	    *) doerr "$opt" "Not a recognized option for build_set" ;;
 	esac
     done
-    do_debug --return build_set
+    [ $DEBUG -ne 0 ] && do_debug --return build_set
 }
 
 # Retrieval of different variables
 function build_get {
-    do_debug --enter build_get
+    [ $DEBUG -ne 0 ] && do_debug --enter build_get
     # We set up default parameters for creating the 
     # default package directory
     local opt=$(trim_em $1)
@@ -200,7 +200,7 @@ function build_get {
 	-source) _ps "${_b_source[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get" ;;
     esac
-    do_debug --return build_get
+    [ $DEBUG -ne 0 ] && do_debug --return build_get
 }
 
 function new_build {
@@ -351,7 +351,7 @@ function pack_list {
 
 # $1 http path
 function add_package {
-    do_debug --enter add_package
+    [ $DEBUG -ne 0 ] && do_debug --enter add_package
     _N_archives=$(( _N_archives + 1 ))
     # Collect options
     local d="" ; local v=""
@@ -452,12 +452,12 @@ function add_package {
     _only_host[$_N_archives]=""
 
     msg_install --message "Added $package[$v] to the install list"
-    do_debug --return add_package
+    [ $DEBUG -ne 0 ] && do_debug --return add_package
 }
 
 # This function allows for setting data related to a package
 function pack_set {
-    do_debug --enter pack_set
+    [ $DEBUG -ne 0 ] && do_debug --enter pack_set
     local index=$_N_archives # Default to this
     local alias="" ; local version="" ; local directory=""
     local settings="0" ; local install="" ; local query=""
@@ -552,13 +552,13 @@ function pack_set {
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
-    do_debug --return pack_set
+    [ $DEBUG -ne 0 ] && do_debug --return pack_set
 }
 
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
 function pack_get {
-    do_debug --enter pack_get
+    [ $DEBUG -ne 0 ] && do_debug --enter pack_get
     local opt="$(trim_em $1)" # Save the option passed
     case $opt in
 	-*) ;;
@@ -657,7 +657,7 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
-    do_debug --return pack_get
+    [ $DEBUG -ne 0 ] && do_debug --return pack_get
 }
 
 function pack_installed {
@@ -714,7 +714,7 @@ function install_all {
 # Install the package
 function pack_install {
     local mod_reqs="" ; local mod_reqs_paths=""
-    do_debug --enter pack_install
+    [ $DEBUG -ne 0 ] && do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
@@ -733,7 +733,7 @@ function pack_install {
     if [ $(pack_get --installed $idx) -eq 1 ]; then
 	msg_install --already-installed $idx
 	if [ $FORCEMODULE -eq 0 ]; then
-	    do_debug --return pack_install
+	    [ $DEBUG -ne 0 ] && do_debug --return pack_install
 	    return 0
 	fi
     fi
@@ -778,7 +778,7 @@ function pack_install {
 	# Notify other required stuff that this can not be installed.
 	pack_set --installed -1 $idx
 	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
-	do_debug --return pack_install
+	[ $DEBUG -ne 0 ] && do_debug --return pack_install
 	return 1
     fi
 
@@ -904,13 +904,13 @@ function pack_install {
 		-P "$(pack_get --install-prefix $idx)" $reqs $(pack_get --module-opt $idx)
 	fi
     fi
-    do_debug --return pack_install
+    [ $DEBUG -ne 0 ] && do_debug --return pack_install
 }
 
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
 function get_index {
-    #do_debug --enter get_index
+    #[ $DEBUG -ne 0 ] && do_debug --enter get_index
     local var=_index
     local i ; local lookup ; local all=0
     while [ $# -gt 1 ]; do
@@ -933,7 +933,7 @@ function get_index {
 	[ "$name" -gt "$_N_archives" ] && return 1
 	[ "$name" -lt 0 ] && return 1
 	_ps "$name"
-	#do_debug --return get_index
+	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 0
     fi
     # Do full expansion.
@@ -941,13 +941,13 @@ function get_index {
     i=0
     #echo $idx
     if [ -z "$idx" ]; then
-	do_debug --msg "We did not find the requested: $name"
-	#do_debug --return get_index
+	[ $DEBUG -ne 0 ] && do_debug --msg "We did not find the requested: $name"
+	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 1
     fi
     if [ $all -eq 1 ]; then
 	_ps "$idx"
-	#do_debug --return get_index
+	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 0
     else
 	local v=""
@@ -980,13 +980,13 @@ function get_index {
 		    fi
 		fi
 		_ps "$i"
-		#do_debug --return get_index
+		#[ $DEBUG -ne 0 ] && do_debug --return get_index
 		return 0
 	    fi
 	done
     done
     #doerr "$name" "Could not find the archive in the list..."
-    #do_debug --return get_index
+    #[ $DEBUG -ne 0 ] && do_debug --return get_index
     return 1
 }
 
@@ -1023,7 +1023,7 @@ function get_make_parallel {
 #   -H <help message> 
 #   -W <what is message>
 function create_module {
-    do_debug --enter create_module
+    [ $DEBUG -ne 0 ] && do_debug --enter create_module
     local name;local version;local path; local help; local whatis; local opt
     local env="" ; local tmp=""
     local mod_path=""
@@ -1083,13 +1083,13 @@ function create_module {
     for mod in $require $load ; do
 	[ -z "${mod// /}" ] && continue
 	[ $(pack_get --installed $mod) -eq 1 ] && continue
-        do_debug --return create_module
+        [ $DEBUG -ne 0 ] && do_debug --return create_module
 	return 1
     done
     
     # If the file exists simply return
     if [ -e "$mfile" ] && [ 0 -eq $force ]; then
-        do_debug --return create_module
+        [ $DEBUG -ne 0 ] && do_debug --return create_module
         return 0
     fi
 
@@ -1324,7 +1324,7 @@ EOF
 		;;
 	esac
     fi
-    do_debug --return create_module
+    [ $DEBUG -ne 0 ] && do_debug --return create_module
 }
 
 # Returns the module specific routine call

@@ -8,11 +8,13 @@ pack_set --module-requirement lua
 pack_set --install-query $(pack_get --install-prefix lua)/lib/lua/$lua_V/complex.so
 
 # Configure the package
-pack_set --command "sed -i -e '/^LUA/{d}' Makefile"
+file=Makefile
+pack_set --command "sed -i -e '/^LUA/{d}' $file"
+pack_set --command "sed -i -e 's:^CFLAGS[ ]*=:CFLAGS = $CFLAGS:gi' $file"
 pack_set --command "sed -i -e '$ aLUA=$(pack_get --install-prefix lua)\n\
 LUAINC=\$(LUA)/include\n\
 LUALIB=\$(LUA)/lib\n\
-LUABIN=\$(LUA)/bin' Makefile"
+LUABIN=\$(LUA)/bin' $file"
 
 pack_set --command "make all"
 

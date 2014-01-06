@@ -3,10 +3,10 @@
 #  automake
 
 add_package --build generic \
-    --archive lua-posix-5.1.29.tar.gz \
-    --version 5.1.29 \
-    --directory luaposix-release-v29 \
-    https://github.com/luaposix/luaposix/archive/release-v29.tar.gz
+    --archive lua-posix-5.1.31.tar.gz \
+    --version 5.1.31 \
+    --directory luaposix-release-v31 \
+    https://github.com/luaposix/luaposix/archive/release-v31.tar.gz
 
 pack_set --module-requirement lua
 
