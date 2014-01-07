@@ -2,12 +2,11 @@
 # different libraries.
 
 # Default debugging variables
-[ -z "$TIMING" ] && TIMING=0
 _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 
-if [ "${BASH_VERSION:0:1}" -lt "4" ]; then
+if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
 fi
 

@@ -15,8 +15,6 @@ unset tmp
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
-TIMING=1
-
 # Use ln to link to this file
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
@@ -74,6 +72,9 @@ source default.bash
 
 # We have installed all libraries needed for doing application installs
 source scripts.bash
+
+msg_install --message "Finished installing all applications..."
+
 
 # When dealing with additional sets of instructions spec files
 # can come in handy.

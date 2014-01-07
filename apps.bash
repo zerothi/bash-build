@@ -15,31 +15,8 @@ source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
 source applications/vmd.bash
-
-# DFT codes
-source applications/dftb.bash
-source applications/qespresso.bash
-source applications/wannier.bash
-source applications/gulp.bash
-source applications/dftd3.bash
-
-# Needs to be installed AFTER wannier90 :)
-source applications/vasp.bash
-source applications/vasp-intel.bash
-source applications/vasp-potcar.bash
-
-# The OpenMX DFT code (has a NEGF routine)
-source applications/openmx.bash
-source applications/openmx-pseudo.bash
-
-source applications/bigdft.bash
-source applications/abinit.bash
-
-# Specfial photonics applications
-source applications/mpb.bash # [gmp,libunistring,guile]
-source applications/mpb-serial.bash # [gmp,libunistring,guile]
-source applications/meep.bash # [gmp,libunistring,guile]
-source applications/meep-serial.bash # [gmp,libunistring,guile]
+source applications/gdis.bash
+source applications/povray.bash
 
 # Create a module with default all plotting tools
 create_module \
@@ -48,9 +25,28 @@ create_module \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \
-    -RL gnuplot \
-    $(list --prefix '-RL ' molden grace xcrysden)
+    $(list --prefix '-RL ' gnuplot molden grace xcrysden)
 
-source applications/gdis.bash
-source applications/povray.bash
+# DFT codes
+source applications/dftb.bash
+source applications/qespresso.bash
+source applications/wannier.bash
+source applications/gulp.bash
+source applications/dftd3.bash
+# The OpenMX DFT code (has a NEGF routine)
+source applications/openmx.bash
+source applications/openmx-pseudo.bash
+source applications/bigdft.bash
+source applications/abinit.bash
+
+# Needs to be installed AFTER wannier90 :)
+source applications/vasp.bash
+source applications/vasp-intel.bash
+source applications/vasp-potcar.bash
+
+# Specfial photonics applications
+source applications/mpb.bash # [gmp,libunistring,guile]
+source applications/mpb-serial.bash # [gmp,libunistring,guile]
+source applications/meep.bash # [gmp,libunistring,guile]
+source applications/meep-serial.bash # [gmp,libunistring,guile]
 
