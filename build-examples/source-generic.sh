@@ -10,7 +10,6 @@ F90=gfortran
 FC=gfortran
 common_flags="-m64 -fPIC -O2"
 CFLAGS="$common_flags"
-CPPFLAGS="$common_flags"
 FCFLAGS="$common_flags -fno-second-underscore"
 FFLAGS="$common_flags -fno-second-underscore"
 

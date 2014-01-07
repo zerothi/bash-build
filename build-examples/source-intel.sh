@@ -13,7 +13,6 @@ F90=ifort
 FC=ifort
 common_flags="-m64 -fPIC -O3 -xHost -prec-div -prec-sqrt -opt-prefetch"
 CFLAGS="$common_flags"
-CPPFLAGS="$common_flags"
 FCFLAGS="$common_flags"
 FFLAGS="$common_flags"
 
