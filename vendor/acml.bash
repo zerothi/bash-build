@@ -32,10 +32,19 @@ pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get
 
 pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
 
+if $(is_host ntch zero) ; then
+    # These machines at least does not have fma4, so delete it!
+    pack_set --command "rm -rf $(pack_get --install-prefix)/${c}64_fma4"
+    pack_set --command "rm -rf $(pack_get --install-prefix)/${c}64_fma4_mp"
+fi
+
 pack_install
 
 # We need to create all the different modules...
 for directive in nothing fma4 ; do
+if $(is_host ntch zero) ; then
+    [ "$directive" == "fma4" ] && continue
+fi
 [ "$directive" == "nothing" ] && directive=""
 for mp in nothing mp ; do
 [ "$mp" == "nothing" ] && mp=""

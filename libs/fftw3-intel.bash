@@ -24,7 +24,7 @@ pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "install_to=$(pack_get --install-prefix)/lib" \
     --command-flag "install_as=libfftw3xc.a"
-pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj*"
 
 # Install the fortran wrappers
 # This will be 4 bytes integers
@@ -34,7 +34,7 @@ pack_set --command "make libintel64" \
     --command-flag "i8=no fname=a_name_" \
     --command-flag "install_to=$(pack_get --install-prefix)/lib" \
     --command-flag "install_as=libfftw3xf.a"
-pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj*"
 
 pack_set --command "cd $MKL_PATH/interfaces/fftw3x_cdft"
 pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
@@ -47,5 +47,5 @@ pack_set --command "make libintel64" \
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
 
-pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj"
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj*"
 
