@@ -1,5 +1,5 @@
 pack_set -s $IS_MODULE
-pack_set --host-reject ntch
+pack_set --host-reject ntch --host-reject zerothi
 pack_set --directory VASP
 
 pack_set --module-requirement openmpi
