@@ -966,27 +966,6 @@ function get_index {
     [ -z "${i// /}" ] && i=-1
     _ps "$i"
     return 0
-
-    doerr "$name" "Could not find the index in the list: $var"
-    for lookup in alias archive package ; do
-	for i in `seq 0 $_N_archives` ; do
-	    local tmp=$(pack_get --$lookup $i)
-	    if [ "x$(lc ${tmp:0:$l})" == "x$lc_name" ]; then
-		if [ ! -z "$version" ]; then
-		    if [ "$(pack_get --version $i)" != "$version" ]; then
-                        # We need to continue the loop as the version did not match...
-			continue 
-		    fi
-		fi
-		_ps "$i"
-		#[ $DEBUG -ne 0 ] && do_debug --return get_index
-		return 0
-	    fi
-	done
-    done
-    #doerr "$name" "Could not find the archive in the list..."
-    #[ $DEBUG -ne 0 ] && do_debug --return get_index
-    return 1
 }
 
 # Has setting returns 1 for success and 0 for fail
@@ -1249,8 +1228,6 @@ EOF
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
 	"$(_module_fmt_routine --prepend-path PATH $path/bin)"
-    _add_module_if -X -d "$path" $mfile \
-	"$(_module_fmt_routine --prepend-path PATH $path)"
     _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
 	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib/pkgconfig)"
     _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
@@ -1371,11 +1348,12 @@ function _add_module_if {
             f)  f="$OPTARG" ;;
             F)  F="$OPTARG" ;;
 	    X)  X=1 ;;
-            h)  _add_module_if_usage 0 ;;
+            h)  echo "Invalid option in add_module_if" 
+		exit 0 ;;
             \?) echo "Invalid option: -$OPTARG"
-		_add_module_if_usage 1 ;;
+		exit 1 ;;
             :)  echo "Option -$OPTARG requires an argument."
-		_add_module_if_usage 1 ;;
+		exit 1 ;;
 	esac
     done ; shift $((OPTIND-1)) ; OPTIND=1
     local mf="$1" ; shift
@@ -1486,7 +1464,7 @@ function _get_true_index {
 
 # Make an error and exit
 function exit_on_error {
-    if [ "$1" -ne "0" ]; then
+    if [ $1 -ne 0 ]; then
 	shift
 	doerr "$@"
     fi
@@ -1501,36 +1479,6 @@ function doerr {
         prefix="       "
     done ; exit 1
 }
-
-# Help for create_module...
-# At the moment only used internally, however
-# can be used at the end of the script to make collected modules
-function create_module_usage { 
-    local f_format="%5s%-20s%s\n"
-    echo "Usage:"
-    printf "%5s%s\n" "" "${0##*/} -<flags> [opt options]"
-    printf "  %s\n" "" "Creates a module in <name>/<sub>/<version>"
-    printf "%s\n" "" "The options:"
-    printf $f_format "" "-n" "name of the library"
-    printf $f_format "" "-v" "version of the library"
-    printf $f_format "" "-P" "the base path of the installation"     
-    printf $f_format "" "-C" "the conflicts for this module"     
-    printf $f_format "" "-R" "the requirements for this module"     
-    printf $f_format "" "-H" "the help message in the module"     
-    printf $f_format "" "-W" "the 'what-is' message"     
-    exit $1
-}
-
-function _add_module_if_usage { 
-    local f_format="%5s%-20s%s\n"
-    echo "Usage:"
-    printf "%5s%s\n" "" "${0##*/} -<flags> [opt options]"
-    printf "%s\n" "" "The options:"
-    printf $f_format "" "-d" "the directory that needs to be checked"     
-    printf $f_format "" "-f" "the file that needs to be checked"     
-    exit $1
-}
-
 
 # Update the package version number by looking at the date in the file
 function pack_set_file_version {
@@ -1551,7 +1499,6 @@ function pack_set_file_version {
 
 
 function do_debug {
-    [ $DEBUG -eq 0 ] && return 0
     local n=""
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) ; shift
