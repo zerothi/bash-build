@@ -22,7 +22,7 @@ if $(is_c gnu) ; then
     tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
     if [ $(pack_installed atlas) -eq 1 ]; then
 	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas'"
     else
 	pack_set --module-requirement blas
 	pack_set --module-requirement lapack
