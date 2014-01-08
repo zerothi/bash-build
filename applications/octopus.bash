@@ -4,6 +4,7 @@ add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --host-reject ntch-l
+pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family octopus"
 
