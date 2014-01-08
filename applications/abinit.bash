@@ -4,7 +4,7 @@
 
 add_package http://ftp.abinit.org/abinit-7.4.3.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --host-reject ntch-l
 
@@ -21,31 +21,58 @@ pack_set --module-requirement fftw-3
 # Correct mistakes in configure script...
 pack_set --command "sed -i -e 's:= call nf90:= nf90:g' ../configure"
 
-tmp_openmp=
-tmp_lib=
-tmp=
+s="sed -i"
+file=build.ac
+pack_set --command "echo '# This is Nicks build.ac for Abinit' > $file"
+
+pack_set --command "$s '$ a\
+prefix=\"$(pack_get --install-prefix)\"\n\
+#FC=\"$MPIFC\"\n\
+#CC=\"$MPICC\"\n\
+#CXX=\"$MPICXX\"\n\
+FCFLAGS=\"${FCFLAGS//-O3/-O2}\"\n\
+CFLAGS=\"${CFLAGS//-O3/-O2}\"\n\
+CXXFLAGS=\"${CXXFLAGS//-O3/-O2}\"\n\
+enable_fc_wrapper=\"no\"\n\
+enable_64bit_flags=\"yes\"\n\
+enable_lotf=\"yes\"\n\
+enable_openmp=\"yes\"\n\
+enable_mpi_inplace=\"yes\"\n\
+enable_mpi_io=\"yes\"\n\
+enable_mpi=\"yes\"\n\
+with_mpi_prefix=\"$(pack_get --install-prefix openmpi)\"\n\
+with_linalg_flavor=\"custom\"' $file"
+
 if $(is_c gnu) ; then
-    tmp_openmp="FCFLAGS_OPENMP='-fopenmp'"
     pack_set --module-requirement scalapack    
     if [ $(pack_installed atlas) -eq 1 ]; then
-	tmp="$tmp --with-linalg-incs='$(list --INCDIRS atlas)'"
-	tmp="$tmp --with-linalg-libs='$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas'"
-	tmp_lib="$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas"
+	pack_set --command "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS atlas)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas\"' $file"
+
     else
 	pack_set --module-requirement blas
 	pack_set --module-requirement lapack
-	tmp="$tmp --with-linalg-incs='$(list --INCDIRS blas lapack)'"
-	tmp="$tmp --with-linalg-libs='$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas'"
-	tmp_lib="$(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas"
+	pack_set --command "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
     fi
+    pack_set --command "$s '$ a\
+FCFLAGS_OPENMP=\"-fopenmp\"' $file"
 
 elif $(is_c intel) ; then
-    # We need to correct the configure script (it checks whether linking is done correctly!
+    # We need to correct the configure script
+    # (it checks whether linking is done correctly!)
     # STUPID, I say!
     pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp_lib="-mkl=cluster"
-    tmp_openmp="FCFLAGS_OPENMP='-openmp' FCLIBS='$tmp_lib'"
-    tmp="$tmp --with-linalg-libs='$tmp_lib'"
+    tmp="-mkl=cluster"
+    pack_set --command "$s '$ a\
+FCFLAGS_OPENMP=\"-openmp\"\n\
+FCLIBS=\"$tmp\"\n\
+LIBS=\"$tmp\"\n\
+with_linalg_libs=\"$tmp\"\n\
+#fcflags_opt_66_wfs=\"${FCFLAGS//-O3/-O1}\"\n\
+enable_hints=\"no\"' $file"
     # Ensures that the build will search for the correct MPI libraries
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
@@ -54,51 +81,61 @@ else
 
 fi
 
+# Add default libraries
+pack_set --command "$s '$ a\
+with_trio_flavor=\"etsf_io+netcdf\"\n\
+with_etsf_io_incs=\"$(list --INCDIRS etsf_io)\"\n\
+with_etsf_io_libs=\"$(list --LDFLAGS --Wlrpath etsf_io) -letsf_io -letsf_io_utils -letsf_io_low_level\"\n\
+with_netcdf_incs=\"$(list --INCDIRS netcdf)\"\n\
+with_netcdf_libs=\"$(list --LDFLAGS --Wlrpath netcdf pnetcdf hdf5 zlib) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
+with_fft_flavor=\"fftw3-mpi\"\n\
+with_fft_incs=\"$(list --INCDIRS fftw-3)\"\n\
+with_fft_libs=\"$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+
 dft_flavor=atompaw+wannier90
 if [ $(vrs_cmp $(pack_get --version libxc) 2.0.2) -ge 0 ]; then
     pack_set --module-requirement libxc
-    # The version is recent enough to use the installed library
     dft_flavor="$dft_flavor+libxc"
-    tmp="$tmp --with-libxc-incs='$(list --INCDIRS libxc)'"
-    tmp="$tmp --with-libxc-libs='$(list --LDFLAGS --Wlrpath libxc) -lxc'"
-fi
-if [ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]; then
-    pack_set --module-requirement bigdft
-    # The version is old enough to use the installed library
-    dft_flavor="$dft_flavor+bigdft"
-    tmp="$tmp --with-bigdft-incs='$(list --INCDIRS bigdft)'"
-    tmp="$tmp --with-bigdft-libs='$(list --LDFLAGS --Wlrpath bigdft) -lbigdft-1'"
+    pack_set --command "$s '$ a\
+with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
+with_libxc_libs=\"$(list --LDFLAGS --Wlrpath libxc) -lxc\"' $file"
+
 fi
 
-pack_set --command "$tmp_openmp LIBS='$tmp_lib' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
-    --command-flag "--disable-config-file --disable-fc-wrapper" \
-    --command-flag "--enable-64bit-flags" \
-    --command-flag "--enable-lotf" \
-    --command-flag "--enable-openmp" \
-    --command-flag "--enable-mpi-inplace" \
-    --command-flag "--enable-mpi --enable-mpi-io" \
-    --command-flag "--with-mpi-prefix=$(pack_get --install-prefix openmpi)" \
-    --command-flag "--with-linalg-flavor=custom" \
-    --command-flag "--with-dft-flavor=$dft_flavor" \
-    --command-flag "--with-atompaw-bins=$(pack_get --install-prefix atompaw)/bin" \
-    --command-flag "--with-atompaw-incs='$(list --INCDIRS atompaw)'" \
-    --command-flag "--with-atompaw-libs='$(list --LDFLAGS --Wlrpath atompaw) $tmp_lib'" \
-    --command-flag "--with-etsf-io-incs='$(list --INCDIRS etsf_io)'" \
-    --command-flag "--with-etsf-io-libs='$(list --LDFLAGS --Wlrpath etsf_io) -letsf_io -letsf_io_utils -letsf_io_low_level'" \
-    --command-flag "--with-netcdf-incs='$(list --INCDIRS netcdf)'" \
-    --command-flag "--with-netcdf-libs='$(list --LDFLAGS --Wlrpath netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--with-fft-flavor=fftw3-mpi" \
-    --command-flag "--with-fft-incs='$(list --INCDIRS fftw-3)'" \
-    --command-flag "--with-fft-libs='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3'" \
-    --command-flag "--with-trio-flavor=etsf_io+netcdf" \
-    --command-flag "--with-wannier90-bins=$(pack_get --install-prefix wannier90)/bin" \
-    --command-flag "--with-wannier90-incs='$(list --INCDIRS wannier90)'" \
-    --command-flag "--with-wannier90-libs='$(list --LDFLAGS --Wlrpath wannier90) -lwannier'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "$tmp"
+if [ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]; then
+    # The interface for the later versions
+    # has changed, hence we require the old-version
+    pack_set --module-requirement bigdft
+    dft_flavor="$dft_flavor+bigdft"
+    pack_set --command "$s '$ a\
+with_bigdft_incs=\"$(list --INCDIRS bigdft)\"\n\
+with_bigdft_libs=\"$(list --LDFLAGS --Wlrpath bigdft) -lbigdft-1\"' $file"
+    
+fi
+
+pack_set --command "$s '$ a\
+with_dft_flavor=\"$dft_flavor\"\n\
+with_atompaw_bins=\"$(pack_get --install-prefix atompaw)/bin\"\n\
+with_atompaw_incs=\"$(list --INCDIRS atompaw)\"\n\
+with_atompaw_libs=\"$(list --LDFLAGS --Wlrpath atompaw) -latompaw\"\n\
+with_wannier90_bins=\"$(pack_get --install-prefix wannier90)/bin\"\n\
+with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
+with_wannier90_libs=\"$(list --LDFLAGS --Wlrpath wannier90) -lwannier\"' $file"
+
+# Configure the package...
+pack_set --command "FC='$MPIFC' CC='$MPICC' CXX='$MPICXX' ../configure" \
+    --command-flag "--with-config-file=./$file"
+
+# Correct the compilation for the intel compiler
+if $(is_c intel) ; then
+    pack_set --command "sed -i -e 's:-O3:-O1:g' src/66_wfs/Makefile"
+fi
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+tmp=$(get_make_parallel)
+pack_set --command "make ${tmp//-j /mj}"
+#pack_set --command "make"
+pack_set --command "make check"
 pack_set --command "make install"
 
 pack_install
