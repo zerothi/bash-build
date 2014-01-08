@@ -22,8 +22,7 @@ tmp_openmp=
 tmp_lib=
 tmp=
 if $(is_c gnu) ; then
-    tmp_openmp="FCFLAGS_OPENMP='-fopenmp' LIBS='-fopenmp'"
-    tmp="--enable-openmp"
+    tmp_openmp="FCFLAGS_OPENMP='-fopenmp'"
     pack_set --module-requirement scalapack    
     if [ $(pack_installed atlas) -eq 1 ]; then
 	tmp="$tmp --with-linalg-incs='$(list --INCDIRS atlas)'"
@@ -41,8 +40,7 @@ elif $(is_c intel) ; then
     # We need to correct the configure script (it checks whether linking is done correctly!
     # STUPID, I say!
     pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp_openmp="FCFLAGS_OPENMP='-openmp' LIBS='-openmp'"
-    tmp="--enable-openmp"
+    tmp_openmp="FCFLAGS_OPENMP='-openmp'"
 #    tmp="$tmp --with-linalg-flavor=mkl"
     tmp="$tmp --with-linalg-libs='-mkl=cluster'"
     tmp_lib="-mkl=cluster"
@@ -71,6 +69,7 @@ fi
 pack_set --command "$tmp_openmp CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
     --command-flag "--enable-64bit-flags" \
     --command-flag "--enable-lotf" \
+    --command-flag "--enable-openmp" \
     --command-flag "--enable-mpi-inplace" \
     --command-flag "--enable-mpi --enable-mpi-io" \
     --command-flag "--with-dft-flavor=$dft_flavor" \
