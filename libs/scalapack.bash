@@ -50,7 +50,7 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp libscalapack.a $(pack_get --install-prefix)/lib/"
 
 if $(is_c intel) ; then
-    echo "Nothing to be done here."
+    echo "empty" > /dev/null
 else
 if [ $(pack_installed atlas) -eq 1 ]; then
     pack_set --command "module unload" \
