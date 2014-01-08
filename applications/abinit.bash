@@ -1,6 +1,6 @@
-if $(is_c intel) ; then
-    return 0
-fi
+#if $(is_c intel) ; then
+#    return 0
+#fi
 
 add_package http://ftp.abinit.org/abinit-7.4.3.tar.gz
 
@@ -17,6 +17,9 @@ pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
 pack_set --module-requirement wannier90
 pack_set --module-requirement fftw-3
+
+# Correct mistakes in configure script...
+pack_set --command "sed -i -e 's:= call nf90:= nf90:g' ../configure"
 
 tmp_openmp=
 tmp_lib=
@@ -40,10 +43,11 @@ elif $(is_c intel) ; then
     # We need to correct the configure script (it checks whether linking is done correctly!
     # STUPID, I say!
     pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp_openmp="FCFLAGS_OPENMP='-openmp'"
-#    tmp="$tmp --with-linalg-flavor=mkl"
-    tmp="$tmp --with-linalg-libs='-mkl=cluster'"
     tmp_lib="-mkl=cluster"
+    tmp_openmp="FCFLAGS_OPENMP='-openmp' FCLIBS='$tmp_lib'"
+    tmp="$tmp --with-linalg-libs='$tmp_lib'"
+    # Ensures that the build will search for the correct MPI libraries
+    pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
     doerr abinit "Could not determine compiler..."
@@ -66,12 +70,15 @@ if [ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]; then
     tmp="$tmp --with-bigdft-libs='$(list --LDFLAGS --Wlrpath bigdft) -lbigdft-1'"
 fi
 
-pack_set --command "$tmp_openmp CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
+pack_set --command "$tmp_openmp LIBS='$tmp_lib' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
+    --command-flag "--disable-config-file --disable-fc-wrapper" \
     --command-flag "--enable-64bit-flags" \
     --command-flag "--enable-lotf" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-mpi-inplace" \
     --command-flag "--enable-mpi --enable-mpi-io" \
+    --command-flag "--with-mpi-prefix=$(pack_get --install-prefix openmpi)" \
+    --command-flag "--with-linalg-flavor=custom" \
     --command-flag "--with-dft-flavor=$dft_flavor" \
     --command-flag "--with-atompaw-bins=$(pack_get --install-prefix atompaw)/bin" \
     --command-flag "--with-atompaw-incs='$(list --INCDIRS atompaw)'" \
