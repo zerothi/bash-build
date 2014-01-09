@@ -1,4 +1,4 @@
-v=4.3.9
+v=4.4.0
 add_package http://dust.ess.uci.edu/nco/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
