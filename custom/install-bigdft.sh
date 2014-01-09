@@ -70,4 +70,31 @@ source libs/etsf_io.bash
 
 install_all --from fftw-3
 
+# Install Python 2.7.3
+if $(is_host n-) ; then
+    add_package --package Python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+else
+    add_package --package python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+fi
+
+# The settings
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --module-requirement zlib
+
+pack_set --install-query $(pack_get --install-prefix)/bin/python
+
+# Install commands that it should run
+pack_set --command "../configure" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
+    --command-flag "--prefix=$(pack_get --install-prefix)"
+
+# Make commands
+pack_set --command "make $(get_make_parallel)"
+pack_set --command "make install"
+
+pack_install
+
+
 source applications/bigdft.bash

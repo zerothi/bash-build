@@ -4,9 +4,9 @@
 v=1.7.1
 add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.bz2
 
-pack_set -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch
+pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --module-opt "--lua-family bigdft"
 
@@ -54,8 +54,13 @@ pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
     --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
     --command-flag "$tmp"
 
+pack_set --command "rm -rf doc" # don't make the documents
+pack_set --command "sed -i -e 's: doc : :g' Makefile" # fix Makefile
+
 # Make commands
 pack_set --command "make $(get_make_parallel)"
+# It seems like there is a bug in the check call...
+#pack_set --command "make check"
 pack_set --command "make install prefix=$(pack_get --install-prefix)"
 
 pack_set --command "module unload $(pack_get --module-name python) $(pack_get --module-name-requirement python)"

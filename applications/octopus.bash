@@ -1,7 +1,7 @@
 v=4.1.2
 add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --host-reject ntch-l
 pack_set --host-reject zerothi
@@ -54,6 +54,7 @@ pack_set --command "LIBS='$(list --LDFLAGS --Wlrpath netcdf fftw-3) -lnetcdff -l
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
+pack_set --command "make check"
 pack_set --command "make install"
 
 pack_install
