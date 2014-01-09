@@ -132,8 +132,8 @@ fi
 
 # Make commands
 tmp=$(get_make_parallel)
-pack_set --command "make ${tmp//-j /mj}"
-pack_set --command "make check"
+pack_set --command "make multi multi_nprocs=${tmp//-j /}"
+pack_set --command "make check-local" # only check local tests...
 pack_set --command "make install"
 
 pack_install
