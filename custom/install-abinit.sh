@@ -59,6 +59,7 @@ source libs/scalapack.bash
 install_all --from hwloc
 
 source libs/fftw3.bash
+source libs/gsl.bash
 
 source libs/zlib.bash
 source libs/hdf5.bash

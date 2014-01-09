@@ -1,7 +1,3 @@
-#if $(is_c intel) ; then
-#    return 0
-#fi
-
 add_package http://ftp.abinit.org/abinit-7.4.3.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -13,6 +9,7 @@ pack_set --module-opt "--lua-family abinit"
 pack_set --install-query $(pack_get --install-prefix)/bin/abinit
 
 pack_set --module-requirement openmpi
+pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
 pack_set --module-requirement wannier90
@@ -27,9 +24,9 @@ pack_set --command "echo '# This is Nicks build.ac for Abinit' > $file"
 
 pack_set --command "$s '$ a\
 prefix=\"$(pack_get --install-prefix)\"\n\
-#FC=\"$MPIFC\"\n\
-#CC=\"$MPICC\"\n\
-#CXX=\"$MPICXX\"\n\
+FC=\"$MPIFC\"\n\
+CC=\"$MPICC\"\n\
+CXX=\"$MPICXX\"\n\
 FCFLAGS=\"${FCFLAGS//-O3/-O2}\"\n\
 CFLAGS=\"${CFLAGS//-O3/-O2}\"\n\
 CXXFLAGS=\"${CXXFLAGS//-O3/-O2}\"\n\
@@ -41,7 +38,10 @@ enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
 enable_mpi=\"yes\"\n\
 with_mpi_prefix=\"$(pack_get --install-prefix openmpi)\"\n\
-with_linalg_flavor=\"custom\"' $file"
+with_math_flavor=\"gsl\"\n\
+with_linalg_flavor=\"custom\"\n\
+with_math_incs=\"$(list --INCDIRS gsl)\"\n\
+with_math_libs=\"$(list --LDFLAGS --Wlrpath gsl) -lgsl\"\n' $file"
 
 if $(is_c gnu) ; then
     pack_set --module-requirement scalapack    
@@ -70,9 +70,7 @@ elif $(is_c intel) ; then
 FCFLAGS_OPENMP=\"-openmp\"\n\
 FCLIBS=\"$tmp\"\n\
 LIBS=\"$tmp\"\n\
-with_linalg_libs=\"$tmp\"\n\
-#fcflags_opt_66_wfs=\"${FCFLAGS//-O3/-O1}\"\n\
-enable_hints=\"no\"' $file"
+with_linalg_libs=\"$tmp\"\n' $file"
     # Ensures that the build will search for the correct MPI libraries
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
@@ -123,18 +121,18 @@ with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
 with_wannier90_libs=\"$(list --LDFLAGS --Wlrpath wannier90) -lwannier\"' $file"
 
 # Configure the package...
-pack_set --command "FC='$MPIFC' CC='$MPICC' CXX='$MPICXX' ../configure" \
-    --command-flag "--with-config-file=./$file"
+# We must not override the flags on the command line, it will
+# disturb the automatically added flags...
+pack_set --command "../configure --with-config-file=./$file"
 
-# Correct the compilation for the intel compiler
 if $(is_c intel) ; then
-    pack_set --command "sed -i -e 's:-O3:-O1:g' src/66_wfs/Makefile"
+    # Correct the compilation for the intel compiler
+    pack_set --command "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile"
 fi
 
 # Make commands
 tmp=$(get_make_parallel)
 pack_set --command "make ${tmp//-j /mj}"
-#pack_set --command "make"
 pack_set --command "make check"
 pack_set --command "make install"
 
