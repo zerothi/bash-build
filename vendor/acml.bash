@@ -1,6 +1,8 @@
 v=5-3-1
 
 for c in gfortran ifort open64 pgi ; do
+dc=$c
+[ "$c" == "open64" ] && dc=${c}_
 if [ "$c" == "gfortran" ]; then
     if ! $(is_c gnu) ; then
 	continue
@@ -26,16 +28,17 @@ add_package --build vendor \
     --directory ./ \
     http://www.student.dtu.dk/~nicpa/packages/acml-$v-$c-64bit.tgz
 
-pack_set --install-query $(pack_get --install-prefix)/${c}64
 
 pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get --install-prefix)"
 
 pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
 
+pack_set --install-query $(pack_get --install-prefix)/${dc}
+
 if $(is_host ntch zero) ; then
     # These machines at least does not have fma4, so delete it!
-    pack_set --command "rm -rf $(pack_get --install-prefix)/${c}64_fma4"
-    pack_set --command "rm -rf $(pack_get --install-prefix)/${c}64_fma4_mp"
+    pack_set --command "rm -rf $(pack_get --install-prefix)/${dc}64_fma4"
+    pack_set --command "rm -rf $(pack_get --install-prefix)/${dc}64_fma4_mp"
 fi
 
 pack_install
@@ -63,13 +66,12 @@ add_package --build vendor \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-prefix $(pack_get --install-prefix acml-install)
-
 # Add ./util dir to path
-pack_set --module-opt "--prepend-ENV PATH=$(pack_get --install-prefix)/util"
+pack_set --module-opt \
+    "--prepend-ENV PATH=$(pack_get --install-prefix acml-install)/util"
 
 # Create custom ACML_DIR env-variable
-tmp=${c}64
+tmp=${dc}64
 [ -n "$directive" ] && tmp=${tmp}_$directive
 [ -n "$mp" ] && tmp=${tmp}_$mp
 pack_set --install-prefix $(pack_get --install-prefix acml-install)/$tmp
