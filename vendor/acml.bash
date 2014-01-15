@@ -33,7 +33,7 @@ pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get
 
 pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
 
-pack_set --install-query $(pack_get --install-prefix)/${dc}
+pack_set --install-query $(pack_get --install-prefix)/${dc}64
 
 if $(is_host ntch zero) ; then
     # These machines at least does not have fma4, so delete it!

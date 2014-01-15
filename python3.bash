@@ -1,8 +1,9 @@
-# Install Python 3.3.2
+# Install Python 3 versions
+v=3.3.3
 if $(is_host n-) ; then
-    add_package --package Python http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tgz
+    add_package --package Python http://www.python.org/ftp/python/$v/Python-$v.tgz
 else
-    add_package --package python http://www.python.org/ftp/python/3.3.2/Python-3.3.2.tgz
+    add_package --package python http://www.python.org/ftp/python/$v/Python-$v.tgz
 fi
 
 # The settings

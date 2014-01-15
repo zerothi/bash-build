@@ -1,3 +1,4 @@
+return 0
 if $(is_host zerothi) ; then
     v=
 else

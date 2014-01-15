@@ -1,8 +1,9 @@
-# Install Python 2.7.3
+# Install Python 2 versions
+v=2.7.6
 if $(is_host n-) ; then
-    add_package --package Python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+    add_package --package Python http://www.python.org/ftp/python/$v/Python-$v.tgz
 else
-    add_package --package python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+    add_package --package python http://www.python.org/ftp/python/$v/Python-$v.tgz
 fi
 
 # The settings
@@ -85,3 +86,5 @@ if [ $(pack_get --installed qutip) -eq 1 ]; then
 fi
 
 build_set --module-path $old_path
+
+exit 0
