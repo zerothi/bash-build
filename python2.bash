@@ -87,4 +87,3 @@ fi
 
 build_set --module-path $old_path
 
-exit 0
