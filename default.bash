@@ -48,8 +48,8 @@ create_module \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
     -M siesta.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules siesta-trunk[465])" \
-    -RL siesta-trunk[465]
+    -echo "$(echo_modules siesta-trunk[468])" \
+    -RL siesta-trunk[468]
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
