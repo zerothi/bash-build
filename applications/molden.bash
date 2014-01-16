@@ -1,4 +1,5 @@
 # Install molden
+#   - libglu1-mesa-dev
 #   - libx11-dev
 #   - mesa-common-dev
 add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.0.tar.gz
