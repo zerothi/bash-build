@@ -1,5 +1,9 @@
 # Install Python 2 versions
-v=2.7.6
+if $(is_c intel) ; then
+    v=2.7.3
+else
+    v=2.7.6
+fi
 if $(is_host n-) ; then
     add_package --package Python http://www.python.org/ftp/python/$v/Python-$v.tgz
 else
@@ -13,10 +17,15 @@ pack_set --module-requirement zlib
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
+tmp=
+if ! $(is_c gnu) ; then
+    tmp="--without-gcc"
+fi
+
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)' $tmp" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
