@@ -3,6 +3,8 @@ add_package --directory dftd3.3.0.2 \
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject ntch
+pack_set --host-reject zero
 pack_set --module-opt "--lua-family dftd3"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/dftd3
