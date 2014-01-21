@@ -57,6 +57,7 @@ source libs/scotch.bash
 source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
+source libs/superlu-dist.bash
 source libs/petsc.bash
 source libs/slepc.bash
 

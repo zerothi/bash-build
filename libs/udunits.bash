@@ -1,23 +1,28 @@
 # The udunits2 package requires an XML library:
 #  libexpat
-v=2.1.24
-add_package ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v.tar.gz
+#  libcunit
+v=2.2.4
+add_package --package udunits --version $v \
+	ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v-Source.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/udunits2
 
-# Add requirments when creating the module
-pack_set --module-requirement netcdf-serial
+#    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+#    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
+
+# apparently they have it in a tar file there
+pack_set --command "tar xfz udunits-2.2.4.tar.gz"
+pack_set --command "cd udunits-2.2.4"
 
 # Install commands that it should run
 pack_set \
     --command "./configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_set --command "make check"
+pack_set --command "make install install-pdf"
 

@@ -71,7 +71,7 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
 #    --command-flag "--with-ptscotch-include=$(pack_get --install-prefix scotch)/include"
 
 #    --command-flag "--with-superlu_dist=1" \
-#    --command-flag "--with-superlu_dist-dir=$(pack_get --install-prefix superlu)" \
+#    --command-flag "--with-superlu_dist-dir=$(pack_get --install-prefix superlu-dist)" \
 
 #    --command-flag "--with-cholmod=1" \
 #    --command-flag "--with-cholmod-dir=$(pack_get --install-prefix cholmod)"

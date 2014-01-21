@@ -5,8 +5,6 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
 
-pack_set --host-reject zerothi
-
 # Install commands that it should run
 if $(is_c intel) ; then
     pack_set --command "../configure" \

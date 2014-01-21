@@ -1,6 +1,6 @@
-add_package --package superlu \
-    --directory SuperLU_4.3 \
-    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
+add_package --package superlu-dist \
+    --directory SuperLU_DIST_3.3 \
+    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_3.3.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -8,25 +8,30 @@ pack_set $(list --prefix "--host-reject " surt muspel slid)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libsuperlu.a
 
+pack_set --module-requirement openmpi \
+    --module-requirement parmetis
+
 # Prepare the make file
 file=make.inc
 pack_set --command "echo '# Make file' > make.inc"
 
 pack_set --command "sed -i '1 a\
 PLAT =\n\
-SuperLUroot = ..\n\
-SUPERLULIB = \$(SuperLUroot)/lib/libsuperlu.a\n\
+DSuperLUroot = ..\n\
+DSUPERLULIB = \$(DSuperLUroot)/lib/libsuperlu.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
-LIBS = \$(SUPERLULIB) \$(BLASLIB) \n\
+METISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lmetis\n\
+PARMETISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis\n\
+LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
 ARCHFLAGS = cr\n\
 RANLIB = ranlib\n\
-CC = $CC\n\
+CC = $MPICC\n\
 CFLAGS = $CFLAGS\n\
 NOOPTS = ${CFLAGS//-O./}\n\
-FORTRAN = $FC\n\
+FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
-LOADER   = $CC\n\
+LOADER   = $MPICC\n\
 LOADOPTS = \$(CFLAGS)\n\
 CDEFS    = -DAdd_\n\
 ' $file"
@@ -57,7 +62,7 @@ else
 fi
 
 # Make commands
-pack_set --command "make superlulib"
+pack_set --command "make"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp lib/libsuperlu.a $(pack_get --install-prefix)/lib/"

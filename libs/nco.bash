@@ -8,7 +8,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/ncks
 # Add requirments when creating the module
 # udunits depend on NetCDF
 pack_set --module-requirement gsl \
-    --module-requirement udunits
+    --module-requirement udunits \
+    --module-requirement netcdf-serial
 
 # Install commands that it should run
 pack_set \
