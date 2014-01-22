@@ -34,7 +34,7 @@ source applications/wannier.bash
 source applications/gulp.bash
 source applications/dftd3.bash
 source applications/octopus.bash
-source applications/qespresso.bash
+source applications/espresso.bash
 # The OpenMX DFT code (has a NEGF routine)
 source applications/openmx.bash
 source applications/openmx-pseudo.bash

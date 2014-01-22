@@ -62,4 +62,4 @@ source libs/fftw3.bash
 
 install_all --from fftw-3
 
-source applications/qespresso.bash
+source applications/espresso.bash

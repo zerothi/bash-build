@@ -16,7 +16,7 @@ for v in \
     pack_set --module-requirement fftw-3
 
     # Fetch all the packages and pack them out
-    source applications/qespresso-packages.bash
+    source applications/espresso-packages.bash
 
     # Patch it...
     pack_set --command "pushd ../"
