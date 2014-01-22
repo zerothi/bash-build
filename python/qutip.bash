@@ -6,7 +6,7 @@ for p in \
 
 #    https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz \
     
-add_package $p
+add_package --directory qutip-2.2.0 $p
 
 pack_set -s $IS_MODULE
 
