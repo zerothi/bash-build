@@ -9,9 +9,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/udunits2
 
-#    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
-#    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
-
 # apparently they have it in a tar file there
 pack_set --command "tar xfz udunits-2.2.4.tar.gz"
 pack_set --command "cd udunits-2.2.4"

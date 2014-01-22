@@ -1,7 +1,7 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
 for p in \
-    https://qutip.googlecode.com/files/QuTiP-2.1.0.tar.gz ; do
+    https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz ; do
 #    https://dl.dropboxusercontent.com/u/2244215/QuTiP-DEV-2.2.0.zip ; do
 
 #    https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz \
