@@ -28,6 +28,7 @@ create_module \
     $(list --prefix '-RL ' gnuplot molden grace xcrysden)
 
 # DFT codes
+source applications/gromacs.bash
 source applications/dftb.bash
 source applications/wannier.bash
 source applications/gulp.bash
