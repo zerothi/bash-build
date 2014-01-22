@@ -1,7 +1,7 @@
 for v in 0.20 ; do
 add_package http://cython.org/release/Cython-$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/cython
 
