@@ -6,7 +6,7 @@ pack_set --module-opt "--lua-family gromacs"
 
 pack_set --host-reject ntch-l --host-reject zeroth
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gromacs
+pack_set --install-query $(pack_get --install-prefix)/bin/GMXRC
 
 pack_set --module-requirement openmpi --module-requirement fftw-3
 
