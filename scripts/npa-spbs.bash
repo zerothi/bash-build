@@ -27,6 +27,8 @@ mail=""
 inout=""
 show_flag=0
 access_policy=SHARED
+omp=1
+mpi=0
 
 function _spbs_add_PBS_option {
     # Takes three arguments
@@ -69,6 +71,8 @@ function _spbs_help {
     printf "\$format" "--message-abort" "Mail when the PBS system aborts the job"
     printf "\$format" "--message-ae" "Short-hand for --message-abort --message-error."
     printf "\$format" "--message-e" "Short-hand for --message-error."
+    printf "\$format" "--[no-]mpi" "Is the job parallel with MPI."
+    printf "\$format" "--[no-]omp" "Is the job threaded (can be supplied together with MPI-flag) [default=omp]."
     printf "\$format" "--mail-address|-mail" "Redirect the mails to given mail address."
     printf "\$format" "--mix-in-out|-joe" "The stderr and stdout will be directed to stdout."
     printf "\$format" "--no-paffinity|--paffinity" "Do (not) create the paffinity ENV when on a single node."
@@ -102,6 +106,10 @@ while [ \$# -ne 0 ]; do
         -message-e) message="e" ;;
         -mail-address|-mail|-M) mail="\$1" ; shift ;;
         -mix-in-out|-joe) inout=oe ;;
+        -no-mpi) mpi=0 ;;
+        -mpi) mpi=1 ;;
+        -no-omp) omp=0 ;;
+        -omp) omp=1 ;;
         -paffinity) single_paffinity=1 ;;
         -no-paffinity) single_paffinity=0 ;;
         -flag-explanations|-fe) show_flag=1 ;;
@@ -160,6 +168,26 @@ if [ \$nodes -eq 1 ] && [ \$single_paffinity -eq 1 ]; then
 _spbs_add_line 'export OMPI_MCA_mpi_paffinity_alone=1' "Ensure that MPI utilizes the best connection mode when on a single node DO NOT USE IF NOT OCCUPYING FULL NODE"
 fi
 echo ''
+
+# Add typical setup for MPI/OpenMP
+if [ \$mpi -eq 1 ]; then
+_spbs_add_line 'exit 0 # load MPI' "Ensure that you have loaded the correct MPI command, then delete this"
+if [ \$omp -eq 1 ]; then
+_spbs_add_line "mpirun --bynode -np \$nodes -x OMP_NUM_THREADS=\$ppn <executable>" "Setup the MPI call to figure out the number of cores used"
+else
+if [ \$has_np_cmd -eq 1 ]; then
+_spbs_add_line 'mpirun -np \$PBS_NP <executable>' "Setup the MPI call to figure out the number of cores used"
+else
+_spbs_add_line 'mpirun -np \$NPROCS <executable>' "Setup the MPI call to figure out the number of cores used"
+fi
+fi
+elif [ \$omp -eq 1 ]; then
+if [ \$has_np_cmd -eq 1 ]; then
+_spbs_add_line 'export OMP_NUM_THREADS=\$PBS_NP' "Ensures the correct number of processes used by threading (requires BASH)"
+else
+_spbs_add_line 'export OMP_NUM_THREADS=\$NPROCS' "Ensures the correct number of processes used by threading (requires BASH)"
+fi
+fi
 
 EOF
 
