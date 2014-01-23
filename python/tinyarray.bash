@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 add_package https://pypi.python.org/packages/source/t/tinyarray/tinyarray-1.0.5.tar.gz
     
 pack_set -s $IS_MODULE

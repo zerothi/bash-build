@@ -15,6 +15,23 @@ unset tmp
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
+python_version=2
+
+while [ $# -gt 1 ]; do
+    opt=$1 ; shift
+    case $opt in
+	--python-version|-python-version|-pv)
+	    python_version=$1 ; shift ;;
+    esac
+done
+
+case $python_version in
+    2|3)
+	;; # fine
+    *)
+	doerr "option parsing" "Cant figure out the python version"
+esac
+
 # Use ln to link to this file
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
@@ -60,7 +77,7 @@ source lua/lua.bash
 source libs.bash
 
 # These are "parent" installations...
-source python2.bash
+source python${python_version}.bash
 # The _ctypes does not work yet...
 #source python3.bash
 

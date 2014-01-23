@@ -61,15 +61,6 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scipy mpi4py) scipy cython mpi4py)
 
-if [ $(pack_get --installed qutip) -eq 1 ]; then
-    create_module \
-        -n "Nick Papior Andersen's Photonics python script for QuTip: $(get_c)" \
-        -v $(date +'%g-%j') \
-        -M python$pV.cython.numexpr.qutip/$(get_c) \
-        -P "/directory/should/not/exist" \
-        $(list --prefix '-L ' $(pack_get --module-requirement qutip numexpr) cython numexpr qutip)
-fi
-
 build_set --module-path $old_path
 
 exit 0
