@@ -1,11 +1,12 @@
 # The udunits2 package requires an XML library:
-#  libexpat
 #  libcunit
 v=2.2.4
 add_package --package udunits --version $v \
 	ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v-Source.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --module-requirement expat
 
 pack_set --install-query $(pack_get --install-prefix)/bin/udunits2
 

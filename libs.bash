@@ -44,6 +44,7 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
+source libs/expat.bash
 source libs/udunits.bash
 source libs/nco.bash
 
