@@ -1,4 +1,4 @@
-for v in 529 ; do
+for v in 544 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
@@ -176,8 +176,6 @@ pack_set --command "cp swarm simplex $(pack_get --install-prefix)/bin/"
 #files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
 #pack_set --command "make $files"
 #pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
-
-
 
 
 # The atom program for creating the pseudos

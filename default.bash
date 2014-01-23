@@ -29,6 +29,30 @@ function echo_modules {
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading Abinit: $(get_c)" \
+    -M abinit.default/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -echo "$(echo_modules abinit)" \
+    -RL abinit
+
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading Octopus: $(get_c)" \
+    -M octopus.default/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -echo "$(echo_modules octopus)" \
+    -RL octopus
+
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading Elk: $(get_c)" \
+    -M elk.default/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -echo "$(echo_modules elk)" \
+    -RL elk
+
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -48,16 +72,16 @@ create_module \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
     -M siesta.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules siesta-trunk[468])" \
-    -RL siesta-trunk[468]
+    -echo "$(echo_modules siesta-trunk[469])" \
+    -RL siesta-trunk[469]
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading OpenMX: $(get_c)" \
     -M openmx.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules openmx[3.7])" \
-    -RL openmx[3.7]
+    -echo "$(echo_modules openmx)" \
+    -RL openmx
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
