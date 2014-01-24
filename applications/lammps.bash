@@ -6,8 +6,8 @@ add_package http://lammps.sandia.gov/tars/lammps.tar.gz
 pack_set_file_version
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch \
-    --host-reject zero
+#pack_set --host-reject ntch \
+#    --host-reject zero
 
 pack_set --module-opt "--lua-family lammps"
 
@@ -66,6 +66,13 @@ pack_set --command "make makelib"
 pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --install-prefix)/bin/lmp"
+# Copy the library over 
+pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "cp liblammps_npa.a $(pack_get --install-prefix)/bin/liblammps.a"
+# Copy headers over 
+pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
+pack_set --command "cp library.cpp library.h $(pack_get --install-prefix)/include/"
+
 
 pack_install
 
