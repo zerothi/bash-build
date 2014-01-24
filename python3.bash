@@ -61,6 +61,14 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scipy mpi4py) scipy cython mpi4py)
 
+create_module \
+    -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.mpi4py.numba.numpy.scipy/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement numba scipy mpi4py) numba scipy cython mpi4py)
+
+
 build_set --module-path $old_path
 
 exit 0

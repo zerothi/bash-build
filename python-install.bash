@@ -66,7 +66,7 @@ source python/llvmmath.bash
 source python/pandas.bash
 
 # Numba needs to release a new version (and numpy needs 1.9), then we can install it!
-#source python/numba.bash
+source python/numba.bash
 
 # Physics related python modules
 

@@ -1,4 +1,4 @@
-for v in 1.8.0 ; do
+for v in 1.7.2 1.8.0 ; do
 add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -121,9 +121,9 @@ fi
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
-
+tmp=$(pack_get --version)
 add_package --package numpy-test fake
-pack_set --module-requirement numpy
+pack_set --module-requirement numpy[$tmp]
 pack_set --command "$(get_parent_exec) -c 'import numpy; numpy.test()'"
 
 done
