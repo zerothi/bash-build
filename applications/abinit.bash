@@ -59,6 +59,7 @@ with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
 with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
     fi
     pack_set --command "$s '$ a\
+FC=\"$MPIFC -fopenmp\"\n\
 FCFLAGS_OPENMP=\"-fopenmp\"' $file"
 
 elif $(is_c intel) ; then
