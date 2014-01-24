@@ -20,8 +20,8 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "REQUIRES_RTTI=1 make $(get_make_parallel)"
-pack_set --command "REQUIRES_RTTI=1 make" \
-    --command-flag "check" \
-    --command-flag "install"
+pack_set --command "REQUIRES_RTTI=1 make check LIT_ARGS='-s -j2'"
+
+pack_set --command "make install"
 
 done
