@@ -76,9 +76,9 @@ create_module \
 create_module \
     -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.mpi4py.numba.numpy.scipy.scientific/$(get_c) \
+    -M python$pV.mpi4py.numba.numpy/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement numba scientificpython scipy mpi4py) numba scientificpython scipy cython mpi4py)
+    $(list --prefix '-L ' $(pack_get --module-requirement numba mpi4py) numba mpi4py)
 
 create_module \
     -n "Nick Papior Andersen's DFT python script for: $(get_c)" \
