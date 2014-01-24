@@ -230,8 +230,10 @@ function arc_cmd {
 	_ps "ln -fs"
     elif [ "x$ext" == "xlocal" ]; then
 	_ps "echo"
+    elif [ "x$ext" == "xfake" ]; then
+	_ps "echo"
     else
-	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local]"
+	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local,fake]"
     fi
 }
 

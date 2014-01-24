@@ -121,4 +121,9 @@ fi
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+
+add_package --package numpy-test fake
+pack_set --module-requirement numpy
+pack_set --command "$(get_parent_exec) -c 'import numpy; numpy.test()'"
+
 done

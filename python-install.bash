@@ -36,9 +36,14 @@ source python/pexpect.bash
 source python/ipython.bash
 
 source python/cython.bash
+source python/cffi.bash
+source python/nose.bash
+
+# Certain libraries requires a certain amount of python .. :)
+source libs/llvm.bash
+
 source python/bzr.bash
 source python/bzr-fastimport.bash
-source python/nose.bash
 
 # Generic scientific libraries
 source python/mpi4py.bash
@@ -54,7 +59,14 @@ source python/sympy.bash
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 
+# Must be installed after numpy
+source python/llvmpy.bash
+source python/llvmmath.bash
+
 source python/pandas.bash
+
+# Numba needs to release a new version (and numpy needs 1.9), then we can install it!
+#source python/numba.bash
 
 # Physics related python modules
 
@@ -78,7 +90,3 @@ source python/kwant.bash
 install_all --from $(get_parent)
 
 build_set --default-build $def_idx
-
-#build_set --build-module-path "--package --version $(get_c)"
-#build_set --build-installation-path \
-#    "$(build_get --installation-path) --package --version $(get_c)"

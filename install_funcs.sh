@@ -393,6 +393,10 @@ function add_package {
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
+    if [ "$url" == "fake" ]; then
+	d=./
+	_install_query[$_N_archives]=/directory/does/not/exist
+    fi
     # Save the archive name
     [ -z "$fn" ] && fn=$(basename $url)
     _archive[$_N_archives]=$fn
