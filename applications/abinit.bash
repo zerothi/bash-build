@@ -1,4 +1,5 @@
-add_package http://ftp.abinit.org/abinit-7.4.3.tar.gz
+v=7.6.1
+add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -28,7 +29,7 @@ prefix=\"$(pack_get --install-prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
-FCFLAGS=\"${FCFLAGS//-O3/-O2}\"\n\
+FCFLAGS=\"${FCFLAGS//-O3/-O2} -DHAVE_FC_LONG_LINES\"\n\
 CFLAGS=\"${CFLAGS//-O3/-O2}\"\n\
 CXXFLAGS=\"${CXXFLAGS//-O3/-O2}\"\n\
 enable_fc_wrapper=\"no\"\n\
@@ -58,14 +59,15 @@ with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llap
 with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
 with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
     fi
+    pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-fopenmp /g' $file"
     pack_set --command "$s '$ a\
-FC=\"$MPIFC -fopenmp\"\n\
 FCFLAGS_OPENMP=\"-fopenmp\"' $file"
-
+    
 elif $(is_c intel) ; then
     # We need to correct the configure script
     # (it checks whether linking is done correctly!)
     # STUPID, I say!
+    pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
     pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
     tmp="-mkl=cluster"
     pack_set --command "$s '$ a\
