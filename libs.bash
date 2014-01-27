@@ -4,15 +4,13 @@ msg_install --message "Installing all libraries..."
 source libs/zlib.bash
 source libs/expat.bash
 source libs/libffi.bash
-source libs/hwloc.bash
-
-# Basic parallel libraries
-source libs/openmpi-hpc.bash
-
+source libs/llvm.bash
 #source libs/gmp.bash
 #source libs/guile.bash
 
-source libs/llvm.bash
+# Basic parallel libraries
+source libs/hwloc.bash
+source libs/openmpi-hpc.bash
 
 # Default fftw libs
 source libs/fftw2.bash

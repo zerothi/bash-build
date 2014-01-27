@@ -51,14 +51,13 @@ export LMOD_IGNORE_CACHE=1
 source helpers.bash
 
 source libs/zlib.bash
+source libs/expat.bash
+source libs/libffi.bash
 
+source libs/llvm.bash
 
 # Install Python 2 versions
-if $(is_c intel) ; then
-    v=2.7.3
-else
-    v=2.7.6
-fi
+v=2.7.6
 if $(is_host n-) ; then
     add_package --alias python --package Python \
 	http://www.python.org/ftp/python/$v/Python-$v.tgz
@@ -70,7 +69,9 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --module-requirement zlib
+pack_set --module-requirement zlib \
+    --module-requirement expat \
+    --module-requirement libffi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
@@ -81,8 +82,9 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)' $tmp" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib expat libffi)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)' $tmp" \
+    --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
@@ -90,7 +92,5 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
 pack_install
-
-source libs/llvm.bash
 
 install_all

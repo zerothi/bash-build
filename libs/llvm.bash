@@ -1,8 +1,8 @@
-for v in 3.2 3.4 ; do
-add_package --directory llvm-$v --version $v \
+for v in 3.3 3.4 ; do
+add_package --directory llvm-$v.src --version $v \
     http://llvm.org/releases/$v/llvm-$v.src.tar.gz
 
-[ "$v" == "3.2" ] && pack_set --directory llvm-$v.src
+[ "$v" == "3.4" ] && pack_set --directory llvm-$v
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
