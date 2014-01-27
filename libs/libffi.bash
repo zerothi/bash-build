@@ -1,9 +1,9 @@
-add_package --package ffi \
+add_package \
     ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libffi.a
+pack_set --install-query $(pack_get --install-prefix)/include/ffi.h
 
 # Install commands that it should run
 pack_set --command "./configure" \
@@ -21,4 +21,9 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
+
+pack_set --command "mv $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)/include" \
+    --command-flag "$(pack_get --install-prefix)/include"
+
+pack_set --command "rm -rf $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)"
 

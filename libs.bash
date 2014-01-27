@@ -3,7 +3,7 @@ msg_install --message "Installing all libraries..."
 # Basic libraries
 source libs/zlib.bash
 source libs/expat.bash
-source libs/ffi.bash
+source libs/libffi.bash
 source libs/hwloc.bash
 
 # Basic parallel libraries

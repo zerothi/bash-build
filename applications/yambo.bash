@@ -65,6 +65,7 @@ pack_set --command "./configure PFC='$MPIFC' " \
     --command-flag "--with-iotk=\$(pwd)/my_IOTK --with-p2y=5.0"
 
 # Fix line endings...
+pack_set --command 'sed -i -e ":a;N;$!ba;s/\\\\\n/ /g" lib/slatec/.objects'
 
 pack_set --command "make $(get_make_parallel) all"
 pack_set --command "sotuhasehuh"

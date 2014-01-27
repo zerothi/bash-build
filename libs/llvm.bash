@@ -9,7 +9,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/bin/llvm-ar
 
 pack_set --module-requirement zlib \
-    --module-requirement ffi
+    --module-requirement libffi
 
 # Install commands that it should run
 pack_set --command "./configure" \
