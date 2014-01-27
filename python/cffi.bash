@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
 
-pack_set --module-requirement cython
+pack_set --module-requirement cython --module-requirement pycparser
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/python$pV/site-packages"
 
