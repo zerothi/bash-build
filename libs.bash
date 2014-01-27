@@ -1,13 +1,18 @@
 msg_install --message "Installing all libraries..."
 
 # Basic libraries
+source libs/zlib.bash
+source libs/expat.bash
+source libs/ffi.bash
 source libs/hwloc.bash
+
+# Basic parallel libraries
 source libs/openmpi-hpc.bash
 
 #source libs/gmp.bash
 #source libs/guile.bash
 
-source libs/ffi.bash
+source libs/llvm.bash
 
 # Default fftw libs
 source libs/fftw2.bash
@@ -22,7 +27,7 @@ source libs/lapack.bash
 source libs/atlas.bash
 
 # ATLAS needs to be installed prematurely...
-install_all --from hwloc
+install_all --from zlib
 
 source libs/scalapack.bash
 source libs/plasma.bash
@@ -37,7 +42,6 @@ source libs/ctl.bash
 source libs/harminv.bash
 
 # Install generic libraries
-source libs/zlib.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
 source libs/h5utils-serial.bash
@@ -46,7 +50,6 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 
-source libs/expat.bash
 source libs/udunits.bash
 source libs/nco.bash
 

@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
 
-pack_set --module-requirement python
+pack_set --module-requirement $(get_parent)
 pack_set --module-requirement llvm[3.2]
 
 pack_set --command "LLVM_CONFIG_PATH=$(pack_get --install-prefix llvm[3.2])/bin/llvm-config $(get_parent_exec)" \

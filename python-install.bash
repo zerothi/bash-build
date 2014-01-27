@@ -41,9 +41,6 @@ source python/cython.bash
 source python/cffi.bash
 source python/nose.bash
 
-# Certain libraries requires a certain amount of python .. :)
-source libs/llvm.bash
-
 source python/bzr.bash
 source python/bzr-fastimport.bash
 
