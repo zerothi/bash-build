@@ -19,7 +19,7 @@ pack_set --command "$tmp 's/CCFLAGS[[:space:]]*=.*/CCFLAGS = $CFLAGS/g' $file"
 pack_set --command "$tmp 's/ARCH[[:space:]]*=.*/ARCH = $AR/g' $file"
 
 if $(is_c intel) ; then
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = -mkl=sequential -lmkl_blas95_lp64|g' $file"
+    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64|g' $file"
     pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = -mkl=sequential -lmkl_lapack95_lp64|g' $file"
 
 else
