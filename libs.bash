@@ -7,7 +7,7 @@ source libs/openmpi-hpc.bash
 #source libs/gmp.bash
 #source libs/guile.bash
 
-source libs/libffi.bash
+source libs/ffi.bash
 
 # Default fftw libs
 source libs/fftw2.bash
