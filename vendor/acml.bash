@@ -3,15 +3,7 @@ v=5-3-1
 for c in gfortran ifort open64 pgi ; do
 dc=$c
 [ "$c" == "open64" ] && dc=${c}_
-if [ "$c" == "gfortran" ]; then
-    if ! $(is_c gnu) ; then
-	continue
-    fi
-elif [ "$c" == "ifort" ]; then
-    if ! $(is_c intel) ; then
-	continue
-    fi
-fi
+
 # we don't need the pgi compiler on nilfheim
 if $(is_host surt muspel slid) ; then
     [ "$c" == "pgi" ] && continue
