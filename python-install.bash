@@ -57,6 +57,7 @@ source python/sympy.bash
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
+source python/pyamg.bash
 
 # Must be installed after numpy
 source python/llvmpy.bash
