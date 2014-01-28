@@ -15,6 +15,5 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 add_package --package llvmmath-test fake
 pack_set --module-requirement llvmmath
 pack_set --install-query $(pack_get --install-prefix llvmmath)/test.output
-pack_set --command "$(get_parent_exec) -c 'import llvmmath; llvmmath.test()' 2> tmp.2 1> tmp.1"
-pack_set --command "mv tmp.2 $(pack_get --install-query)"
-pack_set --command "mv tmp.1 $(pack_get --install-query).1"
+pack_set --command "$(get_parent_exec) -c 'import llvmmath; llvmmath.test()' > tmp.test 2>&1"
+pack_set --command "mv tmp.test $(pack_get --install-query)"
