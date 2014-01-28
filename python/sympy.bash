@@ -1,10 +1,7 @@
 v=0.7.4.1
-ev=""
-[ "x${pV:0:3}" == "x3.3" ] && ev=-py3.3
-
 add_package --directory sympy-$v \
     --package sympy --version $v \
-    https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v$ev.tar.gz
+    https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
