@@ -4,7 +4,7 @@ add_package https://pypi.python.org/packages/source/t/tinyarray/tinyarray-1.0.5.
     
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/tinyarray.so
     
 pack_set --module-requirement numpy \
     --module-requirement cython

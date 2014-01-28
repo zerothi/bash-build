@@ -22,8 +22,10 @@ pack_set --command "make" \
     --command-flag "check" \
     --command-flag "install"
 
+# Fix the include placement
 pack_set --command "mv $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)/include" \
     --command-flag "$(pack_get --install-prefix)/include"
-
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)"
+# Fix the pkgconfig
+pack_set --command "sed -i -e 's:includedir=.*:includedir=\${prefix}/include:' $(pack_get --install-prefix)/lib/pkgconfig/libffi.pc"
 

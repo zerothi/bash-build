@@ -3,7 +3,7 @@ add_package https://pypi.python.org/packages/source/l/llvmmath/llvmmath-$v.tar.g
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/llvmmath
 
 pack_set --module-requirement llvmpy
 pack_set --module-requirement numpy[1.7.2]
