@@ -1,10 +1,14 @@
 for v in 3.3 3.4 ; do
-add_package --directory llvm-$v.src --version $v \
+add_package --directory llvm-$v.src --package llvm --version $v \
     http://llvm.org/releases/$v/llvm-$v.src.tar.gz
 
 [ "$v" == "3.4" ] && pack_set --directory llvm-$v
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+
+if $(is_c intel) ; then
+    pack_set --host-reject $(hostname)
+fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/llvm-ar
 
