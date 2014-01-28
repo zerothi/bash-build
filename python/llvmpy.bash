@@ -14,5 +14,8 @@ pack_set --command "LLVM_CONFIG_PATH=$(pack_get --install-prefix llvm[3.3])/bin/
 
 
 add_package --package llvmpy-test fake
+pack_set --install-query $(pack_get --install-prefix llvmpy)/test.output
 pack_set --module-requirement llvmpy
-pack_set --command "$(get_parent_exec) -c 'import llvm; llvm.test()'"
+pack_set --command "$(get_parent_exec) -c 'import llvm; llvm.test()' 2> tmp.2 1> tmp.1"
+pack_set --command "mv tmp.2 $(pack_get --install-query)"
+pack_set --command "mv tmp.1 $(pack_get --install-query).1"

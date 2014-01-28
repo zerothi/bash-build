@@ -123,7 +123,10 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 
 tmp=$(pack_get --version)
 add_package --package numpy-test fake
+pack_set --install-query $(pack_get --install-prefix numpy)/test.output
 pack_set --module-requirement numpy[$tmp]
-pack_set --command "$(get_parent_exec) -c 'import numpy; numpy.test()'"
+pack_set --command "$(get_parent_exec) -c 'import numpy; numpy.test()' 2> tmp.2 1> tmp.1"
+pack_set --command "mv tmp.2 $(pack_get --install-query)"
+pack_set --command "mv tmp.1 $(pack_get --install-query).1"
 
 done
