@@ -29,6 +29,6 @@ pack_set --command "rm -rf $(pack_get --install-prefix)/lib/libffi-$(pack_get --
 # Fix the pkgconfig
 pack_set --command "sed -i -e 's:includedir=.*:includedir=\${prefix}/include:' $(pack_get --install-prefix)/lib/pkgconfig/libffi.pc"
 pack_set --command "cd $(pack_get --install-prefix)"
-pack_set --command "mv lib64/* lib/"
-pack_set --command "rm -rf lib64"
+pack_set --command "if test -d lib64 ; then mv lib64/* lib/ ; fi"
+pack_set --command "if test -d lib64 ; then rm -rf lib64 ; fi"
 
