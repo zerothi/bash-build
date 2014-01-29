@@ -46,4 +46,6 @@ pack_set --command "cd tools/clang"
 pack_set --command "make test"
 pack_set --command "make install"
 
+pack_install
+
 done
