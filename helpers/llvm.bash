@@ -41,10 +41,12 @@ pack_set --command "REQUIRES_RTTI=1 make $(get_make_parallel)"
 pack_set --command "REQUIRES_RTTI=1 make check-all LIT_ARGS='-s -j2'"
 pack_set --command "make install"
 
+# clang is already tested and installed with the above commands
 # Install clang together with llvm
-pack_set --command "cd tools/clang"
-pack_set --command "make test"
-pack_set --command "make install"
+#pack_set --command "cd tools/clang"
+# check-all also checks clang
+#pack_set --command "make test"
+#pack_set --command "make install"
 
 pack_install
 
