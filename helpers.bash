@@ -18,3 +18,10 @@ source helpers/flex.bash
 source helpers/pcre.bash
 source helpers/swig.bash
 
+
+# Install LLVM generically
+source libs/zlib.bash
+pack_set --alias gen-zlib
+source libs/libffi.bash
+pack_set --alias gen-libffi
+source helpers/llvm.bash
