@@ -1,5 +1,6 @@
-v=0.11.0
-add_package https://pypi.python.org/packages/source/n/numba/numba-$v.tar.gz
+v=0.11.1
+add_package --archive numba-$v.tar.gz \
+    https://github.com/numba/numba/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
