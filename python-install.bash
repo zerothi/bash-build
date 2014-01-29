@@ -33,9 +33,12 @@ source python/dateutil.bash
 source python/fastimport.bash
 source python/pytz.bash
 source python/pexpect.bash
+source python/pygments.bash
 source python/ipython.bash
 source python/pycparser.bash
 source python/six.bash
+
+# Done with packages only installed in python-home! ^
 
 source python/cython.bash
 source python/cffi.bash
