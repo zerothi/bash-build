@@ -1,5 +1,5 @@
 # First install zlib, which is a simple library
-add_package --build generic --alias gen-zlib \
+add_package --build generic --alias gen-zlib --package gen-zlib \
     http://zlib.net/zlib-1.2.8.tar.gz 
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

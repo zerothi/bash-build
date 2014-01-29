@@ -1,4 +1,4 @@
-add_package --build generic --alias gen-libffi \
+add_package --build generic --alias gen-libffi --package gen-libffi \
     ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
