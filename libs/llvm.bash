@@ -7,7 +7,7 @@ add_package --directory llvm-$v.src --package llvm --version $v \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 if $(is_c intel) ; then
-    pack_set --host-reject $(hostname)
+    pack_set --host-reject $(get_hostname)
 fi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/llvm-ar
