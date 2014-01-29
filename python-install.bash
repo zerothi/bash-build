@@ -54,6 +54,7 @@ source python/scientificpython.bash
 source python/matplotlib.bash
 source python/bottleneck.bash
 source python/sympy.bash
+source python/pandas.bash
 
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
@@ -63,13 +64,10 @@ source python/pyamg.bash
 source python/llvmpy.bash
 source python/llvmmath.bash
 
-source python/pandas.bash
-
-# Numba needs to release a new version (and numpy needs 1.9), then we can install it!
+# Numba needs to release a new version (and numpy needs 1.9)
 source python/numba.bash
 
 # Physics related python modules
-
 source python/inelastica.bash
 source python/inelastica-dev.bash
 source python/inelastica-rbch.bash
