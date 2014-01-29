@@ -49,6 +49,7 @@ pack_set --command "make libintel64" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj*"
 
+if [ -d $MKL/interfaces/fftw2x_cdft ]; then
 pack_set --command "cd $MKL_PATH/interfaces/fftw2x_cdft"
 pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
 pack_set --command "make libintel64" \
@@ -66,6 +67,7 @@ pack_set --command "make libintel64" \
     --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --install-prefix)/lib/obj*"
+fi
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
 
