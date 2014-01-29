@@ -1,5 +1,6 @@
 for v in 3.3 3.4 ; do
-add_package --directory llvm-$v.src --package llvm --version $v \
+add_package --build generic \
+    --directory llvm-$v.src --package llvm --version $v \
     http://llvm.org/releases/$v/llvm-$v.src.tar.gz
 
 [ "$v" == "3.4" ] && pack_set --directory llvm-$v
