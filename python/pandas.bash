@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set $(list --prefix ' --module-requirement ' cython numpy numexpr scipy pytables matplotlib pytz)
 if $(is_host ntch) ; then
-    v=$v # no-op
+    echo "" > /dev/null
 else
     pack_set --module-requirement bottleneck
 fi
