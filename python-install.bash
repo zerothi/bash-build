@@ -57,10 +57,9 @@ source python/scientificpython.bash
 source python/matplotlib.bash
 source python/bottleneck.bash
 source python/sympy.bash
-source python/pandas.bash
-
 source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
+source python/pandas.bash
 source python/pyamg.bash
 
 # Must be installed after numpy
