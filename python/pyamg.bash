@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 v=2.1.0
 add_package \
     --package pyamg --version $v \

@@ -29,6 +29,7 @@ build_set --default-build python$IpV
 source python/distribute.bash
 source python/pyparsing.bash
 source python/tornado.bash
+source python/six.bash
 source python/dateutil.bash
 source python/fastimport.bash
 source python/pytz.bash
@@ -36,7 +37,6 @@ source python/pexpect.bash
 source python/pygments.bash
 source python/ipython.bash
 source python/pycparser.bash
-source python/six.bash
 
 # Done with packages only installed in python-home! ^
 
