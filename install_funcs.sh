@@ -1006,7 +1006,8 @@ function get_make_parallel {
 #   -W <what is message>
 function create_module {
     [ $DEBUG -ne 0 ] && do_debug --enter create_module
-    local name;local version;local path; local help; local whatis; local opt
+    local name; local version; local echos
+    local path; local help; local whatis; local opt
     local env="" ; local tmp=""
     local mod_path=""
     local force=0 ; local no_install=0
