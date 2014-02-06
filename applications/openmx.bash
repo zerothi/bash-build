@@ -14,9 +14,14 @@ pack_set --module-requirement openmpi --module-requirement fftw-3
 pack_set --command "cd source"
 
 # Patch it...
-pack_set --command "wget http://www.openmx-square.org/bugfixed/13Sep01/patch3.7.6.tar.gz"
-pack_set --command "tar xfz patch3.7.6.tar.gz"
+#pack_set --command "wget http://www.openmx-square.org/bugfixed/13Sep01/patch3.7.6.tar.gz"
+#pack_set --command "tar xfz patch3.7.6.tar.gz"
 
+# Patch it...
+pack_set --command "wget http://www.openmx-square.org/bugfixed/14Jan31/patch3.7.7.tar.gz"
+pack_set --command "tar xfz patch3.7.7.tar.gz"
+
+pack_set --version 3.7.7
 
 # Clean up the makefile
 file=makefile
