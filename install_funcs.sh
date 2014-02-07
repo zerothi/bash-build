@@ -1239,6 +1239,8 @@ EOF
 	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib64/pkgconfig)"
     _add_module_if -F $force -d "$path/man" $mfile \
 	"$(_module_fmt_routine --prepend-path MANPATH $path/man)"
+    _add_module_if -F $force -d "$path/man" $mfile \
+	"$(_module_fmt_routine --prepend-path MANPATH $path/share/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
     #_add_module_if -F $force -d "$path/lib" $mfile \
 #	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
