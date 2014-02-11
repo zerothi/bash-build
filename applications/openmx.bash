@@ -1,4 +1,6 @@
-add_package http://www.openmx-square.org/openmx3.7.tar.gz
+add_package --package openmx \
+    --version 3.7.7 \
+    http://www.openmx-square.org/openmx3.7.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -21,13 +23,16 @@ pack_set --command "cd source"
 pack_set --command "wget http://www.openmx-square.org/bugfixed/14Jan31/patch3.7.7.tar.gz"
 pack_set --command "tar xfz patch3.7.7.tar.gz"
 
-pack_set --version 3.7.7
-
 # Clean up the makefile
 file=makefile
 pack_set --command "sed -i -e 's/^LIB[^E].*//g;s/^[FC]C[[:space:]]*=.*//g' $file"
 pack_set --command "sed -i -e 's/^CFLAGS.*//g;s:^-I/usr/local/include.*::g' $file"
-pack_set --command "sed -i -e '/-o openmx/{s/CC/FC/}' $file"
+# Ensures that linking gets the FORTRAN files, we could also add -lgfortran
+#tools="openmx TranMain esp check_lead polB analysis_example jx DosMain"
+#for tool in $tools ; do
+#    pack_set --command "sed -i -e '/-o $tool/{s/CC/FC/}' $file"
+#done
+pack_set --command "sed -i -e '/^DESTDIR*/d' $file"
 
 if $(is_c intel) ; then    
     pack_set --command "sed -i '1 a\
@@ -45,6 +50,10 @@ elif $(is_c gnu) ; then
     LIB += $(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas' $file"
     fi
 
+    # Add the gfortran library
+    pack_set --command "sed -i '1 a\
+LIB += -lgfortran' $file"
+
     pack_set --command "sed -i '1 a\
 CC += -fopenmp\nFC += -fopenmp' $file"
 
@@ -53,26 +62,26 @@ else
     
 fi
 pack_set --command "sed -i '1 a\
+DESTDIR = $(pack_get --install-prefix)/bin\n\
 CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
+# Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3\n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi_f90 -lmpi_f77\n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
+
+# prepare the directory of installation
+pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 # Make commands
 pack_set --command "make"
-
-# Install the package
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp openmx $(pack_get --install-prefix)/bin/"
-pack_set --command "cd .."
-
-# Add an ENV-flag for the pseudos to be accesible
-pack_set --command "cd DFT_DATA13"
-pack_set --command "cp -r PAO VPS $(pack_get --install-prefix)/"
-pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --install-prefix)/PAO"
-pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --install-prefix)/VPS"
+pack_set --command "make install"
+for tool in TranMain esp polB analysis_example jx DosMain ; do
+    pack_set --command "make $tool"
+done
+# Apparently this is the only tool that is not automatically installed
+pack_set --command "cp TranMain $(pack_get --install-prefix)/bin/"
 
 pack_install
 
