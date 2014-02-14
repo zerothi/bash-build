@@ -177,7 +177,11 @@ pack_set --command "cp swarm simplex $(pack_get --install-prefix)/bin/"
 #pack_set --command "make $files"
 #pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../"
+pack_set --command "cd ../Vibra/Src"
+pack_set --command "make"
+pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
+
+pack_set --command "cd ../../"
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
 
