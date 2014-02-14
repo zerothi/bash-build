@@ -160,6 +160,10 @@ pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 
+pack_set --command "cd ../"
+pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
+pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
+
 pack_install
 
 create_module \
