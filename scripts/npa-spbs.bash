@@ -141,7 +141,7 @@ esac
 
 _help "Please use \$(basename \$0) --help to see all available options."
 
-if [ \$nodes -ge 2 ]; then
+if [ \$nodes -ge 2 ] && [ \$omp -lt 2 ]; then
   _help "Disabling OpenMP as you have requested +1 node."
   omp=0
 fi
