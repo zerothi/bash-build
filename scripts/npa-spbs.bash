@@ -83,7 +83,6 @@ function _spbs_help {
 
 
 # Function for printing help which does not get piped
-#
 function _help {
     echo "MSG: \$@" >&2
 }
@@ -141,6 +140,11 @@ case \$access_policy in
 esac
 
 _help "Please use \$(basename \$0) --help to see all available options."
+
+if [ \$nodes -ge 2 ]; then
+  _help "Disabling OpenMP as you have requested +1 node."
+  omp=0
+fi
 
 echo "#!/bin/sh"
 _spbs_add_PBS_option -N "\$name" "The name of the PBS script"
