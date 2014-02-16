@@ -18,9 +18,10 @@ fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "check" \
-    --command-flag "install"
+pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make install"
+
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 # Fix the include placement
 pack_set --command "mv $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)/include" \

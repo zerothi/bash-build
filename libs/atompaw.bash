@@ -32,5 +32,8 @@ pack_set --command "./configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+

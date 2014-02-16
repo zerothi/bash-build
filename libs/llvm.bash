@@ -42,7 +42,9 @@ pack_set --command "make install"
 
 # Install clang together with llvm
 pack_set --command "cd tools/clang"
-pack_set --command "make test"
+pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
+
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 done

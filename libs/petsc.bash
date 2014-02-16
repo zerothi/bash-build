@@ -86,7 +86,9 @@ pack_set --command "make"
 pack_set --command "make install"
 
 # This tests the installation (i.e. linking)
-pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) PETSC_ARCH= test"
+pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) PETSC_ARCH= test > tmp.test 2>&1"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
 

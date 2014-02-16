@@ -15,10 +15,10 @@ pack_set --command "CC='$MPICC' FC='$MPIFC' LIBS='-lnetcdff -lnetcdf -lpnetcdf -
 pack_set --command "sed -i -e 's:len = 256:len = dims(1):g' tests/group_level/tests_module.f90"
 
 pack_set --command "make $(get_make_parallel)"
-#if ! $(is_c gnu) ; then
-#    pack_set --command "make check"
-#fi
+pack_set --command "make check > tmp.test 2>&1" 
 pack_set --command "make install"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+
 
 # Correct the very strange partition of the module locations
 pack_set --command "mv $(pack_get --install-prefix)/include/*/* $(pack_get --install-prefix)/include/" 

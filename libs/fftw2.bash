@@ -15,9 +15,10 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "check" \
-    --command-flag "install"
+pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make install"
+
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
 
