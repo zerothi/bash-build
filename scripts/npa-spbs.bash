@@ -82,6 +82,11 @@ function _spbs_help {
 }
 
 
+# Function for printing help which does not get piped
+#
+function _help {
+    echo "MSG: \$@" >&2
+}
 
 
 while [ \$# -ne 0 ]; do
@@ -107,9 +112,9 @@ while [ \$# -ne 0 ]; do
         -mail-address|-mail|-M) mail="\$1" ; shift ;;
         -mix-in-out|-joe) inout=oe ;;
         -no-mpi) mpi=0 ;;
-        -mpi) mpi=1 ;;
+        -mpi) mpi=1 ; [ \$omp -eq 1 ] && omp=0 ;;
         -no-omp) omp=0 ;;
-        -omp) omp=1 ;;
+        -omp) omp=2 ;;
         -paffinity) single_paffinity=1 ;;
         -no-paffinity) single_paffinity=0 ;;
         -flag-explanations|-fe) show_flag=1 ;;
@@ -135,17 +140,24 @@ case \$access_policy in
          _spbs_help ; exit 1 ;;
 esac
 
+_help "Please use \$(basename \$0) --help to see all available options."
 
 echo "#!/bin/sh"
 _spbs_add_PBS_option -N "\$name" "The name of the PBS script"
 _spbs_add_PBS_option -q "\$queue" "The queue that the script is submitted to"
 _spbs_add_PBS_option -l "nodes=\$nodes:ppn=\$ppn" "Determines the processors, nodes = computers, ppn = cores used on each computer [nodes=2:ppn=4] => 8 cpu's"
+if [ \$has_np_cmd -eq 1 ]; then
+  if [ \$((\$nodes*\$ppn)) -le 8 ]; then
+    _help "With <= 8 cores you will automatically only be assigned to the AMD machines"
+    _spbs_add_PBS_option -l "feature='Opteron2220|Opteron2354|Opteron2382|Opteron6136'" "Only requests processors of AMD type"
+  fi
+fi
 _spbs_add_PBS_option -l "walltime=\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 _spbs_add_PBS_option -m "\$message" "Mail upon [a] = PBS abort, [e] = execution error, [b] = begin execution."
 _spbs_add_PBS_option -M "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."
 _spbs_add_PBS_option -j "\$inout" "Combines the stdout and stderr output to the stdout (thus no error file will be created)."
 if [ "x\$access_policy" != "xSHARED" ]; then
-_spbs_add_PBS_option -l "NACCESSPOLICY=\$access_policy" "Determines the access policy of the jobs. SHARED: everybody can run simultaneously. \\
+  _spbs_add_PBS_option -l "NACCESSPOLICY=\$access_policy" "Determines the access policy of the jobs. SHARED: everybody can run simultaneously. \\
 SINGLEUSER: only the same user can run. \\
 SINGLETASK: only one task from the same job can run. \\
 SINGLEJOB: only one job can run."
@@ -155,38 +167,43 @@ echo ''
 _spbs_add_line 'source \$PBS_O_HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
 _spbs_add_line 'module purge' "Clear list of defaulted modules"
 _spbs_add_line 'module load npa-cluster-setup' "Enables the NPA modules"
+_spbs_add_line 'env' "For debugging purposes"
 echo ''
-_spbs_add_line 'ulimit -s unlimited' "Ensure the stack-size unlimited"
+_spbs_add_line 'ulimit -s unlimited' "Ensure an unlimited stack-size"
 _spbs_add_line 'date' "Show the date and time of execution"
 _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution folder"
 if [ \$has_np_cmd -eq 1 ]; then
-_spbs_add_line '# \$PBS_NP is the number of processors available' "The total number of cores is precomputed for you [\$((nodes*ppn))] and saved in the env-variable PBS_NP"
+  _spbs_add_line '# \$PBS_NP is the number of processors available' "The total number of cores is precomputed for you [\$((nodes*ppn))] and saved in the env-variable PBS_NP"
 else
-_spbs_add_line 'NPROCS=\$(wc -l < \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
+  _spbs_add_line 'NPROCS=\$(wc -l < \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
 fi
 if [ \$nodes -eq 1 ] && [ \$single_paffinity -eq 1 ]; then
-_spbs_add_line 'export OMPI_MCA_mpi_paffinity_alone=1' "Ensure that MPI utilizes the best connection mode when on a single node DO NOT USE IF NOT OCCUPYING FULL NODE"
+  _spbs_add_line 'export OMPI_MCA_mpi_paffinity_alone=1' "Ensure that MPI utilizes the best connection mode when on a single node DO NOT USE IF NOT OCCUPYING FULL NODE"
 fi
 echo ''
 
 # Add typical setup for MPI/OpenMP
 if [ \$mpi -eq 1 ]; then
-_spbs_add_line 'exit 0 # load MPI' "Ensure that you have loaded the correct MPI command, then delete this"
-if [ \$omp -eq 1 ]; then
-_spbs_add_line "mpirun --bynode -np \$nodes -x OMP_NUM_THREADS=\$ppn <executable>" "Setup the MPI call to figure out the number of cores used"
-else
-if [ \$has_np_cmd -eq 1 ]; then
-_spbs_add_line 'mpirun -np \$PBS_NP <executable>' "Setup the MPI call to figure out the number of cores used"
-else
-_spbs_add_line 'mpirun -np \$NPROCS <executable>' "Setup the MPI call to figure out the number of cores used"
-fi
-fi
-elif [ \$omp -eq 1 ]; then
-if [ \$has_np_cmd -eq 1 ]; then
-_spbs_add_line 'export OMP_NUM_THREADS=\$PBS_NP' "Ensures the correct number of processes used by threading (requires BASH)"
-else
-_spbs_add_line 'export OMP_NUM_THREADS=\$NPROCS' "Ensures the correct number of processes used by threading (requires BASH)"
-fi
+  _help "You are using MPI. Please edit the submit-script and ensure a working MPI executable"
+  _spbs_add_line 'exit 0 # load MPI' "Ensure that you have loaded the correct MPI command, then delete this"
+  if [ \$omp -gt 0 ]; then
+    _help "You are creating an MPI and OpenMP script."
+    _spbs_add_line "mpirun --bynode -np \$nodes -x OMP_NUM_THREADS=\$ppn <executable>" "Setup the MPI call to figure out the number of cores used"
+  else
+    _help "You are creating an MPI script."
+    if [ \$has_np_cmd -eq 1 ]; then
+      _spbs_add_line 'mpirun -np \$PBS_NP <executable>' "Setup the MPI call to figure out the number of cores used"
+    else
+      _spbs_add_line 'mpirun -np \$NPROCS <executable>' "Setup the MPI call to figure out the number of cores used"
+    fi
+  fi
+elif [ \$omp -gt 0 ]; then
+  _help "You are creating an OpenMP script (no MPI)."
+  if [ \$has_np_cmd -eq 1 ]; then
+    _spbs_add_line 'export OMP_NUM_THREADS=\$PBS_NP' "Ensures the correct number of processes used by threading (requires BASH)"
+  else
+    _spbs_add_line 'export OMP_NUM_THREADS=\$NPROCS' "Ensures the correct number of processes used by threading (requires BASH)"
+  fi
 fi
 
 EOF
