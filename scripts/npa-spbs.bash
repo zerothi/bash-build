@@ -64,7 +64,7 @@ function _spbs_help {
     printf "\$format" "--days|-dd" "The time of execution in days. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
-    printf "\$format" "--nodes|-n" "Number of nodes requested"
+    printf "\$format" "--nodes|-n|-p" "Number of nodes requested"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
     printf "\$format" "--message-begin" "Mail when the job begins"
     printf "\$format" "--message-error" "Mail when the job quits on error"
@@ -101,7 +101,7 @@ while [ \$# -ne 0 ]; do
         -days|-dd) walltime="\$((\$1*24)):\${walltime#*:}" ; shift ;;
         -hours|-hh) walltime="\$1:\${walltime#*:}" ; shift ;;
         -minutes|-mm) walltime="\${walltime%%:*}:\$1:\${walltime##*:}" ; shift ;;
-        -nodes|-n) nodes="\$1" ; shift ;;
+        -nodes|-n|-p) nodes="\$1" ; shift ;;
         -processors-per-node|-ppn) ppn="\$1" ; shift ;;
         -message-begin) message="b\$message" ;;
         -message-error) message="e\$message" ;;
@@ -118,10 +118,10 @@ while [ \$# -ne 0 ]; do
         -no-paffinity) single_paffinity=0 ;;
         -flag-explanations|-fe) show_flag=1 ;;
 #        -access-policy) access_policy="\$1" ; shift ;; 
-        -help|-h) _spbs_help ; exit 0 ;;
+        -help|-h) _spbs_help >&2 ; exit 0 ;;
         *)
-            echo "Could not recognize flag: \$opt"
-            _spbs_help ; exit 1 ;;
+            echo "Could not recognize flag: \$opt" >&2
+            _spbs_help >&2; exit 1 ;;
     esac
 done
 
