@@ -26,7 +26,10 @@ pack_set \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
+#pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+
+#pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.c"
 
 # Install the FORTRAN headers
 add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-fortran-4.2.tar.gz
@@ -53,8 +56,8 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+#pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+#pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.f"
 done
