@@ -14,16 +14,24 @@ pack_set --module-requirement zlib --module-requirement expat \
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python3
 
+tmp=
+if ! $(is_c gnu) ; then
+    tmp="--without-gcc"
+fi
+
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib expat libffi)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
+#pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
+
+#pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 pack_install
 
