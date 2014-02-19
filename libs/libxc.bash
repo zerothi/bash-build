@@ -1,4 +1,4 @@
-v=2.0.2
+v=2.0.3
 add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL -s $BUILD_DIR
