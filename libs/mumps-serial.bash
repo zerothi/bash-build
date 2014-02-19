@@ -12,7 +12,12 @@ pack_set --module-requirement scotch
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
-if $(is_c gnu) ; then
+if $(is_c intel) ; then
+    tmp_flag="-nofor-main"
+    pack_set --command "sed -i '1 a\
+LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+
+else
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
@@ -22,14 +27,6 @@ LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefi
 	pack_set --command "sed -i '1 a\
 LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
     fi
-
-elif $(is_c intel) ; then
-    tmp_flag="-nofor-main"
-    pack_set --command "sed -i '1 a\
-LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
-
-else
-    doerr MUMPS "Could not determine compiler..."
 
 fi
 

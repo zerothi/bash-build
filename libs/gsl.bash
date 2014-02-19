@@ -12,7 +12,7 @@ if $(is_c intel) ; then
 	--command-flag "LDFLAGS='$MKL_LIB'" \
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
-elif $(is_c gnu) ; then
+else
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "../configure" \
@@ -25,8 +25,7 @@ elif $(is_c gnu) ; then
 	    --command-flag "LIBS='-lm $(list --Wlrpath --LDFLAGS blas lapack) -llapack -lblas'" \
 	    --command-flag "--prefix $(pack_get --install-prefix)"
     fi
-else
-    doerr gsl "Have not adapted a correct BLAS/LAPACK library"
+
 fi
 
 # Make commands

@@ -41,7 +41,7 @@ if $(is_c intel) ; then
 BLASLIB = -mkl=sequential\n\
 ' $file"
     
-elif $(is_c gnu) ; then
+else
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
@@ -55,9 +55,6 @@ BLASLIB = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas\n\
 ' $file"
 	
     fi
-
-else
-    doerr superlu "Could not determine compiler"
 
 fi
 

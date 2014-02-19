@@ -55,7 +55,7 @@ if $(is_c intel) ; then
     pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lmkl_blas95_lp64|' $mk"
     pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -lmkl_lapack95_lp64|' $mk"
 
-elif $(is_c gnu) ; then
+else
     # Add requirments when creating the module
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
@@ -69,8 +69,6 @@ elif $(is_c gnu) ; then
 	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lblas|' $mk"
 	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -llapack|' $mk"
     fi
-else
-    doerr $(pack_get --package) "Has not been configured with $(get_c) compiler"
 
 fi
 

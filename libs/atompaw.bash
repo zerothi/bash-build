@@ -8,7 +8,10 @@ pack_set --module-requirement libxc
 pack_set --install-query $(pack_get --install-prefix)/lib/libatompaw.a
 
 tmp=
-if $(is_c gnu) ; then
+if $(is_c intel) ; then
+    tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential"
+
+else
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas"
@@ -16,12 +19,6 @@ if $(is_c gnu) ; then
 	pack_set --module-requirement blas --module-requirement lapack
 	tmp="$(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas"
     fi
-
-elif $(is_c intel) ; then
-    tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential"
-
-else
-    doerr AtomPAW "Could not determine compiler..."
 
 fi
 

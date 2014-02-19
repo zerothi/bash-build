@@ -32,8 +32,6 @@ elif $(is_c gnu) ; then
     pack_set --command "sed -i '1 a\
 CFLAGS = -Drestrict=__restrict' $file"
     
-else
-    doerr scotch "Unrecognized compiler"
 fi
 
 pack_set --command "sed -i '1 a\

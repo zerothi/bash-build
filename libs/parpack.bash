@@ -85,7 +85,7 @@ BLASLIB  = -mkl=sequential\n\
 LDFLAGS = \n\
 ' $file"
 
-elif $(is_c gnu) ; then
+else
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
@@ -107,9 +107,6 @@ LDFLAGS = $(list --LDFLAGS --Wlrpath blas lapack)\n\
     # We need to correct for etime which has enterred as
     # an intrinsic rather than external function
     pack_set --command "sed -i -e 's:.*EXTERNAL[ ]*ETIME.*::g' UTIL/second.f"
-
-else
-    doerr arpack "Could not determine compiler"
 
 fi
 
