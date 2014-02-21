@@ -22,6 +22,9 @@ pack_set --command "cd source"
 pack_set --command "wget http://www.openmx-square.org/bugfixed/14Feb17/patch3.7.8.tar.gz"
 pack_set --command "tar xfz patch3.7.8.tar.gz"
 
+if test -z "$FLAG_OMP" ; then
+    doerr OpenMX "Can not find the OpenMP flag (set FLAG_OMP in source)"
+fi
 
 # Clean up the makefile
 file=makefile
@@ -36,9 +39,9 @@ pack_set --command "sed -i -e '/^DESTDIR*/d' $file"
 
 if $(is_c intel) ; then    
     pack_set --command "sed -i '1 a\
-    LIB += -mkl=parallel\nCC += -openmp\nFC += -openmp -nofor_main' $file"
+    LIB += -mkl=parallel\nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
-elif $(is_c gnu) ; then
+else
     pack_set --module-requirement scalapack
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
@@ -55,10 +58,7 @@ elif $(is_c gnu) ; then
 LIB += -lgfortran' $file"
 
     pack_set --command "sed -i '1 a\
-CC += -fopenmp\nFC += -fopenmp' $file"
-
-else
-    doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
+CC += $FLAG_OMP\nFC += $FLAG_OMP' $file"
     
 fi
 pack_set --command "sed -i '1 a\
@@ -82,6 +82,12 @@ for tool in TranMain esp polB analysis_example jx DosMain ; do
 done
 # Apparently this is the only tool that is not automatically installed
 pack_set --command "cp TranMain $(pack_get --install-prefix)/bin/"
+
+# Add an ENV-flag for the pseudos to be accesible
+pack_set --command "cd DFT_DATA13"
+pack_set --command "cp -r PAO VPS $(pack_get --install-prefix)/"
+pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --install-prefix)/PAO"
+pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --install-prefix)/VPS"
 
 pack_install
 

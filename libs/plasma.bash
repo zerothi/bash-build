@@ -21,11 +21,15 @@ pack_set --module-requirement lapack
 tmp=make.inc
 pack_set --command "echo '# Makefile for easy installation ' > $tmp"
 
+if test -z "$FLAG_OMP" ; then
+    doerr PLASMA "Can not find the OpenMP flag (set FLAG_OMP in source)"
+fi
+
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c intel) ; then
     # The tmg-lib must be included...
     pack_set --command "sed -i '1 a\
-CFLAGS  += -DPLASMA_WITH_MKL -openmp -I$MKL_PATH/include \n\
+CFLAGS  += -DPLASMA_WITH_MKL $FLAG_OMP -I$MKL_PATH/include \n\
 FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
@@ -35,7 +39,7 @@ LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
 else 
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --command "sed -i '1 a\
-CFLAGS  += -fopenmp \n\
+CFLAGS  += $FLAG_OMP \n\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n\
 LIBLAPACK = $(list --LDFLAGS --Wlrpath lapack atlas) -ltmg -llapack_atlas\n' $tmp"
     else

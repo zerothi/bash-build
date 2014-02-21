@@ -11,14 +11,13 @@ pack_set --module-requirement openmpi \
 # Add the lua family
 pack_set --module-opt "--lua-family elk"
 
+if test -z "$FLAG_OMP" ; then
+    doerr elk "Can not find the OpenMP flag (set FLAG_OMP in source)"
+fi
+
 tmp=
 if $(is_c intel) ; then
-    tmp="-openmp -mkl=cluster"
-elif $(is_c gnu) ; then
-    tmp=-fopenmp
-
-else
-    doerr elk "Could not determine compiler"
+    tmp="-mkl=cluster"
 fi
 
 file=make.inc
@@ -27,9 +26,9 @@ pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > $fi
 pack_set --command "sed -i '1 a\
 MAKE = make\n\
 F90 = $FC\n\
-F90_OPTS = $FCFLAGS $tmp \n\
+F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $F77\n\
-F77_OPTS = $FCFLAGS $tmp \n\
+F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
 LIB_XC = $(list --LDFLAGS --Wlrpath libxc) -lxc\n\
 LIB_FFT = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
@@ -42,7 +41,7 @@ if $(is_c intel) ; then
 LIB_LPK = -mkl=cluster\n\
 ' $file"
 
-elif $(is_c gnu) ; then
+else
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp="-llapack_atlas -lf77blas -lcblas -latlas"

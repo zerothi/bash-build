@@ -33,16 +33,11 @@ pack_set --command "make install"
 
 # create the OpenMP version
 pack_set --command "rm -rf ./*"
-if $(is_c gnu) ; then
-    tmp_openmp="-fopenmp"
-elif $(is_c intel) ; then
-    tmp_openmp="-openmp"
-else
-    doerr FFTW3 "Don't know the flag of OpenMP for the compiler..."
-
+if test -z "$FLAG_OMP" ; then
+    doerr FFTW3 "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
-pack_set --command "LIB='$tmp_openmp' CFLAGS='$CFLAGS $tmp_openmp' FFLAGS='$FFLAGS $tmp_openmp' ../configure $flag" \
+pack_set --command "LIB='$FLAG_OMP' CFLAGS='$CFLAGS $FLAG_OMP' FFLAGS='$FFLAGS $FLAG_OMP' ../configure $flag" \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
     --command-flag "--prefix $(pack_get --install-prefix)"

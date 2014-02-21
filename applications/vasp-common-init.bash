@@ -27,7 +27,7 @@ pack_set --command "sed -i '1 a\
 .SUFFIXES: .inc .f .f90 .F\n\
 SUFFIX=.f90\n\
 FC   = $MPIF90 \n\
-FCL  = \$(FC) \n\
+FCL  = \$(FC) $FLAG_OMP \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
      -DCACHE_SIZE=12000 -Davoidalloc \\\\\n\
@@ -35,7 +35,7 @@ CPP  = \$(CPP_) -DMPI \\\\\n\
      -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\
 FREE = -FR \n\
-FFLAGS = $FCFLAGS -FR -assume byterecl \n\
+FFLAGS = $FCFLAGS -FR -assume byterecl $FLAG_OMP \n\
 OFLAG= $FCFLAGS \n\
 OFLAG_HIGH = \$(OFLAG) \n\
 OBJ_HIGH = \n\
@@ -52,8 +52,7 @@ if $(is_c intel) ; then
 
     pack_set --command "sed -i '$ a\
 # First correct the OpenMP flags\n\
-FCL += -mkl=parallel -openmp \n\
-FFLAGS += -openmp \n\
+FCL += -mkl=parallel \n\
 DEBUG += -FR \n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"LinuxIFC\\\\\" -DPGF90 -DIFC \n\
@@ -63,17 +62,15 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LINK = -openmp -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
+LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
 
-elif $(is_c gnu) ; then
+else
     pack_set --module-requirement scalapack
     pack_set --command "sed -i '$ a\
 # First correct the OpenMP flags\n\
-FCL += -fopenmp \n\
-FFLAGS += -fopenmp \n\
 # Correct the CPP\n\
-CPP += -DHOST=\\\\\"gfortran\\\\\" \n\
-LINK = -fopenmp \n\
+CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
+LINK = $FLAG_OMP \n\
 SCA = $(list --Wlrpath --LDFLAGS scalapack) -lscalapack ' $file"
 
     if [ $(pack_installed atlas) -eq 1 ] ; then
@@ -90,9 +87,6 @@ BLAS = $(list --Wlrpath --LDFLAGS blas) -lblas \n\
 LAPACK = $(list --Wlrpath --LDFLAGS lapack) -llapack ' $file"
 
     fi
-
-else
-    doerr VASP "Could not find compiler $(get_c)"
 
 fi
 

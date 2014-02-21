@@ -1,4 +1,5 @@
-add_package http://archive.ipython.org/release/1.1.0/ipython-1.1.0.tar.gz
+v=1.2.0
+add_package http://archive.ipython.org/release/$v/ipython-$v.tar.gz
 
 tmp=
 [ "x${pV:0:1}" == "x3" ] && tmp=3

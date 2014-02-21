@@ -20,21 +20,25 @@ fi
 tmp=sysmakes/make.$cc
 pack_set --command "echo '#' > $tmp"
 
+if test -z "$FLAG_OMP" ; then
+    doerr dftb "Can not find the OpenMP flag (set FLAG_OMP in source)"
+fi
+
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
 FC90 = $FC\n\
-FC90OPT = $FCFLAGS -openmp -mkl=parallel\n\
+FC90OPT = $FCFLAGS $FLAG_OMP -mkl=parallel\n\
 CPP = cpp -traditional\n\
 CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
 LN = \$(FC90) \n\
-LNOPT = -mkl=parallel -openmp\n\
+LNOPT = -mkl=parallel $FLAG_OMP\n\
 LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
 LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n\
 LIBOPT = $MKL_LIB' $tmp"
     
-elif $(is_c gnu) ; then
+else
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
     else
@@ -42,12 +46,12 @@ elif $(is_c gnu) ; then
     fi
     pack_set --command "sed -i '1 a\
 FC90 = $FC\n\
-FC90OPT = $FCFLAGS -fopenmp\n\
+FC90OPT = $FCFLAGS $FLAG_OMP \n\
 CPP = cpp -traditional\n\
 CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
 LN = \$(FC90) \n\
-LNOPT = -fopenmp' $tmp"
+LNOPT = $FLAG_OMP' $tmp"
 
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --command "sed -i '$ a\
@@ -63,9 +67,6 @@ LIB_LAPACK = \$(LAPACKOPT) -llapack\n\
 LIB_BLAS   = \$(BLASOPT) -lblas\n\
 LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)' $tmp"
     fi
-
-else
-    doerr dftb "Could not find compiler $(get_c)"
 
 fi
 

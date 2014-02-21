@@ -18,7 +18,12 @@ pack_set --module-requirement etsf_io
 pack_set --module-requirement fftw-3
 
 tmp=
-if $(is_c gnu) ; then
+if $(is_c intel) ; then
+    tmp="$tmp --with-blas='-mkl=cluster'"
+    tmp="$tmp --with-lapack='-mkl=cluster'"
+    tmp="$tmp --with-scalapack='-mkl=cluster'"
+
+else
     pack_set --module-requirement scalapack    
     tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
     if [ $(pack_installed atlas) -eq 1 ]; then
@@ -30,14 +35,6 @@ if $(is_c gnu) ; then
 	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath blas) -lblas'"
 	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
     fi
-
-elif $(is_c intel) ; then
-    tmp="$tmp --with-blas='-mkl=cluster'"
-    tmp="$tmp --with-lapack='-mkl=cluster'"
-    tmp="$tmp --with-scalapack='-mkl=cluster'"
-
-else
-    doerr octopus "Could not determine compiler..."
 
 fi
 
@@ -54,8 +51,9 @@ pack_set --command "LIBS='$(list --LDFLAGS --Wlrpath netcdf fftw-3) -lnetcdff -l
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 pack_install
 

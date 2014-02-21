@@ -13,6 +13,7 @@ CFLAGS="$common_flags"
 FCFLAGS="$common_flags -Mnosecond_underscore"
 FFLAGS="$common_flags -Mnosecond_underscore"
 
+FLAG_OMP="-mp"
 MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
@@ -23,6 +24,7 @@ MPIF90=mpif90
 
 LDFLAGS=
 
+export FLAG_OMP
 export AR
 export CC
 export CXX

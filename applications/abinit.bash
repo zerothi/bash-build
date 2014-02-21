@@ -24,14 +24,19 @@ s="sed -i"
 file=build.ac
 pack_set --command "echo '# This is Nicks build.ac for Abinit' > $file"
 
+if test -z "$FLAG_OMP" ; then
+    doerr abinit "Can not find the OpenMP flag (set FLAG_OMP in source)"
+fi
+
 pack_set --command "$s '$ a\
 prefix=\"$(pack_get --install-prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
-FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2}\"\n\
-CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2}\"\n\
-CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2}\"\n\
+FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2} $FLAG_OMP\"\n\
+CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2} $FLAG_OMP\"\n\
+CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2} $FLAG_OMP\"\n\
+FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_64bit_flags=\"yes\"\n\
 enable_lotf=\"yes\"\n\
@@ -44,8 +49,22 @@ with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list --INCDIRS gsl)\"\n\
 with_math_libs=\"$(list --LDFLAGS --Wlrpath gsl) -lgsl\"\n' $file"
+    
+if $(is_c intel) ; then
+    # We need to correct the configure script
+    # (it checks whether linking is done correctly!)
+    # STUPID, I say!
+    #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
+    pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
+    tmp="-mkl=cluster"
+    pack_set --command "$s '$ a\
+FCLIBS=\"$tmp\"\n\
+LIBS=\"$tmp\"\n\
+with_linalg_libs=\"$tmp\"\n' $file"
+    # Ensures that the build will search for the correct MPI libraries
+    pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
-if $(is_c gnu) ; then
+else
     pack_set --module-requirement scalapack    
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --command "$s '$ a\
@@ -59,27 +78,7 @@ with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llap
 with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
 with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
     fi
-    pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-fopenmp /g' $file"
-    pack_set --command "$s '$ a\
-FCFLAGS_OPENMP=\"-fopenmp\"' $file"
-    
-elif $(is_c intel) ; then
-    # We need to correct the configure script
-    # (it checks whether linking is done correctly!)
-    # STUPID, I say!
-    pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
-    pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp="-mkl=cluster"
-    pack_set --command "$s '$ a\
-FCFLAGS_OPENMP=\"-openmp\"\n\
-FCLIBS=\"$tmp\"\n\
-LIBS=\"$tmp\"\n\
-with_linalg_libs=\"$tmp\"\n' $file"
-    # Ensures that the build will search for the correct MPI libraries
-    pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
-
-else
-    doerr abinit "Could not determine compiler..."
+    #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-fopenmp /g' $file"
 
 fi
 

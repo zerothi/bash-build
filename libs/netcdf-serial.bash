@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.3.1 ; do
+for v in 4.3.1.1 ; do
 add_package \
     --package netcdf-serial \
     http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz

@@ -22,3 +22,6 @@ source helpers/swig.bash
 source helpers/zlib.bash
 source helpers/libffi.bash
 source helpers/llvm.bash
+
+# Install git for those who want the newest release
+source helpers/git.bash

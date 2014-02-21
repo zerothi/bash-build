@@ -37,7 +37,6 @@ source applications/octopus.bash
 source applications/espresso.bash
 # The OpenMX DFT code (has a NEGF routine)
 source applications/openmx.bash
-source applications/openmx-pseudo.bash
 source applications/bigdft.bash
 source applications/abinit.bash
 

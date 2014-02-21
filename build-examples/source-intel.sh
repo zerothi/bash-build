@@ -16,6 +16,7 @@ CFLAGS="$common_flags"
 FCFLAGS="$common_flags"
 FFLAGS="$common_flags"
 
+FLAG_OMP="-openmp"
 MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
@@ -37,7 +38,7 @@ LDFLAGS=
 # Generate default links to libraries
 #LDFLAGS="$(list --prefix -L$IBASE_DIR/ compiler/lib/intel64 mkl/lib/intel64) $(list --prefix -Wl,-rpath=$IBASE_DIR/ compiler/lib/intel64 mkl/lib/intel64)"
 
-
+export FLAG_OMP
 export AR
 export CC
 export CXX

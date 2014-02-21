@@ -5,7 +5,7 @@ function tmp {
        	--no-default-modules \
 	--package openmx/pseudo \
 	--version $1 \
-	http://www.openmx-square.org/openmx$(pack_get --version openmx).tar.gz
+	http://www.openmx-square.org/openmx3.7.tar.gz
 
     pack_set -s $IS_MODULE
     pack_set --host-reject ntch-l
