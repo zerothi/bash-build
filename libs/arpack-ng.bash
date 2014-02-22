@@ -1,6 +1,7 @@
+v=3.1.5
 add_package \
-    --directory arpack-ng-3.1.4 \
-    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_3.1.4.tar.gz
+    --directory arpack-ng-$v \
+    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -40,4 +41,6 @@ pack_set --command "./configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_set --command "make"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
