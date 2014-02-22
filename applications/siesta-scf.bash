@@ -1,4 +1,4 @@
-for v in 555 ; do
+for v in 557 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
@@ -162,8 +162,9 @@ pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 
 # Install the TS-analyzer
-pack_set --command "cd ../TSAnalyzeSort"
-pack_set --command "cp tsanalyzesort.py $(pack_get --install-prefix)/bin/"
+pack_set --command "cd ../TS/"
+pack_set --command "cp AnalyzeSort/tsanalyzesort.py $(pack_get --install-prefix)/bin/"
+pack_set --command "cp tselecs.sh $(pack_get --install-prefix)/bin/"
 
 # install the optimizer functions
 pack_set --command "cd ../Optimizer"
@@ -183,7 +184,6 @@ pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../../"
 
-pack_set --command "cp TS/tselecs.sh $(pack_get --install-prefix)/bin/tselecs"
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
 
