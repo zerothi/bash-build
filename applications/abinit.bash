@@ -37,6 +37,7 @@ FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
+FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_64bit_flags=\"yes\"\n\
 enable_lotf=\"yes\"\n\
@@ -126,7 +127,7 @@ with_wannier90_libs=\"$(list --LDFLAGS --Wlrpath wannier90) -lwannier\"' $file"
 # Configure the package...
 # We must not override the flags on the command line, it will
 # disturb the automatically added flags...
-pack_set --command "../configure --with-config-file=./$file"
+pack_set --command "unset FCFLAGS && unset CFLAGS && ../configure --with-config-file=./$file"
 
 if $(is_c intel) ; then
     # Correct the compilation for the intel compiler
