@@ -39,6 +39,7 @@ else
 fi
 
 pack_set --command "LIBS='$(list --LDFLAGS --Wlrpath netcdf fftw-3) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
+    --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
     --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
