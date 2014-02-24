@@ -20,7 +20,7 @@ pack_set --module-requirement fftw-3
 tmp=
 if $(is_c intel) ; then
     tmp="$tmp --with-blacs='-lmkl_blacs_openmpi_lp64'"
-    tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=sequential'"
+    tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=parallel'"
     tmp="$tmp --with-lapack='-lmkl_lapack95_lp64'"
     tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
 
