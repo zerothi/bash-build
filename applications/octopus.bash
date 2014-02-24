@@ -8,7 +8,7 @@ pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family octopus"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/octopus
+pack_set --install-query $(pack_get --install-prefix)/bin/octopus_mpi
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement libxc
@@ -19,9 +19,10 @@ pack_set --module-requirement fftw-3
 
 tmp=
 if $(is_c intel) ; then
-    tmp="$tmp --with-blas='-mkl=cluster'"
-    tmp="$tmp --with-lapack='-mkl=cluster'"
-    tmp="$tmp --with-scalapack='-mkl=cluster'"
+    tmp="$tmp --with-blacs='-lmkl_blacs_openmpi_lp64'"
+    tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=sequential'"
+    tmp="$tmp --with-lapack='-lmkl_lapack95_lp64'"
+    tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
 
 else
     pack_set --module-requirement scalapack    
@@ -38,8 +39,8 @@ else
 
 fi
 
-pack_set --command "LIBS='$(list --LDFLAGS --Wlrpath netcdf fftw-3) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX' ../configure" \
-    --command-flag "--enable-mpi" \
+
+pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
     --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
@@ -52,14 +53,29 @@ pack_set --command "LIBS='$(list --LDFLAGS --Wlrpath netcdf fftw-3) -lnetcdff -l
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-# With the MPI not working this errors out...
-#pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.serial"
 
-# Create the octopus executable link
-pack_set --command "cd $(pack_get --install-prefix)/bin/"
-pack_set --command "ln -s octopus_mpi octopus"
+# prep for the MPI-compilation...
+pack_set --command "rm -rf *"
+
+pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+    --command-flag "--enable-mpi" \
+    --command-flag "--enable-openmp" \
+    --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
+    --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
+    --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
+    --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \
+    --command-flag "--with-arpack='$(list --LDFLAGS --Wlrpath arpack-ng) -lparpack -larpack'" \
+    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "$tmp"
+
+# Make commands
+pack_set --command "make -j $(get_make_parallel)"
+pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make install"
+pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.mpi"
 
 pack_install
 
