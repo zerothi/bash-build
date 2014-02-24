@@ -57,6 +57,10 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 #pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
+# Create the octopus executable link
+pack_set --command "cd $(pack_get --install-prefix)/bin/"
+pack_set --command "ln -s octopus_mpi octopus"
+
 pack_install
 
 create_module \
