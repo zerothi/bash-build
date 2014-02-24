@@ -66,11 +66,12 @@ function _spbs_help {
     printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--nodes|-n|-p" "Number of nodes requested"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
-    printf "\$format" "--message-begin" "Mail when the job begins"
-    printf "\$format" "--message-error" "Mail when the job quits on error"
-    printf "\$format" "--message-abort" "Mail when the PBS system aborts the job"
-    printf "\$format" "--message-ae" "Short-hand for --message-abort --message-error."
-    printf "\$format" "--message-e" "Short-hand for --message-error."
+    printf "\$format" "--mail-begin|-m-b" "Mail when the job begins"
+    printf "\$format" "--mail-error|-m-e" "Mail when the job quits on error"
+    printf "\$format" "--mail-abort|-m-a" "Mail when the PBS system aborts the job"
+    printf "\$format" "--mail-ae|-m-ae" "Shorthand for abort/error mail"
+    printf "\$format" "--mail-n|--no-mail|-m-n" "Do not send any mails"
+    printf "\$format" "--mail-(letters)|-m-(letters)" "Short-hand for combining -m-b -m-e or all of them."
     printf "\$format" "--[no-]mpi" "Is the job parallel with MPI."
     printf "\$format" "--[no-]omp" "Is the job threaded (can be supplied together with MPI-flag) [default=omp]."
     printf "\$format" "--mail-address|-mail" "Redirect the mails to given mail address."
@@ -88,6 +89,7 @@ function _help {
 }
 
 
+
 while [ \$# -ne 0 ]; do
     opt="\$1" # Save the option passed
     case \$opt in
@@ -103,11 +105,11 @@ while [ \$# -ne 0 ]; do
         -minutes|-mm) walltime="\${walltime%%:*}:\$1:\${walltime##*:}" ; shift ;;
         -nodes|-n|-p) nodes="\$1" ; shift ;;
         -processors-per-node|-ppn) ppn="\$1" ; shift ;;
-        -message-begin) message="b\$message" ;;
-        -message-error) message="e\$message" ;;
-        -message-abort) message="a\$message" ;;
-        -message-ae) message="ae" ;;
-        -message-e) message="e" ;;
+        -mail-begin|-m-b) message="b\$message" ;;
+        -mail-error|-m-e) message="e\$message" ;;
+        -mail-abort|-m-a) message="a\$message" ;;
+        -mail-ae|-m-ae) message="ae" ;;
+        -mail-n|-no-mail|-m-n) message="n" ;;
         -mail-address|-mail|-M) mail="\$1" ; shift ;;
         -mix-in-out|-joe) inout=oe ;;
         -no-mpi) mpi=0 ;;
