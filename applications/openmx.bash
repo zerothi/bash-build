@@ -84,7 +84,7 @@ done
 pack_set --command "cp TranMain $(pack_get --install-prefix)/bin/"
 
 # Add an ENV-flag for the pseudos to be accesible
-pack_set --command "cd DFT_DATA13"
+pack_set --command "cd ../DFT_DATA13"
 pack_set --command "cp -r PAO VPS $(pack_get --install-prefix)/"
 pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --install-prefix)/PAO"
 pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --install-prefix)/VPS"

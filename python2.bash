@@ -34,7 +34,7 @@ pack_set --command "make $(get_make_parallel)"
 # Clean up intel files
 if $(is_c intel) ; then
     for f in Lib/test/test_unicode Lib/test/test_multibytecodec Lib/test/test_coding Lib/json/tests/test_unicode ; do
-    pack_set --command "rm $f.py"
+    pack_set --command "rm -f ../$f.py"
     done
 fi
 
