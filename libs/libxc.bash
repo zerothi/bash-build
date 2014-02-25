@@ -1,7 +1,7 @@
 v=2.0.3
 add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
 
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL -s $BUILD_DIR
+pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libxc.a
 
