@@ -72,8 +72,9 @@ pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --m
     --command-flag "$tmp"
 
 # Make commands
+pack_set --command "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 pack_set --command "make -j $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check > tmp.test 2>&1 && echo Succesfull >> tmp.test || echo Failure >> tmp.test"
 pack_set --command "make install"
 pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.mpi"
 
