@@ -6,7 +6,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
 pack_set --module-requirement openmpi --module-requirement netcdf-serial
 
-if [ $(vrs_cmp $(pack_get --version) "3.2") -lt 0 ]; then
+if [ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]; then
     pack_set --host-reject zero \
 	--host-reject ntch
 fi
@@ -144,6 +144,44 @@ pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
 pack_set --command "cd ../../"
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
+
+# If the stable version of siesta has enabled the ESM module, 
+# we compile that now
+# Currently it works with 3.1
+if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
+
+    # move back to head
+    tmp=siesta-3.1_esm_v1.05
+    pack_set --command "cd ../"
+    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz"
+    pack_set --command "tar xfz $tmp.tar.gz"
+    pack_set --command "patch -p1 < $tmp/esm_v1.05.diff"
+
+    pack_set --command "cd Obj"
+    pack_set --command "../Src/obj_setup.sh"
+    pack_set --command "make clean"
+
+    pack_set --command "make version"
+    pack_set --command "make libmpi_f90.a"
+    pack_set --command "make libfdf.a"
+    pack_set --command "make libxmlparser.a"
+    pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
+    pack_set --command "make FoX/.FoX"
+    pack_set --command "make siesta"
+    pack_set --command "cp siesta $(pack_get --install-prefix)/bin/siesta_esm"
+    
+    pack_set --command "make clean"
+    
+    pack_set --command "make version"
+    pack_set --command "make libmpi_f90.a"
+    pack_set --command "make libfdf.a"
+    pack_set --command "make libxmlparser.a"
+    pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
+    pack_set --command "make FoX/.FoX"
+    pack_set --command "make $(get_make_parallel) transiesta"
+    pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/transiesta_esm"
+
+fi
 
 pack_install
 
