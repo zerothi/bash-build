@@ -1,6 +1,6 @@
 for v in siesta-3.1 siesta-3.2 ; do
 add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+pack_set -s $IS_MODULE 
 
 pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
@@ -159,6 +159,8 @@ if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
 
     pack_set --command "cd Obj"
     pack_set --command "../Src/obj_setup.sh"
+    pack_set --command "make dep"
+
     pack_set --command "make clean"
 
     pack_set --command "make version"
