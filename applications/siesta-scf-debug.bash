@@ -1,6 +1,6 @@
 for v in 559 ; do
 
-add_package --build intel-debug --package siesta-scf-debug \
+add_package --build debug --package siesta-scf-debug \
     http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
