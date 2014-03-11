@@ -10,6 +10,9 @@ if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
 fi
 
+_DEBUG_COUNTER=0
+function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
+
 _ERROR_FILE=ERROR
 # Clean the error file
 rm -f $_ERROR_FILE
@@ -178,15 +181,15 @@ function build_get {
     # We set up default parameters for creating the 
     # default package directory
     local opt=$(trim_em $1)
+    shift
     local spec=$(var_spec -s $opt)
     if [ -z "$spec" ]; then
 	local b_idx=0
     else
 	local b_idx=$(get_index --hash-array "_b_index" $spec)
     fi
-    [ -z "$b_idx" ] && doerr "Build index" "Build not existing"
+    [ -z "$b_idx" ] && doerr "Build index" "Build not existing ($opt and $spec)"
     opt=$(var_spec $opt)
-    shift
     case $opt in
 	-archive-path|-ap) _ps "$_archives" ;;
 	-installation-path|-ip) _ps "${_b_prefix[$b_idx]}" ;;
@@ -197,14 +200,14 @@ function build_get {
 	-default-build) _ps "$_b_def_idx" ;; 
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
-	*) doerr "$opt" "Not a recognized option for build_get" ;;
+	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
     [ $DEBUG -ne 0 ] && do_debug --return build_get
 }
 
 function new_build {
     # Simple command to initialize a new build
-    _N_b=$((_N_b+1))
+    let _N_b++
     # Initialize all the stuff
     _b_prefix[$_N_b]="${_b_prefix[$_b_def_idx]}"
     _b_mod_prefix[$_N_b]="${_b_mod_prefix[$_b_def_idx]}"
@@ -351,7 +354,7 @@ function pack_list {
 # $1 http path
 function add_package {
     [ $DEBUG -ne 0 ] && do_debug --enter add_package
-    _N_archives=$(( _N_archives + 1 ))
+    let _N_archives++
     # Collect options
     local d="" ; local v=""
     local fn="" ; local package=""
@@ -387,8 +390,7 @@ function add_package {
     # When adding a package we need to ensure that all variables
     # exist for the rest of the package. Hence we source the "source"
     # Notice that the sourcing occurs several times doing the process
-    local tmp="$(build_get --source[$b_name])"
-    source $tmp
+    source $(build_get --source[$b_name])
 
     # Save the url 
     local url=$1

@@ -42,7 +42,8 @@ function set_c_flags {
     local idx=$1 ; shift
     _c_cO[$idx]="$@"
     [ $idx -ge 10 ] && return 0
-    local i=$((idx+1))
+    local i=$idx
+    let i++
     if [ "x${_c_cO[$i]}" == "x" ]; then
 	set_c_flags $i $@
     fi
@@ -52,7 +53,8 @@ function set_f_flags {
     local idx=$1 ; shift
     _c_fO[$idx]="$@"
     [ $idx -ge 10 ] && return 0
-    local i=$((idx+1))
+    local i=$idx
+    let i++
     if [ "x${_c_fO[$i]}" == "x" ]; then
 	set_f_flags $i $@
     fi
