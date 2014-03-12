@@ -93,7 +93,7 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 pack_set --command "make version"
-pack_set --command "siesta_install --siesta"
+pack_set --command "siesta_install -v $v --siesta"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make libfdf.a"
 pack_set --command "make libxmlparser.a"
