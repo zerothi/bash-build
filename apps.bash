@@ -5,7 +5,7 @@ source applications/siesta-stable.bash
 source applications/siesta-dev.bash
 source applications/siesta-mattias.bash
 source applications/siesta-scf.bash
-source applications/siesta-trunk-scf.bash
+source applications/siesta-trunk.bash
 
 source applications/lammps.bash
 

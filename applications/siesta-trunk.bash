@@ -1,6 +1,6 @@
-for v in 447 ; do
+for v in 458 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-scf-$v.tar.gz
+add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
