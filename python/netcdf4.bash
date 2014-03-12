@@ -1,4 +1,7 @@
-add_package --alias py-netcdf --package py-netcdf http://netcdf4-python.googlecode.com/files/netCDF4-1.0.7.tar.gz
+v=1.0.8
+add_package --version $v --alias py-netcdf --package py-netcdf \
+	--archive netcdf4-python-${v}rel.tar.gz \
+	https://github.com/Unidata/netcdf4-python/archive/v${v}rel.tar.gz
 
 pack_set -s $IS_MODULE
 

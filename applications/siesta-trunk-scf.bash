@@ -1,6 +1,6 @@
-for v in 458 ; do
+for v in 438 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-$v.tar.gz
+add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-scf-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
@@ -13,6 +13,10 @@ fi
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
+
+# Fix the __FILE__ content in the classes
+pack_set --command 'for f in Src/class* ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
+pack_set --command "sed -i -e 's:__FILE__:Fstack.T90:g' Src/Fstack.T90"
 
 # Change to directory:
 pack_set --command "cd Obj"
@@ -50,6 +54,8 @@ FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
+NETCDF_INCFLAGS=$(list --INCDIRS netcdf-serial)\n\
+NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf-serial)\n\
 ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
@@ -100,25 +106,24 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 # This should ensure a correct handling of the version info...
 pack_set --command "make version"
-
 pack_set --command "make siesta"
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
 pack_set --command "make version"
-
-# We have not created a test for the check of already installed files...
 pack_set --command "make transiesta"
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../Util/TBTrans"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
+#pack_set --command "cd ../Util/TBTrans"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
 
-pack_set --command "cd ../TBTrans_rep"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
+#pack_set --command "cd ../TBTrans_rep"
+#pack_set --command "siesta_install -v scf --tbtrans"
+#pack_set --command "make dep"
+#pack_set --command "make"
+#pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
 
 pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
@@ -150,11 +155,24 @@ pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 
+# install the optimizer functions
+pack_set --command "cd ../Optimizer"
+pack_set --command "make swarm simplex"
+pack_set --command "cp swarm simplex $(pack_get --install-prefix)/bin/"
+
+# install grid-relevant utilities
+# This requires that we change the libraries
+#pack_set --command "cd ../Grid"
+#files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
+#pack_set --command "make $files"
+#pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
+
 pack_set --command "cd ../Vibra/Src"
 pack_set --command "make"
 pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../../"
+
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
 

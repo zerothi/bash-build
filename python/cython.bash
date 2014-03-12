@@ -1,4 +1,4 @@
-v=0.20
+v=0.20.1
 add_package http://cython.org/release/Cython-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
