@@ -1,4 +1,4 @@
-for v in 560 ; do
+for v in 563 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
@@ -165,6 +165,11 @@ pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
 pack_set --command "cd ../TS/"
 pack_set --command "cp AnalyzeSort/tsanalyzesort.py $(pack_get --install-prefix)/bin/"
 pack_set --command "cp tselecs.sh $(pack_get --install-prefix)/bin/"
+
+# Install the Grimme creator
+pack_set --command "cd ../Grimme/"
+pack_set --command "make"
+pack_set --command "cp fdf2grimme $(pack_get --install-prefix)/bin/"
 
 # install the optimizer functions
 pack_set --command "cd ../Optimizer"
