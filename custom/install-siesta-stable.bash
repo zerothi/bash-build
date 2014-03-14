@@ -57,9 +57,9 @@ source libs/openmpi.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
-source libs/scalapack.bash
-
 install_all --from zlib
+source libs/scalapack.bash
+install_all --from scalapack
 
 # Install generic libraries
 source libs/hdf5.bash

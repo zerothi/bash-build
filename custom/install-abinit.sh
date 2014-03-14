@@ -55,8 +55,9 @@ source libs/openmpi.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
-source libs/scalapack.bash
 install_all --from hwloc
+source libs/scalapack.bash
+install_all --from scalapack
 
 source libs/fftw3.bash
 source libs/gsl.bash
