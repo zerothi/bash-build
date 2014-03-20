@@ -26,8 +26,8 @@ pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
 pack_set --command "sed -i '1 a\
 .SUFFIXES: .inc .f .f90 .F\n\
 SUFFIX=.f90\n\
-FC   = $MPIF90 \n\
-FCL  = \$(FC) $FLAG_OMP \n\
+FC   = $MPIF90 $FLAG_OMP \n\
+FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
      -DCACHE_SIZE=12000 -Davoidalloc \\\\\n\
@@ -35,7 +35,7 @@ CPP  = \$(CPP_) -DMPI \\\\\n\
      -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\
 FREE = -FR \n\
-FFLAGS = $FCFLAGS -FR -assume byterecl $FLAG_OMP \n\
+FFLAGS = $FCFLAGS -FR -assume byterecl \n\
 OFLAG= $FCFLAGS \n\
 OFLAG_HIGH = \$(OFLAG) \n\
 OBJ_HIGH = \n\
