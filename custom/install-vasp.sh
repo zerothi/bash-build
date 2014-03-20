@@ -51,7 +51,7 @@ export LMOD_IGNORE_CACHE=1
 source helpers.bash
 
 source libs/hwloc.bash
-source libs/openmpi.bash
+source libs/openmpi-hpc.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
@@ -65,5 +65,6 @@ source libs/fftw3-intel.bash
 
 install_all --from fftw-3
 
+source applications/wannier.bash
 source applications/vasp.bash
 source applications/vasp-intel.bash
