@@ -61,6 +61,7 @@ source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/pandas.bash
 source python/pyamg.bash
+source python/petsc4py.bash
 
 # Must be installed after numpy
 source python/llvmpy.bash
