@@ -72,7 +72,6 @@ source python/numba.bash
 # Physics related python modules
 source python/inelastica.bash
 source python/inelastica-dev.bash
-source python/inelastica-rbch.bash
 source python/inelastica-matt.bash
 
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]
