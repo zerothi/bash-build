@@ -23,6 +23,7 @@ source libs/blas.bash
 source libs/cblas.bash
 source libs/lapack.bash
 source libs/atlas.bash
+source libs/atlas-dev.bash
 
 # ATLAS needs to be installed prematurely...
 install_all --from zlib
