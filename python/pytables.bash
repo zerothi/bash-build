@@ -1,6 +1,7 @@
+v=3.1.0
 add_package \
     --package pytables \
-    http://sourceforge.net/projects/pytables/files/pytables/3.0.0/tables-3.0.0.tar.gz
+    http://sourceforge.net/projects/pytables/files/pytables/$v/tables-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
