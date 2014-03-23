@@ -65,10 +65,10 @@ pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.serial"
 # prep for the MPI-compilation...
 pack_set --command "rm -rf *"
 
-pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
-    --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
+    --command-flag "--with-libxc-include=$(pack_get --install-prefix libxc)/include" \
     --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
     --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
     --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \
