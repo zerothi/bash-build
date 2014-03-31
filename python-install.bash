@@ -61,6 +61,7 @@ source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/pandas.bash
 source python/pyamg.bash
+source python/petsc4py.bash
 
 # Must be installed after numpy
 source python/llvmpy.bash
@@ -72,7 +73,6 @@ source python/numba.bash
 # Physics related python modules
 source python/inelastica.bash
 source python/inelastica-dev.bash
-source python/inelastica-rbch.bash
 source python/inelastica-matt.bash
 
 source python/qutip.bash # [numpy,scipy,cython,matplotlib]

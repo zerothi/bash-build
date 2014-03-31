@@ -1,3 +1,4 @@
+# apt install gettext
 for v in 1.8.5.5 1.9.0 ; do
 add_package --build generic \
 	--archive git-$v.tar.gz \

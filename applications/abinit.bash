@@ -98,10 +98,13 @@ dft_flavor=atompaw+wannier90
 if [ $(vrs_cmp $(pack_get --version libxc) 2.0.2) -ge 0 ]; then
     pack_set --module-requirement libxc
     dft_flavor="$dft_flavor+libxc"
+    xclib="-lxc"
+    if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
+	xclib="-lxcf90 -lxc"
+    fi
     pack_set --command "$s '$ a\
 with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
-with_libxc_libs=\"$(list --LDFLAGS --Wlrpath libxc) -lxc\"' $file"
-
+with_libxc_libs=\"$(list --LDFLAGS --Wlrpath libxc) $xclib\"' $file"
 fi
 
 if [ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]; then

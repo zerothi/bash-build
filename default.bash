@@ -58,8 +58,8 @@ create_module \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules Inelastica-DEV[228])" \
-    -RL Inelastica-DEV[228]
+    -echo "$(echo_modules Inelastica-DEV[279])" \
+    -RL Inelastica-DEV[279]
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \

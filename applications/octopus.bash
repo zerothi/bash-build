@@ -4,7 +4,7 @@ add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --host-reject ntch
-pack_set --host-reject zerothi
+#pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family octopus"
 
@@ -39,11 +39,16 @@ else
 
 fi
 
+# The old versions had one library, the newer ones have Fortran and C divided.
+tmp_xc="$(pack_get --install-prefix libxc)/lib/libxc.a"
+if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
+    tmp_xc="$(pack_get --install-prefix libxc)/lib/libxcf90.a $(pack_get --install-prefix libxc)/lib/libxc.a"
+fi
 
-pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
-    --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
+    --command-flag "--with-libxc-include=$(pack_get --install-prefix libxc)/include" \
     --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
     --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
     --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \
@@ -60,10 +65,10 @@ pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.serial"
 # prep for the MPI-compilation...
 pack_set --command "rm -rf *"
 
-pack_set --command "../configure LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
-    --command-flag "--with-libxc-prefix=$(pack_get --install-prefix libxc)" \
+    --command-flag "--with-libxc-include=$(pack_get --install-prefix libxc)/include" \
     --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
     --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
     --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \

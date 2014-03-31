@@ -1,4 +1,4 @@
-v=0.13.0
+v=0.13.1
 add_package https://pypi.python.org/packages/source/p/pandas/pandas-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
