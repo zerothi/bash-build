@@ -1,4 +1,4 @@
-for v in 1.7.2 1.8.0 ; do
+for v in 1.7.2 1.8.1 ; do
 add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
