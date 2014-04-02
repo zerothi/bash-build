@@ -9,9 +9,9 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libhwloc.a
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--enable-libnuma" \
-    --command-flag "LIBS='$(list -LDFLAGS -Wlrpath numactl)'" \
+    --command-flag "HWLOC_LIBS='$(list -LDFLAGS -Wlrpath numactl)'" \
     --command-flag "CPPFLAGS='$(list -INCDIRS numactl)'" \
+    --command-flag "--enable-libnuma" \
     --command-flag "--prefix $(pack_get --install-prefix)" \
     --command-flag "--disable-opencl" \
     --command-flag "--disable-cuda" \
