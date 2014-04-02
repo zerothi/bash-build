@@ -3,6 +3,8 @@ add_package http://www.open-mpi.org/software/hwloc/v1.9/downloads/hwloc-1.9.tar.
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set --module-requirement numactl
+
 pack_set --install-query $(pack_get --install-prefix)/lib/libhwloc.a
 
 # Install commands that it should run
