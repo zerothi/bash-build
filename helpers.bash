@@ -23,5 +23,7 @@ source helpers/zlib.bash
 source helpers/libffi.bash
 source helpers/llvm.bash
 
+source helpers/numactl.bash
+
 # Install git for those who want the newest release
 source helpers/git.bash
