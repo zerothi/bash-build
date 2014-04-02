@@ -3,16 +3,15 @@ add_package http://www.open-mpi.org/software/hwloc/v1.9/downloads/hwloc-1.9.tar.
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --module-requirement numactl
-
 pack_set --install-query $(pack_get --install-prefix)/lib/libhwloc.a
+
+# We don't need the libnuma (it only provides an interface to 
+# use the libnuma routines for accessing hwloc)
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "HWLOC_LIBS='$(list -LDFLAGS -Wlrpath numactl)'" \
-    --command-flag "CPPFLAGS='$(list -INCDIRS numactl)'" \
-    --command-flag "--enable-libnuma" \
     --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--disable-libnuma" \
     --command-flag "--disable-opencl" \
     --command-flag "--disable-cuda" \
     --command-flag "--disable-nvml" \
