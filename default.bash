@@ -106,8 +106,8 @@ create_module \
     -n "Nick Papior Andersen's script for loading VASP: $(get_c)" \
     -M vasp.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules vasp[5.3.3-fftw3])" \
-    -RL vasp[5.3.3-fftw3]
+    -echo "$(echo_modules vasp[5.3.5-fftw3])" \
+    -RL vasp[5.3.5-fftw3]
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \

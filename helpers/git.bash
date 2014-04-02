@@ -15,7 +15,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/git
 pack_set --command "module load $(pack_get --module-requirement autoconf)" \
     --command-flag "$(pack_get --module-name autoconf)"
 pack_set --command "make configure"
-pack_set --command "module load $(pack_get --module-name autoconf)" \
+pack_set --command "module unload $(pack_get --module-name autoconf)" \
     --command-flag "$(pack_get --module-requirement autoconf)"
 
 # Install commands that it should run

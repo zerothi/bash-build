@@ -1,10 +1,9 @@
 # Sadly, VASP only runs on Intel compiler...
 if $(is_c intel) ; then
-for v in 5.3.3 ; do
+for v in 5.3.5 ; do
 add_package \
-    --package vasp \
-    --version $v-fftw3.3.2 \
-    http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
+    --version $v-fftw$(pack_get --version fftw-3) \
+    http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
 
 pack_set --module-requirement fftw-3
 
