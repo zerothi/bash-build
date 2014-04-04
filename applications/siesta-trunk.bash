@@ -99,17 +99,12 @@ fi
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
 # This should ensure a correct handling of the version info...
-pack_set --command "make version"
-
-pack_set --command "make siesta"
+source applications/siesta-speed.bash libSiestaXC.a siesta
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
-pack_set --command "make version"
-
-# We have not created a test for the check of already installed files...
-pack_set --command "make transiesta"
+source applications/siesta-speed.bash libSiestaXC.a transiesta
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"

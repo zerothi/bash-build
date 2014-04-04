@@ -38,8 +38,9 @@ pack_set --command "sed -i -e 's/^CFLAGS.*//g;s:^-I/usr/local/include.*::g' $fil
 pack_set --command "sed -i -e '/^DESTDIR*/d' $file"
 
 if $(is_c intel) ; then    
+    # Added ifcore library to complie
     pack_set --command "sed -i '1 a\
-    LIB += -mkl=parallel\nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
+    LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
     pack_set --module-requirement scalapack

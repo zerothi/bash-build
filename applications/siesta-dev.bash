@@ -92,14 +92,8 @@ pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_t
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
-pack_set --command "make version"
 pack_set --command "siesta_install -v $v --siesta"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make siesta"
+source applications/siesta-speed.bash libSiestaXC.a siesta
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
@@ -107,13 +101,7 @@ pack_set --command "make clean"
 # We have not created a test for the check of already installed files...
 #pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
-pack_set --command "make version"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) transiesta"
+source applications/siesta-speed.bash libSiestaXC.a transiesta
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"

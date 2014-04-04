@@ -1,6 +1,6 @@
 for v in siesta-3.1 siesta-3.2 ; do
 add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
-pack_set -s $IS_MODULE 
+pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 
@@ -100,24 +100,12 @@ pack_set --command "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 # Create install directory
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
-pack_set --command "make version"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make siesta"
+source applications/siesta-speed.bash siesta
 pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "make clean"
 
-pack_set --command "make version"
-pack_set --command "make libmpi_f90.a"
-pack_set --command "make libfdf.a"
-pack_set --command "make libxmlparser.a"
-pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-pack_set --command "make FoX/.FoX"
-pack_set --command "make $(get_make_parallel) transiesta"
+source applications/siesta-speed.bash transiesta
 pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"
@@ -163,24 +151,12 @@ if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
 
     pack_set --command "make clean"
 
-    pack_set --command "make version"
-    pack_set --command "make libmpi_f90.a"
-    pack_set --command "make libfdf.a"
-    pack_set --command "make libxmlparser.a"
-    pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-    pack_set --command "make FoX/.FoX"
-    pack_set --command "make siesta"
+    source applications/siesta-speed.bash siesta
     pack_set --command "cp siesta $(pack_get --install-prefix)/bin/siesta_esm"
     
     pack_set --command "make clean"
     
-    pack_set --command "make version"
-    pack_set --command "make libmpi_f90.a"
-    pack_set --command "make libfdf.a"
-    pack_set --command "make libxmlparser.a"
-    pack_set --command "make libSiestaXC.a ; echo 'Maybe existing'"
-    pack_set --command "make FoX/.FoX"
-    pack_set --command "make $(get_make_parallel) transiesta"
+    source applications/siesta-speed.bash transiesta
     pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/transiesta_esm"
 
 fi
