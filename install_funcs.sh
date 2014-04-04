@@ -470,7 +470,7 @@ function pack_set {
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=2
     local mod_prefix=""
-    local mod_opt="" ; local lib=""
+    local mod_opt="" ; local lib="" ; local up_pre_mod=0
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt="$(trim_em $1)"
@@ -502,7 +502,7 @@ function pack_set {
 	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
 	    -m|-module-name)  mod_name="${1%/}" ; shift ;;
 	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
-	    -prefix-and-module)  mod_name="$1" ; install="$(build_get --installation-path)/$1" ; shift ;;
+	    -prefix-and-module)  mod_name="$1" ; up_pre_mod=1 ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
 	    -host-only)  only_h="$only_h $1" ; shift ;; # Can be called several times
 	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
@@ -513,6 +513,13 @@ function pack_set {
 		shift $# ;; 
 	esac
     done
+    if [ $up_pre_mod -eq 1 ]; then
+	# We have used prefix-and-module
+	# we need to correct the fetching of the build path
+	# This is only because we haven't used the index thing before
+	local opt=$(pack_get --build $index)
+	install="$(build_get --installation-path[$opt])/$mod_name"
+    fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
     if [ ! -z "$req" ]; then

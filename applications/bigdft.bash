@@ -45,6 +45,8 @@ pack_set --command "module load $(pack_get --module-name-requirement python) $(p
 
 if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
     xclib="-lxcf90 -lxc"
+    # Replace the -lxc is the configure script with the correct lookup!
+    pack_set --command "sed -i -e 's/-lxc/$xclib/g' ../configure"
 else
     xclib="-lxc"
 fi

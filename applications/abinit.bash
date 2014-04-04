@@ -95,12 +95,15 @@ with_fft_incs=\"$(list --INCDIRS fftw-3)\"\n\
 with_fft_libs=\"$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
 dft_flavor=atompaw+wannier90
-if [ $(vrs_cmp $(pack_get --version libxc) 2.0.2) -ge 0 ]; then
+xc_version=$(pack_get --version libxc)
+if [ $(vrs_cmp $xc_version 2.0.2) -ge 0 ]; then
     pack_set --module-requirement libxc
     dft_flavor="$dft_flavor+libxc"
     xclib="-lxc"
-    if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
+    if [ $(vrs_cmp $xc_version 2.2.0) -ge 0 ]; then
 	xclib="-lxcf90 -lxc"
+	# Correct the check for the minor version
+	pack_set --command "sed -i -e 's/minor != 0/minor != $(str_version -2 $xc_version)/' ../configure"
     fi
     pack_set --command "$s '$ a\
 with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\

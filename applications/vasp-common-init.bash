@@ -1,6 +1,5 @@
 pack_set -s $IS_MODULE
 pack_set --host-reject ntch --host-reject zerothi
-pack_set --directory VASP
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement wannier90[1.2]
@@ -13,11 +12,13 @@ file=mymakefile
 pack_set --command "echo '# NPA' > $file"
 
 # We can start by unpacking the stuff.
-pack_set --command "tar xfz vasp.5.3.3.tar.gz"
+pack_set --command "tar xfz vasp.$v.tar.gz"
 pack_set --command "tar xfz vasp.5.lib.tar.gz"
 
-# Correct the VDW algorithm
-pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
+if [ $(vrs_cmp $v 5.3.5) -lt 0 ]; then
+    # Correct the VDW algorithm, for the older versions
+    pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
+fi
 
 # Start with creating a template makefile.
 # The cache size is determined from the L1 cache (E5-2650 have ~64KB
@@ -30,7 +31,7 @@ FC   = $MPIF90 $FLAG_OMP \n\
 FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
-     -DCACHE_SIZE=12000 -Davoidalloc \\\\\n\
+     -DCACHE_SIZE=6000 -Davoidalloc \\\\\n\
      -DMPI_BLOCK=60000 -Duse_collective -DscaLAPACK \\\\\n\
      -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\

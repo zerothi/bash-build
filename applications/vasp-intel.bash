@@ -1,11 +1,14 @@
 # Sadly VASP only compiles with Intel
 if $(is_c intel) ; then
-for v in 5.3.3 ; do
-add_package \
-    --package vasp \
-    --version $v-fftwintel \
-    http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
-
+for v in 5.3.3 5.3.5 ; do
+if [ $(vrs_cmp $v 5.3.5) -ge 0 ]; then
+    add_package \
+	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
+else
+    add_package \
+	http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
+fi
+pack_set --version $v-fftwintel
 pack_set --module-requirement fftw[intel]
 
 source applications/vasp-common-init.bash

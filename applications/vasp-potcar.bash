@@ -1,38 +1,65 @@
-unset tmp
-function tmp {
-    add_package \
-	--build generic \
-	--directory VASP \
-	--no-default-modules \
-	--package vasp/POTCARS \
-	--version $2 \
-	http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
+unset tmp_start tmp_end
+
+function tmp_start {
+    if [ $(vrs_cmp $1 5.3.5) -ge 0 ]; then
+	add_package \
+	    --build generic \
+	    --no-default-modules \
+	    --package vasp/POTCARS \
+	    --directory vasp \
+	    --version $2 \
+	    http://www.student.dtu.dk/~nicpa/packages/vasp-$1.tar
+    else
+	add_package \
+	    --build generic \
+	    --no-default-modules \
+	    --package vasp/POTCARS \
+	    --directory VASP \
+	    --version $2 \
+	    http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
+    fi
 
     pack_set -s $IS_MODULE
     pack_set --host-reject ntch
-#    pack_set --prefix-and-module \
-#	$(pack_get --alias)/POTCARS/$(pack_get --version)
+    pack_set --prefix-and-module \
+	$(pack_get --alias)/$1/$2
     pack_set --module-opt "--lua-family vasp-potcar"
     pack_set --command "mkdir -p $(dirname $(pack_get --install-prefix))"
     pack_set --command "rm -rf $(pack_get --install-prefix)"
     pack_set --command "mkdir tmp"
     pack_set --command "cd tmp"
-    pack_set --command "tar xfz ../potpaw_$(pack_get --version).t*"
+
+}    
+
+function tmp_end {
     pack_set --command "cd ../"
     # The file permissions are not expected to be correct (we correct them
     # here)
-    pack_set --command "chmod 0644 tmp/*/POTCAR"
+    pack_set --command "chmod 0644 tmp/*/*"
     pack_set --command "mv tmp $(pack_get --install-prefix)"
     pack_set --module-opt "--set-ENV POTCARS=$(pack_get --install-prefix)"
     # We only check for one
     pack_set --install-query $(pack_get --install-prefix)/H/POTCAR
     pack_install
-}    
+}
 
-for v in 5.3.3 ; do
-tmp $v LDA
-tmp $v LDA.52
-tmp $v PBE
-tmp $v PBE.52
+v=5.3.3
+for version in LDA LDA.52 PBE PBE.52 ; do
+    tmp_start $v $version
+    pack_set --command "tar xfz ../potpaw_$version.t*"
+    tmp_end $v $version
 done
-unset tmp
+
+v=5.3.5
+tmp_start $v GGA
+pack_set --command "tar xfz ../potpaw_GGA.t*"
+tmp_end $v GGA
+tmp_start $v USPP_GGA
+pack_set --command "tar xfz ../potUSPP_GGA.t*"
+tmp_end $v USPP_GGA
+tmp_start $v USPP_LDA
+pack_set --command "tar xfz ../potUSPP_LDA.t*"
+tmp_end $v USPP_LDA
+
+
+unset tmp_start tmp_end
