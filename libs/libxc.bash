@@ -6,6 +6,7 @@ pack_set -s $IS_MODULE -s $BUILD_DIR
 pack_set --install-query $(pack_get --install-prefix)/lib/libxc.a
 
 pack_set --command "../configure" \
+    --command-flag "--enable-shared" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 pack_set --command "make $(get_make_parallel)"
