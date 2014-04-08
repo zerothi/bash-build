@@ -1,14 +1,20 @@
-for v in \
-    http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz \
-    ; do
+for v in 5.0.3 5.0.99 ; do
+    
+    if [ "$v" = "5.0.3" ]; then
+	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
+    elif [ "$v" = "5.0.99" ]; then
+	tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
+    else
+	doerr espresso "Version unknown"
+    fi
 
-    add_package $v
+    add_package $tmp
     
     pack_set -s $IS_MODULE
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
-    pack_set --host-reject ntch
+#    pack_set --host-reject ntch
 
     pack_set --module-opt "--lua-family espresso"
 
@@ -17,13 +23,6 @@ for v in \
 
     # Fetch all the packages and pack them out
     source applications/espresso-packages.bash
-
-    # Patch it...
-    pack_set --command "pushd ../"
-    pack_set --command "wget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff"
-    pack_set --command "patch -p0 < espresso-5.0.2-5.0.3.diff"
-    pack_set --command "rm espresso-5.0.2-5.0.3.diff"
-    pack_set --command "popd"
 
     if test -z "$FLAG_OMP" ; then
 	doerr espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -72,7 +71,7 @@ for v in \
 	--command-flag "--prefix=$(pack_get --install-prefix)" 
 
     # Make commands
-    for EXE in bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt ; do
+    for EXE in $libs ; do
 	pack_set --command "make $(get_make_parallel) $EXE"
     done
 
