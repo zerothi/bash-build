@@ -7,6 +7,10 @@ pack_set --command "make $(get_make_parallel) libxmlparser.a"
 pack_set --command "make libmpi_f90.a"
 pack_set --command "make $(get_make_parallel) libfdf.a"
 while [ $# -gt 0 ]; do
-    pack_set --command "make $(get_make_parallel) $1"
+    if [ "$1" == "libSiestaXC.a" ]; then
+        pack_set --command "make -j 2 $1"
+    else
+        pack_set --command "make $(get_make_parallel) $1"
+    fi
     shift
 done

@@ -1,9 +1,10 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
 
 add_package https://sourcesup.renater.fr/frs/download.php/4425/ScientificPython-2.9.3.tar.gz
 #https://sourcesup.renater.fr/frs/download.php/4153/ScientificPython-2.9.2.tar.gz
 
 pack_set -s $IS_MODULE
+
+[ "x${pV:0:1}" == "x3" ] && pack_set --host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Scientific
 
