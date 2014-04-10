@@ -1,20 +1,23 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 0.9.0.8965 ; do
+for v in 0.9.0.8965 0.10.0.11364 ; do
 add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
-
-pack_set --host-reject "ntch"
 
 pack_set --module-opt "--lua-family gpaw"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \
-    --module-requirement ase[3.6] \
     --module-requirement matplotlib \
     --module-requirement h5py
+
+if [ $(vrs_cmp $v 0.10) -lt 0 ]; then
+    pack_set --module-requirement ase[3.6]
+else
+    pack_set --module-requirement ase[3.8]
+fi
 
 # Check for Intel MKL or not
 file=customize.py
