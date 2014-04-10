@@ -1,7 +1,7 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
 # Add the installation of the gpaw setups
-for v in 0.8.7929 0.9.9672 ; do
+for v in 0.8.7929 0.9.9672 0.9.11271 ; do
     add_package --build generic \
 	http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
     

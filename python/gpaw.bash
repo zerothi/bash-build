@@ -11,7 +11,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
 
 pack_set --module-requirement openmpi \
     --module-requirement matplotlib \
-    --module-requirement h5py
+    --module-requirement hdf5 \
+    --module-requirement libxc
 
 if [ $(vrs_cmp $v 0.10) -lt 0 ]; then
     pack_set --module-requirement ase[3.6]
@@ -29,27 +30,27 @@ compiler = \"$CC $CFLAGS $MKL_LIB -mkl=sequential\"\n\
 mpicompiler = \"$MPICC $CFLAGS $MKL_LIB\"\n\
 libraries = [\"mkl_scalapack_lp64\",\"mkl_blacs_openmpi_lp64\",\"mkl_lapack95_lp64\",\"mkl_blas95_lp64\"]\n\
 extra_link_args = [\"$MKL_LIB\",\"-mkl=sequential\"]\n\
-platform_id = \"Xeon\"' $file"
+platform_id = \"$(get_hostname)\"' $file"
 
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
     pack_set --command "sed -i '1 a\
 compiler = \"$CC $CFLAGS \"\n\
 mpicompiler = \"$MPICC $CFLAGS \"\n\
-library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]' $file"
+library_dirs += [\"$(pack_get --install-prefix scalapack)/lib\"]' $file"
 
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix blas)/lib\"]\n\
-library_dirs += [\"$(pack_get --install-prefix lapack)/lib\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"blas\"]' $file"
+library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
+libraries = [\"scalapack\",\"lapack_atlas\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
 
     else
 	pack_set --module-requirement lapack
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\"]' $file"
+library_dirs += [\"$(pack_get --install-prefix blas)/lib\"]\n\
+library_dirs += [\"$(pack_get --install-prefix lapack)/lib\"]\n\
+libraries = [\"scalapack\",\"lapack\",\"blas\",\"gfortran\"]' $file"
 
     fi
 else
@@ -60,6 +61,9 @@ fi
 tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"
 
 pack_set --command "sed -i '$ a\
+library_dirs += [\"$(pack_get --install-prefix libxc)/lib\"]\n\
+include_dirs += [\"$(pack_get --install-prefix libxc)/include\"]\n\
+libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
 extra_compile_args = \"$CFLAGS -std=c99\".split(\" \")\n\
 scalapack = True\n\
