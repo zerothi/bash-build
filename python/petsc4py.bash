@@ -4,7 +4,8 @@ pack_set -s $IS_MODULE
 
 pack_set --module-requirement $(get_parent) \
     --module-requirement petsc \
-    --module-requirement scientificpython
+    --module-requirement mpi4py --module-requirement numpy \
+    --module-requirement cython
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)/__init__.py
 
