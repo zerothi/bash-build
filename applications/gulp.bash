@@ -1,4 +1,5 @@
-add_package http://www.student.dtu.dk/~nicpa/packages/gulp_4.0.tar.gz
+for v in 4.0 4.2.0 ; do
+add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -66,3 +67,5 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias)
+
+done
