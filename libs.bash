@@ -11,6 +11,7 @@ source libs/libffi.bash
 # Basic parallel libraries
 source libs/hwloc.bash
 source libs/openmpi-hpc.bash
+source libs/mpich.bash
 
 # Default fftw libs
 source libs/fftw2.bash

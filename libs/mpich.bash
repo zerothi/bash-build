@@ -1,4 +1,3 @@
-# apt-get libc6-dev
 v=3.1
 add_package http://www.mpich.org/static/downloads/$v/mpich-$v.tar.gz
 
@@ -7,7 +6,8 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --install-prefix)/bin/mpiexec
 
-pack_set --host-reject surt muspel slid
+# Only install locally
+pack_set $(list -p "--host-reject " surt muspel slid n-)
 
 tmp_flags=""
 if $(is_host n-) ; then # enables the linking to the torque management system
