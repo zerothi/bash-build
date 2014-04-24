@@ -1,4 +1,4 @@
-v=3.1.0
+v=3.1.1
 add_package \
     --package pytables \
     http://sourceforge.net/projects/pytables/files/pytables/$v/tables-$v.tar.gz
