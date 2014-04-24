@@ -1,4 +1,4 @@
-v=1.2.1
+v=2.0.0
 add_package http://archive.ipython.org/release/$v/ipython-$v.tar.gz
 
 tmp=
