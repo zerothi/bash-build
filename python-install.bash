@@ -55,6 +55,7 @@ source python/scipy.bash
 source python/numexpr.bash
 source python/scientificpython.bash
 source python/matplotlib.bash
+source python/scikit-learn.bash
 source python/bottleneck.bash
 source python/sympy.bash
 source python/h5py.bash # [numpy,hdf5-serial]
