@@ -16,9 +16,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/numba
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
-add_package --package numba-test fake
-pack_set --install-query $(pack_get --install-prefix numba)/test.output
-pack_set --module-requirement numba
-pack_set --command "$(get_parent_exec) -c 'import numba; numba.test()' > tmp.test 2>&1"
+add_test_package
+pack_set --command "nosetests --exe numba > tmp.test 2>&1"
 pack_set --command "mv tmp.test $(pack_get --install-query)"
 

@@ -37,10 +37,8 @@ if [ $(pack_installed swig) -eq 1 ]; then
     pack_set --command "module unload $(pack_get --module-name swig pcre) $(pack_get --module-name-requirement pcre swig)"
 fi
 
-add_package --package scipy-test fake
-pack_set --install-query $(pack_get --install-prefix scipy)/test.output
-pack_set --module-requirement scipy
-pack_set --command "$(get_parent_exec) -c 'import scipy; scipy.test()' > tmp.test 2>&1"
+add_test_package
+pack_set --command "nosetests --exe scipy > tmp.test 2>&1"
 pack_set --command "mv tmp.test $(pack_get --install-query)"
 
 done

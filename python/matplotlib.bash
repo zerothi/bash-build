@@ -18,3 +18,6 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/python$pV/site-pac
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+add_test_package
+pack_set --command "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Succes'"
+pack_set --command "mv tmp.test $(pack_get --install-query)"
