@@ -1,4 +1,5 @@
 # Install Python 2 versions
+# apt-get bz2-dev
 v=2.7.6
 if $(is_host n-) ; then
     add_package --alias python --package Python \
