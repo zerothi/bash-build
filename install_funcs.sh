@@ -5,6 +5,7 @@
 _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
+[ -z "$DOWNLOAD" ] && DOWNLOAD=0
 
 if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
@@ -757,6 +758,11 @@ function pack_install {
     # Save the module requirements for later...
     mod_reqs="$(pack_get --module-requirement $idx)"
     mod_reqs_paths="$(pack_get --module-paths-requirement $idx)"
+
+    # If we request downloading of files, do so immediately
+    if [ $DOWNLOAD -eq 1 ]; then
+	dwn_file $idx $(build_get --archive-path)
+    fi
 
     # If it is installed...
     if [ $(pack_get --installed $idx) -eq 1 ]; then
