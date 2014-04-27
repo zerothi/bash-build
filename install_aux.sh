@@ -263,6 +263,8 @@ function dwn_file {
     fi
     local archive=$(pack_get --archive $1)
     [ -e $subdir/$archive ] && return 0
+    local url=$(pack_get --url $1)
+    [ "x$url" == "xfake" ] && return 0
     wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
 }
 

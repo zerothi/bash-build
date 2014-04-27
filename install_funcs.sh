@@ -279,6 +279,23 @@ function add_hidden_package {
     pack_set --module-name $mod
 }
 
+# This function takes no arguments
+# It is the name/index of the module that is to be tested
+# It is equivalent to calling:
+#   name=$(pack_get --alias)
+#   version=$(pack_get --version)
+#   add_package --package $name-test --version $version fake
+#   pack_set --module-requirement $name[$version]
+#   pack_set --install-query $(pack_get --install-prefix $name[$version])/test.output
+function add_test_package {
+    local name=$(pack_get --alias)
+    local version=$(pack_get --version)
+    add_package --package $name-test \
+	--version $version fake
+    pack_set --module-requirement $name[$version]
+    pack_set --install-query $(pack_get --install-prefix $name[$version])/test.output
+}
+
 # Local variables for archives to be installed
 declare -a _http
 # The settings
