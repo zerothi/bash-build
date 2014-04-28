@@ -1,12 +1,12 @@
 # old_v 
 for v in 1.4.2 2.4 ; do
     [ "x${pV:0:1}" == "x3" ] && [ "x$v" == "x1.4.2" ] && continue
-	fv=$v
-	if [ $(vrs_cmp $v 2.3.1 ) -ge 0 ]; then
-		fv=v$v
-	fi
-	add_package --archive numexpr-$v.tar.gz \
-		https://github.com/pydata/numexpr/archive/$fv.tar.gz
+    fv=$v
+    if [ $(vrs_cmp $v 2.3.1 ) -ge 0 ]; then
+	fv=v$v
+    fi
+    add_package --archive numexpr-$v.tar.gz \
+	https://github.com/pydata/numexpr/archive/$fv.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
