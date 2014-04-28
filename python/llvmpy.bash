@@ -13,5 +13,5 @@ pack_set --command "LLVM_CONFIG_PATH=$(pack_get --install-prefix llvm[3.3])/bin/
     --command-flag "setup.py install --prefix=$(pack_get --install-prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe llvm > tmp.test 2>&1"
+pack_set --command "nosetests --exe llvm > tmp.test 2>&1 ; echo 'Succes'"
 pack_set --command "mv tmp.test $(pack_get --install-query)"

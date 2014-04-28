@@ -17,6 +17,6 @@ pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe numba > tmp.test 2>&1"
+pack_set --command "nosetests --exe numba > tmp.test 2>&1 ; echo 'Succes'"
 pack_set --command "mv tmp.test $(pack_get --install-query)"
 

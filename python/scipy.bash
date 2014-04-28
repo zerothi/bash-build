@@ -38,7 +38,7 @@ if [ $(pack_installed swig) -eq 1 ]; then
 fi
 
 add_test_package
-pack_set --command "nosetests --exe scipy > tmp.test 2>&1"
+pack_set --command "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Succes'"
 pack_set --command "mv tmp.test $(pack_get --install-query)"
 
 done
