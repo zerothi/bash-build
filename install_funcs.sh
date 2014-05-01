@@ -1311,7 +1311,7 @@ EOF
 		;;
 	    LUA)
 		cat <<EOF >> "$mfile"
-print("$echos")
+LmodMessage("$echos")
 EOF
 		;;
 	esac
