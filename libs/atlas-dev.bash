@@ -1,5 +1,5 @@
 # Then install Atlas
-for v in 3.11.26 ; do
+for v in 3.11.27 ; do
 add_package --package atlas-dev --version $v http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2
 
 pack_set --directory ATLAS

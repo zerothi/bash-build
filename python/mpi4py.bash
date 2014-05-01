@@ -2,8 +2,7 @@ add_package https://bitbucket.org/mpi4py/mpi4py/downloads/mpi4py-1.3.1.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --module-requirement $(get_parent) \
-    --module-requirement openmpi
+pack_set --module-requirement openmpi
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)/__init__.py
 

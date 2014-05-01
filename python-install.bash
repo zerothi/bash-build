@@ -47,6 +47,9 @@ source python/nose.bash
 source python/bzr.bash
 source python/bzr-fastimport.bash
 
+# Units in python
+source python/pint.bash
+
 # Generic scientific libraries
 source python/mpi4py.bash
 source python/numpy.bash
@@ -55,7 +58,6 @@ source python/scipy.bash
 source python/numexpr.bash
 source python/scientificpython.bash
 source python/matplotlib.bash
-source python/scikit-learn.bash
 source python/bottleneck.bash
 source python/sympy.bash
 source python/h5py.bash # [numpy,hdf5-serial]
@@ -63,6 +65,11 @@ source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/pandas.bash
 source python/pyamg.bash
 source python/petsc4py.bash
+
+# Other scikit-programs
+source python/scikit-learn.bash
+source python/scikit-optimization.bash
+source python/scikit-nano.bash
 
 # Must be installed after numpy
 source python/llvmpy.bash
