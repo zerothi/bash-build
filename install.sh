@@ -87,6 +87,9 @@ source apps.bash
 # Add the default modules
 source default.bash
 
+# Add the latest modules
+source latest.bash
+
 # We have installed all libraries needed for doing application installs
 source scripts.bash
 
