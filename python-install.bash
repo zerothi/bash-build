@@ -66,6 +66,9 @@ source python/pandas.bash
 source python/pyamg.bash
 source python/petsc4py.bash
 
+source python/krypy.bash
+source python/pygsl.bash
+
 # Other scikit-programs
 source python/scikit-learn.bash
 source python/scikit-optimization.bash

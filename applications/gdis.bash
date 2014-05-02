@@ -2,8 +2,8 @@
 # libgtkglext1-dev for installation
 # libgtk2.0-dev
 
-for v in 0.91b ; do 
-add_package --build generic --version $v \
+for v in 0.99 ; do 
+add_package --build generic \
     http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
 
 pack_set -s $IS_MODULE
