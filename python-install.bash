@@ -48,7 +48,7 @@ source python/bzr.bash
 source python/bzr-fastimport.bash
 
 # Units in python
-source python/pint.bash
+#source python/pint.bash
 
 # Generic scientific libraries
 source python/mpi4py.bash
@@ -69,7 +69,7 @@ source python/petsc4py.bash
 # Other scikit-programs
 source python/scikit-learn.bash
 source python/scikit-optimization.bash
-source python/scikit-nano.bash
+#source python/scikit-nano.bash
 
 # Must be installed after numpy
 source python/llvmpy.bash

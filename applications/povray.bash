@@ -1,8 +1,6 @@
 add_package \
     --build generic \
-    --version 3.6.1 \
-    --directory povray-3.6.1 \
-    http://www.povray.org/redirect/www.povray.org/ftp/pub/povray/Official/Unix/povray-3.6.tar.bz2
+    http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
 
 pack_set -s $IS_MODULE
 
