@@ -266,6 +266,7 @@ function dwn_file {
     local url=$(pack_get --url $1)
     [ "x$url" == "xfake" ] && return 0
     wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
+    [ $? -ne 0 ] && rm -f $subdir/$archive
 }
 
 # Function to return a list of space seperated quantities with prefix and suffix

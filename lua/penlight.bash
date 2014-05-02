@@ -1,5 +1,6 @@
 add_package --build generic \
     --directory Penlight-1.3.1 \
+    --archive penlight-1.3.1.tar.gz \
     https://github.com/stevedonovan/Penlight/archive/1.3.1.tar.gz
 
 pack_set --module-requirement lua

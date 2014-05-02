@@ -1,18 +1,13 @@
 # The udunits2 package requires an XML library:
 #  libcunit
-v=2.2.4
-add_package --package udunits --version $v \
-	ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v-Source.tar.gz
+v=2.2.11
+add_package ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --module-requirement expat
 
 pack_set --install-query $(pack_get --install-prefix)/bin/udunits2
-
-# apparently they have it in a tar file there
-pack_set --command "tar xfz udunits-2.2.4.tar.gz"
-pack_set --command "cd udunits-2.2.4"
 
 # Install commands that it should run
 pack_set \
