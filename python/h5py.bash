@@ -1,4 +1,5 @@
-add_package https://h5py.googlecode.com/files/h5py-2.2.1.tar.gz
+v=2.3.0
+add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
