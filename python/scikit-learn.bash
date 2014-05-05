@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 v=0.14.1
 add_package \
     https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-$v.tar.gz

@@ -1,3 +1,5 @@
+[ "x${pV:0:1}" == "x3" ] && return 0
+
 v=0.9.5
 add_package \
     http://sourceforge.net/projects/pygsl/files/pygsl/pygsl-$v/pygsl-$v.tar.gz
