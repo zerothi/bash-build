@@ -3,7 +3,7 @@ add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
 
 # Add requirments when creating the module
 pack_set --module-requirement numpy \

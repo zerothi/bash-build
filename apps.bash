@@ -40,6 +40,7 @@ source applications/espresso.bash
 source applications/openmx.bash
 source applications/bigdft.bash
 source applications/abinit.bash
+#source applications/ape.bash
 
 # Needs to be installed AFTER wannier90 :)
 source applications/vasp.bash
