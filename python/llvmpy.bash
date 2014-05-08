@@ -1,4 +1,4 @@
-v=0.12.1
+v=0.12.5
 add_package --archive llvmpy-$v.tar.gz \
     https://github.com/llvmpy/llvmpy/archive/$v.tar.gz
 
