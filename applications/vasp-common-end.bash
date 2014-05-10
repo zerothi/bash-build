@@ -39,7 +39,7 @@ pack_set --command "make -f $tmp clean"
 # First revert to initial setup
 pack_set --command "sed -i -e 's:-DNGZhalf.*:-DNPA_PLACEHOLDER:' ../mymakefile"
 
-pack_set --command "wget http://theory.cm.utexas.edu/vasp/downloads/vtstcode.tar.gz"
+pack_set --command "wget http://theory.cm.utexas.edu/vtsttools/code/vtstcode.tar.gz"
 pack_set --command "tar xfz vtstcode.tar.gz"
 pack_set --command "cp -r vtstcode/* ./"
 
@@ -51,7 +51,7 @@ pack_set --command "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o
 pack_set --command "sed -i -e 's:-DNGZhalf.*:-DNPA_PLACEHOLDER:' ../mymakefile"
 
 # Install vtst scripts
-pack_set --command "wget http://theory.cm.utexas.edu/vasp/downloads/vtstscripts.tar.gz"
+pack_set --command "wget http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
 pack_set --command "tar xfz vtstscripts.tar.gz"
 pack_set --command "cp -r vtstscripts/* $(pack_get --install-prefix)/bin/"
 
