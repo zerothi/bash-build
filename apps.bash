@@ -1,6 +1,9 @@
 #source applications/git.bash
 msg_install --message "Installing the applications..."
 
+# Analysis tools
+source applications/bader.bash
+
 source applications/siesta-stable.bash
 source applications/siesta-dev.bash # my old ts-development
 source applications/siesta-mattias.bash
