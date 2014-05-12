@@ -61,12 +61,10 @@ v=5.3.5
 tmp_start $v GGA
 pack_set --command "tar xfz ../potpaw_GGA.t*"
 tmp_end $v GGA
-tmp_start $v USPP_GGA
-pack_set --command "tar xfz ../potUSPP_GGA.t*"
-tmp_end $v USPP_GGA
-tmp_start $v USPP_LDA
-pack_set --command "tar xfz ../potUSPP_LDA.t*"
-tmp_end $v USPP_LDA
-
+for version in GGA LDA ; do
+    tmp_start $v USPP_$version
+    pack_set --command "tar xfz ../potUSPP_$version.t*"
+    tmp_end $v USPP_$version
+done
 
 unset tmp_start tmp_end
