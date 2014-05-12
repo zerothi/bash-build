@@ -46,7 +46,7 @@ function tmp_end {
     pack_set --command "mv tmp $(pack_get --install-prefix)"
     pack_set --module-opt "--set-ENV POTCARS=$(pack_get --install-prefix)"
     # We only check for one
-    pack_set --install-query $(pack_get --install-prefix)/H/POTCAR
+    pack_set --install-query $(pack_get --install-prefix)/$3
     pack_install
 }
 
@@ -54,17 +54,17 @@ v=5.3.3
 for version in LDA LDA.52 PBE PBE.52 ; do
     tmp_start $v $version
     pack_set --command "tar xfz ../potpaw_$version.t*"
-    tmp_end $v $version
+    tmp_end $v $version H/POTCAR
 done
 
 v=5.3.5
 tmp_start $v GGA
 pack_set --command "tar xfz ../potpaw_GGA.t*"
-tmp_end $v GGA
+tmp_end $v GGA H/POTCAR.Z
 for version in GGA LDA ; do
     tmp_start $v USPP_$version
     pack_set --command "tar xfz ../potUSPP_$version.t*"
-    tmp_end $v USPP_$version
+    tmp_end $v USPP_$version H_soft/POTCAR.Z
 done
 
 unset tmp_start tmp_end
