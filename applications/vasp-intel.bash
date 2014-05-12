@@ -3,9 +3,12 @@ if $(is_c intel) ; then
 for v in 5.3.3 5.3.5 ; do
 if [ $(vrs_cmp $v 5.3.5) -ge 0 ]; then
     add_package \
+	--directory vasp \
 	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
 else
     add_package \
+	--package vasp \
+	--directory VASP \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
 fi
 pack_set --version $v-fftwintel
