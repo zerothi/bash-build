@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family gpaw"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gpaw
+pack_set --install-query $(pack_get --install-prefix)/bin/gpaw-python
 
 pack_set --module-requirement openmpi \
     --module-requirement matplotlib \
