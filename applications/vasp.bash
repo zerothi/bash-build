@@ -4,15 +4,15 @@ for v in 5.3.3 5.3.5 ; do
 if [ $(vrs_cmp $v 5.3.5) -ge 0 ]; then
     add_package \
 	--directory vasp \
+	--version $v-fftw$(pack_get --version fftw-3) \
 	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
 else
     add_package \
 	--package vasp \
 	--directory VASP \
+	--version $v-fftw$(pack_get --version fftw-3) \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
 fi
-
-pack_set --version $v-fftw$(pack_get --version fftw-3)
 pack_set --module-requirement fftw-3
 
 source applications/vasp-common-init.bash
