@@ -4,13 +4,13 @@ for v in 5.3.3 5.3.5 ; do
 if [ $(vrs_cmp $v 5.3.5) -ge 0 ]; then
     add_package \
 	--directory vasp \
-	--version $v-fftwintel \
+	--version $v-fftw-intel \
 	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
 else
     add_package \
 	--package vasp \
 	--directory VASP \
-	--version $v-fftwintel \
+	--version $v-fftw-intel \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
 fi
 pack_set --module-requirement fftw[intel]

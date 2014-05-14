@@ -8,6 +8,11 @@ tmp=$(build_get --default-build)
 source $(build_get --source[$tmp])
 unset tmp
 
+function rm_latest {
+    local latest_mod=$(build_get --module-path)-npa-apps
+    rm -rf $latest_mod/$1
+}
+
 function echo_modules {
     # Retrieve all modules 
     local mods=""
@@ -26,6 +31,7 @@ function echo_modules {
     _ps "Loading: $echos"
 }
 
+rm_latest Inelastica.latest/$(get_c)
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
@@ -34,6 +40,7 @@ create_module \
     -echo "$(echo_modules Inelastica-DEV)" \
     -RL Inelastica-DEV
 
+rm_latest siesta.latest/$(get_c)
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
@@ -42,6 +49,7 @@ create_module \
     -echo "$(echo_modules siesta-dev)" \
     -RL siesta-dev
 
+rm_latest siesta-scf.latest/$(get_c)
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
@@ -51,3 +59,4 @@ create_module \
     -RL siesta-scf
 
 unset echo_modules
+unset rm_latest

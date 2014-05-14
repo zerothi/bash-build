@@ -68,3 +68,12 @@ install_all --from fftw-3
 source applications/wannier.bash
 source applications/vasp.bash
 source applications/vasp-intel.bash
+
+pack_print vasp[5.3.5-fftw-intel]
+pack_print vasp[5.3.5]
+
+echo ""
+get_index vasp[5.3.5-fftw-intel]
+echo ""
+get_index vasp[5.3.5]
+echo ""

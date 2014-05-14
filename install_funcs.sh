@@ -985,6 +985,8 @@ function get_index {
 	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 0
     else
+	#[ ! -z "$version" ] && \
+	#    echo "get_index: loop ($idx)" >&2
 	local v=""
 	i=-1
         # Select the latest per default..

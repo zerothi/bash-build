@@ -79,6 +79,8 @@ function str_version {
 	shift
     fi
     local str="${1// /}"
+    str="${str//-/.}" # enables easy conversion of versions from <major>-<minor> to <major>.<minor>
+    #echo "str_version: splitting version: ($str)" >&2
     # Check which type of versioning we have
     case $str in
 	*.*.*.*)
@@ -145,7 +147,7 @@ function vrs_cmp {
 	else
 	    # Currently we do not do character versioning
 	    # properly
-	    [ "$lv" == "$rv" ] && _ps "0" && return 0
+	    [ "$lv" != "$rv" ] && _ps "-1000" && return 0
 	fi
     done
     _ps "0"
