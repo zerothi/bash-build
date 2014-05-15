@@ -109,20 +109,20 @@ function str_version {
 	all|-all)
 	    _ps "$Mv $mv $rv" ;;
 	major|-major|-1)
-	    [ -z "$Mv" ] && \
-		doerr "$str" "Unknown type of version string"	
+#	    [ -z "$Mv" ] && \
+#		doerr "$str" "Unknown type of version string 1"	
 	    _ps "$Mv" ;;
 	minor|-minor|-2)
-	    [ -z "$mv" ] && \
-		doerr "$str" "Unknown type of version string"	
+#	    [ -z "$mv" ] && \
+#		doerr "$str" "Unknown type of version string 2"	
 	    _ps "$mv" ;;
 	rev|-rev|-3)
-	    [ -z "$rv" ] && \
-		doerr "$str" "Unknown type of version string"	
+#	    [ -z "$rv" ] && \
+#		doerr "$str" "Unknown type of version string 3"	
 	    _ps "$rv" ;;
 	-4)
-	    [ -z "$fourth" ] && \
-		doerr "$str" "Unknown type of version string"	
+#	    [ -z "$fourth" ] && \
+#		doerr "$str" "Unknown type of version string 4"
 	    _ps "$fourth" ;;
 	*)
 	    doerr "$opt" "Unknown print-out of version"
@@ -276,7 +276,7 @@ function dwn_file {
 
 # Function to return a list of space seperated quantities with prefix and suffix
 function list {
-    do_debug --enter list
+    [ $DEBUG -ne 0 ] && do_debug --enter list
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
     # First we collect all options
@@ -341,7 +341,7 @@ function list {
 	done
     fi
     _ps "$retval"
-    do_debug --return list
+    [ $DEBUG -ne 0 ] && do_debug --return list
 }
 
 
