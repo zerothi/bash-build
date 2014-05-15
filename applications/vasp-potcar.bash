@@ -28,6 +28,7 @@ function tmp_start {
 
     pack_set -s $IS_MODULE
     pack_set --host-reject ntch
+    pack_set --host-reject zeroth
     pack_set --prefix-and-module \
 	$(pack_get --alias)/$1/$2
     pack_set --module-opt "--lua-family vasp-potcar"
