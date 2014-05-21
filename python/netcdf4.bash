@@ -14,16 +14,6 @@ pack_set --module-requirement cython \
 
 # Check for Intel MKL or not
 tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial hdf5-serial)"
-tmp_compiler=""
-if $(is_c intel) ; then
-    tmp_compiler="intelem"
-
-elif $(is_c gnu) ; then
-    tmp_compiler=unix
-
-else
-    doerr netCDF4 "Could not determine compiler..."
-fi
 
 file=setup.cfg
 pack_set --command "echo '#' > $file"

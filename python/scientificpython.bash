@@ -15,7 +15,7 @@ pack_set --module-requirement netcdf-serial \
 tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial)"
 tmp_compiler=""
 if $(is_c intel) ; then
-    tmp_compiler="intelem"
+    echo "continue" > /dev/null
 
 elif $(is_c gnu) ; then
     # Add requirements when creating the module
@@ -27,7 +27,6 @@ elif $(is_c gnu) ; then
 	pack_set --module-requirement lapack
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath blas lapack)"
     fi
-    tmp_compiler=unix
 else
     doerr Scientificpython "Could not determine compiler..."
 fi
@@ -35,8 +34,7 @@ fi
 pack_set --command "sed -i -e 's|^\(extra_compile_args[[:space:]]*=.*\)|\1\nextra_link_args = [\"$tmp_flags\"]|' setup.py"
 pack_set --command "sed -i -e 's|\(extra_compile_args[[:space:]]*=[[:space:]]*extra_compile_args\)|\1,extra_link_args=extra_link_args|' setup.py"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build" \
-    --command-flag "--compiler=$tmp_compiler"
+pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
 
 pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"

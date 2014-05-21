@@ -14,5 +14,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' numpy cython)
 
+pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
+
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \

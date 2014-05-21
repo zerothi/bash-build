@@ -12,6 +12,15 @@ IppV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 IpV=$(pack_get --version $(get_parent))
 module unload $pModNames
 
+# Create the numpy installation sequence
+if $(is_c intel) ; then
+    pNumpyInstall="--compiler=intelem --fcompiler=intelem"
+elif $(is_c gnu) ; then
+    pNumpyInstall="--compiler=unix --fcompiler=gnu95"
+else
+    doerr "Compiler python" "Could not recognize compiler"
+fi
+
 # Ensure get_c is defined
 source $(build_get --source)
 new_build --name python$IpV \

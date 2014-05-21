@@ -24,15 +24,8 @@ pack_set --command "patch -R scripts/Inelastica inelastica.patch-r$v"
 pack_set --command "patch package/Inelastica.py Inelastica.py.patch-r$v"
 pack_set --command "patch package/NEGF.py NEGF_double_electrode_r$v"
 
-# Check for Intel MKL or not
-if $(is_c intel) ; then
-    tmp="--fcompiler=intelem --compiler=intelem"
-elif $(is_c gnu) ; then
-    tmp="--fcompiler=gnu95 --compiler=unix"
-fi
-
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config $tmp"
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build $tmp"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"

@@ -9,17 +9,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 
 pack_set $(list --prefix ' --module-requirement ' numpy cython scipy matplotlib)
 
-if $(is_c intel) ; then
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=intelem"
-
-elif $(is_c gnu) ; then
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build" \
-	--command-flag "--compiler=unix"
-
-else
-    doerr $(pack_get --package) "Could not recognize the compiler: $(get_c)"
-fi
+pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
 
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \

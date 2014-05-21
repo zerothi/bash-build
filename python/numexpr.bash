@@ -20,6 +20,8 @@ for v in 1.4.2 2.4 ; do
     # Install commands that it should run
     pack_set --command "mkdir -p" \
 	--command-flag "$(pack_get --install-prefix)/lib/python$pV/site-packages"
+    pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
+
     pack_set --command "$(get_parent_exec) setup.py install" \
 	--command-flag "--prefix=$(pack_get --install-prefix)"
 

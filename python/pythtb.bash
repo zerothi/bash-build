@@ -11,7 +11,7 @@ for v in 1.6.2 ; do
     pack_set --module-requirement numpy \
 	--module-requirement matplotlib
     
-    # Install commands that it should run
+    pack_set --command "$(get_parent_exec) setup.py build"
     pack_set --command "$(get_parent_exec) setup.py install" \
 	--command-flag "--home=$(pack_get --install-prefix)" \
 	
