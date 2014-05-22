@@ -1,4 +1,4 @@
-add_package http://garr.dl.sourceforge.net/project/elk/elk-2.2.10.tgz
+add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.16.tgz
 
 pack_set -s $IS_MODULE
 
@@ -25,13 +25,15 @@ file=make.inc
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
 pack_set --command "sed -i '1 a\
 MAKE = make\n\
-F90 = $FC\n\
+F90 = $MPIF90\n\
 F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
-F77 = $F77\n\
+F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_XC = $(list --LDFLAGS --Wlrpath libxc) -lxc\n\
+LIB_libxc = $(list --LDFLAGS --Wlrpath openmpi libxc) -lxcf90 -lxc\n\
+SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
 LIB_FFT = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
+SRC_FFT = zfftifc.f90\n\
 ' $file"
 
 tmp=
@@ -41,7 +43,7 @@ if $(is_c intel) ; then
 LIB_LPK = -mkl=cluster\n\
 ' $file"
 
-else
+elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp="-llapack_atlas -lf77blas -lcblas -latlas"
@@ -91,12 +93,18 @@ end subroutine\n\
 pack_set --command "make $(get_make_parallel)"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cd src"
-pack_set --command "cp protex elk $(pack_get --install-prefix)/bin/"
-pack_set --command "cd ../utilities"
-pack_set --command "cp blocks2columns/blocks2columns.py $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wien2k-elk/se.pl $(pack_get --install-prefix)/bin/"
+pack_set --command "cp src/protex src/elk $(pack_get --install-prefix)/bin/"
+pack_set --command "cp src/spacegroup/spacegroup $(pack_get --install-prefix)/bin/"
+pack_set --command "cp src/eos/eos $(pack_get --install-prefix)/bin/"
+pack_set --command "cp utilities/blocks2columns/blocks2columns.py $(pack_get --install-prefix)/bin/"
+pack_set --command "cp utilities/elk-bands/elk-bands $(pack_get --install-prefix)/bin/"
+pack_set --command "cp utilities/wien2k-elk/se.pl $(pack_get --install-prefix)/bin/"
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
+
+# Create the species input
+pack_set --command "cp -rf species $(pack_get --install-prefix)/species"
+pack_set --module-opt "--set-ENV ELK_SPECIES=$(pack_get --install-prefix)/species"
+
 
 pack_install
 
