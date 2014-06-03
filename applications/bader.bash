@@ -10,14 +10,13 @@ pack_set --command "echo '.SUFFIXES: .f90' > $file"
 
 pack_set --command "sed -i '1 a\
 FC = $FC \n\
-FFLAGS = $FCFLAGS \n\
+FFLAGS = ${FCFLAGS//-O3/-O2} \n\
 LINK = \n\
 OBJS = kind_mod.o matrix_mod.o ions_mod.o options_mod.o charge_mod.o \
 chgcar_mod.o cube_mod.o io_mod.o bader_mod.o voronoi_mod.o multipole_mod.o main.o \n\
 %.o %.mod: %.f90\n\
 \t\$(FC) \$(FFLAGS) -c \$\*.f90\n\
 bader: \$(OBJS)\n\
-\trm -f bader\n\
 \t\$(FC) \$(LINK) -o bader \$(OBJS)' $file"
 
 # Make commands
