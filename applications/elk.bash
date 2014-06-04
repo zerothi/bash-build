@@ -17,7 +17,7 @@ fi
 
 tmp=
 if $(is_c intel) ; then
-    tmp="-mkl=cluster"
+    tmp=" $MKL_LIB -mkl=cluster"
 fi
 
 file=make.inc
@@ -40,7 +40,7 @@ tmp=
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
-LIB_LPK = -mkl=cluster\n\
+LIB_LPK = $MKL_LIB -mkl=cluster\n\
 ' $file"
 
 elif $(is_c gnu) ; then
