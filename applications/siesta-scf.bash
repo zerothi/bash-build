@@ -184,6 +184,12 @@ pack_set --command "cd ../Vibra/Src"
 pack_set --command "make"
 pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
 
+if [ $(vrs_cmp $v 587) -ge 0 ]; then
+    pack_set --command "cd ../../TS/ts2ts/"
+    pack_set --command "make"
+    pack_set --command "cp ts2ts $(pack_get --install-prefix)/bin/"
+fi
+
 pack_set --command "cd ../../"
 
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
@@ -194,7 +200,6 @@ pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/
 pack_set --command "cd ../Pseudo/atom"
 pack_set --command "make"
 pack_set --command "cp atm $(pack_get --install-prefix)/bin/"
-
 
 pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
 
