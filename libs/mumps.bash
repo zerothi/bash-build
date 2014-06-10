@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
 
 parmetisV=3.2.0
 pack_set --module-requirement parmetis[$parmetisV]
-pack_set --module-requirement scotch
+#pack_set --module-requirement scotch[5.1.12b]
 
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
@@ -44,19 +44,23 @@ LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-SCOTCHDIR = $(pack_get --install-prefix scotch)\n\
-LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
-ISCOTCH = -I\$(SCOTCHDIR)/include \n\
+#SCOTCHDIR = $(pack_get --install-prefix scotch)\n\
+#LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
+#ISCOTCH = -I\$(SCOTCHDIR)/include \n\
 ##LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
-LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr \n\
+#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr \n\
 \n\
 ##ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
-ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
+#ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
+ORDERINGSF = -Dpord -Dparmetis \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
 IORDERINGSF = \$(ISCOTCH) \n\
 IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
+LORDERINGS  = \$(LMETIS) \$(LPORD) \n\
+IORDERINGSF = \n\
+IORDERINGSC = \$(IMETIS) \$(IPORD) \n\
 \n\
 \n\
 PLAT = \n\

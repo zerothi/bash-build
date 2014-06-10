@@ -1,5 +1,8 @@
-add_package --package scotch --alias scotch --version 6.0.0 \
-    https://gforge.inria.fr/frs/download.php/31832/scotch_6.0.0_esmumps.tar.gz
+# MUMPS 4.10.0 only works with 5.1.12b
+for v in 6.0.0 ; do
+add_package --package scotch --alias scotch --version $v \
+    --directory scotch_${v//b/}_esmumps \
+    http://gforge.inria.fr/frs/download.php/latestfile/298/scotch_${v}_esmumps.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -58,11 +61,20 @@ YACC = bison -pscotchyy -y -b y \n\
 prefix = $(pack_get --install-prefix)\n\
 \n' $file"
 
-# Make commands
-pack_set --command "make $(get_make_parallel) scotch"
-pack_set --command "make $(get_make_parallel) ptscotch"
 # the makefile does not create the directory...
 pack_set --command "mkdir -p $(pack_get --install-prefix)"
+
+# Make commands
+pack_set --command "make $(get_make_parallel) scotch"
+if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
+pack_set --command "make $(get_make_parallel) esmumps"
+fi
+pack_set --command "make install"
+pack_set --command "make clean"
+pack_set --command "make $(get_make_parallel) ptscotch"
+if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
+pack_set --command "make $(get_make_parallel) ptesmumps"
+fi
 pack_set --command "make install"
 
 if [ $(pack_installed flex) -eq 1 ] ; then
@@ -71,3 +83,5 @@ fi
 if [ $(pack_installed bison) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
 fi
+
+done
