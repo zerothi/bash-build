@@ -1,4 +1,4 @@
-for v in 564 578 ; do
+for v in 564 578 590 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
@@ -7,9 +7,6 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --install-prefix)/bin/hsx2hs
 
 pack_set --module-requirement openmpi --module-requirement netcdf
-if [ $(pack_installed metis) -eq 1 ]; then
-    pack_set --module-requirement metis
-fi
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
@@ -27,10 +24,18 @@ pack_set --command "../Src/obj_setup.sh"
 # Prepare the compilation arch.make
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
 
-if [ $(pack_installed metis) -eq 1 ]; then
+if [ $(vrs_cmp $v 590) -ge 0 ]; then
+    pack_set --module-requirement mumps
+    pack_set --command "sed -i '1 a\
+FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS\n\
+ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' arch.make"
+else
+    if [ $(pack_installed metis) -eq 1 ]; then
+	pack_set --module-requirement metis
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP\n\
 ADDLIB += -lmetis' arch.make"
+    fi
 fi
 
 pack_set --command "sed -i '1 a\
