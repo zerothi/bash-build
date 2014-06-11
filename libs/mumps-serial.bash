@@ -31,9 +31,9 @@ LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
 fi
 
 pack_set --command "sed -i '1 a\
-LMETISDIR = $(pack_get --install-prefix parmetis[$parmetisV]) \n\
-IMETIS = $(list --INCDIRS parmetis[$parmetisV]) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath parmetis[$parmetisV]) -lparmetis -lmetis \n\
+LMETISDIR = $(pack_get --install-prefix metis[4.0.3]) \n\
+IMETIS = $(list --INCDIRS metis[4.0.3]) \n\
+LMETIS = $(list --LDFLAGS --Wlrpath metis[4.0.3]) -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
@@ -45,7 +45,7 @@ LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 #LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
 \n\
 ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
-##ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
+##ORDERINGSF = -Dpord -Dmetis -Dptscotch \n\
 ORDERINGSF = -Dpord -Dmetis \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
@@ -65,16 +65,12 @@ RM = /bin/rm -f \n\
 CC = $CC \n\
 FC = $FC \n\
 FL = $FC \n\
-##CC = $MPICC \n\
-##FC = $MPIF90 \n\
-##FL = $MPIF90 \n\
 AR = $AR vr \n\
 RANLIB = ranlib \n\
 \n\
 LIBSEQ = -L\$(topdir)/libseq -lmpiseq \n\
 INCSEQ = -I\$(topdir)/libseq \n\
 \n\
-LIBPAR = \$(SCALAP)\n\
 \n\
 LIBOTHERS = \n\
 \n\
@@ -100,4 +96,5 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
 pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
 pack_set --command "cp lib/lib*.a $(pack_get --install-prefix)/lib/"
+pack_set --command "cp libseq/lib*.a $(pack_get --install-prefix)/lib/"
 
