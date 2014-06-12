@@ -96,10 +96,37 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy ase gpaw inelastica) scientificpython scipy ase gpaw inelastica)
 
+for i in $(get_index -all Inelastica-DEV) ; do
+    create_module \
+	-n "Nick Papior Andersen's Inelastica for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M python$pV.Inelastica-DEV.$(pack_get --version $i)/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+done
+
+for i in $(get_index -all ase) ; do
+    create_module \
+	-n "Nick Papior Andersen's ASE for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+done
+
+for i in $(get_index -all gpaw) ; do
+    create_module \
+	-n "Nick Papior Andersen's GPAW for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+done
+
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.kwant/$(get_c) \
+    -M python$pV.kwant.$(pack_get --version kwant)/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement kwant) kwant)
 
