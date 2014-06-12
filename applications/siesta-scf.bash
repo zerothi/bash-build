@@ -1,4 +1,4 @@
-for v in 564 578 592 ; do
+for v in 564 578 593 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 

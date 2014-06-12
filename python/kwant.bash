@@ -47,7 +47,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 [mumps]\n\
-libraries = zmumps mumps_common pord metis scotch\n\
+libraries = zmumps mumps_common pord metis\n\
 ' $file"
 
 pack_set --command "CFLAGS='$CFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
