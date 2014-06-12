@@ -10,14 +10,14 @@ pack_set --module-opt "--lua-family kwant"
 
 pack_set --module-requirement cython \
     --module-requirement numpy \
-    --module-requirement mumps-serial \
+    --module-requirement mumps \
     --module-requirement tinyarray
 
 file=build.conf
 pack_set --command "echo '#' > $file"
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement mumps-serial) mumps-serial)"
+tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement mumps) mumps)"
 pack_set --command "sed -i '1 a\
 extra_link_args = $tmp_flags \n\
 ' $file"
