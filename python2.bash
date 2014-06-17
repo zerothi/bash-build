@@ -89,13 +89,6 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement numba mpi4py) numba mpi4py)
 
-create_module \
-    -n "Nick Papior Andersen's DFT python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.numpy.scipy.scientific.ase.gpaw.inelastica/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy ase gpaw inelastica) scientificpython scipy ase gpaw inelastica)
-
 for i in $(get_index -all Inelastica-DEV) ; do
     create_module \
 	-n "Nick Papior Andersen's Inelastica for: $(get_c)" \
