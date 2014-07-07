@@ -22,9 +22,12 @@ if [ $(vrs_cmp $v 309) -lt 0 ]; then
     pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v"
     pack_set --command "patch -R scripts/Inelastica inelastica.patch-r$v"
     pack_set --command "patch package/Inelastica.py Inelastica.py.patch-r$v"
+    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v"
+    pack_set --command "patch package/NEGF.py NEGF_double_electrode_r$v"
+else
+    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v"
+    pack_set --command "patch -p0 < NEGF_double_electrode_r$v"
 fi
-pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v"
-pack_set --command "patch package/NEGF.py NEGF_double_electrode_r$v"
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 
