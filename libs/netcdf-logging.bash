@@ -6,7 +6,7 @@ else
 fi
 
 # Now we can install NetCDF (we need the C version to be first added!)
-v=4.3.1.1
+v=4.3.2
 add_package \
     --package netcdf-logging \
     http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
@@ -45,14 +45,14 @@ pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 
 # Install the FORTRAN headers
-v=4.4.0
-add_package --archive netcdf-fortran-$v.tar.gz https://github.com/Unidata/netcdf-fortran/archive/v$v.tar.gz
+vf=4.4.0
+add_package --archive netcdf-fortran-$vf.tar.gz https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
-pack_set --install-prefix $(pack_get --install-prefix netcdf-logging)
+pack_set --install-prefix $(pack_get --install-prefix netcdf-logging[$v])
 
 # Add requirments when creating the module
-pack_set --module-requirement netcdf-logging
+pack_set --module-requirement netcdf-logging[$v]
 
 pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
 

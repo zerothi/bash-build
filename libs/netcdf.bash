@@ -32,8 +32,8 @@ pack_set --command "make install"
 #pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.c"
 
 # Install the FORTRAN headers
-v=4.4.0
-add_package --archive netcdf-fortran-$v.tar.gz https://github.com/Unidata/netcdf-fortran/archive/v$v.tar.gz
+vf=4.4.0
+add_package --archive netcdf-fortran-$vf.tar.gz https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 pack_set --install-prefix $(pack_get --install-prefix netcdf[$v])
