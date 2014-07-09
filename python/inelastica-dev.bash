@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 228 279 286 303 312 ; do
+for v in 228 279 286 303 313 ; do
 add_package \
     --package Inelastica-DEV \
     http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
