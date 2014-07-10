@@ -4,6 +4,8 @@ msg_install --message "Installing all libraries..."
 source libs/zlib.bash
 source libs/expat.bash
 source libs/libffi.bash
+source libs/libxml2.bash
+
 #source libs/llvm.bash
 #source libs/gmp.bash
 #source libs/guile.bash
