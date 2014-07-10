@@ -40,7 +40,10 @@ pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set_mv_test tmp.test
+
 
 if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"

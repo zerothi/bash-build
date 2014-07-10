@@ -1,7 +1,12 @@
 # Then install Atlas
 # old_v 3.10.0
+# dev 3.11.28
 for v in 3.10.1 ; do
-add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
+if [ $(vrs_cmp $v 3.10.1) -le 0 ]; then
+    add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
+else
+    add_package http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2
+fi
 
 pack_set --directory ATLAS
 
@@ -14,20 +19,24 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
 pack_set --command "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"
 
 # Configure command
+# -Fa alg: append to all compilers -fPIC
 pack_set --command "../configure -Fa alg '-fPIC'" \
     --command-flag "-Ss flapack $(pack_get --prefix lapack)/lib/liblapack.a" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--incdir=$(pack_get --prefix)/include" \
     --command-flag "--libdir=$(pack_get --prefix)/lib" \
-    --command-flag "--dylibs -m 2066.596 -t $NPROCS" \
+    --command-flag "-t $NPROCS --shared" \
     --command-flag "-b 64 -Si latune 1" \
     --command-flag "-Ss pmake '\$(MAKE) $(get_make_parallel)'"
+#-m 2066.596
 
 # Make commands
 pack_set --command "make"
-if $(is_host surt muspel slid) ; then
-    pack_set --command "make check ptcheck time"
-fi
+pack_set --command "make check > tmp.test 2>&1"
+pack_set_mv_test tmp.test tmp.test.s
+pack_set --command "make ptcheck > tmp.test 2>&1"
+pack_set_mv_test tmp.test tmp.test.t
+
 pack_set --command "make install"
 
 # Create the ATLAS lapack

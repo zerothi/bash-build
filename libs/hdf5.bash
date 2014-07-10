@@ -23,16 +23,17 @@ pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
     --command-flag --enable-parallel \
-    --command-flag --disable-shared \
+    --command-flag --enable-shared \
     --command-flag --enable-static \
-    --command-flag --enable-fortran $tmp
-		#--enable-shared  # They are not tested with parallel
+    --command-flag "--enable-fortran" $tmp
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check-s > tmp.test 2>&1"
+pack_set_mv_test tmp.test tmp.test.s
+# the parallel tests cannot even complete using gnu
+#pack_set --command "NPROCS=3 make check-p > tmp.test 2>&1"
+#pack_set_mv_test tmp.test tmp.test.p
 pack_set --command "make install"
-
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 done

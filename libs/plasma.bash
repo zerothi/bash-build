@@ -70,5 +70,8 @@ LDFLAGS = $FFLAGS \n' $tmp"
 
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"
+pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set_mv_test tmp.test
+
 

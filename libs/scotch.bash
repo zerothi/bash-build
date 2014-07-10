@@ -75,7 +75,10 @@ pack_set --command "make $(get_make_parallel) ptscotch"
 if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
 pack_set --command "make $(get_make_parallel) ptesmumps"
 fi
+
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set_mv_test tmp.test
 
 if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"

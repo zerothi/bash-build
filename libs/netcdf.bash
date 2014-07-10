@@ -26,10 +26,9 @@ pack_set \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
-
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.c"
+pack_set_mv_test tmp.test tmp.test.c
 
 # Install the FORTRAN headers
 vf=4.4.0
@@ -57,8 +56,8 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
+pack_set_mv_test tmp.test tmp.test.f
 
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.f"
 done
