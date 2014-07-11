@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 228 243 313 ; do
+for v in 228 243 315 ; do
 add_package \
     --package Inelastica-MATT \
     http://www.student.dtu.dk/~nicpa/packages/Inelastica-$v.tar.gz
@@ -9,7 +9,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family inelastica"
 
-pack_set --host-reject ntch --host-reject zero
+#pack_set --host-reject ntch --host-reject zero
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Inelastica
 
