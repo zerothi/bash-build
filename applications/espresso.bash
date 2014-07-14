@@ -1,6 +1,8 @@
 for v in 5.1 ; do
+    libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     if [ "$v" = "5.1" ]; then
 	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+    libs="bindir libiotk liblapack libblas mods libs cp pw pp ph tddfpt pwcond ld1 upf xspectra acfdt"
     elif [ "$v" = "5.0.3" ]; then
 	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
@@ -73,7 +75,7 @@ for v in 5.1 ; do
 
     # Make commands
     for EXE in $libs ; do
-	pack_set --command "make $(get_make_parallel) $EXE"
+ 	pack_set --command "make $(get_make_parallel) $EXE"
     done
 
     # Prepare installation directories...
