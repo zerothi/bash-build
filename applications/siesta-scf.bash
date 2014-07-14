@@ -194,6 +194,11 @@ if [ $(vrs_cmp $v 587) -ge 0 ]; then
     pack_set --command "make"
     pack_set --command "cp ts2ts $(pack_get --install-prefix)/bin/"
 fi
+if [ $(vrs_cmp $v 602) -ge 0 ]; then
+    pack_set --command "cd ../tshs2tshs/"
+    pack_set --command "make"
+    pack_set --command "cp tshs2tshs $(pack_get --install-prefix)/bin/"
+fi
 
 pack_set --command "cd ../../"
 
