@@ -1,5 +1,6 @@
 # Install gnuplot, which is a simple library
-add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/4.6.4/gnuplot-4.6.4.tar.gz
+v=4.6.5
+add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/$v/gnuplot-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -13,8 +14,7 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 pack_install
 

@@ -1,4 +1,4 @@
-for v in 0.13.3 ; do 
+for v in 0.14.0 ; do 
 add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE

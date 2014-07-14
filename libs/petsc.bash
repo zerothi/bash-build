@@ -1,6 +1,6 @@
 add_package --package petsc \
-    --directory petsc-3.4.3 \
-    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.4.3.tar.gz
+    --directory petsc-3.5.0 \
+    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.5.tar.gz
 
 pack_set -s $IS_MODULE
 

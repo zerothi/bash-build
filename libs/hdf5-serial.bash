@@ -1,5 +1,5 @@
 # Then install HDF5
-for p in 1.8.12 ; do
+for p in 1.8.13 ; do
 
 add_package \
     --package hdf5-serial \

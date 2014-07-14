@@ -1,6 +1,7 @@
-for v in 5.0.3 ; do
-    
-    if [ "$v" = "5.0.3" ]; then
+for v in 5.1 ; do
+    if [ "$v" = "5.1" ]; then
+	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+    elif [ "$v" = "5.0.3" ]; then
 	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
 	tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz

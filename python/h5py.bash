@@ -1,4 +1,4 @@
-v=2.3.0
+v=2.3.1
 add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

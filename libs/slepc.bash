@@ -1,4 +1,4 @@
-add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.4.3.tar.gz
+add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.4.4.tar.gz
 
 pack_set -s $IS_MODULE
 

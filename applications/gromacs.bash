@@ -1,4 +1,4 @@
-add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.5.tar.gz
+add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.6.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 

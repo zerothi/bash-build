@@ -1,6 +1,6 @@
 # Install Python 2 versions
 # apt-get bz2-dev
-v=2.7.6
+v=2.7.8
 if $(is_host n-) ; then
     add_package --alias python --package Python \
 	http://www.python.org/ftp/python/$v/Python-$v.tgz
@@ -41,7 +41,7 @@ fi
 
 #pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+#pack_set_mv_test tmp.test
 
 pack_install
 
