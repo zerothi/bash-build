@@ -1,5 +1,5 @@
 add_package \
-    ftp://sourceware.org/pub/libffi/libffi-3.0.13.tar.gz
+    ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

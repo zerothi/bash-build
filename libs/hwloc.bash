@@ -13,6 +13,9 @@ pack_set --module-requirement libxml2
 pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/patch_hwloc-intel"
 pack_set --command "patch -p1 < patch_hwloc-intel"
 
+# Preload modules
+pack_set --command "module load help2man m4 autoconf automake"
+
 pack_set --command "./configure" \
     --command-flag "--prefix $(pack_get --install-prefix)" \
     --command-flag "--disable-libnuma" \
@@ -28,3 +31,4 @@ pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
+pack_set --command "module purge"
