@@ -70,6 +70,7 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 source libs/metis.bash
+source libs/mumps.bash
 
 install_all --from hdf5
 
