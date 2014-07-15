@@ -15,10 +15,6 @@ pack_set --module-requirement openmpi --module-requirement fftw-3
 # Move to the source directory
 pack_set --command "cd source"
 
-# Patch it...
-#pack_set --command "wget http://www.openmx-square.org/bugfixed/14Jan31/patch3.7.7.tar.gz"
-#pack_set --command "tar xfz patch3.7.7.tar.gz"
-
 pack_set --command "wget http://www.openmx-square.org/bugfixed/14Feb17/patch3.7.8.tar.gz"
 pack_set --command "tar xfz patch3.7.8.tar.gz"
 
@@ -69,7 +65,7 @@ FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi_f90 -lmpi_f77 \n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi \n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # prepare the directory of installation
