@@ -609,6 +609,12 @@ function pack_get {
 		-build)              _ps "${_build[$index]}" ;;
 		-C|-commands)        _ps "${_cmd[$index]}" ;;
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
+		-module-load) 
+		    for m in ${_mod_req[$index]} ; do
+			_ps "$(pack_get --module-name $m) "
+		    done 
+		    _ps "${_mod_name[$index]}"
+		    ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
 		-module-paths-requirement) 

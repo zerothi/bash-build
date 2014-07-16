@@ -34,6 +34,12 @@ new_build --name python$IpV \
 def_idx=$(build_get --default-build)
 build_set --default-build python$IpV
 
+# Python building utility
+source python/scons.bash
+
+# Install the helper (mongodb)
+source helpers/mongo.bash
+
 # Packages installed in "python-home"
 source python/distribute.bash
 source python/pyparsing.bash
@@ -46,8 +52,17 @@ source python/pexpect.bash
 source python/pygments.bash
 source python/ipython.bash
 source python/pycparser.bash
+source python/monty.bash
+source python/pyyaml.bash
+source python/markupsafe.bash
+source python/jinja2.bash
+
+install_all --from $(get_parent)
 
 # Done with packages only installed in python-home! ^
+
+source python/pymongo.bash
+source python/fireworks.bash
 
 source python/cython.bash
 source python/cffi.bash
@@ -108,6 +123,6 @@ source python/phonopy.bash
 source python/tinyarray.bash
 source python/kwant.bash
 
-install_all --from $(get_parent)
+install_all --from pymongo
 
 build_set --default-build $def_idx

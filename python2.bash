@@ -70,6 +70,13 @@ build_set --module-path $old_path-npa
 create_module \
     -n "Nick Papior Andersen's basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
+    -M python$pV.fireworks/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --module-requirement fireworks) fireworks)
+
+create_module \
+    -n "Nick Papior Andersen's basic python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr) scientificpython scipy cython numexpr matplotlib)
