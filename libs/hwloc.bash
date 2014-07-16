@@ -27,8 +27,10 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+if ! $(is_host n-) ; then
+    pack_set --command "make check > tmp.test 2>&1"
+    pack_set_mv_test tmp.test
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
 
-pack_set --command "module purge"
+pack_set --command "module unload automake autoconf m4 help2man"

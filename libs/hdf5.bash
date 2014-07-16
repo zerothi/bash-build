@@ -1,5 +1,5 @@
 # Then install HDF5
-for p in 1.8.13 ; do
+for p in 1.8.12 ; do
 
 add_package http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$p/src/hdf5-$p.tar.gz
 
@@ -29,8 +29,10 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check-s > tmp.test 2>&1"
-pack_set_mv_test tmp.test tmp.test.s
+if ! $(is_host n-) ; then
+  pack_set --command "make check-s > tmp.test 2>&1"
+  pack_set_mv_test tmp.test tmp.test.s
+fi
 # the parallel tests cannot even complete using gnu
 #pack_set --command "NPROCS=3 make check-p > tmp.test 2>&1"
 #pack_set_mv_test tmp.test tmp.test.p
