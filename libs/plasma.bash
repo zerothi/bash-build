@@ -29,7 +29,7 @@ fi
 if $(is_c intel) ; then
     # The tmg-lib must be included...
     pack_set --command "sed -i '1 a\
-CFLAGS  += -DPLASMA_WITH_MKL $FLAG_OMP -I$MKL_PATH/include \n\
+CFLAGS  += -DPLASMA_WITH_MKL -I$MKL_PATH/include \n\
 FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
@@ -39,7 +39,6 @@ LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
 else 
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --command "sed -i '1 a\
-CFLAGS  += $FLAG_OMP \n\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n\
 LIBLAPACK = $(list --LDFLAGS --Wlrpath lapack atlas) -ltmg -llapack_atlas\n' $tmp"
     else
@@ -64,13 +63,18 @@ LOADER = \$(FC) \n\
 ARCH = $AR \n\
 ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
-CFLAGS = $CFLAGS -DADD_\n\
-FFLAGS = $FFLAGS \n\
-LDFLAGS = $FFLAGS \n' $tmp"
+CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
+FFLAGS = $FFLAGS $FLAG_OMP \n\
+LDFLAGS = \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement hwloc) hwloc)\n' $tmp"
 
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"
 pack_set --command "make test > tmp.test 2>&1"
+pack_set --command "cd testing"
+pack_set --command "make all"
+pack_set --command "python plasma_testing.py -c 2 >> ../tmp.test 2>&1"
+pack_set --command "cat testing_results.txt >> ../tmp.test"
+pack_set --command "cd .."
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
