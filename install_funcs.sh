@@ -510,6 +510,11 @@ function pack_set {
             -R|-module-requirement)  
 		local tmp="$(pack_get --module-requirement $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
+		# We add the host-rejects for this requirement
+		local tmp="$(pack_get --host-reject $1)"
+		[ ! -z "$tmp" ] && reject_h="$reject_h $tmp"
+		local tmp="$(pack_get --host-only $1)"
+		[ ! -z "$tmp" ] && only_h="$only_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
