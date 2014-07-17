@@ -26,7 +26,7 @@ source $(build_get --source)
 new_build --name python$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
-    --installation-path $(build_get --installation-path)/python/$IpV/packages \
+    --installation-path $(build_get --installation-path)/$(pack_get --package $(get_parent))/$IpV/packages \
     --build-module-path "--package --version $IppV $(get_c)" \
     --build-installation-path "--package --version $(get_c)" \
     $(list --prefix ' --default-module ' $pMod)

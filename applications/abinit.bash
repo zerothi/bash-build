@@ -143,9 +143,11 @@ fi
 # Make commands
 tmp=$(get_make_parallel)
 pack_set --command "make multi multi_nprocs=${tmp//-j /}"
-pack_set --command "make check-local > tmp.test 2>&1" # only check local tests...
+# With 7.8+ the testing system has changed.
+# We should do some python calls...
+#pack_set --command "make check-local > tmp.test 2>&1" # only check local tests...
+#pack_set_mv_test tmp.test
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 pack_install
 

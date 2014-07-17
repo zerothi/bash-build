@@ -6,6 +6,8 @@ add_package --build generic \
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject n-
+
 pack_set --install-query $(pack_get --install-prefix)/bin/mongo
 
 pack_set --command "module load $(pack_get --module-load scons)"

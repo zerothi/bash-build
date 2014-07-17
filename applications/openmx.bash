@@ -65,7 +65,7 @@ FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi \n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # prepare the directory of installation
