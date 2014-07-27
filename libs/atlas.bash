@@ -1,8 +1,8 @@
 # Then install Atlas
 # old_v 3.10.0
 # dev 3.11.28
-for v in 3.10.1 ; do
-if [ $(vrs_cmp $v 3.10.1) -le 0 ]; then
+for v in 3.10.2 ; do
+if [ $(vrs_cmp $v 3.10.2) -le 0 ]; then
     add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
 else
     add_package http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2

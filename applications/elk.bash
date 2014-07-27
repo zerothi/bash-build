@@ -1,4 +1,4 @@
-add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.16.tgz
+add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.22.tgz
 
 pack_set -s $IS_MODULE
 
