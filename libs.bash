@@ -15,6 +15,9 @@ source libs/hwloc.bash
 source libs/openmpi-hpc.bash
 source libs/mpich.bash
 
+# Optimization of openmpi parameters
+source libs/otpo.bash
+
 # Default fftw libs
 source libs/fftw2.bash
 source libs/fftw3.bash

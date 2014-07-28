@@ -835,6 +835,10 @@ function pack_install {
 	local tmp=$(pack_get --build $idx)
 	source $(build_get --source[$tmp])
 
+        # Create the list of requirements
+	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
+	module load $module_loads
+
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
@@ -846,10 +850,6 @@ function pack_install {
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
-
-        # Create the list of requirements
-	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-	module load $module_loads
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
@@ -913,9 +913,7 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	for mod in $module_loads ; do
-            module unload $mod
-	done
+        module unload $module_loads
 
 	# Unload the module itself in case of PRELOADING
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
