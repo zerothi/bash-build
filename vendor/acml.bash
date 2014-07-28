@@ -13,6 +13,10 @@ if $(is_host zero ntch) ; then
     [ "$c" == "open64" ] && continue
     [ "$c" == "pgi" ] && continue
 fi
+if $(is_host ntch-2) ; then
+    [ "$c" == "gfortran" ] && continue
+fi
+
 add_package --build vendor \
     --version ${v//-/.} \
     --package acml \

@@ -37,6 +37,7 @@ build_set --default-build python$IpV
 # Python building utility
 source python/scons.bash
 
+install_all --from scons
 # Install the helper (mongodb)
 source helpers/mongo.bash
 
@@ -57,7 +58,7 @@ source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
 
-install_all --from $(get_parent)
+install_all --from mongo
 
 # Done with packages only installed in python-home! ^
 
