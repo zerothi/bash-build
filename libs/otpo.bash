@@ -8,6 +8,10 @@ pack_set --install-query $(pack_get --install-prefix)/bin/otpo
 
 pack_set --module-requirement openmpi
 
+if ! $(is_c gnu) ; then
+    pack_set --host-reject $(get_hostname)
+fi
+
 # Load build tools
 pack_set --command "module load build-tools.npa"
 pack_set --command "./autogen.sh"
