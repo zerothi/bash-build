@@ -78,8 +78,6 @@ source libs.bash
 
 # These are "parent" installations...
 source python${python_version}.bash
-# The _ctypes does not work yet...
-#source python3.bash
 
 # We have installed all libraries needed for doing application installs
 source apps.bash
