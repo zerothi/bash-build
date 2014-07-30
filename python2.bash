@@ -33,11 +33,11 @@ pack_set --command "../configure" \
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 # Clean up intel files
-if $(is_c intel) ; then
-    for f in Lib/test/test_unicode Lib/test/test_multibytecodec Lib/test/test_coding Lib/json/tests/test_unicode ; do
-    pack_set --command "rm -f ../$f.py"
-    done
-fi
+#if $(is_c intel) ; then
+#    for f in Lib/test/test_unicode Lib/test/test_multibytecodec Lib/test/test_coding Lib/json/tests/test_unicode ; do
+#    pack_set --command "rm -f ../$f.py"
+#    done
+#fi
 
 #pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"

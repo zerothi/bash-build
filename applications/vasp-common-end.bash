@@ -16,9 +16,10 @@ pack_set --command "cd ../vasp.5.3"
 # Prepare the installation directory
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
-# Make commands
 # Install the makefile
 pack_set --command "sed -i -e 's:# general.*:include ../mymakefile:' $tmp"
+
+# Make commands
 pack_set --command "make -f $tmp"
 pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp"
 pack_set --command "make -f $tmp clean"
@@ -36,24 +37,25 @@ pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspGNGZhalf"
 pack_set --command "make -f $tmp clean"
 
 ###################### Prepare the TST code ##########################
+
 # First revert to initial setup
 pack_set --command "sed -i -e 's:-DNGZhalf.*:-DNPA_PLACEHOLDER:' ../mymakefile"
 
-pack_set --command "wget http://theory.cm.utexas.edu/vtsttools/code/vtstcode.tar.gz"
-pack_set --command "tar xfz vtstcode.tar.gz"
-pack_set --command "cp -r vtstcode/* ./"
+# old link: http://theory.cm.utexas.edu/vtsttools/code/vtstcode.tar.gz"
+pack_set --command "wget http://theory.cm.utexas.edu/code/vtstcode.tgz"
+pack_set --command "tar xfz vtstcode.tgz"
+pack_set --command "cp -r vtstcode-*/* ./"
 
 # Install module compilations...
 pack_set --command "sed -i -e 's:\(CHAIN_FORCE[^\&]*\):\1TSIF, :i' main.F"
 pack_set --command "sed -s -i -e 's:[[:space:]]*\(\#[end]*if\):\1:i' chain.F dimer.F"
-
 pack_set --command "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' $tmp"
-pack_set --command "sed -i -e 's:-DNGZhalf.*:-DNPA_PLACEHOLDER:' ../mymakefile"
 
 # Install vtst scripts
-pack_set --command "wget http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
-pack_set --command "tar xfz vtstscripts.tar.gz"
-pack_set --command "cp -r vtstscripts/* $(pack_get --install-prefix)/bin/"
+# old link: http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
+pack_set --command "wget http://theory.cm.utexas.edu/code/vtstscripts.tgz"
+pack_set --command "tar xfz vtstscripts.tgz"
+pack_set --command "cp -r vtstscripts-*/* $(pack_get --install-prefix)/bin/"
 
 ######################   end the TST code   ##########################
 
