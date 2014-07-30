@@ -60,7 +60,7 @@ mkl_libs = mkl_rt,mkl_intel_lp64,mkl_gf_lp64,mkl_intel_thread,mkl_core,mkl_def\n
 lapack_libs = mkl_lapack95_lp64\n\
 blas_libs = mkl_blas95_lp64' $file"
 
-    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict -fomit-frame-pointer -I$(pack_get --install-prefix ss_config)/include"
+    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict $FLAG_OMP -I$(pack_get --install-prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $p_flags|g' numpy/distutils/intelccompiler.py"
@@ -89,7 +89,7 @@ lapack_libs = lapack_atlas' $file"
 pack_set --command "sed -i -e \"s/atlas_threads_info(atlas_info):/atlas_threads_info(atlas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
 pack_set --command "sed -i -e \"s/atlas_blas_threads_info(atlas_blas_info):/atlas_blas_threads_info(atlas_blas_info):\n\ \ \ \ section = 'atlas_threads'\n\ \ \ \ _lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
 pack_set --command "sed -i -e \"s/_lib_lapack = \['lapack'\]/_lib_lapack = \['lapack_atlas'\]/g\" numpy/distutils/system_info.py"
-pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:2}\]|g\" numpy/distutils/fcompiler/gnu.py"
+pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[$FLAG_OMP}\]|g\" numpy/distutils/fcompiler/gnu.py"
 
     else
 	pack_set --command "sed -i '$ a\
@@ -101,7 +101,7 @@ lapack_libs = lapack' $file"
     fi
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    p_flags="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include"
+    p_flags="${FCFLAGS// -/ } I$(pack_get --install-prefix ss_config)/include $FLAG_OMP"
     # Remove the leading "-" for a flag
     [ "${p_flags:0:1}" == "-" ] && p_flags="${p_flags:1}"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
@@ -120,7 +120,6 @@ fi
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
-
 
 add_test_package
 pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Succes'"
