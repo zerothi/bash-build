@@ -542,6 +542,7 @@ function pack_set {
 	# This is only because we haven't used the index thing before
 	local opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
+	lib=/lib # ensure setting library path
     fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"

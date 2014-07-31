@@ -5,7 +5,7 @@
 
 for bl in blas atlas openblas ; do
 
-add_package http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
+add_package --package scalapack-$bl http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
 
 pack_set --install-query $(pack_get --install-prefix $bl)/lib/libscalapack.a
 

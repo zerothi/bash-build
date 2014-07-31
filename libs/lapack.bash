@@ -60,7 +60,7 @@ pack_set --command "$AR x $(pack_get --prefix $bl)/lib/liblapack_atlas.a"
 pack_set --command "$AR r ../liblapack.a *.o"
 pack_set --command "cd .."
 pack_set --command "ranlib liblapack.a"
-pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack.a"
+pack_set --command "cp liblapack.a $(pack_get --install-prefix $bl)/lib/liblapack.a"
 fi
 
 done

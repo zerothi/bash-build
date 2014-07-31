@@ -103,26 +103,13 @@ if [ $retval -eq 0 ]; then
 	$(list --prefix '-L ' $(pack_get --module-requirement nco) $(pack_get --module-requirement h5utils-serial) nco h5utils-serial)
 fi
 
-create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's basic math script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M blas.lapack/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement blas) blas lapack)
+for bl in blas atlas openblas ; do
+    create_module \
+	--module-path $(build_get --module-path)-npa \
+	-n "Nick Papior Andersen's parallel math script for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M mpi.$bl.scalapack/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi $bl)
+done
 
-create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's parallel math script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M mpi.blas.lapack.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi blas lapack scalapack)
-
-create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's parallel fast math script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M mpi.atlas.scalapack/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi atlas scalapack)

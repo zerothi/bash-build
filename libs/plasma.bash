@@ -7,17 +7,6 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libplasma.a
 
 pack_set --module-requirement hwloc
 
-if $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
-	pack_set --module-requirement atlas
-    else
-	pack_set --module-requirement blas
-    fi
-fi
-
-# We only require this due to the LAPACKE library
-pack_set --module-requirement lapack
-
 tmp=make.inc
 pack_set --command "echo '# Makefile for easy installation ' > $tmp"
 
@@ -48,8 +37,8 @@ LIBCBLAS  = \n' $tmp"
 	bl=atlas
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n\
-LIBCBLAS  = \n' $tmp"
+LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -latlas \n\
+LIBCBLAS  = -lcblas \n' $tmp"
 
     else
 	bl=blas
@@ -63,7 +52,7 @@ LIBCBLAS  = $(list --LDFLAGS --Wlrpath blas) -lcblas \n' $tmp"
     pack_set --command "sed -i '1 a\
 INCCLAPACK = $(list --INCDIRS $bl)\n\
 LIBCLAPACK = $(list --LDFLAGS --Wlrpath $bl) -llapacke \n\
-LIBLAPACK = $(list --LDFLAGS --Wlrpath $bl) -llapack\n' $tmp"
+LIBLAPACK  = $(list --LDFLAGS --Wlrpath $bl) -ltmg -llapack\n' $tmp"
 
 fi
 
