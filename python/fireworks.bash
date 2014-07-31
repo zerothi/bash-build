@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-requirement mongo
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/fireworks
+pack_set --install-query $(pack_get --install-prefix)/bin/mlaunch
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/python$pV/site-packages/"
 

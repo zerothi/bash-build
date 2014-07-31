@@ -20,7 +20,7 @@ function ml {
     else
         opt=list
     fi
-    module $opt $@
+    module \$opt \$@
 }
 
 EOF
