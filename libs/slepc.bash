@@ -47,9 +47,8 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "--with-arpack-flags='-lparpack -larpack'"
 
 # Set the arch of the build (sets the directory...)
-pack_set --command "export PETSC_ARCH=arch-installed-petsc"
-pack_set --command "export SLEPC_DIR=\$(pwd)"
-pack_set --command "make"
+# (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)
+pack_set --command "make SLEPC_DIR=\$(pwd)"
 
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"
