@@ -66,20 +66,22 @@ with_linalg_libs=\"$tmp\"\n' $file"
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
-    pack_set --module-requirement scalapack    
-    if [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS openblas)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas\"' $file"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
 	pack_set --command "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS atlas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas\"' $file"
-
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas\"' $file"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
 	pack_set --command "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
+with_linalg_incs=\"$(list --INCDIRS blas)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas\"' $file"
     fi
-    #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-fopenmp /g' $file"
 
 fi
 

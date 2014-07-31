@@ -1,6 +1,3 @@
-# Then install Atlas
-# old_v 3.10.0
-# dev 3.11.28
 for v in 3.10.2 3.11.28 ; do
 if [ $(vrs_cmp $v 3.10.2) -le 0 ]; then
     add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
@@ -21,7 +18,7 @@ pack_set --command "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' .
 # Configure command
 # -Fa alg: append to all compilers -fPIC
 pack_set --command "../configure -Fa alg '-fPIC'" \
-    --command-flag "-Ss flapack $(pack_get --prefix lapack)/lib/liblapack.a" \
+    --command-flag "-Ss flapack $(pack_get --prefix blas)/lib/liblapack.a" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--incdir=$(pack_get --prefix)/include" \
     --command-flag "--libdir=$(pack_get --prefix)/lib" \
@@ -39,15 +36,7 @@ pack_set_mv_test tmp.test tmp.test.t
 
 pack_set --command "make install"
 
-# Create the ATLAS lapack
-pack_set --command "mkdir -p tmp"
-pack_set --command "cd tmp"
-pack_set --command "$AR x ../lib/liblapack.a"
-pack_set --command "cp $(pack_get --prefix lapack)/lib/liblapack.a ../liblapack.a"
-pack_set --command "$AR r ../liblapack.a *.o"
-pack_set --command "cd .."
-pack_set --command "ranlib liblapack.a"
-pack_set --command "cp liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
+pack_set --command "cp lib/liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
 
 done
 

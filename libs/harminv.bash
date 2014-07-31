@@ -14,15 +14,17 @@ if $(is_c intel) ; then
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
 
 else
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp_flags="--with-blas='-lopenblas' --with-lapack='-llapack'"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	tmp="--with-blas='$(list --Wlrpath atlas) -lcblas -lf77blas -latlas'"
-	tmp="$tmp --with-lapack='$(list --Wlrpath atlas) -llapack_atlas'"
+	tmp_flags="--with-blas='-lf77blas -lcblas -latlas'"
+	tmp_flags="$tmp_flags --with-lapack='-llapack -lf77blas -lcblas -latlas'"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
-	tmp="--with-blas='$(list --Wlrpath blas) -lblas'"
-	tmp="$tmp --with-lapack='$(list --Wlrpath lapack) -llapack'"
+	tmp_flags="--with-blas='-lblas'"
+	tmp_flags="$tmp_flags --with-lapack='-llapack'"
     fi
 
 fi

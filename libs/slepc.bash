@@ -14,14 +14,20 @@ if $(is_c intel) ; then
     tmp_lib="-mkl=cluster"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath openblas)"
+	tmp_lib="-llapack -lopenblas"
+
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
-	tmp_lib="-llapack_atlas -lf77blas -lcblas -latlas"
+	tmp_lib="-llapack -lf77blas -lcblas -latlas"
     else
-	pack_set --module-requirement lapack --module-requirement blas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath lapack blas)"
+	pack_set --module-requirement blas
+	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath blas)"
 	tmp_lib="-llapack -lblas"
+
     fi
 
 fi

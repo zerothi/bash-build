@@ -66,28 +66,29 @@ SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
 LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
 
 else
-    pack_set --module-requirement scalapack
     pack_set --command "sed -i '$ a\
 # First correct the OpenMP flags\n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
-LINK = $FLAG_OMP \n\
-SCA = $(list --Wlrpath --LDFLAGS scalapack) -lscalapack ' $file"
-
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+LINK = $FLAG_OMP \n' $file"
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '$ a\
+SCA = $(list --Wlrpath --LDFLAGS openblas) -lscalapack\n\
+BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas \n\
+LAPACK = $(list --Wlrpath --LDFLAGS openblas) -llapack ' $file"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
-BLAS = $(list --Wlrpath --LDFLAGS atlas) -lcblas -lf77blas -latlas \n\
-LAPACK = $(list --Wlrpath --LDFLAGS atlas) -llapack_atlas ' $file"
-
+SCA = $(list --Wlrpath --LDFLAGS atlas) -lscalapack\n\
+BLAS = $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas \n\
+LAPACK = $(list --Wlrpath --LDFLAGS atlas) -llapack ' $file"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
 	pack_set --command "sed -i '$ a\
+SCA = $(list --Wlrpath --LDFLAGS blas) -lscalapack\n\
 BLAS = $(list --Wlrpath --LDFLAGS blas) -lblas \n\
-LAPACK = $(list --Wlrpath --LDFLAGS lapack) -llapack ' $file"
-
+LAPACK = $(list --Wlrpath --LDFLAGS blas) -llapack ' $file"
     fi
-
 fi
 

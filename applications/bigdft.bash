@@ -17,23 +17,25 @@ pack_set --module-requirement openmpi \
     --module-requirement libxc
 
 tmp=
-if $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --module-requirement scalapack
-	tmp="--with-ext-linalg='-lscalapack -llapack_atlas -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath atlas scalapack)'"
-    else
-	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
-	pack_set --module-requirement scalapack
-	tmp="--with-ext-linalg='-lscalapack -llapack -lblas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath blas lapack scalapack)'"
-    fi
-
-elif $(is_c intel) ; then
+if $(is_c intel) ; then
     tmp="--with-ext-linalg='-mkl=cluster -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64'"
     tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
+
+elif $(is_c gnu) ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="--with-ext-linalg='-lscalapack -llapack -lopenblas'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath openblas)'"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
+	tmp="--with-ext-linalg='-lscalapack -llapack -lf77blas -lcblas -latlas'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath atlas)'"
+    else
+	pack_set --module-requirement blas
+	tmp="--with-ext-linalg='-lscalapack -llapack -lblas'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath blas)'"
+    fi
+
 
 else
     doerr BigDFT "Could not determine compiler..."

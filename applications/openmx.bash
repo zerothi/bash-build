@@ -39,15 +39,18 @@ if $(is_c intel) ; then
     LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
-    pack_set --module-requirement scalapack
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '1 a\
+    LIB += $(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas' $file"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
     else
-	pack_set --module-requirement blas --module-requirement lapack
+	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas' $file"
     fi
 
     # Add the gfortran library

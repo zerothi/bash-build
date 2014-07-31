@@ -54,20 +54,27 @@ LDFLAGS = \n\
 ' $file"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '1 a\
+LAPACKLIB = -llapack\n\
+BLASLIB  = -lopenblas\n\
+LDFLAGS = $(list --LDFLAGS --Wlrpath openblas)\n\
+' $file"
+
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-LAPACKLIB = -llapack_atlas\n\
+LAPACKLIB = -llapack\n\
 BLASLIB  = -lf77blas -lcblas -latlas\n\
 LDFLAGS = $(list --LDFLAGS --Wlrpath atlas)\n\
 ' $file"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
 	pack_set --command "sed -i '1 a\
 LAPACKLIB = llapack\n\
 BLASLIB  = -lblas\n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath blas lapack)\n\
+LDFLAGS = $(list --LDFLAGS --Wlrpath blas)\n\
 ' $file"
 
     fi

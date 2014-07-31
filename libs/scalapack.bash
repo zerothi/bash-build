@@ -1,9 +1,13 @@
-# Then install ScaLAPACK
+# The good thing about scalapack is that it is a static
+# library
+# Hence any linking to scalapack will require an openmpi compliant
+# linking.
+
+for bl in blas atlas openblas ; do
+
 add_package http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
 
-pack_set -s $IS_MODULE
-
-pack_set --install-query $(pack_get --install-prefix)/lib/libscalapack.a
+pack_set --install-query $(pack_get --install-prefix $bl)/lib/libscalapack.a
 
 pack_set --module-requirement openmpi
 
@@ -23,29 +27,18 @@ if $(is_c intel) ; then
     tmp_lib="-lgfortran"
 fi
 
-if [ $(pack_installed atlas) -eq 1 ]; then
-    pack_set --command "module load $(pack_get --module-load atlas)"
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $tmp_lib $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|g' $file"
-    # No matter the source we need gfortran as ATLAS is compiled with GCC (we should really look into this)
-    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|g' $file"
-
-else
-    pack_set --command "module load $(pack_get --module-load lapack)"
-    pack_set --command "$tmp 's|BLASLIB[[:space:]]*=.*|BLASLIB = $(list --LDFLAGS --Wlrpath blas) -lblas|g' $file"
-    
-    pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath lapack) -llapack|g' $file"
-    
+if [ $bl == "blas" ]; then
+pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lblas?g' $file"
+elif [ $bl == "atlas" ]; then
+pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lf77blas -lcblas -latlas?g' $file"
+elif [ $bl == "openblas" ]; then
+pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lopenblas?g' $file"
 fi
+pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath $bl) -llapack|g' $file"
 
-# Make commands
 pack_set --command "make $(get_make_parallel)"
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
-pack_set --command "cp libscalapack.a $(pack_get --install-prefix)/lib/"
+pack_set --command "mkdir -p $(pack_get --install-prefix $bl)/lib/"
+pack_set --command "cp libscalapack.a $(pack_get --install-prefix $bl)/lib/"
 
-if [ $(pack_installed atlas) -eq 1 ]; then
-    pack_set --command "module unload $(pack_get --module-load atlas)"
-else
-    pack_set --command "module unload $(pack_get --module-load lapack)"
-fi
-
+done

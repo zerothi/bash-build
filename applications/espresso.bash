@@ -43,22 +43,24 @@ for v in 5.1 ; do
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=cluster -lmkl_lapack95_lp64'"
 
     else
-	if [ $(pack_installed atlas) -eq 1 ] ; then
-    	    pack_set --module-requirement atlas \
-	        --module-requirement scalapack
+	# BLACS is always empty (fully encompassed in scalapack)
+    	tmp_lib="$tmp_lib BLACS_LIBS="
+
+	if [ $(pack_installed openblas) -eq 1 ]; then
+	    pack_set --module-requirement openblas
+    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
+	elif [ $(pack_installed atlas) -eq 1 ]; then
+	    pack_set --module-requirement atlas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-	    # Scalapack is already linked with BLACS...
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
 	else
-    	    pack_set --module-requirement blas --module-requirement lapack \
-	        --module-requirement scalapack
+	    pack_set --module-requirement blas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath blas) -lblas'"
-    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-	    # Scalapack is already linked with BLACS...
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath nblas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath blas) -llapack'"
 	fi
 
     fi

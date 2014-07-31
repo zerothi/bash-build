@@ -27,9 +27,9 @@ source libs/fftw3-intel.bash
 # Default packages for many libs
 source libs/blas.bash
 source libs/cblas.bash
-source libs/lapack.bash
 source libs/atlas.bash
-#source libs/atlas-dev.bash
+source libs/openblas.bash
+source libs/lapack.bash
 
 # ATLAS needs to be installed prematurely...
 install_all --from zlib

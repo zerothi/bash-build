@@ -29,15 +29,20 @@ libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n\
 ' $file"
     
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="openblas"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
+	tmp="f77blas cblas atlas"
     else
-	pack_set --module-requirement lapack
+	pack_set --module-requirement blas
+	tmp="blas"
     fi
 
     pack_set --command "sed -i '1 a\
 [lapack]\n\
-libraries = f77blas cblas atlas lapack_atlas\n\
+libraries = lapack $tmp\n\
 ' $file"
 
 else

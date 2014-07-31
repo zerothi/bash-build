@@ -56,18 +56,19 @@ if $(is_c intel) ; then
     pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -lmkl_lapack95_lp64|' $mk"
 
 else
-    # Add requirments when creating the module
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath openblas) -lopenblas|' $mk"
+	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath openblas) -llapack|' $mk"
+
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-
 	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -llapack_atlas|' $mk"
+	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -llapack|' $mk"
     else
-	pack_set --module-requirement lapack
 	pack_set --module-requirement blas
-
-	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = -lblas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = -llapack|' $mk"
+	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath blas) -lblas|' $mk"
+	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath blas) -llapack|' $mk"
     fi
 
 fi

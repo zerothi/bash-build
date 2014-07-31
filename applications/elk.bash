@@ -44,13 +44,17 @@ LIB_LPK = $MKL_LIB -mkl=cluster\n\
 ' $file"
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="-llapack -lopenblas"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	tmp="-llapack_atlas -lf77blas -lcblas -latlas"
+	tmp="-llapack -lf77blas -lcblas -latlas"
     else
-	pack_set --module-requirement blas --module-requirement lapack
+	pack_set --module-requirement blas
 	tmp="-llapack -lblas"
     fi
+
     pack_set --command "sed -i '1 a\
 LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) $tmp\n\
 ' $file"

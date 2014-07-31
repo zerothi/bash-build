@@ -33,25 +33,25 @@ extra_link_args = [\"$MKL_LIB\",\"-mkl=sequential\"]\n\
 platform_id = \"$(get_hostname)\"' $file"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement scalapack
     pack_set --command "sed -i '1 a\
 compiler = \"$CC $CFLAGS \"\n\
-mpicompiler = \"$MPICC $CFLAGS \"\n\
-library_dirs += [\"$(pack_get --install-prefix scalapack)/lib\"]' $file"
+mpicompiler = \"$MPICC $CFLAGS \"\n' $file"
 
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '$ a\
+library_dirs += [\"$(pack_get --install-prefix openblas)/lib\"]\n\
+libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
+    elif [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
-libraries = [\"scalapack\",\"lapack_atlas\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
-
+libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
     else
-	pack_set --module-requirement lapack
+	pack_set --module-requirement blas
 	pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --install-prefix blas)/lib\"]\n\
-library_dirs += [\"$(pack_get --install-prefix lapack)/lib\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"blas\",\"gfortran\"]' $file"
-
     fi
 else
     doerr gpaw "Could not determine compiler..."
