@@ -116,7 +116,6 @@ libraries = lapack' $file"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
     pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=unix --fcompiler=gnu95" 
-    pack_print
     
 else
     doerr numpy "Have not been configured with recognized compiler"
