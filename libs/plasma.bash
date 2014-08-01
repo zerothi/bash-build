@@ -29,19 +29,20 @@ LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
 
 else 
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	bl=openblas
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n\
-LIBCBLAS  = \n' $tmp"
 
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	bl=atlas
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -latlas \n\
 LIBCBLAS  = -lcblas \n' $tmp"
+    
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	bl=openblas
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '1 a\
+LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n\
+LIBCBLAS  = \n' $tmp"
 
     else
 	bl=blas

@@ -25,16 +25,17 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
 
 else
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
-	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
 	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
 	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
+	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
     else
 	pack_set --module-requirement blas
 	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath blas) -lscalapack'"

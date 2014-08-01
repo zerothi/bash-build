@@ -37,16 +37,16 @@ elif $(is_c gnu) ; then
 compiler = \"$CC $CFLAGS \"\n\
 mpicompiler = \"$MPICC $CFLAGS \"\n' $file"
 
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix openblas)/lib\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '$ a\
+library_dirs += [\"$(pack_get --install-prefix openblas)/lib\"]\n\
+libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '$ a\

@@ -48,19 +48,19 @@ CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
 LN = \$(FC90) \n\
 LNOPT = $FLAG_OMP' $tmp"
 
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-ATLASOPT = $(list --LDFLAGS --Wlrpath openblas)\n\
-LIB_LAPACK = \$(ATLASOPT) -llapack\n\
-LIB_BLAS   = \$(ATLASOPT) -lopenblas\n\
-LIBOPT     = \$(ATLASOPT)' $tmp"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)\n\
 LIB_LAPACK = \$(ATLASOPT) -llapack\n\
 LIB_BLAS   = \$(ATLASOPT) -lf77blas -lcblas -latlas\n\
+LIBOPT     = \$(ATLASOPT)' $tmp"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '$ a\
+ATLASOPT = $(list --LDFLAGS --Wlrpath openblas)\n\
+LIB_LAPACK = \$(ATLASOPT) -llapack\n\
+LIB_BLAS   = \$(ATLASOPT) -lopenblas\n\
 LIBOPT     = \$(ATLASOPT)' $tmp"
     else
 	pack_set --module-requirement blas

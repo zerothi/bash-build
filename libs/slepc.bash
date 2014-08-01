@@ -2,7 +2,7 @@ add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.5.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libslepc.a
+pack_set --install-query $(pack_get --install-prefix)/lib/libslepc.so
 
 pack_set --module-requirement petsc \
     --module-requirement parpack
@@ -14,15 +14,17 @@ if $(is_c intel) ; then
     tmp_lib="-mkl=cluster"
 
 else
-    if [ $(pack_installed openblas) -eq 1 ]; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
+	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
+	tmp_lib="-llapack -lf77blas -lcblas -latlas"
+
+    elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath openblas)"
 	tmp_lib="-llapack -lopenblas"
 
-    elif [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
-	tmp_lib="-llapack -lf77blas -lcblas -latlas"
     else
 	pack_set --module-requirement blas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath blas)"

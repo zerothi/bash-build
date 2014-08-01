@@ -13,12 +13,13 @@ if $(is_c intel) ; then
     tmp="$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$(list --LDFLAGS --Wlrpath openblas) -llapack -lopenblas"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack -lf77blas -lcblas -latlas"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$(list --LDFLAGS --Wlrpath openblas) -llapack -lopenblas"
     else
 	pack_set --module-requirement blas
 	tmp="$(list --LDFLAGS --Wlrpath blas) -llapack -lblas"

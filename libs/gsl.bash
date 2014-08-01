@@ -13,12 +13,12 @@ if $(is_c intel) ; then
 	--command-flag "--prefix $(pack_get --install-prefix)"
 
 else
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$(list --Wlrpath --LDFLAGS openblas) -llapack -lopenblas"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$(list --Wlrpath --LDFLAGS atlas) -llapack -lf77blas -lcblas -latlas"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$(list --Wlrpath --LDFLAGS openblas) -llapack -lopenblas"
     else
 	pack_set --module-requirement blas
 	tmp="$(list --Wlrpath --LDFLAGS blas) -llapack -lblas"
@@ -30,8 +30,12 @@ fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+if ! $(is_c intel) ; then
+    pack_set --command "make check > tmp.test 2>&1"
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+if ! $(is_c intel) ; then
+    pack_set_mv_test tmp.test
+fi
 
 

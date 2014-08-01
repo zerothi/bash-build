@@ -46,16 +46,16 @@ for v in 5.1 ; do
 	# BLACS is always empty (fully encompassed in scalapack)
     	tmp_lib="$tmp_lib BLACS_LIBS="
 
-	if [ $(pack_installed openblas) -eq 1 ]; then
-	    pack_set --module-requirement openblas
-    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
-	elif [ $(pack_installed atlas) -eq 1 ]; then
+	if [ $(pack_installed atlas) -eq 1 ]; then
 	    pack_set --module-requirement atlas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
     	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
     	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
+	elif [ $(pack_installed openblas) -eq 1 ]; then
+	    pack_set --module-requirement openblas
+    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
 	else
 	    pack_set --module-requirement blas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath blas) -lblas'"

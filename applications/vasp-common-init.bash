@@ -71,18 +71,19 @@ else
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
 LINK = $FLAG_OMP \n' $file"
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-SCA = $(list --Wlrpath --LDFLAGS openblas) -lscalapack\n\
-BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas \n\
-LAPACK = $(list --Wlrpath --LDFLAGS openblas) -llapack ' $file"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 SCA = $(list --Wlrpath --LDFLAGS atlas) -lscalapack\n\
 BLAS = $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas \n\
 LAPACK = $(list --Wlrpath --LDFLAGS atlas) -llapack ' $file"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '$ a\
+SCA = $(list --Wlrpath --LDFLAGS openblas) -lscalapack\n\
+BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas \n\
+LAPACK = $(list --Wlrpath --LDFLAGS openblas) -llapack ' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '$ a\

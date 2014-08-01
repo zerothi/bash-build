@@ -18,12 +18,12 @@ if $(is_c intel) ; then
     echo "continue" > /dev/null
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath openblas)"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath openblas)"
     else
 	pack_set --module-requirement blas
 	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath blas)"

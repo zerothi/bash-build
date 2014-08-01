@@ -22,6 +22,10 @@ else
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
 LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
+    elif [ $(pack_installed openblas) -eq 1 ] ; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '1 a\
+LIBBLAS = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n' Makefile.inc"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\

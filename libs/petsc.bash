@@ -20,17 +20,18 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
 
 else
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$tmp --with-blas-lib='-lopenblas'"
-	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix openblas)"
 
-    elif [ $(pack_installed atlas) -eq 1 ]; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp="$tmp --with-blas-lib='-lf77blas -lcblas -latlas'"
 	tmp="$tmp --with-lapack-lib='-llapack'"
 	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix atlas)"
+
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$tmp --with-blas-lib='-lopenblas'"
+	tmp="$tmp --with-lapack-lib='-llapack'"
+	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix openblas)"
 
     else
 	pack_set --module-requirement blas
