@@ -34,22 +34,22 @@ else
 	bl=atlas
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -latlas \n\
-LIBCBLAS  = -lcblas \n' $tmp"
+LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n\
+LIBCBLAS = \n' $tmp"
     
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	bl=openblas
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '1 a\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n\
-LIBCBLAS  = \n' $tmp"
+LIBCBLAS = \n' $tmp"
 
     else
 	bl=blas
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath blas) -lblas \n\
-LIBCBLAS  = $(list --LDFLAGS --Wlrpath blas) -lcblas \n' $tmp"
+LIBCBLAS = $(list --LDFLAGS --Wlrpath blas) -lcblas \n' $tmp"
 
     fi
 
