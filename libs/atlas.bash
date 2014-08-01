@@ -40,7 +40,8 @@ pack_set_mv_test tmp.test tmp.test.t
 
 pack_set --command "make install"
 
-pack_set --command "cp lib/liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
+# Move so that we can install correct lapack
+pack_set --command "mv $(pack_get --prefix)/lib/liblapack.a $(pack_get --prefix)/lib/liblapack_atlas.a"
 
 done
 
