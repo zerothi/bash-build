@@ -70,6 +70,9 @@ source vendor.bash
 # Install the helper
 source helpers.bash
 
+# Install helper scripts
+source scripts.bash
+
 # Install the lua-libraries
 source lua/lua.bash
 
@@ -87,9 +90,6 @@ source default.bash
 
 # Add the latest modules
 source latest.bash
-
-# We have installed all libraries needed for doing application installs
-source scripts.bash
 
 msg_install --message "Finished installing all applications..."
 

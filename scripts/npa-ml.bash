@@ -23,6 +23,15 @@ function ml {
     module \$opt \$@
 }
 
+# Returns a list of prereqs so an easy load
+# is enabled
+# For instance:
+#  module load `ml-prereq numpy`
+function ml-prereq {
+    module show \$@ 2>&1 | grep prereq | sed -e "s:prereq::g;s:[[:space:]]::g" | tr "\n" " "
+    printf "\n"
+}
+
 EOF
 
 pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/source/ml.function"
@@ -53,12 +62,7 @@ cat <<EOF > $script
 
 source \$NPA_SOURCE/ml.function
 
-function _ml {
-    local cur="\$2"
-    COMPREPLY=( \$(compgen -W "\$(_module_not_yet_loaded)" -- "\$cur"))
-}
-
-complete -F _ml ml
+# Currently autocomplete does not work
 
 EOF
 

@@ -200,6 +200,7 @@ function build_get {
 	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
 	-default-build) _ps "$_b_def_idx" ;; 
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
+	-def-module-version) _ps "$_crt_version" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
