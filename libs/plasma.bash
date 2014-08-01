@@ -21,6 +21,9 @@ if $(is_c intel) ; then
 CFLAGS  += -DPLASMA_WITH_MKL -I$MKL_PATH/include \n\
 FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
+# We need the C-interface for LAPACK\n\
+INCCLAPACK = $(list --INCDIRS blas)\n\
+LIBCLAPACK = $(list --LDFLAGS --Wlrpath blas) -llapacke \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
@@ -66,7 +69,7 @@ ARCH = $AR \n\
 ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
-FFLAGS = $FFLAGS $FLAG_OMP \n\
+FFLAGS = ${FFLAGS//-fp-model strict/} $FLAG_OMP \n\
 LDFLAGS = \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement hwloc) hwloc)\n' $tmp"
 
 # Make and install commands
