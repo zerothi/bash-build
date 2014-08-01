@@ -6,7 +6,7 @@ add_package --build generic \
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --host-reject n-
+pack_set --host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/mongo
 
