@@ -24,15 +24,38 @@ tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --install-p
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
+if $(is_c intel) ; then
+    if [ -z "$MKL_PATH" ]; then
+	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
+    fi
+    pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
+    pack_set --command "sed -i '$ a\
+[DEFAULT]\n\
+libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5\n\
+library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
+include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
+
+else
+    pack_set --command "sed -i '1 a\
+[DEFAULT]\n\
+libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig\n\
+library_dirs = $tmp_lib\n\
+include_dirs = $tmp_inc\n' $file"
+
+fi
+
+tmp=$(pack_get --install-prefix fftw-3)
 pack_set --command "sed -i '1 a\
 [fftw]\n\
+library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = fftw3\n\
 [amd]\n\
 libraries = amd\n\
+amd_libs = amd\n\
 [umfpack]\n\
-libraries = umfpack\n\
-[DEFAULT]\n\
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig' $file"
+umfpack_libs = umfpack\n\
+libraries = umfpack\n' $file"
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -41,8 +64,6 @@ if $(is_c intel) ; then
     fi
     pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_set --command "sed -i '$ a\
-library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
-include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n\
 [mkl]\n\
 library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64\n\
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n\
@@ -65,22 +86,21 @@ blas_libs = mkl_blas95_lp64' $file"
 
 elif $(is_c gnu) ; then
 
-    pack_set --command "sed -i '$ a\
-library_dirs = $tmp/lib:$tmp_lib\n\
-include_dirs = $tmp/include:$tmp_inc\n' $file"
-
     if [ $(pack_installed atlas) -eq 1 ]; then
 	tmp=$(pack_get --install-prefix atlas)
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 [atlas_threads]\n\
 library_dirs = $tmp/lib\n\
-libraries = ptf77blas,ptcblas,ptatlas\n\
+include_dirs = $tmp/include\n\
+libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
 [atlas]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = f77blas,cblas,atlas\n\
 [lapack]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = lapack' $file" 
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	tmp=$(pack_get --install-prefix openblas)
@@ -88,12 +108,15 @@ libraries = lapack' $file"
 	pack_set --command "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = openblas\n\
 [blas]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = openblas\n\
 [lapack]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = lapack' $file" 
     else
 	tmp=$(pack_get --install-prefix blas)
@@ -101,9 +124,11 @@ libraries = lapack' $file"
 	pack_set --command "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = blas\n\
 [lapack]\n\
 library_dirs = $tmp/lib\n\
+include_dirs = $tmp/include\n\
 libraries = lapack' $file"
     fi
 
