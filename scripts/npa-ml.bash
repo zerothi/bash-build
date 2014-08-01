@@ -9,7 +9,7 @@ cat <<EOF > $script
 function ml {
     local args="" opt=load
     if [ \$# -gt 0 ]; then
-        case $1 in
+        case \$1 in
             load|add|rm|unload|swap|switch|purge|refresh|update)
                 opt=\$1 ; shift ;;
             show|display|help|clear)
