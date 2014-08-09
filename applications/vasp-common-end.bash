@@ -1,23 +1,22 @@
 pack_set --command "cd vasp.5.lib"
 
-# Now tmp will hold the makefile name
-tmp=makefile.linux_ifc_P4
+tmp=makefile.linux_npa_vasp_lib
+pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_lib_$v -O $tmp"
+pack_set --command "sed -i -e 's:include \(.*\):include \1\n\
+CPP = gcc -E -P -C \$*.F >\$*.f\n\
+FC  = $FC\n\
+FFLAGS = $FCFLAGS\n\
+CC  = $CC\n:' $tmp"
 
-# Do library installation
-# Install the makefile...
-pack_set --command "sed -i -e 's:# general.*:\n\
-FC=$FC\n\
-CC=$CC\n\
-CFLAGS=$CFLAGS\n\
-FCFLAGS=$FCFLAGS -FI -O0:' $tmp"
 pack_set --command "make -f $tmp"
+
 pack_set --command "cd ../vasp.5.3"
+
+tmp=makefile.linux_npa_vasp
+pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_$v -O $tmp"
 
 # Prepare the installation directory
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-
-# Install the makefile
-pack_set --command "sed -i -e 's:# general.*:include ../mymakefile:' $tmp"
 
 # Make commands
 pack_set --command "make -f $tmp"
@@ -45,6 +44,9 @@ pack_set --command "sed -i -e 's:-DNGZhalf.*:-DNPA_PLACEHOLDER:' ../mymakefile"
 pack_set --command "wget http://theory.cm.utexas.edu/code/vtstcode.tgz"
 pack_set --command "tar xfz vtstcode.tgz"
 pack_set --command "cp -r vtstcode-*/* ./"
+
+# Bugfix for code
+pack_set --command "sed -i -e 's:<NBAS>:10000:gi' bbm.F"
 
 # Install module compilations...
 pack_set --command "sed -i -e 's:\(CHAIN_FORCE[^\&]*\):\1TSIF, :i' main.F"

@@ -5,7 +5,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/wannier90
 
-pack_set --host-reject ntch-l
+#pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
 
 # Check for Intel MKL or not

@@ -27,6 +27,8 @@ function echo_modules {
 }
 
 
+msg_install --message "abinit, octopus, elk, espresso"
+
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading Abinit: $(get_c)" \
@@ -55,19 +57,23 @@ fi
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
-    -M Inelastica.default/$(get_c) \
-    -P "/directory/should/not/exist" \
-    -echo "$(echo_modules Inelastica-DEV[279])" \
-    -RL Inelastica-DEV[279]
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading QuantumEspresso: $(get_c)" \
     -M espresso.default/$(get_c) \
     -P "/directory/should/not/exist" \
     -echo "$(echo_modules espresso)" \
     -RL espresso
+
+msg_install --message "Inelastica"
+
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
+    -M Inelastica.default/$(get_c) \
+    -P "/directory/should/not/exist" \
+    -echo "$(echo_modules Inelastica-DEV[315])" \
+    -RL Inelastica-DEV[315]
+
+msg_install --message "siesta-dev, siesta-scf"
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
@@ -85,6 +91,8 @@ create_module \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
 
+msg_install --message "siesta-trunk"
+
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
@@ -92,6 +100,8 @@ create_module \
     -P "/directory/should/not/exist" \
     -echo "$(echo_modules siesta-trunk)" \
     -RL siesta-trunk
+
+msg_install --message "openmx, vasp"
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
