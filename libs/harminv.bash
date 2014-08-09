@@ -16,15 +16,15 @@ if $(is_c intel) ; then
 else
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	tmp_flags="--with-blas='-lf77blas -lcblas -latlas'"
-	tmp_flags="$tmp_flags --with-lapack='-llapack -lf77blas -lcblas -latlas'"
+	tmp="--with-blas='-lf77blas -lcblas -latlas'"
+	tmp="$tmp --with-lapack='-llapack -lf77blas -lcblas -latlas'"
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
-	tmp_flags="--with-blas='-lopenblas' --with-lapack='-llapack'"
+	tmp="--with-blas='-lopenblas' --with-lapack='-llapack'"
     else
 	pack_set --module-requirement blas
-	tmp_flags="--with-blas='-lblas'"
-	tmp_flags="$tmp_flags --with-lapack='-llapack'"
+	tmp="--with-blas='-lblas'"
+	tmp="$tmp --with-lapack='-llapack'"
     fi
 
 fi
