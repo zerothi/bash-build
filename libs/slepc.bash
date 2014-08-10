@@ -11,7 +11,7 @@ tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))"
 tmp_lib=
 
 if $(is_c intel) ; then
-    tmp_lib="-mkl=cluster"
+    tmp_lib="-lmkl_blacs_openmpi_lp64 -mkl=cluster"
 
 else
 

@@ -2,7 +2,7 @@ for v in 5.1 ; do
     libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     if [ "$v" = "5.1" ]; then
 	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
-    libs="bindir libiotk liblapack libblas mods libs cp pw pp ph tddfpt pwcond ld1 upf xspectra acfdt"
+	libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt"
     elif [ "$v" = "5.0.3" ]; then
 	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
@@ -36,11 +36,11 @@ for v in 5.1 ; do
     if $(is_c intel) ; then
         tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
-	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -mkl=cluster -lmkl_blas95_lp64'"
-    	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -mkl=cluster -lmkl_blacs_openmpi_lp64'"
+	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=cluster'"
+    	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -lmkl_blacs_openmpi_lp64 -mkl=cluster'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -mkl=cluster -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
-        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=cluster -lmkl_lapack95_lp64'"
+    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=cluster'"
+        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64 -mkl=cluster'"
 
     else
 	# BLACS is always empty (fully encompassed in scalapack)
