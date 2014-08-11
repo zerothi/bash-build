@@ -15,8 +15,13 @@ pack_set --module-requirement zlib --module-requirement expat \
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python3
 
+pCFLAGS="$CFLAGS"
 tmp=
-if ! $(is_c gnu) ; then
+if $(is_c intel) ; then
+    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict"
+    tmp="--without-gcc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+elif ! $(is_c gnu) ; then
     tmp="--without-gcc"
 fi
 

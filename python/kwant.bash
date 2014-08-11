@@ -55,7 +55,7 @@ pack_set --command "sed -i '1 a\
 libraries = zmumps mumps_common pord metis\n\
 ' $file"
 
-pack_set --command "CFLAGS='$CFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
+pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"

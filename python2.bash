@@ -18,8 +18,13 @@ pack_set --module-requirement zlib \
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
+pCFLAGS="$CFLAGS"
 tmp=
-if ! $(is_c gnu) ; then
+if $(is_c intel) ; then
+    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict"
+    tmp="--without-gcc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+elif ! $(is_c gnu) ; then
     tmp="--without-gcc"
 fi
 
@@ -39,6 +44,7 @@ pack_set --command "make $(get_make_parallel)"
 #    pack_set --command "rm -f ../$f.py"
 #    done
 #fi
+
 pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
 pack_set_mv_test tmp.test

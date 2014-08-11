@@ -26,16 +26,16 @@ pack_set --command "echo '#' > $file"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
-compiler = \"$CC $CFLAGS $MKL_LIB -mkl=sequential\"\n\
-mpicompiler = \"$MPICC $CFLAGS $MKL_LIB\"\n\
+compiler = \"$CC $pCFLAGS $MKL_LIB -mkl=sequential\"\n\
+mpicompiler = \"$MPICC $pCFLAGS $MKL_LIB\"\n\
 libraries = [\"mkl_scalapack_lp64\",\"mkl_blacs_openmpi_lp64\",\"mkl_lapack95_lp64\",\"mkl_blas95_lp64\"]\n\
 extra_link_args = [\"$MKL_LIB\",\"-mkl=sequential\"]\n\
 platform_id = \"$(get_hostname)\"' $file"
 
 elif $(is_c gnu) ; then
     pack_set --command "sed -i '1 a\
-compiler = \"$CC $CFLAGS \"\n\
-mpicompiler = \"$MPICC $CFLAGS \"\n' $file"
+compiler = \"$CC $pCFLAGS \"\n\
+mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
 
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
@@ -65,7 +65,7 @@ library_dirs += [\"$(pack_get --install-prefix libxc)/lib\"]\n\
 include_dirs += [\"$(pack_get --install-prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
-extra_compile_args = \"$CFLAGS -std=c99\".split(\" \")\n\
+extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 # Same as -Wl,-rpath:\n\
 runtime_library_dirs += [\"$(pack_get --install-prefix libxc)/lib\"]\n\
 mpi_runtime_library_dirs += [\"$(pack_get --install-prefix openmpi)/lib\"]\n\

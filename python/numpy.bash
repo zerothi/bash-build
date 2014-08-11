@@ -1,4 +1,4 @@
-for v in 1.7.2 1.8.1 ; do
+for v in 1.7.2 1.8.2 ; do
 add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -72,13 +72,13 @@ lapack_libs = mkl_lapack95_lp64\n\
 blas_libs = mkl_blas95_lp64' $file"
 
     p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict $FLAG_OMP -I$(pack_get --install-prefix ss_config)/include"
-    pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${CFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
+    pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${pCFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $p_flags|g' numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's/\"ar\",/\"$AR\",/g' numpy/distutils/fcompiler/intel.py"
-    pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${FCFLAGS//-O3/-O2} $p_flags\"\]:g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's:opt = \[\]:opt = \[\"${pFCFLAGS//-O3/-O2} $p_flags\"\]:g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's:F90:F77:g' numpy/distutils/fcompiler/intel.py"
-    pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${FCFLAGS//-O3/-O2} $p_flags\"\]|g' numpy/distutils/fcompiler/intel.py"
+    pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${pFCFLAGS//-O3/-O2} $p_flags\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e \"/'linker_so'/s|\(.-shared.\)|\1,'-L${tmp_lib//:/ -L}','-Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=}','$p_flags'|g\" numpy/distutils/fcompiler/intel.py"
     pack_set --command "$(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=intelem" \
@@ -133,7 +133,7 @@ libraries = lapack' $file"
     fi
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    p_flags="DUM ${FCFLAGS} -I$(pack_get --install-prefix ss_config)/include $FLAG_OMP"
+    p_flags="DUM ${pFCFLAGS} -I$(pack_get --install-prefix ss_config)/include $FLAG_OMP"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
     p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} -L${tmp_lib//:/ -L} -L$tmp/lib -Wl,-rpath=$tmp/lib -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing

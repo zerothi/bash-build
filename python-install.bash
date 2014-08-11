@@ -57,6 +57,7 @@ source python/monty.bash
 source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
+source python/sphinx.bash # relies on jinja2
 
 install_all --from mongo
 

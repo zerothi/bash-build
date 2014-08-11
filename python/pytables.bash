@@ -16,7 +16,7 @@ pack_set --module-requirement numpy \
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \
     --command-flag "--hdf5=$(pack_get --install-prefix hdf5-serial)" \
-    --command-flag "--cflags='$CFLAGS'"
+    --command-flag "--cflags='$pCFLAGS'"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
  
