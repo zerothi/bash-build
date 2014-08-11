@@ -17,7 +17,7 @@ for v in 5.1 ; do
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
-    pack_set --host-reject ntch
+    #pack_set --host-reject ntch
 
     pack_set --module-opt "--lua-family espresso"
 
@@ -36,11 +36,11 @@ for v in 5.1 ; do
     if $(is_c intel) ; then
         tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
-	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=cluster'"
-    	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -lmkl_blacs_openmpi_lp64 -mkl=cluster'"
+	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=parallel'"
+    	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -lmkl_blacs_openmpi_lp64'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=cluster'"
-        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64 -mkl=cluster'"
+    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
 	# BLACS is always empty (fully encompassed in scalapack)
