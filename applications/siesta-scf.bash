@@ -128,7 +128,12 @@ pack_set --command "cp readwfx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp wfs2wfsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp wfsx2wfs $(pack_get --install-prefix)/bin/"
 
-pack_set --command "cd ../HSX"
+# install simple-stm
+pack_set --command "cd ../../STM/simple-stm"
+pack_set --command "make"
+pack_set --command "cp plstm $(pack_get --install-prefix)/bin/"
+
+pack_set --command "cd ../../HSX"
 pack_set --command "make hs2hsx hsx2hs"
 pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
