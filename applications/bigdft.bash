@@ -18,7 +18,7 @@ pack_set --module-requirement openmpi \
 
 tmp=
 if $(is_c intel) ; then
-    tmp="--with-ext-linalg='-mkl=cluster -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64'"
+    tmp="--with-ext-linalg='-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential'"
     tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
 
 elif $(is_c gnu) ; then

@@ -39,7 +39,7 @@ for v in 5.1 ; do
 	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=parallel'"
     	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -lmkl_blacs_openmpi_lp64'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64'"
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
