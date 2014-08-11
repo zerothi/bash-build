@@ -17,7 +17,7 @@ fi
 
 tmp=
 if $(is_c intel) ; then
-    tmp=" $MKL_LIB -mkl=cluster"
+    tmp=" $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
 fi
 
 file=make.inc
@@ -40,7 +40,7 @@ tmp=
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
-LIB_LPK = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel\n\
+LIB_LPK = $tmp\n\
 ' $file"
 
 elif $(is_c gnu) ; then
