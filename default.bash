@@ -91,15 +91,15 @@ create_module \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
 
-msg_install --message "siesta-trunk"
+#msg_install --message "siesta-trunk"
 
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
-    -M siesta-trunk.default/$(get_c) \
-    -P "/directory/should/not/exist" \
-    -echo "$(echo_modules siesta-trunk)" \
-    -RL siesta-trunk
+#create_module \
+#    --module-path $(build_get --module-path)-npa-apps \
+#    -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
+#    -M siesta-trunk.default/$(get_c) \
+#    -P "/directory/should/not/exist" \
+#    -echo "$(echo_modules siesta-trunk)" \
+#    -RL siesta-trunk
 
 msg_install --message "openmx, vasp"
 
