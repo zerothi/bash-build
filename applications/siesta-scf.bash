@@ -129,7 +129,7 @@ pack_set --command "cp wfs2wfsx $(pack_get --install-prefix)/bin/"
 pack_set --command "cp wfsx2wfs $(pack_get --install-prefix)/bin/"
 
 # install simple-stm
-pack_set --command "cd ../../STM/simple-stm"
+pack_set --command "cd ../STM/simple-stm"
 pack_set --command "make"
 pack_set --command "cp plstm $(pack_get --install-prefix)/bin/"
 
