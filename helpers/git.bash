@@ -1,5 +1,5 @@
 # apt install gettext
-for v in 1.9.0 2.0.4 ; do
+for v in 1.9.4 2.0.4 ; do
 add_package --build generic \
 	--archive git-$v.tar.gz \
 	https://github.com/git/git/archive/v$v.tar.gz
