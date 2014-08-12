@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family openmx"
 
-pack_set --host-reject ntch-l
+pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/openmx
 

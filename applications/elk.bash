@@ -2,6 +2,8 @@ add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.22.tgz
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject ntch --host-reject zeroth
+
 pack_set --install-query $(pack_get --install-prefix)/bin/elk
 
 pack_set --module-requirement openmpi \

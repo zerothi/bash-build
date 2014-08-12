@@ -1,5 +1,5 @@
 pack_set -s $IS_MODULE
-#pack_set --host-reject ntch --host-reject zeroth
+pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement wannier90[1.2]

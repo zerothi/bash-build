@@ -17,7 +17,7 @@ for v in 5.1 ; do
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
-    #pack_set --host-reject ntch
+    pack_set --host-reject ntch --host-reject zeroth
 
     pack_set --module-opt "--lua-family espresso"
 

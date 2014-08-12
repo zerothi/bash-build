@@ -4,7 +4,7 @@ pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family gromacs"
 
-pack_set --host-reject ntch-l --host-reject zeroth
+pack_set --host-reject ntch --host-reject zerothi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/GMXRC
 

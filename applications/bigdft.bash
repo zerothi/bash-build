@@ -6,7 +6,7 @@ add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch-l --host-reject zerothi
+pack_set --host-reject ntch --host-reject zerothi
 
 pack_set --module-opt "--lua-family bigdft"
 
