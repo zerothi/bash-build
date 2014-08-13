@@ -83,7 +83,11 @@ pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --W
     --command-flag "$tmp"
 
 # Make commands
+if [ $NPROCS -gt 4 ]; then
+pack_set --command "export OCT_TEST_MPI_NPROCS=4"
+else
 pack_set --command "export OCT_TEST_MPI_NPROCS=\$NPROCS"
+fi
 pack_set --command "make -j $(get_make_parallel)"
 pack_set --command "make check > tmp.test 2>&1 && echo Succesfull >> tmp.test || echo Failure >> tmp.test"
 pack_set --command "make install"
