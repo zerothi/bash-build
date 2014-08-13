@@ -16,6 +16,9 @@ fi
 if $(is_host ntch-2) ; then
     [ "$c" == "gfortran" ] && continue
 fi
+if $(is_host ntch-l) ; then
+    [ "$c" == "ifort" ] && continue
+fi
 
 add_package --build vendor \
     --version ${v//-/.} \
