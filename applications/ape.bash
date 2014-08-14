@@ -19,7 +19,7 @@ pack_set --command "./configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make check 2>&1 tmp.test"
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/test.output"
+pack_set_mv_test tmp.test
 
 pack_install
 
