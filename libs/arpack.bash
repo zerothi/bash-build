@@ -11,8 +11,8 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libarpack.a
 pack_set --command "pushd ../"
 pack_set --command "wget http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz"
 pack_set --command "tar xfz patch.tar.gz"
+pack_set --command "rm patch.tar.gz"
 pack_set --command "popd"
-
 
 file=ARmake.inc
 pack_set --command "echo '# New makefile' > $file"
