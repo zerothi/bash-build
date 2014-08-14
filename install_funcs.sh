@@ -294,8 +294,15 @@ function add_test_package {
     local version=$(pack_get --version)
     add_package --package $name-test \
 	--version $version fake
+    # Update install-prefix
+    pack_set --install-prefix $(pack_get --install-prefix $name[$version])
     pack_set --module-requirement $name[$version]
-    pack_set --install-query $(pack_get --install-prefix $name[$version])/test.output
+    if [ $# -gt 0 ]; then
+	pack_set --install-query $(pack_get --install-prefix $name[$version])/$1
+	shift
+    else
+	pack_set --install-query $(pack_get --install-prefix $name[$version])/tmp.*
+    fi
 }
 
 # Local variables for archives to be installed

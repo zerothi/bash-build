@@ -42,22 +42,25 @@ install_all --from scons
 source helpers/mongo.bash
 
 # Packages installed in "python-home"
-source python/distribute.bash
+source python/setuptools.bash
 source python/pyparsing.bash
-source python/tornado.bash
+source python/backports.bash
+source python/certifi.bash
+source python/tornado.bash # backports, certifi
 source python/six.bash
 source python/dateutil.bash
+source python/pygments.bash
 source python/fastimport.bash
 source python/pytz.bash
 source python/pexpect.bash
-source python/pygments.bash
-source python/ipython.bash
+source python/docutils.bash
 source python/pycparser.bash
+source python/ipython.bash
 source python/monty.bash
 source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
-source python/sphinx.bash # relies on jinja2
+source python/sphinx.bash # jinja2
 
 install_all --from mongo
 

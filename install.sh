@@ -36,6 +36,7 @@ esac
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
     source $1
+    shift
 else
     [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
     source compiler.sh

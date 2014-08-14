@@ -29,7 +29,8 @@ elif ! $(is_c gnu) ; then
 fi
 
 # Install commands that it should run
-pack_set --command "../configure" \
+pack_set --command "../configure --with-threads" \
+    --command-flag "--enable-unicode=ucs4" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib expat libffi)'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \

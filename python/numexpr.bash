@@ -27,6 +27,6 @@ for v in 1.4.2 2.4 ; do
 
     add_test_package
     pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Succes'"
-    pack_set --command "mv tmp.test $(pack_get --install-query)"
+    pack_set_mv_test tmp.test
     
 done
