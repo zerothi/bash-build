@@ -36,7 +36,7 @@ pack_set --command "../configure --with-threads" \
 pack_set --command "make $(get_make_parallel)"
 
 if $(is_host n-) ; then
-    pack_set --command "make test > tmp.test 2>&1 ; echo 'Success'"
+    pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
     pack_set --command "make test > tmp.test 2>&1"
 fi

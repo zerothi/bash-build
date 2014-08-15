@@ -47,7 +47,10 @@ pack_set --command "make $(get_make_parallel)"
 #fi
 
 if $(is_host n-) ; then
-    pack_set --command "make test > tmp.test 2>&1 ; echo 'Success'"
+    # The test of creating/deleting folders does not go well with 
+    # NFS file systems. Hence we just skip one test to be able to test
+    # everything else.
+    pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
     pack_set --command "make test > tmp.test 2>&1"
 fi
