@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-package
 pack_set --module-opt "--lua-family kwant"
 
 pack_set --module-requirement cython \
-    --module-requirement numpy \
+    --module-requirement scipy \
     --module-requirement mumps \
     --module-requirement tinyarray
 
@@ -59,3 +59,8 @@ pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py bui
 
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
+
+
+add_test_package
+pack_set --command "nosetests -exe kwant  > tmp.test 2>&1 ; echo 'Succes'"
+pack_set_mv_test tmp.test
