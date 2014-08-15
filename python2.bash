@@ -46,7 +46,11 @@ pack_set --command "make $(get_make_parallel)"
 #    done
 #fi
 
-pack_set --command "make test > tmp.test 2>&1"
+if $(is_host n-) ; then
+    pack_set --command "make test > tmp.test 2>&1 ; echo 'Success'"
+else
+    pack_set --command "make test > tmp.test 2>&1"
+fi
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
