@@ -70,8 +70,8 @@ create_module \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
     -P "/directory/should/not/exist" \
-    -echo "$(echo_modules Inelastica-DEV[315])" \
-    -RL Inelastica-DEV[315]
+    -echo "$(echo_modules Inelastica-DEV[323])" \
+    -RL Inelastica-DEV[323]
 
 msg_install --message "siesta-dev, siesta-scf"
 

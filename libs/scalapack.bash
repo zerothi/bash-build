@@ -10,6 +10,7 @@ add_package --package scalapack-$bl http://www.netlib.org/scalapack/scalapack-2.
 pack_set --install-query $(pack_get --install-prefix $bl)/lib/libscalapack.a
 
 pack_set --module-requirement openmpi
+pack_set --module-requirement $bl
 
 # Prepare the make file
 tmp="sed -i -e"
