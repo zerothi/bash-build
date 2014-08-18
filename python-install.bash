@@ -93,8 +93,8 @@ source python/h5py.bash # [numpy,hdf5-serial]
 source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/pandas.bash
 source python/pyamg.bash
-#source python/petsc4py.bash
-#source python/slepc4py.bash
+source python/petsc4py.bash
+source python/slepc4py.bash
 
 source python/krypy.bash
 source python/pygsl.bash

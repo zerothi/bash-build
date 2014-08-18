@@ -13,4 +13,8 @@ pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"
 
+add_test_package
+pack_set --command "nosetests --exe petsc4py > tmp.test 2>&1 ; echo 'Succes'"
+pack_set_mv_test tmp.test
+
 
