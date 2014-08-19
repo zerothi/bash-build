@@ -67,9 +67,15 @@ DESTDIR = $(pack_get --install-prefix)/bin\n\
 CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
+if $(is_host muspel slid surt) ; then
+    tmp="-lmpi_f90 -lmpi_f77"
+else
+    tmp="-lmpi_mpifh -lmpi"
+fi
+
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 $tmp \n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # prepare the directory of installation
