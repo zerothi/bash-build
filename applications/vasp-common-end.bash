@@ -18,22 +18,37 @@ pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linu
 # Prepare the installation directory
 pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 
+# Create the make command
+function compile_ispin {
+    local i=$1 ; shift
+    local exe=$1 ; shift
+    pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$1/' pardens.F"
+    pack_set --command "make -f $tmp"
+    pack_set --command "cp vasp $(pack_get --install-prefix)/bin/${exe}_$i"
+    pack_set --command "make -f $tmp clean"
+    if [ $i -eq 0 ]; then
+	pack_set --command "pushd $(pack_get --install-prefix)/bin"
+	pack_set --command "ln -s ${exe}_0 ${exe}"
+	pack_set --command "popd"
+    fi
+}
+
 # Make commands
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vasp
+done
 
 # Prepare the next installation
 pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZhalf :' ../mymakefile"
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspNGZhalf"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vaspNGZhalf
+done
 
 # Prepare the next installation
 pack_set --command "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vaspGNGZhalf"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vaspGNGZhalf
+done
 
 ###################### Prepare the TST code ##########################
 
@@ -62,21 +77,23 @@ pack_set --command "cp -r vtstscripts-*/* $(pack_get --install-prefix)/bin/"
 ######################   end the TST code   ##########################
 
 # Install vasp_tst 
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp_tst"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vasp_tst
+done
 
 # Prepare the next installation
 pack_set --command "sed -i -e 's:-DNPA_PLACEHOLDER.*:-DNGZhalf :' ../mymakefile"
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp_tstNGZhalf"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vasp_tstNGZhalf
+done
 
 # Prepare the next installation
 pack_set --command "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
-pack_set --command "make -f $tmp"
-pack_set --command "cp vasp $(pack_get --install-prefix)/bin/vasp_tstGNGZhalf"
-pack_set --command "make -f $tmp clean"
+for i in 0 1 2 ; do
+    compile_ispin $i vasp_tstGNGZhalf
+done
+
+unset compile_ispin
 
 # Copy over the vdw_kernel
 vdw=vdw_kernel.bindat
