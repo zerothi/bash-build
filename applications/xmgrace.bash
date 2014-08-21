@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/fdf2fit
 
 pack_set --module-opt "--lua-family grace"
 
-pack_set $(list --pack-module-reqs netcdf-serial fftw-2)
+pack_set --module-requirement netcdf-serial --module-requirement fftw-2
 
 # The motif library are in the following packages:
 # lesstif2-dev
