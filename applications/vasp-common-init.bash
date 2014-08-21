@@ -69,6 +69,8 @@ LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
 elif $(is_c gnu) ; then
 
     pack_set --command "sed -i '$ a\
+FFLAGS_SPEC1 = -O1\n\
+FFLAGS_SPEC2 = -O2\n\
 LIB += -fall-intrinsics\n\
 CPP_ =  ./preprocess <\$*.F | cpp -P -C -traditional >\$*\$(SUFFIX)\n\
 # Correct flags for gfortran\n\
@@ -78,8 +80,6 @@ FCL = \$(FC)\n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
 LINK = $FLAG_OMP $(list --Wlrpath --LDFLAGS openmpi)\n\
-FFLAGS_SPEC1 = -O1\n\
-FFLAGS_SPEC2 = -O2\n\
 LINK = \n\
 DEBUG = \n' $file"
 
