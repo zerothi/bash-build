@@ -31,7 +31,7 @@ CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
      -DCACHE_SIZE=6000 -Davoidalloc \\\\\n\
      -DMPI_BLOCK=60000 -Duse_collective -DscaLAPACK \\\\\n\
-     -DRPROMU_DGEMV  -DRACCMU_DGEMV -DVASP2WANNIER90\n\
+     -DRPROMU_DGEMV -DRACCMU_DGEMV -DVASP2WANNIER90\n\
 #PLACEHOLDER#\n\
 CFLAGS = $CFLAGS \n\
 FFLAGS = $FCFLAGS \n\
