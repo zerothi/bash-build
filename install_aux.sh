@@ -304,10 +304,6 @@ function list {
     done
     for opt in $opts ; do
 	case $opt in
-	    -pack-module-reqs)      
-		pre="--module-requirement " 
-		suf=""
-		args="$(pack_get --module-requirement $args) $args" ;;
 	    -Wlrpath)
 		pre="-Wl,-rpath=" 
 		suf="" 
