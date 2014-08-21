@@ -1,5 +1,5 @@
 v=4.4.4
-add_package http://dust.ess.uci.edu/nco/src/nco-$v.tar.gz
+add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
