@@ -24,11 +24,11 @@ function compile_ispin {
     local exe=$1 ; shift
     pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$1/' pardens.F"
     pack_set --command "make -f $tmp"
-    pack_set --command "cp vasp $(pack_get --install-prefix)/bin/${exe}_$i"
+    pack_set --command "cp vasp $(pack_get --install-prefix)/bin/${exe}_is$i"
     pack_set --command "make -f $tmp clean"
     if [ $i -eq 0 ]; then
 	pack_set --command "pushd $(pack_get --install-prefix)/bin"
-	pack_set --command "ln -s ${exe}_0 ${exe}"
+	pack_set --command "ln -s ${exe}_is0 ${exe}"
 	pack_set --command "popd"
     fi
 }
