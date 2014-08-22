@@ -1,4 +1,4 @@
-for v in 621 ; do
+for v in 624 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
