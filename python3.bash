@@ -35,13 +35,16 @@ pack_set --command "../configure --with-threads" \
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 
-if $(is_host n-) ; then
-    pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+if $(is_host n- slid muspel surt) ; then
+    echo "Skipping python tests..."
+    #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
     pack_set --command "make test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+if ! $(is_host n- slid muspel surt) ; then
+    pack_set_mv_test tmp.test
+fi
 
 pack_install
 

@@ -46,16 +46,19 @@ pack_set --command "make $(get_make_parallel)"
 #    done
 #fi
 
-if $(is_host n-) ; then
+if $(is_host n- slid muspel surt) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
-    pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+    echo "Skipping python tests..."
+    #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
     pack_set --command "make test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+if ! $(is_host n- slid muspel surt) ; then
+    pack_set_mv_test tmp.test
+fi
 
 pack_install
 
