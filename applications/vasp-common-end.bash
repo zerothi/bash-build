@@ -22,7 +22,7 @@ pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
 function compile_ispin {
     local i=$1 ; shift
     local exe=$1 ; shift
-    pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$1/' pardens.F"
+    pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' pardens.F"
     pack_set --command "make -f $tmp"
     pack_set --command "cp vasp $(pack_get --install-prefix)/bin/${exe}_is$i"
     pack_set --command "make -f $tmp clean"
