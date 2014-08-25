@@ -28,7 +28,7 @@ function compile_ispin {
     pack_set --command "make -f $tmp clean"
     if [ $i -eq 0 ]; then
 	pack_set --command "pushd $(pack_get --install-prefix)/bin"
-	pack_set --command "ln -s ${exe}_is0 ${exe}"
+	pack_set --command "ln -fs ${exe}_is0 ${exe}"
 	pack_set --command "popd"
     fi
 }

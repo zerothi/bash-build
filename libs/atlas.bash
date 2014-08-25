@@ -35,9 +35,10 @@ pack_set --command "../configure -Fa alg '-fPIC'" \
 pack_set --command "make"
 pack_set --command "make check > tmp.test 2>&1"
 pack_set_mv_test tmp.test tmp.test.s
+if ! $(is_host n-) ; then
 pack_set --command "make ptcheck > tmp.test 2>&1"
 pack_set_mv_test tmp.test tmp.test.t
-
+fi
 pack_set --command "make install"
 
 # Move so that we can install correct lapack
