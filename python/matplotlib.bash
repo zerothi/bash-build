@@ -1,5 +1,4 @@
-# This module requires that libfreetype6-dev be installed as well as
-# libpng(12)-dev
+# apt-get install libpng(12)-dev libfreetype6-dev
 
 add_package \
     --archive matplotlib-1.3.1.tar.gz \
