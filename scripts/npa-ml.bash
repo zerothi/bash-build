@@ -26,8 +26,8 @@ function ml {
 # Returns a list of prereqs so an easy load
 # is enabled
 # For instance:
-#  module load `ml-prereq numpy`
-function ml-prereq {
+#  module load \`ml_prereq numpy\`
+function ml_prereq {
     module show \$@ 2>&1 | grep prereq | sed -e "s:prereq::g;s:[[:space:]]::g" | tr "\n" " "
     printf "\n"
 }
