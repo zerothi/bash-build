@@ -1,6 +1,5 @@
 # Gdis needs 
-# libgtkglext1-dev for installation
-# libgtk2.0-dev
+# apt-get install libgtkglext1-dev libgtk2.0-dev
 
 for v in 0.99 ; do 
 add_package --build generic \
