@@ -1,4 +1,4 @@
-v=0.12.5
+v=0.12.7
 add_package --archive llvmpy-$v.tar.gz \
     https://github.com/llvmpy/llvmpy/archive/$v.tar.gz
 
@@ -14,4 +14,4 @@ pack_set --command "LLVM_CONFIG_PATH=$(pack_get --install-prefix llvm[3.3])/bin/
 
 add_test_package
 pack_set --command "nosetests --exe llvm > tmp.test 2>&1 ; echo 'Succes'"
-pack_set --command "mv tmp.test $(pack_get --install-query)"
+pack_set_mv_test tmp.test

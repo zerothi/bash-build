@@ -7,7 +7,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/bin/mpiexec
 
 # Only install locally
-pack_set $(list -p "--host-reject " surt muspel slid n-)
+pack_set $(list -p "--host-reject " surt muspel slid n- $(get_hostname))
 
 tmp_flags=""
 if $(is_host n-) ; then # enables the linking to the torque management system

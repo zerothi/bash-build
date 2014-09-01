@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family openmx"
 
-pack_set --host-reject ntch-l
+pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --install-query $(pack_get --install-prefix)/bin/openmx
 
@@ -14,10 +14,6 @@ pack_set --module-requirement openmpi --module-requirement fftw-3
 
 # Move to the source directory
 pack_set --command "cd source"
-
-# Patch it...
-#pack_set --command "wget http://www.openmx-square.org/bugfixed/14Jan31/patch3.7.7.tar.gz"
-#pack_set --command "tar xfz patch3.7.7.tar.gz"
 
 pack_set --command "wget http://www.openmx-square.org/bugfixed/14Feb17/patch3.7.8.tar.gz"
 pack_set --command "tar xfz patch3.7.8.tar.gz"
@@ -43,15 +39,19 @@ if $(is_c intel) ; then
     LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
-    pack_set --module-requirement scalapack
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas' $file"
-    else
-	pack_set --module-requirement blas --module-requirement lapack
+    LIB += $(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas' $file"
+    else
+	pack_set --module-requirement blas
+	pack_set --command "sed -i '1 a\
+    LIB += $(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas' $file"
     fi
 
     # Add the gfortran library
@@ -67,9 +67,15 @@ DESTDIR = $(pack_get --install-prefix)/bin\n\
 CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
+if $(is_host muspel slid surt) ; then
+    tmp="-lmpi_f90 -lmpi_f77"
+else
+    tmp="-lmpi_mpifh -lmpi"
+fi
+
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 -lmpi_f90 -lmpi_f77 \n\
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 $tmp \n\
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # prepare the directory of installation

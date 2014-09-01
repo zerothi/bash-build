@@ -6,7 +6,7 @@ add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch-l --host-reject zerothi
+pack_set --host-reject ntch --host-reject zerothi
 
 pack_set --module-opt "--lua-family bigdft"
 
@@ -17,23 +17,26 @@ pack_set --module-requirement openmpi \
     --module-requirement libxc
 
 tmp=
-if $(is_c gnu) ; then
+if $(is_c intel) ; then
+    tmp="--with-ext-linalg='-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential'"
+    tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
+
+elif $(is_c gnu) ; then
+
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	pack_set --module-requirement scalapack
-	tmp="--with-ext-linalg='-lscalapack -llapack_atlas -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath atlas scalapack)'"
+	tmp="--with-ext-linalg='-lscalapack -llapack -lf77blas -lcblas -latlas'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath atlas)'"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="--with-ext-linalg='-lscalapack -llapack -lopenblas'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath openblas)'"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
-	pack_set --module-requirement scalapack
 	tmp="--with-ext-linalg='-lscalapack -llapack -lblas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath blas lapack scalapack)'"
+	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath blas)'"
     fi
 
-elif $(is_c intel) ; then
-    tmp="--with-ext-linalg='-mkl=cluster -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64'"
-    tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
 
 else
     doerr BigDFT "Could not determine compiler..."

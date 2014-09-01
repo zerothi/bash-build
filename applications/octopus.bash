@@ -4,7 +4,7 @@ add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --host-reject ntch
-#pack_set --host-reject zerothi
+pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family octopus"
 
@@ -25,16 +25,22 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
 
 else
-    pack_set --module-requirement scalapack    
-    tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
+
     if [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
+	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
 	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
+	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
+	tmp="$tmp --with-scalapack='$(list --LDFLAGS --Wlrpath blas) -lscalapack'"
 	tmp="$tmp --with-blas='$(list --LDFLAGS --Wlrpath blas) -lblas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
+	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath blas) -llapack'"
     fi
 
 fi
@@ -60,7 +66,7 @@ pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --W
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.serial"
+pack_set_mv_test tmp.test tmp.test.serial
 
 # prep for the MPI-compilation...
 pack_set --command "rm -rf *"
@@ -77,11 +83,15 @@ pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --W
     --command-flag "$tmp"
 
 # Make commands
+if [ $NPROCS -gt 4 ]; then
+pack_set --command "export OCT_TEST_MPI_NPROCS=4"
+else
 pack_set --command "export OCT_TEST_MPI_NPROCS=\$NPROCS"
+fi
 pack_set --command "make -j $(get_make_parallel)"
 pack_set --command "make check > tmp.test 2>&1 && echo Succesfull >> tmp.test || echo Failure >> tmp.test"
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/tmp.test.mpi"
+pack_set_mv_test tmp.test tmp.test.mpi
 
 pack_install
 

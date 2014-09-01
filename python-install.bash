@@ -26,7 +26,7 @@ source $(build_get --source)
 new_build --name python$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
-    --installation-path $(build_get --installation-path)/python/$IpV/packages \
+    --installation-path $(build_get --installation-path)/$(pack_get --package $(get_parent))/$IpV/packages \
     --build-module-path "--package --version $IppV $(get_c)" \
     --build-installation-path "--package --version $(get_c)" \
     $(list --prefix ' --default-module ' $pMod)
@@ -34,20 +34,40 @@ new_build --name python$IpV \
 def_idx=$(build_get --default-build)
 build_set --default-build python$IpV
 
+# Python building utility
+source python/scons.bash
+
+install_all --from scons
+# Install the helper (mongodb)
+source helpers/mongo.bash
+
 # Packages installed in "python-home"
-source python/distribute.bash
+source python/setuptools.bash
 source python/pyparsing.bash
-source python/tornado.bash
+source python/backports.bash
+source python/certifi.bash
+source python/tornado.bash # backports, certifi
 source python/six.bash
 source python/dateutil.bash
+source python/pygments.bash
 source python/fastimport.bash
 source python/pytz.bash
 source python/pexpect.bash
-source python/pygments.bash
-source python/ipython.bash
+source python/docutils.bash
 source python/pycparser.bash
+source python/ipython.bash
+source python/monty.bash
+source python/pyyaml.bash
+source python/markupsafe.bash
+source python/jinja2.bash
+source python/sphinx.bash # jinja2
+
+install_all --from mongo
 
 # Done with packages only installed in python-home! ^
+
+source python/pymongo.bash
+source python/fireworks.bash
 
 source python/cython.bash
 source python/cffi.bash
@@ -74,6 +94,7 @@ source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source python/pandas.bash
 source python/pyamg.bash
 source python/petsc4py.bash
+source python/slepc4py.bash
 
 source python/krypy.bash
 source python/pygsl.bash
@@ -107,6 +128,6 @@ source python/phonopy.bash
 source python/tinyarray.bash
 source python/kwant.bash
 
-install_all --from $(get_parent)
+install_all --from pymongo
 
 build_set --default-build $def_idx

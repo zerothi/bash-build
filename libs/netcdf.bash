@@ -25,6 +25,11 @@ pack_set \
     --command-flag "--enable-netcdf-4"
 
 # Make commands
+hv=$(pack_get --version hdf5)
+if [ $(vrs_cmp $hv 1.8.12) -gt 0 ]; then
+    pack_set --command "sed -i -e 's/H5Pset_fapl_mpiposix/H5Pset_fapl_mpio/gi' ../libsrc4/nc4file.c"
+fi
+
 pack_set --command "make $(get_make_parallel)"
 #pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"

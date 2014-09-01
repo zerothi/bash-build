@@ -304,10 +304,6 @@ function list {
     done
     for opt in $opts ; do
 	case $opt in
-	    -pack-module-reqs)      
-		pre="--module-requirement " 
-		suf=""
-		args="$(pack_get --module-requirement $args) $args" ;;
 	    -Wlrpath)
 		pre="-Wl,-rpath=" 
 		suf="" 
@@ -374,6 +370,7 @@ function pack_print {
     echo " MN : $(pack_get -module-name $pack)"
     echo " IQ : $(pack_get -install-query $pack)"
     echo " REQ: $(pack_get -module-requirement $pack)"
+    echo " REJ: $(pack_get -host-reject $pack)"
     echo "                                 << << << <<"
 }
 

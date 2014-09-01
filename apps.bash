@@ -8,7 +8,7 @@ source applications/siesta-stable.bash
 source applications/siesta-dev.bash # my old ts-development
 source applications/siesta-mattias.bash
 source applications/siesta-scf.bash # my ts-development
-source applications/siesta-trunk.bash # siesta trunk development
+#source applications/siesta-trunk.bash # siesta trunk development
 #source applications/siesta-trunk-scf.bash # siesta trunk-scf development
 
 source applications/lammps.bash

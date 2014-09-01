@@ -29,8 +29,10 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check-s > tmp.test 2>&1"
-pack_set_mv_test tmp.test tmp.test.s
+if ! $(is_host n-) ; then
+  pack_set --command "make check-s > tmp.test 2>&1"
+  pack_set_mv_test tmp.test tmp.test.s
+fi
 # the parallel tests cannot even complete using gnu
 #pack_set --command "NPROCS=3 make check-p > tmp.test 2>&1"
 #pack_set_mv_test tmp.test tmp.test.p

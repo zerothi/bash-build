@@ -1,11 +1,11 @@
-v=0.13.1
+v=0.14.1
 add_package https://pypi.python.org/packages/source/p/pandas/pandas-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
 
-pack_set $(list --prefix ' --module-requirement ' cython numpy numexpr scipy pytables matplotlib pytz)
+pack_set $(list --prefix ' --module-requirement ' cython numpy numexpr scipy pytables matplotlib)
 if $(is_host ntch) ; then
     echo "" > /dev/null
 else
@@ -21,4 +21,4 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 
 add_test_package
 pack_set --command "nosetests --exe pandas > tmp.test 2>&1 ; echo 'Succes'"
-pack_set --command "mv tmp.test $(pack_get --install-query)"
+pack_set_mv_test tmp.test

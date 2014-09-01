@@ -1,5 +1,5 @@
-# apt install gettext
-for v in 1.8.5.5 1.9.0 ; do
+# apt-get install gettext
+for v in 1.9.4 2.0.4 ; do
 add_package --build generic \
 	--archive git-$v.tar.gz \
 	https://github.com/git/git/archive/v$v.tar.gz
@@ -28,7 +28,7 @@ pack_set --command "./configure" \
 pack_set --command "make $(get_make_parallel)"
 #pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
-#pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+#pack_set_mv_test tmp.test
 
 pack_install
 

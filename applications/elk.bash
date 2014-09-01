@@ -1,6 +1,8 @@
-add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.16.tgz
+add_package http://garr.dl.sourceforge.net/project/elk/elk-2.3.22.tgz
 
 pack_set -s $IS_MODULE
+
+pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --install-prefix)/bin/elk
 
@@ -17,7 +19,7 @@ fi
 
 tmp=
 if $(is_c intel) ; then
-    tmp=" $MKL_LIB -mkl=cluster"
+    tmp=" $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
 fi
 
 file=make.inc
@@ -40,17 +42,22 @@ tmp=
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
-LIB_LPK = $MKL_LIB -mkl=cluster\n\
+LIB_LPK = $tmp\n\
 ' $file"
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	tmp="-llapack_atlas -lf77blas -lcblas -latlas"
+	tmp="-llapack -lf77blas -lcblas -latlas"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="-llapack -lopenblas"
     else
-	pack_set --module-requirement blas --module-requirement lapack
+	pack_set --module-requirement blas
 	tmp="-llapack -lblas"
     fi
+
     pack_set --command "sed -i '1 a\
 LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) $tmp\n\
 ' $file"

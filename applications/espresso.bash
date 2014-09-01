@@ -1,6 +1,9 @@
-for v in 5.0.3 ; do
-    
-    if [ "$v" = "5.0.3" ]; then
+for v in 5.1 ; do
+    libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
+    if [ "$v" = "5.1" ]; then
+	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+	libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt"
+    elif [ "$v" = "5.0.3" ]; then
 	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
 	tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
@@ -14,7 +17,7 @@ for v in 5.0.3 ; do
 
     pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
 
-#    pack_set --host-reject ntch
+    pack_set --host-reject ntch --host-reject zeroth
 
     pack_set --module-opt "--lua-family espresso"
 
@@ -30,32 +33,33 @@ for v in 5.0.3 ; do
 
     # Check for Intel MKL or not
     tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
+    # BLACS is always empty (fully encompassed in scalapack)
+    tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
         tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
-	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -mkl=cluster -lmkl_blas95_lp64'"
-    	tmp_lib="$tmp_lib BLACS_LIBS='$tmp -mkl=cluster -lmkl_blacs_openmpi_lp64'"
+	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=parallel'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -mkl=cluster -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
-        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -mkl=cluster -lmkl_lapack95_lp64'"
+    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+        tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
-	if [ $(pack_installed atlas) -eq 1 ] ; then
-    	    pack_set --module-requirement atlas \
-	        --module-requirement scalapack
+
+	if [ $(pack_installed atlas) -eq 1 ]; then
+	    pack_set --module-requirement atlas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-	    # Scalapack is already linked with BLACS...
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
+	elif [ $(pack_installed openblas) -eq 1 ]; then
+	    pack_set --module-requirement openblas
+    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
 	else
-    	    pack_set --module-requirement blas --module-requirement lapack \
-	        --module-requirement scalapack
+	    pack_set --module-requirement blas
     	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath blas) -lblas'"
-    	    tmp_lib="$tmp_lib BLACS_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-	    # Scalapack is already linked with BLACS...
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath scalapack) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath lapack) -llapack'"
+    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath nblas) -lscalapack'"
+    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath blas) -llapack'"
 	fi
 
     fi
@@ -72,7 +76,7 @@ for v in 5.0.3 ; do
 
     # Make commands
     for EXE in $libs ; do
-	pack_set --command "make $(get_make_parallel) $EXE"
+ 	pack_set --command "make $(get_make_parallel) $EXE"
     done
 
     # Prepare installation directories...

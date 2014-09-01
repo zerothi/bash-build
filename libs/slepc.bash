@@ -1,8 +1,8 @@
-add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.4.3.tar.gz
+add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.5.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libslepc.a
+pack_set --install-query $(pack_get --install-prefix)/lib/libslepc.so
 
 pack_set --module-requirement petsc \
     --module-requirement parpack
@@ -11,17 +11,25 @@ tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))"
 tmp_lib=
 
 if $(is_c intel) ; then
-    tmp_lib="-mkl=cluster"
+    tmp_lib="-lmkl_blacs_openmpi_lp64 -mkl=cluster"
 
 else
+
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
-	tmp_lib="-llapack_atlas -lf77blas -lcblas -latlas"
+	tmp_lib="-llapack -lf77blas -lcblas -latlas"
+
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath openblas)"
+	tmp_lib="-llapack -lopenblas"
+
     else
-	pack_set --module-requirement lapack --module-requirement blas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath lapack blas)"
+	pack_set --module-requirement blas
+	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath blas)"
 	tmp_lib="-llapack -lblas"
+
     fi
 
 fi
@@ -41,9 +49,8 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "--with-arpack-flags='-lparpack -larpack'"
 
 # Set the arch of the build (sets the directory...)
-pack_set --command "export PETSC_ARCH=arch-installed-petsc"
-pack_set --command "export SLEPC_DIR=\$(pwd)"
-pack_set --command "make"
+# (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)
+pack_set --command "make SLEPC_DIR=\$(pwd)"
 
 pack_set --command "make testexamples"
 pack_set --command "make testfortran"

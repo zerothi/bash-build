@@ -29,7 +29,11 @@ elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ] ; then
 	pack_set --module-requirement atlas
 	tmp_blas="$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas"
-	tmp_lapack="$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas"
+	tmp_lapack="$(list --LDFLAGS --Wlrpath atlas) -llapack"
+    elif [ $(pack_installed openblas) -eq 1 ] ; then
+	pack_set --module-requirement openblas
+	tmp_blas="$(list --LDFLAGS --Wlrpath openblas) -lopenblas"
+	tmp_lapack="$(list --LDFLAGS --Wlrpath openblas) -llapack"
     else
 	pack_set --module-requirement blas --module-requirement lapack
 	tmp_blas="$(list --LDFLAGS --Wlrpath blas) -lblas"

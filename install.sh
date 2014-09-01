@@ -36,6 +36,7 @@ esac
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
     source $1
+    shift
 else
     [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
     source compiler.sh
@@ -70,6 +71,9 @@ source vendor.bash
 # Install the helper
 source helpers.bash
 
+# Install helper scripts
+source scripts.bash
+
 # Install the lua-libraries
 source lua/lua.bash
 
@@ -78,8 +82,6 @@ source libs.bash
 
 # These are "parent" installations...
 source python${python_version}.bash
-# The _ctypes does not work yet...
-#source python3.bash
 
 # We have installed all libraries needed for doing application installs
 source apps.bash
@@ -89,9 +91,6 @@ source default.bash
 
 # Add the latest modules
 source latest.bash
-
-# We have installed all libraries needed for doing application installs
-source scripts.bash
 
 msg_install --message "Finished installing all applications..."
 

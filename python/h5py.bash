@@ -1,4 +1,4 @@
-v=2.3.0
+v=2.3.1
 add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -22,4 +22,4 @@ pack_set --command "$(get_parent_exec) setup.py install" \
 
 add_test_package
 pack_set --command "nosetests --exe h5py > tmp.test 2>&1 ; echo 'Succes'"
-pack_set --command "mv tmp.test $(pack_get --install-query)"
+pack_set_mv_test tmp.test

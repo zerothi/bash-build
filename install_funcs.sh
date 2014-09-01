@@ -200,6 +200,7 @@ function build_get {
 	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
 	-default-build) _ps "$_b_def_idx" ;; 
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
+	-def-module-version) _ps "$_crt_version" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
@@ -293,8 +294,15 @@ function add_test_package {
     local version=$(pack_get --version)
     add_package --package $name-test \
 	--version $version fake
+    # Update install-prefix
+    pack_set --install-prefix $(pack_get --install-prefix $name[$version])
     pack_set --module-requirement $name[$version]
-    pack_set --install-query $(pack_get --install-prefix $name[$version])/test.output
+    if [ $# -gt 0 ]; then
+	pack_set --install-query $(pack_get --install-prefix $name[$version])/$1
+	shift
+    else
+	pack_set --install-query $(pack_get --install-prefix $name[$version])/tmp.*
+    fi
 }
 
 # Local variables for archives to be installed
@@ -510,6 +518,11 @@ function pack_set {
             -R|-module-requirement)  
 		local tmp="$(pack_get --module-requirement $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
+		# We add the host-rejects for this requirement
+		local tmp="$(pack_get --host-reject $1)"
+		[ ! -z "$tmp" ] && reject_h="$reject_h $tmp"
+		local tmp="$(pack_get --host-only $1)"
+		[ ! -z "$tmp" ] && only_h="$only_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
@@ -537,6 +550,7 @@ function pack_set {
 	# This is only because we haven't used the index thing before
 	local opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
+	lib=/lib # ensure setting library path
     fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
@@ -609,6 +623,12 @@ function pack_get {
 		-build)              _ps "${_build[$index]}" ;;
 		-C|-commands)        _ps "${_cmd[$index]}" ;;
 		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
+		-module-load) 
+		    for m in ${_mod_req[$index]} ; do
+			_ps "$(pack_get --module-name $m) "
+		    done 
+		    _ps "${_mod_name[$index]}"
+		    ;;
 		-R|-module-requirement) 
                                      _ps "${_mod_req[$index]}" ;;
 		-module-paths-requirement) 
@@ -824,6 +844,10 @@ function pack_install {
 	local tmp=$(pack_get --build $idx)
 	source $(build_get --source[$tmp])
 
+        # Create the list of requirements
+	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
+	module load $module_loads
+
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
@@ -835,10 +859,6 @@ function pack_install {
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
-
-        # Create the list of requirements
-	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-	module load $module_loads
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
@@ -902,9 +922,7 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-	for mod in $module_loads ; do
-            module unload $mod
-	done
+        module unload $module_loads
 
 	# Unload the module itself in case of PRELOADING
 	if $(has_setting $PRELOAD_MODULE $idx) ; then

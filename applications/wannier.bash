@@ -5,7 +5,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --install-prefix)/bin/wannier90
 
-pack_set --host-reject ntch-l
+#pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
 
 # Check for Intel MKL or not
@@ -13,12 +13,16 @@ if $(is_c intel) ; then
     tmp="$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
-	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas -lf77blas -lcblas -latlas"
+	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack -lf77blas -lcblas -latlas"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	tmp="$(list --LDFLAGS --Wlrpath openblas) -llapack -lopenblas"
     else
-	pack_set --module-requirement blas --module-requirement lapack
-	tmp="$(list --LDFLAGS --Wlrpath blas lapack) -llapack -lblas"
+	pack_set --module-requirement blas
+	tmp="$(list --LDFLAGS --Wlrpath blas) -llapack -lblas"
     fi
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

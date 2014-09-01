@@ -1,5 +1,4 @@
-# This module requires that libfreetype6-dev be installed as well as
-# libpng(12)-dev
+# apt-get install libpng(12)-dev libfreetype6-dev
 
 add_package \
     --archive matplotlib-1.3.1.tar.gz \
@@ -20,4 +19,4 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
 
 add_test_package
 pack_set --command "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Succes'"
-pack_set --command "mv tmp.test $(pack_get --install-query)"
+pack_set_mv_test tmp.test

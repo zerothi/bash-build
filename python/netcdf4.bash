@@ -1,4 +1,4 @@
-v=1.0.9
+v=1.1.0
 add_package --version $v --alias py-netcdf --package py-netcdf \
 	--archive netcdf4-python-${v}rel.tar.gz \
 	https://github.com/Unidata/netcdf4-python/archive/v${v}rel.tar.gz
@@ -26,7 +26,7 @@ netCDF4_dir = $(pack_get --install-prefix netcdf-serial)\n\
 HDF5_dir = $(pack_get --install-prefix hdf5-serial)\n\
 ' $file"
 
-pack_set --command "CFLAGS='$CFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
+pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --install-prefix)"

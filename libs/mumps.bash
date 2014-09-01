@@ -20,19 +20,22 @@ SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential 
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
-    pack_set --module-requirement scalapack
-    if [ $(pack_installed atlas) -eq 1 ] ; then
+    if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '1 a\
-SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
+SCALAP = $(list --LDFLAGS --Wlrpath atlas) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "sed -i '1 a\
+SCALAP = $(list --LDFLAGS --Wlrpath openblas) -lscalapack \n\
+LIBBLAS = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n' Makefile.inc"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\
-SCALAP = $(list --LDFLAGS --Wlrpath scalapack) -lscalapack \n\
+SCALAP = $(list --LDFLAGS --Wlrpath blas) -lscalapack \n\
 LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
     fi
-
 fi
 
 pack_set --command "sed -i '1 a\

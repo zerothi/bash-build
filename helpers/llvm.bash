@@ -1,4 +1,4 @@
-for v in 3.3 3.4 ; do
+for v in 3.3 ; do # 3.4.2
 add_package --build generic \
     --directory llvm-$v.src --package llvm --version $v \
     http://llvm.org/releases/$v/llvm-$v.src.tar.gz
@@ -40,7 +40,7 @@ pack_set --command "../configure" \
 pack_set --command "REQUIRES_RTTI=1 make $(get_make_parallel)"
 pack_set --command "REQUIRES_RTTI=1 make check-all LIT_ARGS='-s -j2' > tmp.test 2>&1"
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
+pack_set_mv_test tmp.test
 
 pack_install
 

@@ -1,4 +1,4 @@
-for v in 0.13.3 ; do 
+for v in 0.14.0 ; do 
 add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -23,6 +23,6 @@ fi
 
 add_test_package
 pack_set --command "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Succes'"
-pack_set --command "mv tmp.test $(pack_get --install-query)"
+pack_set_mv_test tmp.test
 
 done

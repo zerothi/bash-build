@@ -1,4 +1,4 @@
-v=7.6.3
+v=7.8.2
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -57,7 +57,7 @@ if $(is_c intel) ; then
     # STUPID, I say!
     #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
     pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp="-mkl=cluster"
+    tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
     pack_set --command "$s '$ a\
 FCLIBS=\"$tmp\"\n\
 LIBS=\"$tmp\"\n\
@@ -66,20 +66,22 @@ with_linalg_libs=\"$tmp\"\n' $file"
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
-    pack_set --module-requirement scalapack    
     if [ $(pack_installed atlas) -eq 1 ]; then
+	pack_set --module-requirement atlas
 	pack_set --command "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS atlas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas scalapack) -lscalapack -llapack_atlas -lf77blas -lcblas -latlas\"' $file"
-
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas\"' $file"
+    elif [ $(pack_installed openblas) -eq 1 ]; then
+	pack_set --module-requirement openblas
+	pack_set --command "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS openblas)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas\"' $file"
     else
 	pack_set --module-requirement blas
-	pack_set --module-requirement lapack
 	pack_set --command "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS blas lapack)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas lapack scalapack) -lscalapack -llapack -lblas\"' $file"
+with_linalg_incs=\"$(list --INCDIRS blas)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas\"' $file"
     fi
-    #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-fopenmp /g' $file"
 
 fi
 
@@ -143,9 +145,11 @@ fi
 # Make commands
 tmp=$(get_make_parallel)
 pack_set --command "make multi multi_nprocs=${tmp//-j /}"
-pack_set --command "make check-local > tmp.test 2>&1" # only check local tests...
+# With 7.8+ the testing system has changed.
+# We should do some python calls...
+#pack_set --command "make check-local > tmp.test 2>&1" # only check local tests...
+#pack_set_mv_test tmp.test
 pack_set --command "make install"
-pack_set --command "mv tmp.test $(pack_get --install-prefix)/"
 
 pack_install
 

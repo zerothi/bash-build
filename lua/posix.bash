@@ -2,11 +2,12 @@
 #  libtoolize/libtool
 #  automake
 
+v=32
 add_package --build generic \
-    --archive lua-posix-5.1.31.tar.gz \
-    --version 5.1.31 \
-    --directory luaposix-release-v31 \
-    https://github.com/luaposix/luaposix/archive/release-v31.tar.gz
+    --archive lua-posix-5.1.$v.tar.gz \
+    --version 5.1.$v \
+    --directory luaposix-release-v$v \
+    https://github.com/luaposix/luaposix/archive/release-v$v.tar.gz
 
 pack_set --module-requirement lua
 
@@ -27,10 +28,6 @@ pack_set --command "./configure" \
 
 # Make lua package
 pack_set --command "make all"
-
-# Make the compilation check
 pack_set --command "make check"
-
-# Make install lua
 pack_set --command "make install"
 
