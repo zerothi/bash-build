@@ -1,4 +1,4 @@
-for v in 1.2 ; do
+for v in 2.0.0 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -7,6 +7,9 @@ pack_set --install-query $(pack_get --install-prefix)/bin/wannier90
 
 #pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
+if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
+    pack_set --module-requirement openmpi
+fi
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -34,22 +37,41 @@ pack_set --command "echo '# NPA' > $file"
 
 pack_set --command "sed -i '1 a\
 F90 = $FC \n\
+COMMS = mpi\n\
+MPIF90 = $MPIF90 # this will only be used for v >= 2.0\n\
 FCOPTS = $FCFLAGS $tmp\n\
 LDOPTS = $FCFLAGS $tmp\n\
 LIBS = $tmp -lpthread ' $file"
 
+pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
+pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
+pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
+
 # Make commands
 pack_set --command "make $(get_make_parallel) wannier"
+if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
+    for d in post w90chk2chk w90vdw w90pov ; do
+	pack_set --command "make $d"
+    done
+    pack_set --command "cp postw90.x $(pack_get --install-prefix)/bin/"
+    pack_set --command "cp w90chk2chk.x $(pack_get --install-prefix)/bin/"
+    pack_set --command "cp utility/w90vdw/w90vdw.x $(pack_get --install-prefix)/bin/"
+    pack_set --command "cp utility/w90pov/w90pov $(pack_get --install-prefix)/bin/"
+    pack_set --command "cp utility/kmesh.pl $(pack_get --install-prefix)/bin/"
+fi
 pack_set --command "make lib"
 pack_set --command "make test"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
 pack_set --command "cp wannier90.x $(pack_get --install-prefix)/bin/"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
 pack_set --command "cp libwannier.a $(pack_get --install-prefix)/lib/"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
-pack_set --command "cp src/*.mod $(pack_get --install-prefix)/include/"
+if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
+    pack_set --command "cp src/obj/*.mod $(pack_get --install-prefix)/include/"
+else
+    pack_set --command "cp src/*.mod $(pack_get --install-prefix)/include/"
+fi
+
+# Make easy links
 pack_set --command "cd $(pack_get --install-prefix)/bin/"
-pack_set --command "ln -s wannier90.x wannier90"
+pack_set --command 'for f in *.x ; do ln -s $f ${f//.x/} ; done'
 
 pack_install
 
