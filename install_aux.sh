@@ -267,7 +267,10 @@ function dwn_file {
     [ -e $subdir/$archive ] && return 0
     local url=$(pack_get --url $1)
     [ "x$url" == "xfake" ] && return 0
-    wget --no-check-certificate $(pack_get --url $1) -O $subdir/$archive
+    # Better circumvent the proxies...
+    wget --no-proxy \
+	--no-check-certificate \
+	$(pack_get --url $1) -O $subdir/$archive
     if [ $? -ne 0 ]; then
 	rm -f $subdir/$archive
 	doerr "$archive" "Could not download file succesfully..."

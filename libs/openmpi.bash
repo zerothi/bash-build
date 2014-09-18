@@ -22,6 +22,9 @@ elif $(is_host surt muspel slid) ; then
 elif $(is_host thul) ; then
     tmp_flags="CPPFLAGS='-I/usr/local/include'"
 
+elif $(is_host hemera) ; then
+    tmp_flags="CPPFLAGS='-I/software/torque/include' --with-openib-libdir=/usr/lib64"
+    
 fi
 
 if [ $(pack_installed flex) -eq 1 ]; then
