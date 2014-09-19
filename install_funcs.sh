@@ -476,6 +476,8 @@ function add_package {
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     _lib_prefix[$_N_archives]=${_install_prefix[$_N_archives]}$lp
+    # Just in case lib64 already exists
+    [ -d ${_lib_prefix[$_N_archives]}64 ] && _lib_prefix[$_N_archives]=${_install_prefix[$_N_archives]}${lp}64
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
@@ -944,6 +946,14 @@ function pack_install {
 	pack_set --installed 1 $idx
 
     fi
+
+    # Fix the library path...
+    # We favour lib64
+    for cmd in lib lib64 ; do
+	if [ -d $(pack_get --install-prefix)/$cmd ]; then
+	    pack_set --library-path $(pack_get --install-prefix)/$cmd $idx
+	fi
+    done
 
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements

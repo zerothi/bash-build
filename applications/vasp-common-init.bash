@@ -41,7 +41,7 @@ OBJ_HIGH  = \n\
 OBJ_NOOPT = \n\
 DEBUG  = -O0 \n\
 INLINE = \$(OFLAG) \n\
-WANNIER_PATH = $(pack_get --install-prefix wannier90[1.2])/lib\n\
+WANNIER_PATH = $(pack_get --library-path wannier90[1.2])\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
 LIB  = -L../vasp.5.lib -ldmy \$(WANNIER) -lwannier \\\\\n\
      ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS)' $file"

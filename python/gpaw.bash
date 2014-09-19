@@ -40,17 +40,17 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix atlas)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path atlas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix openblas)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path openblas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix blas)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path blas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"blas\",\"gfortran\"]' $file"
     fi
 else
@@ -61,15 +61,15 @@ fi
 tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"
 
 pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --install-prefix libxc)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
 include_dirs += [\"$(pack_get --install-prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 # Same as -Wl,-rpath:\n\
-runtime_library_dirs += [\"$(pack_get --install-prefix libxc)/lib\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get --install-prefix openmpi)/lib\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get --install-prefix hdf5)/lib\"]\n\
+runtime_library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get --library-path openmpi)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get --library-path hdf5)\"]\n\
 scalapack = True\n\
 \n\
 if scalapack:\n\
@@ -77,9 +77,9 @@ if scalapack:\n\
     define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
 \n\
 hdf5 = True\n\
-library_dirs += [\"$(pack_get --install-prefix hdf5)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path hdf5)\"]\n\
 libraries += [\"hdf5_hl\",\"hdf5\"]\n\
-library_dirs += [\"$(pack_get --install-prefix zlib)/lib\"]\n\
+library_dirs += [\"$(pack_get --library-path zlib)\"]\n\
 libraries += [\"z\"]\n\
 \n\
 # Add all directories for inclusion\n\
