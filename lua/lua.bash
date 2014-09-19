@@ -16,7 +16,7 @@ pack_set --command "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_ALL 
 pack_set --command "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --install-prefix)/\":' src/luaconf.h"
 
 # Make lua
-if $(is_host hemera) ; then
+if $(is_host hemera eris) ; then
     pack_set --command "make MYLIBS='-lncurses' linux test"
 else
     pack_set --command "make linux test"

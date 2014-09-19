@@ -7,15 +7,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --install-prefix)/bin/mpiexec
 
 # Only install locally
-pack_set $(list -p "--host-reject " surt muspel slid n- $(get_hostname))
-
-tmp_flags=""
-if $(is_host n-) ; then # enables the linking to the torque management system
-    tmp_flags=
-elif $(is_host surt muspel slid) ; then
-    tmp_flags=
-
-fi
+pack_set $(list -p "--host-reject " surt muspel slid n- hemera eris $(get_hostname))
 
 # Install commands that it should run
 pack_set --command "unset F90 && unset F90FLAGS && ../configure" \
@@ -26,4 +18,3 @@ pack_set --command "unset F90 && unset F90FLAGS && ../configure" \
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
-

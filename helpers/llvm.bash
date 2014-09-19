@@ -10,6 +10,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 if $(is_c intel) ; then
     pack_set --host-reject $(hostname)
 fi
+pack_set $(list --prefix "--host-reject " hemera eris)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/llvm-ar
 
@@ -25,7 +26,7 @@ fi
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.gz
 mywget ${tmp//llvm-/$name-} $o
 
-pack_set --command "tar xfz $name-$v.src.tar.gz -C ../tools/"
+pack_set --command "tar xfz $o -C ../tools/"
 pack_set --command "pushd ../tools"
 tmp=$(pack_get --directory)
 pack_set --command "ln -s ${tmp//llvm-/$name-} clang"
