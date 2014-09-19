@@ -15,13 +15,21 @@ pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
-# Fix the include placement
-pack_set --command "mv $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)/include" \
-    --command-flag "$(pack_get --install-prefix)/include"
-pack_set --command "rm -rf $(pack_get --install-prefix)/lib/libffi-$(pack_get --version)"
-# Fix the pkgconfig
-pack_set --command "sed -i -e 's:includedir=.*:includedir=\${prefix}/include:' $(pack_get --install-prefix)/lib/pkgconfig/libffi.pc"
-pack_set --command "cd $(pack_get --install-prefix)"
-pack_set --command "if test -d lib64 ; then mv lib64/* lib/ ; fi"
-pack_set --command "if test -d lib64 ; then rm -rf lib64 ; fi"
+flib="$(pack_get --install-prefix)/lib/libffi-$(pack_get --version)/include"
+flib64="$(pack_get --install-prefix)/lib64/libffi-$(pack_get --version)/include"
+tinc="$(pack_get --install-prefix)/include"
 
+# Fix the include placement
+pack_set --command "[ -d $flib ] && mv $flib $tinc || true"
+pack_set --command "[ -d $flib64 ] && mv $flib $tinc || true"
+
+# Fix pkgconfig
+for f in lib lib64 ; do
+    flib="$(pack_get --install-prefix)/$f/pkgconfig/libffi.pc"
+    pack_set --command "[ -e $flib ] && sed -i -e 's:includedir=.*:includedir=\${prefix}/include:' $flib || true"
+    flib="$(pack_get --install-prefix)/$f/libffi-$(pack_get --version)"
+    pack_set --command "[ -d $flib ] && rm -rf $(pack_get --install-prefix)/lib/libffi-$(pack_get --version) || true"
+done
+unset flib
+unset flib64
+unset tinc
