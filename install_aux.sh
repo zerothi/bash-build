@@ -277,6 +277,7 @@ function mywget {
     # If the url is fake
     [ "x$url" == "xfake" ] && return 0
     # Better circumvent the proxies...
+    msg_install --message "Downloading $url to $O"
     wget --no-proxy \
 	--no-check-certificate \
 	$url -O $O
