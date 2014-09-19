@@ -3,7 +3,7 @@ add_package https://pypi.python.org/packages/source/p/pandas/pandas-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/site.py
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/site.py
 
 pack_set $(list --prefix ' --module-requirement ' cython numpy numexpr scipy pytables matplotlib)
 if $(is_host ntch) ; then
@@ -12,7 +12,7 @@ else
     pack_set --module-requirement bottleneck
 fi
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/python$pV/site-packages"
+pack_set --command "mkdir -p $(pack_get --library-path)/python$pV/site-packages"
 
 pack_set --command "$(get_parent_exec) setup.py build"
 

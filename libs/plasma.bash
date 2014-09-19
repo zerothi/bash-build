@@ -3,7 +3,7 @@ add_package \
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libplasma.a
+pack_set --install-query $(pack_get --library-path)/libplasma.a
 
 pack_set --module-requirement hwloc
 

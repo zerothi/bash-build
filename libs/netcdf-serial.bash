@@ -9,7 +9,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # Add requirments when creating the module
 pack_set --module-requirement hdf5-serial
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdf.a
+pack_set --install-query $(pack_get --library-path)/libnetcdf.a
 
 # Install commands that it should run
 pack_set \
@@ -40,7 +40,7 @@ pack_set --module-requirement netcdf-serial[$v]
 
 pack_set --install-prefix $(pack_get --install-prefix netcdf-serial[$v])
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libnetcdff.a
+pack_set --install-query $(pack_get --library-path)/libnetcdff.a
 
 # Install commands that it should run
 pack_set --command "../configure" \

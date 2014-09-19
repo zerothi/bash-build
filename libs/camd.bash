@@ -4,7 +4,7 @@ add_package http://www.cise.ufl.edu/research/sparse/camd/CAMD-$v.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --directory CAMD
-pack_set --install-query $(pack_get --install-prefix)/lib/libcamd.a
+pack_set --install-query $(pack_get --library-path)/libcamd.a
 
 pack_set --module-requirement ss_config
 
@@ -21,9 +21,9 @@ pack_set --command "sed -i -e 's|../../SuiteSparse_config/SuiteSparse_config.h||
 # Make commands
 pack_set --command "make $(get_make_parallel) all"
 # Install commands that it should run
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/"
+pack_set --command "mkdir -p $(pack_get --library-path)/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
-pack_set --command "make INSTALL_LIB='$(pack_get --install-prefix)/lib/'" \
+pack_set --command "make INSTALL_LIB='$(pack_get --library-path)/'" \
     --command-flag "INSTALL_INCLUDE='$(pack_get --install-prefix)/include/'" \
     --command-flag "install"
 

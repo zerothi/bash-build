@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 [ "x${pV:0:1}" == "x3" ] && pack_set --host-reject $(get_hostname)
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/Scientific
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/Scientific
 
 pack_set --module-requirement netcdf-serial \
     --module-requirement numpy

@@ -4,7 +4,7 @@ add_package \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libfftw3_mpi.a
+pack_set --install-query $(pack_get --library-path)/libfftw3_mpi.a
 
 # Install commands that it should run
 pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"

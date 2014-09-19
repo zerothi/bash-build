@@ -6,7 +6,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/sklearn/__init__.py
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/sklearn/__init__.py
 
 # Add requirments when creating the module
 pack_set --module-requirement numpy \

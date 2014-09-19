@@ -11,7 +11,7 @@ pack_set --directory ATLAS
 pack_set $(list --prefix "--host-reject " surt muspel slid)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libatlas.a
+pack_set --install-query $(pack_get --library-path)/libatlas.a
 
 # Prepare the make file
 pack_set --command "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"

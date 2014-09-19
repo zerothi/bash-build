@@ -2,7 +2,7 @@ add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libmetis.a
+pack_set --install-query $(pack_get --library-path)/libmetis.a
 
 if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"

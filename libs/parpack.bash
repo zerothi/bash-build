@@ -5,7 +5,7 @@ add_package --package parpack \
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-query $(pack_get --install-prefix)/lib/libparpack.a
+pack_set --install-query $(pack_get --library-path)/libparpack.a
 
 pack_set --module-requirement openmpi
 
@@ -124,4 +124,4 @@ pack_set --command "sed -i -e 's/^FC.*//;s/^FFLAGS.*//;s/^PFC/FC/;s/^PFFLAGS/FFL
 pack_set --command "make plib"
 
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
-pack_set --command "cp libarpack.a libparpack.a $(pack_get --install-prefix)/lib/"
+pack_set --command "cp libarpack.a libparpack.a $(pack_get --library-path)/"

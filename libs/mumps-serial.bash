@@ -4,7 +4,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libmumps_common.a
+pack_set --install-query $(pack_get --library-path)/libmumps_common.a
 
 pack_set --module-requirement metis
 #pack_set --module-requirement scotch[5.1.12b]
@@ -99,6 +99,6 @@ pack_set --command "make $(get_make_parallel) alllib"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
 pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
-pack_set --command "cp lib/lib*.a $(pack_get --install-prefix)/lib/"
-pack_set --command "cp libseq/lib*.a $(pack_get --install-prefix)/lib/"
+pack_set --command "cp lib/lib*.a $(pack_get --library-path)/"
+pack_set --command "cp libseq/lib*.a $(pack_get --library-path)/"
 

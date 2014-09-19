@@ -8,7 +8,7 @@ pack_set -s $IS_MODULE
 pack_set $(list --prefix '--host-reject ' ntch)
 
 # This devious thing will never install the same place
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages
 
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' numpy cython)

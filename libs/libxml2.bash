@@ -3,7 +3,7 @@ add_package \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libxml2.so
+pack_set --install-query $(pack_get --library-path)/libxml2.so
 
 # Add requirments when creating the module
 pack_set --module-requirement zlib

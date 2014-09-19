@@ -5,7 +5,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libboost_python.a
+pack_set --install-query $(pack_get --library-path)/libboost_python.a
 
 # Install commands that it should run
 pack_set --command "echo \"using mpi;\" >> tools/build/v2/user-config.jam"

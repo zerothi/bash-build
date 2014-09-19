@@ -4,7 +4,7 @@ add_package --archive llvmpy-$v.tar.gz \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/llvmpy
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/llvmpy
 
 pack_set --module-requirement $(get_parent)
 pack_set --module-requirement llvm[3.3]

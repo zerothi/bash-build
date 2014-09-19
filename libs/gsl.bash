@@ -3,7 +3,7 @@ add_package ftp://ftp.gnu.org/gnu/gsl/gsl-1.16.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libgsl.a
+pack_set --install-query $(pack_get --library-path)/libgsl.a
 
 # Install commands that it should run
 if $(is_c intel) ; then

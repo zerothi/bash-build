@@ -2,7 +2,7 @@ add_package ftp://ftp.gnu.org/gnu/guile/guile-2.0.6.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libguile.a
+pack_set --install-query $(pack_get --library-path)/libguile.a
 
 pack_set --module-requirement gmp
 

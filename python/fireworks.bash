@@ -8,7 +8,7 @@ pack_set --module-requirement mongo
 
 pack_set --install-query $(pack_get --install-prefix)/bin/mlaunch
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib/python$pV/site-packages/"
+pack_set --command "mkdir -p $(pack_get --library-path)/python$pV/site-packages/"
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \

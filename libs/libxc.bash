@@ -3,7 +3,7 @@ add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libxc.a
+pack_set --install-query $(pack_get --library-path)/libxc.a
 
 pack_set --command "../configure" \
     --command-flag "--enable-shared" \

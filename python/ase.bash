@@ -11,7 +11,7 @@ pack_set --module-opt "--lua-family ase"
 
 pack_set --host-reject ntch
 
-pack_set --install-query $(pack_get --install-prefix)/lib/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement scipy
 

@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --module-requirement netcdf
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libetsf_io.a
+pack_set --install-query $(pack_get --library-path)/libetsf_io.a
 
 pack_set --command "CC='$MPICC' FC='$MPIFC' LIBS='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz' ./configure" \
     --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \

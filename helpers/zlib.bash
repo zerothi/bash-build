@@ -4,7 +4,7 @@ add_package --build generic --alias gen-zlib --package gen-zlib \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libz.a
+pack_set --install-query $(pack_get --library-path)/libz.a
 
 # Install commands that it should run
 pack_set --command "./configure" \

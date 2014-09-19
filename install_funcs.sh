@@ -475,9 +475,9 @@ function add_package {
     tmp="$(build_get --build-installation-path[$b_name])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
-    _lib_prefix[$_N_archives]=${_install_prefix[$_N_archives]}$lp
+    _lib_prefix[$_N_archives]=$lp
     # Just in case lib64 already exists
-    [ -d ${_lib_prefix[$_N_archives]}64 ] && _lib_prefix[$_N_archives]=${_install_prefix[$_N_archives]}${lp}64
+    [ -d ${_install_prefix[$_N_archives]}/${_lib_prefix[$_N_archives]}64 ] && _lib_prefix[$_N_archives]=${lp}64
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
@@ -564,7 +564,7 @@ function pack_set {
 	_mod_req[$index]="$req"
     fi
     [ ! -z "$install" ]    && _install_prefix[$index]="$install"
-    [ ! -z "$lib" ]        && _lib_prefix[$index]="${_install_prefix[$index]}$lib"
+    [ ! -z "$lib" ]        && _lib_prefix[$index]="$lib"
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
@@ -646,7 +646,7 @@ function pack_get {
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
-		-L|-library-path)    _ps "${_lib_prefix[$index]}" ;;
+		-L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -690,7 +690,7 @@ function pack_get {
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
 	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-library-path)    _ps "${_lib_prefix[$index]}" ;;
+	    -L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) 
                                  _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;

@@ -6,7 +6,7 @@ add_package \
 # Correct the old version of parmetis...
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/lib/libparmetis.a
+pack_set --install-query $(pack_get --library-path)/libparmetis.a
 
 if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"
