@@ -9,19 +9,21 @@ pack_set --install-query $(pack_get --install-prefix)/lib/libparpack.a
 
 pack_set --module-requirement openmpi
 
+
+oA=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.tar.gz
+mywget http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz $oA
+oP=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-parpack96.tar.gz
+mywget http://www.caam.rice.edu/software/ARPACK/SRC/parpack96.tar.gz $oP
+oPP=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-ppatch.tar.gz
+mywget http://www.caam.rice.edu/software/ARPACK/SRC/ppatch.tar.gz $oPP
+
 # Apply patch
 pack_set --command "pushd ../"
-pack_set --command "wget http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz"
-pack_set --command "tar xfz patch.tar.gz"
-pack_set --command "rm patch.tar.gz"
+pack_set --command "tar xfz $oA"
 
 # Apply parallel source and patch
-pack_set --command "wget http://www.caam.rice.edu/software/ARPACK/SRC/parpack96.tar.gz"
-pack_set --command "tar xfz parpack96.tar.gz"
-pack_set --command "rm parpack96.tar.gz"
-pack_set --command "wget http://www.caam.rice.edu/software/ARPACK/SRC/ppatch.tar.gz"
-pack_set --command "tar xfz ppatch.tar.gz"
-pack_set --command "rm ppatch.tar.gz"
+pack_set --command "tar xfz $oP"
+pack_set --command "tar xfz $oPP"
 
 pack_set --command "popd"
 

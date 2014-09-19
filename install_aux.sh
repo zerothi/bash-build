@@ -264,16 +264,25 @@ function dwn_file {
 	subdir="$2"
     fi
     local archive=$(pack_get --archive $1)
-    [ -e $subdir/$archive ] && return 0
     local url=$(pack_get --url $1)
+    mywget $url $subdir/$archive
+}
+
+# Shorthand for my wget
+function mywget {
+    local url=$1 ; shift
+    local O=$1 ; shift
+    # If it exists return
+    [ -e $O ] && return 0
+    # If the url is fake
     [ "x$url" == "xfake" ] && return 0
     # Better circumvent the proxies...
     wget --no-proxy \
 	--no-check-certificate \
-	$(pack_get --url $1) -O $subdir/$archive
+	$url -O $O
     if [ $? -ne 0 ]; then
-	rm -f $subdir/$archive
-	doerr "$archive" "Could not download file succesfully..."
+	rm -f $O
+	doerr "$url" "Could not download file succesfully..."
     fi
 }
 

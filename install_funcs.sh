@@ -79,6 +79,7 @@ source install_hostinfo.sh
 
 # The place of all the archives
 _archives="$(pwd)/.archives"
+function pwd_archives { _ps "$_archives" ; }
 
 # Denote how the module paths and installation paths should be
 function build_set {

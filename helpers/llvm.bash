@@ -6,7 +6,6 @@ add_package --build generic \
 [ "$v" == "3.4" ] && pack_set --directory llvm-$v
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
-pack_set --host-reject hemera
 
 if $(is_c intel) ; then
     pack_set --host-reject $(hostname)
@@ -23,7 +22,9 @@ name=clang
 if [ $(vrs_cmp $v 3.3) -le 0 ]; then
     name=cfe
 fi
-pack_set --command "wget ${tmp//llvm-/$name-}"
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.gz
+mywget ${tmp//llvm-/$name-} $o
+
 pack_set --command "tar xfz $name-$v.src.tar.gz -C ../tools/"
 pack_set --command "pushd ../tools"
 tmp=$(pack_get --directory)
