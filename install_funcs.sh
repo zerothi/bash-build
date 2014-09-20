@@ -1321,9 +1321,11 @@ EOF
 #	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python)"
-    for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
+    for PV in 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python$PV/site-packages)"
+	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib64/python$PV/site-packages)"
     done
     if [ ! -z "$lua_family" ]; then
 	case $_module_format in
