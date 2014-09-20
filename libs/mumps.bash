@@ -107,6 +107,6 @@ LIBSEQNEEDED = \n' Makefile.inc"
 pack_set --command "make $(get_make_parallel) alllib"
 pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
 pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "mkdir -p $(pack_get --library-path)"
 pack_set --command "cp lib/lib*.a $(pack_get --library-path)/"
 

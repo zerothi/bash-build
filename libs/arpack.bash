@@ -89,5 +89,5 @@ fi
 
 pack_set --command "make"
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "mkdir -p $(pack_get --library-path)"
 pack_set --command "cp libarpack.a $(pack_get --library-path)/"

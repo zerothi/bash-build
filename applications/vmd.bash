@@ -17,7 +17,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/vmd
 
 # Install commands that it should run
 pack_set --command "VMDINSTALLBINDIR=$(pack_get --install-prefix)/bin" \
-    --command-flag "VMDINSTALLLIBRARYDIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "VMDINSTALLLIBRARYDIR=$(pack_get --library-path)" \
     --command-flag "./configure"
 
 # Make commands

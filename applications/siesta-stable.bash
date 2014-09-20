@@ -7,8 +7,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
 pack_set --module-requirement openmpi --module-requirement netcdf-serial
 
 if [ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]; then
-    pack_set --host-reject zero \
-	--host-reject ntch
+    pack_set $(list --prefix '--host-reject ' zero ntch)
 fi
 
 # Add the lua family
@@ -113,8 +112,9 @@ if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
     # move back to head
     tmp=siesta-3.1_esm_v1.05
     pack_set --command "cd ../"
-    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz"
-    pack_set --command "tar xfz $tmp.tar.gz"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$tmp.tar.gz
+    mywget http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz $o
+    pack_set --command "tar xfz $o"
     pack_set --command "patch -p1 < $tmp/esm_v1.05.diff"
 
     pack_set --command "cd Obj"

@@ -81,7 +81,7 @@ for v in 5.1 ; do
 
     # Prepare installation directories...
     pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-    pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+    pack_set --command "mkdir -p $(pack_get --library-path)"
     pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
     pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
     # Install the iotk-library

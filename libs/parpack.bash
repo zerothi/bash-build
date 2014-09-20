@@ -123,5 +123,5 @@ pack_set --command "make lib"
 pack_set --command "sed -i -e 's/^FC.*//;s/^FFLAGS.*//;s/^PFC/FC/;s/^PFFLAGS/FFLAGS/' $file"
 pack_set --command "make plib"
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "mkdir -p $(pack_get --library-path)"
 pack_set --command "cp libarpack.a libparpack.a $(pack_get --library-path)/"

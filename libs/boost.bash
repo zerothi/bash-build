@@ -13,7 +13,7 @@ pack_set --command "./bootstrap.sh" \
     --command-flag "--with-libraries=all" \
     --command-flag "--prefix=$(pack_get --install-prefix)" \
     --command-flag "--includedir=$(pack_get --install-prefix)/include" \
-    --command-flag "--libdir=$(pack_get --install-prefix)/lib"
+    --command-flag "--libdir=$(pack_get --library-path)"
 
 # Make commands
 pack_set --command "./b2 stage"

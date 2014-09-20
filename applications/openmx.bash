@@ -15,8 +15,9 @@ pack_set --module-requirement openmpi --module-requirement fftw-3
 # Move to the source directory
 pack_set --command "cd source"
 
-pack_set --command "wget http://www.openmx-square.org/bugfixed/14Feb17/patch3.7.8.tar.gz"
-pack_set --command "tar xfz patch3.7.8.tar.gz"
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.7.8.tar.gz
+mywget http://www.openmx-square.org/bugfixed/14Feb17/patch3.7.8.tar.gz $o
+pack_set --command "tar xfz $o"
 
 if test -z "$FLAG_OMP" ; then
     doerr OpenMX "Can not find the OpenMP flag (set FLAG_OMP in source)"

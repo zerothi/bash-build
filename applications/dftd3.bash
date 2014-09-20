@@ -10,7 +10,9 @@ pack_set --module-opt "--lua-family dftd3"
 pack_set --install-query $(pack_get --install-prefix)/bin/dftd3
 
 pack_set --command "rm pars.f"
-pack_set --command "wget http://www.thch.uni-bonn.de/tc/downloads/DFT-D3/data/pars.f"
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-pars.f
+mywget http://www.thch.uni-bonn.de/tc/downloads/DFT-D3/data/pars.f $o
+pack_set --command "cp $o pars.f"
 
 pack_set --command "sed -i '1 a\
 FC      = $FC\n\

@@ -14,20 +14,20 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --library-path)/libfftw2xf_DOUBLE.a
 
 # Create the directory (we are not sure that the makefiles will do...)
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "mkdir -p $(pack_get --library-path)"
 
 # Install the C wrappers (in both precisions)
 pack_set --command "cd $MKL_PATH/interfaces/fftw2xc"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "INSTALL_LIBNAME=libfftw2xc_SINGLE.a" \
     --command-flag "PRECISION=MKL_SINGLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "INSTALL_LIBNAME=libfftw2xc_DOUBLE.a" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
@@ -37,14 +37,14 @@ pack_set --command "cd $MKL_PATH/interfaces/fftw2xf"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "i8=no" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "INSTALL_LIBNAME=libfftw2xf_SINGLE.a" \
     --command-flag "PRECISION=MKL_SINGLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "i8=no" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "INSTALL_LIBNAME=libfftw2xf_DOUBLE.a" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
@@ -56,7 +56,7 @@ pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "mpi=openmpi" \
     --command-flag "interface=lp64" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "PRECISION=MKL_SINGLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 
@@ -64,7 +64,7 @@ pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "mpi=openmpi" \
     --command-flag "interface=lp64" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib" \
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)" \
     --command-flag "PRECISION=MKL_DOUBLE"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 fi

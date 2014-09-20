@@ -9,8 +9,10 @@ for pack in \
     http://qe-forge.org/gf/download/frsrelease/116/407/pwcond-5.0.2.tar.gz \
     http://qe-forge.org/gf/download/frsrelease/116/409/tddfpt-5.0.2.tar.gz 
 do
-    
-    pack_set --command "wget $pack -O archive/$(basename ${pack:10})"
+
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
+    mywget $pack $o
+    pack_set --command "cp $o archive/$(basename ${pack:10})"
     pack_set --command "tar xfz archive/$(basename ${pack:10})"
 
 done
@@ -19,9 +21,9 @@ pack_set --command "mv PWgui-5.0.2 PWgui"
 
 # Patch it...
 pack_set --command "pushd ../"
-pack_set --command "wget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff"
-pack_set --command "patch -p0 < espresso-5.0.2-5.0.3.diff"
-pack_set --command "rm espresso-5.0.2-5.0.3.diff"
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-espresso-5.0.2-5.0.3.diff
+mywget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff $o
+pack_set --command "patch -p0 < $o"
 pack_set --command "popd"
 
 libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
@@ -38,15 +40,17 @@ for pack in \
     http://qe-forge.org/gf/download/frsrelease/151/523/PWCOND-5.0.99.tar.gz
 do
     
-    opack=$(basename ${pack:10})
-    pack_set --command "wget $pack -O archive/$opack"
-    pack_set --command "tar xfz archive/$opack --strip 1"
-
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
+    mywget $pack $o
+    pack_set --command "cp $o archive/$(basename ${pack:10})"
+    pack_set --command "tar xfz archive/$(basename ${pack:10}) --strip 1"
+    
 done
 pack="http://qe-forge.org/gf/download/frsrelease/116/408/PWgui-5.0.2.tgz"
-opack=$(basename ${pack:10})
-pack_set --command "wget $pack -O archive/$opack"
-pack_set --command "tar xfz archive/$opack"
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
+mywget $pack $o
+pack_set --command "cp $o archive/$(basename ${pack:10})"
+pack_set --command "tar xfz archive/$(basename ${pack:10})"
 
 pack_set --command "mv PWgui-5.0.2 PWgui-5.0.1"
 

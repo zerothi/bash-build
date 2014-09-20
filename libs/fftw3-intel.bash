@@ -16,13 +16,13 @@ pack_set --install-prefix $(pack_get --install-prefix fftw[intel])
 pack_set --install-query $(pack_get --library-path)/libfftw3xf.a
 
 # Create the directory (we are not sure that the makefiles will do...)
-pack_set --command "mkdir -p $(pack_get --install-prefix)/lib"
+pack_set --command "mkdir -p $(pack_get --library-path)"
 
 # Install the C wrappers (in both precisions)
 pack_set --command "cd $MKL_PATH/interfaces/fftw3xc"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
-    --command-flag "install_to=$(pack_get --install-prefix)/lib" \
+    --command-flag "install_to=$(pack_get --library-path)" \
     --command-flag "install_as=libfftw3xc.a"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 
@@ -32,7 +32,7 @@ pack_set --command "cd $MKL_PATH/interfaces/fftw3xf"
 pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "i8=no fname=a_name_" \
-    --command-flag "install_to=$(pack_get --install-prefix)/lib" \
+    --command-flag "install_to=$(pack_get --library-path)" \
     --command-flag "install_as=libfftw3xf.a"
 pack_set --command "rm -rf $(pack_get --library-path)/obj*"
 
@@ -44,7 +44,7 @@ pack_set --command "make libintel64" \
     --command-flag "compiler=intel" \
     --command-flag "mpi=openmpi" \
     --command-flag "interface=lp64" \
-    --command-flag "INSTALL_DIR=$(pack_get --install-prefix)/lib"
+    --command-flag "INSTALL_DIR=$(pack_get --library-path)"
 fi
 
 pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
