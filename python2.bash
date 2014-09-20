@@ -16,9 +16,7 @@ pack_set --module-requirement zlib \
     --module-requirement expat \
     --module-requirement libffi
 
-if $(is_host eris) ; then
-    pack_set --module-opt "--prepend-ENV $(pack_get --prefix)/lib64/python2.7/lib-dynload"
-fi
+pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
