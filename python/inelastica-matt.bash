@@ -18,15 +18,19 @@ pack_set --module-requirement netcdf-serial \
 
 # patch it...
 if [ $(vrs_cmp $v 309) -lt 0 ]; then
-    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/Inelastica.py.patch-r$v"
-    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v"
-    pack_set --command "patch -R scripts/Inelastica inelastica.patch-r$v"
-    pack_set --command "patch package/Inelastica.py Inelastica.py.patch-r$v"
-    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v"
-    pack_set --command "patch package/NEGF.py NEGF_double_electrode_r$v"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-Inelastica.py.patch-p$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/Inelastica.py.patch-r$v $o
+    pack_set --command "patch package/Inelastica.py $o"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-inelastica.patch-p$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v $o
+    pack_set --command "patch -R scripts/Inelastica $o"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-NEGF_double_electrode_r$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v $o
+    pack_set --command "patch package/NEGF.py $o"
 else
-    pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v"
-    pack_set --command "patch -p0 < NEGF_double_electrode_r$v"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-NEGF_double_electrode_r$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v $o
+    pack_set --command "patch -p0 < $o"
 fi
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"

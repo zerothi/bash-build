@@ -15,11 +15,12 @@ pack_set --module-requirement netcdf-serial \
     --module-requirement scientificpython
 
 if [ $(pack_get --version) -lt 260 ]; then
-# patch it...
-pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/Inelastica.py.patch-r$v"
-pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v"
-pack_set --command "patch -R scripts/Inelastica inelastica.patch-r$v"
-pack_set --command "patch package/Inelastica.py Inelastica.py.patch-r$v"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-Inelastica.py.patch-p$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/Inelastica.py.patch-r$v $o
+    pack_set --command "patch package/Inelastica.py $o"
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-inelastica.patch-p$v
+    mywget http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v $o
+    pack_set --command "patch -R scripts/Inelastica $o"
 fi
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
