@@ -408,13 +408,14 @@ function add_package {
 	    -version|-v) v=$1 ; shift ;;
 	    -package|-p) package=$1 ; shift ;;
 	    -no-default-modules) no_def_mod=1 ;;
-	    -lib-path|-lp) lp=$1 ; 
+	    -lib-path|-lp) lp=$1 ; shift
 		case $lp in
-		    /*) # do nothing
+		    /*) 
+			lp=${lp#\/}
 			;;
-		    *) lp="/$lp"
+		    *) # do nothing
 			;;
-		esac ; shift ;;
+		esac ;;
 	    -alias|-a) alias=$1 ; shift ;;
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
@@ -958,8 +959,8 @@ function pack_install {
     # Fix the library path...
     # We favour lib64
     for cmd in lib lib64 ; do
-	if [ -d $(pack_get --install-prefix)/$cmd ]; then
-	    pack_set --library-path $(pack_get --install-prefix)/$cmd $idx
+	if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
+	    pack_set --library-path $cmd $idx
 	fi
     done
 
