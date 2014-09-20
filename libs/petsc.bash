@@ -9,6 +9,8 @@ pack_set --install-query $(pack_get --library-path)/libpetsc.so
 pack_set \
     $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
 
+pack_set $(list -p '--host-reject ' hemera eris)
+
 tmp=''
 if $(is_c intel) ; then
     tmp="$tmp --with-blas-lapack-dir=$MKL_PATH/lib/intel64"

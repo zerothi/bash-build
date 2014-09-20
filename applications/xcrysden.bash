@@ -5,7 +5,7 @@ add_package http://www.xcrysden.org/download/xcrysden-1.5.53.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix "--host-reject " surt muspel slid)
+pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris)
 
 pack_set --install-query $(pack_get --install-prefix)/bin/xcrysden
 

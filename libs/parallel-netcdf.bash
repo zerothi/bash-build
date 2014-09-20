@@ -27,9 +27,13 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+if ! $(is_host hemera eris) ; then
+	pack_set --command "make check > tmp.test 2>&1"
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+if ! $(is_host hemera eris) ; then
+	pack_set_mv_test tmp.test
+fi
 
 
 if [ $(pack_installed flex) -eq 1 ] ; then
