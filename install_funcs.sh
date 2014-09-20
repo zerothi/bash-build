@@ -397,7 +397,7 @@ function add_package {
     # Default to default index
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp="/lib"
+    local lp="lib"
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
@@ -519,13 +519,14 @@ function pack_set {
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix)  install="$1" ; shift ;;
-	    -L|-library-suffix)  lib="$1" 
+	    -L|-library-suffix)  lib="$1" ; shift
 		case $lib in
-		    /*) # do nothing
+		    /*)
+			lib=${lib#\/}
 			;;
-		    *) lib="/$lib"
+		    *)  # do nothing
 			;;
-		esac ; shift ;;
+		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
             -R|-module-requirement)  
 		local tmp="$(pack_get --module-requirement $1)"
