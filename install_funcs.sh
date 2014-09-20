@@ -563,7 +563,7 @@ function pack_set {
 	# This is only because we haven't used the index thing before
 	local opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
-	lib=/lib # ensure setting library path
+	lib=lib # ensure setting library path
     fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
@@ -961,7 +961,7 @@ function pack_install {
     # We favour lib64
     for cmd in lib lib64 ; do
 	if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
-	    pack_set --library-path $cmd $idx
+	    pack_set --library-suffix $cmd $idx
 	fi
     done
 
