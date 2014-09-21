@@ -11,6 +11,7 @@ source helpers/autoconf.bash
 source helpers/automake.bash
 source helpers/libtool.bash
 source helpers/cmake.bash
+source helpers/freetype.bash
 
 function echo_modules {
     # Retrieve all modules 

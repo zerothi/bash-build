@@ -1184,7 +1184,7 @@ EOF
     if [ ! -z "$cmt" ]; then
 	case $_module_format in
 	    TCL)
-		cmt=", [\$compiler]"
+		cmt=", (\$compiler)"
 		cat <<EOF >> "$mfile"
 set compiler	$(get_c)
 EOF

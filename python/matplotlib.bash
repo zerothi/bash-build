@@ -8,7 +8,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
-pack_set --module-requirement numpy
+pack_set --module-requirement numpy --module-requirement gen-freetype
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"

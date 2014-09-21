@@ -45,7 +45,7 @@ pack_set --prefix $(pack_get --prefix netcdf[$v])
 # Add requirments when creating the module
 pack_set --module-requirement netcdf[$v]
 
-pack_set --install-query $(pack_get --LD netcdf[$v])/libnetcdff.a
+pack_set --install-query $(pack_get --LD)/libnetcdff.a
 
 tmp_cppflags="-DgFortran"
 
