@@ -45,6 +45,4 @@ pack_set --command "REQUIRES_RTTI=1 make check-all LIT_ARGS='-s -j2' > tmp.test 
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
-pack_install
-
 done

@@ -10,11 +10,8 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 # Make link to default version (always the newest version, latest installation)
 pack_set --command "cd $(pack_get --prefix)/Modules/"
 pack_set --command "ln -fs $(pack_get --version) default" 
-
-pack_install

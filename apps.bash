@@ -61,3 +61,4 @@ source applications/mpb-serial.bash # [gmp,libunistring,guile]
 source applications/meep.bash # [gmp,libunistring,guile]
 source applications/meep-serial.bash # [gmp,libunistring,guile]
 
+pack_install

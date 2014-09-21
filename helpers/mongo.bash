@@ -19,5 +19,3 @@ pack_set --command "scons" \
     --command-flag "install"
 
 pack_set --command "module unload $(pack_get --module-load scons)"
-
-pack_install

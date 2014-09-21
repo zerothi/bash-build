@@ -27,5 +27,3 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 pack_set_mv_test tmp.test
-
-pack_install

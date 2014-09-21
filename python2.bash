@@ -111,7 +111,6 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy mpi4py) scientificpython scipy cython mpi4py)
 
-
 create_module \
     -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
     -v $(date +'%g-%j') \

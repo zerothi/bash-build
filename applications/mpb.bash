@@ -44,8 +44,7 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 # Install the inversion symmetric part
 pack_set --command "make distclean"
@@ -59,8 +58,7 @@ pack_set --command "./configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 pack_install
 

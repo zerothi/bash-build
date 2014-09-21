@@ -31,9 +31,6 @@ source libs/atlas.bash
 source libs/openblas.bash
 source libs/lapack.bash
 
-# ATLAS needs to be installed prematurely...
-install_all --from zlib
-
 source libs/plasma.bash
 #source libs/flame.bash
 source libs/scalapack.bash
@@ -73,14 +70,14 @@ source libs/superlu-dist.bash
 source libs/petsc.bash
 source libs/slepc.bash
 
-install_all --from plasma
-
 # Libraries for DFT
 source libs/libxc.bash
 source libs/etsf_io.bash
 source libs/atompaw.bash
 
-install_all --from libxc
+# We need to end lib-installation
+# before proceeding
+pack_install
 
 # We install the module scripts here:
 create_module \

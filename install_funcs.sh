@@ -9,7 +9,6 @@ _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 [ -z "$DOWNLOAD" ] && DOWNLOAD=0
-[ -z "$IM_INSTALL" ] && IM_INSTALL=1
 
 if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
@@ -387,10 +386,8 @@ function add_package {
     [ $DEBUG -ne 0 ] && do_debug --enter add_package
     # If we have immediate install we check to see if we
     # should install the previous package.
-    if [ $IM_INSTALL -eq 1 ]; then
-	if [ $_N_archives -ge 0 ]; then
-	    pack_install $_N_archives
-	fi
+    if [ $_N_archives -ge 0 ]; then
+	pack_install $_N_archives
     fi
     let _N_archives++
     # Collect options

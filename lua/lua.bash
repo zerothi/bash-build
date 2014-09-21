@@ -36,5 +36,3 @@ source lua/penlight.bash
 source lua/peg.bash
 source lua/lmod.bash
 
-install_all --from lua
-

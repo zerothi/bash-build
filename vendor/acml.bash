@@ -44,8 +44,6 @@ if $(is_host ntch zero) ; then
     pack_set --command "rm -rf $(pack_get --prefix)/${dc}64_fma4_mp"
 fi
 
-pack_install
-
 # We need to create all the different modules...
 for directive in nothing fma4 ; do
 if $(is_host ntch zero) ; then
@@ -89,9 +87,6 @@ tmp=${tmp//ifort/intel}
 [ ! -z "$directive" ] && tmp="${tmp}-$directive"
 [ ! -z "$mp" ] && tmp="${tmp}-$mp"
 pack_set --module-name acml/${v//-/.}/$tmp
-
-# As this is only module-installations we might as well do it immediately...
-pack_install
 
 done # mp
 done # directive

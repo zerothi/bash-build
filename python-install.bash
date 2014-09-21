@@ -37,7 +37,6 @@ build_set --default-build python$IpV
 # Python building utility
 source python/scons.bash
 
-install_all --from scons
 # Install the helper (mongodb)
 source helpers/mongo.bash
 
@@ -61,8 +60,6 @@ source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
 source python/sphinx.bash # jinja2
-
-install_all --from mongo
 
 # Done with packages only installed in python-home! ^
 
@@ -107,8 +104,6 @@ source python/scikit-optimization.bash
 # Must be installed after numpy
 source python/llvmpy.bash
 source python/llvmmath.bash
-
-# Numba needs to release a new version (and numpy needs 1.9)
 source python/numba.bash
 
 # Physics related python modules
@@ -128,6 +123,6 @@ source python/phonopy.bash
 source python/tinyarray.bash
 source python/kwant.bash
 
-install_all --from pymongo
+pack_install
 
 build_set --default-build $def_idx

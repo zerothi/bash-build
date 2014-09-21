@@ -37,8 +37,6 @@ pack_set --command "make INSTALL_LIB='$(pack_get --LD)/'" \
     --command-flag "install"
 
 
-
-
 # Add the UMFPACK include directory to the path (we need to run this EVERY time)
 add_package \
     --package UMFPACK-make \
