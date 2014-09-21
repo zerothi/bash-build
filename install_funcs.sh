@@ -577,7 +577,11 @@ function pack_set {
 	req="$(rem_dup $req)"
 	_mod_req[$index]="$req"
     fi
-    [ ! -z "$install" ]    && _install_prefix[$index]="$install"
+    if [ ! -z "$install" ];
+	_install_prefix[$index]="$install"
+	[ -d "$install/lib" ] && lib="lib"
+	[ -d "$install/lib64" ] && lib="lib64"
+    fi
     [ ! -z "$lib" ]        && _lib_prefix[$index]="$lib"
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
