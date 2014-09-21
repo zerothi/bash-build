@@ -1,6 +1,9 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
+# Set options
+set -o hashall
+
 # Default debugging variables
 _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
@@ -397,7 +400,7 @@ function add_package {
     # Default to default index
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp="lib"
+    local lp=""
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
@@ -484,9 +487,14 @@ function add_package {
     tmp="$(build_get --build-installation-path[$b_name])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
-    _lib_prefix[$_N_archives]=$lp
-    # Just in case lib64 already exists
-    [ -d ${_install_prefix[$_N_archives]}/${_lib_prefix[$_N_archives]}64 ] && _lib_prefix[$_N_archives]=${lp}64
+    if [ -z "$lp" ]; then
+	_lib_prefix[$_N_archives]=lib
+        # Just in case lib64 already exists
+	[ -d ${_install_prefix[$_N_archives]}/lib64 ] && \
+	    _lib_prefix[$_N_archives]=lib64
+    else
+	_lib_prefix[$_N_archives]=$lp
+    fi
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
@@ -518,7 +526,7 @@ function pack_set {
 		install="$_install_prefix_no_path" ;;
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
-            -I|-install-prefix)  install="$1" ; shift ;;
+            -I|-install-prefix|-prefix)  install="$1" ; shift ;;
 	    -L|-library-suffix)  lib="$1" ; shift
 		case $lib in
 		    /*)
@@ -563,7 +571,6 @@ function pack_set {
 	# This is only because we haven't used the index thing before
 	local opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
-	lib=lib # ensure setting library path
     fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
@@ -1082,10 +1089,10 @@ function create_module {
     local name; local version; local echos
     local path; local help; local whatis; local opt
     local env="" ; local tmp=""
-    local mod_path=""
+    local mod_path="" ;local cmt=
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
-    local lua_family=""
+    local lua_family="" ; local fpath=
     local fm_comment="#"
     while [ $# -gt 0 ]; do
 	opt="$(trim_em $1)" ; shift
@@ -1113,6 +1120,7 @@ function create_module {
 		doerr "$opt" "Option for create_module $opt was not recognized"
 	esac
     done
+    fpath=$path
     require="$(rem_dup $require)"
     load="$(rem_dup $load)"
     conflict="$(rem_dup $conflict)"
@@ -1175,16 +1183,16 @@ EOF
 	    doerr "create_module" "Unknown module type, [TCL,LUA]"
 	    ;;
     esac
-    tmp="$(get_c)"
-    if [ ! -z "$tmp" ]; then
+    cmt="$(get_c)"
+    if [ ! -z "$cmt" ]; then
 	case $_module_format in
 	    TCL)
+		cmt=", [\$compiler]"
 		cat <<EOF >> "$mfile"
 set compiler	$(get_c)
 EOF
 		;;
-	    LUA) tmp=", compiler \$compiler"
-		cat <<EOF >> "$mfile"
+	    LUA) cat <<EOF >> "$mfile"
 local compiler      = "$(get_c)"
 EOF
 		;;
@@ -1192,9 +1200,15 @@ EOF
     fi
 
     case $_module_format in
-	TCL) cat <<EOF >> "$mfile"
-set basepath	${path//$version/\$version}
+	TCL) 
+	    tmp="${path//$version/\$version}"
+	    if [ ! -z "$cmt" ]; then
+		tmp="${tmp//$(get_c)/\$compiler}"
+	    fi
+	    cat <<EOF >> "$mfile"
+set basepath	$tmp
 EOF
+	    fpath="\$basepath"
 	    ;;
 	LUA) cat <<EOF >> "$mfile"
 local basepath      = "${path%$version*}" .. version .. "${path#*$version}"
@@ -1209,7 +1223,7 @@ proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
 }
 
-module-whatis "Loads \$modulename (\$version)$tmp."
+module-whatis "Loads \$modulename (\$version)$cmt."
 
 EOF
 	    ;;
@@ -1305,27 +1319,27 @@ EOF
     fi
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
-	"$(_module_fmt_routine --prepend-path PATH $path/bin)"
+	"$(_module_fmt_routine --prepend-path PATH $fpath/bin)"
     _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib/pkgconfig)"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
     _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib64/pkgconfig)"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
     _add_module_if -F $force -d "$path/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $path/man)"
+	"$(_module_fmt_routine --prepend-path MANPATH $fpath/man)"
     _add_module_if -F $force -d "$path/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $path/share/man)"
+	"$(_module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
     #_add_module_if -F $force -d "$path/lib" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
  #   _add_module_if -F $force -d "$path/lib64" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
-	"$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python)"
+	"$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
     for PV in 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python$PV/site-packages)"
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
-	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib64/python$PV/site-packages)"
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
     if [ ! -z "$lua_family" ]; then
 	case $_module_format in
