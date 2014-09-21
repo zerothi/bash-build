@@ -656,7 +656,7 @@ function pack_get {
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
-		-L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -689,7 +689,7 @@ function pack_get {
 		                 _ps "${_mod_req[$index]}" ;;
 	    -module-paths-requirement) 
 		for m in ${_mod_req[$index]} ; do
-		    if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
+		    if [ "$(pack_get --prefix $m)" == "$_install_prefix_no_path" ]; then
 			continue
 		    else
 			_ps "$m "
@@ -700,7 +700,7 @@ function pack_get {
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
 	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+	    -L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) 
                                  _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
