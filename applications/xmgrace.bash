@@ -3,7 +3,7 @@ add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.23.t
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/fdf2fit
+pack_set --install-query $(pack_get --prefix)/bin/fdf2fit
 
 pack_set --module-opt "--lua-family grace"
 
@@ -18,8 +18,8 @@ pack_set --command "./configure" \
     --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement)) $CPPFLAGS'" \
     --command-flag "--enable-netcdf" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--enable-grace-home=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--enable-grace-home=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

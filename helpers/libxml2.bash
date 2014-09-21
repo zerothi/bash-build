@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-requirement gen-zlib
 
-pack_set --install-query $(pack_get --install-prefix)/include/xml2.h
+pack_set --install-query $(pack_get --prefix)/include/xml2.h
 
 # Preload all tools for creating the configure script
 pack_set --command "module load $(pack_get --module-requirement libtool)" \
@@ -19,8 +19,8 @@ pack_set --command "module unload $(pack_get --module-name libtool)" \
     --command-flag "$(pack_get --module-requirement libtool)"
 
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
-    --command-flag "--with-zlib=$(pack_get --install-prefix gen-zlib)"
+    --command-flag "--prefix $(pack_get --prefix)" \
+    --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

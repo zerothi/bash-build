@@ -5,21 +5,21 @@ add_package \
 pack_set -s $IS_MODULE
 
 # Force the named alias
-pack_set --install-query $(pack_get --install-prefix)/bin/povray
+pack_set --install-query $(pack_get --prefix)/bin/povray
 
 pack_set --module-opt "--lua-family povray"
 
 # Compile commands
 pack_set --command "./configure" \
 	--command-flag "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
-	--command-flag "--prefix=$(pack_get --install-prefix)"
+	--command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make"
 pack_set --command "make install"
 
 ## install commands... (this will install the non-GUI version)
-#pack_set --command "printf '%s%s\n' 'U' '$(pack_get --install-prefix)' | ./install -no-arch-check"
+#pack_set --command "printf '%s%s\n' 'U' '$(pack_get --prefix)' | ./install -no-arch-check"
 
 pack_install
 

@@ -10,7 +10,7 @@ pack_set --command "rm config"
 pack_set --command "echo '' > config"
 pack_set --command "echo '' > config"
 pack_set --command "sed -i '1 a\
-PREFIX = $(pack_get --install-prefix lua)\n\
+PREFIX = $(pack_get --prefix lua)\n\
 LUA_LIBDIR = \$(PREFIX)/lib/lua/$lua_V\n\
 LUA_INC =\$(PREFIX)/include\n\
 LIB_OPTION = -shared\n\
@@ -27,5 +27,5 @@ pack_set --command "make"
 pack_set --command "make install"
 
 # Copy the header to the correct placement
-pack_set --command "cp src/lfs.h $(pack_get --install-prefix lua)/include/"
+pack_set --command "cp src/lfs.h $(pack_get --prefix lua)/include/"
 

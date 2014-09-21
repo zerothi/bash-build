@@ -13,10 +13,10 @@ pack_set --module-opt "--lua-family vmd"
 # Force the named alias
 pack_set --directory vmd-$(pack_get --version)
 
-pack_set --install-query $(pack_get --install-prefix)/bin/vmd
+pack_set --install-query $(pack_get --prefix)/bin/vmd
 
 # Install commands that it should run
-pack_set --command "VMDINSTALLBINDIR=$(pack_get --install-prefix)/bin" \
+pack_set --command "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
     --command-flag "VMDINSTALLLIBRARYDIR=$(pack_get --library-path)" \
     --command-flag "./configure"
 

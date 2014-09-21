@@ -8,7 +8,7 @@ pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family octopus"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/octopus_mpi
+pack_set --install-query $(pack_get --prefix)/bin/octopus_mpi
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement libxc
@@ -54,12 +54,12 @@ fi
 pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
-    --command-flag "--with-libxc-include=$(pack_get --install-prefix libxc)/include" \
-    --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
-    --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
-    --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \
+    --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
+    --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
+    --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
+    --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
     --command-flag "--with-arpack='$(list --LDFLAGS --Wlrpath arpack-ng) -lparpack -larpack'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "$tmp"
 
 # Make commands
@@ -74,12 +74,12 @@ pack_set --command "rm -rf *"
 pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
-    --command-flag "--with-libxc-include=$(pack_get --install-prefix libxc)/include" \
-    --command-flag "--with-etsf-io-prefix=$(pack_get --install-prefix etsf_io)" \
-    --command-flag "--with-gsl-prefix=$(pack_get --install-prefix gsl)" \
-    --command-flag "--with-netcdf-prefix=$(pack_get --install-prefix netcdf)" \
+    --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
+    --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
+    --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
+    --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
     --command-flag "--with-arpack='$(list --LDFLAGS --Wlrpath arpack-ng) -lparpack -larpack'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "$tmp"
 
 # Make commands

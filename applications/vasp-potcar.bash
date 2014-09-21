@@ -32,8 +32,8 @@ function tmp_start {
     pack_set --prefix-and-module \
 	$(pack_get --alias)/$1/$2
     pack_set --module-opt "--lua-family vasp-potcar"
-    pack_set --command "mkdir -p $(dirname $(pack_get --install-prefix))"
-    pack_set --command "rm -rf $(pack_get --install-prefix)"
+    pack_set --command "mkdir -p $(dirname $(pack_get --prefix))"
+    pack_set --command "rm -rf $(pack_get --prefix)"
     pack_set --command "mkdir tmp"
     pack_set --command "cd tmp"
 
@@ -44,10 +44,10 @@ function tmp_end {
     # The file permissions are not expected to be correct (we correct them
     # here)
     pack_set --command "chmod 0644 tmp/*/*"
-    pack_set --command "mv tmp $(pack_get --install-prefix)"
-    pack_set --module-opt "--set-ENV POTCARS=$(pack_get --install-prefix)"
+    pack_set --command "mv tmp $(pack_get --prefix)"
+    pack_set --module-opt "--set-ENV POTCARS=$(pack_get --prefix)"
     # We only check for one
-    pack_set --install-query $(pack_get --install-prefix)/$3
+    pack_set --install-query $(pack_get --prefix)/$3
     pack_install
 }
 

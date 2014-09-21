@@ -20,8 +20,8 @@ fi
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF90} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-zlib=$(pack_get --prefix zlib)" \
     --command-flag --enable-parallel \
     --command-flag --enable-shared \
     --command-flag --enable-static \

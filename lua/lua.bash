@@ -6,14 +6,14 @@ add_package --build generic http://www.lua.org/ftp/lua-5.2.3.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/lua
+pack_set --install-query $(pack_get --prefix)/bin/lua
 
 # Correct the installation compilation
 pack_set --command "sed -i -e '/^CC/{s:.*:CC = $CC:}' src/Makefile"
 pack_set --command "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_ALL \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
 
 # Correct the default package directory
-pack_set --command "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --install-prefix)/\":' src/luaconf.h"
+pack_set --command "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --prefix)/\":' src/luaconf.h"
 
 # Make lua
 if $(is_host hemera eris) ; then
@@ -23,7 +23,7 @@ else
 fi
 
 # Make install lua
-pack_set --command "make install INSTALL_TOP=$(pack_get --install-prefix)"
+pack_set --command "make install INSTALL_TOP=$(pack_get --prefix)"
 
 lua_V=5.2
 

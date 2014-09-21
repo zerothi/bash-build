@@ -12,7 +12,7 @@ if $(is_c intel) ; then
 fi
 pack_set $(list --prefix "--host-reject " hemera eris)
 
-pack_set --install-query $(pack_get --install-prefix)/bin/llvm-ar
+pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
 pack_set --module-requirement gen-zlib \
     --module-requirement gen-libffi
@@ -37,7 +37,7 @@ pack_set --command "../configure" \
     --command-flag "--enable-zlib" \
     --command-flag "--enable-libffi" \
     --command-flag "--enable-optimized" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "REQUIRES_RTTI=1 make $(get_make_parallel)"

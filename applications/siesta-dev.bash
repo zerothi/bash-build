@@ -4,7 +4,7 @@ add_package http://www.student.dtu.dk/~nicpa/packages/siesta-dev-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --install-prefix)/bin/tbtrans
+pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
@@ -61,11 +61,11 @@ source applications/siesta-linalg.bash
 pack_set --command "sed -i -e 's/c(1:[A-Za-z]*)[[:space:]]*=>/c =>/g' ../Src/m_ts_contour.f90"
 
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 pack_set --command "siesta_install -v $v --siesta"
 source applications/siesta-speed.bash libSiestaXC.a siesta
-pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
+pack_set --command "cp siesta $(pack_get --prefix)/bin/"
 
 pack_set --command "make clean"
 
@@ -73,57 +73,57 @@ pack_set --command "make clean"
 #pack_set --command "../Src/obj_setup.sh"
 #pack_set --command "siesta_install --transiesta"
 source applications/siesta-speed.bash libSiestaXC.a transiesta
-pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
+pack_set --command "cp transiesta $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../Util/TBTrans"
 pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans_orig"
+pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans_orig"
 
 pack_set --command "cd ../TBTrans_rep"
 pack_set --command "siesta_install --tbtrans"
 pack_set --command "make dep"
 pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --install-prefix)/bin/tbtrans"
+pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans"
 
 pack_set --command "cd ../Bands"
 pack_set --command "make all"
-pack_set --command "cp new.gnubands.o $(pack_get --install-prefix)/bin/gnubands"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/gnubands"
-pack_set --command "cp eigfat2plot.o $(pack_get --install-prefix)/bin/eigfat2plot"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/eigfat2plot"
+pack_set --command "cp new.gnubands.o $(pack_get --prefix)/bin/gnubands"
+pack_set --command "chmod a+x $(pack_get --prefix)/bin/gnubands"
+pack_set --command "cp eigfat2plot.o $(pack_get --prefix)/bin/eigfat2plot"
+pack_set --command "chmod a+x $(pack_get --prefix)/bin/eigfat2plot"
 
 pack_set --command "cd ../Contrib/APostnikov"
 pack_set --command "make all"
-pack_set --command "cp *xsf fmpdos $(pack_get --install-prefix)/bin/"
+pack_set --command "cp *xsf fmpdos $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../../Denchar/Src"
 pack_set --command "make denchar"
-pack_set --command "cp denchar $(pack_get --install-prefix)/bin/"
+pack_set --command "cp denchar $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../../Eig2DOS"
 pack_set --command "make"
-pack_set --command "cp Eig2DOS $(pack_get --install-prefix)/bin/"
+pack_set --command "cp Eig2DOS $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../WFS"
 pack_set --command "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
-pack_set --command "cp info_wfsx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp readwf $(pack_get --install-prefix)/bin/"
-pack_set --command "cp readwfx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wfs2wfsx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wfsx2wfs $(pack_get --install-prefix)/bin/"
+pack_set --command "cp info_wfsx $(pack_get --prefix)/bin/"
+pack_set --command "cp readwf $(pack_get --prefix)/bin/"
+pack_set --command "cp readwfx $(pack_get --prefix)/bin/"
+pack_set --command "cp wfs2wfsx $(pack_get --prefix)/bin/"
+pack_set --command "cp wfsx2wfs $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../HSX"
 pack_set --command "make hs2hsx hsx2hs"
-pack_set --command "cp hs2hsx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp hsx2hs $(pack_get --install-prefix)/bin/"
+pack_set --command "cp hs2hsx $(pack_get --prefix)/bin/"
+pack_set --command "cp hsx2hs $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../Vibra/Src"
 pack_set --command "make"
-pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
+pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../../"
-pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
-pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
+pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
+pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
 pack_install
 

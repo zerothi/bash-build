@@ -9,7 +9,7 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/m4
+pack_set --install-query $(pack_get --prefix)/bin/m4
 
 [ $(pack_installed help2man) -eq 1 ] && \
     pack_set --module-requirement help2man
@@ -17,7 +17,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/m4
 # Install commands that it should run
 pack_set --command "./configure" \
     --command-flag "--enable-c++" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

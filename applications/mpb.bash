@@ -3,7 +3,7 @@ add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/mpbi-mpi
+pack_set --install-query $(pack_get --prefix)/bin/mpbi-mpi
 
 pack_set --host-reject ntch --host-reject zeroth \
     $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
@@ -31,7 +31,7 @@ else
 
 fi
 # Add the CTL library
-tmp="$tmp --with-libctl=$(pack_get --install-prefix libctl)/share/libctl"
+tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
 # Install commands that it should run
 pack_set --command "autoconf configure.ac > configure"
@@ -40,7 +40,7 @@ pack_set --command "./configure" \
     --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement))'" \
     --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
     --command-flag "--with-mpi" \
-    --command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
+    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
@@ -55,7 +55,7 @@ pack_set --command "./configure" \
     --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
     --command-flag "--with-inv-symmetry" \
     --command-flag "--with-mpi" \
-    --command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
+    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

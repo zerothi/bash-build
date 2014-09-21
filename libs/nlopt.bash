@@ -11,8 +11,8 @@ pack_set --install-query $(pack_get --library-path)/libnlopt.a
 
 
 pack_set --command "../configure" \
-    --command-flag "PYTHON='$(pack_get --install-prefix python)/bin/python'" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "PYTHON='$(pack_get --prefix python)/bin/python'" \
+    --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--enable-shared --with-cxx"
 
 # Make commands

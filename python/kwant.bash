@@ -58,7 +58,7 @@ libraries = zmumps mumps_common pord metis\n\
 pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 
 add_test_package

@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 #pack_set --host-reject ntch-
 # --host-reject zeroth
 
-pack_set --install-query $(pack_get --install-prefix)/bin/yambo
+pack_set --install-query $(pack_get --prefix)/bin/yambo
 
 pack_set --module-requirement openmpi --module-requirement netcdf \
     --module-requirement etsf_io --module-requirement fftw-3
@@ -55,17 +55,17 @@ pack_set --command "cp $(pack_get --library-path libxc)/libxc.a lib/"
 
 
 pack_set --command "./configure PFC='$MPIFC' " \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-netcdf-LFS --enable-netcdf-hdf5" \
     --command-flag "--with-blas='$tmp_blas' --with-lapack='$tmp_lapack'" \
     --command-flag "--with-blacs='$tmp_scalapack'" \
     --command-flag "--with-scalapack='$tmp_scalapack'" \
-    --command-flag "--with-etsf-io-include=$(pack_get --install-prefix etsf_io)/include" \
+    --command-flag "--with-etsf-io-include=$(pack_get --prefix etsf_io)/include" \
     --command-flag "--with-etsf-io-lib=$(pack_get --library-path etsf_io)" \
-    --command-flag "--with-netcdf-include=$(pack_get --install-prefix netcdf)/include" \
+    --command-flag "--with-netcdf-include=$(pack_get --prefix netcdf)/include" \
     --command-flag "--with-netcdf-lib=$(pack_get --library-path netcdf)" \
     --command-flag "--with-netcdf-link='$(list --INCDIRS --LDFLAGS --Wlrpath netcdf pnetcdf hdf5 zlib) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--with-fftw=$(pack_get --install-prefix fftw-3)" \
+    --command-flag "--with-fftw=$(pack_get --prefix fftw-3)" \
     --command-flag "--with-iotk=\$(pwd)/my_IOTK --with-p2y=5.0"
 
 # Fix line endings...

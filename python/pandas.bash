@@ -17,7 +17,7 @@ pack_set --command "mkdir -p $(pack_get --library-path)/python$pV/site-packages"
 pack_set --command "$(get_parent_exec) setup.py build"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
 pack_set --command "nosetests --exe pandas > tmp.test 2>&1 ; echo 'Succes'"

@@ -8,7 +8,7 @@ pack_set --module-opt "--lua-family openmx"
 
 pack_set --host-reject ntch-l --host-reject zerothi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/openmx
+pack_set --install-query $(pack_get --prefix)/bin/openmx
 
 pack_set --module-requirement openmpi --module-requirement fftw-3
 
@@ -64,7 +64,7 @@ CC += $FLAG_OMP\nFC += $FLAG_OMP' $file"
     
 fi
 pack_set --command "sed -i '1 a\
-DESTDIR = $(pack_get --install-prefix)/bin\n\
+DESTDIR = $(pack_get --prefix)/bin\n\
 CC = $MPICC $CFLAGS \$(INCS)\n\
 FC = $MPIF90 $FFLAGS \$(INCS)' $file"
 
@@ -80,7 +80,7 @@ LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -
 INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
 
 # prepare the directory of installation
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 # Make commands
 pack_set --command "make"
@@ -89,13 +89,13 @@ for tool in TranMain esp polB analysis_example jx DosMain ; do
     pack_set --command "make $tool"
 done
 # Apparently this is the only tool that is not automatically installed
-pack_set --command "cp TranMain $(pack_get --install-prefix)/bin/"
+pack_set --command "cp TranMain $(pack_get --prefix)/bin/"
 
 # Add an ENV-flag for the pseudos to be accesible
 pack_set --command "cd ../DFT_DATA13"
-pack_set --command "cp -r PAO VPS $(pack_get --install-prefix)/"
-pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --install-prefix)/PAO"
-pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --install-prefix)/VPS"
+pack_set --command "cp -r PAO VPS $(pack_get --prefix)/"
+pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --prefix)/PAO"
+pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --prefix)/VPS"
 
 pack_install
 

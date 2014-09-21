@@ -6,13 +6,13 @@ pack_set --module-opt "--lua-family gromacs"
 
 pack_set --host-reject ntch --host-reject zerothi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/GMXRC
+pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
 pack_set --module-requirement openmpi --module-requirement fftw-3
 
 pack_set --command "module load $(pack_get --module-name cmake)"
 
-tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --install-prefix)"
+tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 if $(is_c intel) ; then
     # hopefully this should be enough
     tmp="$tmp -DGMX_BLAS_USER='-mkl=parallel'"
@@ -43,15 +43,15 @@ pack_set --command "make install"
 pack_set --command "module unload $(pack_get --module-name cmake)"
 
 # Add GROMACS envs
-pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --install-prefix)/bin"
+pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --prefix)/bin"
 pack_set --module-opt "--set-ENV GMXLDLIB=$(pack_get --library-path)"
-pack_set --module-opt "--set-ENV GMXMAN=$(pack_get --install-prefix)/man"
-pack_set --module-opt "--set-ENV GMXDATA=$(pack_get --install-prefix)/share/gromacs"
+pack_set --module-opt "--set-ENV GMXMAN=$(pack_get --prefix)/man"
+pack_set --module-opt "--set-ENV GMXDATA=$(pack_get --prefix)/share/gromacs"
 
 # Add auto source scripts (if users wishes to use these)
-pack_set --module-opt "--set-ENV GMXRC_BASH=$(pack_get --install-prefix)/bin/GMXRC.bash"
-pack_set --module-opt "--set-ENV GMXRC_CSH=$(pack_get --install-prefix)/bin/GMXRC.csh"
-pack_set --module-opt "--set-ENV GMXRC_ZSH=$(pack_get --install-prefix)/bin/GMXRC.zsh"
+pack_set --module-opt "--set-ENV GMXRC_BASH=$(pack_get --prefix)/bin/GMXRC.bash"
+pack_set --module-opt "--set-ENV GMXRC_CSH=$(pack_get --prefix)/bin/GMXRC.csh"
+pack_set --module-opt "--set-ENV GMXRC_ZSH=$(pack_get --prefix)/bin/GMXRC.zsh"
 
 pack_install
 

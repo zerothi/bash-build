@@ -5,7 +5,7 @@ add_package http://www.open-mpi.org/software/ompi/v1.8/downloads/openmpi-1.8.2.t
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # What to check for when checking for installation...
-pack_set --install-query $(pack_get --install-prefix)/bin/mpif90
+pack_set --install-query $(pack_get --prefix)/bin/mpif90
 
 pack_set --host-reject surt muspel slid
 
@@ -34,8 +34,8 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-hwloc=$(pack_get --install-prefix hwloc)"
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-hwloc=$(pack_get --prefix hwloc)"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
 pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"

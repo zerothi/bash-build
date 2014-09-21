@@ -43,7 +43,7 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "AR=$AR" \
     --command-flag "RANLIB=ranlib" \
     --command-flag "./configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-arpack" \
     --command-flag "--with-arpack-dir=$(pack_get --library-path parpack)" \
     --command-flag "--with-arpack-flags='-lparpack -larpack'"
@@ -62,10 +62,10 @@ pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
 
 # This tests the installation (i.e. linking)
-pack_set --command "make SLEPC_DIR=$(pack_get --install-prefix) test > tmp.test 2>&1"
+pack_set --command "make SLEPC_DIR=$(pack_get --prefix) test > tmp.test 2>&1"
 pack_set_mv_test tmp.test
 
-pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --install-prefix)"
+pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --prefix)"
 
 # Clean up the unused module
 pack_set --command "rm -rf $(pack_get --library-path)/modules"

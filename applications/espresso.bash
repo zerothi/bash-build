@@ -15,7 +15,7 @@ for v in 5.1 ; do
     
     pack_set -s $IS_MODULE
 
-    pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
+    pack_set --install-query $(pack_get --prefix)/bin/pw.x
 
     pack_set --host-reject ntch --host-reject zeroth
 
@@ -72,7 +72,7 @@ for v in 5.1 ; do
 	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement)) $FLAG_OMP'" \
 	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
 	--command-flag "--enable-parallel --enable-openmp" \
-	--command-flag "--prefix=$(pack_get --install-prefix)" 
+	--command-flag "--prefix=$(pack_get --prefix)" 
 
     # Make commands
     for EXE in $libs ; do
@@ -80,13 +80,13 @@ for v in 5.1 ; do
     done
 
     # Prepare installation directories...
-    pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+    pack_set --command "mkdir -p $(pack_get --prefix)/bin"
     pack_set --command "mkdir -p $(pack_get --library-path)"
-    pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
-    pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
+    pack_set --command "mkdir -p $(pack_get --prefix)/include"
+    pack_set --command "cp bin/* $(pack_get --prefix)/bin/"
     # Install the iotk-library
     pack_set --command "cp iotk/src/libiotk.a $(pack_get --library-path)/"
-    pack_set --command "cp iotk/src/*.mod $(pack_get --install-prefix)/include/"
+    pack_set --command "cp iotk/src/*.mod $(pack_get --prefix)/include/"
 
     pack_install
 

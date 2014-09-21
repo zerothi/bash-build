@@ -40,7 +40,7 @@ pack_set --installed 1
 module load $(build_get --default-module)
 module load $mod
 tmp=$(which mpif90)
-pack_set --install-prefix ${tmp//\/bin*/}
+pack_set --prefix ${tmp//\/bin*/}
 module unload $mod
 module unload $(build_get --default-module)
 

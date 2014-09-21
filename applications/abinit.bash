@@ -8,7 +8,7 @@ pack_set --host-reject zerothi
 
 pack_set --module-opt "--lua-family abinit"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/abinit
+pack_set --install-query $(pack_get --prefix)/bin/abinit
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement gsl
@@ -29,7 +29,7 @@ if test -z "$FLAG_OMP" ; then
 fi
 
 pack_set --command "$s '$ a\
-prefix=\"$(pack_get --install-prefix)\"\n\
+prefix=\"$(pack_get --prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
@@ -45,7 +45,7 @@ enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
 enable_mpi=\"yes\"\n\
-with_mpi_prefix=\"$(pack_get --install-prefix openmpi)\"\n\
+with_mpi_prefix=\"$(pack_get --prefix openmpi)\"\n\
 with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list --INCDIRS gsl)\"\n\
@@ -125,10 +125,10 @@ fi
 
 pack_set --command "$s '$ a\
 with_dft_flavor=\"$dft_flavor\"\n\
-with_atompaw_bins=\"$(pack_get --install-prefix atompaw)/bin\"\n\
+with_atompaw_bins=\"$(pack_get --prefix atompaw)/bin\"\n\
 with_atompaw_incs=\"$(list --INCDIRS atompaw)\"\n\
 with_atompaw_libs=\"$(list --LDFLAGS --Wlrpath atompaw) -latompaw\"\n\
-with_wannier90_bins=\"$(pack_get --install-prefix wannier90)/bin\"\n\
+with_wannier90_bins=\"$(pack_get --prefix wannier90)/bin\"\n\
 with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
 with_wannier90_libs=\"$(list --LDFLAGS --Wlrpath wannier90) -lwannier\"' $file"
 

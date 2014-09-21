@@ -11,7 +11,7 @@ pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(
 
 pack_set --command "../configure" \
     --command-flag "--enable-mpi" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

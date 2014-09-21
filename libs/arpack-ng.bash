@@ -38,7 +38,7 @@ pack_set --command "./configure" \
     --command-flag "CFLAGS='$CFLAGS'" \
     --command-flag "MPIF77='$MPIFC'" \
     --command-flag "--enable-mpi $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
 pack_set --command "make check > tmp.test 2>&1"

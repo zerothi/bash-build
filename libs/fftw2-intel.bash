@@ -72,6 +72,6 @@ fi
 pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
 
 # Install a link to the include files
-pack_set --command "cd $(pack_get --install-prefix)"
+pack_set --command "cd $(pack_get --prefix)"
 # Needs to be a softlink!
 pack_set --command "ln -fs $MKL_PATH/include/fftw include"

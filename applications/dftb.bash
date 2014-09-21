@@ -7,7 +7,7 @@ pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --module-opt "--lua-family dftb+"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/dftb+
+pack_set --install-query $(pack_get --prefix)/bin/dftb+
 pack_set --directory $(pack_get --directory)_src
 
 # Check for Intel MKL or not
@@ -82,8 +82,8 @@ pack_set --command "make distclean"
 pack_set --command "make $(get_make_parallel)"
 
 # Make commands
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp _obj_$cc/dftb+ $(pack_get --install-prefix)/bin/"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "cp _obj_$cc/dftb+ $(pack_get --prefix)/bin/"
 
 pack_install
 

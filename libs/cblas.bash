@@ -5,13 +5,13 @@ add_package \
     --version $(pack_get --version blas) \
     http://www.netlib.org/blas/blast-forum/cblas.tgz
 
-pack_set --install-prefix $(pack_get --install-prefix blas)
+pack_set --prefix $(pack_get --prefix blas)
 
 # Required as the version has just been set
 pack_set --install-query $(pack_get --library-path)/libcblas.a
 
 # Create the directory
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
+pack_set --command "mkdir -p $(pack_get --prefix)/include/"
 
 # Prepare the make file
 tmp="sed -i -e"
@@ -30,4 +30,4 @@ pack_set --command "make runtst >> tmp.test 2>&1"
 pack_set_mv_test tmp.test
 
 # Copy over the header files
-pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
+pack_set --command "cp include/*.h $(pack_get --prefix)/include/"

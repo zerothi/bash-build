@@ -6,7 +6,7 @@ pack_set --install-query $(pack_get --library-path)/libgmp.a
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

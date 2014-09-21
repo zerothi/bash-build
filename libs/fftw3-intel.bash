@@ -11,7 +11,7 @@ pack_set --host-reject surt --host muspel --host-reject slid
 # Notice that we install this along with fftw2 from intel
 # The names are not overlapping, hence we do not need
 # to change the version numbering
-pack_set --install-prefix $(pack_get --install-prefix fftw[intel])
+pack_set --prefix $(pack_get --prefix fftw[intel])
 
 pack_set --install-query $(pack_get --library-path)/libfftw3xf.a
 

@@ -33,7 +33,7 @@ fi
 pack_set --command "./configure" \
     --command-flag "LDFLAGS='$LDFLAGS $(list --LDFLAGS $(pack_get --module-paths-requirement)) $(list --Wlrpath $(pack_get --module-paths-requirement))'" \
     --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
-    --command-flag "--prefix $(pack_get --install-prefix) $tmp"
+    --command-flag "--prefix $(pack_get --prefix) $tmp"
 
 
 # Make commands

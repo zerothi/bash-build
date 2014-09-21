@@ -13,7 +13,7 @@ pack_set --module-opt "--lua-family lammps"
 pack_set --directory 'lammps-*'
 pack_set --command 'cd src'
 
-pack_set --install-query $(pack_get --install-prefix)/bin/lmp
+pack_set --install-query $(pack_get --prefix)/bin/lmp
 
 pack_set --module-requirement openmpi \
     --module-requirement fftw-3
@@ -63,14 +63,14 @@ fi
 pack_set --command "make $(get_make_parallel) npa"
 pack_set --command "make makelib"
 pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp lmp_npa $(pack_get --install-prefix)/bin/lmp"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
 pack_set --command "mkdir -p $(pack_get --library-path)"
-pack_set --command "cp liblammps_npa.a $(pack_get --install-prefix)/bin/liblammps.a"
+pack_set --command "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
 # Copy headers over 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
-pack_set --command "cp library.cpp library.h $(pack_get --install-prefix)/include/"
+pack_set --command "mkdir -p $(pack_get --prefix)/include"
+pack_set --command "cp library.cpp library.h $(pack_get --prefix)/include/"
 
 
 pack_install

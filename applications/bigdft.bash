@@ -10,7 +10,7 @@ pack_set --host-reject ntch --host-reject zerothi
 
 pack_set --module-opt "--lua-family bigdft"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/bigdft
+pack_set --install-query $(pack_get --prefix)/bin/bigdft
 
 pack_set --module-requirement openmpi \
     --module-requirement etsf_io \
@@ -58,8 +58,8 @@ fi
 pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
     --command-flag "--disable-internal-libxc" \
     --command-flag "--with-etsf-io" \
-    --command-flag "--with-etsf-io-path=$(pack_get --install-prefix etsf_io)" \
-    --command-flag "--with-netcdf-path=$(pack_get --install-prefix netcdf)" \
+    --command-flag "--with-etsf-io-path=$(pack_get --prefix etsf_io)" \
+    --command-flag "--with-netcdf-path=$(pack_get --prefix netcdf)" \
     --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--with-libxc-libs='$(list --LDFLAGS --Wlrpath libxc) $xclib'" \
     --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
@@ -72,7 +72,7 @@ pack_set --command "sed -i -e 's: doc : :g' Makefile" # fix Makefile
 pack_set --command "make $(get_make_parallel)"
 # It seems like there is a bug in the check call...
 #pack_set --command "make check"
-pack_set --command "make install prefix=$(pack_get --install-prefix)"
+pack_set --command "make install prefix=$(pack_get --prefix)"
 
 pack_set --command "module unload $(pack_get --module-name python) $(pack_get --module-name-requirement python)"
 

@@ -14,7 +14,7 @@ pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(lc
 # Install commands that it should run
 pack_set --command "./configure CC='$CC $pCFLAGS' CXX='$CXX $pCFLAGS'" \
     --command-flag "CPP='$CC -E' CXXCPP='$CXX -E'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
 pack_set --command "make install"

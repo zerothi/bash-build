@@ -13,6 +13,6 @@ for v in 1.6.2 ; do
     
     pack_set --command "$(get_parent_exec) setup.py build"
     pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--home=$(pack_get --install-prefix)" \
+	--command-flag "--home=$(pack_get --prefix)" \
 	
 done

@@ -21,8 +21,8 @@ fi
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-mpi=$(pack_get --install-prefix openmpi)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-mpi=$(pack_get --prefix openmpi)" \
     --command-flag "--enable-fortran"
 
 # Make commands

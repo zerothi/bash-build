@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris)
 
-pack_set --install-query $(pack_get --install-prefix)/bin/xcrysden
+pack_set --install-query $(pack_get --prefix)/bin/xcrysden
 
 pack_set --module-opt "--lua-family xcrysden"
 
@@ -52,12 +52,12 @@ fi
 
 # Install commands that it should run
 pack_set --command "make xcrysden"
-pack_set --command "prefix=$(pack_get --install-prefix) make install"
+pack_set --command "prefix=$(pack_get --prefix) make install"
 
 # Add the XCRYSDEN TOP DIR env
-#pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --install-prefix)"
-#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --install-prefix)/scripts"
-#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --install-prefix)/util"
+#pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --prefix)"
+#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/scripts"
+#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/util"
 
 pack_install
 

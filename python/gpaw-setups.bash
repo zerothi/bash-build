@@ -13,10 +13,10 @@ for v in 0.8.7929 0.9.9672 0.9.11271 ; do
 
     pack_set --module-opt "--lua-family gpaw-setups"
     
-    pack_set --module-opt "--set-ENV GPAW_SETUP_PATH=$(pack_get --install-prefix)"
+    pack_set --module-opt "--set-ENV GPAW_SETUP_PATH=$(pack_get --prefix)"
         
-    pack_set --install-query $(pack_get --install-prefix)/
-    pack_set --command "mkdir -p $(pack_get --install-prefix)"
-    pack_set --command "cp -r ./* $(pack_get --install-prefix)/"
+    pack_set --install-query $(pack_get --prefix)/
+    pack_set --command "mkdir -p $(pack_get --prefix)"
+    pack_set --command "cp -r ./* $(pack_get --prefix)/"
     
 done

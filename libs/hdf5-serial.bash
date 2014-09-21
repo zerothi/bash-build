@@ -19,8 +19,8 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-zlib=$(pack_get --install-prefix zlib)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-zlib=$(pack_get --prefix zlib)" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static" \
     --command-flag "--enable-fortran" $tmp

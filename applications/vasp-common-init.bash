@@ -6,7 +6,7 @@ pack_set --module-requirement wannier90[1.2]
 
 pack_set --module-opt "--lua-family vasp"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/vasp_tstGNGZhalf_is2
+pack_set --install-query $(pack_get --prefix)/bin/vasp_tstGNGZhalf_is2
 
 file=mymakefile
 pack_set --command "echo '# NPA' > $file"

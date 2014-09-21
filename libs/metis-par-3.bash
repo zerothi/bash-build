@@ -30,12 +30,12 @@ COPTIONS = -DNDEBUG\n' Makefile.in"
 pack_set --command "make"
 # Do the manual installation...
 pack_set --command "mkdir -p $(pack_get --library-path)"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
+pack_set --command "mkdir -p $(pack_get --prefix)/include"
 pack_set --command "cp libmetis.a $(pack_get --library-path)"
 pack_set --command "cp libparmetis.a $(pack_get --library-path)"
-pack_set --command "cp parmetis.h $(pack_get --install-prefix)/include"
-pack_set --command "cp METISLib/metis.h $(pack_get --install-prefix)/include"
-pack_set --command "sed -i -e 's|.../parmetis.h.|<parmetis.h>|' $(pack_get --install-prefix)/include/metis.h"
+pack_set --command "cp parmetis.h $(pack_get --prefix)/include"
+pack_set --command "cp METISLib/metis.h $(pack_get --prefix)/include"
+pack_set --command "sed -i -e 's|.../parmetis.h.|<parmetis.h>|' $(pack_get --prefix)/include/metis.h"
 
 if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module unload $(pack_get --module-name cmake)"

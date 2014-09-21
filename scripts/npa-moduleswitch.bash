@@ -44,7 +44,7 @@ cat <<EOF > $script
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/_switch_modules_clean"
+pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_modules_clean"
 
 _npa_new_name
 
@@ -66,7 +66,7 @@ cat <<EOF > $script
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/_switch_reuse_modulepath"
+pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_reuse_modulepath"
 
 
 _npa_new_name
@@ -82,16 +82,16 @@ cat <<EOF > $script
 
   export _SWITCH_NPA_MODPATH="\$MODULEPATH"
 
-  source $(pack_get --install-prefix)/bin/_switch_modules_clean
+  source $(pack_get --prefix)/bin/_switch_modules_clean
 
-  source $(pack_get --install-prefix lmod)/lmod/lmod/init/bash
+  source $(pack_get --prefix lmod)/lmod/lmod/init/bash
 
-  source $(pack_get --install-prefix)/bin/_switch_reuse_modulepath
+  source $(pack_get --prefix)/bin/_switch_reuse_modulepath
   
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/switch2lmod"
+pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2lmod"
 
 _npa_new_name
 
@@ -106,14 +106,14 @@ cat <<EOF > $script
 
   export _SWITCH_NPA_MODPATH="\$MODULEPATH"
 
-  source $(pack_get --install-prefix)/bin/_switch_modules_clean
+  source $(pack_get --prefix)/bin/_switch_modules_clean
 
-  source $(pack_get --install-prefix modules)/Modules/default/init/bash
+  source $(pack_get --prefix modules)/Modules/default/init/bash
 
-  source $(pack_get --install-prefix)/bin/_switch_reuse_modulepath
+  source $(pack_get --prefix)/bin/_switch_reuse_modulepath
   
 #}
 EOF
 
 
-pack_set --command "mv $(pwd)/$script $(pack_get --install-prefix)/bin/switch2em"
+pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2em"

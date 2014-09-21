@@ -9,7 +9,7 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/libtool
+pack_set --install-query $(pack_get --prefix)/bin/libtool
 
 [ $(pack_installed automake) -eq 1 ] && \
     pack_set --module-requirement automake
@@ -19,7 +19,7 @@ pack_set --install-query $(pack_get --install-prefix)/bin/libtool
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

@@ -15,7 +15,7 @@ pack_set --command "sed -i -e 's/^cc.*/cc = $CC/' Makefile"
 # Defaults to 32 bits information within METIS...
 pack_set --command "sed -i -e 's/\(define IDXTYPEWIDTH\).*/\1 32/' include/metis.h"
 pack_set --command "sed -i -e 's/\(define REALTYPEWIDTH\).*/\1 32/' include/metis.h"
-pack_set --command "make config prefix=$(pack_get --install-prefix)"
+pack_set --command "make config prefix=$(pack_get --prefix)"
 pack_set --command "cd build/linux-unknown"
 pack_set --command "make"
 pack_set --command "make install"

@@ -9,11 +9,11 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/cmake
+pack_set --install-query $(pack_get --prefix)/bin/cmake
 
 # Install commands that it should run
 pack_set --command "./bootstrap" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

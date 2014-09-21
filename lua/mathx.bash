@@ -11,7 +11,7 @@ pack_set --install-query $(pack_get --library-path lua)/lua/$lua_V/mathx.so
 file=Makefile
 pack_set --command "sed -i -e '/^LUA/{d}' $file"
 pack_set --command "sed -i -e 's:^CFLAGS[ ]*=:CFLAGS = $CFLAGS:gi' $file"
-pack_set --command "sed -i -e '$ aLUA=$(pack_get --install-prefix lua)\n\
+pack_set --command "sed -i -e '$ aLUA=$(pack_get --prefix lua)\n\
 LUAINC=\$(LUA)/include\n\
 LUALIB=\$(LUA)/lib\n\
 LUABIN=\$(LUA)/bin' $file"

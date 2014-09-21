@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family gpaw"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gpaw-python
+pack_set --install-query $(pack_get --prefix)/bin/gpaw-python
 
 pack_set --module-requirement openmpi \
     --module-requirement matplotlib \
@@ -58,13 +58,13 @@ else
 
 fi
 
-tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"
+tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --prefix' $(pack_get --module-paths-requirement))"
 
 pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
-include_dirs += [\"$(pack_get --install-prefix libxc)/include\"]\n\
+include_dirs += [\"$(pack_get --prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
-include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
+include_dirs += [\"$(pack_get --prefix openmpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 # Same as -Wl,-rpath:\n\
 runtime_library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
@@ -87,6 +87,6 @@ include_dirs += [${tmp:2}]' $file"
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 done

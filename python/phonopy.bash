@@ -5,7 +5,7 @@ for v in 1.8.4.1 ; do
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-    pack_set --install-query $(pack_get --install-prefix)/bin/phonopy
+    pack_set --install-query $(pack_get --prefix)/bin/phonopy
         
     # Add requirements when creating the module
     pack_set --module-requirement numpy \
@@ -16,6 +16,6 @@ for v in 1.8.4.1 ; do
 	--command-flag "$(pack_get --library-path)/python$pV/site-packages"
     pack_set --command "$(get_parent_exec) setup.py build"
     pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--home=$(pack_get --install-prefix)" \
+	--command-flag "--home=$(pack_get --prefix)" \
 	
 done

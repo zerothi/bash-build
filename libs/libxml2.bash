@@ -10,9 +10,9 @@ pack_set --module-requirement zlib
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--with-python=no" \
-    --command-flag "--with-zlib=$(pack_get --install-prefix zlib)"
+    --command-flag "--with-zlib=$(pack_get --prefix zlib)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

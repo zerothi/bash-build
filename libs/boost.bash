@@ -11,8 +11,8 @@ pack_set --install-query $(pack_get --library-path)/libboost_python.a
 pack_set --command "echo \"using mpi;\" >> tools/build/v2/user-config.jam"
 pack_set --command "./bootstrap.sh" \
     --command-flag "--with-libraries=all" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--includedir=$(pack_get --install-prefix)/include" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--includedir=$(pack_get --prefix)/include" \
     --command-flag "--libdir=$(pack_get --library-path)"
 
 # Make commands

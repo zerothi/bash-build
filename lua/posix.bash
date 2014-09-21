@@ -20,11 +20,11 @@ pack_set --install-query $(pack_get --library-path lua)/lua/$lua_V/posix_c.so
 
 # Configure the package
 pack_set --command "./configure" \
-	--command-flag "LUA=$(pack_get --install-prefix lua)/bin/lua" \
-	--command-flag "LUA_INCLUDE='-I$(pack_get --install-prefix lua)/include'" \
-	--command-flag "--prefix=$(pack_get --install-prefix lua)" \
+	--command-flag "LUA=$(pack_get --prefix lua)/bin/lua" \
+	--command-flag "LUA_INCLUDE='-I$(pack_get --prefix lua)/include'" \
+	--command-flag "--prefix=$(pack_get --prefix lua)" \
 	--command-flag "--libdir=$(pack_get --library-path lua)/lua/$lua_V/" \
-	--command-flag "--datarootdir=$(pack_get --install-prefix lua)/share/lua/$lua_V/" 
+	--command-flag "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/" 
 
 # Make lua package
 pack_set --command "make all"

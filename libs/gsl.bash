@@ -10,7 +10,7 @@ if $(is_c intel) ; then
     pack_set --command "../configure" \
 	--command-flag "LIBS='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64'" \
 	--command-flag "LDFLAGS='$MKL_LIB'" \
-	--command-flag "--prefix $(pack_get --install-prefix)"
+	--command-flag "--prefix $(pack_get --prefix)"
 
 else
     if [ $(pack_installed atlas) -eq 1 ]; then
@@ -25,7 +25,7 @@ else
     fi
     pack_set --command "../configure" \
 	--command-flag "LIBS='-lm $tmp'" \
-	--command-flag "--prefix $(pack_get --install-prefix)"
+	--command-flag "--prefix $(pack_get --prefix)"
 fi
 
 # Make commands

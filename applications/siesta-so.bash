@@ -4,7 +4,7 @@ add_package http://www.student.dtu.dk/~nicpa/packages/siesta-so-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --install-prefix)/bin/siesta
+pack_set --install-query $(pack_get --prefix)/bin/siesta
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
@@ -60,29 +60,29 @@ MPI_INCLUDE=.\n\
 
 source applications/siesta-linalg.bash
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 # This should ensure a correct handling of the version info...
 source applications/siesta-speed.bash siesta
-pack_set --command "cp siesta $(pack_get --install-prefix)/bin/"
+pack_set --command "cp siesta $(pack_get --prefix)/bin/"
 
 pack_set --command "make clean"
 
 # We have not created a test for the check of already installed files...
 source applications/siesta-speed.bash transiesta
-pack_set --command "cp transiesta $(pack_get --install-prefix)/bin/"
+pack_set --command "cp transiesta $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../Util/Contrib/APostnikov"
 pack_set --command "make all"
-pack_set --command "cp *xsf $(pack_get --install-prefix)/bin/"
+pack_set --command "cp *xsf $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../../WFS"
 pack_set --command "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
-pack_set --command "cp info_wfsx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp readwf $(pack_get --install-prefix)/bin/"
-pack_set --command "cp readwfx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wfs2wfsx $(pack_get --install-prefix)/bin/"
-pack_set --command "cp wfsx2wfs $(pack_get --install-prefix)/bin/"
+pack_set --command "cp info_wfsx $(pack_get --prefix)/bin/"
+pack_set --command "cp readwf $(pack_get --prefix)/bin/"
+pack_set --command "cp readwfx $(pack_get --prefix)/bin/"
+pack_set --command "cp wfs2wfsx $(pack_get --prefix)/bin/"
+pack_set --command "cp wfsx2wfs $(pack_get --prefix)/bin/"
 
 # install grid-relevant utilities
 # This requires that we change the libraries
@@ -90,23 +90,23 @@ pack_set --command "cd ../Grid"
 files="grid2cdf cdf2xsf cdf2grid grid2val grid2cube grid_rotate cdf_fft cdf_diff grid_supercell"
 files="grid2val grid2cube"
 pack_set --command "make $files"
-pack_set --command "cp $files $(pack_get --install-prefix)/bin/"
+pack_set --command "cp $files $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../Vibra/Src"
 pack_set --command "make"
-pack_set --command "cp fcbuild vibrator $(pack_get --install-prefix)/bin/"
+pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../../"
 
-pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --install-prefix)/bin/vpsa2bin"
-pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --install-prefix)/bin/vpsb2asc"
+pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
+pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
 # The atom program for creating the pseudos
 pack_set --command "cd ../Pseudo/atom"
 pack_set --command "make"
-pack_set --command "cp atm $(pack_get --install-prefix)/bin/"
+pack_set --command "cp atm $(pack_get --prefix)/bin/"
 
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
+pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 
 pack_install
 

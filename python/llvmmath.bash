@@ -10,7 +10,7 @@ pack_set --module-requirement llvmpy
 pack_set --module-requirement numpy
 
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
 pack_set --command "nosetests --exe llvmmath > tmp.test 2>&1 ; echo 'Succes'"

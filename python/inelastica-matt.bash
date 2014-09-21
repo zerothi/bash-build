@@ -36,6 +36,6 @@ fi
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 done

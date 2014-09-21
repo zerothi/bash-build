@@ -19,7 +19,7 @@ for flag in --enable-single nothing ; do
 pack_set --command "rm -rf ./*"
 pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
     --command-flag "--enable-mpi" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 pack_set --command "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
@@ -34,7 +34,7 @@ pack_set --command "rm -rf ./*"
 pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-threads" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 pack_set --command "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
     pack_set --command "make check > tmp.test 2>&1"
@@ -52,7 +52,7 @@ fi
 pack_set --command "LIB='$FLAG_OMP' CFLAGS='$mpi_flags $CFLAGS $FLAG_OMP' FFLAGS='$mpi_flags $FFLAGS $FLAG_OMP' ../configure $flag" \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 pack_set --command "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
     pack_set --command "make check > tmp.test 2>&1"

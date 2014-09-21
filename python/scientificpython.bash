@@ -35,8 +35,8 @@ fi
 pack_set --command "sed -i -e 's|^\(extra_compile_args[[:space:]]*=.*\)|\1\nextra_link_args = [\"$tmp_flags\"]|' setup.py"
 pack_set --command "sed -i -e 's|\(extra_compile_args[[:space:]]*=[[:space:]]*extra_compile_args\)|\1,extra_link_args=extra_link_args|' setup.py"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
+pack_set --command "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --install-prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+pack_set --command "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
+    --command-flag "--prefix=$(pack_get --prefix)"
 

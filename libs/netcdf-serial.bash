@@ -14,7 +14,7 @@ pack_set --install-query $(pack_get --library-path)/libnetcdf.a
 # Install commands that it should run
 pack_set \
     --command "../configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--disable-dap" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-shared" \
@@ -38,7 +38,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 # Add requirments when creating the module
 pack_set --module-requirement netcdf-serial[$v]
 
-pack_set --install-prefix $(pack_get --install-prefix netcdf-serial[$v])
+pack_set --prefix $(pack_get --prefix netcdf-serial[$v])
 
 pack_set --install-query $(pack_get --library-path)/libnetcdff.a
 
@@ -46,7 +46,7 @@ pack_set --install-query $(pack_get --library-path)/libnetcdff.a
 pack_set --command "../configure" \
     --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
     --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static"
 

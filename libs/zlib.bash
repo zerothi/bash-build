@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --library-path)/libz.a
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--static"
 
 # Make commands

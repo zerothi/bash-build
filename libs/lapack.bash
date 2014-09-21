@@ -47,8 +47,8 @@ pack_set --command "make $(get_make_parallel) lapacklib lapackelib tmglib"
 
 pack_set --command "cp liblapack.a liblapacke.a $(pack_get --library-path $bl)/"
 pack_set --command "cp libtmglib.a $(pack_get --library-path $bl)/libtmg.a"
-pack_set --command "mkdir -p $(pack_get --install-prefix $bl)/include/"
-pack_set --command "cp lapacke/include/*.h $(pack_get --install-prefix $bl)/include/"
+pack_set --command "mkdir -p $(pack_get --prefix $bl)/include/"
+pack_set --command "cp lapacke/include/*.h $(pack_get --prefix $bl)/include/"
 
 if [ $bl == "atlas" ]; then
 # We need to collect the two sets

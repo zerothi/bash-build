@@ -4,7 +4,7 @@ pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch --host-reject zeroth
 
-pack_set --install-query $(pack_get --install-prefix)/bin/elk
+pack_set --install-query $(pack_get --prefix)/bin/elk
 
 pack_set --module-requirement openmpi \
     --module-requirement libxc \
@@ -99,18 +99,18 @@ end subroutine\n\
 
 pack_set --command "make $(get_make_parallel)"
 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp src/protex src/elk $(pack_get --install-prefix)/bin/"
-pack_set --command "cp src/spacegroup/spacegroup $(pack_get --install-prefix)/bin/"
-pack_set --command "cp src/eos/eos $(pack_get --install-prefix)/bin/"
-pack_set --command "cp utilities/blocks2columns/blocks2columns.py $(pack_get --install-prefix)/bin/"
-pack_set --command "cp utilities/elk-bands/elk-bands $(pack_get --install-prefix)/bin/"
-pack_set --command "cp utilities/wien2k-elk/se.pl $(pack_get --install-prefix)/bin/"
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "cp src/protex src/elk $(pack_get --prefix)/bin/"
+pack_set --command "cp src/spacegroup/spacegroup $(pack_get --prefix)/bin/"
+pack_set --command "cp src/eos/eos $(pack_get --prefix)/bin/"
+pack_set --command "cp utilities/blocks2columns/blocks2columns.py $(pack_get --prefix)/bin/"
+pack_set --command "cp utilities/elk-bands/elk-bands $(pack_get --prefix)/bin/"
+pack_set --command "cp utilities/wien2k-elk/se.pl $(pack_get --prefix)/bin/"
+pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 
 # Create the species input
-pack_set --command "cp -rf species $(pack_get --install-prefix)/species"
-pack_set --module-opt "--set-ENV ELK_SPECIES=$(pack_get --install-prefix)/species"
+pack_set --command "cp -rf species $(pack_get --prefix)/species"
+pack_set --module-opt "--set-ENV ELK_SPECIES=$(pack_get --prefix)/species"
 
 
 pack_install

@@ -39,7 +39,7 @@ LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
 fi
 
 pack_set --command "sed -i '1 a\
-LMETISDIR = $(pack_get --install-prefix parmetis[$parmetisV]) \n\
+LMETISDIR = $(pack_get --prefix parmetis[$parmetisV]) \n\
 IMETIS = $(list --INCDIRS parmetis[$parmetisV]) \n\
 LMETIS = $(list --LDFLAGS --Wlrpath parmetis[$parmetisV]) -lparmetis -lmetis \n\
 \n\
@@ -47,7 +47,7 @@ LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-#SCOTCHDIR = $(pack_get --install-prefix scotch)\n\
+#SCOTCHDIR = $(pack_get --prefix scotch)\n\
 #LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
 #ISCOTCH = -I\$(SCOTCHDIR)/include \n\
 ##LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
@@ -105,8 +105,8 @@ LIBSEQNEEDED = \n' Makefile.inc"
 
 # Make commands
 pack_set --command "make $(get_make_parallel) alllib"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
-pack_set --command "cp include/*.h $(pack_get --install-prefix)/include/"
+pack_set --command "mkdir -p $(pack_get --prefix)/include"
+pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
 pack_set --command "mkdir -p $(pack_get --library-path)"
 pack_set --command "cp lib/lib*.a $(pack_get --library-path)/"
 

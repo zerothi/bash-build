@@ -17,7 +17,7 @@ pack_set --command "patch -p1 < patch_hwloc-intel"
 pack_set --command "module load help2man m4 autoconf automake"
 
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--disable-libnuma" \
     --command-flag "--disable-opencl" \
     --command-flag "--disable-cuda" \

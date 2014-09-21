@@ -23,7 +23,7 @@ for v in 1.4.2 2.4 ; do
     pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
 
     pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--prefix=$(pack_get --install-prefix)"
+	--command-flag "--prefix=$(pack_get --prefix)"
 
     add_test_package
     pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Succes'"

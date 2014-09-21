@@ -58,11 +58,11 @@ MKDIR = mkdir \n\
 RANLIB = ranlib \n\
 YACC = bison -pscotchyy -y -b y \n\
 \n\
-prefix = $(pack_get --install-prefix)\n\
+prefix = $(pack_get --prefix)\n\
 \n' $file"
 
 # the makefile does not create the directory...
-pack_set --command "mkdir -p $(pack_get --install-prefix)"
+pack_set --command "mkdir -p $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel) scotch"

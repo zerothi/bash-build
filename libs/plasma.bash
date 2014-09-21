@@ -62,7 +62,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 PLASMA_F90 =1\n\
-prefix = $(pack_get --install-prefix)\n\
+prefix = $(pack_get --prefix)\n\
 CC = $CC \n\
 FC = $FC \n\
 LOADER = \$(FC) \n\

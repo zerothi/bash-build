@@ -7,7 +7,7 @@ pack_set --host-reject ntch
 pack_set --host-reject zerothi
 pack_set --module-opt "--lua-family dftd3"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/dftd3
+pack_set --install-query $(pack_get --prefix)/bin/dftd3
 
 pack_set --command "rm pars.f"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-pars.f
@@ -29,8 +29,8 @@ pack_set --command "sed -i -e 's/^[[:space:]]*OSTYPE/#OSTYPE/gi' Makefile"
 pack_set --command "make"
 
 # Install the package
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp dftd3 $(pack_get --install-prefix)/bin/"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "cp dftd3 $(pack_get --prefix)/bin/"
 
 pack_install
 
