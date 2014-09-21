@@ -62,10 +62,10 @@ for pack in \
     PHonon-5.1.tar.gz \
     neb-5.1.tar.gz \
     xspectra-5.1.tar.gz \
-    tddfpt.5.1.tar.gz \
-    PWgui.5.1.tar.gz \
-    atomic.5.1.tar.gz \
-    pwcond.5.1.tar.gz
+    tddfpt-5.1.tar.gz \
+    PWgui-5.1.tar.gz \
+    atomic-5.1.tar.gz \
+    pwcond-5.1.tar.gz
 do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$pack
