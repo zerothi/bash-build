@@ -30,7 +30,7 @@ else
     
 fi
 
-clib="$(list --prefix ':' --loop-cmd 'pack_get --library-path' $(pack_get --module-requirement))"
+clib="$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --module-requirement))"
 clib=${clib// /}
 clib=${clib:1}
 
@@ -44,7 +44,7 @@ pack_set --command "module unload $(pack_get --module-name cmake)"
 
 # Add GROMACS envs
 pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --prefix)/bin"
-pack_set --module-opt "--set-ENV GMXLDLIB=$(pack_get --library-path)"
+pack_set --module-opt "--set-ENV GMXLDLIB=$(pack_get --LD)"
 pack_set --module-opt "--set-ENV GMXMAN=$(pack_get --prefix)/man"
 pack_set --module-opt "--set-ENV GMXDATA=$(pack_get --prefix)/share/gromacs"
 

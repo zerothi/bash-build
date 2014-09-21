@@ -7,7 +7,7 @@ for bl in blas atlas openblas ; do
 
 add_package --package scalapack-$bl http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
 
-pack_set --install-query $(pack_get --library-path $bl)/libscalapack.a
+pack_set --install-query $(pack_get --LD $bl)/libscalapack.a
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement $bl
@@ -39,7 +39,7 @@ pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLA
 
 pack_set --command "make $(get_make_parallel)"
 
-pack_set --command "mkdir -p $(pack_get --library-path $bl)/"
-pack_set --command "cp libscalapack.a $(pack_get --library-path $bl)/"
+pack_set --command "mkdir -p $(pack_get --LD $bl)/"
+pack_set --command "cp libscalapack.a $(pack_get --LD $bl)/"
 
 done

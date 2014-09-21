@@ -6,7 +6,7 @@ add_package \
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-query $(pack_get --library-path)/libparpack.a
+pack_set --install-query $(pack_get --LD)/libparpack.a
 
 pack_set --module-requirement openmpi
 

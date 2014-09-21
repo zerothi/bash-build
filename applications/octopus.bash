@@ -46,9 +46,9 @@ else
 fi
 
 # The old versions had one library, the newer ones have Fortran and C divided.
-tmp_xc="$(pack_get --library-path libxc)/libxc.a"
+tmp_xc="$(pack_get --LD libxc)/libxc.a"
 if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
-    tmp_xc="$(pack_get --library-path libxc)/libxcf90.a $(pack_get --library-path libxc)/libxc.a"
+    tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
 
 pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \

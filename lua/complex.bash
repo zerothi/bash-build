@@ -5,7 +5,7 @@ add_package --build generic \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --library-path lua)/lua/$lua_V/complex.so
+pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/complex.so
 
 # Configure the package
 file=Makefile
@@ -18,4 +18,4 @@ LUABIN=\$(LUA)/bin' $file"
 
 pack_set --command "make all"
 
-pack_set --command "cp complex.so $(pack_get --library-path lua)/lua/$lua_V/complex.so"
+pack_set --command "cp complex.so $(pack_get --LD lua)/lua/$lua_V/complex.so"

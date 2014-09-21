@@ -13,7 +13,7 @@ for v in 1.8.4.1 ; do
     
     # Install commands that it should run
     pack_set --command "mkdir -p" \
-	--command-flag "$(pack_get --library-path)/python$pV/site-packages"
+	--command-flag "$(pack_get --LD)/python$pV/site-packages"
     pack_set --command "$(get_parent_exec) setup.py build"
     pack_set --command "$(get_parent_exec) setup.py install" \
 	--command-flag "--home=$(pack_get --prefix)" \

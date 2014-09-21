@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-requirement libxc
 
-pack_set --install-query $(pack_get --library-path)/libatompaw.a
+pack_set --install-query $(pack_get --LD)/libatompaw.a
 
 tmp=
 if $(is_c intel) ; then
@@ -26,7 +26,7 @@ fi
 
 pack_set --command "./configure" \
     --command-flag "--with-libxc-incs=$(pack_get --prefix libxc)/include" \
-    --command-flag "--with-libxc-libs=$(pack_get --library-path libxc)" \
+    --command-flag "--with-libxc-libs=$(pack_get --LD libxc)" \
     --command-flag "--with-linalg-libs='$tmp'" \
     --command-flag "--prefix=$(pack_get --prefix)"
 

@@ -3,7 +3,7 @@ add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement numpy
 

@@ -4,7 +4,7 @@ add_package --package openblas --archive OpenBLAS-$v.tar.gz \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libopenblas.a
+pack_set --install-query $(pack_get --LD)/libopenblas.a
 
 # NO_LAPACK=1 means that we do not need -lgfortran
 pack_set --command "sed -i -s -e 's:-lgfortran::g' Makefile.system f_check"

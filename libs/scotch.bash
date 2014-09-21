@@ -6,7 +6,7 @@ add_package --package scotch --alias scotch --version $v \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libscotch.a
+pack_set --install-query $(pack_get --LD)/libscotch.a
 
 pack_set --module-requirement zlib --module-requirement openmpi
 

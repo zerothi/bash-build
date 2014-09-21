@@ -3,7 +3,7 @@ add_package http://zlib.net/zlib-1.2.8.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libz.a
+pack_set --install-query $(pack_get --LD)/libz.a
 
 # Install commands that it should run
 pack_set --command "./configure" \

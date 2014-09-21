@@ -13,7 +13,7 @@ add_package \
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libnetcdf.a
+pack_set --install-query $(pack_get --LD)/libnetcdf.a
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5 \
@@ -53,7 +53,7 @@ pack_set --prefix $(pack_get --prefix netcdf-logging[$v])
 # Add requirments when creating the module
 pack_set --module-requirement netcdf-logging[$v]
 
-pack_set --install-query $(pack_get --library-path)/libnetcdff.a
+pack_set --install-query $(pack_get --LD)/libnetcdff.a
 
 tmp_cppflags="-DgFortran"
 

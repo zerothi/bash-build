@@ -4,7 +4,7 @@ add_package http://downloads.kwant-project.org/kwant/kwant-1.0.1.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/kwant/__init__.py
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/kwant/__init__.py
 
 pack_set --module-opt "--lua-family kwant"
 

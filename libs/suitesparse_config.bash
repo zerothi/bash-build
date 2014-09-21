@@ -6,7 +6,7 @@ add_package \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libsuitesparseconfig.a
+pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
 
 mk=SuiteSparse_config.mk
 pack_set --command "sed -i -e 's|^[[:space:]]*\(F77\)[[:space:]]*=.*|\1 = $F77|' $mk"
@@ -18,9 +18,9 @@ pack_set --command "echo 'FFLAGS = $FFLAGS' >> $mk"
 
 pack_set --command "make $(get_make_parallel)"
 # Install commands that it should run
-pack_set --command "mkdir -p $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)/"
 pack_set --command "mkdir -p $(pack_get --prefix)/include/"
-pack_set --command "make INSTALL_LIB='$(pack_get --library-path)/'" \
+pack_set --command "make INSTALL_LIB='$(pack_get --LD)/'" \
     --command-flag "INSTALL_INCLUDE='$(pack_get --prefix)/include/'" \
     --command-flag "install"
 

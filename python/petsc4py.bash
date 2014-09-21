@@ -7,7 +7,7 @@ pack_set --module-requirement $(get_parent) \
     --module-requirement mpi4py --module-requirement numpy \
     --module-requirement cython
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(pack_get --alias)/__init__.py
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)/__init__.py
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \

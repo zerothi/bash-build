@@ -6,7 +6,7 @@ pack_set --host-reject ntch --host-reject zeroth \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libctl.a
+pack_set --install-query $(pack_get --LD)/libctl.a
 
 # Install commands that it should run
 pack_set --command "./configure" \

@@ -4,7 +4,7 @@ add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libnetcdf.a
+pack_set --install-query $(pack_get --LD)/libnetcdf.a
 
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' hdf5 pnetcdf)
@@ -45,7 +45,7 @@ pack_set --prefix $(pack_get --prefix netcdf[$v])
 # Add requirments when creating the module
 pack_set --module-requirement netcdf[$v]
 
-pack_set --install-query $(pack_get --library-path netcdf[$v])/libnetcdff.a
+pack_set --install-query $(pack_get --LD netcdf[$v])/libnetcdff.a
 
 tmp_cppflags="-DgFortran"
 

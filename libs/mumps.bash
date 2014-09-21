@@ -4,7 +4,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libmumps_common.a
+pack_set --install-query $(pack_get --LD)/libmumps_common.a
 
 parmetisV=3.2.0
 pack_set --module-requirement parmetis[$parmetisV]
@@ -107,6 +107,6 @@ LIBSEQNEEDED = \n' Makefile.inc"
 pack_set --command "make $(get_make_parallel) alllib"
 pack_set --command "mkdir -p $(pack_get --prefix)/include"
 pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
-pack_set --command "mkdir -p $(pack_get --library-path)"
-pack_set --command "cp lib/lib*.a $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)"
+pack_set --command "cp lib/lib*.a $(pack_get --LD)/"
 

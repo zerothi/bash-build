@@ -6,7 +6,7 @@ add_package \
 # Correct the old version of parmetis...
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libparmetis.a
+pack_set --install-query $(pack_get --LD)/libparmetis.a
 
 if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"
@@ -29,10 +29,10 @@ COPTIONS = -DNDEBUG\n' Makefile.in"
 
 pack_set --command "make"
 # Do the manual installation...
-pack_set --command "mkdir -p $(pack_get --library-path)"
+pack_set --command "mkdir -p $(pack_get --LD)"
 pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "cp libmetis.a $(pack_get --library-path)"
-pack_set --command "cp libparmetis.a $(pack_get --library-path)"
+pack_set --command "cp libmetis.a $(pack_get --LD)"
+pack_set --command "cp libparmetis.a $(pack_get --LD)"
 pack_set --command "cp parmetis.h $(pack_get --prefix)/include"
 pack_set --command "cp METISLib/metis.h $(pack_get --prefix)/include"
 pack_set --command "sed -i -e 's|.../parmetis.h.|<parmetis.h>|' $(pack_get --prefix)/include/metis.h"

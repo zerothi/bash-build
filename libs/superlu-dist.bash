@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set $(list --prefix "--host-reject " surt muspel slid)
 
-pack_set --install-query $(pack_get --library-path)/libsuperlu.a
+pack_set --install-query $(pack_get --LD)/libsuperlu.a
 
 pack_set --module-requirement openmpi \
     --module-requirement parmetis
@@ -67,6 +67,6 @@ fi
 # Make commands
 pack_set --command "make"
 
-pack_set --command "mkdir -p $(pack_get --library-path)/"
-pack_set --command "cp lib/libsuperlu.a $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)/"
+pack_set --command "cp lib/libsuperlu.a $(pack_get --LD)/"
 

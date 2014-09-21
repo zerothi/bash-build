@@ -16,7 +16,7 @@ pack_set --module-requirement $(get_parent) \
 file=site.cfg
 pack_set --command "echo '#' > $file"
 
-tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --library-path' $(pack_get --module-requirement))
+tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --module-requirement))
 tmp_lib=${tmp_lib// /}
 tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64
 
@@ -46,7 +46,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 [fftw]\n\
-library_dirs = $(pack_get --library-path fftw-3)\n\
+library_dirs = $(pack_get --LD fftw-3)\n\
 include_dirs = $(pack_get --prefix fftw-3)/include\n\
 libraries = fftw3\n\
 [amd]\n\
@@ -89,15 +89,15 @@ elif $(is_c gnu) ; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
 [atlas_threads]\n\
-library_dirs = $(pack_get --library-path atlas)\n\
+library_dirs = $(pack_get --LD atlas)\n\
 include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
 [atlas]\n\
-library_dirs = $(pack_get --library-path atlas)\n\
+library_dirs = $(pack_get --LD atlas)\n\
 include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = f77blas,cblas,atlas\n\
 [lapack]\n\
-library_dirs = $(pack_get --library-path atlas)\n\
+library_dirs = $(pack_get --LD atlas)\n\
 include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = lapack' $file" 
     elif [ $(pack_installed openblas) -eq 1 ]; then

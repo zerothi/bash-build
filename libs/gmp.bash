@@ -2,7 +2,7 @@ add_package ftp://ftp.gmplib.org/pub/gmp-5.0.5/gmp-5.0.5.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libgmp.a
+pack_set --install-query $(pack_get --LD)/libgmp.a
 
 # Install commands that it should run
 pack_set --command "./configure" \

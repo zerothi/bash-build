@@ -5,7 +5,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libboost_python.a
+pack_set --install-query $(pack_get --LD)/libboost_python.a
 
 # Install commands that it should run
 pack_set --command "echo \"using mpi;\" >> tools/build/v2/user-config.jam"
@@ -13,7 +13,7 @@ pack_set --command "./bootstrap.sh" \
     --command-flag "--with-libraries=all" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--includedir=$(pack_get --prefix)/include" \
-    --command-flag "--libdir=$(pack_get --library-path)"
+    --command-flag "--libdir=$(pack_get --LD)"
 
 # Make commands
 pack_set --command "./b2 stage"

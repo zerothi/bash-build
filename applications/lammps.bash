@@ -66,7 +66,7 @@ pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
-pack_set --command "mkdir -p $(pack_get --library-path)"
+pack_set --command "mkdir -p $(pack_get --LD)"
 pack_set --command "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
 # Copy headers over 
 pack_set --command "mkdir -p $(pack_get --prefix)/include"

@@ -4,7 +4,7 @@
 add_package https://launchpad.net/bzr-fastimport/trunk/0.13.0/+download/bzr-fastimport-0.13.0.tar.gz
 
 # We install it into the bzr package
-pack_set --install-query $(pack_get --library-path bzr)/python$pV/site-packages/bzrlib/plugins/fastimport
+pack_set --install-query $(pack_get --LD bzr)/python$pV/site-packages/bzrlib/plugins/fastimport
 
 # Add requirments when creating the module
 pack_set --module-requirement $(get_parent) \

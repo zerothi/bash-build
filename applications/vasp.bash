@@ -19,7 +19,7 @@ source applications/vasp-common-init.bash
 # Install the correct FFT routine
 pack_set --command "sed -i '$ a\
 FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\\\n\
-      $(pack_get --library-path fftw-3)/libfftw3.a\n\
+      $(pack_get --LD fftw-3)/libfftw3.a\n\
 INCS    = -I$(pack_get --prefix fftw-3)/include' $file"
 
 source applications/vasp-common-end.bash

@@ -3,7 +3,7 @@ add_package http://ftp.gnu.org/gnu/glpk/glpk-4.47.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libglpk.a
+pack_set --install-query $(pack_get --LD)/libglpk.a
 
 pack_set --command "../configure" \
     --command-flag "--prefix $(pack_get --prefix)" \

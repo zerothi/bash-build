@@ -4,7 +4,7 @@ add_package --package petsc \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libpetsc.so
+pack_set --install-query $(pack_get --LD)/libpetsc.so
 
 pack_set \
     $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
@@ -99,4 +99,4 @@ pack_set_mv_test tmp.test
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
 
 # Clean up the unused module
-pack_set --command "rm -rf $(pack_get --library-path)/modules"
+pack_set --command "rm -rf $(pack_get --LD)/modules"

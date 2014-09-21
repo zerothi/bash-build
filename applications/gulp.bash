@@ -57,9 +57,9 @@ pack_set --command "make $(get_make_parallel) lib"
 
 # Install the package
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
-pack_set --command "mkdir -p $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)/"
 pack_set --command "cp gulp $(pack_get --prefix)/bin/"
-pack_set --command "cp ../libgulp.a $(pack_get --library-path)/"
+pack_set --command "cp ../libgulp.a $(pack_get --LD)/"
 
 pack_install
 

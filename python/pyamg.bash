@@ -9,7 +9,7 @@ pack_set -s $IS_MODULE
 
 pack_set --directory pyamg-$v
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/pyamg
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/pyamg
 
 # Add requirments when creating the module
 pack_set --module-requirement scipy

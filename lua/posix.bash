@@ -11,7 +11,7 @@ add_package --build generic \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --library-path lua)/lua/$lua_V/posix_c.so
+pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/posix_c.so
 
 [ $(pack_installed help2man) -eq 1 ] && \
     pack_set --module-requirement help2man
@@ -23,7 +23,7 @@ pack_set --command "./configure" \
 	--command-flag "LUA=$(pack_get --prefix lua)/bin/lua" \
 	--command-flag "LUA_INCLUDE='-I$(pack_get --prefix lua)/include'" \
 	--command-flag "--prefix=$(pack_get --prefix lua)" \
-	--command-flag "--libdir=$(pack_get --library-path lua)/lua/$lua_V/" \
+	--command-flag "--libdir=$(pack_get --LD lua)/lua/$lua_V/" \
 	--command-flag "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/" 
 
 # Make lua package
