@@ -57,6 +57,8 @@ pack_set --command "mv PWgui-5.0.2 PWgui-5.0.1"
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
 
 elif [ "$v" = "5.1" ]; then
+
+libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     
 for pack in \
     PHonon-5.1.tar.gz \
@@ -71,7 +73,7 @@ do
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$pack
     mywget http://files.qe-forge.org/index.php?file=$pack $o
     pack_set --command "cp $o archive/$pack"
-    pack_set --command "tar xfz archive/$pack --strip 1"
+    pack_set --command "tar xfz archive/$pack"
     
 done
 

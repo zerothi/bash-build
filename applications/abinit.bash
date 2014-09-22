@@ -37,7 +37,7 @@ FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
-FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\"\n\
+FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_64bit_flags=\"yes\"\n\
 enable_lotf=\"yes\"\n\
@@ -159,5 +159,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

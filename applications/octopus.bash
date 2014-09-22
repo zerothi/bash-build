@@ -51,7 +51,7 @@ if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
     tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
     --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
@@ -71,7 +71,7 @@ pack_set_mv_test tmp.test tmp.test.serial
 # prep for the MPI-compilation...
 pack_set --command "rm -rf *"
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
     --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
@@ -101,5 +101,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

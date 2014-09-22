@@ -8,18 +8,16 @@ pack_set --module-requirement gen-zlib
 pack_set --install-query $(pack_get --prefix)/include/xml2.h
 
 # Preload all tools for creating the configure script
-pack_set --command "module load $(pack_get --module-requirement libtool)" \
-    --command-flag "$(pack_get --module-name libtool)"
+tmp="$(pack_get --mod-req-all libtool) $(pack_get --module-name libtool)"
+pack_set --command "module load $tmp"
 
 # Create configure
 pack_set --command "./autogen.sh"
 
 # Preload all tools for creating the configure script
-pack_set --command "module unload $(pack_get --module-name libtool)" \
-    --command-flag "$(pack_get --module-requirement libtool)"
+pack_set --command "module unload $tmp"
 
-pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --prefix)" \
+pack_set --command "./configure --prefix $(pack_get --prefix)" \
     --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)"
 
 # Make commands

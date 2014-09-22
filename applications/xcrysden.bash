@@ -68,6 +68,6 @@ if [ $(pack_installed) -eq 1 ]; then
 	-v $(pack_get --version) \
 	-M $(pack_get --alias).$(pack_get --version)/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement)) \
+	$(list --prefix '-L ' $(pack_get --mod-req)) \
 	-L $(pack_get --alias) 
 fi

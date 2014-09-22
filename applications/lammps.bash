@@ -25,7 +25,7 @@ pack_set --command "sed -i '1 a\
 include ../MAKE/Makefile.linux\n\
 SHELL=/bin/sh\n\
 CC =         $MPICXX\n\
-CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))\n\
+CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --mod-req))\n\
 SHFLAGS =    -fPIC\n\
 DEPFLAGS =   -M\n\
 LINK =	     \$(CC)\n\
@@ -47,12 +47,12 @@ JPG_LIB = ' $tmp"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
 else
@@ -82,5 +82,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

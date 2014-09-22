@@ -41,10 +41,10 @@ OPT2 = -ffloat-store\n\
 BAGGER = \n\
 RUNF90 = $MPIF90\n\
 RUNCC = $MPICC\n\
-FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 BLAS = \n\
 LAPACK = \n\
-CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 ETIME = \n\
 GULPENV = \n\
 CDABS = cdabs.o\n\
@@ -70,7 +70,7 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
 
 done

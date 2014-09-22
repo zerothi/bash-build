@@ -58,7 +58,7 @@ else
 
 fi
 
-tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --prefix' $(pack_get --module-paths-requirement))"
+tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --prefix' $(pack_get --mod-req))"
 
 pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --LD libxc)\"]\n\

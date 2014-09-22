@@ -17,7 +17,7 @@ file=build.conf
 pack_set --command "echo '#' > $file"
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement mumps) mumps)"
+tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req mumps) mumps)"
 pack_set --command "sed -i '1 a\
 extra_link_args = $tmp_flags \n\
 ' $file"

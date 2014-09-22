@@ -9,7 +9,6 @@ pack_set --install-query $(pack_get --prefix)/bin/nc3tonc4
 
 pack_set --module-requirement cython \
     --module-requirement netcdf-serial \
-    --module-requirement hdf5-serial \
     --module-requirement numpy
 
 # Check for Intel MKL or not

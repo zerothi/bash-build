@@ -54,7 +54,7 @@ fi
 
 
 # Install commands that it should run
-pack_set --command "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-requirement))' ../configure $tmp_flags" \
+pack_set --command "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))' ../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands

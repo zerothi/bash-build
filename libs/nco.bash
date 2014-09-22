@@ -16,9 +16,9 @@ pack_set $(list -p '--host-reject ' hemera eris)
 # Install commands that it should run
 pack_set \
     --command "./configure" \
-    --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) '" \
+    --command-flag "LDFLAGS=' $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) '" \
     --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lexpat -lnetcdf '" \
-    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --module-paths-requirement)) '" \
+    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req)) '" \
     --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-udunits2" \

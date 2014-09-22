@@ -30,7 +30,7 @@ else
     
 fi
 
-clib="$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --module-requirement))"
+clib="$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req))"
 clib=${clib// /}
 clib=${clib:1}
 
@@ -62,5 +62,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --LD)/libslepc.so
 pack_set --module-requirement petsc \
     --module-requirement parpack
 
-tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))"
+tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))"
 tmp_lib=
 
 if $(is_c intel) ; then

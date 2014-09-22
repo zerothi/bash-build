@@ -76,8 +76,8 @@ fi
 
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement)) -lfftw3_mpi -lfftw3 $tmp \n\
-INCS = $(list --INCDIRS $(pack_get --module-requirement))' $file"
+LIB = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lfftw3_mpi -lfftw3 $tmp \n\
+INCS = $(list --INCDIRS $(pack_get --mod-req))' $file"
 
 # prepare the directory of installation
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
@@ -106,5 +106,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

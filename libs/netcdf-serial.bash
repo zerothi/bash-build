@@ -44,8 +44,8 @@ pack_set --install-query $(pack_get --LD)/libnetcdff.a
 
 # Install commands that it should run
 pack_set --command "../configure" \
-    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
-    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req))'" \
+    --command-flag "LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-shared" \
     --command-flag "--enable-static"

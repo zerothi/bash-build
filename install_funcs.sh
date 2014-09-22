@@ -533,8 +533,8 @@ function pack_set {
 			;;
 		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
-            -R|-module-requirement)  
-		local tmp="$(pack_get --module-requirement $1)"
+            -R|-module-requirement|-mod-req)  
+		local tmp="$(pack_get --mod-req-all $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
 		# We add the host-rejects for this requirement
 		local tmp="$(pack_get --host-reject $1)"
@@ -650,16 +650,14 @@ function pack_get {
 		    done 
 		    _ps "${_mod_name[$index]}"
 		    ;;
-		-R|-module-requirement) 
-                                     _ps "${_mod_req[$index]}" ;;
-		-module-paths-requirement) 
+		-R|-module-requirement|-mod-req) 
 		    for m in ${_mod_req[$index]} ; do
-			if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
-			    continue
-			else
+			if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
 			    _ps "$m "
 			fi
 		    done ;;
+		-module-requirement-all|-mod-req-all) 
+                    _ps "${_mod_req[$index]}" ;;
 		-module-name-requirement) 
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
@@ -693,17 +691,15 @@ function pack_get {
 	case $opt in
 	    -C|-commands)        _ps "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-	    -R|-module-requirement)
-		                 _ps "${_mod_req[$index]}" ;;
-	    -module-paths-requirement) 
+	    -R|-module-requirement|-mod-req)
 		for m in ${_mod_req[$index]} ; do
-		    if [ "$(pack_get --prefix $m)" == "$_install_prefix_no_path" ]; then
-			continue
-		    else
+		    if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
 			_ps "$m "
 		    fi
 		done ;;
-	    -module-name-requirement)
+	    -module-requirement-all|-mod-req-all) 
+		_ps "${_mod_req[$index]}" ;;
+	    -module-name-requirement|-mod-req-name)
 		for m in ${_mod_req[$index]} ; do
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
@@ -797,8 +793,8 @@ function pack_install {
     fi
 
     # Save the module requirements for later...
-    mod_reqs="$(pack_get --module-requirement $idx)"
-    mod_reqs_paths="$(pack_get --module-paths-requirement $idx)"
+    mod_reqs="$(pack_get --mod-req-all $idx)"
+    mod_reqs_paths="$(pack_get --mod-req $idx)"
 
     # If we request downloading of files, do so immediately
     if [ $DOWNLOAD -eq 1 ]; then
@@ -1106,7 +1102,7 @@ function create_module {
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -RL|-reqs+load-module) 
-		load="$load $(pack_get --module-requirement $1) $1" ; shift ;; # Can be optioned several times
+		load="$load $(pack_get --mod-req $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times

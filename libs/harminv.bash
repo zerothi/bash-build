@@ -31,8 +31,8 @@ fi
 
     # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$LDFLAGS $(list --LDFLAGS $(pack_get --module-paths-requirement)) $(list --Wlrpath $(pack_get --module-paths-requirement))'" \
-    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+    --command-flag "LDFLAGS='$LDFLAGS $(list --LDFLAGS $(pack_get --mod-req)) $(list --Wlrpath $(pack_get --mod-req))'" \
+    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req))'" \
     --command-flag "--prefix $(pack_get --prefix) $tmp"
 
 

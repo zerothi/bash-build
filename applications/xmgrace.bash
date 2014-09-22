@@ -14,9 +14,9 @@ pack_set --module-requirement netcdf-serial --module-requirement fftw-2
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))'" \
     --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement)) $CPPFLAGS'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req)) $CPPFLAGS'" \
     --command-flag "--enable-netcdf" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-grace-home=$(pack_get --prefix)"
@@ -33,5 +33,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias) 

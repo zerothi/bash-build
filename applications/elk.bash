@@ -59,7 +59,7 @@ elif $(is_c gnu) ; then
     fi
 
     pack_set --command "sed -i '1 a\
-LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement)) $tmp\n\
+LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) $tmp\n\
 ' $file"
 
 else
@@ -121,5 +121,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
