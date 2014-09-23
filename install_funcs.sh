@@ -512,7 +512,7 @@ function pack_set {
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=2
-    local mod_prefix=""
+    local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
     while [ $# -gt 0 ]; do
 	# Process what is requested
@@ -533,6 +533,15 @@ function pack_set {
 			;;
 		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
+            -module-remove|-mod-rem)  
+		local tmp=""
+		for m in ${_mod_req[$index]} ; do
+		    if [ "$m" != "$1" ]; then
+			tmp="$tmp $m"
+		    fi
+		done
+		_mod_req[$index]="$tmp"
+		shift ;;
             -R|-module-requirement|-mod-req)  
 		local tmp="$(pack_get --mod-req-all $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
