@@ -7,7 +7,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
 # Only install locally
-pack_set $(list -p "--host-reject " surt muspel slid n- hemera eris $(get_hostname))
+pack_set $(list -p "--host-reject " surt muspel slid n- hemera eris ponto $(get_hostname))
 
 # Install commands that it should run
 pack_set --command "unset F90 && unset F90FLAGS && ../configure" \

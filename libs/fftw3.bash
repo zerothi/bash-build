@@ -22,7 +22,7 @@ pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
     --command-flag "--prefix $(pack_get --prefix)"
 
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n-) ; then
+if ! $(is_host n- hemera) ; then
     pack_set --command "make check > tmp.test 2>&1"
     pack_set_mv_test tmp.test tmp.test.mpi.$ext
 fi
@@ -36,7 +36,7 @@ pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
     --command-flag "--enable-threads" \
     --command-flag "--prefix $(pack_get --prefix)"
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n-) ; then
+if ! $(is_host n- hemera) ; then
     pack_set --command "make check > tmp.test 2>&1"
     pack_set_mv_test tmp.test tmp.test.smp.mpi.$ext
 fi
@@ -54,7 +54,7 @@ pack_set --command "LIB='$FLAG_OMP' CFLAGS='$mpi_flags $CFLAGS $FLAG_OMP' FFLAGS
     --command-flag "--enable-openmp" \
     --command-flag "--prefix $(pack_get --prefix)"
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n-) ; then
+if ! $(is_host n- hemera) ; then
     pack_set --command "make check > tmp.test 2>&1"
     pack_set_mv_test tmp.test tmp.test.omp.mpi.$ext
 fi

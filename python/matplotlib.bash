@@ -9,6 +9,9 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
+if ! $(is_host hemera) ; then
+	pack_set --module-requirement numpy --module-requirement gen-freetype
+fi
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"

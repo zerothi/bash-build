@@ -27,11 +27,11 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host hemera eris) ; then
+if ! $(is_host hemera eris ponto) ; then
 	pack_set --command "make check > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-if ! $(is_host hemera eris) ; then
+if ! $(is_host hemera eris ponto) ; then
 	pack_set_mv_test tmp.test
 fi
 

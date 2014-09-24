@@ -1,8 +1,8 @@
 # We will only install this on the super computer
 add_package http://ab-initio.mit.edu/harminv/harminv-1.3.1.tar.gz
 
-pack_set --host-reject ntch --host-reject zeroth \
-    $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 hemera eris)
+pack_set \
+    $(list --prefix "--host-reject " ntch zeroth surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 hemera eris ponto)
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

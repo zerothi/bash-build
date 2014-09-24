@@ -8,12 +8,8 @@ fi
 
 pack_set --directory ATLAS
 
-pack_set $(list --prefix "--host-reject " surt muspel slid eris)
+pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris ponto)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
-
-if $(is_host eris) ; then
-	pack_set --module-requirement gcc/4.7.2
-fi
 
 pack_set --install-query $(pack_get --LD)/libatlas.a
 

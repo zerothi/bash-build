@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --LD)/libpetsc.so
 pack_set \
     $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
 
-pack_set $(list -p '--host-reject ' hemera eris)
+pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 tmp=''
 if $(is_c intel) ; then

@@ -11,7 +11,7 @@ pack_set --module-requirement gsl \
     --module-requirement udunits \
     --module-requirement netcdf-serial
 
-pack_set $(list -p '--host-reject ' hemera eris)
+pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 # Install commands that it should run
 pack_set \

@@ -19,7 +19,7 @@ fi
 if $(is_host ntch-l) ; then
     [ "$c" == "ifort" ] && continue
 fi
-if $(is_host hemera eris) ; then
+if $(is_host hemera eris ponto) ; then
     [ "$c" == "open64" ] && continue
     [ "$c" == "pgi" ] && continue
 fi
