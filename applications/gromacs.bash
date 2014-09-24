@@ -1,4 +1,5 @@
-add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.6.tar.gz
+for v in 4.6.7 5.0.1 ; do
+add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -64,3 +65,5 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
+
+done
