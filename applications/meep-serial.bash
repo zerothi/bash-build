@@ -1,7 +1,7 @@
 # Install
 add_package \
     --package meep-serial \
-    http://ab-initio.mit.edu/meep/meep-1.2.tar.gz
+    http://ab-initio.mit.edu/meep/meep-1.2.1.tar.gz
 
 pack_set -s $IS_MODULE
 

@@ -1,7 +1,7 @@
 # Install
 add_package \
     --package mpb-serial \
-    http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
+    http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
 
 pack_set -s $IS_MODULE
 

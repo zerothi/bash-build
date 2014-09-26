@@ -1,5 +1,5 @@
 # Install
-add_package http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
+add_package http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
 
 pack_set -s $IS_MODULE
 
