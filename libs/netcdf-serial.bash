@@ -28,7 +28,7 @@ pack_set_mv_test tmp.test tmp.test.c
 
 
 # Install the FORTRAN headers
-vf=4.4.0
+vf=4.4.1
 add_package --archive netcdf-fortran-$vf.tar.gz \
     --package netcdf-fortran-serial \
     https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
