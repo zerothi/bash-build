@@ -4,12 +4,12 @@ add_package --package petsc \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libpetsc.so
+pack_set --install-query $(pack_get --LD)/libpetsc.so
 
 pack_set \
     $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
 
-pack_set $(list -p '--host-reject ' hemera eris)
+pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 tmp=''
 if $(is_c intel) ; then
@@ -27,24 +27,24 @@ else
 	pack_set --module-requirement atlas
 	tmp="$tmp --with-blas-lib='-lf77blas -lcblas -latlas'"
 	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix atlas)"
+	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix atlas)"
 
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
 	tmp="$tmp --with-blas-lib='-lopenblas'"
 	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix openblas)"
+	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix openblas)"
 
     else
 	pack_set --module-requirement blas
 	tmp="$tmp --with-blas-lib='-lblas'"
 	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --install-prefix blas)"
+	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix blas)"
     fi
 
 fi
 
-tmp_ld="$(list --Wlrpath --LDFLAGS $(pack_get --module-requirement))"
+tmp_ld="$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))"
 
 pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
@@ -55,48 +55,48 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "LIBS='$tmp_ld'" \
     --command-flag "AR=ar" \
     --command-flag "RANLIB=ranlib" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-fortran-interfaces=1" \
     --command-flag "--with-pic=1 $tmp" \
     --command-flag "--with-parmetis=1" \
-    --command-flag "--with-parmetis-dir=$(pack_get --install-prefix parmetis)" \
+    --command-flag "--with-parmetis-dir=$(pack_get --prefix parmetis)" \
     --command-flag "--with-metis=1" \
-    --command-flag "--with-metis-dir=$(pack_get --install-prefix parmetis)" \
+    --command-flag "--with-metis-dir=$(pack_get --prefix parmetis)" \
     --command-flag "--with-hwloc=1" \
-    --command-flag "--with-hwloc-dir=$(pack_get --install-prefix hwloc)" \
+    --command-flag "--with-hwloc-dir=$(pack_get --prefix hwloc)" \
     --command-flag "--with-hdf5=1" \
-    --command-flag "--with-hdf5-dir=$(pack_get --install-prefix hdf5)" \
+    --command-flag "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
     --command-flag "--with-fftw=1" \
-    --command-flag "--with-fftw-dir=$(pack_get --install-prefix fftw-3)"
+    --command-flag "--with-fftw-dir=$(pack_get --prefix fftw-3)"
 
 #    --command-flag "--with-mumps=1" \
 #    --command-flag "--with-mumps-lib='$(list --LDFLAGS --Wlrpath mumps) -lzmumps -ldmumps -lmumps_common -lpord'" \
-#    --command-flag "--with-mumps-include=$(pack_get --install-prefix mumps)/include" \
+#    --command-flag "--with-mumps-include=$(pack_get --prefix mumps)/include" \
 #    --command-flag "--with-ptscotch=1" \
 #    --command-flag "--with-ptscotch-lib='$(list --LDFLAGS --Wlrpath scotch) -lptscotch'" \
-#    --command-flag "--with-ptscotch-include=$(pack_get --install-prefix scotch)/include"
+#    --command-flag "--with-ptscotch-include=$(pack_get --prefix scotch)/include"
 
 #    --command-flag "--with-superlu_dist=1" \
-#    --command-flag "--with-superlu_dist-dir=$(pack_get --install-prefix superlu-dist)" \
+#    --command-flag "--with-superlu_dist-dir=$(pack_get --prefix superlu-dist)" \
 
 #    --command-flag "--with-cholmod=1" \
-#    --command-flag "--with-cholmod-dir=$(pack_get --install-prefix cholmod)"
+#    --command-flag "--with-cholmod-dir=$(pack_get --prefix cholmod)"
 #    --command-flag "--with-umfpack=1" \
-#    --command-flag "--with-umfpack-dir=$(pack_get --install-prefix umfpack) $tmp"
+#    --command-flag "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
 #    --command-flag "--with-scalar-type=complex" \ #error on hwloc
 #    --command-flag "--with-netcdf=1" \
-#    --command-flag "--with-netcdf-dir=$(pack_get --install-prefix netcdf)" \
+#    --command-flag "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
 
 # Make commands
 pack_set --command "make"
 pack_set --command "make install"
 
 # This tests the installation (i.e. linking)
-pack_set --command "make PETSC_DIR=$(pack_get --install-prefix) PETSC_ARCH= test > tmp.test 2>&1"
+pack_set --command "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH= test > tmp.test 2>&1"
 pack_set_mv_test tmp.test
 
 
-pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --install-prefix)"
+pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
 
 # Clean up the unused module
-pack_set --command "rm -rf $(pack_get --library-path)/modules"
+pack_set --command "rm -rf $(pack_get --LD)/modules"

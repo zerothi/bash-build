@@ -1,12 +1,12 @@
 # We will only install this on the super computer
 add_package http://ab-initio.mit.edu/harminv/harminv-1.3.1.tar.gz
 
-pack_set --host-reject ntch --host-reject zeroth \
-    $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 hemera eris)
+pack_set \
+    $(list --prefix "--host-reject " ntch zeroth surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 hemera eris ponto)
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libharminv.a
+pack_set --install-query $(pack_get --LD)/libharminv.a
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -31,9 +31,9 @@ fi
 
     # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$LDFLAGS $(list --LDFLAGS $(pack_get --module-paths-requirement)) $(list --Wlrpath $(pack_get --module-paths-requirement))'" \
-    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
-    --command-flag "--prefix $(pack_get --install-prefix) $tmp"
+    --command-flag "LDFLAGS='$LDFLAGS $(list --LDFLAGS $(pack_get --mod-req)) $(list --Wlrpath $(pack_get --mod-req))'" \
+    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req))'" \
+    --command-flag "--prefix $(pack_get --prefix) $tmp"
 
 
 # Make commands

@@ -5,12 +5,12 @@ add_package https://pypi.python.org/packages/source/c/cffi/cffi-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/site.py
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement cython
 
-pack_set --command "mkdir -p $(pack_get --library-path)/python$pV/site-packages"
+pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 

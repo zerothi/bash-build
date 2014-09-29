@@ -5,7 +5,7 @@ add_package --package arpack \
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-query $(pack_get --library-path)/libarpack.a
+pack_set --install-query $(pack_get --LD)/libarpack.a
 
 # First download file
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.tar.gz
@@ -89,5 +89,5 @@ fi
 
 pack_set --command "make"
 
-pack_set --command "mkdir -p $(pack_get --library-path)"
-pack_set --command "cp libarpack.a $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)"
+pack_set --command "cp libarpack.a $(pack_get --LD)/"

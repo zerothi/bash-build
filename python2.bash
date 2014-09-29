@@ -18,6 +18,11 @@ pack_set --module-requirement zlib \
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
+pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
+if $(is_host eris) ; then
+    pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/lib64/python2.7/lib-dynload"
+fi
+
 pCFLAGS="$CFLAGS"
 tmp=
 if $(is_c intel) ; then
@@ -105,7 +110,6 @@ create_module \
     -M python$pV.cython.mpi4py.numpy.scipy.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy mpi4py) scientificpython scipy cython mpi4py)
-
 
 create_module \
     -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \

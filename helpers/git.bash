@@ -9,28 +9,25 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --module-requirement gen-zlib
 
 pack_set --module-opt "--lua-family git"
-pack_set --install-query $(pack_get --install-prefix)/bin/git
+pack_set --install-query $(pack_get --prefix)/bin/git
 
 # Preload all tools for creating the configure script
-pack_set --command "module load $(pack_get --module-requirement autoconf)" \
-    --command-flag "$(pack_get --module-name autoconf)"
+tmp="$(pack_get --mod-req-all autoconf) $(pack_get --module-name autoconf)"
+pack_set --command "module load $tmp"
 pack_set --command "make configure"
-pack_set --command "module unload $(pack_get --module-name autoconf)" \
-    --command-flag "$(pack_get --module-requirement autoconf)"
+pack_set --command "module unload $tmp"
 
 # Install commands that it should run
 pack_set --command "./configure" \
     --command-flag "CFLAGS='$CFLAGS $(list --LDFLAGS -Wlrpath gen-zlib)'" \
-    --command-flag "--with-zlib=$(pack_get --install-prefix gen-zlib)" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)" \
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 #pack_set --command "make test > tmp.test 2>&1"
 pack_set --command "make install"
 #pack_set_mv_test tmp.test
-
-pack_install
 
 done
 

@@ -3,7 +3,7 @@ add_package --version 0.28a \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/bader
+pack_set --install-query $(pack_get --prefix)/bin/bader
 
 file=Makefile
 pack_set --command "echo '.SUFFIXES: .f90' > $file"
@@ -21,8 +21,8 @@ bader: \$(OBJS)\n\
 
 # Make commands
 pack_set --command "make bader"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
-pack_set --command "cp bader $(pack_get --install-prefix)/bin/"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
+pack_set --command "cp bader $(pack_get --prefix)/bin/"
 
 pack_install
 
@@ -33,6 +33,6 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias) 
 

@@ -10,12 +10,12 @@ add_package --build generic-empty \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --install-prefix)/lmod/$(pack_get --version)/init/bash
+pack_set --install-query $(pack_get --prefix)/lmod/$(pack_get --version)/init/bash
 
 # Configure the package
 pack_set --command "unset LUA_PATH && ./configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-lua-include=$(pack_get --install-prefix lua)/include"
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-lua-include=$(pack_get --prefix lua)/include"
 
 # Make lua package
 pack_set --command "make pre-install"

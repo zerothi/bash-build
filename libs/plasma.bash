@@ -3,7 +3,7 @@ add_package \
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
-pack_set --install-query $(pack_get --library-path)/libplasma.a
+pack_set --install-query $(pack_get --LD)/libplasma.a
 
 pack_set --module-requirement hwloc
 
@@ -62,7 +62,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 PLASMA_F90 =1\n\
-prefix = $(pack_get --install-prefix)\n\
+prefix = $(pack_get --prefix)\n\
 CC = $CC \n\
 FC = $FC \n\
 LOADER = \$(FC) \n\
@@ -71,7 +71,7 @@ ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
 FFLAGS = ${FFLAGS//-fp-model strict/} $FLAG_OMP \n\
-LDFLAGS = \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --module-requirement hwloc) hwloc)\n' $tmp"
+LDFLAGS = \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
 
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"

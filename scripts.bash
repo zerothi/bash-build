@@ -9,8 +9,6 @@ build_set --default-build generic-no-version
 
 source scripts/npa-scripts.bash
 
-install_all --from npa-scripts
-
 if [ $def_version -eq 1 ]; then
     build_set --default-module-version
 fi

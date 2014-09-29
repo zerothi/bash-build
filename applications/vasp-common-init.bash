@@ -6,7 +6,7 @@ pack_set --module-requirement wannier90[1.2]
 
 pack_set --module-opt "--lua-family vasp"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/vasp_tstGNGZhalf_is2
+pack_set --install-query $(pack_get --prefix)/bin/vasp_tstGNGZhalf_is2
 
 file=mymakefile
 pack_set --command "echo '# NPA' > $file"
@@ -41,7 +41,7 @@ OBJ_HIGH  = \n\
 OBJ_NOOPT = \n\
 DEBUG  = -O0 \n\
 INLINE = \$(OFLAG) \n\
-WANNIER_PATH = $(pack_get --library-path wannier90[1.2])\n\
+WANNIER_PATH = $(pack_get --LD wannier90[1.2])\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
 LIB  = -L../vasp.5.lib -ldmy \$(WANNIER) -lwannier \\\\\n\
      ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS)' $file"

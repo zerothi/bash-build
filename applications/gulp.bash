@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family gulp"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gulp
+pack_set --install-query $(pack_get --prefix)/bin/gulp
 
 pack_set --command "cd Src"
 
@@ -41,10 +41,10 @@ OPT2 = -ffloat-store\n\
 BAGGER = \n\
 RUNF90 = $MPIF90\n\
 RUNCC = $MPICC\n\
-FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 BLAS = \n\
 LAPACK = \n\
-CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 ETIME = \n\
 GULPENV = \n\
 CDABS = cdabs.o\n\
@@ -56,10 +56,10 @@ pack_set --command "make $(get_make_parallel) gulp"
 pack_set --command "make $(get_make_parallel) lib"
 
 # Install the package
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin/"
-pack_set --command "mkdir -p $(pack_get --library-path)/"
-pack_set --command "cp gulp $(pack_get --install-prefix)/bin/"
-pack_set --command "cp ../libgulp.a $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
+pack_set --command "mkdir -p $(pack_get --LD)/"
+pack_set --command "cp gulp $(pack_get --prefix)/bin/"
+pack_set --command "cp ../libgulp.a $(pack_get --LD)/"
 
 pack_install
 
@@ -70,7 +70,7 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
 
 done

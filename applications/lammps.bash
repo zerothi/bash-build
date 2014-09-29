@@ -13,7 +13,7 @@ pack_set --module-opt "--lua-family lammps"
 pack_set --directory 'lammps-*'
 pack_set --command 'cd src'
 
-pack_set --install-query $(pack_get --install-prefix)/bin/lmp
+pack_set --install-query $(pack_get --prefix)/bin/lmp
 
 pack_set --module-requirement openmpi \
     --module-requirement fftw-3
@@ -25,7 +25,7 @@ pack_set --command "sed -i '1 a\
 include ../MAKE/Makefile.linux\n\
 SHELL=/bin/sh\n\
 CC =         $MPICXX\n\
-CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --module-paths-requirement))\n\
+CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --mod-req))\n\
 SHFLAGS =    -fPIC\n\
 DEPFLAGS =   -M\n\
 LINK =	     \$(CC)\n\
@@ -47,12 +47,12 @@ JPG_LIB = ' $tmp"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))\n\
+LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
 else
@@ -63,14 +63,14 @@ fi
 pack_set --command "make $(get_make_parallel) npa"
 pack_set --command "make makelib"
 pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "cp lmp_npa $(pack_get --install-prefix)/bin/lmp"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
-pack_set --command "mkdir -p $(pack_get --library-path)"
-pack_set --command "cp liblammps_npa.a $(pack_get --install-prefix)/bin/liblammps.a"
+pack_set --command "mkdir -p $(pack_get --LD)"
+pack_set --command "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
 # Copy headers over 
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
-pack_set --command "cp library.cpp library.h $(pack_get --install-prefix)/include/"
+pack_set --command "mkdir -p $(pack_get --prefix)/include"
+pack_set --command "cp library.cpp library.h $(pack_get --prefix)/include/"
 
 
 pack_install
@@ -82,5 +82,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

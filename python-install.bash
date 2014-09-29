@@ -4,7 +4,7 @@ msg_install \
 # This script will install all python packages
 #exit 0
 
-pMod="$(pack_get --module-requirement $(get_parent)) $(get_parent)"
+pMod="$(pack_get --mod-req-all $(get_parent)) $(get_parent)"
 pModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
 module load $pModNames
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
@@ -37,7 +37,6 @@ build_set --default-build python$IpV
 # Python building utility
 source python/scons.bash
 
-install_all --from scons
 # Install the helper (mongodb)
 source helpers/mongo.bash
 
@@ -61,8 +60,6 @@ source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
 source python/sphinx.bash # jinja2
-
-install_all --from mongo
 
 # Done with packages only installed in python-home! ^
 
@@ -107,8 +104,6 @@ source python/scikit-optimization.bash
 # Must be installed after numpy
 source python/llvmpy.bash
 source python/llvmmath.bash
-
-# Numba needs to release a new version (and numpy needs 1.9)
 source python/numba.bash
 
 # Physics related python modules
@@ -128,6 +123,6 @@ source python/phonopy.bash
 source python/tinyarray.bash
 source python/kwant.bash
 
-install_all --from pymongo
+pack_install
 
 build_set --default-build $def_idx

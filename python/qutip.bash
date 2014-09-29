@@ -15,7 +15,7 @@ pack_set $(list --prefix '--host-reject ' surt muspel slid ntch zeroth hemera er
 p_name=$(lc $(pack_get --alias))
 p_name=${p_name//-DEV/}
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$p_name
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$p_name
 
 # Add requirments when creating the module
 pack_set --module-requirement scipy \
@@ -25,6 +25,6 @@ pack_set --module-requirement scipy \
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     
 done

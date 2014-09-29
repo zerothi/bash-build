@@ -1,14 +1,14 @@
 # Install
 add_package \
     --package mpb-serial \
-    http://ab-initio.mit.edu/mpb/mpb-1.4.2.tar.gz
+    http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --host-reject ntch --host-reject zeroth \
     $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
 
-pack_set --install-query $(pack_get --install-prefix)/bin/mpbi
+pack_set --install-query $(pack_get --prefix)/bin/mpbi
 
 pack_set --module-opt "--lua-family mpb"
 
@@ -38,34 +38,32 @@ else
 
 fi
 # Add the CTL library
-tmp="$tmp --with-libctl=$(pack_get --install-prefix libctl)/share/libctl"
+tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
 # Install commands that it should run
 pack_set --command "autoconf configure.ac > configure"
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))'" \
+    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req))'" \
     --command-flag "--without-mpi" \
-    --command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
+    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 # Install the inversion symmetric part
 pack_set --command "make distclean"
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))'" \
+    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req))'" \
     --command-flag "--with-inv-symmetry" \
     --command-flag "--without-mpi" \
-    --command-flag "--prefix=$(pack_get --install-prefix) $tmp" 
+    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 pack_install
 
@@ -75,5 +73,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias) 

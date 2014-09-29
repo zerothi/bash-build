@@ -7,7 +7,7 @@ add_package \
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libpnetcdf.a
+pack_set --install-query $(pack_get --LD)/libpnetcdf.a
 
 pack_set --module-requirement openmpi
 if [ $(pack_installed bison) -eq 1 ]; then
@@ -21,17 +21,17 @@ fi
 pack_set --command "../configure" \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--with-mpi=$(pack_get --install-prefix openmpi)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--with-mpi=$(pack_get --prefix openmpi)" \
     --command-flag "--enable-fortran"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host hemera eris) ; then
+if ! $(is_host hemera eris ponto) ; then
 	pack_set --command "make check > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-if ! $(is_host hemera eris) ; then
+if ! $(is_host hemera eris ponto) ; then
 	pack_set_mv_test tmp.test
 fi
 

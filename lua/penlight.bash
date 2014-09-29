@@ -5,7 +5,7 @@ add_package --build generic \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --library-path lua)/lua/$lua_V/pl
+pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/pl
 
 pack_set --command "cd lua"
-pack_set --command "cp -rf pl $(pack_get --library-path lua)/lua/$lua_V/"
+pack_set --command "cp -rf pl $(pack_get --LD lua)/lua/$lua_V/"

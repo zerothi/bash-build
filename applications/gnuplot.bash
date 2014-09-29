@@ -6,11 +6,11 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family gnuplot"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gnuplot
+pack_set --install-query $(pack_get --prefix)/bin/gnuplot
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
@@ -24,5 +24,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

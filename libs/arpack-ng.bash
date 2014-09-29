@@ -6,7 +6,7 @@ add_package \
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-query $(pack_get --library-path)/libparpack.a
+pack_set --install-query $(pack_get --LD)/libparpack.a
 
 pack_set --module-requirement openmpi
 
@@ -33,12 +33,12 @@ fi
 pack_set --command "./configure" \
     --command-flag "F77='$FC'" \
     --command-flag "FFLAGS='$FCFLAGS'" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))'" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))'" \
     --command-flag "CC='$CC'" \
     --command-flag "CFLAGS='$CFLAGS'" \
     --command-flag "MPIF77='$MPIFC'" \
     --command-flag "--enable-mpi $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
 pack_set --command "make check > tmp.test 2>&1"

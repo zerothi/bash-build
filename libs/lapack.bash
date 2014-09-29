@@ -5,7 +5,7 @@ add_package --package lapack-$bl http://www.netlib.org/lapack/lapack-3.5.0.tgz
 
 pack_set -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --library-path $bl)/liblapack.a
+pack_set --install-query $(pack_get --LD $bl)/liblapack.a
 
 pack_set --module-requirement $bl
 
@@ -45,22 +45,22 @@ pack_set --command "echo 'LAPACKE_WITH_TMG = Yes' >> $file"
 # Make commands
 pack_set --command "make $(get_make_parallel) lapacklib lapackelib tmglib"
 
-pack_set --command "cp liblapack.a liblapacke.a $(pack_get --library-path $bl)/"
-pack_set --command "cp libtmglib.a $(pack_get --library-path $bl)/libtmg.a"
-pack_set --command "mkdir -p $(pack_get --install-prefix $bl)/include/"
-pack_set --command "cp lapacke/include/*.h $(pack_get --install-prefix $bl)/include/"
+pack_set --command "cp liblapack.a liblapacke.a $(pack_get --LD $bl)/"
+pack_set --command "cp libtmglib.a $(pack_get --LD $bl)/libtmg.a"
+pack_set --command "mkdir -p $(pack_get --prefix $bl)/include/"
+pack_set --command "cp lapacke/include/*.h $(pack_get --prefix $bl)/include/"
 
 if [ $bl == "atlas" ]; then
 # We need to collect the two sets
 pack_set --command "mkdir -p tmp"
 pack_set --command "cd tmp"
 # Extract atlas optimized lapack routines
-pack_set --command "$AR x $(pack_get --library-path $bl)/liblapack_atlas.a"
+pack_set --command "$AR x $(pack_get --LD $bl)/liblapack_atlas.a"
 # replace them
 pack_set --command "$AR r ../liblapack.a *.o"
 pack_set --command "cd .."
 pack_set --command "ranlib liblapack.a"
-pack_set --command "cp liblapack.a $(pack_get --library-path $bl)/liblapack.a"
+pack_set --command "cp liblapack.a $(pack_get --LD $bl)/liblapack.a"
 fi
 
 done

@@ -2,7 +2,6 @@ for v in 5.1 ; do
     libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     if [ "$v" = "5.1" ]; then
 	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
-	libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt"
     elif [ "$v" = "5.0.3" ]; then
 	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
@@ -15,7 +14,7 @@ for v in 5.1 ; do
     
     pack_set -s $IS_MODULE
 
-    pack_set --install-query $(pack_get --install-prefix)/bin/pw.x
+    pack_set --install-query $(pack_get --prefix)/bin/pw.x
 
     pack_set --host-reject ntch --host-reject zeroth
 
@@ -69,10 +68,10 @@ for v in 5.1 ; do
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='$FCFLAGS $FLAG_OMP'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --module-paths-requirement)) $FLAG_OMP'" \
-	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement))'" \
+	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req)) $FLAG_OMP'" \
+	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req))'" \
 	--command-flag "--enable-parallel --enable-openmp" \
-	--command-flag "--prefix=$(pack_get --install-prefix)" 
+	--command-flag "--prefix=$(pack_get --prefix)" 
 
     # Make commands
     for EXE in $libs ; do
@@ -80,13 +79,13 @@ for v in 5.1 ; do
     done
 
     # Prepare installation directories...
-    pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-    pack_set --command "mkdir -p $(pack_get --library-path)"
-    pack_set --command "mkdir -p $(pack_get --install-prefix)/include"
-    pack_set --command "cp bin/* $(pack_get --install-prefix)/bin/"
+    pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+    pack_set --command "mkdir -p $(pack_get --LD)"
+    pack_set --command "mkdir -p $(pack_get --prefix)/include"
+    pack_set --command "cp bin/* $(pack_get --prefix)/bin/"
     # Install the iotk-library
-    pack_set --command "cp iotk/src/libiotk.a $(pack_get --library-path)/"
-    pack_set --command "cp iotk/src/*.mod $(pack_get --install-prefix)/include/"
+    pack_set --command "cp iotk/src/libiotk.a $(pack_get --LD)/"
+    pack_set --command "cp iotk/src/*.mod $(pack_get --prefix)/include/"
 
     pack_install
 
@@ -96,7 +95,7 @@ for v in 5.1 ; do
     	-v $(pack_get --version) \
     	-M $(pack_get --alias).$(pack_get --version)/$(get_c) \
 	-P "/directory/should/not/exist" \
-    	$(list --prefix '-L ' $(pack_get --module-requirement)) \
+    	$(list --prefix '-L ' $(pack_get --mod-req)) \
     	-L $(pack_get --alias) 
 
 done

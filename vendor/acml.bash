@@ -19,7 +19,7 @@ fi
 if $(is_host ntch-l) ; then
     [ "$c" == "ifort" ] && continue
 fi
-if $(is_host hemera eris) ; then
+if $(is_host hemera eris ponto) ; then
     [ "$c" == "open64" ] && continue
     [ "$c" == "pgi" ] && continue
 fi
@@ -32,19 +32,17 @@ add_package --build vendor \
     --directory ./ \
     http://www.student.dtu.dk/~nicpa/packages/acml-$v-$c-64bit.tgz
 
-pack_set --install-query $(pack_get --install-prefix)/${dc}64
+pack_set --install-query $(pack_get --prefix)/${dc}64
 
-pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get --install-prefix)"
+pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get --prefix)"
 
 pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
 
 if $(is_host ntch zero) ; then
     # These machines at least does not have fma4, so delete it!
-    pack_set --command "rm -rf $(pack_get --install-prefix)/${dc}64_fma4"
-    pack_set --command "rm -rf $(pack_get --install-prefix)/${dc}64_fma4_mp"
+    pack_set --command "rm -rf $(pack_get --prefix)/${dc}64_fma4"
+    pack_set --command "rm -rf $(pack_get --prefix)/${dc}64_fma4_mp"
 fi
-
-pack_install
 
 # We need to create all the different modules...
 for directive in nothing fma4 ; do
@@ -71,15 +69,15 @@ pack_set -s $IS_MODULE
 
 # Add ./util dir to path
 pack_set --module-opt \
-    "--prepend-ENV PATH=$(pack_get --install-prefix acml-install)/util"
+    "--prepend-ENV PATH=$(pack_get --prefix acml-install)/util"
 
 # Create custom ACML_DIR env-variable
 tmp=${dc}64
 [ -n "$directive" ] && tmp=${tmp}_$directive
 [ -n "$mp" ] && tmp=${tmp}_$mp
-pack_set --install-prefix $(pack_get --install-prefix acml-install)/$tmp
+pack_set --prefix $(pack_get --prefix acml-install)/$tmp
 
-pack_set --module-opt "--set-ENV ACML_DIR=$(pack_get --install-prefix)"
+pack_set --module-opt "--set-ENV ACML_DIR=$(pack_get --prefix)"
 
 pack_set --lua-family acml
 
@@ -89,9 +87,6 @@ tmp=${tmp//ifort/intel}
 [ ! -z "$directive" ] && tmp="${tmp}-$directive"
 [ ! -z "$mp" ] && tmp="${tmp}-$mp"
 pack_set --module-name acml/${v//-/.}/$tmp
-
-# As this is only module-installations we might as well do it immediately...
-pack_install
 
 done # mp
 done # directive

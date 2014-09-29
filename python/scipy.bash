@@ -3,7 +3,7 @@ add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement numpy
 
@@ -15,7 +15,7 @@ pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build $pNumpyIn
 
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 if [ $(pack_installed swig) -eq 1 ]; then
     pack_set --command "module unload $(pack_get --module-name swig pcre) $(pack_get --module-name-requirement pcre swig)"

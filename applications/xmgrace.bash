@@ -3,7 +3,7 @@ add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.23.t
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --install-prefix)/bin/fdf2fit
+pack_set --install-query $(pack_get --prefix)/bin/fdf2fit
 
 pack_set --module-opt "--lua-family grace"
 
@@ -14,17 +14,16 @@ pack_set --module-requirement netcdf-serial --module-requirement fftw-2
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --module-paths-requirement))'" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))'" \
     --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --module-paths-requirement)) $CPPFLAGS'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req)) $CPPFLAGS'" \
     --command-flag "--enable-netcdf" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
-    --command-flag "--enable-grace-home=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)" \
+    --command-flag "--enable-grace-home=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
+pack_set --command "make install"
 
 pack_install
 
@@ -34,5 +33,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias) 

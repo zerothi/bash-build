@@ -1,12 +1,14 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
+# Set options
+set -o hashall
+
 # Default debugging variables
 _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 [ -z "$DOWNLOAD" ] && DOWNLOAD=0
-[ -z "$IM_INSTALL" ] && IM_INSTALL=1
 
 if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
@@ -384,10 +386,8 @@ function add_package {
     [ $DEBUG -ne 0 ] && do_debug --enter add_package
     # If we have immediate install we check to see if we
     # should install the previous package.
-    if [ $IM_INSTALL -eq 1 ]; then
-	if [ $_N_archives -ge 0 ]; then
-	    pack_install $_N_archives
-	fi
+    if [ $_N_archives -ge 0 ]; then
+	pack_install $_N_archives
     fi
     let _N_archives++
     # Collect options
@@ -397,7 +397,7 @@ function add_package {
     # Default to default index
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp="/lib"
+    local lp=""
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) 
 	shift
@@ -408,13 +408,14 @@ function add_package {
 	    -version|-v) v=$1 ; shift ;;
 	    -package|-p) package=$1 ; shift ;;
 	    -no-default-modules) no_def_mod=1 ;;
-	    -lib-path|-lp) lp=$1 ; 
+	    -lib-path|-lp) lp=$1 ; shift
 		case $lp in
-		    /*) # do nothing
+		    /*) 
+			lp=${lp#\/}
 			;;
-		    *) lp="/$lp"
+		    *) # do nothing
 			;;
-		esac ; shift ;;
+		esac ;;
 	    -alias|-a) alias=$1 ; shift ;;
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
@@ -483,9 +484,14 @@ function add_package {
     tmp="$(build_get --build-installation-path[$b_name])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
-    _lib_prefix[$_N_archives]=$lp
-    # Just in case lib64 already exists
-    [ -d ${_install_prefix[$_N_archives]}/${_lib_prefix[$_N_archives]}64 ] && _lib_prefix[$_N_archives]=${lp}64
+    if [ -z "$lp" ]; then
+	_lib_prefix[$_N_archives]=lib
+        # Just in case lib64 already exists
+	[ -d ${_install_prefix[$_N_archives]}/lib64 ] && \
+	    _lib_prefix[$_N_archives]=lib64
+    else
+	_lib_prefix[$_N_archives]=$lp
+    fi
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
@@ -506,7 +512,7 @@ function pack_set {
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=2
-    local mod_prefix=""
+    local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
     while [ $# -gt 0 ]; do
 	# Process what is requested
@@ -517,17 +523,27 @@ function pack_set {
 		install="$_install_prefix_no_path" ;;
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
-            -I|-install-prefix)  install="$1" ; shift ;;
-	    -L|-library-suffix)  lib="$1" 
+            -I|-install-prefix|-prefix)  install="$1" ; shift ;;
+	    -L|-library-suffix)  lib="$1" ; shift
 		case $lib in
-		    /*) # do nothing
+		    /*)
+			lib=${lib#\/}
 			;;
-		    *) lib="/$lib"
+		    *)  # do nothing
 			;;
-		esac ; shift ;;
+		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
-            -R|-module-requirement)  
-		local tmp="$(pack_get --module-requirement $1)"
+            -module-remove|-mod-rem)  
+		local tmp=""
+		for m in ${_mod_req[$index]} ; do
+		    if [ "$m" != "$1" ]; then
+			tmp="$tmp $m"
+		    fi
+		done
+		_mod_req[$index]="$tmp"
+		shift ;;
+            -R|-module-requirement|-mod-req)  
+		local tmp="$(pack_get --mod-req-all $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
 		# We add the host-rejects for this requirement
 		local tmp="$(pack_get --host-reject $1)"
@@ -561,7 +577,6 @@ function pack_set {
 	# This is only because we haven't used the index thing before
 	local opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
-	lib=/lib # ensure setting library path
     fi
     # We now have index to be the correct spanning
     [ ! -z "$cmd" ] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
@@ -571,7 +586,11 @@ function pack_set {
 	req="$(rem_dup $req)"
 	_mod_req[$index]="$req"
     fi
-    [ ! -z "$install" ]    && _install_prefix[$index]="$install"
+    if [ ! -z "$install" ]; then
+	_install_prefix[$index]="$install"
+	[ -d "$install/lib" ] && lib="lib"
+	[ -d "$install/lib64" ] && lib="lib64"
+    fi
     [ ! -z "$lib" ]        && _lib_prefix[$index]="$lib"
     [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
@@ -640,21 +659,19 @@ function pack_get {
 		    done 
 		    _ps "${_mod_name[$index]}"
 		    ;;
-		-R|-module-requirement) 
-                                     _ps "${_mod_req[$index]}" ;;
-		-module-paths-requirement) 
+		-R|-module-requirement|-mod-req) 
 		    for m in ${_mod_req[$index]} ; do
-			if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
-			    continue
-			else
+			if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
 			    _ps "$m "
 			fi
 		    done ;;
+		-module-requirement-all|-mod-req-all) 
+                    _ps "${_mod_req[$index]}" ;;
 		-module-name-requirement) 
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
-		-L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -683,22 +700,20 @@ function pack_get {
 	case $opt in
 	    -C|-commands)        _ps "${_cmd[$index]}" ;;
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-	    -R|-module-requirement)
-		                 _ps "${_mod_req[$index]}" ;;
-	    -module-paths-requirement) 
+	    -R|-module-requirement|-mod-req)
 		for m in ${_mod_req[$index]} ; do
-		    if [ "$(pack_get --install-prefix $m)" == "$_install_prefix_no_path" ]; then
-			continue
-		    else
+		    if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
 			_ps "$m "
 		    fi
 		done ;;
-	    -module-name-requirement)
+	    -module-requirement-all|-mod-req-all) 
+		_ps "${_mod_req[$index]}" ;;
+	    -module-name-requirement|-mod-req-name)
 		for m in ${_mod_req[$index]} ; do
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
 	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+	    -L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 	    -I|-install-prefix|-prefix) 
                                  _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
@@ -787,8 +802,8 @@ function pack_install {
     fi
 
     # Save the module requirements for later...
-    mod_reqs="$(pack_get --module-requirement $idx)"
-    mod_reqs_paths="$(pack_get --module-paths-requirement $idx)"
+    mod_reqs="$(pack_get --mod-req-all $idx)"
+    mod_reqs_paths="$(pack_get --mod-req $idx)"
 
     # If we request downloading of files, do so immediately
     if [ $DOWNLOAD -eq 1 ]; then
@@ -958,8 +973,8 @@ function pack_install {
     # Fix the library path...
     # We favour lib64
     for cmd in lib lib64 ; do
-	if [ -d $(pack_get --install-prefix)/$cmd ]; then
-	    pack_set --library-path $(pack_get --install-prefix)/$cmd $idx
+	if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
+	    pack_set --library-suffix $cmd $idx
 	fi
     done
 
@@ -1080,10 +1095,10 @@ function create_module {
     local name; local version; local echos
     local path; local help; local whatis; local opt
     local env="" ; local tmp=""
-    local mod_path=""
+    local mod_path="" ;local cmt=
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
-    local lua_family=""
+    local lua_family="" ; local fpath=
     local fm_comment="#"
     while [ $# -gt 0 ]; do
 	opt="$(trim_em $1)" ; shift
@@ -1096,7 +1111,7 @@ function create_module {
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -RL|-reqs+load-module) 
-		load="$load $(pack_get --module-requirement $1) $1" ; shift ;; # Can be optioned several times
+		load="$load $(pack_get --mod-req $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
@@ -1111,6 +1126,7 @@ function create_module {
 		doerr "$opt" "Option for create_module $opt was not recognized"
 	esac
     done
+    fpath=$path
     require="$(rem_dup $require)"
     load="$(rem_dup $load)"
     conflict="$(rem_dup $conflict)"
@@ -1173,16 +1189,16 @@ EOF
 	    doerr "create_module" "Unknown module type, [TCL,LUA]"
 	    ;;
     esac
-    tmp="$(get_c)"
-    if [ ! -z "$tmp" ]; then
+    cmt="$(get_c)"
+    if [ ! -z "$cmt" ]; then
 	case $_module_format in
 	    TCL)
+		cmt=", (\$compiler)"
 		cat <<EOF >> "$mfile"
 set compiler	$(get_c)
 EOF
 		;;
-	    LUA) tmp=", compiler \$compiler"
-		cat <<EOF >> "$mfile"
+	    LUA) cat <<EOF >> "$mfile"
 local compiler      = "$(get_c)"
 EOF
 		;;
@@ -1190,9 +1206,15 @@ EOF
     fi
 
     case $_module_format in
-	TCL) cat <<EOF >> "$mfile"
-set basepath	${path//$version/\$version}
+	TCL) 
+	    tmp="${path//$version/\$version}"
+	    if [ ! -z "$cmt" ]; then
+		tmp="${tmp//$(get_c)/\$compiler}"
+	    fi
+	    cat <<EOF >> "$mfile"
+set basepath	$tmp
 EOF
+	    fpath="\$basepath"
 	    ;;
 	LUA) cat <<EOF >> "$mfile"
 local basepath      = "${path%$version*}" .. version .. "${path#*$version}"
@@ -1207,7 +1229,7 @@ proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
 }
 
-module-whatis "Loads \$modulename (\$version)$tmp."
+module-whatis "Loads \$modulename (\$version)$cmt."
 
 EOF
 	    ;;
@@ -1303,25 +1325,27 @@ EOF
     fi
     # Add paths if they are available
     _add_module_if -F $force -d "$path/bin" $mfile \
-	"$(_module_fmt_routine --prepend-path PATH $path/bin)"
+	"$(_module_fmt_routine --prepend-path PATH $fpath/bin)"
     _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib/pkgconfig)"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
     _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $path/lib64/pkgconfig)"
+	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
     _add_module_if -F $force -d "$path/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $path/man)"
+	"$(_module_fmt_routine --prepend-path MANPATH $fpath/man)"
     _add_module_if -F $force -d "$path/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $path/share/man)"
+	"$(_module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
     #_add_module_if -F $force -d "$path/lib" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib)"
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
  #   _add_module_if -F $force -d "$path/lib64" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $path/lib64)"
+#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
-	"$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python)"
-    for PV in 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
+	"$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
+    for PV in 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "$(_module_fmt_routine --prepend-path PYTHONPATH $path/lib/python$PV/site-packages)"
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
+	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
+	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
     if [ ! -z "$lua_family" ]; then
 	case $_module_format in

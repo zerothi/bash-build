@@ -2,7 +2,7 @@ add_package http://www.open-mpi.org/software/hwloc/v1.9/downloads/hwloc-1.9.1.ta
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libhwloc.a
+pack_set --install-query $(pack_get --LD)/libhwloc.a
 
 pack_set --module-requirement numactl --module-requirement libxml2
 
@@ -10,7 +10,7 @@ pack_set --module-requirement numactl --module-requirement libxml2
 pack_set --command "module load help2man m4 autoconf automake"
 
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)" \
+    --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--enable-libnuma" \
     --command-flag "--disable-opencl" \
     --command-flag "--disable-cuda" \

@@ -3,14 +3,14 @@ add_package --build generic \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --library-path lua)//lua/$lua_V/lfs.so
+pack_set --install-query $(pack_get --LD lua)//lua/$lua_V/lfs.so
 
 # Correct the installation compilation
 pack_set --command "rm config"
 pack_set --command "echo '' > config"
 pack_set --command "echo '' > config"
 pack_set --command "sed -i '1 a\
-PREFIX = $(pack_get --install-prefix lua)\n\
+PREFIX = $(pack_get --prefix lua)\n\
 LUA_LIBDIR = \$(PREFIX)/lib/lua/$lua_V\n\
 LUA_INC =\$(PREFIX)/include\n\
 LIB_OPTION = -shared\n\
@@ -27,5 +27,5 @@ pack_set --command "make"
 pack_set --command "make install"
 
 # Copy the header to the correct placement
-pack_set --command "cp src/lfs.h $(pack_get --install-prefix lua)/include/"
+pack_set --command "cp src/lfs.h $(pack_get --prefix lua)/include/"
 

@@ -4,9 +4,9 @@ add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar
 pack_set -s $IS_MODULE
 
 if [ "x${pV:0:1}" == "x3" ]; then
-    pack_set --install-query $(pack_get --install-prefix)/bin/f2py3
+    pack_set --install-query $(pack_get --prefix)/bin/f2py3
 else
-    pack_set --install-query $(pack_get --install-prefix)/bin/f2py
+    pack_set --install-query $(pack_get --prefix)/bin/f2py
 fi
 pack_set --module-requirement $(get_parent) \
     --module-requirement fftw-3 --module-requirement umfpack
@@ -16,11 +16,11 @@ pack_set --module-requirement $(get_parent) \
 file=site.cfg
 pack_set --command "echo '#' > $file"
 
-tmp_lib=$(list --prefix ':' --suffix '/lib' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))
+tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req))
 tmp_lib=${tmp_lib// /}
 tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64
 
-tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --install-prefix' $(pack_get --module-requirement))
+tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req))
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
@@ -44,11 +44,10 @@ include_dirs = $tmp_inc\n' $file"
 
 fi
 
-tmp=$(pack_get --install-prefix fftw-3)
 pack_set --command "sed -i '1 a\
 [fftw]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $(pack_get --LD fftw-3)\n\
+include_dirs = $(pack_get --prefix fftw-3)/include\n\
 libraries = fftw3\n\
 [amd]\n\
 libraries = amd\n\
@@ -71,7 +70,7 @@ mkl_libs = mkl_rt,mkl_intel_lp64,mkl_gf_lp64,mkl_intel_thread,mkl_core,mkl_def\n
 lapack_libs = mkl_lapack95_lp64\n\
 blas_libs = mkl_blas95_lp64' $file"
 
-    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict $FLAG_OMP -I$(pack_get --install-prefix ss_config)/include"
+    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model strict $FLAG_OMP -I$(pack_get --prefix ss_config)/include"
     pack_set --command "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${pCFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
     pack_set --command "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $p_flags|g' numpy/distutils/intelccompiler.py"
@@ -87,55 +86,55 @@ blas_libs = mkl_blas95_lp64' $file"
 elif $(is_c gnu) ; then
 
     if [ $(pack_installed atlas) -eq 1 ]; then
-	tmp=$(pack_get --install-prefix atlas)
 	pack_set --module-requirement atlas
+	tmp=$(pack_get --LD atlas)
 	pack_set --command "sed -i '$ a\
 [atlas_threads]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp)\n\
+include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
 [atlas]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = f77blas,cblas,atlas\n\
 [lapack]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix atlas)/include\n\
 libraries = lapack' $file" 
     elif [ $(pack_installed openblas) -eq 1 ]; then
-	tmp=$(pack_get --install-prefix openblas)
 	pack_set --module-requirement openblas
+	tmp=$(pack_get --LD openblas)
 	pack_set --command "sed -i '$ a\
 [openblas]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix openblas)/include\n\
 libraries = openblas\n\
 [blas]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix openblas)/include\n\
 libraries = openblas\n\
 [lapack]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix openblas)/include\n\
 libraries = lapack' $file" 
     else
-	tmp=$(pack_get --install-prefix blas)
 	pack_set --module-requirement blas
+	tmp=$(pack_get --LD blas)
 	pack_set --command "sed -i '$ a\
 [blas]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix blas)/include\n\
 libraries = blas\n\
 [lapack]\n\
-library_dirs = $tmp/lib\n\
-include_dirs = $tmp/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix blas)/include\n\
 libraries = lapack' $file"
     fi
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
-    p_flags="DUM ${pFCFLAGS} -I$(pack_get --install-prefix ss_config)/include $FLAG_OMP"
+    p_flags="DUM ${pFCFLAGS} -I$(pack_get --prefix ss_config)/include $FLAG_OMP"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} -L${tmp_lib//:/ -L} -L$tmp/lib -Wl,-rpath=$tmp/lib -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
+    p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:9}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
@@ -149,7 +148,7 @@ fi
 
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
 pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Succes'"

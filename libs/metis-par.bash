@@ -2,7 +2,7 @@ add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.ta
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libparmetis.a
+pack_set --install-query $(pack_get --LD)/libparmetis.a
 
 pack_set --module-requirement openmpi
 
@@ -21,12 +21,12 @@ pack_set --command "sed -i -e 's/^\(cc\).*/\1 = $CC/' metis/Makefile"
 pack_set --command "sed -i -e 's/\(define IDXTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
 pack_set --command "sed -i -e 's/\(define REALTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
 pack_set --command "cd metis"
-pack_set --command "make config prefix=$(pack_get --install-prefix)"
+pack_set --command "make config prefix=$(pack_get --prefix)"
 pack_set --command "cd build/linux-unknown"
 pack_set --command "make"
 pack_set --command "make install"
 pack_set --command "cd ../../../"
-pack_set --command "make config prefix=$(pack_get --install-prefix)"
+pack_set --command "make config prefix=$(pack_get --prefix)"
 pack_set --command "cd build/linux-unknown"
 pack_set --command "make"
 pack_set --command "make install"

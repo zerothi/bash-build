@@ -11,12 +11,13 @@ source helpers/autoconf.bash
 source helpers/automake.bash
 source helpers/libtool.bash
 source helpers/cmake.bash
+source helpers/freetype.bash
 
 function echo_modules {
     # Retrieve all modules 
     local mods=""
     while [ $# -gt 0 ]; do
-	mods="$(pack_get --module-requirement $1) $1"
+	mods="$(pack_get --mod-req-all $1) $1"
 	shift
     done
     # Remove duplicates

@@ -6,16 +6,19 @@ add_package \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/site.py
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
-pack_set --module-requirement numpy
+pack_set --module-requirement numpy --module-requirement gen-freetype
+if ! $(is_host hemera) ; then
+	pack_set --module-requirement numpy --module-requirement gen-freetype
+fi
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 # Apparently matplotlib sucks at creating directories...
-pack_set --command "mkdir -p $(pack_get --library-path)/python$pV/site-packages/"
+pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
 pack_set --command "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Succes'"

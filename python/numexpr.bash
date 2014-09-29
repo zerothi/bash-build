@@ -11,7 +11,7 @@ for v in 1.4.2 2.4 ; do
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
     # This devious thing will never install the same place!!!!!
-    pack_set --install-query $(pack_get --library-path)/python$pV/site-packages
+    pack_set --install-query $(pack_get --LD)/python$pV/site-packages
     
     # Add requirments when creating the module
     pack_set --module-requirement numpy \
@@ -19,11 +19,11 @@ for v in 1.4.2 2.4 ; do
     
     # Install commands that it should run
     pack_set --command "mkdir -p" \
-	--command-flag "$(pack_get --library-path)/python$pV/site-packages"
+	--command-flag "$(pack_get --LD)/python$pV/site-packages"
     pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
 
     pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--prefix=$(pack_get --install-prefix)"
+	--command-flag "--prefix=$(pack_get --prefix)"
 
     add_test_package
     pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Succes'"

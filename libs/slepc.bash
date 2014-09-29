@@ -2,12 +2,12 @@ add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.5.0.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/libslepc.so
+pack_set --install-query $(pack_get --LD)/libslepc.so
 
 pack_set --module-requirement petsc \
     --module-requirement parpack
 
-tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))"
+tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))"
 tmp_lib=
 
 if $(is_c intel) ; then
@@ -43,9 +43,9 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "AR=$AR" \
     --command-flag "RANLIB=ranlib" \
     --command-flag "./configure" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-arpack" \
-    --command-flag "--with-arpack-dir=$(pack_get --library-path parpack)" \
+    --command-flag "--with-arpack-dir=$(pack_get --LD parpack)" \
     --command-flag "--with-arpack-flags='-lparpack -larpack'"
 
 # Set the arch of the build (sets the directory...)
@@ -62,10 +62,10 @@ pack_set --command "unset PETSC_ARCH"
 pack_set --command "unset SLEPC_DIR"
 
 # This tests the installation (i.e. linking)
-pack_set --command "make SLEPC_DIR=$(pack_get --install-prefix) test > tmp.test 2>&1"
+pack_set --command "make SLEPC_DIR=$(pack_get --prefix) test > tmp.test 2>&1"
 pack_set_mv_test tmp.test
 
-pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --install-prefix)"
+pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --prefix)"
 
 # Clean up the unused module
-pack_set --command "rm -rf $(pack_get --library-path)/modules"
+pack_set --command "rm -rf $(pack_get --LD)/modules"

@@ -16,7 +16,7 @@ tmp=makefile.linux_npa_vasp
 pack_set --command "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_$v -O $tmp"
 
 # Prepare the installation directory
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 # Create the make command
 function compile_ispin {
@@ -24,10 +24,10 @@ function compile_ispin {
     local exe=$1 ; shift
     pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' pardens.F"
     pack_set --command "make -f $tmp"
-    pack_set --command "cp vasp $(pack_get --install-prefix)/bin/${exe}_is$i"
+    pack_set --command "cp vasp $(pack_get --prefix)/bin/${exe}_is$i"
     pack_set --command "make -f $tmp clean"
     if [ $i -eq 0 ]; then
-	pack_set --command "pushd $(pack_get --install-prefix)/bin"
+	pack_set --command "pushd $(pack_get --prefix)/bin"
 	pack_set --command "ln -fs ${exe}_is0 ${exe}"
 	pack_set --command "popd"
     fi
@@ -72,7 +72,7 @@ pack_set --command "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
 pack_set --command "wget http://theory.cm.utexas.edu/code/vtstscripts.tgz"
 pack_set --command "tar xfz vtstscripts.tgz"
-pack_set --command "cp -r vtstscripts-*/* $(pack_get --install-prefix)/bin/"
+pack_set --command "cp -r vtstscripts-*/* $(pack_get --prefix)/bin/"
 
 ######################   end the TST code   ##########################
 
@@ -97,13 +97,13 @@ unset compile_ispin
 
 # Copy over the vdw_kernel
 vdw=vdw_kernel.bindat
-pack_set --command "mkdir -p $(pack_get --install-prefix)/data"
-pack_set --command "cp $vdw $(pack_get --install-prefix)/data/$vdw"
+pack_set --command "mkdir -p $(pack_get --prefix)/data"
+pack_set --command "cp $vdw $(pack_get --prefix)/data/$vdw"
 # Add an ENV-flag for the kernel to be copied
-pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --install-prefix)/data/$vdw"
+pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --prefix)/data/$vdw"
 
 # Ensure that the group is correctly set
-tmp="$(pack_get --install-prefix)/bin"
+tmp="$(pack_get --prefix)/bin"
 if $(is_host n-) ; then
     pack_set --command "chmod o-rwx $tmp/vasp*"
     pack_set --command "chgrp nanotech $tmp/vasp*"
@@ -120,5 +120,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

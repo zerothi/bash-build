@@ -3,12 +3,11 @@ add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch
-pack_set --host-reject zerothi
+pack_set $(list -p '--host-reject ' ntch zerothi hemera)
 
 pack_set --module-opt "--lua-family abinit"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/abinit
+pack_set --install-query $(pack_get --prefix)/bin/abinit
 
 pack_set --module-requirement openmpi
 pack_set --module-requirement gsl
@@ -29,7 +28,7 @@ if test -z "$FLAG_OMP" ; then
 fi
 
 pack_set --command "$s '$ a\
-prefix=\"$(pack_get --install-prefix)\"\n\
+prefix=\"$(pack_get --prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
@@ -37,7 +36,7 @@ FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
-FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --module-requirement))\"\n\
+FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_64bit_flags=\"yes\"\n\
 enable_lotf=\"yes\"\n\
@@ -45,7 +44,7 @@ enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
 enable_mpi=\"yes\"\n\
-with_mpi_prefix=\"$(pack_get --install-prefix openmpi)\"\n\
+with_mpi_prefix=\"$(pack_get --prefix openmpi)\"\n\
 with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list --INCDIRS gsl)\"\n\
@@ -125,10 +124,10 @@ fi
 
 pack_set --command "$s '$ a\
 with_dft_flavor=\"$dft_flavor\"\n\
-with_atompaw_bins=\"$(pack_get --install-prefix atompaw)/bin\"\n\
+with_atompaw_bins=\"$(pack_get --prefix atompaw)/bin\"\n\
 with_atompaw_incs=\"$(list --INCDIRS atompaw)\"\n\
 with_atompaw_libs=\"$(list --LDFLAGS --Wlrpath atompaw) -latompaw\"\n\
-with_wannier90_bins=\"$(pack_get --install-prefix wannier90)/bin\"\n\
+with_wannier90_bins=\"$(pack_get --prefix wannier90)/bin\"\n\
 with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
 with_wannier90_libs=\"$(list --LDFLAGS --Wlrpath wannier90) -lwannier\"' $file"
 
@@ -159,5 +158,5 @@ create_module \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)

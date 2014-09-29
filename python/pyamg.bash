@@ -9,7 +9,7 @@ pack_set -s $IS_MODULE
 
 pack_set --directory pyamg-$v
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/pyamg
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/pyamg
 
 # Add requirments when creating the module
 pack_set --module-requirement scipy
@@ -17,4 +17,4 @@ pack_set --module-requirement scipy
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"

@@ -9,9 +9,9 @@ pack_set --version npa
 pack_set --install-query /directory/does/not/exist
 
 # Create installation dir
-pack_set --command "mkdir -p $(pack_get --install-prefix)/bin"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/source"
-pack_set --module-opt "--set-ENV NPA_SOURCE=$(pack_get --install-prefix)/source"
+pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_set --command "mkdir -p $(pack_get --prefix)/source"
+pack_set --module-opt "--set-ENV NPA_SOURCE=$(pack_get --prefix)/source"
 
 script=""
 function _npa_new_name {
@@ -26,4 +26,4 @@ source scripts/npa-ml.bash
 
 unset _npa_new_name
 unset script
-pack_set --command "chmod a+x $(pack_get --install-prefix)/bin/*"
+pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"

@@ -5,7 +5,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/tables
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tables
 
 # Add requirments when creating the module
 pack_set --module-requirement numpy \
@@ -15,10 +15,10 @@ pack_set --module-requirement numpy \
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \
-    --command-flag "--hdf5=$(pack_get --install-prefix hdf5-serial)" \
+    --command-flag "--hdf5=$(pack_get --prefix hdf5-serial)" \
     --command-flag "--cflags='$pCFLAGS'"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)" \
+    --command-flag "--prefix=$(pack_get --prefix)" \
  
 # The tables test is extremely extensive, and many are minor errors.
 # I have disabled it for now   

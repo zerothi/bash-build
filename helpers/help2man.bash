@@ -10,17 +10,14 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/help2man
+pack_set --install-query $(pack_get --prefix)/bin/help2man
 
-pack_set --module-opt "--set-ENV HELP2MAN=$(pack_get --install-prefix)/bin/help2man"
+pack_set --module-opt "--set-ENV HELP2MAN=$(pack_get --prefix)/bin/help2man"
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --install-prefix)"
+    --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make" \
-    --command-flag "install"
-
-pack_install
+pack_set --command "make install"

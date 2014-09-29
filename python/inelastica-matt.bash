@@ -11,7 +11,7 @@ pack_set --module-opt "--lua-family inelastica"
 
 #pack_set --host-reject ntch --host-reject zero
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/Inelastica
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/Inelastica
 
 pack_set --module-requirement netcdf-serial \
     --module-requirement scientificpython
@@ -36,6 +36,6 @@ fi
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 done

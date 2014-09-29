@@ -7,11 +7,11 @@ pack_set --module-requirement $(get_parent) \
     --module-requirement mpi4py --module-requirement numpy \
     --module-requirement cython
 
-pack_set --install-query $(pack_get --library-path)/python$pV/site-packages/$(pack_get --alias)/__init__.py
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)/__init__.py
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
 pack_set --command "nosetests --exe petsc4py > tmp.test 2>&1 ; echo 'Succes'"

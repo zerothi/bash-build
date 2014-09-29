@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set $(list --prefix "--host-reject " surt muspel slid)
 
-pack_set --install-query $(pack_get --library-path)/libsuperlu.a
+pack_set --install-query $(pack_get --LD)/libsuperlu.a
 
 # Prepare the make file
 file=make.inc
@@ -62,6 +62,6 @@ fi
 # Make commands
 pack_set --command "make superlulib"
 
-pack_set --command "mkdir -p $(pack_get --library-path)/"
-pack_set --command "cp lib/libsuperlu.a $(pack_get --library-path)/"
+pack_set --command "mkdir -p $(pack_get --LD)/"
+pack_set --command "cp lib/libsuperlu.a $(pack_get --LD)/"
 

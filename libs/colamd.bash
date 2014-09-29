@@ -4,7 +4,7 @@ add_package http://www.cise.ufl.edu/research/sparse/colamd/COLAMD-$v.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --directory COLAMD
-pack_set --install-query $(pack_get --library-path)/libcolamd.a
+pack_set --install-query $(pack_get --LD)/libcolamd.a
 
 pack_set --module-requirement ss_config
 
@@ -21,10 +21,10 @@ pack_set --command "sed -i -e 's|../../SuiteSparse_config/SuiteSparse_config.h||
 # Make commands
 pack_set --command "make $(get_make_parallel) all"
 # Install commands that it should run
-pack_set --command "mkdir -p $(pack_get --library-path)/"
-pack_set --command "mkdir -p $(pack_get --install-prefix)/include/"
-pack_set --command "make INSTALL_LIB='$(pack_get --library-path)/'" \
-    --command-flag "INSTALL_INCLUDE='$(pack_get --install-prefix)/include/'" \
+pack_set --command "mkdir -p $(pack_get --LD)/"
+pack_set --command "mkdir -p $(pack_get --prefix)/include/"
+pack_set --command "make INSTALL_LIB='$(pack_get --LD)/'" \
+    --command-flag "INSTALL_INCLUDE='$(pack_get --prefix)/include/'" \
     --command-flag "install"
 
 
@@ -39,5 +39,5 @@ pack_set --install-query /directory/does/not/exist
 
 # Edit the mk file to comply with the standards
 mk=../SuiteSparse_config.mk
-pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --install-prefix COLAMD)/include \1|' $mk"
+pack_set --command "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --prefix COLAMD)/include \1|' $mk"
 

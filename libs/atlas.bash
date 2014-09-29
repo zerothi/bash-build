@@ -8,14 +8,10 @@ fi
 
 pack_set --directory ATLAS
 
-pack_set $(list --prefix "--host-reject " surt muspel slid eris)
+pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris ponto n-62-17-44)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-if $(is_host eris) ; then
-	pack_set --module-requirement gcc/4.7.2
-fi
-
-pack_set --install-query $(pack_get --library-path)/libatlas.a
+pack_set --install-query $(pack_get --LD)/libatlas.a
 
 # Prepare the make file
 pack_set --command "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"
@@ -28,10 +24,10 @@ fi
 # Configure command
 # -Fa alg: append to all compilers -fPIC
 pack_set --command "../configure -Fa alg '-fPIC'" \
-    --command-flag "-Ss flapack $(pack_get --library-path blas)/liblapack.a" \
+    --command-flag "-Ss flapack $(pack_get --LD blas)/liblapack.a" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--incdir=$(pack_get --prefix)/include" \
-    --command-flag "--libdir=$(pack_get --library-path)" \
+    --command-flag "--libdir=$(pack_get --LD)" \
     --command-flag "-t $NPROCS --shared" \
     --command-flag "-b 64 -Si latune 1 $tmp" \
     --command-flag "-Ss pmake '\$(MAKE) $(get_make_parallel)'"
@@ -46,7 +42,7 @@ fi
 pack_set --command "make install"
 
 # Move so that we can install correct lapack
-pack_set --command "mv $(pack_get --library-path)/liblapack.a $(pack_get --library-path)/liblapack_atlas.a"
+pack_set --command "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
 
 done
 

@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --module-opt "--lua-family gpaw"
 
-pack_set --install-query $(pack_get --install-prefix)/bin/gpaw-python
+pack_set --install-query $(pack_get --prefix)/bin/gpaw-python
 
 pack_set --module-requirement openmpi \
     --module-requirement matplotlib \
@@ -40,17 +40,17 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --library-path atlas)\"]\n\
+library_dirs += [\"$(pack_get --LD atlas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --library-path openblas)\"]\n\
+library_dirs += [\"$(pack_get --LD openblas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --library-path blas)\"]\n\
+library_dirs += [\"$(pack_get --LD blas)\"]\n\
 libraries = [\"scalapack\",\"lapack\",\"blas\",\"gfortran\"]' $file"
     fi
 else
@@ -58,18 +58,18 @@ else
 
 fi
 
-tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --install-prefix' $(pack_get --module-paths-requirement))"
+tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --prefix' $(pack_get --mod-req))"
 
 pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
-include_dirs += [\"$(pack_get --install-prefix libxc)/include\"]\n\
+library_dirs += [\"$(pack_get --LD libxc)\"]\n\
+include_dirs += [\"$(pack_get --prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
-include_dirs += [\"$(pack_get --install-prefix openmpi)/include\"]\n\
+include_dirs += [\"$(pack_get --prefix openmpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 # Same as -Wl,-rpath:\n\
-runtime_library_dirs += [\"$(pack_get --library-path libxc)\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get --library-path openmpi)\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get --library-path hdf5)\"]\n\
+runtime_library_dirs += [\"$(pack_get --LD libxc)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get --LD openmpi)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 scalapack = True\n\
 \n\
 if scalapack:\n\
@@ -77,9 +77,9 @@ if scalapack:\n\
     define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
 \n\
 hdf5 = True\n\
-library_dirs += [\"$(pack_get --library-path hdf5)\"]\n\
+library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 libraries += [\"hdf5_hl\",\"hdf5\"]\n\
-library_dirs += [\"$(pack_get --library-path zlib)\"]\n\
+library_dirs += [\"$(pack_get --LD zlib)\"]\n\
 libraries += [\"z\"]\n\
 \n\
 # Add all directories for inclusion\n\
@@ -87,6 +87,6 @@ include_dirs += [${tmp:2}]' $file"
 
 pack_set --command "$(get_parent_exec) setup.py build"
 pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 done
