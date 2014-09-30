@@ -12,6 +12,10 @@ pack_set --module-requirement numpy \
     --module-requirement cython \
     --module-requirement hdf5-serial \
     --module-requirement numexpr
+
+if [ $(vrs_cmp 3.1.1 $v) -le 0 ]; then
+   pack_set --command "sed -i -e 's:Cython.Compiler.Main:Cython.Compiler:' setup.py"
+fi
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \

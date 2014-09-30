@@ -3,7 +3,7 @@
 v=1.4.0
 add_package \
     --archive matplotlib-$v.tar.gz \
-    https://github.com/matplotlib/matplotlib/archive/$v.tar.gz
+    https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

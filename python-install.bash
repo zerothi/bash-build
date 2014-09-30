@@ -60,6 +60,7 @@ source python/pyyaml.bash
 source python/markupsafe.bash
 source python/jinja2.bash
 source python/sphinx.bash # jinja2
+source python/mock.bash # only for python 2
 
 # Done with packages only installed in python-home! ^
 

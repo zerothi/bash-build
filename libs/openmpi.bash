@@ -35,7 +35,8 @@ fi
 # Install commands that it should run
 pack_set --command "../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--with-hwloc=$(pack_get --prefix hwloc)"
+    --command-flag "--with-hwloc=$(pack_get --prefix hwloc)" \
+    --command-flag "--enable-mpi-cxx"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
 pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"

@@ -8,6 +8,8 @@ pack_set --install-query $(pack_get --prefix)/bin/siesta
 
 pack_set --module-requirement openmpi --module-requirement netcdf
 
+pack_set $(list -p '--host-reject ' zeroth ntch)
+
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
 

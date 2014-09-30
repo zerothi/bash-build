@@ -3,7 +3,7 @@ add_package --version $v --alias py-netcdf --package py-netcdf \
 	--archive netcdf4-python-${v}rel.tar.gz \
 	https://github.com/Unidata/netcdf4-python/archive/v${v}rel.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/nc3tonc4
 
