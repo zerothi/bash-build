@@ -27,5 +27,7 @@ HDF5_dir = $(pack_get --prefix hdf5-serial)\n\
 
 pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
+pack_set --command "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
+
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)"
