@@ -6,6 +6,7 @@ add_package \
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tables
+pack_set --host-reject eris
 
 # Add requirments when creating the module
 pack_set --module-requirement numpy \

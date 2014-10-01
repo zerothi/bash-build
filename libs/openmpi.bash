@@ -22,8 +22,11 @@ elif $(is_host surt muspel slid) ; then
 elif $(is_host thul) ; then
     tmp_flags="CPPFLAGS='-I/usr/local/include'"
 
-elif $(is_host hemera) ; then
+elif $(is_host hemera ponto) ; then
     tmp_flags="CPPFLAGS='-I/software/torque/include' --with-verbs-libdir=/usr/lib64"
+
+elif $(is_host eris) ; then
+    tmp_flags="CPPFLAGS='-I/software/torque-cpuset/eris/3.0.5/include'"
     
 fi
 
@@ -43,10 +46,12 @@ pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+if ! $(is_host hemera eris) ; then
+    # hemera eris has problems with nfs file system...
+    pack_set --command "make check > tmp.test 2>&1"
+    pack_set_mv_test tmp.test
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
-
 
 if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"

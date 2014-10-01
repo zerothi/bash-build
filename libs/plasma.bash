@@ -71,7 +71,7 @@ ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
 FFLAGS = ${FFLAGS//-fp-model strict/} $FLAG_OMP \n\
-LDFLAGS = \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
+LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
 
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"
