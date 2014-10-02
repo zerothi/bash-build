@@ -33,9 +33,6 @@ fi
 pack_set --command "./configure" \
     --command-flag "F77='$FC'" \
     --command-flag "FFLAGS='$FCFLAGS'" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))'" \
-    --command-flag "CC='$CC'" \
-    --command-flag "CFLAGS='$CFLAGS'" \
     --command-flag "MPIF77='$MPIFC'" \
     --command-flag "--enable-mpi $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)"
