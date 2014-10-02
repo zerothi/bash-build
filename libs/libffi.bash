@@ -12,7 +12,8 @@ if $(is_c intel) ; then
     # The __m128 is not needed anymore, the intel-tema has fixed the issue
     # i can also see that a patch has been committed to libffi
     # So for the next release this should not be necessary
-    pack_set --command "sed -i -e 's:INTEL_COMPILER:INTEL_COMPILERS:' src/x86/ffi64.c"
+    #pack_set --command "sed -i -e 's:INTEL_COMPILER:INTEL_COMPILERS:' src/x86/ffi64.c"
+    echo "Done..." >/dev/null
 fi
 
 # Make commands

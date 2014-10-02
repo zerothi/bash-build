@@ -12,8 +12,8 @@ pack_set --module-requirement openmpi
 
 tmp_flags=""
 if $(is_c intel) ; then
-    tmp_flags="--with-blas='-mkl=sequential'"
-    tmp_flags="$tmp_flags --with-lapack='-mkl=sequential'"
+    tmp_flags="--with-blas='-lmkl_blas95_lp64'"
+    tmp_flags="$tmp_flags --with-lapack='-lmkl_lapack95_lp64'"
 
 else
     if [ $(pack_installed atlas) -eq 1 ]; then
@@ -41,6 +41,8 @@ pack_set --command "./configure" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
-pack_set --command "make check > tmp.test 2>&1"
+if ! $(is_host eris) ; then
+	pack_set --command "make check > tmp.test 2>&1"
+	pack_set_mv_test tmp.test
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test

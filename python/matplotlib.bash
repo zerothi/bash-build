@@ -14,6 +14,8 @@ if ! $(is_host hemera) ; then
 	pack_set --module-requirement numpy --module-requirement gen-freetype
 fi
 
+pack_set --command "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
+
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
 pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
 # Apparently matplotlib sucks at creating directories...
