@@ -281,7 +281,7 @@ function add_hidden_package {
 	--version $version \
 	path_to_module/$package-$version.tar.gz
     pack_set --index-alias $mod
-    pack_set --installed 1 # Make sure it is "installed"
+    pack_set --installed $_I_INSTALLED # Make sure it is "installed"
     pack_set --module-name $mod
 }
 
@@ -344,6 +344,11 @@ declare -a _reject_host
 # A variable that contains all the hosts that it will be installed on
 declare -a _only_host
 # Logical variable determines whether the package has been installed
+_I_LIB=3 # an internal module only used for its library path
+_I_MOD=2 # a module supplied from outside, it does not contain paths
+_I_INSTALLED=1 # the package has been installed
+_I_TO_BE=0 # have not decided what the package should do yet...
+_I_REJECT=-1 # the package is rejected on this one...
 declare -a _installed
 # Adds this to the environment variable in the creation of the modules
 declare -a _mod_opts
@@ -473,7 +478,7 @@ function add_package {
 	_index[$lc_name]="$_N_archives"
     fi
     # Default the module name to this:
-    _installed[$_N_archives]=0
+    _installed[$_N_archives]=$_I_TO_BE
     # Module prefix and the name of the module
     _mod_prefix[$_N_archives]="$(build_get --module-path[$b_name])"
     tmp="$(build_get --build-module-path[$b_name])"
@@ -520,7 +525,7 @@ function pack_set {
 	shift
 	case $opt in
 	    -no-path)
-		install="$_install_prefix_no_path" ;;
+		inst=$_I_MOD ;;
             -C|-command)  cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix|-prefix)  install="$1" ; shift ;;
@@ -659,15 +664,21 @@ function pack_get {
 		    done 
 		    _ps "${_mod_name[$index]}"
 		    ;;
-		-R|-module-requirement|-mod-req) 
+		-R|-module-requirement|-mod-req)
 		    for m in ${_mod_req[$index]} ; do
-			if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
-			    _ps "$m "
-			fi
+			case $(pack_get --installed $m) in
+			    $_I_INSTALLED|$_I_MOD) _ps "$m " ;;
+                        esac
+		    done ;;
+		-mod-req-path)
+		    for m in ${_mod_req[$index]} ; do
+			case $(pack_get --installed $m) in
+			    $_I_INSTALLED|$_I_LIB) _ps "$m " ;;
+                        esac
 		    done ;;
 		-module-requirement-all|-mod-req-all) 
                     _ps "${_mod_req[$index]}" ;;
-		-module-name-requirement) 
+		-module-name-requirement|-mod-req-name) 
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
@@ -702,9 +713,15 @@ function pack_get {
 	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
 	    -R|-module-requirement|-mod-req)
 		for m in ${_mod_req[$index]} ; do
-		    if [ "x$(pack_get --prefix $m)" != "x$_install_prefix_no_path" ]; then
-			_ps "$m "
-		    fi
+		    case $(pack_get --installed $m) in
+			$_I_INSTALLED|$_I_MOD) _ps "$m " ;;
+                    esac
+		done ;;
+	    -mod-req-path)
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get --installed $m) in
+			$_I_INSTALLED|$_I_LIB) _ps "$m " ;;
+                    esac
 		done ;;
 	    -module-requirement-all|-mod-req-all) 
 		_ps "${_mod_req[$index]}" ;;
@@ -739,7 +756,7 @@ function pack_get {
 function pack_installed {
     local ret=$(pack_get --installed $1)
     [ -z "$ret" ] && ret=0
-    if [ $ret -eq 0 ]; then
+    if [ $ret -eq $_I_TO_BE ]; then
 	pack_install $1 > /dev/null
 	ret=$(pack_get --installed $1)
     fi
@@ -798,12 +815,12 @@ function pack_install {
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
-	pack_set --installed 1 $idx
+	pack_set --installed $_I_INSTALLED $idx
     fi
 
     # Save the module requirements for later...
-    mod_reqs="$(pack_get --mod-req-all $idx)"
-    mod_reqs_paths="$(pack_get --mod-req $idx)"
+    mod_reqs="$(pack_get --mod-req $idx)"
+    mod_reqs_paths="$(pack_get --mod-req-path $idx)"
 
     # If we request downloading of files, do so immediately
     if [ $DOWNLOAD -eq 1 ]; then
@@ -811,7 +828,7 @@ function pack_install {
     fi
 
     # If it is installed...
-    if [ $(pack_get --installed $idx) -eq 1 ]; then
+    if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
 	msg_install --already-installed $idx
 	if [ $FORCEMODULE -eq 0 ]; then
 	    [ $DEBUG -ne 0 ] && do_debug --return pack_install
@@ -844,12 +861,12 @@ function pack_install {
     for tmp in $mod_reqs ; do
 	[ -z "${tmp// /}" ] && break
 	tmp_idx=$(get_index $tmp)
-	if [ $(pack_get --installed $tmp_idx) -eq 0 ]; then
+	if [ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]; then
 	    pack_install $tmp_idx
 	fi
 	# Capture packages that has been rejected.
 	# If it depends on rejected packages, it must itself be rejected.
-	if [ $(pack_get --installed $tmp_idx) -eq -1 ]; then
+	if [ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]; then
 	    run=0
 	    break
 	fi
@@ -857,14 +874,14 @@ function pack_install {
 
     if [ $run -eq 0 ]; then
 	# Notify other required stuff that this can not be installed.
-	pack_set --installed -1 $idx
+	pack_set --installed $_I_REJECT $idx
 	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
 	[ $DEBUG -ne 0 ] && do_debug --return pack_install
 	return 1
     fi
 
     # Check that the package is not already installed
-    if [ $(pack_get --installed $idx) -eq 0 ]; then
+    if [ $(pack_get --installed $idx) -eq $_I_TO_BE ]; then
 
 	# Source the file for obtaining correct env-variables
 	local tmp=$(pack_get --build $idx)
@@ -966,7 +983,7 @@ function pack_install {
 	#export LD_LIBRARY_PATH="$old_ld_lib_path"
 
         # For sure it is now installed...
-	pack_set --installed 1 $idx
+	pack_set --installed $_I_INSTALLED $idx
 
     fi
 
@@ -981,7 +998,7 @@ function pack_install {
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
 	local reqs="$(list --prefix '-R ' $mod_reqs)"
-	if [ $(pack_get --installed $idx) -eq 1 ]; then
+	if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
             # We install the module scripts here:
 	    create_module \
 		-n "$(pack_get --alias $idx)" \
@@ -1152,7 +1169,7 @@ function create_module {
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
 	[ -z "${mod// /}" ] && continue
-	[ $(pack_get --installed $mod) -eq 1 ] && continue
+	[ $(pack_get --installed $mod) -eq $_I_INSTALLED ] && continue
         [ $DEBUG -ne 0 ] && do_debug --return create_module
 	return 1
     done
@@ -1248,7 +1265,7 @@ EOF
 $fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
-	    if [ $(pack_get --installed $tmp) -ne 0 ]; then
+	    if [ $(pack_get --installed $tmp) -ge $_I_INSTALLED ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
 		    TCL) echo "module load $tmp_load" >> "$mfile" ;;
@@ -1267,7 +1284,7 @@ EOF
 $fm_comment Requirements for the module:
 EOF
 	for tmp in $require ; do
-	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+	    if [ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
 		    TCL) echo "prereq $tmp_load" >> "$mfile" ;;
@@ -1285,7 +1302,7 @@ EOF
 $fm_comment Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
-	    if [ $(pack_get --installed $tmp ) -ne 0 ]; then
+	    if [ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
 		    TCL) echo "conflict $tmp_load" >> "$mfile" ;;
