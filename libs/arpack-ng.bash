@@ -12,8 +12,8 @@ pack_set --module-requirement openmpi
 
 tmp_flags=""
 if $(is_c intel) ; then
-    tmp_flags="--with-blas='-lmkl_blas95_lp64'"
-    tmp_flags="$tmp_flags --with-lapack='-lmkl_lapack95_lp64'"
+    tmp_flags="--with-blas='-mkl=sequential'"
+    tmp_flags="$tmp_flags --with-lapack='-mkl=sequential'"
 
 else
     if [ $(pack_installed atlas) -eq 1 ]; then
