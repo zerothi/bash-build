@@ -247,7 +247,7 @@ function new_build {
 		local tmp=$(get_index $1)
 		[ -z "$tmp" ] && tmp=-1
 		if [ $tmp -lt 0 ]; then
-		    echo Adding hidding package $1
+		    msg_install --message "Adding hidden package $1"
 		    add_hidden_package "$1"
 		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1" ; shift ;;
@@ -516,7 +516,7 @@ function pack_set {
     local settings="0" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
-    local reject_h="" ; local only_h="" ; local inst=2
+    local reject_h="" ; local only_h="" ; local inst=-100
     local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
     while [ $# -gt 0 ]; do
@@ -597,7 +597,7 @@ function pack_set {
 	[ -d "$install/lib64" ] && lib="lib64"
     fi
     [ ! -z "$lib" ]        && _lib_prefix[$index]="$lib"
-    [ "$inst" -ne "2" ]    && _installed[$index]="$inst"
+    [ "$inst" -ne "-100" ]    && _installed[$index]="$inst"
     [ ! -z "$query" ]      && _install_query[$index]="$query"
     if [ ! -z "$alias" ]; then
 	local tmp="" ; local v=""
