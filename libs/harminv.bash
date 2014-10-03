@@ -31,7 +31,7 @@ fi
 
     # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req))'" \
+    --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--prefix $(pack_get --prefix) $tmp"
 
 

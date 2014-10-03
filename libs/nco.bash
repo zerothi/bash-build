@@ -17,7 +17,7 @@ pack_set $(list -p '--host-reject ' hemera eris ponto)
 pack_set \
     --command "./configure" \
     --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lexpat -lnetcdf '" \
-    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req)) '" \
+    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req-path)) '" \
     --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--enable-netcdf-4" \
     --command-flag "--enable-udunits2" \

@@ -68,8 +68,8 @@ for v in 5.1 ; do
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='$FCFLAGS $FLAG_OMP'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req)) $FLAG_OMP'" \
-	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req))'" \
+	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path)) $FLAG_OMP'" \
+	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
 	--command-flag "--enable-parallel --enable-openmp" \
 	--command-flag "--prefix=$(pack_get --prefix)" 
 

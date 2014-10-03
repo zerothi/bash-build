@@ -16,11 +16,11 @@ pack_set --module-requirement $(get_parent) \
 file=site.cfg
 pack_set --command "echo '#' > $file"
 
-tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req))
+tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req-path))
 tmp_lib=${tmp_lib// /}
 tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64
 
-tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req))
+tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req-path))
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 

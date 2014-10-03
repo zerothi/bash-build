@@ -43,8 +43,8 @@ tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 # Install commands that it should run
 pack_set --command "autoconf configure.ac > configure"
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req))'" \
+    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path))'" \
+    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--without-mpi" \
     --command-flag "--prefix=$(pack_get --prefix) $tmp" 
 
@@ -55,8 +55,8 @@ pack_set --command "make install"
 # Install the inversion symmetric part
 pack_set --command "make distclean"
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req))'" \
+    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path))'" \
+    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--with-inv-symmetry" \
     --command-flag "--without-mpi" \
     --command-flag "--prefix=$(pack_get --prefix) $tmp" 
