@@ -1,4 +1,6 @@
-add_package http://www.open-mpi.org/software/hwloc/v1.9/downloads/hwloc-1.9.1.tar.bz2
+sv=1.9
+v=$sv.1
+add_package http://www.open-mpi.org/software/hwloc/v$sv/downloads/hwloc-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -24,6 +24,9 @@ source libs/fftw3.bash
 source libs/fftw2-intel.bash
 source libs/fftw3-intel.bash
 
+# Install my fortran dictionary library
+source libs/fvar.bash
+
 # Default packages for many libs
 source libs/blas.bash
 source libs/cblas.bash
@@ -52,6 +55,9 @@ source libs/parallel-netcdf.bash
 source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
+
+# Install my ncdf library
+source libs/ncdf.bash
 
 source libs/udunits.bash
 source libs/nco.bash
