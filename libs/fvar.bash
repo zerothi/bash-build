@@ -1,4 +1,4 @@
-v=0.15
+v=0.16
 add_package \
     --archive fvar-$v.tar.gz \
     https://github.com/zerothi/fvar/archive/$v.tar.gz
@@ -16,6 +16,7 @@ FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
 PP = cpp -E -P -C \n\
 AR = $AR\n\
+RANLIB = ranlib\n\
 .F90.o:\n\
 \t\$(FC) -c \$(INC) \$(FFLAGS) \$(FPPFLAGS) \$< \n\
 .f90.o:\n\
