@@ -1,4 +1,4 @@
-v=0.20
+v=0.21
 add_package \
     --archive ncdf-$v.tar.gz \
     https://github.com/zerothi/ncdf/archive/$v.tar.gz
