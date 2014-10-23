@@ -1,6 +1,6 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=1.4.0
+v=1.4.1
 add_package \
     --archive matplotlib-$v.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz
@@ -11,7 +11,7 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
 if ! $(is_host hemera) ; then
-	pack_set --module-requirement numpy --module-requirement gen-freetype
+    pack_set --module-requirement numpy --module-requirement gen-freetype
 fi
 
 pack_set --command "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
