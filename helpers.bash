@@ -1,5 +1,14 @@
 msg_install --message "Installing all helper modules if needed..."
 
+# Add a module which contains the default build tools
+add_package --build generic --version npa \
+    --package build-tools fake
+pack_set -s $IS_MODULE
+pack_set --installed $_I_INSTALLED # Make sure it is "installed"
+pack_set --module-name build-tools/npa
+pack_set --prefix $(build_get --installation-path[generic])/build-tools/npa
+pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
+
 # Install modules
 source helpers/modules.bash
 
@@ -13,32 +22,6 @@ source helpers/libtool.bash
 source helpers/cmake.bash
 source helpers/freetype.bash
 
-function echo_modules {
-    # Retrieve all modules 
-    local mods=""
-    while [ $# -gt 0 ]; do
-	mods="$(pack_get --mod-req-all $1) $1"
-	shift
-    done
-    # Remove duplicates
-    mods="$(rem_dup $mods)"
-    local echos=""
-    for mod in $mods ; do
-	local tmp=$(pack_get --module-name $mod)
-	local tmp=${tmp//\/$(get_c)/}
-	echos="$echos $tmp"
-    done
-    _ps "Loading: $echos"
-}
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for build tools." \
-    -M build-tools.npa \
-    -P "/directory/should/not/exist" \
-    -echo "$(echo_modules make help2man m4 autoconf automake libtool cmake)" \
-    $(list --prefix '-RL ' make help2man m4 autoconf automake libtool cmake)
-unset echo_modules
 
 # Install bison
 source helpers/bison.bash

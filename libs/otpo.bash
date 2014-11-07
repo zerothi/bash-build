@@ -13,7 +13,7 @@ if ! $(is_c gnu) ; then
 fi
 
 # Load build tools
-pack_set --command "module load build-tools.npa"
+pack_set --command "module load build-tools/npa"
 pack_set --command "./autogen.sh"
 
 # Install commands that it should run
@@ -25,4 +25,4 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 pack_set --command "cp OpenIB_Parameters $(pack_get --prefix)/"
 
-pack_set --command "module unload build-tools.npa"
+pack_set --command "module unload build-tools/npa"
