@@ -87,9 +87,9 @@ pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans"
 
 pack_set --command "cd ../Bands"
 pack_set --command "make all"
-pack_set --command "cp new.gnubands.o $(pack_get --prefix)/bin/gnubands"
+pack_set --command "cp new.gnubands $(pack_get --prefix)/bin/gnubands"
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/gnubands"
-pack_set --command "cp eigfat2plot.o $(pack_get --prefix)/bin/eigfat2plot"
+pack_set --command "cp eigfat2plot $(pack_get --prefix)/bin/eigfat2plot"
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/eigfat2plot"
 
 pack_set --command "cd ../Contrib/APostnikov"

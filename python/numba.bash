@@ -2,7 +2,7 @@ v=0.15.1
 add_package --archive numba-$v.tar.gz \
     https://github.com/numba/numba/archive/$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-requirement cython
 pack_set --module-requirement cffi

@@ -1,4 +1,4 @@
-for v in 631 ; do
+for v in 631 662 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
 
@@ -26,6 +26,17 @@ pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arc
 
 if [ $(vrs_cmp $v 590) -ge 0 ]; then
     pack_set --module-requirement mumps
+    if [ $(vrs_cmp $v 662) -ge 0 ]; then
+	pack_set --module-requirement fftw-3
+	pack_set --command "sed -i '1 a\
+METIS_LIB = -lmetis\n\
+FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
+FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DNCDF -DNCDF_4\n\
+COMP_LIBS += libvardict.a libncdf.a' arch.make"
+    fi
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' arch.make"
@@ -59,9 +70,10 @@ FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-NETCDF_INCFLAGS=$(list --INCDIRS netcdf-serial)\n\
-NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf-serial)\n\
+NETCDF_INCFLAGS=$(list --INCDIRS netcdf)\n\
+NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf)\n\
 ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
@@ -81,67 +93,63 @@ source applications/siesta-linalg.bash
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 # This should ensure a correct handling of the version info...
-pack_set --command "siesta_install -v scf --siesta"
-source applications/siesta-speed.bash libSiestaXC.a siesta
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    pack_set --command "siesta_install -v scf-p --siesta"
+    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
+else
+    pack_set --command "siesta_install -v scf --siesta"
+    source applications/siesta-speed.bash libSiestaXC.a siesta
+fi
 pack_set --command "cp siesta $(pack_get --prefix)/bin/"
 
 pack_set --command "make clean"
 
-# We have not created a test for the check of already installed files...
-#pack_set --command "../Src/obj_setup.sh"
-#pack_set --command "siesta_install --transiesta"
-source applications/siesta-speed.bash libSiestaXC.a transiesta
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    echo aoesntuhaosntehu
+    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
+else
+    source applications/siesta-speed.bash libSiestaXC.a transiesta
+fi
 pack_set --command "cp transiesta $(pack_get --prefix)/bin/"
-
-#pack_set --command "cd ../Util/TBTrans"
-#pack_set --command "make"
-#pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans_orig"
-
-#pack_set --command "cd ../TBTrans_rep"
-#pack_set --command "siesta_install -v scf --tbtrans"
-#pack_set --command "make dep"
-#pack_set --command "make"
-#pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans"
 
 pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
-pack_set --command "cp new.gnubands.o $(pack_get --prefix)/bin/gnubands"
-pack_set --command "cp eigfat2plot.o $(pack_get --prefix)/bin/eigfat2plot"
+pack_set --command "cp new.gnubands eigfat2plot fat.gplot gnubands $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../Contrib/APostnikov"
 pack_set --command "make all"
 pack_set --command "cp *xsf fmpdos $(pack_get --prefix)/bin/"
 
-#pack_set --command "cd ../../Denchar/Src"
-#pack_set --command "make denchar"
-#pack_set --command "cp denchar $(pack_get --prefix)/bin/"
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    pack_set --command "cd ../../Denchar/Src"
+    pack_set --command "make denchar"
+    pack_set --command "cp denchar $(pack_get --prefix)/bin/"
+fi
 
 pack_set --command "cd ../../Eig2DOS"
 pack_set --command "make"
 pack_set --command "cp Eig2DOS $(pack_get --prefix)/bin/"
 
 pack_set --command "cd ../WFS"
-pack_set --command "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
-pack_set --command "cp info_wfsx $(pack_get --prefix)/bin/"
-pack_set --command "cp readwf $(pack_get --prefix)/bin/"
-pack_set --command "cp readwfx $(pack_get --prefix)/bin/"
-pack_set --command "cp wfs2wfsx $(pack_get --prefix)/bin/"
-pack_set --command "cp wfsx2wfs $(pack_get --prefix)/bin/"
+files="info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
+pack_set --command "make $files"
+pack_set --command "cp $files $(pack_get --prefix)/bin/"
 
 # install simple-stm
 pack_set --command "cd ../STM/simple-stm"
 pack_set --command "make"
 pack_set --command "cp plstm $(pack_get --prefix)/bin/"
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    pack_set --command "cd ../ol-stm/Src"
+    pack_set --command "make"
+    pack_set --command "cp stm $(pack_get --prefix)/bin/"
+    pack_set --command "cd .."
+fi
 
 pack_set --command "cd ../../HSX"
-pack_set --command "make hs2hsx hsx2hs"
-pack_set --command "cp hs2hsx $(pack_get --prefix)/bin/"
-pack_set --command "cp hsx2hs $(pack_get --prefix)/bin/"
-
-# Install the TS-analyzer
-pack_set --command "cd ../TS/"
-pack_set --command "cp AnalyzeSort/tsanalyzesort.py $(pack_get --prefix)/bin/"
-pack_set --command "cp tselecs.sh $(pack_get --prefix)/bin/"
+files="hs2hsx hsx2hs"
+pack_set --command "make $files"
+pack_set --command "cp $files $(pack_get --prefix)/bin/"
 
 # Install the Grimme creator
 pack_set --command "cd ../Grimme/"
@@ -165,8 +173,13 @@ pack_set --command "cd ../Vibra/Src"
 pack_set --command "make"
 pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 
+# Install the TS-analyzer
+pack_set --command "cd ../../TS/"
+pack_set --command "cp AnalyzeSort/tsanalyzesort.py $(pack_get --prefix)/bin/"
+pack_set --command "cp tselecs.sh $(pack_get --prefix)/bin/"
+
 if [ $(vrs_cmp $v 587) -ge 0 ]; then
-    pack_set --command "cd ../../TS/ts2ts/"
+    pack_set --command "cd ts2ts"
     pack_set --command "make"
     pack_set --command "cp ts2ts $(pack_get --prefix)/bin/"
 fi
@@ -174,6 +187,11 @@ if [ $(vrs_cmp $v 602) -ge 0 ]; then
     pack_set --command "cd ../tshs2tshs/"
     pack_set --command "make"
     pack_set --command "cp tshs2tshs $(pack_get --prefix)/bin/"
+fi
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    pack_set --command "cd ../TBtrans/"
+    pack_set --command "make"
+    pack_set --command "cp tbtrans tbt_data.py $(pack_get --prefix)/bin/"
 fi
 
 pack_set --command "cd ../../"
@@ -186,6 +204,22 @@ pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc
 pack_set --command "cd ../Pseudo/atom"
 pack_set --command "make"
 pack_set --command "cp atm $(pack_get --prefix)/bin/"
+
+# Compile the 3m equivalent versions
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    # Go back
+    pack_set --command "cd ../../Obj"
+    pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
+    pack_set --command "make clean"
+
+    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
+    pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta_3m"
+
+    pack_set --command "cd ../Util/TS/TBtrans"
+    pack_set --command "make clean ; make"
+    pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans_3m"
+
+fi
 
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 

@@ -1,4 +1,4 @@
-v=0.17
+v=0.18
 add_package \
     --archive fvar-$v.tar.gz \
     https://github.com/zerothi/fvar/archive/$v.tar.gz

@@ -39,3 +39,6 @@ source helpers/numactl.bash
 
 # Install git for those who want the newest release
 source helpers/git.bash
+
+# Other helpers
+source helpers/ffmpeg.bash

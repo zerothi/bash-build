@@ -52,16 +52,17 @@ source helpers.bash
 
 source libs/zlib.bash
 
+source libs/libxml2.bash
 source libs/hwloc.bash
 source libs/openmpi-hpc.bash
+source libs/openblas.bash
 source libs/blas.bash
 source libs/lapack.bash
 source libs/atlas.bash
-install_all --from zlib
 source libs/scalapack.bash
-install_all --from scalapack
 
 # Install generic libraries
+source libs/fftw3.bash
 source libs/hdf5.bash
 source libs/hdf5-serial.bash
 source libs/h5utils-serial.bash
@@ -70,8 +71,7 @@ source libs/netcdf.bash
 source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 source libs/metis.bash
+source libs/metis-par-3.bash
 source libs/mumps.bash
-
-install_all --from hdf5
 
 source applications/siesta-scf.bash

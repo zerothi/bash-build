@@ -50,6 +50,7 @@ export LMOD_IGNORE_CACHE=1
 # Install the helper
 source helpers.bash
 
+source libs/libxml2.bash
 source libs/hwloc.bash
 source libs/openmpi.bash
 source libs/blas.bash
