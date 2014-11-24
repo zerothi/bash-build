@@ -13,10 +13,8 @@ pack_set --module-requirement lua
 
 pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/posix_c.so
 
-[ $(pack_installed help2man) -eq 1 ] && \
-    pack_set --module-requirement help2man
-[ $(pack_installed autoconf) -eq 1 ] && \
-    pack_set --module-requirement autoconf
+[ $(pack_installed build-tools) -eq 1 ] && \
+    pack_set --module-requirement build-tools
 
 # Configure the package
 pack_set --command "./configure" \
