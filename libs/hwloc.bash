@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --LD)/libhwloc.a
 pack_set --module-requirement numactl --module-requirement libxml2
 
 # Preload modules
-pack_set --command "module load help2man m4 autoconf automake"
+pack_set --command "module load build-tools"
 
 pack_set --command "./configure" \
     --command-flag "--prefix $(pack_get --prefix)" \
@@ -28,4 +28,4 @@ if ! $(is_host n-) ; then
 fi
 pack_set --command "make install"
 
-pack_set --command "module unload automake autoconf m4 help2man"
+pack_set --command "module unload build-tools"

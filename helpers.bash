@@ -13,13 +13,14 @@ pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
 # Install modules
 source helpers/modules.bash
 
-source helpers/gnumake.bash
 
 source helpers/help2man.bash
 source helpers/m4.bash
 source helpers/autoconf.bash
 source helpers/automake.bash
 source helpers/libtool.bash
+# gnumake relies on libtool
+source helpers/gnumake.bash
 source helpers/cmake.bash
 source helpers/freetype.bash
 

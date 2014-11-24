@@ -9,6 +9,8 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
+pack_set --host-reject "n-"
+
 pack_set --install-query $(pack_get --prefix build-tools)/bin/make
 
 # Install commands that it should run
