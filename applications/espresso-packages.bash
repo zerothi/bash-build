@@ -86,14 +86,18 @@ for pack in \
     neb-5.1.1.tar.gz \
     xspectra-5.1.1.tar.gz \
     tddfpt-5.1.1.tar.gz \
-    GWW-5.1.1.tar.gz \
-    PWgui-5.1.1.tar.gz \
+    http://qe-forge.org/gf/download/frsrelease/173/653/GWW-5.1.1.tar.gz \
+    PWgui-5.1.tar.gz \
     atomic-5.1.1.tar.gz \
     pwcond-5.1.1.tar.gz
 do
     
-    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$pack
-    mywget http://files.qe-forge.org/index.php?file=$pack $o
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
+    if [ ${pack:0:2} == "ht" ]; then
+	mywget $pack $o
+    else
+	mywget http://files.qe-forge.org/index.php?file=$pack $o
+    fi
     pack_set --command "cp $o archive/$pack"
     pack_set --command "tar xfz archive/$pack"
     
