@@ -5,7 +5,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libmetis.a
 
 if [ $(pack_installed cmake) -eq 1 ]; then
-    pack_set --command "module load build-tools/npa"
+    pack_set --command "module load $(pack_get --module-name cmake)"
 fi
 
 # Make commands
@@ -22,6 +22,6 @@ pack_set --command "make install"
 
 
 if [ $(pack_installed cmake) -eq 1 ]; then
-    pack_set --command "module unload build-tools/npa"
+    pack_set --command "module unload $(pack_get --module-name cmake)"
 fi
 
