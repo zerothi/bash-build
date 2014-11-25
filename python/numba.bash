@@ -11,6 +11,8 @@ pack_set --module-requirement llvmmath
 
 pack_set --install-query $(pack_get --prefix)/bin/numba
 
+pack_set --command "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
+
 pack_set --command "$(get_parent_exec) setup.py build "
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)"
