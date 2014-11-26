@@ -10,9 +10,6 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
-if ! $(is_host hemera) ; then
-    pack_set --module-requirement numpy --module-requirement gen-freetype
-fi
 
 pack_set --command "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
 

@@ -75,7 +75,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr) scipy cython numexpr matplotlib)
+    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr matplotlib) scipy cython numexpr matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
