@@ -105,6 +105,8 @@ if [ $(vrs_cmp $xc_version 2.0.2) -ge 0 ]; then
 	xclib="-lxcf90 -lxc"
 	# Correct the check for the minor version
 	pack_set --command "sed -i -e 's/minor != 0/minor != $(str_version -2 $xc_version)/' ../configure"
+	pack_set --command "sed -i -e 's/|| (minor < 0) || (minor > 1)//' ../configure"
+
     fi
     pack_set --command "$s '$ a\
 with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
