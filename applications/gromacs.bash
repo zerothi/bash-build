@@ -14,6 +14,7 @@ pack_set --module-requirement openmpi --module-requirement fftw-3
 pack_set --command "module load $(pack_get --module-name cmake)"
 
 tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
+tmp="$tmp -DGMX_GPU=OFF"
 if $(is_c intel) ; then
     # hopefully this should be enough
     tmp="$tmp -DGMX_BLAS_USER='-mkl=parallel'"

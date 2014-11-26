@@ -95,6 +95,7 @@ do
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
     if [ ${pack:0:2} == "ht" ]; then
 	mywget $pack $o
+    pack=$(basename ${pack:10})
     else
 	mywget http://files.qe-forge.org/index.php?file=$pack $o
     fi
