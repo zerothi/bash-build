@@ -18,9 +18,13 @@ fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+if $(is_host slid muspel surt) ; then
+    echo "Do not test" > /dev/null
+else
+    pack_set --command "make check > tmp.test 2>&1"
+    pack_set_mv_test tmp.test
+fi
 pack_set --command "make install"
-pack_set_mv_test tmp.test
 
 # Fix include path and pkgconfig
 for f in lib lib64 ; do

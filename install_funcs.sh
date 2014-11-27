@@ -274,7 +274,7 @@ function new_build {
 # It enables to look them up in the index and thus 
 # to use them on equal footing as the others...
 function add_hidden_package {
-    local mod="$1"
+    local mod="$1" ; shift
     local package="${mod%/*}"
     local version="${mod#*/}"
     add_package --package $package \
@@ -1111,7 +1111,7 @@ function create_module {
     [ $DEBUG -ne 0 ] && do_debug --enter create_module
     local name; local version; local echos
     local path; local help; local whatis; local opt
-    local env="" ; local tmp=""
+    local env="" ; local tmp="" ; local mod=""
     local mod_path="" ;local cmt=
     local force=0 ; local no_install=0
     local require=""; local conflict=""; local load=""
