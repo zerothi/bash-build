@@ -818,7 +818,9 @@ function pack_install {
 
     # First a simple check that it hasn't already been installed...
     if [ -e $(pack_get --install-query $idx) ]; then
-	pack_set --installed $_I_INSTALLED $idx
+	if [ $(pack_get --installed $idx) -eq $_I_TO_BE ]; then
+	    pack_set --installed $_I_INSTALLED $idx
+	fi
     fi
 
     # Save the module requirements for later...
@@ -1292,12 +1294,12 @@ EOF
 	    if [ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
-		    TCL) echo "prereq $tmp_load" >> "$mfile" ;;
-		    LUA) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
-		esac
-	    elif [ $force -eq 0 ]; then
+                    TCL) echo "prereq $tmp_load" >> "$mfile" ;;
+                    LUA) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
+                esac
+            elif [ $force -eq 0 ]; then
 		no_install=1
-	    fi
+            fi
 	done
 	echo "" >> $mfile
     fi
