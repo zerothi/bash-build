@@ -394,7 +394,10 @@ function add_package {
     if [ $_N_archives -ge 0 ]; then
 	pack_install $_N_archives
     fi
+
+    # Increment contained packages
     let _N_archives++
+
     # Collect options
     local d="" ; local v=""
     local fn="" ; local package=""
@@ -989,11 +992,13 @@ function pack_install {
 
     # Fix the library path...
     # We favour lib64
-    for cmd in lib lib64 ; do
-	if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
-	    pack_set --library-suffix $cmd $idx
-	fi
-    done
+    if [ ! -d $(pack_get -LD $idx) ]; then
+	for cmd in lib lib64 ; do
+	    if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
+		pack_set --library-suffix $cmd $idx
+	    fi
+	done
+    fi
 
     if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
