@@ -4,6 +4,7 @@ add_package https://pypi.python.org/packages/source/p/pandas/pandas-$v.tar.gz
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
+pack_set --host-reject n-
 
 pack_set $(list --prefix ' --module-requirement ' cython numpy numexpr scipy pytables matplotlib)
 if $(is_host ntch) ; then
