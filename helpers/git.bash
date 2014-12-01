@@ -12,7 +12,7 @@ pack_set --module-opt "--lua-family git"
 pack_set --install-query $(pack_get --prefix)/bin/git
 
 # Preload all tools for creating the configure script
-tmp="$(pack_get --mod-req-all autoconf) $(pack_get --module-name autoconf)"
+tmp="$(pack_get --mod-req-all build-tools) $(pack_get --module-name build-tools)"
 pack_set --command "module load $tmp"
 pack_set --command "make configure"
 pack_set --command "module unload $tmp"
