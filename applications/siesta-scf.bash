@@ -206,7 +206,7 @@ pack_set --command "make"
 pack_set --command "cp atm $(pack_get --prefix)/bin/"
 
 # Compile the 3m equivalent versions
-if $(is_host n- surt ntch-2 zerothi) ; then
+if $(is_c intel) ; then
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     # Go back
     pack_set --command "cd ../../Obj"
