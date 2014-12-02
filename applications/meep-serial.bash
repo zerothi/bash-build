@@ -14,7 +14,7 @@ pack_set --install-query $(pack_get --prefix)/bin/meep
 
 pack_set --module-requirement zlib \
     --module-requirement hdf5-serial \
-    --module-requirement fftw-2 \
+    --module-requirement fftw-3 \
     --module-requirement libctl
 
 # Check for Intel MKL or not
@@ -45,6 +45,8 @@ fi
 pack_set --module-requirement harminv
 tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
+pack_set --command "module load build-tools"
+
 # Install commands that it should run
 pack_set --command "autoconf configure.ac > configure"
 pack_set --command "./configure" \
@@ -57,6 +59,7 @@ pack_set --command "./configure" \
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 
+pack_set --command "module unload build-tools"
 
 pack_install
 
