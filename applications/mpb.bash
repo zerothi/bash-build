@@ -14,7 +14,7 @@ pack_set --module-requirement openmpi \
     --module-requirement libctl \
     --module-requirement zlib \
     --module-requirement hdf5 \
-    --module-requirement fftw-2
+    --module-requirement fftw-3
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
