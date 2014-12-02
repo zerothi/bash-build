@@ -40,6 +40,8 @@ fi
 # Add the CTL library
 tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
+pack_set --command "module load build-tools"
+
 # Install commands that it should run
 pack_set --command "autoconf configure.ac > configure"
 pack_set --command "./configure" \
@@ -64,6 +66,8 @@ pack_set --command "./configure" \
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
+
+pack_set --command "module unload build-tools"
 
 pack_install
 
