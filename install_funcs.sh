@@ -1621,6 +1621,11 @@ function pack_set_file_version {
     tmp=${tmp%/}
     tmp=${tmp#/}
     pack_set --module-name $tmp $idx
+    local tmp="$(build_get --build-installation-path[$b_name])"
+    pack_set --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp) $idx
+    tmp=$(pack_get --prefix $idx)
+    pack_set --prefix ${tmp%/} $idx
+
 }
 
 

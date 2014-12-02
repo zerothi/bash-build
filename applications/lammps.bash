@@ -22,7 +22,7 @@ tmp=MAKE/Makefile.npa
 pack_set --command "echo '# NPA-script' > $tmp"
 
 pack_set --command "sed -i '1 a\
-include ../MAKE/Makefile.linux\n\
+include ../MAKE/Makefile.mpi\n\
 SHELL=/bin/sh\n\
 CC =         $MPICXX\n\
 CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --mod-req-path))\n\
