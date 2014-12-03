@@ -18,8 +18,8 @@ pack_set --install-query $(pack_get --install-prefix)/bin/python3
 pCFLAGS="$CFLAGS"
 tmp=
 if $(is_c intel) ; then
-    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict"
-    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict"
+    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     tmp="--without-gcc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
 elif ! $(is_c gnu) ; then
     tmp="--without-gcc"
