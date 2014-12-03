@@ -23,9 +23,10 @@ function compile_ispin {
     local i=$1 ; shift
     local exe=$1 ; shift
     pack_set --command "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' pardens.F"
+    # Ensure we re-compile pardens
+    pack_set --command "rm -f pardens.o"
     pack_set --command "make -f $tmp"
     pack_set --command "cp vasp $(pack_get --prefix)/bin/${exe}_is$i"
-    pack_set --command "make -f $tmp clean"
     if [ $i -eq 0 ]; then
 	pack_set --command "pushd $(pack_get --prefix)/bin"
 	pack_set --command "ln -fs ${exe}_is0 ${exe}"
@@ -38,17 +39,23 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp
 done
 
+pack_set --command "make -f $tmp clean"
+
 # Prepare the next installation
 pack_set --command "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZhalf :' ../mymakefile"
 for i in 0 1 2 ; do
     compile_ispin $i vaspNGZhalf
 done
 
+pack_set --command "make -f $tmp clean"
+
 # Prepare the next installation
 pack_set --command "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
 for i in 0 1 2 ; do
     compile_ispin $i vaspGNGZhalf
 done
+
+pack_set --command "make -f $tmp clean"
 
 ###################### Prepare the TST code ##########################
 
@@ -81,11 +88,15 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp_tst
 done
 
+pack_set --command "make -f $tmp clean"
+
 # Prepare the next installation
 pack_set --command "sed -i -e 's:-DNPA_PLACEHOLDER.*:-DNGZhalf :' ../mymakefile"
 for i in 0 1 2 ; do
     compile_ispin $i vasp_tstNGZhalf
 done
+
+pack_set --command "make -f $tmp clean"
 
 # Prepare the next installation
 pack_set --command "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
@@ -93,14 +104,16 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp_tstGNGZhalf
 done
 
+pack_set --command "make -f $tmp clean"
+
 unset compile_ispin
 
 # Copy over the vdw_kernel
-vdw=vdw_kernel.bindat
+tmp=vdw_kernel.bindat
 pack_set --command "mkdir -p $(pack_get --prefix)/data"
-pack_set --command "cp $vdw $(pack_get --prefix)/data/$vdw"
+pack_set --command "cp $tmp $(pack_get --prefix)/data/$tmp"
 # Add an ENV-flag for the kernel to be copied
-pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --prefix)/data/$vdw"
+pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --prefix)/data/$tmp"
 
 # Ensure that the group is correctly set
 tmp="$(pack_get --prefix)/bin"

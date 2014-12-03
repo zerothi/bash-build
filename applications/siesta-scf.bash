@@ -105,7 +105,6 @@ pack_set --command "cp siesta $(pack_get --prefix)/bin/"
 pack_set --command "make clean"
 
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
-    echo aoesntuhaosntehu
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 else
     source applications/siesta-speed.bash libSiestaXC.a transiesta
