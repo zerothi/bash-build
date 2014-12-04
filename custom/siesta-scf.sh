@@ -77,6 +77,7 @@ source libs/netcdf-logging.bash
 source libs/netcdf-serial.bash
 source libs/metis.bash
 source libs/metis-par-3.bash
+source libs/scotch.bash
 source libs/mumps.bash
 
 source applications/siesta-scf.bash

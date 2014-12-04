@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --LD)/libmumps_common.a
 
 parmetisV=3.2.0
 pack_set --module-requirement parmetis[$parmetisV]
-#pack_set --module-requirement scotch[5.1.12b]
+pack_set --module-requirement scotch
 
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
