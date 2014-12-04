@@ -1,0 +1,107 @@
+#!/bin/bash -i
+
+tmp=`pwd`
+
+source ~/.bashrc
+module purge
+
+# Ensure that there is not multiple threads running
+export OMP_NUM_THREADS=1
+
+# On thul and interactive nodes, sourching leads to going back
+cd $tmp
+unset tmp
+
+# We have here the installation of all the stuff for gray....
+source install_funcs.sh
+
+# Use ln to link to this file
+if [ $# -ne 0 ]; then
+    [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
+    source $1
+else
+    [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
+    source compiler.sh
+fi
+
+if [ -z "$(build_get --installation-path)" ]; then
+    msg_install --message "The installation path has not been set."
+    echo "I do not dare to guess where to place it..."
+    echo "Please set it in your source file."
+    exit 1
+fi
+
+if [ -z "$(build_get --module-path)" ]; then
+    msg_install --message "The module path has not been set."
+    msg_install --message "Will set it to: $(build_get --installation-path)/modules"
+    build_set --module-path "$(build_get --installation-path)/modules"
+fi
+
+
+# Begin installation of various packages
+# List of archives
+# The order is the installation order
+# Set the umask 5 means read and execute
+#umask 0
+
+# We can always set the env-variable of LMOD
+export LMOD_IGNORE_CACHE=1
+
+# Install the helper
+source helpers.bash
+
+source libs/hwloc.bash
+source libs/openmpi.bash
+
+source libs/blas.bash
+source libs/cblas.bash
+source libs/lapack.bash blas
+source libs/atlas.bash
+source libs/lapack.bash atlas
+source libs/openblas.bash
+source libs/lapack.bash openblas
+
+install_all --from hwloc
+source libs/scalapack.bash
+install_all --from scalapack
+
+source libs/fftw3.bash
+
+source libs/zlib.bash
+source libs/hdf5.bash
+source libs/parallel-netcdf.bash
+source libs/netcdf.bash
+
+source libs/libxc.bash
+source libs/etsf_io.bash
+
+install_all --from fftw-3
+
+# Install Python 2.7.3
+if $(is_host n-) ; then
+    add_package --package Python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+else
+    add_package --package python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
+fi
+
+# The settings
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --module-requirement zlib
+
+pack_set --install-query $(pack_get --install-prefix)/bin/python
+
+# Install commands that it should run
+pack_set --command "../configure" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
+    --command-flag "--prefix=$(pack_get --install-prefix)"
+
+# Make commands
+pack_set --command "make $(get_make_parallel)"
+pack_set --command "make install"
+
+pack_install
+
+
+source applications/bigdft.bash

@@ -15,6 +15,23 @@ unset tmp
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
+python_version=2
+
+while [ $# -gt 1 ]; do
+    opt=$1 ; shift
+    case $opt in
+	--python-version|-python-version|-pv)
+	    python_version=$1 ; shift ;;
+    esac
+done
+
+case $python_version in
+    2|3)
+	;; # fine
+    *)
+	doerr "option parsing" "Cant figure out the python version"
+esac
+
 # Use ln to link to this file
 if [ $# -ne 0 ]; then
     [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
@@ -50,17 +67,32 @@ export LMOD_IGNORE_CACHE=1
 # Install the helper
 source helpers.bash
 
+source libs/zlib.bash
+source libs/expat.bash
+source libs/libffi.bash
 source libs/libxml2.bash
+
+# Basic parallel libraries
 source libs/hwloc.bash
-source libs/openmpi.bash
-source libs/blas.bash
-source libs/lapack.bash
-source libs/atlas.bash
-install_all --from hwloc
+source libs/openmpi-hpc.bash
 
+source libs/fftw2.bash
 source libs/fftw3.bash
-source libs/libxc.bash
+source libs/blas.bash
+source libs/cblas.bash
+source libs/lapack.bash blas
+source libs/atlas.bash
+source libs/lapack.bash atlas
+source libs/openblas.bash
+source libs/lapack.bash openblas
 
-install_all --from fftw-3
+install_all --from zlib
 
-source applications/elk.bash
+# A sparse library
+source libs/suitesparse.bash
+
+install_all --from openblas
+
+
+# These are "parent" installations...
+source python${python_version}.bash

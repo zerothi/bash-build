@@ -1,5 +1,6 @@
 # Then install LAPACK
-for bl in blas atlas openblas ; do
+bl=$1
+shift
 
 add_package --package lapack-$bl http://www.netlib.org/lapack/lapack-3.5.0.tgz
 
@@ -33,11 +34,11 @@ pack_set --command "$tmp 's/TIMER[[:space:]]*=.*/TIMER = INT_CPU_TIME/g' $file"
 pack_set --command "$tmp 's/_LINUX//g' $file"
 pack_set --command "$tmp 's/_SUN4//g' $file"
 if [ $bl == "blas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lblas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lblas?g' $file"
 elif [ $bl == "atlas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lf77blas -lcblas -latlas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lf77blas -lcblas -latlas?g' $file"
 elif [ $bl == "openblas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lopenblas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --Wlrpath --LDFLAGS $bl) -lopenblas?g' $file"
 fi
 pack_set --command "echo '' >> $file"
 pack_set --command "echo 'LAPACKE_WITH_TMG = Yes' >> $file"
@@ -51,16 +52,14 @@ pack_set --command "mkdir -p $(pack_get --prefix $bl)/include/"
 pack_set --command "cp lapacke/include/*.h $(pack_get --prefix $bl)/include/"
 
 if [ $bl == "atlas" ]; then
-# We need to collect the two sets
-pack_set --command "mkdir -p tmp"
-pack_set --command "cd tmp"
-# Extract atlas optimized lapack routines
-pack_set --command "$AR x $(pack_get --LD $bl)/liblapack_atlas.a"
-# replace them
-pack_set --command "$AR r ../liblapack.a *.o"
-pack_set --command "cd .."
-pack_set --command "ranlib liblapack.a"
-pack_set --command "cp liblapack.a $(pack_get --LD $bl)/liblapack.a"
+    # We need to collect the two sets
+    pack_set --command "mkdir -p tmp"
+    pack_set --command "cd tmp"
+    # Extract atlas optimized lapack routines
+    pack_set --command "$AR x $(pack_get --LD $bl)/liblapack_atlas.a"
+    # replace them
+    pack_set --command "$AR r ../liblapack.a *.o"
+    pack_set --command "cd .."
+    pack_set --command "ranlib liblapack.a"
+    pack_set --command "cp liblapack.a $(pack_get --LD $bl)/liblapack.a"
 fi
-
-done

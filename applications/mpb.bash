@@ -24,7 +24,7 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
     pack_set --module-requirement atlas
     tmp="--with-blas='$(list --LDFLAGS --Wlrpath atlas) -lcblas -lf77blas -latlas'"
-    tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

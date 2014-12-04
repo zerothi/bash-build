@@ -26,7 +26,7 @@ elif $(is_c gnu) ; then
     if [ $(pack_installed atlas) -eq 1 ]; then
 	pack_set --module-requirement atlas
     tmp="--with-blas='$(list --LDFLAGS --Wlrpath atlas) -lcblas -lf77blas -latlas'"
-    tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack_atlas'"
+    tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
     else
 	pack_set --module-requirement blas --module-requirement lapack
 	tmp="--with-blas='$(list --LDFLAGS --Wlrpath blas) -lblas'"

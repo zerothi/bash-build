@@ -29,11 +29,11 @@ if $(is_c intel) && ! $(is_host eris) ; then
 fi
 
 if [ $bl == "blas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lblas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lblas?g' $file"
 elif [ $bl == "atlas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lf77blas -lcblas -latlas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lf77blas -lcblas -latlas?g' $file"
 elif [ $bl == "openblas" ]; then
-pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lopenblas?g' $file"
+    pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --Wlrpath --LDFLAGS $bl) -lopenblas?g' $file"
 fi
 pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LDFLAGS --Wlrpath $bl) -llapack|g' $file"
 

@@ -50,16 +50,32 @@ export LMOD_IGNORE_CACHE=1
 # Install the helper
 source helpers.bash
 
-source libs/libxml2.bash
+source libs/zlib.bash
+
 source libs/hwloc.bash
 source libs/openmpi.bash
+
 source libs/blas.bash
-source libs/lapack.bash
+source libs/cblas.bash
+source libs/lapack.bash blas
 source libs/atlas.bash
-install_all --from hwloc
+source libs/lapack.bash atlas
+source libs/openblas.bash
+source libs/lapack.bash openblas
 
-source libs/fftw3.bash
+install_all --from zlib
+source libs/scalapack.bash
+install_all --from scalapack
 
-install_all --from fftw-3
+# Install generic libraries
+source libs/hdf5.bash
+source libs/hdf5-serial.bash
+source libs/h5utils-serial.bash
+source libs/parallel-netcdf.bash
+source libs/netcdf.bash
+source libs/netcdf-logging.bash
+source libs/netcdf-serial.bash
 
-source applications/gromacs.bash
+install_all --from hdf5
+
+source applications/siesta-stable.bash

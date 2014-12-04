@@ -30,9 +30,11 @@ source libs/fvar.bash
 # Default packages for many libs
 source libs/blas.bash
 source libs/cblas.bash
+source libs/lapack.bash blas
 source libs/atlas.bash
+source libs/lapack.bash atlas
 source libs/openblas.bash
-source libs/lapack.bash
+source libs/lapack.bash openblas
 
 source libs/plasma.bash
 #source libs/flame.bash

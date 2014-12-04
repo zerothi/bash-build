@@ -50,44 +50,33 @@ export LMOD_IGNORE_CACHE=1
 # Install the helper
 source helpers.bash
 
-# Basic libraries
 source libs/zlib.bash
-source libs/expat.bash
-source libs/libffi.bash
-source libs/libxml2.bash
 
+source libs/libxml2.bash
 source libs/hwloc.bash
 source libs/openmpi-hpc.bash
 
-# Default packages for many libs
 source libs/blas.bash
 source libs/cblas.bash
+source libs/lapack.bash blas
 source libs/atlas.bash
+source libs/lapack.bash atlas
 source libs/openblas.bash
-source libs/lapack.bash
-
-source libs/blas.bash
-source libs/lapack.bash
-source libs/atlas.bash
-install_all --from zlib
-
-source libs/fftw3.bash
-source libs/fftw2-intel.bash
-source libs/fftw3-intel.bash
+source libs/lapack.bash openblas
 
 source libs/scalapack.bash
 
-install_all --from atlas
+# Install generic libraries
+source libs/fftw3.bash
+source libs/hdf5.bash
+source libs/hdf5-serial.bash
+source libs/h5utils-serial.bash
+source libs/parallel-netcdf.bash
+source libs/netcdf.bash
+source libs/netcdf-logging.bash
+source libs/netcdf-serial.bash
+source libs/metis.bash
+source libs/metis-par-3.bash
+source libs/mumps.bash
 
-source applications/wannier.bash
-source applications/vasp.bash
-source applications/vasp-intel.bash
-
-pack_print vasp[5.3.5-fftw-intel]
-pack_print vasp[5.3.5]
-
-echo ""
-get_index vasp[5.3.5-fftw-intel]
-echo ""
-get_index vasp[5.3.5]
-echo ""
+source applications/siesta-scf.bash

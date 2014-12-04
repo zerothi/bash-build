@@ -50,52 +50,23 @@ export LMOD_IGNORE_CACHE=1
 # Install the helper
 source helpers.bash
 
+source libs/libxml2.bash
 source libs/hwloc.bash
 source libs/openmpi.bash
+
 source libs/blas.bash
-source libs/lapack.bash
+source libs/cblas.bash
+source libs/lapack.bash blas
 source libs/atlas.bash
+source libs/lapack.bash atlas
+source libs/openblas.bash
+source libs/lapack.bash openblas
+
 install_all --from hwloc
-source libs/scalapack.bash
-install_all --from scalapack
 
 source libs/fftw3.bash
-
-source libs/zlib.bash
-source libs/hdf5.bash
-source libs/parallel-netcdf.bash
-source libs/netcdf.bash
-
 source libs/libxc.bash
-source libs/etsf_io.bash
 
 install_all --from fftw-3
 
-# Install Python 2.7.3
-if $(is_host n-) ; then
-    add_package --package Python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
-else
-    add_package --package python http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tgz
-fi
-
-# The settings
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
-
-pack_set --module-requirement zlib
-
-pack_set --install-query $(pack_get --install-prefix)/bin/python
-
-# Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS zlib)'" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
-
-# Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
-
-pack_install
-
-
-source applications/bigdft.bash
+source applications/elk.bash
