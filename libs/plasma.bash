@@ -70,7 +70,7 @@ ARCH = $AR \n\
 ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
-FFLAGS = $FFLAGS $FLAG_OMP \n\
+FFLAGS = ${FFLAGS//-fp-model precise/} $FLAG_OMP \n\
 LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
 
 # Make and install commands
