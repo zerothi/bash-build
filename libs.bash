@@ -64,13 +64,16 @@ source libs/ncdf.bash
 source libs/udunits.bash
 source libs/nco.bash
 
-# A sparse library
-source libs/suitesparse.bash
-
+# sorting algorithms for matrices
 source libs/metis.bash
 source libs/metis-par-3.bash
 source libs/metis-par.bash
 source libs/scotch.bash
+
+# A sparse library
+source libs/suitesparse.bash
+source libs/suitesparse_all.bash
+
 #source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
