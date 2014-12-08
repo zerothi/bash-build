@@ -59,7 +59,9 @@ LIBCLAPACK = $(list --LDFLAGS --Wlrpath $bl) -llapacke \n\
 LIBLAPACK  = $(list --LDFLAGS --Wlrpath $bl) -ltmg -llapack\n' $tmp"
 
 fi
-
+tmpfc=${FFLAGS//-fp-model /}
+tmpfc=${tmpfc//precise/}
+tmpfc=${tmpfc//source/}
 pack_set --command "sed -i '1 a\
 PLASMA_F90 =1\n\
 prefix = $(pack_get --prefix)\n\
@@ -70,9 +72,9 @@ ARCH = $AR \n\
 ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
-FFLAGS = ${FFLAGS//-fp-model precise/} $FLAG_OMP \n\
+FFLAGS = $tmpfc $FLAG_OMP \n\
 LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
-
+unset tmpfc
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"
 pack_set --command "make test > tmp.test 2>&1"
