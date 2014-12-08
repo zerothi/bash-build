@@ -10,6 +10,8 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
 
+pack_set $(list --prefix '--host-reject ' surt slid muspel n-)
+
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
 # Create the suite sparse config file
@@ -34,8 +36,8 @@ sse "INSTALL_INCLUDE = $(pack_get --prefix)/include"
 # Add lapack/blas
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    sse "BLAS = -lmkl_blas95_lp64"
-    sse "LAPACK = -lmkl_lapack95_lp64"
+    sse "BLAS = $MKL_LIB $INTEL_LIB -lmkl_blas95_lp64"
+    sse "LAPACK = $MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64"
 
 else
 
