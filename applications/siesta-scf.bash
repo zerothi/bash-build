@@ -196,6 +196,7 @@ fi
 if [ $(vrs_cmp $v 681) -ge 0 ]; then
     pack_set --command "cd ../TB/"
     pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
+    pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 fi
 
 pack_set --command "cd ../../"
