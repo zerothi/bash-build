@@ -1,4 +1,4 @@
-for v in 631 678 ; do
+for v in 631 681 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -35,7 +35,7 @@ FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4\n\
-COMP_LIBS += libvardict.a libncdf.a' arch.make"
+COMP_LIBS += libncdf.a libvardict.a' arch.make"
     fi
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS\n\
@@ -183,6 +183,7 @@ if [ $(vrs_cmp $v 587) -ge 0 ]; then
     pack_set --command "cp ts2ts $(pack_get --prefix)/bin/"
 fi
 if [ $(vrs_cmp $v 602) -ge 0 ]; then
+    # we need serial netcdf library to compile tshs2tshs :(
     pack_set --command "cd ../tshs2tshs/"
     pack_set --command "make"
     pack_set --command "cp tshs2tshs $(pack_get --prefix)/bin/"
@@ -192,12 +193,15 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "make"
     pack_set --command "cp tbtrans tbt_data.py $(pack_get --prefix)/bin/"
 fi
+if [ $(vrs_cmp $v 681) -ge 0 ]; then
+    pack_set --command "cd ../TB/"
+    pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
+fi
 
 pack_set --command "cd ../../"
 
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
 
 # The atom program for creating the pseudos
 pack_set --command "cd ../Pseudo/atom"
