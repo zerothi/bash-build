@@ -1,6 +1,9 @@
 #source applications/git.bash
 msg_install --message "Installing the applications..."
 
+# Valgrind
+source applications/valgrind.bash
+
 # Analysis tools
 source applications/bader.bash
 
