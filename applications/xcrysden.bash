@@ -1,7 +1,7 @@
 # Requirements:
 #  apt-get install libglu1-mesa-dev mesa-common-dev lesstif2-dev tk8.5-dev libxmu-headers libxmu-dev
 
-add_package http://www.xcrysden.org/download/xcrysden-1.5.53.tar.gz
+add_package http://www.xcrysden.org/download/xcrysden-1.5.60.tar.gz
 
 pack_set -s $IS_MODULE
 
