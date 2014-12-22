@@ -4,6 +4,11 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --prefix)/bin/valgrind
 
+if $(is_c intel) ; then
+    # valgrind currently only installs using GCC
+    pack_set --host-reject $(get_hostname)
+fi
+
 pack_set --module-opt "--lua-family valgrind"
 pack_set --module-requirement openmpi
 
