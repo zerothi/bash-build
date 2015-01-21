@@ -1,4 +1,4 @@
-for v in 631 688 ; do
+for v in 631 688 696 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -93,7 +93,10 @@ source applications/siesta-linalg.bash
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
 # This should ensure a correct handling of the version info...
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [ $(vrs_cmp $v 696) -ge 0 ]; then
+    pack_set --command "siesta_install -v scf-l --siesta"
+    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
+elif [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "siesta_install -v scf-p --siesta"
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
 else
