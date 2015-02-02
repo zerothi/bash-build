@@ -10,7 +10,9 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
 
-pack_set $(list --prefix '--host-reject ' surt slid muspel n-)
+if $(is_c intel) ; then
+    pack_set --host-reject $(get_hostname)
+fi
 
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
