@@ -1,5 +1,5 @@
 # Install gnuplot, which is a simple library
-v=4.6.5
+for v in 4.6.6 5.0.0 ; do
 add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/$v/gnuplot-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -26,3 +26,5 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
+
+done

@@ -1,4 +1,4 @@
-for v in 631 688 ; do
+for v in 631 688 704 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -66,6 +66,7 @@ DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
+FFLAGS += #OMPPLACEHOLDER\n\
 FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
@@ -73,6 +74,7 @@ ARFLAGS_EXTRA=\n\
 NETCDF_INCFLAGS=$(list --INCDIRS netcdf)\n\
 NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf)\n\
 ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+ADDLIB += #OMPPLACEHOLDER\n\
 INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
@@ -92,15 +94,42 @@ source applications/siesta-linalg.bash
 
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 
+function set_flag {
+    local v=$1 ; shift
+    end=
+    case $v in
+	openmp)
+	    pack_set --command "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' arch.make"
+	    end=_omp
+	    ;;
+	*)
+	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' arch.make"
+	    end=
+	    ;;
+    esac
+}
+
 # This should ensure a correct handling of the version info...
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [ $(vrs_cmp $v 696) -ge 0 ]; then
+    pack_set --command "siesta_install -v scf-l --siesta"
+elif [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "siesta_install -v scf-p --siesta"
-    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
 else
     pack_set --command "siesta_install -v scf --siesta"
+fi
+
+for omp in openmp none ; do
+set_flag $omp
+
+pack_set --command "make clean"
+
+# This should ensure a correct handling of the version info...
+if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
+else
     source applications/siesta-speed.bash libSiestaXC.a siesta
 fi
-pack_set --command "cp siesta $(pack_get --prefix)/bin/"
+pack_set --command "cp siesta $(pack_get --prefix)/bin/siesta$end"
 
 pack_set --command "make clean"
 
@@ -109,7 +138,9 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 else
     source applications/siesta-speed.bash libSiestaXC.a transiesta
 fi
-pack_set --command "cp transiesta $(pack_get --prefix)/bin/"
+pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+
+done
 
 pack_set --command "cd ../Util/Bands"
 pack_set --command "make all"
@@ -190,8 +221,14 @@ if [ $(vrs_cmp $v 602) -ge 0 ]; then
 fi
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "cd ../TBtrans/"
-    pack_set --command "make"
-    pack_set --command "cp tbtrans tbt_data.py $(pack_get --prefix)/bin/"
+    for omp in openmp none ; do
+	pack_set --command "pushd ../../../Obj"
+	set_flag $omp
+	pack_set --command "popd"
+	pack_set --command "make clean ; make"
+	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
+    done
+    pack_set --command "cp tbt_data.py $(pack_get --prefix)/bin/"
 fi
 if [ $(vrs_cmp $v 681) -ge 0 ]; then
     pack_set --command "cd ../TB/"
@@ -215,18 +252,21 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
     # Go back
     pack_set --command "cd ../../Obj"
     pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
-    pack_set --command "make clean"
+    for omp in openmp none ; do
+	set_flag $omp
+	pack_set --command "make clean"
+	
+	source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
+	pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
 
-    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
-    pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta_3m"
-
-    pack_set --command "cd ../Util/TS/TBtrans"
-    pack_set --command "make clean ; make"
-    pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans_3m"
-
+	pack_set --command "pushd ../Util/TS/TBtrans"
+	pack_set --command "make clean ; make"
+	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
+	pack_set --command "popd"
+    done
 fi
 fi
-
+unset set_flag
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 
 pack_install
