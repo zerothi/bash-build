@@ -1,4 +1,4 @@
-sv=1.10
+sv=1.10.1
 v=$sv.0
 add_package http://www.open-mpi.org/software/hwloc/v$sv/downloads/hwloc-$v.tar.bz2
 
