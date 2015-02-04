@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/petsc/petsc4py/downloads/petsc4py-3.5.tar.gz
+add_package https://bitbucket.org/petsc/petsc4py/downloads/petsc4py-3.5.1.tar.gz
 
 pack_set -s $IS_MODULE
 

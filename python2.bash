@@ -18,7 +18,9 @@ pack_set --module-requirement zlib \
 
 pack_set --install-query $(pack_get --install-prefix)/bin/python
 
-pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
+if ! $(is_host ntch-) ; then
+    pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
+fi
 if $(is_host eris) ; then
     pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/lib64/python2.7/lib-dynload"
 fi
