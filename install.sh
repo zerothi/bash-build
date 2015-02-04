@@ -18,10 +18,15 @@ source install_funcs.sh
 python_version=2
 
 while [ $# -gt 1 ]; do
-    opt=$1 ; shift
+    opt=$1
     case $opt in
 	--python-version|-python-version|-pv)
-	    python_version=$1 ; shift ;;
+	    shift
+	    python_version=$1
+	    shift ;;
+	*)
+	    break
+	    ;;
     esac
 done
 
@@ -32,15 +37,23 @@ case $python_version in
 	doerr "option parsing" "Cant figure out the python version"
 esac
 
-# Use ln to link to this file
-if [ $# -ne 0 ]; then
-    [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
-    source $1
+declare -a l_builds
+
+# Get all sources
+l_builds[0]=compiler.sh
+i=0
+while [ $# -ne 0 ]; do
+    l_builds[$i]=$1
+    let i++
     shift
-else
-    [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
-    source compiler.sh
+done
+
+# Source the first file
+if [ ! -e ${l_builds[0]} ]; then
+    echo "File ${l_builds[0]} does not exist, please create."
+    exit 1
 fi
+source ${l_builds[0]}
 
 if [ -z "$(build_get --installation-path)" ]; then
     msg_install --message "The installation path has not been set."
@@ -76,6 +89,15 @@ source scripts.bash
 
 # Install the lua-libraries
 source lua/lua.bash
+
+# Source the next build
+if [ ${#l_builds[@]} -gt 1 ]; then
+    i=1
+    while [ $i -lt ${#l_builds[@]} ]; do
+	source ${l_builds[$i]}
+	let i++
+    done
+fi
 
 # Install all libraries
 source libs.bash

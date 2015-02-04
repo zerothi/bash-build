@@ -140,6 +140,8 @@ function build_set {
 		[ -z "$tmp" ] && tmp=-1
 		if [ $tmp -lt 0 ]; then
 		    add_hidden_package "$1"
+		else
+		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --module-requirement $1)"
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
 		shift ;;
@@ -249,6 +251,8 @@ function new_build {
 		if [ $tmp -lt 0 ]; then
 		    msg_install --message "Adding hidden package $1"
 		    add_hidden_package "$1"
+		else
+		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $1)"
 		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1" ; shift ;;
 	    -source)

@@ -3,11 +3,12 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement build-tools
 pack_set $(list --prefix '--module-requirement ' \
     gmp mpfr mpc isl cloog)
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
+
+pack_set --command "module load build-tools"
 
 # Install commands that it should run
 pack_set --command "../configure" \
@@ -29,14 +30,5 @@ pack_set --command "make BOOT_LDFLAGS='$(list --LDFLAGS --Wlrpath gmp mpfr mpc i
 pack_set --command "make install"
 #pack_set_mv_test tmp.test
 
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package)." \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)
+pack_set --command "module unload build-tools"
 

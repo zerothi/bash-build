@@ -12,12 +12,14 @@ new_build --name intel \
     --build-installation-path "--package --version $(get_c)" \
     --source source-intel.sh
 
+build_set --default-build intel
+
 mkdir -p $(build_get --module-path[intel])-npa
 mkdir -p $(build_get --module-path[intel])-npa-apps
 
 build_set --default-module-version
 FORCEMODULE=1
-]build_set --module-format LUA
+#build_set --module-format LUA
 
 tmp=$(get_c)
 new_build --name vendor-intel \
@@ -27,4 +29,3 @@ new_build --name vendor-intel \
     --build-module-path "--package --version ${tmp//intel-/}" \
     --build-installation-path "--package --version ${tmp//intel-/}"
 
-source build-generic.sh
