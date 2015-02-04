@@ -18,16 +18,21 @@ function trim_em {
 
 # trim spaces
 function trim_spaces {
-    local str=$1 ; shift
-    str=${str%% }
-    str=${str## }
-    local i=0
-    while [ $i -ne ${#str} ]; do
-	i=${#str}
-	# we also remove all double spaces
-	str=${str//  / }
+    local str="" ; local s=""
+    local i
+    while [ $# -gt 0 ]; do
+	s="$1" ; shift
+	s=${s## } # removes prefix space (apparently does not work)
+	s=${s%% } # removes suffix space (apparently does not work)
+	i=0
+	while [ $i -ne ${#s} ]; do
+	    i=${#s}
+            # we also remove all double spaces
+	    s=${s//  / }
+	done
+	str="$str $s"
     done
-    _ps "$str"
+    _ps "${str:1}"
 }
 
 # A variable is passed to var_spec

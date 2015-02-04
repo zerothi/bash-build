@@ -912,16 +912,18 @@ function pack_install {
 	# Perhaps this could be generalized with options specifying the ENV_VARS
 	local tmp=$(trim_spaces "$(list --LDFLAGS --Wlrpath $mod_reqs_paths)")
 	old_fcflags="$FCFLAGS"
-	export FCFLAGS="$(trim_spaces "$FCFLAGS") $tmp"
+	export FCFLAGS="$(trim_spaces $FCFLAGS) $tmp"
 	old_fflags="$FFLAGS"
-	export FFLAGS="$(trim_spaces "$FFLAGS") $tmp"
+	export FFLAGS="$(trim_spaces $FFLAGS) $tmp"
 	old_cflags="$CFLAGS"
-	export CFLAGS="$(trim_spaces "$CFLAGS") $tmp"
+	export CFLAGS="$(trim_spaces $CFLAGS) $tmp"
+	old_cxxflags="$CXXFLAGS"
+	export CXXFLAGS="$(trim_spaces $CXXFLAGS) $tmp"
 	old_ldflags="$LDFLAGS"
-	export LDFLAGS="$(trim_spaces "$LDFLAGS") $tmp"
+	export LDFLAGS="$(trim_spaces $LDFLAGS) $tmp"
 	tmp=$(trim_spaces "$(list --INCDIRS $mod_reqs_paths)")
 	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$(trim_spaces "$CPPFLAGS") $tmp"
+	export CPPFLAGS="$(trim_spaces $CPPFLAGS) $tmp"
 	#old_ld_lib_path="$LD_LIBRARY_PATH"
 	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs_paths)"
 
@@ -983,6 +985,7 @@ function pack_install {
 	export FCFLAGS="$old_fcflags"
 	export FFLAGS="$old_fflags"
 	export CFLAGS="$old_cflags"
+	export CXXFLAGS="$old_cxxflags"
 	export CPPFLAGS="$old_cppflags"
 	export LDFLAGS="$old_ldflags"
 	#export LD_LIBRARY_PATH="$old_ld_lib_path"

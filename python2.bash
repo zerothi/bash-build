@@ -102,14 +102,14 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr matplotlib) scientificpython scipy cython numexpr matplotlib)
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr matplotlib py-netcdf) scientificpython scipy cython numexpr py-netcdf matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.cython.mpi4py.numpy.scipy.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy mpi4py) scientificpython scipy cython mpi4py)
+    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy mpi4py py-netcdf) scientificpython scipy cython mpi4py py-netcdf)
 
 create_module \
     -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
