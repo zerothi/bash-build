@@ -59,7 +59,7 @@ LIBOPT     = \$(ATLASOPT)' $tmp"
 	pack_set --command "sed -i '$ a\
 ATLASOPT = $(list --LDFLAGS --Wlrpath openblas)\n\
 LIB_LAPACK = \$(ATLASOPT) -llapack\n\
-LIB_BLAS   = \$(ATLASOPT) -lopenblas\n\
+LIB_BLAS   = \$(ATLASOPT) -lopenblas_omp\n\
 LIBOPT     = \$(ATLASOPT)' $tmp"
     else
 	pack_set --module-requirement blas

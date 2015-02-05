@@ -94,7 +94,7 @@ LAPACK = $(list --Wlrpath --LDFLAGS atlas) -llapack\n ' $file"
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '$ a\
 SCA = $(list --Wlrpath --LDFLAGS openblas) -lscalapack\n\
-BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas \n\
+BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas_omp \n\
 LAPACK = $(list --Wlrpath --LDFLAGS openblas) -llapack\n ' $file"
 
     else

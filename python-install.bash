@@ -21,6 +21,9 @@ else
     doerr "Compiler python" "Could not recognize compiler"
 fi
 
+# Save the default build index
+def_idx=$(build_get --default-build)
+
 # Ensure get_c is defined
 source $(build_get --source)
 new_build --name python$IpV \
@@ -31,7 +34,7 @@ new_build --name python$IpV \
     --build-installation-path "--package --version $(get_c)" \
     $(list --prefix ' --default-module ' $pMod)
 
-def_idx=$(build_get --default-build)
+# Change to the new build default
 build_set --default-build python$IpV
 
 # Python building utility

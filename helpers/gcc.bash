@@ -32,3 +32,6 @@ pack_set --command "make install"
 
 pack_set --command "module unload build-tools"
 
+# Add to LD_LIBRARY_PATH, this ensures that at least 
+# these libraries always will be present in LD
+pack_set --module-opt "--prepend-ENV LD_LIBRARY_PATH=$(pack_get --prefix)/lib64"

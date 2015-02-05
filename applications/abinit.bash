@@ -74,7 +74,7 @@ with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77b
 	pack_set --module-requirement openblas
 	pack_set --command "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS openblas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas\"' $file"
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas_omp\"' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "$s '$ a\

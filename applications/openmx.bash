@@ -48,7 +48,7 @@ else
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas' $file"
+    LIB += $(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas_omp' $file"
     else
 	pack_set --module-requirement blas
 	pack_set --command "sed -i '1 a\

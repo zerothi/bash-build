@@ -41,7 +41,7 @@ LIBCBLAS = \n' $tmp"
 	bl=openblas
 	pack_set --module-requirement openblas
 	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n\
+LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas_omp \n\
 LIBCBLAS = \n' $tmp"
 
     else

@@ -8,6 +8,8 @@ pack_set --install-query $(pack_get --prefix)/bin/otpo
 
 pack_set --module-requirement openmpi
 
+pack_set --host-reject ntch-2
+
 if ! $(is_c gnu) ; then
     pack_set --host-reject $(get_hostname)
 fi

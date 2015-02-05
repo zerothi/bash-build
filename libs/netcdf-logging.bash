@@ -1,4 +1,4 @@
-if $(is_host ntch-2) ; then
+if $(is_host ntch-22) ; then
     v=
 else
     return 0

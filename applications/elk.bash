@@ -52,7 +52,7 @@ elif $(is_c gnu) ; then
 	tmp="-llapack -lf77blas -lcblas -latlas"
     elif [ $(pack_installed openblas) -eq 1 ]; then
 	pack_set --module-requirement openblas
-	tmp="-llapack -lopenblas"
+	tmp="-llapack -lopenblas_omp"
     else
 	pack_set --module-requirement blas
 	tmp="-llapack -lblas"

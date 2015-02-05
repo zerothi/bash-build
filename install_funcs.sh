@@ -94,7 +94,7 @@ function build_set {
 	local opt=$(trim_em $1)
 	local spec=$(var_spec -s $opt)
 	if [ -z "$spec" ]; then
-	    local b_idx=0
+	    local b_idx=$_N_b
 	else
 	    local b_idx=$(get_index --hash-array "_b_index" $spec)
 	fi
@@ -191,7 +191,7 @@ function build_get {
     shift
     local spec=$(var_spec -s $opt)
     if [ -z "$spec" ]; then
-	local b_idx=0
+	local b_idx=$_b_def_idx
     else
 	local b_idx=$(get_index --hash-array "_b_index" $spec)
     fi
@@ -219,6 +219,7 @@ function new_build {
     # Initialize all the stuff
     _b_prefix[$_N_b]="${_b_prefix[$_b_def_idx]}"
     _b_mod_prefix[$_N_b]="${_b_mod_prefix[$_b_def_idx]}"
+    _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     _b_build_prefix[$_N_b]="${_b_build_prefix[$_b_def_idx]}"
     _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
     # Read in options

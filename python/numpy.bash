@@ -108,11 +108,11 @@ libraries = lapack' $file"
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix openblas)/include\n\
-libraries = openblas\n\
+libraries = openblas_omp\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix openblas)/include\n\
-libraries = openblas\n\
+libraries = openblas_omp\n\
 [lapack]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix openblas)/include\n\

@@ -3,6 +3,8 @@ msg_install --message "Will install helper default modules now"
 # fetch default versions
 def_build=$(build_get --default-build)
 def_version=$(build_get --def-module-version)
+mp=$(build_get --module-path)
+mp=${mp//-generic/}
 
 # Revert to the generic build without specifying compiler version
 build_set --non-default-module-version
@@ -15,7 +17,7 @@ unset tmp
 
 if [ $(pack_get --installed gcc) -eq 1 ]; then
     create_module \
-	--module-path $(build_get --module-path)-npa \
+	--module-path $mp-npa \
 	-n "Nick Papior Andersen's script for loading gcc: $(pack_get --version gcc)." \
 	-v $(pack_get --version gcc) \
 	-M $(pack_get --alias gcc).$(pack_get --version gcc) \
@@ -24,7 +26,7 @@ fi
 
 for i in $(get_index --all git) ; do
     create_module \
-	--module-path $(build_get --module-path)-npa \
+	--module-path $mp-npa \
 	-n "Nick Papior Andersen's script for loading git: $(pack_get --version $i)." \
 	-v $(pack_get --version $i) \
 	-M $(pack_get --alias $i).$(pack_get --version $i) \
@@ -33,7 +35,7 @@ done
 
 if [ $(pack_get --installed doxygen) -eq 1 ]; then
     create_module \
-	--module-path $(build_get --module-path)-npa \
+	--module-path $mp-npa \
 	-n "Nick Papior Andersen's script for loading doxygen: $(pack_get --version doxygen)." \
 	-v $(pack_get --version doxygen) \
 	-M $(pack_get --alias doxygen).$(pack_get --version doxygen) \
@@ -44,4 +46,4 @@ if [ $def_version -eq 1 ]; then
     build_set --default-module-version
 fi
 build_set --default-build $def_build
-unset def_build def_version
+unset def_build def_version mp
