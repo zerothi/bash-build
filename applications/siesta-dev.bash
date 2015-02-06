@@ -11,6 +11,9 @@ pack_set --module-requirement openmpi --module-requirement netcdf
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
 
+# Correct the utils.F90 name
+pack_set --command "sed -i -e 's/__FILE__/\'utils.F90\'/g' Src/fdf/utils.F90"
+
 # Change to directory:
 pack_set --command "cd Obj"
 
