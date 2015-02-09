@@ -10,8 +10,7 @@ if $(is_host surt muspel slid) ; then
 fi
 # On my machines I will only ever use gfortran and ifort (for now...)
 if $(is_host zero ntch) ; then
-    [ "$c" == "open64" ] && continue
-    [ "$c" == "pgi" ] && continue
+    continue
 fi
 if $(is_host ntch-2) ; then
     [ "$c" == "gfortran" ] && continue
