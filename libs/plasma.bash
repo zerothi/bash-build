@@ -1,5 +1,4 @@
-add_package \
-    http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.6.0.tar.gz
+add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.6.0.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
@@ -84,12 +83,13 @@ pack_set --command "python plasma_testing.py -c 2 >> ../tmp.test 2>&1"
 pack_set --command "cat testing_results.txt >> ../tmp.test"
 pack_set --command "cd .."
 pack_set --command "make install"
-# We also build the timings executables
-pack_set --command "cd timing"
-pack_set --command "make all"
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-pack_set --command "cp time_*[^cho] $(pack_get --prefix)/bin/"
-pack_set --command "cd .."
+if ! $(is_host ntch) ; then
+    # We also build the timings executables
+    pack_set --command "cd timing"
+    pack_set --command "make all"
+    pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+    pack_set --command "cp time_*[^cho] $(pack_get --prefix)/bin/"
+    pack_set --command "cd .."
+fi
 pack_set_mv_test tmp.test
-
 
