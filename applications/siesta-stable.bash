@@ -13,9 +13,6 @@ fi
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
 
-# Fix __FILE__
-pack_set --command 'f=Src/fdf/utils.F90 ; sed -i -e "s:__FILE__:\"$f\":g" $f'
-
 # Change to directory:
 pack_set --command "cd Obj"
 

@@ -1,4 +1,4 @@
-for v in 4.0 4.2.0 ; do
+for v in 4.0 4.2.0 4.3 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -61,8 +61,14 @@ pack_set --command "mkdir -p $(pack_get --LD)/"
 pack_set --command "cp gulp $(pack_get --prefix)/bin/"
 pack_set --command "cp ../libgulp.a $(pack_get --LD)/"
 
-pack_install
+# Move the doc and libraries
+pack_set --command "mv ../Docs $(pack_get --prefix)/"
+pack_set --command "mv ../Libraries $(pack_get --prefix)/"
+# Add env variables
+pack_set --module-opt "--set-ENV GULP_DOC=$(pack_get --prefix)/Docs"
+pack_set --module-opt "--set-ENV GULP_LIB=$(pack_get --prefix)/Libraries"
 
+pack_install
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \

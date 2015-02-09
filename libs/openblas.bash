@@ -19,7 +19,7 @@ for ver in thread none openmp ; do
 	flag="$def_flag USE_THREAD=1"
 	test_end="_pt"
     elif [ "$ver" == "openmp" ]; then
-	flag="$def_flag USE_THREAD=0 USE_OPENMP=1 LIBNAMESUFFIX=omp"
+	flag="$def_flag USE_OPENMP=1 LIBNAMESUFFIX=omp"
 	test_end="_omp"
     fi
 
