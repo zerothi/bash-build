@@ -94,7 +94,7 @@ function build_set {
 	local opt=$(trim_em $1)
 	local spec=$(var_spec -s $opt)
 	if [ -z "$spec" ]; then
-	    local b_idx=$_N_b
+	    local b_idx=$_b_def_idx
 	else
 	    local b_idx=$(get_index --hash-array "_b_index" $spec)
 	fi
