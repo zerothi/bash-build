@@ -1,8 +1,5 @@
 msg_install --message "Will install latest modules now"
 
-# Revert to the first build
-build_set --default-build
-
 # Source the file for obtaining correct env-variables
 tmp=$(build_get --default-build)
 source $(build_get --source[$tmp])

@@ -70,26 +70,41 @@ clear_parent
 old_path=$(build_get --module-path)
 build_set --module-path $old_path-npa
 
+
 create_module \
     -n "Nick Papior Andersen's basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
+    -M python$pV.fireworks/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scipy cython numexpr matplotlib py-netcdf) scipy cython numexpr matplotlib py-netcdf)
+    $(list --prefix '-L ' $(pack_get --module-requirement fireworks) fireworks)
+
+create_module \
+    -n "Nick Papior Andersen's basic python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
+    -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-RL ' scientificpython scipy cython numexpr py-netcdf matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.mpi4py.numpy.scipy/$(get_c) \
+    -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scipy mpi4py py-netcdf) scipy cython mpi4py py-netcdf)
+    $(list --prefix '-RL ' scientificpython scipy cython mpi4py py-netcdf)
 
 create_module \
-    -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
+    -n "Nick Papior Andersen's parallel/numba python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.mpi4py.numba.numpy/$(get_c) \
+    -M python$pV.numpy.mpi4py.numba/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement numba mpi4py) numba mpi4py)
+    $(list --prefix '-RL ' numba mpi4py)
+
+create_module \
+    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
+    -M python$pV.numerics/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-RL ' scipy cython mpi4py py-netcdf matplotlib h5py numexpr pandas sympy)
 
 build_set --module-path $old_path
 

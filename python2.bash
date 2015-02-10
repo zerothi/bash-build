@@ -104,21 +104,21 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy cython numexpr matplotlib py-netcdf) scientificpython scipy cython numexpr py-netcdf matplotlib)
+    $(list --prefix '-RL ' scientificpython scipy cython numexpr py-netcdf matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.mpi4py.numpy.scipy.scientific/$(get_c) \
+    -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement scientificpython scipy mpi4py py-netcdf) scientificpython scipy cython mpi4py py-netcdf)
+    $(list --prefix '-RL ' scientificpython scipy cython mpi4py py-netcdf)
 
 create_module \
-    -n "Nick Papior Andersen's parallel OPT python script for: $(get_c)" \
+    -n "Nick Papior Andersen's parallel/numba python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.mpi4py.numba.numpy/$(get_c) \
+    -M python$pV.numpy.mpi4py.numba/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement numba mpi4py) numba mpi4py)
+    $(list --prefix '-RL ' numba mpi4py)
 
 for i in $(get_index -all Inelastica-DEV) ; do
     create_module \
@@ -126,7 +126,7 @@ for i in $(get_index -all Inelastica-DEV) ; do
 	-v $(date +'%g-%j') \
 	-M python$pV.Inelastica-DEV.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+	$(list --prefix '-RL ' $i)
 done
 
 for i in $(get_index -all ase) ; do
@@ -135,7 +135,7 @@ for i in $(get_index -all ase) ; do
 	-v $(date +'%g-%j') \
 	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+	$(list --prefix '-RL ' $i)
 done
 
 for i in $(get_index -all gpaw) ; do
@@ -144,7 +144,7 @@ for i in $(get_index -all gpaw) ; do
 	-v $(date +'%g-%j') \
 	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement $i) $i)
+	$(list --prefix '-RL ' $i)
 done
 
 create_module \
@@ -152,7 +152,14 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.kwant.$(pack_get --version kwant)/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement kwant) kwant)
+    $(list --prefix '-RL ' kwant)
+
+create_module \
+    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -v $(date +'%g-%j') \
+    -M python$pV.numerics/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-RL ' scipy cython mpi4py py-netcdf matplotlib h5py numexpr pandas sympy)
 
 if [ $(pack_get --installed qutip) -eq 1 ]; then
     create_module \
@@ -160,7 +167,7 @@ if [ $(pack_get --installed qutip) -eq 1 ]; then
         -v $(date +'%g-%j') \
         -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
         -P "/directory/should/not/exist" \
-        $(list --prefix '-L ' $(pack_get --module-requirement scientificpython qutip numexpr) scientificpython cython numexpr qutip)
+        $(list --prefix '-RL ' scientificpython cython numexpr qutip)
 fi
 
 build_set --module-path $old_path
