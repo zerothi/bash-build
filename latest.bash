@@ -1,9 +1,9 @@
 msg_install --message "Will install latest modules now"
 
+cm_defs="-P /directory/should/not/exist --module-path $(build_get --module-path)-npa-apps"
+
 # Source the file for obtaining correct env-variables
-tmp=$(build_get --default-build)
-source $(build_get --source[$tmp])
-unset tmp
+source $(build_get --source)
 
 function rm_latest {
     local latest_mod=$(build_get --module-path)-npa-apps
@@ -29,29 +29,23 @@ function echo_modules {
 }
 
 rm_latest Inelastica.latest/$(get_c)
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
+create_module $cm_defs \
     -n "Nick Papior Andersen's script for loading Inelastica: $(get_c)" \
     -M Inelastica.latest/$(get_c) \
-    -P "/directory/should/not/exist" \
     -echo "$(echo_modules Inelastica-DEV)" \
     -RL Inelastica-DEV
 
 rm_latest siesta.latest/$(get_c)
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
+create_module $cm_defs \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
     -M siesta.latest/$(get_c) \
-    -P "/directory/should/not/exist" \
     -echo "$(echo_modules siesta-dev)" \
     -RL siesta-dev
 
 rm_latest siesta-scf.latest/$(get_c)
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
+create_module $cm_defs \
     -n "Nick Papior Andersen's script for loading SIESTA: $(get_c)" \
     -M siesta-scf.latest/$(get_c) \
-    -P "/directory/should/not/exist" \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
 
