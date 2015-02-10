@@ -8,8 +8,6 @@ pack_set --install-query $(pack_get --prefix)/bin/gprof
 pack_set --command "../configure" \
     --command-flag "--prefix $(pack_get --prefix)"
 
-# Make commands
+# Make commands (no tests available)
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make test 2>&1 tmp.test"
 pack_set --command "make install"
-pack_set_mv_test tmp.test
