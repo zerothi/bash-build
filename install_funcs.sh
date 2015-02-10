@@ -217,11 +217,12 @@ function new_build {
     # Simple command to initialize a new build
     let _N_b++
     # Initialize all the stuff
+    _b_source[$_N_b]="${_b_source[$_b_def_idx]}"
     _b_prefix[$_N_b]="${_b_prefix[$_b_def_idx]}"
     _b_mod_prefix[$_N_b]="${_b_mod_prefix[$_b_def_idx]}"
-    _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     _b_build_prefix[$_N_b]="${_b_build_prefix[$_b_def_idx]}"
     _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
+    _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     # Read in options
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1)

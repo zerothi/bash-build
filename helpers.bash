@@ -48,6 +48,8 @@ source helpers/swig.bash
 source helpers/zlib.bash
 source helpers/llvm.bash
 
+source helpers/binutils.bash
+
 source helpers/numactl.bash
 #source helpers/libxml2.bash
 
