@@ -145,16 +145,6 @@ function build_set {
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
 		shift ;;
-	    -module-format)
-		_module_format="$1"
-		shift
-		case $_module_format in
-		    TCL) ;;
-		    LUA) ;;
-		    *)
-			doerr "$_module_format" "Unrecognized module format (LUA/TCL)"
-		esac
-		;;
 	    -default-build)
 		switch_idx=0
 		if [ $# -gt 0 ]; then

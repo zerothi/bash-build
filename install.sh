@@ -24,11 +24,20 @@ while [ $# -gt 1 ]; do
 	    shift
 	    python_version=$1
 	    shift ;;
+	--tcl|-tcl)
+	    _module_format=TCL
+	    shift ;;
+	--lua|-lua)
+	    _module_format=LUA
+	    shift ;;
 	*)
 	    break
 	    ;;
     esac
 done
+
+# Notify the user about which module files will be generated
+msg_install --message "Will create $_module_format compliant module files"
 
 case $python_version in
     2|3)

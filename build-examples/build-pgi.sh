@@ -17,5 +17,4 @@ build_set --default-build pgi
 
 build_set --default-module-version
 #FORCEMODULE=1
-#build_set --module-format LUA
 

@@ -17,4 +17,3 @@ mkdir -p $(build_get --module-path[gnu])-npa-apps
 
 build_set --default-module-version
 #FORCEMODULE=1
-#build_set --module-format LUA

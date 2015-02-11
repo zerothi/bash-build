@@ -19,7 +19,6 @@ mkdir -p $(build_get --module-path[intel])-npa-apps
 
 build_set --default-module-version
 FORCEMODULE=1
-#build_set --module-format LUA
 
 tmp=$(get_c)
 new_build --name vendor-intel \
