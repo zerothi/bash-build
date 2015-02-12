@@ -15,15 +15,6 @@ tmp=$(build_get --default-build)
 source $(build_get --source[$tmp])
 unset tmp
 
-if [ $(pack_get --installed gcc) -eq 1 ]; then
-    create_module \
-	--module-path $mp-npa \
-	-n "Nick Papior Andersen's script for loading gcc: $(pack_get --version gcc)." \
-	-v $(pack_get --version gcc) \
-	-M $(pack_get --alias gcc).$(pack_get --version gcc) \
-	-P "/directory/should/not/exist" -RL gcc 
-fi
-
 for i in $(get_index --all git) ; do
     create_module \
 	--module-path $mp-npa \
@@ -33,14 +24,16 @@ for i in $(get_index --all git) ; do
 	-P "/directory/should/not/exist" -RL $i
 done
 
-if [ $(pack_get --installed doxygen) -eq 1 ]; then
-    create_module \
-	--module-path $mp-npa \
-	-n "Nick Papior Andersen's script for loading doxygen: $(pack_get --version doxygen)." \
-	-v $(pack_get --version doxygen) \
-	-M $(pack_get --alias doxygen).$(pack_get --version doxygen) \
-	-P "/directory/should/not/exist" -RL doxygen 
-fi
+for p in gcc doxygen graphviz ; do
+    if [ $(pack_get --installed $p) -eq 1 ]; then
+	create_module \
+	    --module-path $mp-npa \
+	    -n "Nick Papior Andersen's script for loading $p: $(pack_get --version $p)." \
+	    -v $(pack_get --version $p) \
+	    -M $(pack_get --alias $p).$(pack_get --version $p) \
+	    -P "/directory/should/not/exist" -RL $p 
+    fi
+done
 
 if [ $def_version -eq 1 ]; then
     build_set --default-module-version

@@ -60,4 +60,7 @@ source helpers/doxygen.bash
 # Other helpers
 source helpers/ffmpeg.bash
 
+source helpers/graphviz.bash
+
+
 source helpers/default.bash
