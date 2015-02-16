@@ -12,7 +12,7 @@ while [ $# -gt 0 ]; do
     elif [ "$1" == "libncdf.a" ]; then
         pack_set --command "make $1"
     elif [ "$1" == "libSiestaXC.a" ]; then
-        pack_set --command "make -j 2 $1"
+        pack_set --command "make $1"
     else
         pack_set --command "make $(get_make_parallel) $1"
     fi

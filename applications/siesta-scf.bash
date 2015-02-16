@@ -123,6 +123,9 @@ if [ $omp == "openmp" ]; then
 if [ $(vrs_cmp $v 688) -lt 0 ]; then
     continue
 fi
+if $(is_c intel) ; then
+    continue
+fi
 fi
 set_flag $omp
 
@@ -227,6 +230,11 @@ fi
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "cd ../TBtrans/"
     for omp in openmp none ; do
+	if [ $omp == "openmp" ]; then
+	    if $(is_c intel) ; then
+		continue
+	    fi
+	fi
 	pack_set --command "pushd ../../../Obj"
 	set_flag $omp
 	pack_set --command "popd"
@@ -258,6 +266,11 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "cd ../../Obj"
     pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
     for omp in openmp none ; do
+	if [ $omp == "openmp" ]; then
+	    if $(is_c intel) ; then
+		continue
+	    fi
+	fi
 	set_flag $omp
 	pack_set --command "make clean"
 	
