@@ -38,7 +38,7 @@ FPPFLAGS += -DNCDF -DNCDF_4\n\
 COMP_LIBS += libncdf.a libvardict.a' arch.make"
     fi
     pack_set --command "sed -i '1 a\
-FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS\n\
+FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS -DTS_NOCHECKS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' arch.make"
 else
     if [ $(pack_installed metis) -eq 1 ]; then
