@@ -13,7 +13,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --module-requirement zlib --module-requirement expat \
     --module-requirement libffi
 
-pack_set --install-query $(pack_get --install-prefix)/bin/python3
+pack_set --install-query $(pack_get --prefix)/bin/python3
 
 pCFLAGS="$CFLAGS"
 tmp=
@@ -30,7 +30,7 @@ pack_set --command "../configure --with-threads" \
     --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib expat libffi)'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
-    --command-flag "--prefix=$(pack_get --install-prefix)"
+    --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

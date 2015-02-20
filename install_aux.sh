@@ -333,7 +333,7 @@ function list {
 	    -INCDIRS) 
 		pre="-I" 
 		suf="/include" 
-		lcmd="pack_get --install-prefix " ;;
+		lcmd="pack_get --prefix " ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
@@ -358,16 +358,16 @@ function list {
     [ $DEBUG -ne 0 ] && do_debug --return list
 }
 
-# Copy a test file to $(pack_get --install-prefix) 
+# Copy a test file to $(pack_get --prefix) 
 # And compress it immediately!
 function pack_set_mv_test {
     local f=$1 ; shift
     local o=$f
     [ $# -gt 0 ] && o=$1 ; shift
     # move and gzip
-    pack_set --command "mkdir -p $(pack_get --install-prefix)"
-    pack_set --command "mv $f $(pack_get --install-prefix)/$o"
-    pack_set --command "gzip -f $(pack_get --install-prefix)/$o"
+    pack_set --command "mkdir -p $(pack_get --prefix)"
+    pack_set --command "mv $f $(pack_get --prefix)/$o"
+    pack_set --command "gzip -f $(pack_get --prefix)/$o"
 }
 
 # Debugging function for printing out every available

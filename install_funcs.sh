@@ -312,21 +312,21 @@ function add_hidden_package {
 #   version=$(pack_get --version)
 #   add_package --package $name-test --version $version fake
 #   pack_set --module-requirement $name[$version]
-#   pack_set --install-query $(pack_get --install-prefix $name[$version])/test.output
+#   pack_set --install-query $(pack_get --prefix $name[$version])/test.output
 function add_test_package {
     local name=$(pack_get --alias)
     local version=$(pack_get --version)
     add_package --package $name-test \
 	--version $version fake
     # Update install-prefix
-    pack_set --install-prefix $(pack_get --install-prefix $name[$version])
+    pack_set --prefix $(pack_get --prefix $name[$version])
     pack_set --module-requirement $name[$version]
     pack_set --remove-setting module
     if [ $# -gt 0 ]; then
-	pack_set --install-query $(pack_get --install-prefix $name[$version])/$1
+	pack_set --install-query $(pack_get --prefix $name[$version])/$1
 	shift
     else
-	pack_set --install-query $(pack_get --install-prefix $name[$version])/tmp.*
+	pack_set --install-query $(pack_get --prefix $name[$version])/tmp.*
     fi
 }
 
@@ -943,7 +943,7 @@ function pack_install {
 		-v "$(pack_get --version $idx)" \
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$(pack_get --install-prefix $idx)"
+		-P "$(pack_get --prefix $idx)"
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
@@ -965,7 +965,7 @@ function pack_install {
 	old_cppflags="$CPPFLAGS"
 	export CPPFLAGS="$(trim_spaces $CPPFLAGS) $tmp"
 	#old_ld_lib_path="$LD_LIBRARY_PATH"
-	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --install-prefix' --suffix '/lib' $mod_reqs_paths)"
+	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --prefix' --suffix '/lib' $mod_reqs_paths)"
 
         # Show that we will install
 	msg_install --start $idx
@@ -1039,7 +1039,7 @@ function pack_install {
     # We favour lib64
     if [ ! -d $(pack_get -LD $idx) ]; then
 	for cmd in lib lib64 ; do
-	    if [ -d $(pack_get --install-prefix $idx)/$cmd ]; then
+	    if [ -d $(pack_get --prefix $idx)/$cmd ]; then
 		pack_set --library-suffix $cmd $idx
 	    fi
 	done
@@ -1055,7 +1055,7 @@ function pack_install {
 		-v "$(pack_get --version $idx)" \
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$(pack_get --install-prefix $idx)" $reqs $(pack_get --module-opt $idx)
+		-P "$(pack_get --prefix $idx)" $reqs $(pack_get --module-opt $idx)
 	fi
     fi
     [ $DEBUG -ne 0 ] && do_debug --return pack_install

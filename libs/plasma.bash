@@ -6,8 +6,8 @@ pack_set --install-query $(pack_get --LD)/libplasma.a
 
 pack_set --module-requirement hwloc
 
-tmp=make.inc
-pack_set --command "echo '# Makefile for easy installation ' > $tmp"
+file=make.inc
+pack_set --command "echo '# Makefile for easy installation ' > $file"
 
 if test -z "$FLAG_OMP" ; then
     doerr PLASMA "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -25,7 +25,7 @@ INCCLAPACK = $(list --INCDIRS blas)\n\
 LIBCLAPACK = $(list --LDFLAGS --Wlrpath blas) -llapacke \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
-LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
+LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $file"
 
 else 
 
@@ -33,18 +33,18 @@ else
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
 	    tmp=
-	    bl=
+	    cblas=
 	    [ "x$la" == "xatlas" ] && \
 		tmp="-lf77blas -lcblas"
 	    [ "x$la" == "xopenblas" ] && \
 		tmp="-lopenblas_omp" || tmp="$tmp -l$la"
-	    [ "x$la" == "xblas" ] && bl="-lcblas"
+	    [ "x$la" == "xblas" ] && cblas="-lcblas"
 	    pack_set --command "sed -i '1 a\
 LIBBLAS  = $(list --LDFLAGS --Wlrpath $la) $tmp \n\
-LIBCBLAS = $bl\n\
-INCCLAPACK = $(list --INCDIRS $bl)\n\
+LIBCBLAS = $cblas\n\
+INCCLAPACK = $(list --INCDIRS $la)\n\
 LIBCLAPACK = $(list --LDFLAGS --Wlrpath $la) -llapacke \n\
-LIBLAPACK  = $(list --LDFLAGS --Wlrpath $la) -ltmg -llapack\n' $tmp"
+LIBLAPACK  = $(list --LDFLAGS --Wlrpath $la) -ltmg -llapack\n' $file"
 	    break
 	fi
     done
@@ -64,7 +64,7 @@ ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
 FFLAGS = $tmpfc $FLAG_OMP \n\
-LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $tmp"
+LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $file"
 unset tmpfc
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"
