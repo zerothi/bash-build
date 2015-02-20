@@ -2,7 +2,7 @@ for v in 631 688 704 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
 

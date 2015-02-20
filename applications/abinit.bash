@@ -1,7 +1,7 @@
 v=7.10.2
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set $(list -p '--host-reject ' ntch zerothi)
 

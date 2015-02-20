@@ -1,7 +1,7 @@
 add_package --version 0.28a \
     http://theory.cm.utexas.edu/henkelman/code/bader/download/bader.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/bader
 

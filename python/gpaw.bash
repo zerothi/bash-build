@@ -37,22 +37,20 @@ elif $(is_c gnu) ; then
 compiler = \"$CC $pCFLAGS \"\n\
 mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD atlas)\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"f77blas\",\"cblas\",\"atlas\",\"gfortran\"]' $file"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD openblas)\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"openblas\",\"gfortran\"]' $file"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD blas)\"]\n\
-libraries = [\"scalapack\",\"lapack\",\"blas\",\"gfortran\"]' $file"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="\"f77blas\",\"cblas\""
+	    tmp="$tmp,\"$la\""
+	    pack_set --command "sed -i '$ a\
+library_dirs += [\"$(pack_get --LD $la)\"]\n\
+libraries = [\"scalapack\",\"lapack\",$tmp,\"gfortran\"]' $file"
+	    break
+	fi
+    done
+
 else
     doerr gpaw "Could not determine compiler..."
 

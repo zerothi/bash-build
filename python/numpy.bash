@@ -85,51 +85,48 @@ blas_libs = mkl_blas95_lp64' $file"
 
 elif $(is_c gnu) ; then
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp=$(pack_get --LD atlas)
-	pack_set --command "sed -i '$ a\
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp="$(pack_get --LD $la)"
+	    pack_set --command "sed -i '$ a\
+[lapack]\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = lapack\n' $file" 
+	    
+	    if [ "x$la" == "xatlas" ]; then
+		pack_set --command "sed -i '$ a\
 [atlas_threads]\n\
-library_dirs = $tmp)\n\
-include_dirs = $(pack_get --prefix atlas)/include\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
 [atlas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix atlas)/include\n\
-libraries = f77blas,cblas,atlas\n\
-[lapack]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix atlas)/include\n\
-libraries = lapack' $file" 
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp=$(pack_get --LD openblas)
-	pack_set --command "sed -i '$ a\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = f77blas,cblas,atlas\n' $file" 
+	    elif [ "x$la" == "xopenblas" ]; then
+		pack_set --command "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix openblas)/include\n\
-libraries = openblas_omp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = openblasp\n\
 [blas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix openblas)/include\n\
-libraries = openblas_omp\n\
-[lapack]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix openblas)/include\n\
-libraries = lapack' $file" 
-    else
-	pack_set --module-requirement blas
-	tmp=$(pack_get --LD blas)
-	pack_set --command "sed -i '$ a\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = openblasp\n' $file" 
+	    elif [ "x$la" == "xblas" ]; then
+		pack_set --command "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix blas)/include\n\
-libraries = blas\n\
-[lapack]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix blas)/include\n\
-libraries = lapack' $file"
-    fi
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = blas\n' $file"
+	    else
+		doerr "numpy" "Could not find linear-algebra library: $la"
+	    fi
+	    break
+	fi
+    done
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
     p_flags="DUM ${pFCFLAGS} -I$(pack_get --prefix ss_config)/include $FLAG_OMP"

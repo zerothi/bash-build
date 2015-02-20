@@ -29,33 +29,25 @@ LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $tmp"
 
 else 
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	bl=atlas
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n\
-LIBCBLAS = \n' $tmp"
-    
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	bl=openblas
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath openblas) -lopenblas_omp \n\
-LIBCBLAS = \n' $tmp"
-
-    else
-	bl=blas
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath blas) -lblas \n\
-LIBCBLAS = $(list --LDFLAGS --Wlrpath blas) -lcblas \n' $tmp"
-
-    fi
-
-    pack_set --command "sed -i '1 a\
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    bl=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    [ "x$la" == "xopenblas" ] && \
+		tmp="-lopenblas_omp" || tmp="$tmp -l$la"
+	    [ "x$la" == "xblas" ] && bl="-lcblas"
+	    pack_set --command "sed -i '1 a\
+LIBBLAS  = $(list --LDFLAGS --Wlrpath $la) $tmp \n\
+LIBCBLAS = $bl\n\
 INCCLAPACK = $(list --INCDIRS $bl)\n\
-LIBCLAPACK = $(list --LDFLAGS --Wlrpath $bl) -llapacke \n\
-LIBLAPACK  = $(list --LDFLAGS --Wlrpath $bl) -ltmg -llapack\n' $tmp"
+LIBCLAPACK = $(list --LDFLAGS --Wlrpath $la) -llapacke \n\
+LIBLAPACK  = $(list --LDFLAGS --Wlrpath $la) -ltmg -llapack\n' $tmp"
+	    break
+	fi
+    done
 
 fi
 tmpfc=${FFLAGS//-fp-model /}

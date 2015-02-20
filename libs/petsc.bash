@@ -23,24 +23,18 @@ if $(is_c intel) ; then
 
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="$tmp --with-blas-lib='-lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix atlas)"
-
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$tmp --with-blas-lib='-lopenblas'"
-	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix openblas)"
-
-    else
-	pack_set --module-requirement blas
-	tmp="$tmp --with-blas-lib='-lblas'"
-	tmp="$tmp --with-lapack-lib='-llapack'"
-	tmp="$tmp --with-scalapack-dir=$(pack_get --prefix blas)"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    tmp="--with-lapack-lib='-llapack' --with-blas-lib='$tmp'"
+	    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix $la)"
+	    break
+	fi
+    done
 
 fi
 

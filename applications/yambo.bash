@@ -2,7 +2,7 @@ v=3.3.0-41
 add_package --version $v \
     http://qe-forge.org/gf/download/frsrelease/133/433/yambo-${v//-/-rev}.tgz
 
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL
 
 #pack_set --host-reject ntch-
 # --host-reject zeroth

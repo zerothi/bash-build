@@ -89,29 +89,22 @@ LDFLAGS = \n\
 
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-LAPACKLIB = -llapack\n\
-BLASLIB  = -lf77blas -lcblas -latlas\n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath atlas)\n\
-' $file"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-LAPACKLIB = -llapack\n\
-BLASLIB  = -lopenblas\n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath openblas)\n\
-' $file"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-LAPACKLIB = llapack\n\
-BLASLIB  = -lblas\n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath blas)\n\
-' $file"
 
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    pack_set --command "sed -i '1 a\
+LAPACKLIB = -llapack\n\
+BLASLIB   = $tmp \n\
+LDFLAGS   = $(list --LDFLAGS --Wlrpath $la)\n\
+' $file"
+	    break
+	fi
+    done
 
     # We need to correct for etime which has enterred as
     # an intrinsic rather than external function

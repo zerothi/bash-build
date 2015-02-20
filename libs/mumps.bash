@@ -1,5 +1,4 @@
-add_package \
-    --package mumps \
+add_package --package mumps \
     http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz
 
 pack_set -s $IS_MODULE
@@ -20,22 +19,21 @@ SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential 
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-SCALAP = $(list --LDFLAGS --Wlrpath atlas) -lscalapack \n\
-LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-SCALAP = $(list --LDFLAGS --Wlrpath openblas) -lscalapack \n\
-LIBBLAS = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n' Makefile.inc"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-SCALAP = $(list --LDFLAGS --Wlrpath blas) -lscalapack \n\
-LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    pack_set --command "sed -i '1 a\
+SCALAP  = $(list --LDFLAGS --Wlrpath $la) -lscalapack \n\
+LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
+	    break
+	fi
+    done
+
 fi
 
 pack_set --command "sed -i '1 a\

@@ -15,22 +15,17 @@ if $(is_c intel) ; then
 
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath atlas)"
-	tmp_lib="-llapack -lf77blas -lcblas -latlas"
-
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath openblas)"
-	tmp_lib="-llapack -lopenblas"
-
-    else
-	pack_set --module-requirement blas
-	tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath blas)"
-	tmp_lib="-llapack -lblas"
-
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath $la)"
+	    tmp_lib="-llapack"
+	    [ "x$la" == "xatlas" ] && \
+		tmp_lib="$tmp_lib -lf77blas -lcblas"
+	    tmp_lib="$tmp_lib -l$la"
+	    break
+	fi
+    done
 
 fi
 

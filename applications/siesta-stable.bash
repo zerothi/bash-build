@@ -1,6 +1,6 @@
 for v in siesta-3.1 siesta-3.2 ; do
 add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 

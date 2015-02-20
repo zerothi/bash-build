@@ -13,16 +13,18 @@ if $(is_c intel) ; then
 	--command-flag "--prefix $(pack_get --prefix)"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="$(list --Wlrpath --LDFLAGS atlas) -llapack -lf77blas -lcblas -latlas"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$(list --Wlrpath --LDFLAGS openblas) -llapack -lopenblas"
-    else
-	pack_set --module-requirement blas
-	tmp="$(list --Wlrpath --LDFLAGS blas) -llapack -lblas"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    [ "x$la" == "xatlas" ] && \
+		tmp="$tmp -lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    break
+	fi
+    done
+
     pack_set --command "../configure" \
 	--command-flag "LIBS='-lm $tmp'" \
 	--command-flag "--prefix $(pack_get --prefix)"

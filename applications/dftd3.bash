@@ -1,8 +1,6 @@
 add_package --directory dftd3.3.0.2 \
     http://www.student.dtu.dk/~nicpa/packages/dftd3_3.0.2.tar.gz
 
-pack_set -s $IS_MODULE
-
 pack_set --host-reject ntch
 pack_set --host-reject zerothi
 pack_set --module-opt "--lua-family dftd3"

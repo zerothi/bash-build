@@ -1,7 +1,7 @@
 # Install grace
 add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.24.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/fdf2fit
 

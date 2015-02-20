@@ -26,7 +26,6 @@ function tmp_start {
 	    http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
     fi
 
-    pack_set -s $IS_MODULE
     pack_set --host-reject ntch
     pack_set --host-reject zeroth
     pack_set --prefix-and-module \

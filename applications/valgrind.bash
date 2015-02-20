@@ -1,6 +1,6 @@
 add_package http://valgrind.org/downloads/valgrind-3.10.1.tar.bz2
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --prefix)/bin/valgrind
 

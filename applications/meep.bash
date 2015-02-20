@@ -4,8 +4,6 @@ add_package http://ab-initio.mit.edu/meep/meep-1.2.1.tar.gz
 pack_set --host-reject ntch --host-reject zeroth \
     $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 n-)
 
-pack_set -s $IS_MODULE
-
 pack_set --install-query $(pack_get --prefix)/bin/meep-mpi
 
 pack_set --module-opt "--lua-family meep"

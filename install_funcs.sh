@@ -25,10 +25,10 @@ rm -f $_ERROR_FILE
 _module_format='TCL'
 
 # List of options for archival stuff
-let "BUILD_DIR=1 << 0"
+BUILD_DIR=build-dir
+PRELOAD_MODULE=module-preload
+IS_MODULE=module
 let "MAKE_PARALLEL=1 << 1"
-let "IS_MODULE=1 << 2"
-let "PRELOAD_MODULE=1 << 3"
 
 # A separator used for commands that can be given consequetively
 _LIST_SEP='ø'
@@ -54,6 +54,8 @@ declare -a _b_build_mod_prefix
 _b_build_mod_prefix[$_b_def_idx]="--package --version"
 # default modules for this build
 declare -a _b_def_mod_reqs
+# default settings for this build
+declare -a _b_def_settings
 # Pointers of lookup
 declare -A _b_index
 _N_b=-1
@@ -90,6 +92,7 @@ function build_set {
     # We set up default parameters for creating the 
     # default package directory
     local def_mod_first=1
+    local tmp
     while [ $# -gt 0 ]; do
 	local opt=$(trim_em $1)
 	local spec=$(var_spec -s $opt)
@@ -145,6 +148,26 @@ function build_set {
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
 		shift ;;
+	    -default-setting)
+		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		shift ;;
+	    -default-choice)
+		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		shift
+		if [ $# -eq 0 ]; then
+		    doerr "BUILD-CHOICE" "You need to specify at least one choice"
+		fi
+		while [ $# -gt 0 ]; do
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}|$1"
+		    shift
+		done
+		;;
+	    -remove-default-setting)
+		tmp="${_b_def_settings[$b_idx]//$1/}" ; shift
+		# Remove the setting from the list
+		tmp="${tmp//$_LIST_SEP$_LIST_SEP/$_LIST_SEP}"
+		_b_def_settings[$b_idx]="$tmp"
+		;;
 	    -default-build)
 		switch_idx=0
 		if [ $# -gt 0 ]; then
@@ -195,6 +218,7 @@ function build_get {
 	-build-installation-path|-bip) _ps "${_b_build_prefix[$b_idx]}" ;;
 	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
 	-default-build) _ps "$_b_def_idx" ;; 
+	-default-setting) _ps "${_b_def_settings[$b_idx]}" ;;
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
 	-def-module-version) _ps "$_crt_version" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
@@ -297,6 +321,7 @@ function add_test_package {
     # Update install-prefix
     pack_set --install-prefix $(pack_get --install-prefix $name[$version])
     pack_set --module-requirement $name[$version]
+    pack_set --remove-setting module
     if [ $# -gt 0 ]; then
 	pack_set --install-query $(pack_get --install-prefix $name[$version])/$1
 	shift
@@ -307,7 +332,8 @@ function add_test_package {
 
 # Local variables for archives to be installed
 declare -a _http
-# The settings
+# The settings, this is formatted like <setting-1>$_LIST_SEP<setting-2>
+# etc.
 declare -a _settings
 # Where the package is installed
 declare -a _install_prefix
@@ -457,7 +483,7 @@ function add_package {
     fi
     _version[$_N_archives]=$v
     # Save the settings
-    _settings[$_N_archives]=0
+    _settings[$_N_archives]="$(build_get --default-setting $b_name)"
     # Save the package name...
     [ -z "$package" ] && package=${d%$v}
     local len=${#package}
@@ -512,12 +538,13 @@ function pack_set {
     [ $DEBUG -ne 0 ] && do_debug --enter pack_set
     local index=$_N_archives # Default to this
     local alias="" ; local version="" ; local directory=""
-    local settings="0" ; local install="" ; local query=""
+    local settings="" ; local install="" ; local query=""
     local mod_name="" ; local package="" ; local opt=""
     local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
     local reject_h="" ; local only_h="" ; local inst=-100
     local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
+    local tmp=
     while [ $# -gt 0 ]; do
 	# Process what is requested
 	local opt="$(trim_em $1)"
@@ -547,12 +574,12 @@ function pack_set {
 		_mod_req[$index]="$tmp"
 		shift ;;
             -R|-module-requirement|-mod-req)  
-		local tmp="$(pack_get --mod-req-all $1)"
+		tmp="$(pack_get --mod-req-all $1)"
 		[ ! -z "$tmp" ] && req="$req $tmp"
 		# We add the host-rejects for this requirement
-		local tmp="$(pack_get --host-reject $1)"
+		tmp="$(pack_get --host-reject $1)"
 		[ ! -z "$tmp" ] && reject_h="$reject_h $tmp"
-		local tmp="$(pack_get --host-only $1)"
+		tmp="$(pack_get --host-only $1)"
 		[ ! -z "$tmp" ] && only_h="$only_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
@@ -561,7 +588,24 @@ function pack_set {
 	    -installed)  inst="$1" ; shift ;;
             -v|-version)  version="$1" ; shift ;;
             -d|-directory)  directory="$1" ; shift ;;
-	    -s|-setting)  settings=$((settings + $1)) ; shift ;; # Can be called several times
+	    -s|-setting)  settings="$settings$_LIST_SEP$1" ; shift ;; # Can be called several times
+	    -choice)
+		settings="$settings$_LIST_SEP$1"
+		shift
+		if [ $# -eq 0 ]; then
+		    doerr "pack_set" "You need to specify at least one choice"
+		fi
+		while [ $# -gt 0 ]; do
+		    settings="$settings|$1"
+		    shift
+		done
+		;;
+	    -rem-s|-remove-setting)  
+		tmp="${_settings[$index]//$1/}" ; shift
+		# Remove the setting from the list
+		tmp="${tmp//$_LIST_SEP$_LIST_SEP/$_LIST_SEP}"
+		_settings[$index]="$tmp"
+		;;
 	    -m|-module-name)  mod_name="${1%/}" ; shift ;;
 	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
 	    -prefix-and-module)  mod_name="$1" ; up_pre_mod=1 ; shift ;;
@@ -624,7 +668,7 @@ function pack_set {
     [ ! -z "$mod_opt" ]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
     [ ! -z "$version" ]    && _version[$index]="$version"
     [ ! -z "$directory" ]  && _directory[$index]="$directory"
-    [ 0 -ne "$settings" ]  && _settings[$index]="$settings"
+    [ ! -z "$settings" ]   && _settings[$index]="${settings:1}$_LIST_SEP${_settings[$index]}"
     [ ! -z "$mod_prefix" ] && _mod_prefix[$index]="$mod_prefix"
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
@@ -893,7 +937,7 @@ function pack_install {
 	module load $module_loads
 
 	# If the module should be preloaded (for configures which checks that the path exists)
-	if $(has_setting $PRELOAD_MODULE $idx) ; then
+	if $(has_setting module-preload $idx) ; then
 	    create_module --force \
 		-n "$(pack_get --alias $idx)" \
 		-v "$(pack_get --version $idx)" \
@@ -942,7 +986,7 @@ function pack_install {
 	[ $? -ne 0 ] && exit 1
 
         # We are now in the package directory
-	if $(has_setting $BUILD_DIR $idx) ; then
+	if $(has_setting build-dir $idx) ; then
 	    rm -rf build-tmp ; mkdir -p build-tmp ; popd 1> /dev/null 
 	    pushd $(pack_get --directory $idx)/build-tmp 1> /dev/null
 	fi
@@ -971,7 +1015,7 @@ function pack_install {
         module unload $module_loads
 
 	# Unload the module itself in case of PRELOADING
-	if $(has_setting $PRELOAD_MODULE $idx) ; then
+	if $(has_setting module-preload $idx) ; then
 	    module unload $(pack_get --module-name $idx)
 	    # We need to clean up, in order to force the
 	    # module creation.
@@ -1001,7 +1045,7 @@ function pack_install {
 	done
     fi
 
-    if $(has_setting $IS_MODULE $idx) ; then
+    if $(has_setting module $idx) ; then
         # Create the list of requirements
 	local reqs="$(list --prefix '-R ' $mod_reqs)"
 	if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
@@ -1085,9 +1129,34 @@ function get_index {
 #   $1 : <setting>
 #   $2 : <index|name of archive>
 function has_setting {
-    local tmp
-    let "tmp=$1 & $(pack_get -s $2)"
-    [ $tmp -gt 0 ] && return 0
+    local ss="" ; local s="$1" ; shift
+    local -a sets=()
+    [ $# -gt 0 ] && ss="$1" && shift
+    IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
+    for ss in "${sets[@]}" ; do
+	[ "x$s" == "x$ss" ] && return 0
+    done
+    return 1
+}
+
+# Returns a list of the choices
+#   $1 : name according to the choic
+#   $2 : this package
+function choice {
+    local ss="" ; local s="$1" ; shift
+    local -a sets=()
+    [ $# -gt 0 ] && ss="$1" && shift
+    local len=${#s}
+    IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
+    for ss in "${sets[@]}" ; do
+	if [ "x$s" == "x${ss:0:$len}" ]; then
+	    IFS="|" read -ra sets <<< "${ss:$len}"
+	    for ss in "${sets[@]}" ; do
+		_ps " $ss"
+	    done
+	    return 0
+	fi
+    done
     return 1
 }
     

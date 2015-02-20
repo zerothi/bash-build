@@ -57,19 +57,19 @@ if $(is_c intel) ; then
 
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath atlas) -llapack|' $mk"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath openblas) -lopenblas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath openblas) -llapack|' $mk"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath blas) -lblas|' $mk"
-	pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath blas) -llapack|' $mk"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    break
+	fi
+    done
+
+    pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath $la) $tmp|' $mk"
+    pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath $la) -llapack|' $mk"
 
 fi
 

@@ -14,8 +14,6 @@ for v in 5.1.1 ; do
 
     add_package $tmp
     
-    pack_set -s $IS_MODULE
-
     pack_set --install-query $(pack_get --prefix)/bin/pw.x
 
     pack_set --host-reject ntch --host-reject zeroth

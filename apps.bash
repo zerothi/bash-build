@@ -1,6 +1,9 @@
 #source applications/git.bash
 msg_install --message "Installing the applications..."
 
+# Make all default modules
+build_set --default-setting module
+
 # Valgrind
 source applications/valgrind.bash
 
@@ -63,5 +66,7 @@ source applications/mpb.bash # [gmp,libunistring,guile]
 source applications/mpb-serial.bash # [gmp,libunistring,guile]
 source applications/meep.bash # [gmp,libunistring,guile]
 source applications/meep-serial.bash # [gmp,libunistring,guile]
+
+build_set --remove-default-setting module
 
 pack_install

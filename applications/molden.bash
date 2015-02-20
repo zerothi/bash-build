@@ -2,7 +2,7 @@
 # apt-get install libglu1-mesa-dev libx11-dev mesa-common-dev
 add_package ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden5.1.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family molden"
 

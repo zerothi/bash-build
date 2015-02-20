@@ -47,19 +47,18 @@ else
     # the C-compiler will work.
     sse "LIB += -lgfortran"
 
-    if [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	sse "BLAS = $(list --LDFLAGS --Wlrpath openblas) -lopenblas"
-	sse "LAPACK = $(list --LDFLAGS --Wlrpath openblas) -llapack"
-    elif [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	sse "BLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas"
-	sse "LAPACK = $(list --LDFLAGS --Wlrpath atlas) -llapack"
-    else
-	pack_set --module-requirement blas
-	sse "BLAS = $(list --LDFLAGS --Wlrpath blas) -lblas"
-	sse "LAPACK = $(list --LDFLAGS --Wlrpath blas) -llapack"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    sse "LAPACK = $(list --LDFLAGS --Wlrpath $la) -llapack"
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    sse "BLAS = $(list --LDFLAGS --Wlrpath $la) $tmp"
+	    break
+	fi
+    done
 
 fi
 

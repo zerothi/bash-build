@@ -18,19 +18,19 @@ if $(is_c intel) ; then
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ] ; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-LIBBLAS = $(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas \n' Makefile.inc"
-    elif [ $(pack_installed openblas) -eq 1 ] ; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-LIBBLAS = $(list --LDFLAGS --Wlrpath openblas) -lopenblas \n' Makefile.inc"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-LIBBLAS = $(list --LDFLAGS --Wlrpath blas) -lblas \n' Makefile.inc"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="-lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    pack_set --command "sed -i '1 a\
+LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
+	    break
+	fi
+    done
 
 fi
 

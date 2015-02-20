@@ -12,16 +12,17 @@ if $(is_c intel) ; then
     tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack -lf77blas -lcblas -latlas"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$(list --LDFLAGS --Wlrpath openblas) -llapack -lopenblas"
-    else
-	pack_set --module-requirement blas
-	tmp="$(list --LDFLAGS --Wlrpath blas) -llapack -lblas"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    [ "x$la" == "xatlas" ] && \
+		tmp="$tmp -lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    break
+	fi
+    done
 fi
 
 pack_set --command "./configure" \

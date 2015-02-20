@@ -1,7 +1,7 @@
 for v in 4.6.7 5.0.4 ; do
 add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family gromacs"
 

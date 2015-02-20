@@ -2,8 +2,6 @@
 for v in 4.6.6 5.0.0 ; do
 add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/$v/gnuplot-$v.tar.gz
 
-pack_set -s $IS_MODULE
-
 pack_set --module-opt "--lua-family gnuplot"
 
 pack_set --install-query $(pack_get --prefix)/bin/gnuplot

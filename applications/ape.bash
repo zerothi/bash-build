@@ -1,8 +1,6 @@
 for v in 2.2.0 ; do
 add_package http://www.tddft.org/programs/APE/sites/default/files/ape-$v.tar.gz
 
-pack_set -s $IS_MODULE
-
 pack_set --install-query $(pack_get --prefix)/bin/ape
 
 pack_set --module-requirement gsl \

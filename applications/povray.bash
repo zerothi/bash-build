@@ -2,8 +2,6 @@ add_package \
     --build generic \
     http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
 
-pack_set -s $IS_MODULE
-
 # Force the named alias
 pack_set --install-query $(pack_get --prefix)/bin/povray
 

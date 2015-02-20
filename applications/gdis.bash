@@ -5,8 +5,6 @@ for v in 0.99 ; do
 add_package --build generic \
     http://www.student.dtu.dk/~nicpa/packages/gdis-$v.tar.gz
 
-pack_set -s $IS_MODULE
-
 pack_set $(list --prefix "--host-reject " surt muspel slid n- hemera eris)
 
 pack_set --module-opt "--lua-family gdis"

@@ -1,7 +1,5 @@
 add_package http://garr.dl.sourceforge.net/project/elk/elk-3.0.4.tgz
 
-pack_set -s $IS_MODULE
-
 pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/elk

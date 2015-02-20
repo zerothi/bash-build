@@ -1,7 +1,7 @@
 for v in 2.0.0 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/wannier90
 

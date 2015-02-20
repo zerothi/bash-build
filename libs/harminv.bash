@@ -14,22 +14,22 @@ if $(is_c intel) ; then
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="--with-blas='-lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-lapack='-llapack -lf77blas -lcblas -latlas'"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="--with-blas='-lopenblas' --with-lapack='-llapack'"
-    else
-	pack_set --module-requirement blas
-	tmp="--with-blas='-lblas'"
-	tmp="$tmp --with-lapack='-llapack'"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp=
+	    [ "x$la" == "xatlas" ] && \
+		tmp="$tmp -lf77blas -lcblas"
+	    tmp="$tmp -l$la"
+	    tmp="--with-blas='$tmp' --with-lapack='-llapack'"
+	    break
+	fi
+    done
 
 fi
 
-    # Install commands that it should run
+# Install commands that it should run
 pack_set --command "./configure" \
     --command-flag "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--prefix $(pack_get --prefix) $tmp"

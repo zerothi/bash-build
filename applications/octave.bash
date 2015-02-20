@@ -1,6 +1,6 @@
 add_package ftp://ftp.gnu.org/gnu/octave/octave-3.8.2.tar.bz2
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/octave

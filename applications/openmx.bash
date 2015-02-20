@@ -2,8 +2,6 @@ add_package --package openmx \
     --version 3.7.8 \
     http://www.openmx-square.org/openmx3.7.tar.gz
 
-pack_set -s $IS_MODULE
-
 pack_set --module-opt "--lua-family openmx"
 
 pack_set --host-reject ntch-l --host-reject zerothi

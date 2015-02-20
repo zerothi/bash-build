@@ -18,16 +18,15 @@ if $(is_c intel) ; then
     echo "continue" > /dev/null
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath atlas)"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath openblas)"
-    else
-	pack_set --module-requirement blas
-	tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath blas)"
-    fi
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath $la)"
+	    break
+	fi
+    done
+
 else
     doerr Scientificpython "Could not determine compiler..."
 fi
