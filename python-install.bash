@@ -36,6 +36,8 @@ new_build --name python$IpV \
 # Change to the new build default
 build_set --default-build python$IpV
 
+build_set --default-choice linalg openblas atlas blas
+
 # Python building utility
 source python/scons.bash
 
