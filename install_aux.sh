@@ -210,7 +210,7 @@ function isnumber {
 #  4. translate '\n' to ' '
 function rem_dup {
     # Apparently we cannot use _ps here!!!!
-    echo -n "$@" | tr ' ' '\n' | sed -e '/^[[:space:]]*$/d' | awk '!_[$0]++' | tr '\n' ' '
+    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | awk '!_[$0]++' | tr '\n' ' '
 }
 
 
@@ -394,11 +394,11 @@ function pack_print {
 }
 
 if [ $DEBUG -gt 0 ]; then
-    echo Debugging var_spec
-    echo $(var_spec foo[bar])
-    echo $(var_spec -v foo[bar])
-    echo $(var_spec -s foo[bar])
-    [ "x$(var_spec -s foo)" == "x" ] && echo SUCCESS
+    echo "Debugging var_spec"
+    echo "$(var_spec foo[bar])"
+    echo "$(var_spec -v foo[bar])"
+    echo "$(var_spec -s foo[bar])"
+    [ "x$(var_spec -s foo)" == "x" ] && echo "SUCCESS"
 fi
 
 

@@ -8,13 +8,12 @@ pack_set --install-query $(pack_get --prefix)/include/ffi.h
 pack_set --command "./configure" \
     --command-flag "--prefix $(pack_get --prefix)"
 
-if $(is_c intel) ; then
+#if $(is_c intel) ; then
     # The __m128 is not needed anymore, the intel-tema has fixed the issue
     # i can also see that a patch has been committed to libffi
     # So for the next release this should not be necessary
     #pack_set --command "sed -i -e 's:INTEL_COMPILER:INTEL_COMPILERS:' src/x86/ffi64.c"
-    echo "Done..." >/dev/null
-fi
+#fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
@@ -34,5 +33,12 @@ for f in lib lib64 ; do
     pack_set --command "[ -d $flib/include ] && mv $flib/include $(pack_get --prefix)/include || true"
     pack_set --command "[ -d $flib ] && rm -rf $flib || true"
 done
+
 unset flib
 unset tinc
+
+# Install to correct library directory.
+pack_install
+if [ -d $(pack_get --prefix)/lib64 ]; then
+    pack_set --library-suffix lib64
+fi

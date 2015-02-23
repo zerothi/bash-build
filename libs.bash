@@ -74,7 +74,7 @@ source libs/scotch.bash
 source libs/suitesparse.bash
 source libs/suitesparse_all.bash
 
-#source libs/mumps-serial.bash
+source libs/mumps-serial.bash
 source libs/mumps.bash
 source libs/superlu.bash
 source libs/superlu-dist.bash

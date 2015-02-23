@@ -2,6 +2,7 @@
 
 tmp=`pwd`
 
+
 source ~/.bashrc
 module purge
 
@@ -18,12 +19,26 @@ source install_funcs.sh
 python_version=2
 
 while [ $# -gt 1 ]; do
-    opt=$1 ; shift
+    opt=$1
     case $opt in
 	--python-version|-python-version|-pv)
-	    python_version=$1 ; shift ;;
+	    shift
+	    python_version=$1
+	    shift ;;
+	--tcl|-tcl)
+	    _module_format=TCL
+	    shift ;;
+	--lua|-lua)
+	    _module_format=LUA
+	    shift ;;
+	*)
+	    break
+	    ;;
     esac
 done
+
+# Notify the user about which module files will be generated
+msg_install --message "Will create $_module_format compliant module files"
 
 case $python_version in
     2|3)
@@ -32,14 +47,23 @@ case $python_version in
 	doerr "option parsing" "Cant figure out the python version"
 esac
 
-# Use ln to link to this file
-if [ $# -ne 0 ]; then
-    [ ! -e $1 ] && echo "File $1 does not exist, please create." && exit 1
-    source $1
-else
-    [ ! -e compiler.sh ] && echo "Please create file: compiler.sh" && exit 1
-    source compiler.sh
+declare -a l_builds
+
+# Get all sources
+l_builds[0]=compiler.sh
+i=0
+while [ $# -ne 0 ]; do
+    l_builds[$i]=$1
+    let i++
+    shift
+done
+
+# Source the first file
+if [ ! -e ${l_builds[0]} ]; then
+    echo "File ${l_builds[0]} does not exist, please create."
+    exit 1
 fi
+source ${l_builds[0]}
 
 if [ -z "$(build_get --installation-path)" ]; then
     msg_install --message "The installation path has not been set."
@@ -54,7 +78,6 @@ if [ -z "$(build_get --module-path)" ]; then
     build_set --module-path "$(build_get --installation-path)/modules"
 fi
 
-
 # Begin installation of various packages
 # List of archives
 # The order is the installation order
@@ -66,6 +89,15 @@ export LMOD_IGNORE_CACHE=1
 
 # Install the helper
 source helpers.bash
+
+# Source the next build
+if [ ${#l_builds[@]} -gt 1 ]; then
+    i=1
+    while [ $i -lt ${#l_builds[@]} ]; do
+	source ${l_builds[$i]}
+	let i++
+    done
+fi
 
 source libs/zlib.bash
 source libs/expat.bash
@@ -86,13 +118,8 @@ source libs/lapack.bash atlas
 source libs/openblas.bash
 source libs/lapack.bash openblas
 
-install_all --from zlib
-
 # A sparse library
 source libs/suitesparse.bash
-
-install_all --from openblas
-
 
 # These are "parent" installations...
 source python${python_version}.bash

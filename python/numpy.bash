@@ -24,40 +24,24 @@ tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
-if $(is_c intel) ; then
-    if [ -z "$MKL_PATH" ]; then
-	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
-    fi
-    pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
-    pack_set --command "sed -i '$ a\
-[DEFAULT]\n\
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5\n\
-library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
-include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
-
-else
-    pack_set --command "sed -i '1 a\
-[DEFAULT]\n\
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig\n\
-library_dirs = $tmp_lib\n\
-include_dirs = $tmp_inc\n' $file"
-
-fi
-
 pack_set --command "sed -i '1 a\
 [fftw]\n\
 library_dirs = $(pack_get --LD fftw-3)\n\
 include_dirs = $(pack_get --prefix fftw-3)/include\n\
 libraries = fftw3\n\
+runtime_library_dirs = $(pack_get --LD fftw-3)\n\
 [amd]\n\
 libraries = amd\n\
 amd_libs = amd\n\
+runtime_library_dirs = $(pack_get --LD amd)\n\
 [umfpack]\n\
 umfpack_libs = umfpack\n\
-libraries = umfpack\n' $file"
+libraries = umfpack\n\
+runtime_library_dirs = $(pack_get --LD umfpack)\n' $file"
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
+
     if [ -z "$MKL_PATH" ]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
@@ -79,6 +63,15 @@ blas_libs = mkl_blas95_lp64' $file"
     pack_set --command "sed -i -e 's:F90:F77:g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${pFCFLAGS//-O3/-O2} $p_flags\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_set --command "sed -i -e \"/'linker_so'/s|\(.-shared.\)|\1,'-L${tmp_lib//:/ -L}','-Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=}','$p_flags'|g\" numpy/distutils/fcompiler/intel.py"
+
+    pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
+    pack_set --command "sed -i '1 a\
+[ALL]\n\
+libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5\n\
+library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
+runtime_library_dirs = $tmp_lib\n\
+include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
+
     pack_set --command "$(get_parent_exec) setup.py config" \
 	--command-flag "--compiler=intelem" \
 	--command-flag "--fcompiler=intelem" 
@@ -93,7 +86,13 @@ elif $(is_c gnu) ; then
 [lapack]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = lapack\n' $file" 
+libraries = lapack\n\
+runtime_library_dirs = $(pack_get --LD $la)\n\
+[lapack_opt]\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = lapack\n\
+runtime_library_dirs = $(pack_get --LD $la)\n' $file" 
 	    
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '$ a\
@@ -101,32 +100,59 @@ libraries = lapack\n' $file"
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
+runtime_library_dirs = $(pack_get --LD $la)\n\
 [atlas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = f77blas,cblas,atlas\n' $file" 
+libraries = f77blas,cblas,atlas\n\
+runtime_library_dirs = $(pack_get --LD $la)\n' $file" 
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = openblasp\n\
+openblas_libs = openblasp\n\
+runtime_library_dirs = $(pack_get --LD $la)\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp\n' $file" 
+libraries = openblasp\n\
+blas_libs = openblasp\n\
+runtime_library_dirs = $(pack_get --LD $la)\n\
+[blas_opt]\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = openblasp\n\
+blas_libs = openblasp\n\
+runtime_library_dirs = $(pack_get --LD $la)\n' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = blas\n' $file"
+libraries = blas\n\
+blas_libs = blas\n\
+runtime_library_dirs = $(pack_get --LD $la)\n\
+[blas_opt]\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = blas\n\
+blas_libs = blas\n\
+runtime_library_dirs = $(pack_get --LD $la)\n' $file"
 	    else
 		doerr "numpy" "Could not find linear-algebra library: $la"
 	    fi
 	    break
 	fi
     done
+
+    pack_set --command "sed -i '1 a\
+[ALL]\n\
+libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig\n\
+library_dirs = $tmp_lib\n\
+include_dirs = $tmp_inc\n\
+runtime_library_dirs = $tmp_lib\n' $file"
 
     # Add the flags to the EXTRAFLAGS for the GNU compiler
     p_flags="DUM ${pFCFLAGS} -I$(pack_get --prefix ss_config)/include $FLAG_OMP"

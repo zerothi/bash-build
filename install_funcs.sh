@@ -4,6 +4,9 @@
 # Set options
 set -o hashall
 
+# Skipping unicode char's might help speed
+export LC_ALL=C
+
 # Default debugging variables
 _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
@@ -36,26 +39,26 @@ _LIST_SEP='ø'
 # The index of the default build...
 _b_def_idx=0
 # Name of setup (lookup-purposes)
-declare -a _b_name
+declare -A _b_name
 # source file
-declare -a _b_source
+declare -A _b_source
 # build path
-declare -a _b_build_path
+declare -A _b_build_path
 _b_build_path[$_b_def_idx]=$(pwd)/.compile
 # installation prefix
-declare -a _b_prefix
+declare -A _b_prefix
 # module installation prefix
-declare -a _b_mod_prefix
+declare -A _b_mod_prefix
 # how to build the full installation path
-declare -a _b_build_prefix
+declare -A _b_build_prefix
 _b_build_prefix[$_b_def_idx]="--package --version"
 # how to build the full module path
-declare -a _b_build_mod_prefix
+declare -A _b_build_mod_prefix
 _b_build_mod_prefix[$_b_def_idx]="--package --version"
 # default modules for this build
-declare -a _b_def_mod_reqs
+declare -A _b_def_mod_reqs
 # default settings for this build
-declare -a _b_def_settings
+declare -A _b_def_settings
 # Pointers of lookup
 declare -A _b_index
 _N_b=-1
@@ -331,51 +334,51 @@ function add_test_package {
 }
 
 # Local variables for archives to be installed
-declare -a _http
+declare -A _http
 # The settings, this is formatted like <setting-1>$_LIST_SEP<setting-2>
 # etc.
-declare -a _settings
+declare -A _settings
 # Where the package is installed
-declare -a _install_prefix
+declare -A _install_prefix
 # Where the package libraries are found
-declare -a _lib_prefix
+declare -A _lib_prefix
 # What to check for when installed
-declare -a _install_query
+declare -A _install_query
 # An aliased name
-declare -a _alias
+declare -A _alias
 # The module installation prefix (in case we have several different module paths)
-declare -a _mod_prefix
+declare -A _mod_prefix
 # The module name (when one which to load it must be (module load _mod_name[i])
-declare -a _mod_name
+declare -A _mod_name
 # The extension of the archive
-declare -a _ext
+declare -A _ext
 # The pure archive name (i.e. without http)
-declare -a _archive
+declare -A _archive
 # The package name (i.e. without extension and version, defaults to be the same as alias)
-declare -a _package
+declare -A _package
 # The version number of the package
-declare -a _version
+declare -A _version
 # The directory of the extracted package
-declare -a _directory
+declare -A _directory
 # A command sequence of the extracted package (executed before make commands)
-declare -a _cmd
+declare -A _cmd
 # A module sequence which is the requirements for the package
-declare -a _mod_req
+declare -A _mod_req
 # Variable for holding information about "non-installation" hosts
-declare -a _reject_host
+declare -A _reject_host
 # A variable that contains all the hosts that it will be installed on
-declare -a _only_host
+declare -A _only_host
 # Logical variable determines whether the package has been installed
 _I_LIB=3 # an internal module only used for its library path
 _I_MOD=2 # a module supplied from outside, it does not contain paths
 _I_INSTALLED=1 # the package has been installed
 _I_TO_BE=0 # have not decided what the package should do yet...
 _I_REJECT=-1 # the package is rejected on this one...
-declare -a _installed
+declare -A _installed
 # Adds this to the environment variable in the creation of the modules
-declare -a _mod_opts
+declare -A _mod_opts
 # The name of the build attached to this
-declare -a _build
+declare -A _build
 # Local variables for hash tables of index (speed up of execution)
 declare -A _index
 # The counter to hold the archives
@@ -1626,7 +1629,7 @@ function docmd {
     local ar="$1"
     shift
     local cmd=($*)
-    echo 
+    echo ""
     echo " # ================================================================"
     if [ ! -z "$ar" ] ; then
         echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
@@ -1707,5 +1710,5 @@ function do_debug {
 	    -return) n="return from routine: $1" ; shift ;;
 	esac
     done
-    echo $n >> DEBUG
+    echo "$n" >> DEBUG
 }

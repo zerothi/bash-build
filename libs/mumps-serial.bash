@@ -1,13 +1,12 @@
-add_package \
-    --package mumps-serial \
-    http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz
+add_package --package mumps-serial \
+    http://mumps.enseeiht.fr/MUMPS_5.0.0.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libmumps_common.a
 
 pack_set --module-requirement metis
-#pack_set --module-requirement scotch[5.1.12b]
+pack_set --module-requirement scotch
 
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
@@ -35,22 +34,21 @@ LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
 fi
 
 pack_set --command "sed -i '1 a\
-LMETISDIR = $(pack_get --prefix metis[4.0.3]) \n\
-IMETIS = $(list --INCDIRS metis[4.0.3]) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath metis[4.0.3]) -lmetis \n\
+LMETISDIR = $(pack_get --prefix metis) \n\
+IMETIS = $(list --INCDIRS metis) \n\
+LMETIS = $(list --LDFLAGS --Wlrpath metis) -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-#SCOTCHDIR = $(pack_get --prefix scotch)\n\
-#LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
-#ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
+SCOTCHDIR = $(pack_get --prefix scotch)\n\
+LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
+ISCOTCH = -I\$(SCOTCHDIR)/include \n\
+LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lscotch -lscotcherr \n\
 \n\
 ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
 ##ORDERINGSF = -Dpord -Dmetis -Dptscotch \n\
-ORDERINGSF = -Dpord -Dmetis \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
@@ -75,7 +73,6 @@ RANLIB = ranlib \n\
 LIBSEQ = -L\$(topdir)/libseq -lmpiseq \n\
 INCSEQ = -I\$(topdir)/libseq \n\
 \n\
-\n\
 LIBOTHERS = \n\
 \n\
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)\n\
@@ -89,10 +86,7 @@ OPTC    = $CFLAGS -O\n\
 \n\
 INCS = \$(INCSEQ) \n\
 LIBS = \$(LIBSEQ) \n\
-##INCS = \$(INCPAR) \n\
-##LIBS = \$(LIBPAR) \n\
-LIBSEQNEEDED = libseqneeded \n\
-##LIBSEQNEEDED = \n' Makefile.inc"
+LIBSEQNEEDED = libseqneeded \n' Makefile.inc"
 
 # Make commands
 pack_set --command "make $(get_make_parallel) alllib"

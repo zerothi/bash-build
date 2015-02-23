@@ -11,6 +11,10 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/sklearn/__init
 # Add requirments when creating the module
 pack_set --module-requirement numpy \
     --module-requirement scipy
+
+if $(is_c gnu) ; then
+    pack_set --host-reject $(get_hostname)
+fi
     
 # Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build"
