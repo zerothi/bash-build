@@ -58,6 +58,7 @@ source python/pytz.bash
 source python/pexpect.bash
 source python/docutils.bash
 source python/pycparser.bash
+source python/pyzmq.bash
 source python/ipython.bash
 source python/monty.bash
 source python/pyyaml.bash

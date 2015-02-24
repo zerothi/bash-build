@@ -1,9 +1,5 @@
-v=1.6
-add_package \
-    --archive pygments-$v.bz2 \
-    https://bitbucket.org/birkenfeld/pygments-main/get/$v.tar.bz2
-
-pack_set --directory "birkenfeld-pygments*"
+add_package --package pygments \
+    https://pypi.python.org/packages/source/P/Pygments/Pygments-2.0.2.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/pygmentize
 
