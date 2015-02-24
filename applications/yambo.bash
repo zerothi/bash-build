@@ -26,21 +26,20 @@ if $(is_c intel) ; then
     tmp_scalapack="$tmp_blas"
 
 elif $(is_c gnu) ; then
-    if [ $(pack_installed atlas) -eq 1 ] ; then
-	pack_set --module-requirement atlas
-	tmp_blas="$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas"
-	tmp_lapack="$(list --LDFLAGS --Wlrpath atlas) -llapack"
-    elif [ $(pack_installed openblas) -eq 1 ] ; then
-	pack_set --module-requirement openblas
-	tmp_blas="$(list --LDFLAGS --Wlrpath openblas) -lopenblas"
-	tmp_lapack="$(list --LDFLAGS --Wlrpath openblas) -llapack"
-    else
-	pack_set --module-requirement blas --module-requirement lapack
-	tmp_blas="$(list --LDFLAGS --Wlrpath blas) -lblas"
-	tmp_lapack="$(list --LDFLAGS --Wlrpath lapack) -llapack"
-    fi
-    pack_set --module-requirement scalapack
-    tmp_scalapack="$(list --LDFLAGS --Wlrpath scalapack) -lscalapack $tmp_lapack $tmp_blas"
+
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    tmp_blas="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_lapack="$tmp_blas -llapack"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp_blas="$tmp_blas -lf77blas -lcblas -latlas"
+	    else
+		tmp_blas="$tmp_blas -l$la"
+	    fi
+	    tmp_scalapack="$tmp_scalapack -lscalapack $tmp_lapack $tmp_blas"
+	fi
+    done
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

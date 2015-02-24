@@ -15,19 +15,21 @@ if $(is_c intel) ; then
     
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-    LIBS = $(list --Wlrpath --LDFLAGS atlas) -llapack -lf77blas -lcblas -latlas' Makefile"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-    LIBS = $(list --Wlrpath --LDFLAGS openblas) -llapack -lopenblas' Makefile"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-    LIBS = $(list --Wlrpath --LDFLAGS blas) -llapack -lblas' Makefile"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    if [ "x$la" == "xatlas" ]; then
+		pack_set --command "sed -i '1 a\
+LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lf77blas -lcblas -latlas' $file"
+	    elif [ "x$la" == "xblas" ]; then
+		pack_set --command "sed -i '1 a\
+LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lblas' $file"
+	    elif [ "x$la" == "xopenblas" ]; then
+		pack_set --command "sed -i '1 a\
+LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lopenblas' $file"
+	    fi
+	fi
+    done
 
 fi
 

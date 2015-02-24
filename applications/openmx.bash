@@ -39,19 +39,21 @@ if $(is_c intel) ; then
     
 else
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas_omp' $file"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '1 a\
-    LIB += $(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas' $file"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    if [ "x$la" == "xatlas" ]; then
+		pack_set --command "sed -i '1 a\
+LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
+	    elif [ "x$la" == "xblas" ]; then
+		pack_set --command "sed -i '1 a\
+LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lblas' $file"
+	    elif [ "x$la" == "xopenblas" ]; then
+		pack_set --command "sed -i '1 a\
+LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lopenblas_omp' $file"
+	    fi
+	fi
+    done
 
     # Add the gfortran library
     pack_set --command "sed -i '1 a\

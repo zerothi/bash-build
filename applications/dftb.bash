@@ -14,8 +14,8 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
     cc=gnu
 fi
-tmp=sysmakes/make.$cc
-pack_set --command "echo '#' > $tmp"
+file=sysmakes/make.$cc
+pack_set --command "echo '#' > $file"
 
 if test -z "$FLAG_OMP" ; then
     doerr dftb "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -33,7 +33,7 @@ LN = \$(FC90) \n\
 LNOPT = -mkl=parallel $FLAG_OMP\n\
 LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
 LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n\
-LIBOPT = $MKL_LIB' $tmp"
+LIBOPT = $MKL_LIB' $file"
     
 else
     pack_set --command "sed -i '1 a\
@@ -43,31 +43,27 @@ CPP = cpp -traditional\n\
 CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
 LN = \$(FC90) \n\
-LNOPT = $FLAG_OMP' $tmp"
-
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '$ a\
-ATLASOPT = $(list --LDFLAGS --Wlrpath atlas)\n\
-LIB_LAPACK = \$(ATLASOPT) -llapack\n\
-LIB_BLAS   = \$(ATLASOPT) -lf77blas -lcblas -latlas\n\
-LIBOPT     = \$(ATLASOPT)' $tmp"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-ATLASOPT = $(list --LDFLAGS --Wlrpath openblas)\n\
-LIB_LAPACK = \$(ATLASOPT) -llapack\n\
-LIB_BLAS   = \$(ATLASOPT) -lopenblas_omp\n\
-LIBOPT     = \$(ATLASOPT)' $tmp"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '$ a\
-BLASOPT =  $(list --LDFLAGS --Wlrpath blas)\n\
-LAPACKOPT =  $(list --LDFLAGS --Wlrpath blas)\n\
-LIB_LAPACK = \$(LAPACKOPT) -llapack\n\
-LIB_BLAS   = \$(BLASOPT) -lblas\n\
-LIBOPT     = \$(LAPACKOPT) \$(BLASOPT)' $tmp"
-    fi
+LNOPT = $FLAG_OMP' $file"
+    
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    pack_set --command "sed -i '$ a\
+LINALG_OPT = $(list --LDFLAGS --Wlrpath $la)\n\
+LIB_LAPACK = \$(LINALG_OPT) -llapack\n\
+LIBOPT = \$(LINALG_OPT)\n' $file"
+	    if [ "x$la" == "xatlas" ]; then
+		pack_set --command "sed -i '$ a\
+LIB_BLAS   = \$(LINALG_OPT) -lf77blas -lcblas -latlas\n' $file"
+	    elif [ "x$la" == "xopenblas" ]; then
+		pack_set --command "sed -i '$ a\
+LIB_BLAS   = \$(LINALG_OPT) -lopenblas_omp\n' $file"
+	    elif [ "x$la" == "xblas" ]; then
+		pack_set --command "sed -i '$ a\
+LIB_BLAS   = \$(LINALG_OPT) -lblas\n' $file"
+	    fi
+	fi
+    done
 
 fi
 

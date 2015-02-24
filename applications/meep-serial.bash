@@ -22,19 +22,20 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="--with-blas='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="--with-blas='$(list --LDFLAGS --Wlrpath openblas) -lopenblas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
-    else
-	pack_set --module-requirement blas
-	tmp="--with-blas='$(list --LDFLAGS --Wlrpath blas) -lblas'"
-	tmp="$tmp --with-lapack='$(list --LDFLAGS --Wlrpath blas) -llapack'"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp="$tmp --with-lapack='$tmp_ld -llapack'"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
+	    elif [ "x$la" == "xopenblas" ]; then
+		tmp="$tmp --with-blas='$tmp_ld -lopenblas'"
+	    elif [ "x$la" == "xblas" ]; then
+		tmp="$tmp --with-blas='$tmp_ld -lblas'"
+	    fi
+	fi
+    done
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

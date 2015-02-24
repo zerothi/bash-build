@@ -65,22 +65,22 @@ with_linalg_libs=\"$tmp\"\n' $file"
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS atlas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath atlas) -lscalapack -llapack -lf77blas -lcblas -latlas\"' $file"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS openblas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath openblas) -lscalapack -llapack -lopenblas_omp\"' $file"
-    else
-	pack_set --module-requirement blas
-	pack_set --command "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS blas)\"\n\
-with_linalg_libs=\"$(list --LDFLAGS --Wlrpath blas) -lscalapack -llapack -lblas\"' $file"
-    fi
+    
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    if [ "x$la" == "xatlas" ]; then
+		tmp="-lf77blas -lcblas -latlas"
+	    elif [ "x$la" == "xopenblas" ]; then
+		tmp="-lopenblas_omp"
+	    elif [ "x$la" == "xblas" ]; then
+		tmp="-lblas"
+	    fi
+	    pack_set --command "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS $la)\"\n\
+with_linalg_libs=\"$(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack $tmp\"\n' $file"
+	fi
+    done
 
 fi
 

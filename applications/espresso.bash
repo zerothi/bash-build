@@ -44,22 +44,21 @@ for v in 5.1.1 ; do
 
     else
 
-	if [ $(pack_installed atlas) -eq 1 ]; then
-	    pack_set --module-requirement atlas
-    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lf77blas -lcblas -latlas'"
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath atlas) -llapack'"
-	elif [ $(pack_installed openblas) -eq 1 ]; then
-	    pack_set --module-requirement openblas
-    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lopenblas_omp'"
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath openblas) -llapack'"
-	else
-	    pack_set --module-requirement blas
-    	    tmp_lib="$tmp_lib BLAS_LIBS='$(list --LDFLAGS --Wlrpath blas) -lblas'"
-    	    tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LDFLAGS --Wlrpath nblas) -lscalapack'"
-    	    tmp_lib="$tmp_lib LAPACK_LIBS='$(list --LDFLAGS --Wlrpath blas) -llapack'"
-	fi
+	for la in $(choice linalg) ; do
+	    if [ $(pack_installed $la) -eq 1 ] ; then
+		pack_set --module-requirement $la
+		tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
+		tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp_ld -lscalapack'"
+		if [ "x$la" == "xatlas" ]; then
+		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
+		elif [ "x$la" == "xopenblas" ]; then
+		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lopenblas_omp'"
+		elif [ "x$la" == "xblas" ]; then
+		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lblas'"
+		fi
+	    fi
+	done
 
     fi
 

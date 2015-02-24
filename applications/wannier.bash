@@ -17,16 +17,18 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="$(list --LDFLAGS --Wlrpath atlas) -llapack -lf77blas -lcblas -latlas"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="$(list --LDFLAGS --Wlrpath openblas) -llapack -lopenblas"
-    else
-	pack_set --module-requirement blas
-	tmp="$(list --LDFLAGS --Wlrpath blas) -llapack -lblas"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp="$tmp -lf77blas -lcblas -latlas"
+	    else
+		tmp="$tmp -l$la"
+	    fi
+	fi
+    done
+
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
 

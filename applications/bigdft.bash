@@ -23,20 +23,20 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="--with-ext-linalg='-lscalapack -llapack -lf77blas -lcblas -latlas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath atlas)'"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="--with-ext-linalg='-lscalapack -llapack -lopenblas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath openblas)'"
-    else
-	pack_set --module-requirement blas
-	tmp="--with-ext-linalg='-lscalapack -llapack -lblas'"
-	tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath blas)'"
-    fi
-
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    tmp_ld="-lscalapack -llapack"
+	    tmp="$tmp --with-ext-linalg-path='$(list -- LDFLAGS --Wlrpath $la)'"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
+	    elif [ "x$la" == "xopenblas" ]; then
+		tmp="$tmp --with-ext-linalg='$tmp_ld -lopenblas'"
+	    elif [ "x$la" == "xblas" ]; then
+		tmp="$tmp --with-ext-linalg='$tmp_ld -lblas'"
+	    fi
+	fi
+    done
 
 else
     doerr BigDFT "Could not determine compiler..."

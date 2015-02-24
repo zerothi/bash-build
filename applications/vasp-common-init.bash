@@ -82,28 +82,25 @@ LINK = $FLAG_OMP $(list --Wlrpath --LDFLAGS openmpi)\n\
 LINK = \n\
 DEBUG = \n' $file"
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	pack_set --command "sed -i '$ a\
-SCA = $(list --Wlrpath --LDFLAGS atlas) -lscalapack\n\
-BLAS = $(list --Wlrpath --LDFLAGS atlas) -lf77blas -lcblas -latlas \n\
-LAPACK = $(list --Wlrpath --LDFLAGS atlas) -llapack\n ' $file"
-
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	pack_set --command "sed -i '$ a\
-SCA = $(list --Wlrpath --LDFLAGS openblas) -lscalapack\n\
-BLAS = $(list --Wlrpath --LDFLAGS openblas) -lopenblas_omp \n\
-LAPACK = $(list --Wlrpath --LDFLAGS openblas) -llapack\n ' $file"
-
-    else
-	pack_set --module-requirement blas
-	pack_set --command "sed -i '$ a\
-SCA = $(list --Wlrpath --LDFLAGS blas) -lscalapack\n\
-BLAS = $(list --Wlrpath --LDFLAGS blas) -lblas \n\
-LAPACK = $(list --Wlrpath --LDFLAGS blas) -llapack\n ' $file"
-
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    pack_set --module-requirement $la
+	    pack_set --command "sed -i '$ a\
+SCA = $(list --Wlrpath --LDFLAGS $la) -lscalapack\n\
+LAPACK = $(list --Wlrpath --LDFLAGS $la) -llapack\n ' $file"
+	    
+	    if [ "x$la" == "xatlas" ]; then
+		pack_set --command "sed -i '$ a\
+BLAS = $(list --Wlrpath --LDFLAGS $la) -lf77blas -lcblas -latlas\n' $file"
+	    elif [ "x$la" == "xblas" ]; then
+		pack_set --command "sed -i '$ a\
+BLAS = $(list --Wlrpath --LDFLAGS $la) -lblas\n' $file"
+	    elif [ "x$la" == "xopenblas" ]; then
+		pack_set --command "sed -i '$ a\
+BLAS = $(list --Wlrpath --LDFLAGS $la) -lopenblas_omp\n' $file"
+	    fi
+	fi
+    done
 
 # Fix source for gnu
 pack_set --command "sed -i -e 's:3(1x,3I):3(1x,3I0):g' vasp.5.3/spinsym.F"

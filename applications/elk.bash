@@ -45,16 +45,19 @@ LIB_LPK = $tmp\n\
 
 elif $(is_c gnu) ; then
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp="-llapack -lf77blas -lcblas -latlas"
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp="-llapack -lopenblas_omp"
-    else
-	pack_set --module-requirement blas
-	tmp="-llapack -lblas"
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    tmp="-llapack"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp="$tmp -lf77blas -lcblas -latlas"
+	    elif [ "x$la" == "xopenblas" ]; then
+		tmp="$tmp -lopenblas_omp"
+	    elif [ "x$la" == "xblas" ]; then
+		tmp="$tmp -lblas"
+	    fi
+	fi
+    done
 
     pack_set --command "sed -i '1 a\
 LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) $tmp\n\

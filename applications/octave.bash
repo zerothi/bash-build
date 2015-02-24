@@ -33,22 +33,20 @@ if $(is_c intel) ; then
 
 else 
 
-    if [ $(pack_installed atlas) -eq 1 ]; then
-	pack_set --module-requirement atlas
-	tmp_flags="$tmp_flags --with-blas='$(pack_get --LD atlas) -lf77blas -lcblas -latlas'"
-	tmp_flags="$tmp_flags --with-lapack='$(pack_get --LD atlas) -llapack'"
-
-    elif [ $(pack_installed openblas) -eq 1 ]; then
-	pack_set --module-requirement openblas
-	tmp_flags="$tmp_flags --with-blas='$(pack_get --LD openblas) -lopenblas'"
-	tmp_flags="$tmp_flags --with-lapack='$(pack_get --LD openblas) -llapack'"
-
-    else
-	pack_set --module-requirement blas
-	tmp_flags="$tmp_flags --with-blas='$(pack_get --LD blas) -lblas'"
-	tmp_flags="$tmp_flags --with-lapack='$(pack_get --LD blas) -llapack'"
-
-    fi
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ] ; then
+	    pack_set --module-requirement $la
+	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_flags="$tmp_flags --with-lapack='$tmp_ld -llapack'"
+	    if [ "x$la" == "xatlas" ]; then
+		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
+	    elif [ "x$la" == "xopenblas" ]; then
+		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lopenblas'"
+	    elif [ "x$la" == "xblas" ]; then
+		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lblas'"
+	    fi
+	fi
+    done
 
 fi
 
