@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libmumps_common.a
 
 pack_set --module-requirement metis
-pack_set --module-requirement scotch
+# Using scotch requires a special interface :(
 
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
@@ -42,13 +42,13 @@ LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-SCOTCHDIR = $(pack_get --prefix scotch)\n\
-LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
-ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lscotch -lscotcherr \n\
+#SCOTCHDIR = $(pack_get --prefix scotch)\n\
+#LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
+#ISCOTCH = -I\$(SCOTCHDIR)/include \n\
+#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lscotch \n\
 \n\
-ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
-##ORDERINGSF = -Dpord -Dmetis -Dptscotch \n\
+ORDERINGSF = -Dpord -Dmetis #-Dscotch \n\
+##ORDERINGSF = -Dpord -Dmetis # -Dptscotch \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\

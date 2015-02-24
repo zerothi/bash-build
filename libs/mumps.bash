@@ -1,13 +1,17 @@
+for v in 4.10.0 5.0.0 ; do
 add_package --package mumps \
-    http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz
+    http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libmumps_common.a
 
-parmetisV=3.2.0
-pack_set --module-requirement parmetis[$parmetisV]
-pack_set --module-requirement scotch
+if [ $(vrs_cmp $v 5.0.0) -ge 0 ]; then
+    parmetisV=parmetis
+else
+    parmetisV=parmetis[3.2.0]
+fi
+pack_set --module-requirement $parmetisV
 
 pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 
@@ -36,10 +40,10 @@ LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
 
 fi
 
-pack_set --command "sed -i '1 a\
-LMETISDIR = $(pack_get --prefix parmetis[$parmetisV]) \n\
-IMETIS = $(list --INCDIRS parmetis[$parmetisV]) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath parmetis[$parmetisV]) -lparmetis -lmetis \n\
+pack_set --command "sed -i '$ a\
+LMETISDIR = $(pack_get --prefix $parmetisV) \n\
+IMETIS = $(list --INCDIRS $parmetisV) \n\
+LMETIS = $(list --LDFLAGS --Wlrpath $parmetisV) -lparmetis -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
@@ -48,17 +52,17 @@ LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 #SCOTCHDIR = $(pack_get --prefix scotch)\n\
 #LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
 #ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-##LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr \n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr \n\
+#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch \n\
+#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch \n\
 \n\
-##ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
+#ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
 #ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
 ORDERINGSF = -Dpord -Dparmetis \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
-LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
-IORDERINGSF = \$(ISCOTCH) \n\
-IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
+#LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
+#IORDERINGSF = \$(ISCOTCH) \n\
+#IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \n\
 IORDERINGSF = \n\
 IORDERINGSC = \$(IMETIS) \$(IPORD) \n\
@@ -108,3 +112,4 @@ pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
 pack_set --command "mkdir -p $(pack_get --LD)"
 pack_set --command "cp lib/lib*.a $(pack_get --LD)/"
 
+done

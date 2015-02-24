@@ -184,8 +184,8 @@ function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
 
 # Returns the file time in a simple format
 function get_file_time {
-    local format="$1"
-    local fdate=$(stat -c "%y" $2)
+    local format="$1" ; shift
+    local fdate=$(stat -L -c "%y" $1) ; shift
     _ps "`date +"$format" --date="$fdate"`"
 }
 

@@ -20,7 +20,8 @@ fi
 _DEBUG_COUNTER=0
 function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
 
-_ERROR_FILE=ERROR
+_cwd=$(pwd)
+_ERROR_FILE=$_cwd/ERROR
 # Clean the error file
 rm -f $_ERROR_FILE
 
@@ -44,7 +45,7 @@ declare -A _b_name
 declare -A _b_source
 # build path
 declare -A _b_build_path
-_b_build_path[$_b_def_idx]=$(pwd)/.compile
+_b_build_path[$_b_def_idx]=$_cwd/.compile
 # installation prefix
 declare -A _b_prefix
 # module installation prefix
@@ -86,7 +87,7 @@ source install_compiler.sh
 source install_hostinfo.sh
 
 # The place of all the archives
-_archives="$(pwd)/.archives"
+_archives="$_cwd/.archives"
 function pwd_archives { _ps "$_archives" ; }
 
 # Denote how the module paths and installation paths should be
@@ -150,6 +151,7 @@ function build_set {
 		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --module-requirement $1)"
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
+		_b_def_mod_reqs[$b_idx]="$(rem_dup ${_b_def_mod_reqs[$b_idx]})"
 		shift ;;
 	    -default-setting)
 		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
@@ -273,7 +275,9 @@ function new_build {
 		else
 		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $1)"
 		fi
-		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1" ; shift ;;
+		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1"
+		_b_def_mod_reqs[$_N_b]="$(rem_dup ${_b_def_mod_reqs[$_N_b]})"
+		shift ;;
 	    -source)
 		_b_source[$_N_b]="$(readlink -f $1)" ; shift
 		[ ! -e ${_b_source[$_N_b]} ] && \
@@ -634,8 +638,7 @@ function pack_set {
     if [ ! -z "$req" ]; then
 	req="${_mod_req[$index]} $req"
 	# Remove dublicates:
-	req="$(rem_dup $req)"
-	_mod_req[$index]="$req"
+	_mod_req[$index]="$(rem_dup $req)"
     fi
     if [ ! -z "$install" ]; then
 	_install_prefix[$index]="$install"
@@ -919,6 +922,9 @@ function pack_install {
 	    break
 	fi
     done
+
+    # Create a list of compilation modules required
+    pack_crt_list $idx
 
     if [ $run -eq 0 ]; then
 	# Notify other required stuff that this can not be installed.
@@ -1634,7 +1640,7 @@ function docmd {
     if [ ! -z "$ar" ] ; then
         echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
     fi
-    echo " # PWD: "$(pwd)
+    echo " # PWD: "$_cwd
     echo " # CMD: "${cmd[@]}
     echo " # ================================================================"
     eval ${cmd[@]}
@@ -1677,6 +1683,24 @@ function doerr {
     done ; exit 1
 }
 
+function pack_crt_list {
+    # It will only take one argument...
+    local pack=$_N_archives
+    [ $# -gt 0 ] && pack=$1
+    local build=$(pack_get --build $pack)
+    build=$(build_get --build-path $build)
+    local mr=$(pack_get --module-requirement $pack)
+    if [ ! -z "$mr" ]; then
+	{
+	    echo "# Used packages"
+	    for p in $mr ; do
+		echo "$p"
+	    done
+	} > $build/$(pack_get --alias $pack)-$(pack_get --version $pack).list
+    fi
+}
+
+
 # Update the package version number by looking at the date in the file
 function pack_set_file_version {
     local idx=$_N_archives
@@ -1712,3 +1736,4 @@ function do_debug {
     done
     echo "$n" >> DEBUG
 }
+

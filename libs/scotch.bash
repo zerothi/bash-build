@@ -1,8 +1,7 @@
-# MUMPS 4.10.0 only works with 5.1.12b
-for v in 6.0.0 ; do
+# MUMPS 4.10.0 only works with 5.1.12b, MUMPS 5 works with >=6.0.1
+for v in 6.0.3 ; do
 add_package --package scotch --alias scotch --version $v \
-    --directory scotch_${v//b/}_esmumps \
-    http://gforge.inria.fr/frs/download.php/latestfile/298/scotch_${v}_esmumps.tar.gz
+    http://gforge.inria.fr/frs/download.php/file/34099/scotch_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -20,24 +19,22 @@ fi
 # Move to source
 pack_set --command "cd src"
 
-
 file=Makefile.inc
 pack_set --command "echo '# Makefile for easy installation ' > $file"
-
 
 if $(is_c intel) ; then
 
     pack_set --command "sed -i '1 a\
-CFLAGS = -restrict' $file"
+CFLAGS = -restrict\n' $file"
     
 elif $(is_c gnu) ; then
     
     pack_set --command "sed -i '1 a\
-CFLAGS = -Drestrict=__restrict' $file"
+CFLAGS = -Drestrict=__restrict\n' $file"
     
 fi
 
-pack_set --command "sed -i '1 a\
+pack_set --command "sed -i '$ a\
 EXE = \n\
 LIB = .a \n\
 OBJ = .o \n\
@@ -67,18 +64,24 @@ pack_set --command "mkdir -p $(pack_get --prefix)"
 # Make commands
 pack_set --command "make $(get_make_parallel) scotch"
 if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
-pack_set --command "make $(get_make_parallel) esmumps"
+    pack_set --command "make $(get_make_parallel) esmumps"
 fi
 pack_set --command "make install"
+pack_set --command "make check > tmp.test 2>&1"
+pack_set_mv_test tmp.test
 pack_set --command "make clean"
+
+# Remove threads
+pack_set --command "sed -i -e 's/-DSCOTCH_PTHREAD //gi' $file"
+pack_set --command "sed -i -e 's/-DCOMMON_PTHREAD //gi' $file"
 pack_set --command "make $(get_make_parallel) ptscotch"
 if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
-pack_set --command "make $(get_make_parallel) ptesmumps"
+    pack_set --command "make $(get_make_parallel) ptesmumps"
 fi
-
-pack_set --command "make check > tmp.test 2>&1"
+# this check waits for a key-press????
+#pack_set --command "make ptcheck > tmp.test 2>&1"
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+#pack_set_mv_test tmp.test ptmp.test
 
 if [ $(pack_installed flex) -eq 1 ] ; then
     pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
