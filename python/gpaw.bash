@@ -42,8 +42,8 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
 	    pack_set --module-requirement $la
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
-		tmp="\"f77blas\",\"cblas\""
-	    tmp="$tmp,\"$la\""
+		tmp="\"f77blas\",\"cblas\","
+	    tmp="$tmp\"$la\""
 	    pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --LD $la)\"]\n\
 libraries = [\"scalapack\",\"lapack\",$tmp,\"gfortran\"]' $file"
