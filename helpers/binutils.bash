@@ -5,9 +5,11 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set --install-query $(pack_get --prefix)/bin/gprof
 
 # Install commands that it should run
+pack_set --command "module load build-tools"
 pack_set --command "../configure" \
     --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands (no tests available)
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
+pack_set --command "module unload build-tools"
