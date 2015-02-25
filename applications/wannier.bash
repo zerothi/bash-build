@@ -26,6 +26,7 @@ elif $(is_c gnu) ; then
 	    else
 		tmp="$tmp -l$la"
 	    fi
+	    break
 	fi
     done
 

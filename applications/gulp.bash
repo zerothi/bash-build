@@ -29,6 +29,7 @@ LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lblas' $file"
 		pack_set --command "sed -i '1 a\
 LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lopenblas' $file"
 	    fi
+	    break
 	fi
     done
 

@@ -52,6 +52,7 @@ LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lblas' $file"
 		pack_set --command "sed -i '1 a\
 LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lopenblas_omp' $file"
 	    fi
+	    break
 	fi
     done
 

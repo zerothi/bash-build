@@ -62,6 +62,7 @@ LIB_BLAS   = \$(LINALG_OPT) -lopenblas_omp\n' $file"
 		pack_set --command "sed -i '$ a\
 LIB_BLAS   = \$(LINALG_OPT) -lblas\n' $file"
 	    fi
+	    break
 	fi
     done
 

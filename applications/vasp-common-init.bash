@@ -99,6 +99,7 @@ BLAS = $(list --Wlrpath --LDFLAGS $la) -lblas\n' $file"
 		pack_set --command "sed -i '$ a\
 BLAS = $(list --Wlrpath --LDFLAGS $la) -lopenblas_omp\n' $file"
 	    fi
+	    break
 	fi
     done
 

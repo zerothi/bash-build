@@ -38,6 +38,7 @@ elif $(is_c gnu) ; then
 		tmp_blas="$tmp_blas -l$la"
 	    fi
 	    tmp_scalapack="$tmp_scalapack -lscalapack $tmp_lapack $tmp_blas"
+	    break
 	fi
     done
 

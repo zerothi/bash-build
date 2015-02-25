@@ -56,6 +56,7 @@ elif $(is_c gnu) ; then
 	    elif [ "x$la" == "xblas" ]; then
 		tmp="$tmp -lblas"
 	    fi
+	    break
 	fi
     done
 

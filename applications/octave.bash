@@ -45,6 +45,7 @@ else
 	    elif [ "x$la" == "xblas" ]; then
 		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lblas'"
 	    fi
+	    break
 	fi
     done
 

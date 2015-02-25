@@ -57,6 +57,7 @@ for v in 5.1.1 ; do
 		elif [ "x$la" == "xblas" ]; then
 		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lblas'"
 		fi
+		break
 	    fi
 	done
 

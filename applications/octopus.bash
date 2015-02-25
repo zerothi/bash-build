@@ -39,6 +39,7 @@ else
 	    elif [ "x$la" == "xblas" ]; then
 		tmp="$tmp --with-blas='$tmp_ld -lblas'"
 	    fi
+	    break
 	fi
     done
 

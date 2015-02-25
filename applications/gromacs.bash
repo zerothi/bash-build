@@ -32,6 +32,7 @@ elif $(is_c gnu) ; then
 	    elif [ "x$la" == "xblas" ]; then
 		tmp="$tmp -DGMX_BLAS_USER='$tmp_ld -lblas -lgfortran'"
 	    fi
+	    break
 	fi
     done
 

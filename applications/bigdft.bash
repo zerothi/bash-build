@@ -35,6 +35,7 @@ elif $(is_c gnu) ; then
 	    elif [ "x$la" == "xblas" ]; then
 		tmp="$tmp --with-ext-linalg='$tmp_ld -lblas'"
 	    fi
+	    break
 	fi
     done
 

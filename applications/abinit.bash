@@ -79,6 +79,7 @@ else
 	    pack_set --command "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS $la)\"\n\
 with_linalg_libs=\"$(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack $tmp\"\n' $file"
+	    break
 	fi
     done
 
