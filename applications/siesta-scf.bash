@@ -213,7 +213,6 @@ pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 
 # Install the TS-analyzer
 pack_set --command "cd ../../TS/"
-pack_set --command "cp AnalyzeSort/tsanalyzesort.py $(pack_get --prefix)/bin/"
 pack_set --command "cp tselecs.sh $(pack_get --prefix)/bin/"
 
 if [ $(vrs_cmp $v 587) -ge 0 ]; then
@@ -241,11 +240,17 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	pack_set --command "make clean ; make"
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
     done
-    pack_set --command "cp tbt_data.py $(pack_get --prefix)/bin/"
+    if [ $(vrs_cmp $v 750) -lt 0 ]; then
+	pack_set --command "cp tbt_data.py $(pack_get --prefix)/bin/"
+    fi
 fi
 if [ $(vrs_cmp $v 681) -ge 0 ]; then
     pack_set --command "cd ../TB/"
-    pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
+    if [ $(vrs_cmp $v 750) -ge 0 ]; then
+	pack_set --command "cp tbt_tb.py tbt_data.py $(pack_get --prefix)/bin/"
+    else
+	pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
+    fi
     pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 fi
 
