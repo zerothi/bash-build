@@ -27,7 +27,7 @@ elif $(is_c gnu) ; then
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="-lscalapack -llapack"
-	    tmp="$tmp --with-ext-linalg-path='$(list -- LDFLAGS --Wlrpath $la)'"
+	    tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath $la)'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
 	    elif [ "x$la" == "xopenblas" ]; then
