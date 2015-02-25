@@ -21,6 +21,7 @@ source helpers/automake.bash
 source helpers/libtool.bash
 # gnumake relies on libtool
 source helpers/gnumake.bash
+source helpers/texinfo.bash
 source helpers/cmake.bash
 source helpers/freetype.bash
 source helpers/libunistring.bash
