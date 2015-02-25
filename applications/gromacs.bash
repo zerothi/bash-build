@@ -26,11 +26,11 @@ elif $(is_c gnu) ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
 	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$tmp_ld -lf77blas -lcblas -latlas -lgfortran'"
+		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lf77blas -lcblas -latlas -lgfortran'"
 	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$tmp_ld -lopenblas -lgfortran'"
+		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lopenblas -lgfortran'"
 	    elif [ "x$la" == "xblas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$tmp_ld -lblas -lgfortran'"
+		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lblas -lgfortran'"
 	    fi
 	    break
 	fi
