@@ -18,11 +18,12 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
+	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
-		tmp="$tmp -lf77blas -lcblas"
+		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
-	    tmp="--with-blas='$tmp' --with-lapack='-llapack'"
+	    tmp="--with-blas='$tmp_ld $tmp' --with-lapack='$tmp_ld -llapack'"
 	    break
 	fi
     done
