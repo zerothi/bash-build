@@ -10,8 +10,11 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --module-requirement zlib --module-requirement expat \
-    --module-requirement libffi
+pack_set $(list --prefix '--mod-req ' zlib expat libffi)
+lib_extra=
+if [ $(pack_get --installed sqlite) -eq 1 ]; then
+    lib_extra=sqlite
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python3
 
@@ -27,8 +30,8 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure --with-threads" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath zlib expat libffi)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS zlib expat libffi)' $tmp" \
+    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req) $lib_extra)'" \
+    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --prefix)"
 

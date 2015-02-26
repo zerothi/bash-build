@@ -63,5 +63,6 @@ source helpers/ffmpeg.bash
 
 source helpers/graphviz.bash
 
+source helpers/sqlite.bash
 
 source helpers/default.bash
