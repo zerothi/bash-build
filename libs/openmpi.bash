@@ -17,14 +17,11 @@ if $(is_host n-) ; then # enables the linking to the torque management system
     # For OpenMPI versions above 1.6.2 it uses hwloc for maffinity (hwloc uses libnuma internally)
     # so no need for using libnuma
 elif $(is_host surt muspel slid) ; then
-    tmp_flags="CPPFLAGS='-I/usr/include/torque' --with-verbs-libdir=/usr/lib64"
-
-elif $(is_host thul) ; then
-    tmp_flags="CPPFLAGS='-I/usr/local/include'"
-
+    tmp_flags="CPPFLAGS='-I/usr/local/include' --with-verbs-libdir=/usr/lib64"
+    
 elif $(is_host hemera ponto) ; then
     tmp_flags="CPPFLAGS='-I/software/torque/include' --with-verbs-libdir=/usr/lib64"
-
+    
 elif $(is_host eris) ; then
     tmp_flags="CPPFLAGS='-I/software/torque-cpuset/eris/3.0.5/include'"
     
