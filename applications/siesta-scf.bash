@@ -239,6 +239,11 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	pack_set --command "popd"
 	pack_set --command "make clean ; make"
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
+	if [ $(vrs_cmp $v 763) -ge 0 ]; then
+	    pack_set --command "make clean-tbt ; make phtrans"
+	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
+	    pack_set --command "make clean"
+	fi
     done
     if [ $(vrs_cmp $v 750) -lt 0 ]; then
 	pack_set --command "cp tbt_data.py $(pack_get --prefix)/bin/"
