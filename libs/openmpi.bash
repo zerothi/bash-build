@@ -7,8 +7,6 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/mpif90
 
-pack_set $(list --prefix '--host-reject ' surt muspel slid)
-
 pack_set --module-requirement hwloc
 
 tmp_flags=""
