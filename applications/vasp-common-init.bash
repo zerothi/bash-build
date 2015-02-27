@@ -3,6 +3,10 @@ pack_set --host-reject ntch --host-reject zeroth
 pack_set --module-requirement openmpi
 pack_set --module-requirement wannier90[1.2]
 
+if $(is_c gnu) ; then
+    pack_set --host-reject $(get_hostname)
+fi
+
 pack_set --module-opt "--lua-family vasp"
 
 pack_set --install-query $(pack_get --prefix)/bin/vasp_tstGNGZhalf_is2

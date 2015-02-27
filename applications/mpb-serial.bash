@@ -16,6 +16,7 @@ pack_set --module-requirement libctl \
     --module-requirement fftw-2
 
 # Check for Intel MKL or not
+tmp=
 if $(is_c intel) ; then
     tmp="--with-blas='$MKL_LIB -mkl=sequential -lmkl_blas95_lp64'"
     tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'"
