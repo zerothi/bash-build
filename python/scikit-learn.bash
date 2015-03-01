@@ -11,6 +11,8 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/sklearn/__init
 pack_set --module-requirement numpy \
     --module-requirement scipy
 
+pack_set --host-reject $(get_hostname)
+
 if $(is_c gnu) ; then
     pack_set --host-reject $(get_hostname)
 fi

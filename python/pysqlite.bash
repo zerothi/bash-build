@@ -1,5 +1,7 @@
 add_package https://pypi.python.org/packages/source/p/pysqlite/pysqlite-2.6.3.tar.gz
 
+[ "x${pV:0:1}" == "x3" ] && pack_set --host-reject $(get_hostname)
+
 pack_set --module-requirement sqlite
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/$(pack_get --package)-$(pack_get --version)-py$pV.egg
 
