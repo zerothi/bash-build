@@ -1,9 +1,7 @@
-v=3.0
-add_package http://archive.ipython.org/release/$v/ipython-$v.tar.gz
+v=3.0.0
+add_package https://github.com/ipython/ipython/releases/download/rel-$v/ipython-$v.tar.gz
 
-tmp=
-[ "x${pV:0:1}" == "x3" ] && tmp=3
-pack_set --install-query $(pack_get --prefix $(get_parent))/bin/ipython$tmp
+pack_set --install-query $(pack_get --prefix $(get_parent))/bin/ipython${pV:0:1}
 
 pack_set --command "$(get_parent_exec) setup.py build ${pNumpyInstall%--fcomp*}"
 

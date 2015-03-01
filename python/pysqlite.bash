@@ -1,7 +1,7 @@
 add_package https://pypi.python.org/packages/source/p/pysqlite/pysqlite-2.6.3.tar.gz
 
 pack_set --module-requirement sqlite
-pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/$(pack_get --package)-$(pack_get --version)-py$pV.egg
+pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/$(pack_get --package)-$(pack_get --version)-py$pV.egg-info
 
 # Create the sqlite setup.cfg
 file=setup.cfg

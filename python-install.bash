@@ -53,6 +53,7 @@ source python/tornado.bash # backports, certifi
 source python/six.bash
 source python/dateutil.bash
 source python/pygments.bash
+source python/jsonschema.bash
 source python/markupsafe.bash
 source python/jinja2.bash
 source python/sphinx.bash # jinja2
