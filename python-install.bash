@@ -53,6 +53,9 @@ source python/tornado.bash # backports, certifi
 source python/six.bash
 source python/dateutil.bash
 source python/pygments.bash
+source python/markupsafe.bash
+source python/jinja2.bash
+source python/sphinx.bash # jinja2
 source python/fastimport.bash
 source python/pytz.bash
 source python/pexpect.bash
@@ -63,9 +66,6 @@ source python/pysqlite.bash
 source python/ipython.bash
 source python/monty.bash
 source python/pyyaml.bash
-source python/markupsafe.bash
-source python/jinja2.bash
-source python/sphinx.bash # jinja2
 source python/mock.bash # only for python 2
 
 # Done with packages only installed in python-home! ^
