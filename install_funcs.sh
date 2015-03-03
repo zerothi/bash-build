@@ -12,6 +12,7 @@ _NS=1000000000
 [ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 [ -z "$DOWNLOAD" ] && DOWNLOAD=0
+[ -z "$PACK_LIST" ] && PACK_LIST=0
 
 if [ ${BASH_VERSION%%.*} -lt 4 ]; then
     do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
@@ -77,6 +78,40 @@ _parent_exec=""
 function set_parent_exec {       _parent_exec=$1 ; }
 function get_parent_exec { _ps "$_parent_exec" ; }
 
+# Create a list of packages that _only_ will
+# be installed
+# This can be handy to create custom builds which
+# can test certain parts.
+declare -A _pack_only
+function pack_only {
+    [ $DEBUG -ne 0 ] && do_debug --enter pack_only
+    local tmp
+    while [ $# -gt 0 ]; do
+	local opt=$(trim_em $1)
+	case $opt in
+	    -file)
+		shift
+		# We will add all packages found in the file
+		local line
+		# parse file
+		while read line
+		do
+		    [ "x${line:0:1}" == "x#" ] && continue
+		    _pack_only[$line]=1
+		done < $1
+		shift
+		;;
+	    *)
+		_pack_only[$opt]=1
+		shift
+		;;
+	esac
+    done
+    [ $DEBUG -ne 0 ] && do_debug --return pack_only
+}
+
+
+
 # Add any auxillary commands
 source install_aux.sh
 
@@ -95,7 +130,6 @@ function build_set {
     [ $DEBUG -ne 0 ] && do_debug --enter build_set
     # We set up default parameters for creating the 
     # default package directory
-    local def_mod_first=1
     local tmp
     while [ $# -gt 0 ]; do
 	local opt=$(trim_em $1)
@@ -138,21 +172,24 @@ function build_set {
 		[ $b_idx -eq 0 ] && _build_module_path="$1"
 		_b_build_mod_prefix[$b_idx]="$1"
 		shift ;;
-	    -default-module) 
-		if [ $def_mod_first -eq 1 ]; then
-		    def_mod_first=0
-		    _b_def_mod_reqs[$b_idx]=""
-		fi
+	    -default-module-hidden) 
 		local tmp=$(get_index $1)
-		[ -z "$tmp" ] && tmp=-1
-		if [ $tmp -lt 0 ]; then
+		if [ -z "$tmp" ]; then
 		    add_hidden_package "$1"
-		else
-		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --module-requirement $1)"
+		fi
+		# fall through BASH >= 4
+		;&
+	    -default-module) 
+		local tmp=$(get_index $1)
+		if [ ! -z "$tmp" ]; then
+		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --mod-req-all $tmp)"
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
 		_b_def_mod_reqs[$b_idx]="$(rem_dup ${_b_def_mod_reqs[$b_idx]})"
 		shift ;;
+	    -reset-module) 
+		_b_def_mod_reqs[$b_idx]=""
+		;;
 	    -default-setting)
 		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
 		shift ;;
@@ -266,13 +303,20 @@ function new_build {
 		_b_build_mod_prefix[$_N_b]="$1" ; shift ;;
 	    -build-path|-bp)
 		_b_build_path[$_N_b]="$1" ; mkdir -p $1 ; shift ;;
-	    -default-module)
+	    -reset-module) 
+		_b_def_mod_reqs[$_N_b]=""
+		;;
+	    -default-module-hidden) 
 		local tmp=$(get_index $1)
-		[ -z "$tmp" ] && tmp=-1
-		if [ $tmp -lt 0 ]; then
+		if [ -z "$tmp" ]; then
 		    msg_install --message "Adding hidden package $1"
 		    add_hidden_package "$1"
-		else
+		fi
+		# fall through BASH >= 4
+		;&
+	    -default-module) 
+		local tmp=$(get_index $1)
+		if [ ! -z "$tmp" ]; then
 		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $1)"
 		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1"
@@ -716,13 +760,13 @@ function pack_get {
 		-R|-module-requirement|-mod-req)
 		    for m in ${_mod_req[$index]} ; do
 			case $(pack_get --installed $m) in
-			    $_I_INSTALLED|$_I_MOD) _ps "$m " ;;
+			    $_I_MOD|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
                         esac
 		    done ;;
 		-mod-req-path)
 		    for m in ${_mod_req[$index]} ; do
 			case $(pack_get --installed $m) in
-			    $_I_INSTALLED|$_I_LIB) _ps "$m " ;;
+			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
                         esac
 		    done ;;
 		-module-requirement-all|-mod-req-all) 
@@ -855,11 +899,24 @@ function install_all {
 
 # Install the package
 function pack_install {
-    local mod_reqs="" ; local mod_reqs_paths=""
     [ $DEBUG -ne 0 ] && do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
+    fi
+    local tmp=$(pack_get --alias $idx)
+    if [ ${#_pack_only[@]} -gt 0 ]; then
+	if [ 0${_pack_only[$tmp]} -eq 1 ]; then
+	    pack_only $(pack_get --mod-req-all $idx)
+	else
+	    [ $DEBUG -ne 0 ] && do_debug --enter pack_install
+	    return 
+	fi
+    fi
+
+    if [ $DEBUG -ne 0 ]; then
+        # Print out information for packages that are tried installed.
+	pack_print $idx
     fi
 
     # First a simple check that it hasn't already been installed...
@@ -869,14 +926,33 @@ function pack_install {
 	fi
     fi
 
-    # Save the module requirements for later...
-    mod_reqs="$(pack_get --mod-req $idx)"
-    mod_reqs_paths="$(pack_get --mod-req-path $idx)"
-
     # If we request downloading of files, do so immediately
     if [ $DOWNLOAD -eq 1 ]; then
 	dwn_file $idx $(build_get --archive-path)
     fi
+    
+    # Check that we can install on this host
+    local run=1
+
+    # Save the module requirements for later...
+    local mod_reqs="$(pack_get --mod-req $idx)"
+    local tmp
+    local tmp_idx
+
+    # Make sure that every package before is installed...
+    for tmp in $mod_reqs ; do
+	[ -z "${tmp// /}" ] && break
+	tmp_idx=$(get_index $tmp)
+	if [ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]; then
+	    pack_install $tmp_idx
+	fi
+	# Capture packages that has been rejected.
+	# If it depends on rejected packages, it must itself be rejected.
+	if [ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]; then
+	    run=0
+	    break
+	fi
+    done
 
     # If it is installed...
     if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
@@ -887,8 +963,8 @@ function pack_install {
 	fi
     fi
 
-    # Check that we can install on this host
-    local run=1
+    local mod_reqs_paths="$(pack_get --mod-req-path $idx)"
+
     local tmp="$(pack_get --host-only $idx)"
     if [ ! -z "$tmp" ]; then
 	run=0
@@ -907,21 +983,6 @@ function pack_install {
 	    fi
 	done
     fi
-
-    # Make sure that every package before is installed...
-    for tmp in $mod_reqs ; do
-	[ -z "${tmp// /}" ] && break
-	tmp_idx=$(get_index $tmp)
-	if [ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]; then
-	    pack_install $tmp_idx
-	fi
-	# Capture packages that has been rejected.
-	# If it depends on rejected packages, it must itself be rejected.
-	if [ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]; then
-	    run=0
-	    break
-	fi
-    done
 
     # Create a list of compilation modules required
     pack_crt_list $idx
@@ -1684,6 +1745,7 @@ function doerr {
 }
 
 function pack_crt_list {
+    [ $PACK_LIST -eq 0 ] && return
     # It will only take one argument...
     local pack=$_N_archives
     [ $# -gt 0 ] && pack=$1
@@ -1696,6 +1758,7 @@ function pack_crt_list {
 	    for p in $mr ; do
 		echo "$p"
 	    done
+	    echo "$(pack_get --alias $pack)"
 	} > $build/$(pack_get --alias $pack)-$(pack_get --version $pack).list
     fi
 }

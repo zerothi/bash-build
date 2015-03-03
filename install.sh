@@ -15,67 +15,103 @@ unset tmp
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
 
-python_version=2
-
-while [ $# -gt 1 ]; do
-    opt=$1
+# Default python version installed
+_python_version=2
+# Default name for build which builds the generic
+# packages.
+_generic_build=generic
+_default_build=generic
+while [ $# -gt 0 ]; do
+    opt=$(trim_em $1)
     case $opt in
-	--python-version|-python-version|-pv)
+	-*)
 	    shift
-	    python_version=$1
+	    ;;
+    esac
+    case $opt in
+	-python-version|-pv)
+	    _python_version=$1
+	    case $_python_version in
+		2|3)
+		    ;; # fine
+		*)
+		    doerr "option parsing" "Python version does not exist [2|3]"
+		    ;;
+	    esac
 	    shift ;;
-	--tcl|-tcl)
+	-tcl)
 	    _module_format=TCL
-	    shift ;;
-	--lua|-lua)
+	    ;;
+	-lua)
 	    _module_format=LUA
+	    ;;
+	-build)
+	    if [ ! -e $1 ]; then
+		doerr "option parsing" "Build source $1 does not exist!"
+	    fi
+	    source $1
 	    shift ;;
+	-generic)
+	    _generic_build=$1
+	    shift ;;
+	-default|-opti)
+	    _default_build=$1
+	    shift ;;
+	-only)
+	    pack_only $1
+	    shift ;;
+	-only-file)
+	    pack_only --file $1
+	    shift ;;
+	-debug)
+	    export DEBUG=1
+	    ;;
 	*)
-	    break
+	    # We consider empty stuff to be builds
+	    if [ ! -e $opt ]; then
+		doerr "option parsing" "Build source $opt does not exist!"
+	    fi
+	    source $opt
+	    shift
 	    ;;
     esac
 done
 
+# We should now have populated all builds
+# Check if the _generic_build exists
+tmp=$(get_index --hash-array "_b_index" $_generic_build)
+if [ -z "$tmp" ]; then
+    doerr "option parsing" "Unrecognized build $_generic_build, create it first"
+else
+    build_set --default-build $_generic_build
+    msg_install --message "The default build for the generic packages is: $_generic_build"
+fi
+tmp=$(get_index --hash-array "_b_index" $_default_build)
+if [ -z "$tmp" ]; then
+    doerr "option parsing" "Unrecognized build $_default_build, create it first"
+else
+    msg_install --message "The default build for packages is: $_default_build"
+fi
+
 # Notify the user about which module files will be generated
 msg_install --message "Will create $_module_format compliant module files"
 
-case $python_version in
-    2|3)
-	;; # fine
-    *)
-	doerr "option parsing" "Cant figure out the python version"
-esac
+tmp=0
+while [ $tmp -lt $_N_b ]; do
+    if [ -z "$(build_get --installation-path[$tmp])" ]; then
+	msg_install --message "The installation path for ${_b_name[$tmp]} has not been set."
+	echo "I do not dare to guess where to place packages!"
+	echo "Please set it in your source file."
+	exit 1
+    fi
 
-declare -a l_builds
-
-# Get all sources
-l_builds[0]=compiler.sh
-i=0
-while [ $# -ne 0 ]; do
-    l_builds[$i]=$1
-    let i++
-    shift
+    if [ -z "$(build_get --module-path[$tmp])" ]; then
+	msg_install --message "The module path for ${_b_name[$tmp]} has not been set."
+	msg_install --message "Will set it to: $(build_get --installation-path[$tmp])/modules"
+	build_set --module-path "$(build_get --installation-path[$tmp])/modules"
+    fi
+    let tmp++
 done
-
-# Source the first file
-if [ ! -e ${l_builds[0]} ]; then
-    echo "File ${l_builds[0]} does not exist, please create."
-    exit 1
-fi
-source ${l_builds[0]}
-
-if [ -z "$(build_get --installation-path)" ]; then
-    msg_install --message "The installation path has not been set."
-    echo "I do not dare to guess where to place it..."
-    echo "Please set it in your source file."
-    exit 1
-fi
-
-if [ -z "$(build_get --module-path)" ]; then
-    msg_install --message "The module path has not been set."
-    msg_install --message "Will set it to: $(build_get --installation-path)/modules"
-    build_set --module-path "$(build_get --installation-path)/modules"
-fi
 
 
 # Begin installation of various packages
@@ -99,20 +135,16 @@ source scripts.bash
 # Install the lua-libraries
 source lua/lua.bash
 
-# Source the next build
-if [ ${#l_builds[@]} -gt 1 ]; then
-    i=1
-    while [ $i -lt ${#l_builds[@]} ]; do
-	source ${l_builds[$i]}
-	let i++
-    done
-fi
+build_set --default-build $_default_build
+build_set --reset-module \
+    $(list --prefix '--default-module ' \
+        $(build_get --default-module))
 
 # Install all libraries
 source libs.bash
 
 # These are "parent" installations...
-source python${python_version}.bash
+source python${_python_version}.bash
 
 # We have installed all libraries needed for doing application installs
 source apps.bash
@@ -122,6 +154,9 @@ source default.bash
 
 # Add the latest modules
 source latest.bash
+
+# We always need to finish by installing the last package
+pack_install
 
 msg_install --message "Finished installing all applications..."
 
