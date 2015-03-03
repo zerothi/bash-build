@@ -1,4 +1,4 @@
-for v in 631 688 704 ; do
+for v in 631 688 704 768 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -251,8 +251,8 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 fi
 if [ $(vrs_cmp $v 681) -ge 0 ]; then
     pack_set --command "cd ../TB/"
-    if [ $(vrs_cmp $v 750) -ge 0 ]; then
-	pack_set --command "cp tbt_tb.py tbt_data.py $(pack_get --prefix)/bin/"
+    if [ $(vrs_cmp $v 767) -ge 0 ]; then
+	pack_set --command "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
     else
 	pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
     fi
