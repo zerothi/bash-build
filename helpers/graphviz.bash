@@ -16,5 +16,3 @@ pack_set --command "./configure --with-x" \
 
 pack_set --command "make"
 pack_set --command "make install"
-
-pack_install
