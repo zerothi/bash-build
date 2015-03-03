@@ -16,7 +16,8 @@ has_np_cmd=0
 
 if [ "xn-" == "x\${_hostname:0:2}" ] || \
    [ "xgray" == "x\${_hostname:0:4}" ] || \
-   [ "xhpc-fe" == "x\${_hostname:0:6}" ]
+   [ "xhpc-fe" == "x\${_hostname:0:6}" ] || \
+   [ "xhpclogin" == "x\${_hostname:0:8}" ]
 then
     has_np_cmd=1
     queue="fotonano"
