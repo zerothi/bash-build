@@ -37,7 +37,9 @@ pack_set --command "make install"
 
 # Install the FORTRAN headers
 vf=4.4.1
-add_package --archive netcdf-fortran-$vf.tar.gz https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
+add_package --archive netcdf-fortran-$vf.tar.gz \
+    --package netcdf-fortran \
+    https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 pack_set --prefix $(pack_get --prefix netcdf[$v])
