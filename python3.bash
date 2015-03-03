@@ -1,6 +1,6 @@
 # Install Python 3 versions
 # apt-get libbz2-dev
-v=3.4.2
+v=3.4.3
 if $(is_host n-) ; then
     add_package --alias python --package Python http://www.python.org/ftp/python/$v/Python-$v.tgz
 else
