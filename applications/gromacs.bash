@@ -48,9 +48,9 @@ clib=${clib:1}
 # configure the build...
 pack_set --command "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 
-# Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+# Make commands (cmake --build removes color)
+pack_set --command "cmake --build ."
+pack_set --command "cmake --build . --target install"
 pack_set --command "module unload $(pack_get --module-name cmake)"
 
 # Add GROMACS envs
