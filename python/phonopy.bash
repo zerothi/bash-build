@@ -1,15 +1,14 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 1.8.4.1 ; do
-    add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-1.8/phonopy-$v.tar.gz
+for v in 1.8.4.1 1.9.3 ; do
+    add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-${v:0:3}/phonopy-$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
     pack_set --install-query $(pack_get --prefix)/bin/phonopy
         
     # Add requirements when creating the module
-    pack_set --module-requirement numpy \
-	--module-requirement scipy
+    pack_set --module-requirement scipy
     
     # Install commands that it should run
     pack_set --command "mkdir -p" \
