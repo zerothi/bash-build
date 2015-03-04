@@ -39,10 +39,10 @@ pack_set --command "../configure --with-threads" \
 pack_set --command "make $(get_make_parallel)"
 
 if $(is_host n- slid muspel surt hemera eris) ; then
-    echo "Skipping python tests..."
+    msg_install --message "Skipping python tests..."
     #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
-    pack_set --command "make test > tmp.test 2>&1"
+    pack_set --command "make EXTRATESTOPTS='-x test_urllib2_localnet' test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
 if ! $(is_host n- slid muspel surt hemera eris) ; then

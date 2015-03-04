@@ -59,7 +59,7 @@ if $(is_host n- slid muspel surt hemera eris) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
-    echo "Skipping python tests..."
+    msg_install --message "Skipping python tests..."
     #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 	
 else
