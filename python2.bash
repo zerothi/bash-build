@@ -63,7 +63,8 @@ if $(is_host n- slid muspel surt hemera eris) ; then
     #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 	
 else
-    pack_set --command "make EXTRATESTOPTS='-x test_urllib2_localnet' test > tmp.test 2>&1"
+    tmp=$(list -p '-x test_' urllib2_localnet)
+    pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
 if ! $(is_host n- slid muspel surt hemera eris) ; then
