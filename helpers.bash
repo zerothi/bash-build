@@ -47,6 +47,7 @@ source helpers/swig.bash
 
 # Install LLVM generically
 source helpers/zlib.bash
+source helpers/llvm-3.3.bash
 source helpers/llvm.bash
 
 source helpers/binutils.bash
