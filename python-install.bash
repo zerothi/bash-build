@@ -113,6 +113,10 @@ source python/scikit-optimization.bash
 # Must be installed after numpy
 source python/llvmpy.bash
 source python/llvmmath.bash
+source python/numba-0.15.bash
+
+# Later versions of numba
+source python/llvmlite.bash
 source python/numba.bash
 
 # Physics related python modules

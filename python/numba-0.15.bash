@@ -1,10 +1,13 @@
-add_package https://pypi.python.org/packages/source/n/numba/numba-0.17.0.tar.gz
+v=0.15.1
+add_package --archive numba-$v.tar.gz \
+    https://github.com/numba/numba/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-requirement cython
 pack_set --module-requirement cffi
-pack_set --module-requirement llvmlite
+pack_set --module-requirement llvmpy
+pack_set --module-requirement llvmmath
 
 pack_set --install-query $(pack_get --prefix)/bin/numba
 

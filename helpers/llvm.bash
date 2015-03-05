@@ -90,7 +90,7 @@ pack_set --command "module load cmake"
 pack_set --command "cmake -C $file .."
 
 # Make commands (this cmake --build removes colors)
-pack_set --command "cmake --build ."
+pack_set --command "cmake --build . -- $(get_make_parallel)"
 pack_set --command "cmake --build . --target check-all > tmp.test 2>&1 && echo Succes > /dev/null || echo Failure > /dev/null"
 pack_set --command "cmake --build . --target install"
 pack_set_mv_test tmp.test
