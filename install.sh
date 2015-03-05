@@ -45,12 +45,6 @@ while [ $# -gt 0 ]; do
 	-lua)
 	    _module_format=LUA
 	    ;;
-	-build)
-	    if [ ! -e $1 ]; then
-		doerr "option parsing" "Build source $1 does not exist!"
-	    fi
-	    source $1
-	    shift ;;
 	-generic)
 	    _generic_build=$1
 	    shift ;;
@@ -66,6 +60,9 @@ while [ $# -gt 0 ]; do
 	-debug)
 	    export DEBUG=1
 	    ;;
+	-build)
+	    opt=$1
+	    ;& # go through
 	*)
 	    # We consider empty stuff to be builds
 	    if [ ! -e $opt ]; then
@@ -85,6 +82,7 @@ if [ -z "$tmp" ]; then
 else
     build_set --default-build $_generic_build
     msg_install --message "The default build for the generic packages is: $_generic_build"
+    source $(build_get --source)
 fi
 tmp=$(get_index --hash-array "_b_index" $_default_build)
 if [ -z "$tmp" ]; then
@@ -139,6 +137,7 @@ build_set --default-build $_default_build
 build_set --reset-module \
     $(list --prefix '--default-module ' \
         $(build_get --default-module))
+source $(build_get --source)
 
 # Install all libraries
 source libs.bash
