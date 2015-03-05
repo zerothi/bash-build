@@ -20,3 +20,6 @@ pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 pack_set_mv_test tmp.test
 
+pack_set --command "pushd $(pack_get --prefix)/include"
+pack_set --command "ln -s libxml2/libxml"
+pack_set --command "popd"
