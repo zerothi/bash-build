@@ -256,6 +256,7 @@ if [ $(vrs_cmp $v 681) -ge 0 ]; then
     else
 	pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
     fi
+
     pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 fi
 
@@ -291,11 +292,20 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	pack_set --command "make clean ; make"
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
 	pack_set --command "popd"
+
     done
 fi
 fi
 unset set_flag
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
+
+# Create the byte-compiled versions
+tmp=$(pack_get --alias python).$(pack_get --version python)
+pack_set --command "module load $tmp"
+pack_set --command "pushd $(pack_get --prefix)/bin/"
+pack_set --command "python -m compileall ."
+pack_set --command "popd"
+pack_set --command "module unload $tmp"
 
 pack_install
 
