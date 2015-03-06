@@ -1,9 +1,9 @@
 # 3.11.28
 for v in 3.10.2 ; do
 if [ $(vrs_cmp $v 3.10.2) -le 0 ]; then
-    add_package http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
+    add_package --build generic-host http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
 else
-    add_package http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2
+    add_package --build generic-host http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2
 fi
 
 pack_set --directory ATLAS

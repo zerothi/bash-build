@@ -33,3 +33,11 @@ new_build --name vendor \
     --source source-generic.sh \
     --build-module-path "--package --version" \
     --build-installation-path "--package --version"
+
+new_build --name generic-host \
+    --installation-path /opt \
+    --module-path /opt/modules \
+    --build-path .compile \
+    --source source-generic.sh \
+    --build-module-path "--package --version $(get_c)" \
+    --build-installation-path "--package --version $(get_c)"
