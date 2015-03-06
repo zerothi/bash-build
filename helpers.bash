@@ -54,7 +54,6 @@ source helpers/llvm.bash
 source helpers/binutils.bash
 
 source helpers/numactl.bash
-#source helpers/libxml2.bash
 
 # Install git for those who want the newest release
 source helpers/git.bash
