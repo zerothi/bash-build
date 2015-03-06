@@ -5,6 +5,7 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
+pack_set --host-reject n-
 if $(is_c intel) ; then
     pack_set --host-reject $(hostname)
 fi

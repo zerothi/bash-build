@@ -269,12 +269,12 @@ pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc
 pack_set --command "cd ../Pseudo/atom"
 pack_set --command "make"
 pack_set --command "cp atm $(pack_get --prefix)/bin/"
+pack_set --command "cd ../../Obj"
 
 # Compile the 3m equivalent versions
 if $(is_c intel) ; then
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     # Go back
-    pack_set --command "cd ../../Obj"
     pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
     for omp in openmp none ; do
 	if [ $omp == "openmp" ]; then
@@ -298,6 +298,8 @@ fi
 fi
 unset set_flag
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
+
+pack_set --command "cp arch.make ../../"
 
 # Create the byte-compiled versions
 tmp=$(pack_get --alias python).$(pack_get --version python)
