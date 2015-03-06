@@ -1,4 +1,4 @@
-for v in 631 688 704 769 ; do
+for v in 688 704 775 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -132,7 +132,9 @@ set_flag $omp
 pack_set --command "make clean"
 
 # This should ensure a correct handling of the version info...
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [ $(vrs_cmp $v 772) -ge 0 ]; then
+    pack_set --command "make $(get_make_parallel) siesta"
+elif [ $(vrs_cmp $v 662) -ge 0 ]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
 else
     source applications/siesta-speed.bash libSiestaXC.a siesta
@@ -141,7 +143,9 @@ pack_set --command "cp siesta $(pack_get --prefix)/bin/siesta$end"
 
 pack_set --command "make clean"
 
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [ $(vrs_cmp $v 772) -ge 0 ]; then
+    pack_set --command "make $(get_make_parallel) transiesta"
+elif [ $(vrs_cmp $v 662) -ge 0 ]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 else
     source applications/siesta-speed.bash libSiestaXC.a transiesta
@@ -236,11 +240,15 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	fi
 	pack_set --command "pushd ../../../Obj"
 	set_flag $omp
-	pack_set --command "popd"
-	pack_set --command "make clean ; make"
+	pack_set --command "popd ; make clean"
+	if [ $(vrs_cmp $v 772) -ge 0 ]; then
+	    pack_set --command "make $(get_make_parallel)"
+	else
+	    pack_set --command "make"
+	fi
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
-	if [ $(vrs_cmp $v 763) -ge 0 ]; then
-	    pack_set --command "make clean-tbt ; make phtrans"
+	if [ $(vrs_cmp $v 772) -ge 0 ]; then
+	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
 	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
 	    pack_set --command "make clean"
 	fi
@@ -269,10 +277,27 @@ pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc
 pack_set --command "cd ../Pseudo/atom"
 pack_set --command "make"
 pack_set --command "cp atm $(pack_get --prefix)/bin/"
+
 pack_set --command "cd ../../Obj"
 
-# Compile the 3m equivalent versions
+# Compile the 3m equivalent versions, if applicable
+tmp=0
 if $(is_c intel) ; then
+    tmp=1
+elif $(is_c gnu) ; then
+    for la in $(choice linalg) ; do
+	if [ $(pack_installed $la) -eq 1 ]; then
+	    if [ "x$la" == "xopenblas" ]; then
+		# Only openblas has gemm3m
+		tmp=1
+	    fi
+	    break
+	fi
+    done
+fi
+
+
+if [ $tmp -eq 1 ] ; then
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     # Go back
     pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
@@ -285,12 +310,25 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	set_flag $omp
 	pack_set --command "make clean"
 	
-	source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
+	if [ $(vrs_cmp $v 772) -ge 0 ]; then
+	    pack_set --command "make $(get_make_parallel) transiesta"
+	else
+	    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
+	fi
 	pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
 
-	pack_set --command "pushd ../Util/TS/TBtrans"
-	pack_set --command "make clean ; make"
+	pack_set --command "pushd ../Util/TS/TBtrans ; make clean"
+	if [ $(vrs_cmp $v 772) -ge 0 ]; then
+	    pack_set --command "make $(get_make_parallel)"
+	else
+	    pack_set --command "make"
+	fi
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
+	if [ $(vrs_cmp $v 772) -ge 0 ]; then
+	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
+	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans${end}_3m"
+	    pack_set --command "make clean"
+	fi
 	pack_set --command "popd"
 
     done
@@ -299,15 +337,16 @@ fi
 unset set_flag
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 
-pack_set --command "cp arch.make ../../"
-
-# Create the byte-compiled versions
+# Create the byte-compiled versions, to make it faster for users 
 tmp=$(pack_get --alias python).$(pack_get --version python)
 pack_set --command "module load $tmp"
 pack_set --command "pushd $(pack_get --prefix)/bin/"
 pack_set --command "python -m compileall ."
 pack_set --command "popd"
 pack_set --command "module unload $tmp"
+
+# Save the arch.make file
+pack_set --command "cp arch.make ../../"
 
 pack_install
 
