@@ -390,6 +390,7 @@ function pack_print {
     echo " IQ : $(pack_get -install-query $pack)"
     echo " REQ: $(pack_get -module-requirement $pack)"
     echo " REJ: $(pack_get -host-reject $pack)"
+    echo " OPT: $(pack_get -module-opt $pack)"
     echo "                                 << << << <<"
 }
 

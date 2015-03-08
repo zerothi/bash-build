@@ -2,6 +2,7 @@
 # libraries to siesta
 
 # Check for Intel MKL or not
+siesta_la=mkl
 if $(is_c intel) ; then
 
     pack_set --command "sed -i '1 a\
@@ -16,6 +17,7 @@ elif $(is_c gnu) ; then
     tmp="-llapack"
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
+	    siesta_la=$la
 	    pack_set --module-requirement $la
 	    [ "x$la" == "xatlas" ] && \
 		tmp="$tmp -lf77blas -lcblas"
@@ -24,7 +26,8 @@ elif $(is_c gnu) ; then
 LDFLAGS=$(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
-LIBS=\$(ADDLIB) -lscalapack $tmp\n\
+BLAS_LIBS=$tmp\n\
+LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n\
 ' arch.make"
 	    break
 	fi

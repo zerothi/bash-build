@@ -101,10 +101,15 @@ function set_flag {
 	openmp)
 	    pack_set --command "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' arch.make"
 	    end=_omp
+	    if [ "x$siesta_la" == "xopenblas" ]; then
+		pack_set --command "sed -i -e 's:BLAS_LIBS=.*:BLAS_LIBS=-lopenblas_omp:g' arch.make"
+	    fi
 	    ;;
 	*)
 	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' arch.make"
 	    end=
+	    if [ "x$siesta_la" == "xopenblas" ]; then
+		pack_set --command "sed -i -e 's:BLAS_LIBS=.*:BLAS_LIBS=-lopenblas:g' arch.make"
 	    ;;
     esac
 }
