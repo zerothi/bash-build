@@ -110,6 +110,7 @@ function set_flag {
 	    end=
 	    if [ "x$siesta_la" == "xopenblas" ]; then
 		pack_set --command "sed -i -e 's:BLAS_LIBS=.*:BLAS_LIBS=-lopenblas:g' arch.make"
+	    fi
 	    ;;
     esac
 }
