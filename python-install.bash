@@ -4,7 +4,7 @@ msg_install \
 # This script will install all python packages
 #exit 0
 
-pMod="$(pack_get --mod-req $(get_parent)) $(get_parent)"
+pMod="$(pack_get --mod-req-all $(get_parent)) $(get_parent)"
 pModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
 module load $pModNames
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
@@ -58,6 +58,7 @@ source python/fastimport.bash
 source python/pexpect.bash
 source python/pycparser.bash
 source python/pyzmq.bash
+source python/mistune.bash
 
 source python/jsonschema.bash
 source python/markupsafe.bash
@@ -69,6 +70,8 @@ source python/ipython.bash
 source python/monty.bash
 source python/pyyaml.bash
 source python/mock.bash # only for python 2
+
+source python/pandoc.bash
 
 # Done with packages only installed in python-home! ^
 
