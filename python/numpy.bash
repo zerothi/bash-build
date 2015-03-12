@@ -173,6 +173,11 @@ fi
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
+# Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
+# loading
+pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
+
+
 add_test_package
 pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Succes'"
 pack_set_mv_test tmp.test
