@@ -24,7 +24,7 @@ else
 	    [ "x$la" == "xatlas" ] && \
 		tmp=" -lf77blas -lcblas"
 	    tmp="$tmp -l$la"
-	    tmp_flags="--with-blas='${tmp:1}' --with-lapack='-llapack'"
+	    tmp_flags="--with-blas='${tmp:1}' --with-lapack='-llapack ${tmp:1}'"
 	    break
 	fi
     done

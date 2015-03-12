@@ -1,11 +1,14 @@
 for v in 5.1.1 ; do
     libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
+    tmp="-package espresso -version $v"
+    if [ "$v" = "5.1.2" ]; then
+    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
     if [ "$v" = "5.1.1" ]; then
-	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
+	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
     elif [ "$v" = "5.1" ]; then
-	tmp="-package espresso -version $v http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
     elif [ "$v" = "5.0.3" ]; then
-	tmp="-package espresso -version $v http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
+	tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
     elif [ "$v" = "5.0.99" ]; then
 	tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
     else

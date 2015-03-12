@@ -26,7 +26,7 @@ elif $(is_c gnu) ; then
 LDFLAGS=$(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
-BLAS_LIBS=$tmp\n\
+BLAS_LIBS=$tmp \n\
 LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n\
 ' arch.make"
 	    break

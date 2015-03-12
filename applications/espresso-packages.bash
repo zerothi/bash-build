@@ -77,19 +77,19 @@ do
     
 done
 
-elif [ "$v" = "5.1.1" ]; then
+elif [ "$v" = "5.1.1" ] || [ "$v" = "5.1.2" ]; then
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
     
 for pack in \
-    PHonon-5.1.1.tar.gz \
-    neb-5.1.1.tar.gz \
-    xspectra-5.1.1.tar.gz \
-    tddfpt-5.1.1.tar.gz \
-    http://qe-forge.org/gf/download/frsrelease/173/653/GWW-5.1.1.tar.gz \
-    PWgui-5.1.tar.gz \
-    atomic-5.1.1.tar.gz \
-    pwcond-5.1.1.tar.gz
+    PHonon-$v.tar.gz \
+    neb-$v.tar.gz \
+    xspectra-$v.tar.gz \
+    tddfpt-$v.tar.gz \
+    GWW-$v.tar.gz \
+    PWgui-$v.tar.gz \
+    atomic-$v.tar.gz \
+    pwcond-$v.tar.gz
 do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)

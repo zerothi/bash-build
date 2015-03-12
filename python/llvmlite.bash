@@ -11,6 +11,7 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/llvm-lite
 pack_set --module-requirement $(get_parent)
 pack_set --module-requirement cffi
 pack_set --module-requirement llvm[3.5]
+pack_set --host-reject $(get_hostname)
 
 pack_set --command "$(get_parent_exec)" \
     --command-flag "setup.py install --prefix=$(pack_get --prefix)"

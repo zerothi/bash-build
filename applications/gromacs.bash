@@ -6,6 +6,9 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 pack_set --module-opt "--lua-family gromacs"
 
 pack_set --host-reject ntch --host-reject zerothi
+if $(is_c gnu) ; then
+    pack_set $(list -p '--host-reject ' n-62-25 n-62-26)
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 

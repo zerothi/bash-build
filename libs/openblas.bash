@@ -10,7 +10,7 @@ pack_set --install-query $(pack_get --LD)/libopenblas.a
 pack_set --command "sed -i -s -e 's:-lgfortran::g' f_check"
 
 # OpenBLAS and Haswell do not work well together...
-pack_set $(list --prefix "--host-reject " n-62-26)
+pack_set $(list --prefix "--host-reject " n-62-26 n-62-25)
 
 # Default flags for all compilations of OpenBLAS here
 def_flag="BINARY=64 SANITY_CHECK=1 NO_LAPACK=1"
