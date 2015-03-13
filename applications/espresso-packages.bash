@@ -1,3 +1,5 @@
+libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
+
 if [ "$v" = "5.0.3" ]; then
 
 for pack in \
@@ -77,28 +79,44 @@ do
     
 done
 
-elif [ "$v" = "5.1.1" ] || [ "$v" = "5.1.2" ]; then
+elif [ "$v" = "5.1.1" ]; then
 
-libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
+libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt gwl"
     
 for pack in \
-    PHonon-$v.tar.gz \
-    neb-$v.tar.gz \
-    xspectra-$v.tar.gz \
-    tddfpt-$v.tar.gz \
-    GWW-$v.tar.gz \
-    PWgui-$v.tar.gz \
-    atomic-$v.tar.gz \
-    pwcond-$v.tar.gz
+    651/PHonon-$v.tar.gz \
+    652/neb-$v.tar.gz \
+    649/xspectra-$v.tar.gz \
+    648/tddfpt-$v.tar.gz \
+    653/GWW-$v.tar.gz \
+    647/atomic-$v.tar.gz \
+    650/pwcond-$v.tar.gz
 do
-    
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
-    if [ ${pack:0:2} == "ht" ]; then
-	mywget $pack $o
-	pack=$(basename ${pack:10})
-    else
-	mywget http://files.qe-forge.org/index.php?file=$pack $o
-    fi
+    mywget http://qe-forge.org/gf/download/frsrelease/173/$pack $o
+    pack=$(basename $pack)
+
+    pack_set --command "cp $o archive/$pack"
+    pack_set --command "tar xfz archive/$pack"
+    
+done
+
+elif [ "$v" = "5.1.2" ]; then
+    
+for pack in \
+    755/PHonon-$v.tar.gz \
+    760/neb-$v.tar.gz \
+    757/xspectra-$v.tar.gz \
+    758/tddfpt-$v.tar.gz \
+    754/GWW-$v.tar.gz \
+    759/PWgui-$v.tar.gz \
+    752/atomic-$v.tar.gz \
+    756/pwcond-$v.tar.gz
+do
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
+    mywget http://qe-forge.org/gf/download/frsrelease/185/$pack $o
+    pack=$(basename $pack)
+
     pack_set --command "cp $o archive/$pack"
     pack_set --command "tar xfz archive/$pack"
     
