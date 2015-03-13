@@ -1,4 +1,4 @@
-v=3.1.5
+v=3.2.0
 add_package \
     --directory arpack-ng-$v \
     http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_$v.tar.gz
