@@ -15,7 +15,7 @@ _NS=1000000000
 [ -z "$PACK_LIST" ] && PACK_LIST=0
 
 if [ ${BASH_VERSION%%.*} -lt 4 ]; then
-    do_err "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
+    doerr "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
 fi
 
 _DEBUG_COUNTER=0
@@ -507,7 +507,15 @@ function add_package {
     # When adding a package we need to ensure that all variables
     # exist for the rest of the package. Hence we source the "source"
     # Notice that the sourcing occurs several times doing the process
-    source $(build_get --source[$b_name])
+    # Note that setting a variable local and using direct
+    # assignment will set the return status of local =
+    # and not the assignment operator.
+    local b_idx
+    b_idx=$(get_index --hash-array "_b_index" $b_name)
+    if [ $? -ne 0 ]; then
+	doerr "$1" "Could not find associated build ($b_name), please create build before commensing compilation"
+    fi
+    source $(build_get --source[$b_idx])
 
     # Save the url 
     local url=$1
@@ -534,7 +542,7 @@ function add_package {
     fi
     _version[$_N_archives]=$v
     # Save the settings
-    _settings[$_N_archives]="$(build_get --default-setting $b_name)"
+    _settings[$_N_archives]="$(build_get --default-setting $b_idx)"
     # Save the package name...
     [ -z "$package" ] && package=${d%$v}
     local len=${#package}
@@ -556,14 +564,14 @@ function add_package {
     # Default the module name to this:
     _installed[$_N_archives]=$_I_TO_BE
     # Module prefix and the name of the module
-    _mod_prefix[$_N_archives]="$(build_get --module-path[$b_name])"
-    tmp="$(build_get --build-module-path[$b_name])"
+    _mod_prefix[$_N_archives]="$(build_get --module-path[$b_idx])"
+    tmp="$(build_get --build-module-path[$b_idx])"
     _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $tmp)
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
     # Install prefix and the installation path
     tmp="$(build_get --build-installation-path[$b_name])"
-    _install_prefix[$_N_archives]=$(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
+    _install_prefix[$_N_archives]=$(build_get --installation-path[$b_idx])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     if [ -z "$lp" ]; then
 	_lib_prefix[$_N_archives]=lib
@@ -576,7 +584,7 @@ function add_package {
     # Install default values
     _mod_req[$_N_archives]=""
     [ $no_def_mod -eq 0 ] && \
-	_mod_req[$_N_archives]="$(build_get --default-module[$b_name])"
+	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
     _reject_host[$_N_archives]=""
     _only_host[$_N_archives]=""
 
@@ -847,11 +855,18 @@ function pack_get {
 }
 
 function pack_installed {
-    local ret=$(pack_get --installed $1)
-    [ -z "$ret" ] && ret=0
-    if [ $ret -eq $_I_TO_BE ]; then
-	pack_install $1 > /dev/null
-	ret=$(pack_get --installed $1)
+    local ret=$1 ; shift
+    local idx
+    idx=$(get_index $ret)
+    if [ $? -ne 0 ]; then
+	ret=0
+    else
+	ret=$(pack_get --installed $idx)
+	[ -z "$ret" ] && ret=0
+	if [ $ret -eq $_I_TO_BE ]; then
+	    pack_install $1 > /dev/null
+	    ret=$(pack_get --installed $idx)
+	fi
     fi
     _ps $ret
 }
@@ -1134,7 +1149,6 @@ function pack_install {
 # Can be used to return the index in the _arrays for the named variable
 # $1 is the shortname for what to search for
 function get_index {
-    #[ $DEBUG -ne 0 ] && do_debug --enter get_index
     local var=_index
     local i ; local lookup ; local all=0
     while [ $# -gt 1 ]; do
@@ -1144,38 +1158,36 @@ function get_index {
 	    -hash-array) var="$1" ; shift ;;
 	esac
     done
-    [ ${#1} -eq 0 ] && return 1
+    local l=$1 ; shift
+    [ ${#l} -eq 0 ] && return 1
     # Save the thing that we want to process...
-    local name=$(var_spec $1)
-    local version=$(var_spec -s $1)
-    local l=${#name} ; local lc_name="$(lc $name)"
-    #[ ! -z "$version" ] && \
-#	echo "get_index: name($name) version($version)" >&2
+    local name=$(var_spec $l)
+    local version=$(var_spec -s $l)
+    name="$(lc $name)"
     # do full variable (for ${!...})
-    var="$var[$lc_name]"
-    if $(isnumber $name) ; then # We have a number
-	[ "$name" -gt "$_N_archives" ] && return 1
-	[ "$name" -lt 0 ] && return 1
+    l=${#name}
+    var="$var[$name]"
+    #echo "get_index: name($name) version($version)" >&2
+    if $(isnumber $name) ; then
+	if [ "$var" == "_index" ]; then
+	    [ $name -gt ${#_index[@]} ] && return 1
+	elif [ "$var" == "_b_index" ]; then
+	    [ $name -gt ${#_b_index[@]} ] && return 1
+	fi
+	[ $name -lt 0 ] && return 1
 	_ps "$name"
-	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 0
     fi
     # Do full expansion.
     local idx=${!var}
     i=0
-    #echo $idx
     if [ -z "$idx" ]; then
-	[ $DEBUG -ne 0 ] && do_debug --msg "We did not find the requested: $name"
-	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 1
     fi
     if [ $all -eq 1 ]; then
 	_ps "$idx"
-	#[ $DEBUG -ne 0 ] && do_debug --return get_index
 	return 0
     else
-	#[ ! -z "$version" ] && \
-	#    echo "get_index: loop ($idx)" >&2
 	local v=""
 	i=-1
         # Select the latest per default..

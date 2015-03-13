@@ -1,3 +1,5 @@
+source source-generic.sh
+
 # Create a new build with name generic
 new_build --name generic \
     --installation-path /opt/generic \
