@@ -1,4 +1,4 @@
-for v in 4.0 4.2.0 4.3 ; do
+for v in 4.2.0 4.3 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
 pack_set --module-opt "--lua-family gulp"

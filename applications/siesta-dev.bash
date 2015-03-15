@@ -1,4 +1,4 @@
-for v in 470 475 ; do
+for v in 475 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-dev-$v.tar.gz
 

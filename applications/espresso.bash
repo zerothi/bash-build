@@ -76,6 +76,12 @@ for v in 5.1.1 ; do
 	--command-flag "--enable-parallel --enable-openmp" \
 	--command-flag "--prefix=$(pack_get --prefix)" 
 
+    # Fix kvecs_FS.f for gfortran loop-block
+    if $(is_c gnu) ; then
+        pack_set --command "sed -i '$ a\
+kvecs_FS.o: FFLAGS=${FCFLAGS//-floop-block/}\n' make.sys"
+    fi
+
     # Make commands
     for EXE in $libs ; do
  	pack_set --command "make $(get_make_parallel) $EXE"
