@@ -103,12 +103,18 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' numba mpi4py)
 
+tmp=
+for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas ; do
+    if [ $(pack_installed $i) -eq 1 ]; then
+        tmp="$tmp $i"
+    fi
+done
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numerics/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scipy cython mpi4py netcdf4py matplotlib h5py numexpr pandas sympy)
+    $(list --prefix '-RL ' $tmp)
 
 build_set --module-path $old_path
 

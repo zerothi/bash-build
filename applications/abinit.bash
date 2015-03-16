@@ -3,7 +3,7 @@ add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set $(list -p '--host-reject ' ntch zerothi)
+pack_set $(list -p '--host-reject ' ntch zerothi n-62-25 n-62-26)
 
 pack_set --module-opt "--lua-family abinit"
 
@@ -26,15 +26,17 @@ pack_set --command "echo '# This is Nicks build.ac for Abinit' > $file"
 if test -z "$FLAG_OMP" ; then
     doerr abinit "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
-
+tmpf="${FCFLAGS//-O3/-O2}"
+tmpc="${CFLAGS//-O3/-O2}"
+tmpcx="${CXXFLAGS//-O3/-O2}"
 pack_set --command "$s '$ a\
 prefix=\"$(pack_get --prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
-FCFLAGS_EXTRA=\"${FCFLAGS//-O3/-O2} $FLAG_OMP\"\n\
-CFLAGS_EXTRA=\"${CFLAGS//-O3/-O2} $FLAG_OMP\"\n\
-CXXFLAGS_EXTRA=\"${CXXFLAGS//-O3/-O2} $FLAG_OMP\"\n\
+FCFLAGS_EXTRA=\"${tmpf//-floop-block/} $FLAG_OMP\"\n\
+CFLAGS_EXTRA=\"${tmpc//-floop-block/} $FLAG_OMP\"\n\
+CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
 FC_LDFLAGS_EXTRA=\"$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))\"\n\
 enable_fc_wrapper=\"no\"\n\

@@ -157,14 +157,20 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' kwant)
 
+tmp=
+for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas ; do
+    if [ $(pack_installed $i) -eq 1 ]; then
+        tmp="$tmp $i"
+    fi
+done
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numerics/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scipy cython mpi4py netcdf4py matplotlib h5py numexpr pandas sympy)
+    $(list --prefix '-RL ' $tmp)
 
-if [ $(pack_get --installed qutip) -eq 1 ]; then
+if [ $(pack_installed qutip) -eq 1 ]; then
     create_module \
         -n "Nick Papior Andersen's Photonics python script for QuTip: $(get_c)" \
         -v $(date +'%g-%j') \
