@@ -5,11 +5,7 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --host-reject n-
-if $(is_c intel) ; then
-    pack_set --host-reject $(hostname)
-fi
-pack_set $(list --prefix "--host-reject " hemera eris ponto)
+pack_set $(list --prefix "--host-reject " n- hemera eris ponto surt muspel slid)
 
 pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 

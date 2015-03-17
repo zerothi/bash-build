@@ -9,8 +9,10 @@ pack_set --install-query $(pack_get --LD)/libopenblas.a
 # NO_LAPACK=1 means that we do not need -lgfortran
 pack_set --command "sed -i -s -e 's:-lgfortran::g' f_check"
 
-# OpenBLAS and Haswell do not work well together...
-pack_set $(list --prefix "--host-reject " n-62-26 n-62-25)
+if $(is_host n-62-26 n-62-25) ; then
+   # Haswell and old binutils does not work together!
+   pack_set --module-requirement binutils
+fi
 
 # Default flags for all compilations of OpenBLAS here
 def_flag="BINARY=64 SANITY_CHECK=1 NO_LAPACK=1"
