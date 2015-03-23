@@ -234,6 +234,8 @@ function arc_cmd {
 	_ps "ln -fs"
     elif [ "x$ext" == "xlocal" ]; then
 	_ps "echo"
+    elif [ "x$ext" == "xbin" ]; then
+	_ps "echo"
     elif [ "x$ext" == "xfake" ]; then
 	_ps "echo"
     else
