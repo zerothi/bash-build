@@ -530,6 +530,8 @@ function add_package {
     # Save the type of archive
     local ext=${fn##*.}
     _ext[$_N_archives]=$ext
+    # A binary does not have a directory
+    [ "$ext" == "bin" ] && d=./
     # Infer what the directory is
     local archive_d=${fn%.*tar.$ext}
     [ "${#archive_d}" -eq "${#fn}" ] && archive_d=${fn%.$ext}
