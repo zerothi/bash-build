@@ -1,4 +1,4 @@
-for v in 2.0.0 1.2 ; do
+for v in 2.0.1 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
