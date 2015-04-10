@@ -67,6 +67,8 @@ source applications/mpb-serial.bash # [gmp,libunistring,guile]
 source applications/meep.bash # [gmp,libunistring,guile]
 source applications/meep-serial.bash # [gmp,libunistring,guile]
 
+source applications/atk.bash
+
 build_set --remove-default-setting module
 
 pack_install

@@ -1,7 +1,7 @@
 v=3.2.0
 add_package \
-    --directory arpack-ng-$v \
-    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_$v.tar.gz
+    --archive arpack-ng-$v.tar.gz \
+    https://github.com/opencollab/arpack-ng/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
