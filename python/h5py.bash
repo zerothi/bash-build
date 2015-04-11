@@ -14,7 +14,7 @@ pack_set --module-requirement numpy \
 pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages"
     
 # Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py build" \
+pack_set --command "$(get_parent_exec) setup.py configure" \
     --command-flag "--hdf5=$(pack_get --prefix hdf5-serial)"
 
 pack_set --command "$(get_parent_exec) setup.py install" \
