@@ -11,7 +11,8 @@ pack_set --install-query $(pack_get --prefix)/bin/lua
 # Correct the installation compilation
 pack_set --command "sed -i -e '/^CC/{s:.*:CC = $CC:}' src/Makefile"
 # -DLUA_COMPAT_BITLIB and -DLUA_COMPAT_APIINTCASTS are for the bit32 lib
-pack_set --command "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_BITLIB -DLUA_COMPAT_APIINTCASTS -DLUA_COMPAT_ALL \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
+# -DLUA_COMPAT_ALL is not used for 5.3
+pack_set --command "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_BITLIB -DLUA_COMPAT_APIINTCASTS \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
 
 # Correct the default package directory
 pack_set --command "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --prefix)/\":' src/luaconf.h"
