@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-add_package http://downloads.kwant-project.org/kwant/kwant-1.0.2.tar.gz
+add_package http://downloads.kwant-project.org/kwant/kwant-1.0.3.tar.gz
 
 pack_set -s $IS_MODULE
 
