@@ -46,6 +46,7 @@ source helpers/mongo.bash
 
 # Packages installed in "python-home"
 source python/setuptools.bash
+source python/pkgconfig.bash
 source python/pyparsing.bash
 source python/backports.bash
 source python/certifi.bash
