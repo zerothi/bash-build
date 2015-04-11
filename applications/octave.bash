@@ -1,3 +1,9 @@
+tmp=0
+if $(is_c gnu) ; then
+    tmp=1
+fi
+[ $tmp -eq 0 ] && return
+
 add_package ftp://ftp.gnu.org/gnu/octave/octave-3.8.2.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -5,7 +11,10 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/octave
 
-tmp_flags="--with-x"
+# Link gnuplot (otherwise the gnuplot backend won't work)
+pack_set --module-requirement gnuplot
+
+tmp_flags="--with-x --disable-docs --disable-java"
 pack_set --module-requirement arpack-ng
 tmp_flags="$tmp_flags --with-arpack-libdir=$(pack_get --LD arpack-ng)"
 tmp_flags="$tmp_flags --with-arpack-includedir=$(pack_get --prefix arpack-ng)/include"
@@ -51,18 +60,23 @@ else
 
 fi
 
-
 # Install commands that it should run
 pack_set --command "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))' ../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+#pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
-pack_set_mv_test tmp.test
+#pack_set_mv_test tmp.test
 
+pack_install
 
-if [ $(pack_installed flex) -eq 1 ] ; then
-    pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
-fi
+create_module \
+    --module-path $(build_get --module-path)-npa-apps \
+    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
+    -v $(pack_get --version) \
+    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
+    -P "/directory/should/not/exist" \
+    $(list --prefix '-L ' $(pack_get --mod-req)) \
+    -L $(pack_get --alias)

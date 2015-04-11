@@ -30,7 +30,7 @@ source applications/gdis.bash
 source applications/povray.bash
 
 # Octave
-#source applications/octave.bash
+source applications/octave.bash
 
 # Create a module with default all plotting tools
 create_module \
