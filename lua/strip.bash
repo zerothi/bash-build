@@ -1,11 +1,12 @@
+# This file requires the lua-src to be present
+return
 add_package --build generic \
     --version 5.3 \
-    --directory mathx \
-    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lmathx.tar.gz
+    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lstrip.tar.gz
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/mathx.so
+pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/strip.so
 
 # Configure the package
 file=Makefile
@@ -18,5 +19,5 @@ LUABIN=\$(LUA)/bin' $file"
 
 pack_set --command "make all"
 
-pack_set --command "cp mathx.so $(pack_get --LD lua)/lua/$lua_V/mathx.so"
+pack_set --command "cp strip.so $(pack_get --LD lua)/lua/$lua_V/strip.so"
 

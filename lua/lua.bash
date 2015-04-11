@@ -2,7 +2,7 @@
 #  libreadlineX-dev
 unset LUA_PATH
 
-add_package --build generic http://www.lua.org/ftp/lua-5.2.3.tar.gz
+add_package --build generic http://www.lua.org/ftp/lua-5.2.4.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -28,9 +28,11 @@ pack_set --command "make install INSTALL_TOP=$(pack_get --prefix)"
 lua_V=5.2
 
 # Source all the lua-packages that will be installed
+source lua/rocks.bash
 source lua/filesystem.bash
 source lua/posix.bash
 source lua/mathx.bash
+source lua/strip.bash
 source lua/complex.bash
 source lua/penlight.bash
 source lua/peg.bash
