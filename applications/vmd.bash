@@ -1,4 +1,4 @@
-v=1.9.1
+v=1.9.2
 add_package \
     --build generic \
     --no-default-modules \
