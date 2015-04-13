@@ -12,7 +12,7 @@ pack_set --module-opt "--lua-family kwant"
 
 pack_set --module-requirement cython \
     --module-requirement scipy \
-    --module-requirement mumps \
+    --module-requirement mumps-serial \
     --module-requirement tinyarray
 
 file=build.conf
