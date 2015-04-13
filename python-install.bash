@@ -44,6 +44,9 @@ source python/scons.bash
 # Install the helper (mongodb)
 source helpers/mongo.bash
 
+# Used for many packages
+source python/nose.bash
+
 # Packages installed in "python-home"
 source python/setuptools.bash
 source python/pkgconfig.bash
@@ -81,7 +84,6 @@ source python/fireworks.bash
 
 source python/cython.bash
 source python/cffi.bash
-source python/nose.bash
 
 source python/bzr.bash
 source python/bzr-fastimport.bash
