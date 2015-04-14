@@ -20,6 +20,9 @@ pack_set --command "echo '#' > $file"
 
 # Check for Intel MKL or not
 tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req mumps) mumps)"
+if $(is_c gnu) ; then
+    tmp_flags="$tmp_flags -lgfortran"
+fi
 pack_set --command "sed -i '1 a\
 extra_link_args = $tmp_flags \n\
 ' $file"
