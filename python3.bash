@@ -85,16 +85,16 @@ create_module \
 create_module \
     -n "Nick Papior Andersen's basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
+    -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython numexpr netcdf4py matplotlib)
+    $(list --prefix '-RL ' scipy cython numexpr netcdf4py matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
+    -M python$pV.cython.numpy.scipy.mpi4py/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython mpi4py netcdf4py)
+    $(list --prefix '-RL ' scipy cython mpi4py netcdf4py)
 
 create_module \
     -n "Nick Papior Andersen's parallel/numba python script for: $(get_c)" \
