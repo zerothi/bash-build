@@ -1,5 +1,5 @@
 #oldv 688 704 775
-for v in 822 ; do
+for v in 823 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -253,9 +253,11 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	else
 	    pack_set --command "make"
 	fi
+	pack_set --command "make" # corrects version 
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
 	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
+	    pack_set --command "make phtrans" # corrects version 
 	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
 	    pack_set --command "make clean"
 	fi

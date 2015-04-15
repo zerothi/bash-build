@@ -15,6 +15,7 @@ while [ $# -gt 0 ]; do
         pack_set --command "make $1"
     else
         pack_set --command "make $(get_make_parallel) $1"
+        pack_set --command "make $1"
     fi
     shift
 done
