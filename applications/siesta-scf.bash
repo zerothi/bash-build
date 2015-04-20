@@ -1,5 +1,5 @@
 #oldv 688 704 775
-for v in 823 ; do
+for v in 834 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
