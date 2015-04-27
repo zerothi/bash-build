@@ -48,7 +48,7 @@ while [ $# -gt 0 ]; do
 	-generic)
 	    _generic_build=$1
 	    shift ;;
-	-default|-opti)
+	-default|-opti|-d)
 	    _default_build=$1
 	    shift ;;
 	-only)

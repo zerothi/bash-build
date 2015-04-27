@@ -27,17 +27,8 @@ source helpers/freetype.bash
 source helpers/libunistring.bash
 source helpers/libffi.bash
 
-# Install my GCC version
-source helpers/gmp.bash
-
-#source helpers/guile.bash # not related to GCC, but depends on gmp
-#source helpers/autogen.bash # not related to GCC, but depends on guile
-
-source helpers/mpfr.bash
-source helpers/mpc.bash
-source helpers/isl.bash
-source helpers/cloog.bash
-source helpers/gcc.bash
+# Install my GCC versions
+source gcc/gcc.bash
 
 # Install bison
 source helpers/bison.bash
