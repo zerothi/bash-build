@@ -1,4 +1,4 @@
-v=0.23
+v=0.24
 add_package \
     --archive ncdf-$v.tar.gz \
     https://github.com/zerothi/ncdf/archive/$v.tar.gz
@@ -21,7 +21,7 @@ PP = cpp -E -P -C \n\
 LIBVARDICT = $(pack_get --LD fvar)/libvardict.a \n\
 INC = $(list --INCDIRS $(pack_get --mod-req-path))\n\
 LIB_PATH = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
-LDFLAGS = \$(LIB_PATH) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+LIBS = \$(LIB_PATH) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 FPPFLAGS = -DNCDF_PARALLEL -DNCDF_4\n\
 AR = $AR\n\
 .F90.o:\n\
