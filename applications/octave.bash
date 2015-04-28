@@ -11,6 +11,9 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/octave
 
+pack_set --host-reject zero
+pack_set --host-reject ntch
+
 # Link gnuplot (otherwise the gnuplot backend won't work)
 pack_set --module-requirement gnuplot
 
