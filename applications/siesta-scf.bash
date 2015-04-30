@@ -1,7 +1,13 @@
 #oldv 688 704 775
-for v in 834 ; do
+for opt in none debug ; do
+if [ "$opt" == "none" ]; then
+    opt=
+else
+    opt="--build $opt --package siesta-scf-debug"
+fi
+for v in 838 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
+add_package $opt http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
 
@@ -368,4 +374,5 @@ create_module \
     $(list --prefix '-L ' $(pack_get --mod-req)) \
     -L $(pack_get --alias)
 
+done
 done
