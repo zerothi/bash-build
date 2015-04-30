@@ -133,6 +133,9 @@ source scripts.bash
 # Install the lua-libraries
 source lua/lua.bash
 
+build_set --reset-module[debug] \
+    $(list --prefix '--default-module ' \
+        $(build_get --default-module[$_default_build]))
 build_set --default-build $_default_build
 build_set --reset-module \
     $(list --prefix '--default-module ' \
