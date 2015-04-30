@@ -45,7 +45,7 @@ source libs/parpack.bash
 
 # Some specific libraries
 source libs/gsl.bash
-#source libs/boost.bash
+source libs/boost.bash
 source libs/ctl.bash
 source libs/harminv.bash
 
