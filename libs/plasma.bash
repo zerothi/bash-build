@@ -1,4 +1,4 @@
-add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.7.0.tar.gz
+add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.7.1.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
