@@ -7,7 +7,8 @@ function get_hostname { _ps "$_host" ; }
 
 # Figure out the number of cores on the machine
 _n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
-export NPROCS=$_n_procs
+[ -z "$NPROCS" ] && \
+    export NPROCS=$_n_procs
 
 # Check the host...
 # Takes one argument:
