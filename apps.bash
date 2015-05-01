@@ -4,6 +4,8 @@ msg_install --message "Installing the applications..."
 # Make all default modules
 build_set --default-setting module
 
+source applications/bgw.bash
+
 # Valgrind
 source applications/valgrind.bash
 
