@@ -51,6 +51,9 @@ while [ $# -gt 0 ]; do
 	-default|-opti|-d)
 	    _default_build=$1
 	    shift ;;
+	-list)
+	    export PACK_LIST=1
+	    ;;
 	-only)
 	    pack_only $1
 	    shift ;;

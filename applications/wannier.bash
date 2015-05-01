@@ -63,7 +63,8 @@ if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
     pack_set --command "cp utility/kmesh.pl $(pack_get --prefix)/bin/"
 fi
 pack_set --command "make lib"
-pack_set --command "make test"
+pack_set --command "make test 2>&1 > tmp.test"
+pack_set_mv_test tmp.test
 pack_set --command "cp wannier90.x $(pack_get --prefix)/bin/"
 pack_set --command "cp libwannier.a $(pack_get --LD)/"
 if [ $(vrs_cmp $v 2.0) -ge 0 ]; then

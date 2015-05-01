@@ -31,14 +31,16 @@ source libs/fvar.bash
 source libs/blas.bash
 source libs/cblas.bash
 source libs/lapack.bash blas
+source libs/scalapack.bash blas
 source libs/atlas.bash
 source libs/lapack.bash atlas
+source libs/scalapack.bash atlas
 source libs/openblas.bash
 source libs/lapack.bash openblas
+source libs/scalapack.bash openblas
 
 source libs/plasma.bash
 #source libs/flame.bash
-source libs/scalapack.bash
 source libs/arpack.bash
 source libs/arpack-ng.bash
 source libs/parpack.bash
