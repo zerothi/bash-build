@@ -4,8 +4,6 @@ msg_install --message "Installing the applications..."
 # Make all default modules
 build_set --default-setting module
 
-source applications/bgw.bash
-
 # Valgrind
 source applications/valgrind.bash
 
@@ -62,6 +60,9 @@ source applications/abinit.bash
 source applications/vasp.bash
 source applications/vasp-intel.bash
 source applications/vasp-potcar.bash
+
+source applications/bgw.bash
+#source applications/cp2k.bash
 
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
