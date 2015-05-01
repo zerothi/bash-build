@@ -2,10 +2,12 @@
 for opt in none debug ; do
 if [ "$opt" == "none" ]; then
     opt=
+    ext_fpp=
 else
     opt="--build $opt --package siesta-scf-debug"
+    ext_fpp="-DSCALAPACK_DEBUG"
 fi
-for v in 838 ; do
+for v in 846 ; do
 
 add_package $opt http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -74,7 +76,7 @@ KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
 FFLAGS += #OMPPLACEHOLDER\n\
-FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
+FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4 $ext_fpp\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
