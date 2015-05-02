@@ -62,7 +62,7 @@ source applications/vasp-intel.bash
 source applications/vasp-potcar.bash
 
 source applications/bgw.bash
-#source applications/cp2k.bash
+source applications/cp2k.bash
 
 # Specfial photonics applications
 source applications/mpb.bash # [gmp,libunistring,guile]
