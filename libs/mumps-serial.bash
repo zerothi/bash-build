@@ -14,7 +14,7 @@ pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
 if $(is_c intel) ; then
     tmp_flag="-nofor-main"
     pack_set --command "sed -i '1 a\
-LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n' Makefile.inc"
 
 else
 
@@ -80,9 +80,9 @@ CDEFS   = -DAdd_ \n\
 #CDEFS   = -D \n\
 \n\
 #Begin Optimized options\n\
-OPTF    = $FCFLAGS -O -DALLOW_NON_INIT $tmp_flag\n\
-OPTL    = $FCFLAGS -O $tmp_flag\n\
-OPTC    = $CFLAGS -O\n\
+OPTF    = $FCFLAGS -O -DALLOW_NON_INIT $tmp_flag $FLAG_OMP\n\
+OPTL    = $FCFLAGS -O $tmp_flag $FLAG_OMP\n\
+OPTC    = $CFLAGS -O $FLAG_OMP\n\
 \n\
 INCS = \$(INCSEQ) \n\
 LIBS = \$(LIBSEQ) \n\
