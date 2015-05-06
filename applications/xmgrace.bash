@@ -1,5 +1,5 @@
 # Install grace
-add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.24.tar.gz
+add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.25.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
