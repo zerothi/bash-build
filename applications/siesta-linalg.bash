@@ -21,6 +21,7 @@ elif $(is_c gnu) ; then
 	    pack_set --module-requirement $la
 	    [ "x$la" == "xatlas" ] && \
 		tmp="$tmp -lf77blas -lcblas"
+	    [ "x$la" == "xacml" ] && tmp=""
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
 LDFLAGS=$(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
