@@ -3,7 +3,7 @@ add_package \
     --package pytables \
     http://sourceforge.net/projects/pytables/files/pytables/$v/tables-$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tables
 pack_set --host-reject eris
