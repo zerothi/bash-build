@@ -6,6 +6,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set $(list --prefix '--module-requirement ' \
     gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.2] isl[0.12.2] cloog)
 
+pack_set --host-reject zero --host-reject ntch
+
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
 pack_set --command "module load build-tools"
