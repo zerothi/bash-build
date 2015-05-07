@@ -44,11 +44,12 @@ source python/scons.bash
 # Install the helper (mongodb)
 source helpers/mongo.bash
 
+source python/setuptools.bash
+
 # Used for many packages
 source python/nose.bash
 
 # Packages installed in "python-home"
-source python/setuptools.bash
 source python/pkgconfig.bash
 source python/pyparsing.bash
 source python/backports.bash
