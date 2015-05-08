@@ -2,7 +2,7 @@
 bl=$1
 shift
 
-add_package --package lapack-$bl http://www.netlib.org/lapack/lapack-3.5.0.tgz
+add_package --package lapack-$bl http://www.student.dtu.dk/~nicpa/packages/lapack-1544.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
@@ -49,7 +49,7 @@ pack_set --command "make $(get_make_parallel) lapacklib lapackelib tmglib"
 pack_set --command "cp liblapack.a liblapacke.a $(pack_get --LD $bl)/"
 pack_set --command "cp libtmglib.a $(pack_get --LD $bl)/libtmg.a"
 pack_set --command "mkdir -p $(pack_get --prefix $bl)/include/"
-pack_set --command "cp lapacke/include/*.h $(pack_get --prefix $bl)/include/"
+pack_set --command "cp LAPACKE/include/*.h $(pack_get --prefix $bl)/include/"
 
 if [ $bl == "atlas" ]; then
     # We need to collect the two sets

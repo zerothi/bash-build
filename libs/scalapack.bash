@@ -5,7 +5,7 @@
 bl=$1
 shift
 
-add_package --package scalapack-$bl http://www.netlib.org/scalapack/scalapack-2.0.2.tgz
+add_package --package scalapack-$bl http://www.student.dtu.dk/~nicpa/packages/scalapack-200.tar.gz
 
 pack_set --install-query $(pack_get --LD $bl)/libscalapack.a
 
