@@ -18,10 +18,10 @@ if [ $(vrs_cmp 3.1.1 $v) -le 0 ]; then
    pack_set --command "sed -i -e 's:Cython.Compiler.Main:Cython.Compiler:' setup.py"
 fi
     
-# Install commands that it should run
 pack_set --command "$(get_parent_exec) setup.py build" \
     --command-flag "--hdf5=$(pack_get --prefix hdf5-serial)" \
     --command-flag "--cflags='$pCFLAGS'"
+pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)" \
  
