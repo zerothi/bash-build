@@ -8,8 +8,7 @@ if [ "x${pV:0:1}" == "x3" ]; then
 else
     pack_set --install-query $(pack_get --prefix)/bin/f2py
 fi
-pack_set --module-requirement $(get_parent) \
-    --module-requirement fftw-3 --module-requirement umfpack
+pack_set $(list -p '-mod-req ' fftw-2 fftw-3 umfpack)
 
 # For future maybe this flag is important: NPY_SEPARATE_COMPILATION=0
 
@@ -18,25 +17,32 @@ pack_set --command "echo '#' > $file"
 
 tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req-path))
 tmp_lib=${tmp_lib// /}
-tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64
+tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
 
 tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req-path))
 tmp_inc=${tmp_inc// /}
 tmp_inc=${tmp_inc:1}
 
 pack_set --command "sed -i '1 a\
+[fftw2]\n\
+library_dirs = $(pack_get --LD fftw-2)\n\
+include_dirs = $(pack_get --prefix fftw-2)/include\n\
+libraries = fftw_threads\n\
+runtime_library_dirs = $(pack_get --LD fftw-2)\n\
 [fftw]\n\
 library_dirs = $(pack_get --LD fftw-3)\n\
 include_dirs = $(pack_get --prefix fftw-3)/include\n\
-libraries = fftw3\n\
+libraries = fftw3_threads\n\
 runtime_library_dirs = $(pack_get --LD fftw-3)\n\
 [amd]\n\
 libraries = amd\n\
-amd_libs = amd\n\
+include_dirs = $(pack_get --prefix amd)/include\n\
+library_dirs = $(pack_get --LD amd)\n\
 runtime_library_dirs = $(pack_get --LD amd)\n\
 [umfpack]\n\
-umfpack_libs = umfpack\n\
 libraries = umfpack\n\
+include_dirs = $(pack_get --prefix umfpack)/include\n\
+library_dirs = $(pack_get --LD umfpack)\n\
 runtime_library_dirs = $(pack_get --LD umfpack)\n' $file"
 
 # Check for Intel MKL or not
@@ -67,16 +73,16 @@ blas_libs = mkl_blas95_lp64' $file"
     pack_set --command "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_set --command "sed -i '1 a\
 [ALL]\n\
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5\n\
+libraries = umfpack,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5,pthread\n\
 library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
 runtime_library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
 
-    pack_set --command "$(get_parent_exec) setup.py config" \
-	--command-flag "--compiler=intelem" \
-	--command-flag "--fcompiler=intelem" 
-
 elif $(is_c gnu) ; then
+
+    # Force embedded_lapack (until 
+    pack_set --command "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
+    pack_set --command "sed -i -e '/_lib_names[ ]*=/s|openblas|openblasp|g' numpy/distutils/system_info.py"
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
@@ -87,12 +93,7 @@ elif $(is_c gnu) ; then
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = lapack\n\
-runtime_library_dirs = $(pack_get --LD $la)\n\
-[lapack_opt]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = lapack\n\
-runtime_library_dirs = $(pack_get --LD $la)\n' $file" 
+runtime_library_dirs = $tmp\n' $file" 
 	    
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '$ a\
@@ -100,46 +101,33 @@ runtime_library_dirs = $(pack_get --LD $la)\n' $file"
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
-runtime_library_dirs = $(pack_get --LD $la)\n\
+runtime_library_dirs = $tmp\n\
 [atlas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = f77blas,cblas,atlas\n\
-runtime_library_dirs = $(pack_get --LD $la)\n' $file" 
+runtime_library_dirs = $tmp\n' $file" 
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp\n\
-openblas_libs = openblasp\n\
-runtime_library_dirs = $(pack_get --LD $la)\n\
+libraries = lapack,openblasp\n\
+extra_link_args = -lpthread\n\
+runtime_library_dirs = $tmp\n\
+embedded_lapack = True\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = openblasp\n\
-blas_libs = openblasp\n\
-runtime_library_dirs = $(pack_get --LD $la)\n\
-[blas_opt]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp\n\
-blas_libs = openblasp\n\
-runtime_library_dirs = $(pack_get --LD $la)\n' $file"
+runtime_library_dirs = $tmp\n' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = blas\n\
-blas_libs = blas\n\
-runtime_library_dirs = $(pack_get --LD $la)\n\
-[blas_opt]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = blas\n\
-blas_libs = blas\n\
-runtime_library_dirs = $(pack_get --LD $la)\n' $file"
+runtime_library_dirs = $tmp\n' $file"
 	    else
 		doerr "numpy" "Could not find linear-algebra library: $la"
 	    fi
@@ -149,7 +137,7 @@ runtime_library_dirs = $(pack_get --LD $la)\n' $file"
 
     pack_set --command "sed -i '1 a\
 [ALL]\n\
-libraries = pthread,cholmod,ccolamd,camd,colamd,suitesparseconfig\n\
+libraries = umfpack,cholmod,ccolamd,camd,colamd,suitesparseconfig,pthread\n\
 library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc\n\
 runtime_library_dirs = $tmp_lib\n' $file"
@@ -161,16 +149,16 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # The DUM variable is to terminate (list) argument grabbing
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:9}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
-    pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config" \
-	--command-flag "--compiler=unix --fcompiler=gnu95" 
     
 else
     doerr numpy "Have not been configured with recognized compiler"
 
 fi
 
-# Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py install" \
+pack_set --command "unset LDFLAGS"
+
+pack_set --command "CC=$CC $(get_parent_exec) setup.py config $pNumpyInstall"
+pack_set --command "CC=$CC $(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 # Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
@@ -179,6 +167,7 @@ pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
 
 
 add_test_package
+pack_set --command "unset LDFLAGS"
 pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Succes'"
 pack_set_mv_test tmp.test
 
