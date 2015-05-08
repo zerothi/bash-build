@@ -921,7 +921,7 @@ function pack_install {
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
     fi
-    local tmp=$(pack_get --alias $idx)
+    local tmp=$(lc $(pack_get --alias $idx))
     if [ ${#_pack_only[@]} -gt 0 ]; then
 	if [ 0${_pack_only[$tmp]} -eq 1 ]; then
 	    pack_only $(pack_get --mod-req-all $idx)
