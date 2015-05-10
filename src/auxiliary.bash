@@ -1,6 +1,72 @@
 
 # File for auxillary commands used in the command line tools
 
+# Init installation
+# Pretty prints some information about the installation
+#   $1 : the package name or index
+function msg_install {
+    local n="" ; local action=0
+    while [ $# -gt 1 ]; do
+	local opt=$(trim_em $1) ; shift
+	case $opt in
+	    -start|-S) n="Installing" ; action=1 ;;
+	    -finish|-F) n="Finished" ; action=2 ;;
+	    -already-installed) n="Already installed" ; action=3 ;;
+	    -message) n="$1" ; shift ; action=4 ;;
+	    *) break ;;
+	esac
+    done
+    if [ $# -gt 0 ]; then
+	local pack=$1
+    else
+	local pack=$_N_archives
+    fi
+    [ "$action" -ne "4" ] && \
+	local cmd=$(arc_cmd $(pack_get --ext $pack) )
+    echo " ================================== "
+    echo "   $n"
+    if [ "$action" -eq "1" ]; then
+	echo " File    : $(pack_get --archive $pack)"
+	echo " Ext     : $(pack_get --ext $pack)"
+	echo " Ext CMD : $cmd"
+    fi
+    if [ "$action" -ne "4" ]; then
+	echo " Package : $(pack_get --package $pack)"
+	if [ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]; then
+	    echo " Alias   : $(pack_get --alias $pack)"
+	fi	
+	echo " Version : $(pack_get --version $pack)"
+    fi
+    if [ "$action" -eq "1" ]; then
+	module list 2>&1
+    fi
+    echo " ================================== "
+}
+
+
+# Do the cmd 
+# This will automatically check for the error
+function docmd {
+    local ar="$1"
+    shift
+    local cmd=($*)
+    echo ""
+    echo " # ================================================================"
+    if [ ! -z "$ar" ] ; then
+        echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
+    fi
+    echo " # PWD: "$_cwd
+    echo " # CMD: "${cmd[@]}
+    echo " # ================================================================"
+    eval ${cmd[@]}
+    local st=$?
+    if (( $st != 0 )) ; then
+	echo "STATUS = $st"
+        exit $st;
+    fi
+}
+
+
 # Print simple string (shortcut for printf "%s" "$1")
 function _ps {
     printf "%s" "$@"
