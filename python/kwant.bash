@@ -19,19 +19,17 @@ file=build.conf
 pack_set --command "echo '#' > $file"
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req mumps) mumps)"
+tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req mumps-serial) mumps-serial) $FLAG_OMP"
 if $(is_c gnu) ; then
     tmp_flags="$tmp_flags -lgfortran"
 fi
 pack_set --command "sed -i '1 a\
-extra_link_args = $tmp_flags \n\
-' $file"
+extra_link_args = $tmp_flags \n' $file"
 if $(is_c intel) ; then
     
     pack_set --command "sed -i '1 a\
 [lapack]\n\
-libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n\
-' $file"
+libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n' $file"
     
 elif $(is_c gnu) ; then
 
@@ -41,6 +39,8 @@ elif $(is_c gnu) ; then
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
 		tmp="f77blas cblas"
+	    [ "x$la" == "xopenblas" ] && \
+		la=openblas_omp
 	    tmp="$tmp $la"
 	    break
 	fi
@@ -58,7 +58,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 [mumps]\n\
-libraries = zmumps mumps_common pord metis\n\
+libraries = zmumps_omp mumps_common_omp pord metis\n\
 ' $file"
 
 pack_set --command "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
