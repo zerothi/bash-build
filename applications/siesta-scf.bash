@@ -22,8 +22,10 @@ pack_set --command "cd Obj"
 # Setup the compilation scheme
 pack_set --command "../Src/obj_setup.sh"
 
-# Prepare the compilation arch.make
-pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+file=arch.make
+
+# Prepare the compilation $file
+pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
 
 if [ $(vrs_cmp $v 590) -ge 0 ]; then
     pack_set --module-requirement mumps
@@ -36,17 +38,17 @@ FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4\n\
-COMP_LIBS += libncdf.a libvardict.a' arch.make"
+COMP_LIBS += libncdf.a libvardict.a' $file"
     fi
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' arch.make"
+ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 else
     if [ $(pack_installed metis) -eq 1 ]; then
 	pack_set --module-requirement metis
     pack_set --command "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP\n\
-ADDLIB += -lmetis' arch.make"
+ADDLIB += -lmetis' $file"
     fi
 fi
 
@@ -89,7 +91,7 @@ MPI_INCLUDE=.\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 .f90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
-' arch.make"
+' $file"
 
 source applications/siesta-linalg.bash
 
@@ -100,17 +102,23 @@ function set_flag {
     end=
     case $v in
 	openmp)
-	    pack_set --command "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' arch.make"
+	    pack_set --command "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
+	    pack_set --command "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
+	    pack_set --command "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
+
+
 	    end=_omp
 	    if [ "x$siesta_la" == "xopenblas" ]; then
-		pack_set --command "sed -i -e 's:-lopenblas :-lopenblas_omp :g' arch.make"
+		pack_set --command "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
 	    fi
 	    ;;
 	*)
-	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' arch.make"
+	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
+	    pack_set --command "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
+	    pack_set --command "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
 	    end=
 	    if [ "x$siesta_la" == "xopenblas" ]; then
-		pack_set --command "sed -i -e 's:-lopenblas_omp :-lopenblas :g' arch.make"
+		pack_set --command "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
 	    fi
 	    ;;
     esac
@@ -307,7 +315,7 @@ fi
 if [ $tmp -eq 1 ] ; then
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     # Go back
-    pack_set --command "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
+    pack_set --command "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
     for omp in openmp none ; do
 	if [ $omp == "openmp" ]; then
 	    if $(is_c intel) ; then
@@ -352,8 +360,8 @@ pack_set --command "python -m compileall ."
 pack_set --command "popd"
 pack_set --command "module unload $tmp"
 
-# Save the arch.make file
-pack_set --command "cp arch.make ../../"
+# Save the $file file
+pack_set --command "cp $file ../../"
 
 pack_install
 
