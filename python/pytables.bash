@@ -5,13 +5,11 @@ add_package \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tables
+pack_set --install-query $(pack_get --prefix)/bin/ptdump
 pack_set --host-reject eris
 
 # Add requirments when creating the module
-pack_set --module-requirement numpy \
-    --module-requirement cython \
-    --module-requirement hdf5-serial \
+pack_set --module-requirement hdf5-serial \
     --module-requirement numexpr
 
 if [ $(vrs_cmp 3.1.1 $v) -le 0 ]; then
