@@ -3,7 +3,7 @@ add_package --package mumps-serial \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libmumps_common.a
+pack_set --install-query $(pack_get --LD)/libmumps_common_omp.a
 
 pack_set --module-requirement metis
 # Using scotch requires a special interface :(
