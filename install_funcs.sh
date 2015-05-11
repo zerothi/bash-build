@@ -71,13 +71,13 @@ function pack_only {
 
 
 # Add any auxillary commands
-source src/auxiliary.sh
+source src/auxiliary.bash
 
 # Add the compiler stuff 
-source src/compiler.sh
+source src/compiler.bash
 
 # Add host information
-source src/host.sh
+source src/host.bash
 
 # The place of all the archives
 _archives="$_cwd/.archives"
