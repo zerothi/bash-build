@@ -6,6 +6,7 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
 
 pack_set --module-requirement numpy
+pack_set --module-requirement cython
 
 if [ $(pack_installed swig) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement pcre swig) $(pack_get --module-name pcre swig)"
