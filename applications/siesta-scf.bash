@@ -159,7 +159,7 @@ pack_set --command "cp siesta $(pack_get --prefix)/bin/siesta$end"
 pack_set --command "make clean"
 
 if [ $(vrs_cmp $v 772) -ge 0 ]; then
-    pack_set --command "make $(get_make_parallel) transiesta"
+    pack_set --command "make $(get_make_parallel) transiesta ; make transiesta"
 elif [ $(vrs_cmp $v 662) -ge 0 ]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 else
@@ -257,13 +257,13 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	set_flag $omp
 	pack_set --command "popd ; make clean"
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel)"
+	    pack_set --command "make $(get_make_parallel) ; make"
 	else
 	    pack_set --command "make"
 	fi
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
+	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans ; make phtrans"
 	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
 	    pack_set --command "make clean"
 	fi
@@ -299,6 +299,7 @@ pack_set --command "cd ../../Obj"
 tmp=0
 if $(is_c intel) ; then
     tmp=1
+
 elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
@@ -326,7 +327,7 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 	pack_set --command "make clean"
 	
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel) transiesta"
+	    pack_set --command "make $(get_make_parallel) transiesta ; make transiesta"
 	else
 	    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 	fi
@@ -334,13 +335,13 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 
 	pack_set --command "pushd ../Util/TS/TBtrans ; make clean"
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel)"
+	    pack_set --command "make $(get_make_parallel) ; make"
 	else
 	    pack_set --command "make"
 	fi
 	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
 	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
+	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans ; make phtrans"
 	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans${end}_3m"
 	    pack_set --command "make clean"
 	fi
