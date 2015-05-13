@@ -1,4 +1,4 @@
-add_package http://garr.dl.sourceforge.net/project/elk/elk-3.0.4.tgz
+add_package http://garr.dl.sourceforge.net/project/elk/elk-3.0.18.tgz
 
 pack_set --host-reject ntch --host-reject zeroth
 
