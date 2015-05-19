@@ -1,6 +1,8 @@
+for v in 4.0 ; do
+
 add_package --package superlu-dist \
-    --directory SuperLU_DIST_3.3 \
-    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_3.3.tar.gz
+    --directory SuperLU_DIST_$v \
+    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -22,12 +24,13 @@ DSUPERLULIB = \$(DSuperLUroot)/lib/libsuperlu.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
 METISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lmetis\n\
 PARMETISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis\n\
+I_PARMETIS = $(list --INCDIRS parmetis)\n\
 LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
 ARCHFLAGS = cr\n\
 RANLIB = ranlib\n\
 CC = $MPICC\n\
-CFLAGS = $CFLAGS\n\
+CFLAGS = $CFLAGS \$(I_PARMETIS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
@@ -65,3 +68,4 @@ pack_set --command "make"
 pack_set --command "mkdir -p $(pack_get --LD)/"
 pack_set --command "cp lib/libsuperlu.a $(pack_get --LD)/"
 
+done

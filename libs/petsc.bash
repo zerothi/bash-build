@@ -63,25 +63,27 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "--with-fftw=1" \
     --command-flag "--with-fftw-dir=$(pack_get --prefix fftw-3)"
 
-#    --command-flag "--with-mumps=1" \
-#    --command-flag "--with-mumps-lib='$(list --LDFLAGS --Wlrpath mumps) -lzmumps -ldmumps -lmumps_common -lpord'" \
-#    --command-flag "--with-mumps-include=$(pack_get --prefix mumps)/include" \
-#    --command-flag "--with-ptscotch=1" \
-#    --command-flag "--with-ptscotch-lib='$(list --LDFLAGS --Wlrpath scotch) -lptscotch'" \
-#    --command-flag "--with-ptscotch-include=$(pack_get --prefix scotch)/include"
-
+# Just does not work
 #    --command-flag "--with-superlu_dist=1" \
 #    --command-flag "--with-superlu_dist-dir=$(pack_get --prefix superlu-dist)" \
+#    --command-flag "--with-superlu_dist-lib='-lsuperlu'"
+
+# Requires ptesmumps
+#    --command-flag "--with-mumps=1" \
+#    --command-flag "--with-mumps-dir=$(pack_get --prefix mumps)" \
+#    --command-flag "--with-ptscotch=1" \
+#    --command-flag "--with-ptscotch-dir=$(pack_get --prefix scotch)"
+
+#    --command-flag "--with-netcdf=1" \
+#    --command-flag "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
+#    --command-flag "--with-netcdf-libs='-lnetcdf -lpnetcdf'"
 
 #    --command-flag "--with-cholmod=1" \
 #    --command-flag "--with-cholmod-dir=$(pack_get --prefix cholmod)"
 #    --command-flag "--with-umfpack=1" \
 #    --command-flag "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
 #    --command-flag "--with-scalar-type=complex" \ #error on hwloc
-#    --command-flag "--with-netcdf=1" \
-#    --command-flag "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
 
-# Make commands
 pack_set --command "make"
 pack_set --command "make install"
 
