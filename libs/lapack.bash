@@ -2,7 +2,7 @@
 bl=$1
 shift
 
-add_package --package lapack-$bl http://www.student.dtu.dk/~nicpa/packages/lapack-1544.tar.gz
+add_package --package lapack-$bl http://www.student.dtu.dk/~nicpa/packages/lapack-1545.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
