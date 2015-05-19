@@ -1,4 +1,4 @@
- Create a module for loading
+# Create a module for loading
 # Flags for creating the module:
 #   -n <name>
 #   -v <version>
