@@ -5,7 +5,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 pack_set --install-query $(pack_get --LD)/libboost_random.a
 

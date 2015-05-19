@@ -12,7 +12,7 @@ if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name cmake)"
 fi
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 # Make commands 
 pack_set --command "echo '# The start of a new Makefile.in' > Makefile.in"

@@ -4,7 +4,7 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
-pack_set --module-requirement openmpi --module-requirement netcdf-serial
+pack_set --module-requirement mpi --module-requirement netcdf-serial
 
 if [ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]; then
     pack_set $(list --prefix '--host-reject ' zero ntch)

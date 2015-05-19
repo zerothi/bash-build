@@ -8,7 +8,7 @@ pack_set -s $IS_MODULE
 # Required as the version has just been set
 pack_set --install-query $(pack_get --LD)/libparpack.a
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 tmp_flags=""
 if $(is_c intel) ; then

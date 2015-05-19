@@ -9,7 +9,7 @@ pack_set --module-opt "--lua-family gpaw"
 
 pack_set --install-query $(pack_get --prefix)/bin/gpaw-python
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement matplotlib \
     --module-requirement hdf5 \
     --module-requirement libxc
@@ -62,11 +62,11 @@ pack_set --command "sed -i '$ a\
 library_dirs += [\"$(pack_get --LD libxc)\"]\n\
 include_dirs += [\"$(pack_get --prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
-include_dirs += [\"$(pack_get --prefix openmpi)/include\"]\n\
+include_dirs += [\"$(pack_get --prefix mpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 # Same as -Wl,-rpath:\n\
 runtime_library_dirs += [\"$(pack_get --LD libxc)\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get --LD openmpi)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get --LD mpi)\"]\n\
 mpi_runtime_library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 scalapack = True\n\
 \n\

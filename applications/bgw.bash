@@ -12,7 +12,7 @@ pack_set --host-reject zerothi
 
 pack_set --install-query $(pack_get --prefix)/bin/bgw
 
-pack_set $(list -p '--module-requirement ' openmpi fftw-3 hdf5)
+pack_set $(list -p '--module-requirement ' mpi fftw-3 hdf5)
 
 file=arch.mk
 pack_set --command "echo '# NPA' > $file"
@@ -38,7 +38,7 @@ FFTWLIB = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3_omp -lfftw3\n\
 FFTWINCLUDE = $(pack_get --prefix fftw-3)/include\n\
 HDF5LIB = $(list --LDFLAGS --Wlrpath hdf5 zlib) -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lz\n\
 HDF5INCLUDE = $(pack_get --prefix hdf5)/include\n\
-TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix openmpi)/bin/mpirun\" make check-parallel\n\
+TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel\n\
 ' $file"
 
 if $(is_c intel) ; then

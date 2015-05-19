@@ -9,7 +9,7 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/yambo
 
-pack_set --module-requirement openmpi --module-requirement netcdf \
+pack_set --module-requirement mpi --module-requirement netcdf \
     --module-requirement etsf_io --module-requirement fftw-3
 
 # Add the lua family

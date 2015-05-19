@@ -17,6 +17,8 @@ source install_funcs.sh
 
 # Default python version installed
 _python_version=2
+# Default MPI version
+_mpi_version=openmpi
 # Default name for build which builds the generic
 # packages.
 _generic_build=generic
@@ -36,6 +38,16 @@ while [ $# -gt 0 ]; do
 		    ;; # fine
 		*)
 		    doerr "option parsing" "Python version does not exist [2|3]"
+		    ;;
+	    esac
+	    shift ;;
+	-mpi-version|-mpi)
+	    _mpi_version=$(lc $1)
+	    case $_mpi_version in
+		openmpi|mpich)
+		    ;; # fine
+		*)
+		    doerr "option parsing" "MPI version does not exist [OpenMPI|MPICH]"
 		    ;;
 	    esac
 	    shift ;;

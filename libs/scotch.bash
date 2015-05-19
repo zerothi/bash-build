@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libscotch.a
 
-pack_set --module-requirement zlib --module-requirement openmpi
+pack_set --module-requirement zlib --module-requirement mpi
 
 if [ $(pack_installed bison) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
@@ -44,10 +44,10 @@ ARFLAGS = -ruv \n\
 CAT = cat \n\
 CCS = $CC \n\
 CCP = $MPICC \n\
-CCD = $CC $(list --INCDIRS openmpi) \n\
+CCD = $CC $(list --INCDIRS mpi) \n\
 CFLAGS += $CFLAGS -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_PTHREAD -DIDXSIZE64 \n\
 CLIBFLAGS = \n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath zlib) $(list --LDFLAGS --Wlrpath openmpi) -lz -lm -lrt \n\
+LDFLAGS = $(list --LDFLAGS --Wlrpath zlib) $(list --LDFLAGS --Wlrpath mpi) -lz -lm -lrt \n\
 CP = cp \n\
 LEX = flex -Pscotchyy -olex.yy.c \n\
 LN = ln \n\

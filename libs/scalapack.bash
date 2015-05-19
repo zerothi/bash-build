@@ -1,6 +1,6 @@
 # The good thing about scalapack is that it is a static
 # library
-# Hence any linking to scalapack will require an openmpi compliant
+# Hence any linking to scalapack will require an mpi compliant
 # linking.
 bl=$1
 shift
@@ -9,7 +9,7 @@ add_package --package scalapack-$bl http://www.student.dtu.dk/~nicpa/packages/sc
 
 pack_set --install-query $(pack_get --LD $bl)/libscalapack.a
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 pack_set --module-requirement $bl
 
 # Prepare the make file

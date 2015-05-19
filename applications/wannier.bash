@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --prefix)/bin/wannier90
 #pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
 if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
-    pack_set --module-requirement openmpi
+    pack_set --module-requirement mpi
 fi
 
 # Check for Intel MKL or not

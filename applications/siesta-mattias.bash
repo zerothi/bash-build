@@ -6,7 +6,7 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
-pack_set --module-requirement openmpi --module-requirement netcdf
+pack_set --module-requirement mpi --module-requirement netcdf
 
 pack_set --host-reject zero --host-reject ntch
 

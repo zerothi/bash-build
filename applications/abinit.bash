@@ -9,7 +9,7 @@ pack_set --module-opt "--lua-family abinit"
 
 pack_set --install-query $(pack_get --prefix)/bin/abinit
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
@@ -46,7 +46,7 @@ enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
 enable_mpi=\"yes\"\n\
-with_mpi_prefix=\"$(pack_get --prefix openmpi)\"\n\
+with_mpi_prefix=\"$(pack_get --prefix mpi)\"\n\
 with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list --INCDIRS gsl)\"\n\

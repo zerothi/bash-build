@@ -2,7 +2,7 @@ add_package http://sourceforge.net/projects/cp2k/files/cp2k-2.6.1.tar.bz2
 
 pack_set --host-reject ntch --host-reject zeroth
 
-pack_set $(list -p '--module-requirement ' openmpi libxc fftw-3)
+pack_set $(list -p '--module-requirement ' mpi libxc fftw-3)
 
 pack_set --install-query $(pack_get --prefix)/bin/cp2k.psmp
 

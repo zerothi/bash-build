@@ -12,7 +12,7 @@ pack_set --module-opt "--lua-family bigdft"
 
 pack_set --install-query $(pack_get --prefix)/bin/bigdft
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement etsf_io \
     --module-requirement libxc
 

@@ -15,7 +15,7 @@ pack_set --command 'cd src'
 
 pack_set --install-query $(pack_get --prefix)/bin/lmp
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement fftw-3
 
 tmp=MAKE/Makefile.npa

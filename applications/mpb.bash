@@ -8,7 +8,7 @@ pack_set --host-reject ntch --host-reject zeroth \
 
 pack_set --module-opt "--lua-family mpb"
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement libctl \
     --module-requirement zlib \
     --module-requirement hdf5 \

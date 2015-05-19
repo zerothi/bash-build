@@ -10,7 +10,7 @@ if $(is_c intel) ; then
 fi
 
 pack_set --module-opt "--lua-family valgrind"
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 pack_set --command "../configure --with-mpicc=$MPICC" \
     --command-flag "--enable-only64bit" \

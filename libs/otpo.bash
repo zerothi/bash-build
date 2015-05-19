@@ -1,3 +1,4 @@
+[ $_mpi_version != "openmpi" ] && return
 add_package --directory otpo \
     http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.tar.bz2
 
@@ -6,7 +7,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/otpo
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 pack_set --host-reject ntch-2
 

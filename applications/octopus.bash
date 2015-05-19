@@ -10,7 +10,7 @@ pack_set --module-opt "--lua-family octopus"
 
 pack_set --install-query $(pack_get --prefix)/bin/octopus_mpi
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 pack_set --module-requirement libxc
 pack_set --module-requirement gsl
 pack_set --module-requirement arpack-ng

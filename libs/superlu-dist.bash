@@ -10,7 +10,7 @@ pack_set $(list --prefix "--host-reject " surt muspel slid)
 
 pack_set --install-query $(pack_get --LD)/libsuperlu.a
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement parmetis
 
 # Prepare the make file

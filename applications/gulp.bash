@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --prefix)/bin/gulp
 
 pack_set --command "cd Src"
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 file=Makefile
 if $(is_c intel) ; then

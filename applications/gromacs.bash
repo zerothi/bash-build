@@ -12,7 +12,7 @@ fi
 
 pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
-pack_set --module-requirement openmpi --module-requirement fftw-3
+pack_set --module-requirement mpi --module-requirement fftw-3
 
 pack_set --command "module load $(pack_get --module-name cmake)"
 

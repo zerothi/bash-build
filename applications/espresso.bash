@@ -23,7 +23,7 @@ for v in 5.1.1 5.1.2 ; do
 
     pack_set --module-opt "--lua-family espresso"
 
-    pack_set --module-requirement openmpi 
+    pack_set --module-requirement mpi 
     pack_set --module-requirement fftw-3
 
     # Fetch all the packages and pack them out

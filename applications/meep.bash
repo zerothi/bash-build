@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --prefix)/bin/meep-mpi
 
 pack_set --module-opt "--lua-family meep"
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement zlib \
     --module-requirement hdf5 \
     --module-requirement fftw-3 \

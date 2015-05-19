@@ -4,7 +4,7 @@ pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/elk
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement libxc \
     --module-requirement fftw-3
 
@@ -30,7 +30,7 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list --LDFLAGS --Wlrpath openmpi libxc) -lxcf90 -lxc\n\
+LIB_libxc = $(list --LDFLAGS --Wlrpath mpi libxc) -lxcf90 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
 LIB_FFT = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
 SRC_FFT = zfftifc.f90\n\

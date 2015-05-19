@@ -7,8 +7,7 @@ pack_set -s $IS_MODULE
 # Required as the version has just been set
 pack_set --install-query $(pack_get --LD)/libparpack.a
 
-pack_set --module-requirement openmpi
-
+pack_set --module-requirement mpi
 
 oA=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.tar.gz
 mywget http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz $oA

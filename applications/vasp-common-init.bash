@@ -1,6 +1,6 @@
 pack_set --host-reject ntch --host-reject zeroth
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 pack_set --module-requirement wannier90[1.2]
 
 if $(is_c gnu) ; then
@@ -67,7 +67,7 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
+LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS mpi) ' $file"
 
 elif $(is_c gnu) ; then
 
@@ -82,7 +82,7 @@ FREE = -ffree-form\n\
 FCL = \$(FC)\n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
-LINK = $FLAG_OMP $(list --Wlrpath --LDFLAGS openmpi)\n\
+LINK = $FLAG_OMP $(list --Wlrpath --LDFLAGS mpi)\n\
 LINK = \n\
 DEBUG = \n' $file"
 

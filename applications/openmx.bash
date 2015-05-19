@@ -8,7 +8,7 @@ pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --install-query $(pack_get --prefix)/bin/openmx
 
-pack_set --module-requirement openmpi --module-requirement fftw-3
+pack_set --module-requirement mpi --module-requirement fftw-3
 
 # Move to the source directory
 pack_set --command "cd source"

@@ -10,10 +10,19 @@ source libs/libxml2.bash
 #source libs/gmp.bash
 #source libs/guile.bash
 
-# Basic parallel libraries
 source libs/hwloc.bash
+
+# Basic parallel libraries
 source libs/openmpi-hpc.bash
 source libs/mpich.bash
+# Set the default MPI version
+if $(is_c intel) ; then
+    # The current implementation does not abstract the
+    # mpi differences
+    pack_set --alias mpi openmpi
+else
+    pack_set --alias mpi $_mpi_version
+fi
 
 # Optimization of openmpi parameters
 source libs/otpo.bash
@@ -120,6 +129,6 @@ for bl in blas atlas openblas ; do
 	-v $(date +'%g-%j') \
 	-M mpi.$bl.scalapack/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi $bl)
+	$(list --prefix '-L ' $(pack_get --module-requirement mpi) mpi $bl)
 done
 
