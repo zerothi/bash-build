@@ -5,7 +5,8 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
-pack_set $(list -p "--host-reject " surt muspel slid n- hemera eris ponto $(get_hostname))
+pack_set $(list -p "--host-reject " surt muspel slid n- hemera eris ponto)
+pack_set --host-reject $(get_hostname)
 
 pack_set --command "unset F90"
 pack_set --command "unset F90FLAGS"
@@ -28,10 +29,12 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
-pack_set --command "unset F90 && unset F90FLAGS && ../configure" \
+pack_set --command "unset F90"
+pack_set --command "unset F90FLAGS"
+pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--enable-f77 --enable-fc --enable-cxx" \
-    --command-flag "--enable-shared --enable-smpcoll $tmp_flags"
+    --command-flag "--enable-fortran=all --enable-cxx" \
+    --command-flag "--enable-shared --enable-smpcoll"
 
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
