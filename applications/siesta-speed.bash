@@ -19,5 +19,6 @@ while [ $# -gt 0 ]; do
         pack_set --command "make $(get_make_parallel) $prev"
     fi
 done
+# Asserts that the version.o is updated
 pack_set --command "make $prev"
 
