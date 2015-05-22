@@ -1,12 +1,10 @@
 # Install Python 2 versions
 # apt-get bz2-dev
 v=2.7.9
+add_package --alias python --package python \
+    http://www.python.org/ftp/python/$v/Python-$v.tgz
 if $(is_host n-) ; then
-    add_package --alias python --package Python \
-	http://www.python.org/ftp/python/$v/Python-$v.tgz
-else
-    add_package --alias python --package python \
-	http://www.python.org/ftp/python/$v/Python-$v.tgz
+    pack_set --package Python
 fi
 
 # The settings
