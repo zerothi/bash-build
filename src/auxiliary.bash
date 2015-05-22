@@ -385,9 +385,19 @@ function list {
     done
     local args=""
     while [ $# -gt 0 ]; do
-	args="$args $1"
+	case $1 in
+	    +*)
+		# We gather all requirements to 
+		# make it easy
+		args="$args $(pack_get --mod-req ${1:1:})"
+		;;
+	    *)
+		args="$args $1"
+		;;
+	esac
 	shift
     done
+    args="$(rem_dup $args)"
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
