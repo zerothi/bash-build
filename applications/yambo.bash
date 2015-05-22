@@ -64,7 +64,7 @@ pack_set --command "./configure PFC='$MPIFC' " \
     --command-flag "--with-etsf-io-lib=$(pack_get --LD etsf_io)" \
     --command-flag "--with-netcdf-include=$(pack_get --prefix netcdf)/include" \
     --command-flag "--with-netcdf-lib=$(pack_get --LD netcdf)" \
-    --command-flag "--with-netcdf-link='$(list --INCDIRS --LDFLAGS --Wlrpath netcdf pnetcdf hdf5 zlib) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "--with-netcdf-link='$(list --INCDIRS --LDFLAGS --Wlrpath +netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--with-fftw=$(pack_get --prefix fftw-3)" \
     --command-flag "--with-iotk=\$(pwd)/my_IOTK --with-p2y=5.0"
 

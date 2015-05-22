@@ -33,7 +33,7 @@ done
 pack_set --command "mkdir -p $(pack_get --prefix)/lib/plugins"
 
 cdf_inc="$(list -INCDIRS $(pack_get --mod-req netcdf-serial) netcdf-serial)"
-cdf_lib="$(list -Wlrpath -LDFLAGS $(pack_get --mod-req netcdf-serial) netcdf-serial)"
+cdf_lib="$(list -Wlrpath -LDFLAGS +netcdf-serial)"
 cdf_libs="-lnetcdf -lhdf5_hl -lhdf5 -lz"
 
 add_flags="NETCDFINC='$cdf_inc'"
