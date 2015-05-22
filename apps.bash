@@ -26,6 +26,8 @@ source applications/molden.bash
 source applications/xmgrace.bash
 source applications/xcrysden.bash
 source applications/vmd.bash
+# Installed by source to get python support
+source applications/vmd-python.bash
 source applications/gdis.bash
 source applications/povray.bash
 
