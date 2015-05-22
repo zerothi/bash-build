@@ -34,7 +34,7 @@ for v in 5.1.1 5.1.2 ; do
     fi
 
     # Check for Intel MKL or not
-    tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
+    tmp_lib="FFT_LIBS='$(list --LD-rp fftw-3) -lfftw3'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
@@ -50,7 +50,7 @@ for v in 5.1.1 5.1.2 ; do
 	for la in $(choice linalg) ; do
 	    if [ $(pack_installed $la) -eq 1 ] ; then
 		pack_set --module-requirement $la
-		tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+		tmp_ld="$(list --LD-rp $la)"
 		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
 		tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp_ld -lscalapack'"
 		if [ "x$la" == "xatlas" ]; then
@@ -71,7 +71,7 @@ for v in 5.1.1 5.1.2 ; do
 	--command-flag "$tmp_lib" \
 	--command-flag "FFLAGS='${FCFLAGS//-floop-block/} $FLAG_OMP'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path)) $FLAG_OMP'" \
+	--command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
 	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
 	--command-flag "--enable-parallel --enable-openmp" \
 	--command-flag "--prefix=$(pack_get --prefix)" 

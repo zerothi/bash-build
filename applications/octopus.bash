@@ -29,7 +29,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp="$tmp --with-scalapack='$tmp_ld -lscalapack'"
 	    tmp="$tmp --with-lapack='$tmp_ld -llapack'"
 	    if [ "x$la" == "xatlas" ]; then
@@ -51,14 +51,14 @@ if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
     tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
     --command-flag "--enable-openmp" \
     --command-flag "--enable-utils" \
     --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
     --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
     --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
     --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-    --command-flag "--with-arpack='$(list --LDFLAGS --Wlrpath arpack-ng) -lparpack -larpack'" \
+    --command-flag "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "$tmp"
 
@@ -71,14 +71,14 @@ pack_set_mv_test tmp.test tmp.test.serial
 # prep for the MPI-compilation...
 pack_set --command "rm -rf *"
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
     --command-flag "--enable-mpi" \
     --command-flag "--enable-openmp" \
     --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
     --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
     --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
     --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-    --command-flag "--with-arpack='$(list --LDFLAGS --Wlrpath arpack-ng) -lparpack -larpack'" \
+    --command-flag "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "$tmp"
 

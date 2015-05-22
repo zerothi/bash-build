@@ -26,7 +26,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
+LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
 	    break
 	fi
     done
@@ -36,7 +36,7 @@ fi
 pack_set --command "sed -i '1 a\
 LMETISDIR = $(pack_get --prefix metis) \n\
 IMETIS = $(list --INCDIRS metis) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath metis) -lmetis \n\
+LMETIS = $(list --LD-rp metis) -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\

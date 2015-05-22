@@ -12,7 +12,7 @@ pack_set --module-requirement cython \
     --module-requirement numpy
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial hdf5-serial)"
+tmp_flags="$(list --LD-rp netcdf-serial hdf5-serial)"
 
 file=setup.cfg
 pack_set --command "echo '#' > $file"

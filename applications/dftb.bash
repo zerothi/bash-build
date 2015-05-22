@@ -49,7 +49,7 @@ LNOPT = $FLAG_OMP' $file"
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    pack_set --command "sed -i '$ a\
-LINALG_OPT = $(list --LDFLAGS --Wlrpath $la)\n\
+LINALG_OPT = $(list --LD-rp $la)\n\
 LIB_LAPACK = \$(LINALG_OPT) -llapack\n\
 LIBOPT = \$(LINALG_OPT)\n' $file"
 	    if [ "x$la" == "xatlas" ]; then

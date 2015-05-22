@@ -16,7 +16,7 @@ pack_set --module-requirement hdf5-serial
 pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--without-octave" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath +hdf5-serial)'"
+    --command-flag "LDFLAGS='$(list --LD-rp +hdf5-serial)'"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

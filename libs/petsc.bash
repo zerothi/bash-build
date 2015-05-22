@@ -38,7 +38,7 @@ else
 
 fi
 
-tmp_ld="$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))"
+tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
 
 pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \

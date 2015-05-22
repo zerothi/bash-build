@@ -24,11 +24,11 @@ FC = $MPIFC \n\
 LD = $MPIFC \n\
 AR = $AR -r \n\
 HWLOC_INC = $(list -INCDIRS hwloc) \n\
-HWLOC_LIB = $(list -LDFLAGS -Wlrpath hwloc) \n\
+HWLOC_LIB = $(list --LD-rp hwloc) \n\
 FFTW_INC = $(list -INCDIRS fftw-3) \n\
-FFTW_LIB = $(list -LDFLAGS -Wlrpath fftw-3) \n\
+FFTW_LIB = $(list --LD-rp fftw-3) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
-LIBXC_LIB = $(list -LDFLAGS -Wlrpath libxc) \n\
+LIBXC_LIB = $(list --LD-rp libxc) \n\
 DFLAGS  = -D__FFTW3 -D__HWLOC \n\
 DFLAGS += -D__LIBXC2 -D__parallel -D__SCALAPACK\n\
 DFLAGS += -D__HAS_NO_MPI_MOD \n\
@@ -59,7 +59,7 @@ FCFLAGS += -ffree-form -ffree-line-length-none \n\
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    pack_set --command "sed -i '1 a\
 SCALAPACK_L = $tmp_ld -lscalapack \n\
 ' $file"

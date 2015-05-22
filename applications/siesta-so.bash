@@ -44,7 +44,7 @@ FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 ARFLAGS_EXTRA=\n\
 \n\
 NETCDF_INCFLAGS=$(list --INCDIRS netcdf-serial)\n\
-NETCDF_LIBS=$(list --LDFLAGS --Wlrpath netcdf-serial)\n\
+NETCDF_LIBS=$(list --LD-rp netcdf-serial)\n\
 ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\

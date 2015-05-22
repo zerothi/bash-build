@@ -38,7 +38,7 @@ fi
 # Install commands that it should run
 pack_set --command "../configure --with-threads" \
     --command-flag "--enable-unicode=ucs4" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req) $lib_extra)'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --prefix)"

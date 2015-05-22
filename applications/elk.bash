@@ -30,9 +30,9 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list --LDFLAGS --Wlrpath mpi libxc) -lxcf90 -lxc\n\
+LIB_libxc = $(list --LD-rp mpi libxc) -lxcf90 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
-LIB_FFT = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
+LIB_FFT = $(list --LD-rp fftw-3) -lfftw3\n\
 SRC_FFT = zfftifc.f90\n\
 ' $file"
 
@@ -61,7 +61,7 @@ elif $(is_c gnu) ; then
     done
 
     pack_set --command "sed -i '1 a\
-LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) $tmp\n\
+LIB_LPK = $(list --LD-rp $(pack_get --mod-req)) $tmp\n\
 ' $file"
 
 else

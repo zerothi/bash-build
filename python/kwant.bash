@@ -19,7 +19,7 @@ file=build.conf
 pack_set --command "echo '#' > $file"
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req mumps-serial) mumps-serial) $FLAG_OMP"
+tmp_flags="$(list --LD-rp $(pack_get --mod-req mumps-serial) mumps-serial) $FLAG_OMP"
 if $(is_c gnu) ; then
     tmp_flags="$tmp_flags -lgfortran"
 fi

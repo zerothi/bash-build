@@ -34,9 +34,9 @@ C_LINK = $MPICXX $FLAG_OMP\n\
 C_OPTS = $CFLAGS $FLAG_OMP\n\
 C_DEBUGFLAG = \n\
 REMOVE = rm -f\n\
-FFTWLIB = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3_omp -lfftw3\n\
+FFTWLIB = $(list --LD-rp fftw-3) -lfftw3_omp -lfftw3\n\
 FFTWINCLUDE = $(pack_get --prefix fftw-3)/include\n\
-HDF5LIB = $(list --LDFLAGS --Wlrpath hdf5 zlib) -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lz\n\
+HDF5LIB = $(list --LD-rp hdf5 zlib) -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lz\n\
 HDF5INCLUDE = $(pack_get --prefix hdf5)/include\n\
 TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel\n\
 ' $file"
@@ -55,7 +55,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    pack_set --command "sed -i '$ a\
 COMPFLAG = -DGNU\n\
 F90free += -ffree-form -ffree-line-length-none\n\

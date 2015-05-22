@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
 # Install commands that it should run
 pack_set --command "module load $(pack_get --module-name-requirement mpi) $(pack_get --module-name mpi)"
 
-mpi_flags="$(list -Wlrpath -LDFLAGS mpi)"
+mpi_flags="$(list --LD-rp mpi)"
 for flag in --enable-single nothing ; do
     ext=f
     if [ "$flag" == "nothing" ]; then

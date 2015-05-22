@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --LD)/libslepc.so
 pack_set --module-requirement petsc \
     --module-requirement parpack
 
-tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))"
+tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
 tmp_lib=
 
 if $(is_c intel) ; then
@@ -18,7 +18,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$tmp_ld $(list --LD-rp $la)"
 	    tmp_lib="-llapack"
 	    [ "x$la" == "xatlas" ] && \
 		tmp_lib="$tmp_lib -lf77blas -lcblas"

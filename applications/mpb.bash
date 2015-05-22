@@ -25,7 +25,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp="$tmp --with-lapack='$tmp_ld -llapack'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
@@ -51,7 +51,7 @@ pack_set --command "module load build-tools"
 pack_set --command "autoconf configure.ac > configure"
 pack_set --command "./configure" \
     --command-flag "CC='$MPICC' CXX='$MPICXX'" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path))'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
     --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--with-mpi" \
     --command-flag "--prefix=$(pack_get --prefix) $tmp" 
@@ -64,7 +64,7 @@ pack_set --command "make install"
 pack_set --command "make distclean"
 pack_set --command "./configure" \
     --command-flag "CC=$MPICC CXX=$MPICXX" \
-    --command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path))'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
     --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "--with-inv-symmetry" \
     --command-flag "--with-mpi" \

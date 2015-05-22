@@ -21,13 +21,13 @@ else
 	    pack_set --module-requirement $la
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '1 a\
-LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lf77blas -lcblas -latlas' $file"
+LIBS = $(list --LD-rp $la) -llapack -lf77blas -lcblas -latlas' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lblas' $file"
+LIBS = $(list --LD-rp $la) -llapack -lblas' $file"
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIBS = $(list --LDFLAGS --Wlrpath $la) -llapack -lopenblas' $file"
+LIBS = $(list --LD-rp $la) -llapack -lopenblas' $file"
 	    fi
 	    break
 	fi
@@ -43,10 +43,10 @@ OPT2 = -ffloat-store\n\
 BAGGER = \n\
 RUNF90 = $MPIF90\n\
 RUNCC = $MPICC\n\
-FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+FFLAGS = -I.. $FCFLAGS $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
 BLAS = \n\
 LAPACK = \n\
-CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+CFLAGS = -I.. $CFLAGS $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
 ETIME = \n\
 GULPENV = \n\
 CDABS = cdabs.o\n\

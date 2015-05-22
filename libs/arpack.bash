@@ -67,7 +67,7 @@ else
 	    pack_set --command "sed -i '1 a\
 LAPACKLIB = -llapack\n\
 BLASLIB   = $tmp\n\
-LDFLAGS = $(list --LDFLAGS --Wlrpath $la)\n\
+LDFLAGS = $(list --LD-rp $la)\n\
 ' $file"
 	    break
 	fi

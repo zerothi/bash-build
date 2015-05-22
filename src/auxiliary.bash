@@ -375,6 +375,7 @@ function list {
 	esac
 	shift
 	case $opt in
+	    -LD-rp) opts="$opts --LD-rp" ; 
 	    -prefix|-p)    pre="$1" ; shift ;;
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;

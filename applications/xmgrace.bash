@@ -14,7 +14,7 @@ pack_set --module-requirement netcdf-serial --module-requirement fftw-2
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
     --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path)) $CPPFLAGS'" \
     --command-flag "--enable-netcdf" \

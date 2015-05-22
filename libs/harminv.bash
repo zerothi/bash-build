@@ -18,7 +18,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
 		tmp="-lf77blas -lcblas"

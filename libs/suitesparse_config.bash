@@ -68,8 +68,8 @@ else
 	fi
     done
 
-    pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath $la) $tmp|' $mk"
-    pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LDFLAGS --Wlrpath $la) -llapack|' $mk"
+    pack_set --command "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LD-rp $la) $tmp|' $mk"
+    pack_set --command "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LD-rp $la) -llapack|' $mk"
 
 fi
 

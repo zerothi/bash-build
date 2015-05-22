@@ -20,7 +20,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    tmp="$(list --LD-rp $la) -llapack"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp -lf77blas -lcblas -latlas"
 	    else

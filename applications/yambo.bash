@@ -30,7 +30,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_blas="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_blas="$(list --LD-rp $la)"
 	    tmp_lapack="$tmp_blas -llapack"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp_blas="$tmp_blas -lf77blas -lcblas -latlas"
@@ -64,7 +64,7 @@ pack_set --command "./configure PFC='$MPIFC' " \
     --command-flag "--with-etsf-io-lib=$(pack_get --LD etsf_io)" \
     --command-flag "--with-netcdf-include=$(pack_get --prefix netcdf)/include" \
     --command-flag "--with-netcdf-lib=$(pack_get --LD netcdf)" \
-    --command-flag "--with-netcdf-link='$(list --INCDIRS --LDFLAGS --Wlrpath +netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+    --command-flag "--with-netcdf-link='$(list --INCDIRS --LD-rp +netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--with-fftw=$(pack_get --prefix fftw-3)" \
     --command-flag "--with-iotk=\$(pwd)/my_IOTK --with-p2y=5.0"
 

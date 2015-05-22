@@ -121,7 +121,7 @@ function pack_install {
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp=$(trim_spaces "$(list --LDFLAGS --Wlrpath $mod_reqs_paths)")
+	local tmp=$(trim_spaces "$(list --LD-rp $mod_reqs_paths)")
 	old_fcflags="$FCFLAGS"
 	export FCFLAGS="$(trim_spaces $FCFLAGS) $tmp"
 	old_fflags="$FFLAGS"

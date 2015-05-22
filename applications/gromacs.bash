@@ -27,7 +27,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lf77blas -lcblas -latlas -lgfortran'"
 	    elif [ "x$la" == "xopenblas" ]; then

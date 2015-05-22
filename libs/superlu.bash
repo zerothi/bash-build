@@ -46,7 +46,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-BLASLIB = $(list --LDFLAGS --Wlrpath $la) $tmp\n\
+BLASLIB = $(list --LD-rp $la) $tmp\n\
 ' $file"
 	    break
 	fi

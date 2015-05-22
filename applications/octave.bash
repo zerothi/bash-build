@@ -48,7 +48,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp_flags="$tmp_flags --with-lapack='$tmp_ld -llapack'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
@@ -64,7 +64,7 @@ else
 fi
 
 # Install commands that it should run
-pack_set --command "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))' ../configure $tmp_flags" \
+pack_set --command "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands

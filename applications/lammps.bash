@@ -47,12 +47,12 @@ JPG_LIB = ' $tmp"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+LINKFLAGS =  $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
 else

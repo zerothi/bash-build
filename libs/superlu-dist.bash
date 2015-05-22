@@ -22,8 +22,8 @@ PLAT =\n\
 DSuperLUroot = ..\n\
 DSUPERLULIB = \$(DSuperLUroot)/lib/libsuperlu.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
-METISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lmetis\n\
-PARMETISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis\n\
+METISLIB = $(list --LD-rp parmetis) -lmetis\n\
+PARMETISLIB = $(list --LD-rp parmetis) -lparmetis\n\
 I_PARMETIS = $(list --INCDIRS parmetis)\n\
 LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
@@ -54,7 +54,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-BLASLIB = $(list --LDFLAGS --Wlrpath $la) $tmp\n\
+BLASLIB = $(list --LD-rp $la) $tmp\n\
 ' $file"
 	    break
 	fi

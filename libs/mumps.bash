@@ -32,8 +32,8 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-SCALAP  = $(list --LDFLAGS --Wlrpath $la) -lscalapack \n\
-LIBBLAS = $(list --LDFLAGS --Wlrpath $la) $tmp \n' Makefile.inc"
+SCALAP  = $(list --LD-rp $la) -lscalapack \n\
+LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
 	    break
 	fi
     done
@@ -43,7 +43,7 @@ fi
 pack_set --command "sed -i '$ a\
 LMETISDIR = $(pack_get --prefix $parmetisV) \n\
 IMETIS = $(list --INCDIRS $parmetisV) \n\
-LMETIS = $(list --LDFLAGS --Wlrpath $parmetisV) -lparmetis -lmetis \n\
+LMETIS = $(list --LD-rp $parmetisV) -lparmetis -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\

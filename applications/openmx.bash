@@ -44,13 +44,13 @@ else
 	    pack_set --module-requirement $la
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
+LIB += $(list --LD-rp $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lblas' $file"
+LIB += $(list --LD-rp $la) -lscalapack -llapack -lblas' $file"
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lopenblas_omp' $file"
+LIB += $(list --LD-rp $la) -lscalapack -llapack -lopenblas_omp' $file"
 	    fi
 	    break
 	fi
@@ -77,7 +77,7 @@ fi
 
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 $tmp \n\
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 $tmp \n\
 INCS = $(list --INCDIRS $(pack_get --mod-req-path))' $file"
 
 # prepare the directory of installation

@@ -25,7 +25,7 @@ pack_set --command "../configure" \
     --command-flag "--with-multilib-list=m64"
 
 # Make commands
-pack_set --command "make BOOT_LDFLAGS='$(list --LDFLAGS --Wlrpath gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.2] isl[0.12.2] cloog)' $(get_make_parallel)"
+pack_set --command "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.2] isl[0.12.2] cloog)' $(get_make_parallel)"
 # make check requires autogen installed
 #pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"

@@ -32,7 +32,7 @@ TCL_LIB      = -ltcl8.5\n\
 TK_LIB       = -ltk8.5\n\
 GLU_LIB      = -lGLU\n\
 GL_LIB       = -lGL\n\
-FFTW3_LIB    = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
+FFTW3_LIB    = $(list --LD-rp fftw-3) -lfftw3\n\
 \n\
 # Include directories\n\
 TCL_INCDIR      = \n\

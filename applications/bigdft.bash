@@ -27,7 +27,7 @@ elif $(is_c gnu) ; then
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="-lscalapack -llapack"
-	    tmp="$tmp --with-ext-linalg-path='$(list --LDFLAGS --Wlrpath $la)'"
+	    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp $la)'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
 	    elif [ "x$la" == "xopenblas" ]; then
@@ -62,7 +62,7 @@ pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
     --command-flag "--with-etsf-io-path=$(pack_get --prefix etsf_io)" \
     --command-flag "--with-netcdf-path=$(pack_get --prefix netcdf)" \
     --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--with-libxc-libs='$(list --LDFLAGS --Wlrpath libxc) $xclib'" \
+    --command-flag "--with-libxc-libs='$(list --LD-rp libxc) $xclib'" \
     --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
     --command-flag "$tmp"
 
