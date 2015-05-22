@@ -364,8 +364,6 @@ pack_set --command "module unload $tmp"
 # Save the $file file
 pack_set --command "cp $file ../../"
 
-pack_print
-
 pack_install
 
 create_module \
