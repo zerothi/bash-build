@@ -50,9 +50,11 @@ SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
 ' $file"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
 
     pack_set --command "sed -i '$ a\
 FCFLAGS += -ffree-form -ffree-line-length-none \n\
+SCALAPACK_L = $(list --LD-rp scalapack) -lscalapack \n\
 ' $file"
 
     # We use a c-linker (which does not add gfortran library)
@@ -60,9 +62,6 @@ FCFLAGS += -ffree-form -ffree-line-length-none \n\
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
-	    pack_set --command "sed -i '1 a\
-SCALAPACK_L = $tmp_ld -lscalapack \n\
-' $file"
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '1 a\
 LAPACK_L = $tmp_ld -llapack -lf77blas -lcblas -latlas\n\

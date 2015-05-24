@@ -46,13 +46,14 @@ for v in 5.1.1 5.1.2 ; do
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
+	pack_set --module-requirement scalapack
 
 	for la in $(choice linalg) ; do
 	    if [ $(pack_installed $la) -eq 1 ] ; then
 		pack_set --module-requirement $la
 		tmp_ld="$(list --LD-rp $la)"
 		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
-		tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp_ld -lscalapack'"
+		tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
 		if [ "x$la" == "xatlas" ]; then
 		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
 		elif [ "x$la" == "xopenblas" ]; then

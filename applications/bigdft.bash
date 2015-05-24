@@ -22,12 +22,13 @@ if $(is_c intel) ; then
     tmp="$tmp --with-ext-linalg-path='$MKL_LIB $INTEL_LIB'"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="-lscalapack -llapack"
-	    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp $la)'"
+	    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp scalapack $la)'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
 	    elif [ "x$la" == "xopenblas" ]; then

@@ -36,6 +36,7 @@ elif $(is_c gnu) ; then
     pack_set --command "sed -i '1 a\
 compiler = \"$CC $pCFLAGS \"\n\
 mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
@@ -45,7 +46,7 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
 		tmp="\"f77blas\",\"cblas\","
 	    tmp="$tmp\"$la\""
 	    pack_set --command "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD $la)\"]\n\
+library_dirs += [\"$(pack_get --LD scalapack)\",\"$(pack_get --LD $la)\"]\n\
 libraries = [\"scalapack\",\"lapack\",$tmp,\"gfortran\"]' $file"
 	    break
 	fi

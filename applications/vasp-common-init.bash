@@ -85,12 +85,13 @@ CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
 LINK = $FLAG_OMP $(list --LD-rp mpi)\n\
 LINK = \n\
 DEBUG = \n' $file"
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
 	    pack_set --command "sed -i '$ a\
-SCA = $(list --LD-rp $la) -lscalapack\n\
+SCA = $(list --LD-rp scalapack) -lscalapack\n\
 LAPACK = $(list --LD-rp $la) -llapack\n ' $file"
 	    
 	    if [ "x$la" == "xatlas" ]; then

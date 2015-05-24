@@ -23,6 +23,7 @@ SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential 
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
@@ -32,7 +33,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-SCALAP  = $(list --LD-rp $la) -lscalapack \n\
+SCALAP  = $(list --LD-rp scalapack) -lscalapack \n\
 LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
 	    break
 	fi

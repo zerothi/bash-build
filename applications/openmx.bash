@@ -38,19 +38,20 @@ if $(is_c intel) ; then
     LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LD-rp $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LD-rp $la) -lscalapack -llapack -lblas' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lblas' $file"
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LD-rp $la) -lscalapack -llapack -lopenblas_omp' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lopenblas_omp' $file"
 	    fi
 	    break
 	fi

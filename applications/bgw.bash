@@ -50,12 +50,13 @@ SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
 ' $file"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
 
     # We use a c-linker (which does not add gfortran library)
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LD-rp $la)"
+	    tmp_ld="$(list --LD-rp scalapack $la)"
 	    pack_set --command "sed -i '$ a\
 COMPFLAG = -DGNU\n\
 F90free += -ffree-form -ffree-line-length-none\n\

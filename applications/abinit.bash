@@ -67,6 +67,7 @@ with_linalg_libs=\"$tmp\"\n' $file"
     pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
+    pack_set --module-requirement scalapack
     
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
@@ -80,7 +81,7 @@ else
 	    fi
 	    pack_set --command "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS $la)\"\n\
-with_linalg_libs=\"$(list --LD-rp $la) -lscalapack -llapack $tmp\"\n' $file"
+with_linalg_libs=\"$(list --LD-rp scalapack $la) -lscalapack -llapack $tmp\"\n' $file"
 	    break
 	fi
     done

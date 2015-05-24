@@ -22,7 +22,7 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
 
 else
-
+    pack_set --module-requirement scalapack
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
@@ -31,11 +31,10 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    tmp="--with-lapack-lib='-llapack' --with-blas-lib='$tmp'"
-	    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix $la)"
 	    break
 	fi
     done
-
+    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix scalapack)"
 fi
 
 tmp_ld="$(list --LD-rp $(pack_get --mod-req))"

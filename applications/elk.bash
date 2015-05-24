@@ -44,6 +44,7 @@ LIB_LPK = $tmp\n\
 ' $file"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then

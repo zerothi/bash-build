@@ -26,6 +26,8 @@ if $(is_c intel) ; then
     tmp_scalapack="$tmp_blas"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
+    tmp_scalapack="$(list --LD-rp scalapack)"
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
