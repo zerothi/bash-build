@@ -35,6 +35,8 @@ declare -A _reject_host
 # A variable that contains all the hosts that it will be installed on
 declare -A _only_host
 # Logical variable determines whether the package has been installed
+_I_REQ=4 # an internal module only used for its custom dependency list
+         # it does not contain any paths itself
 _I_LIB=3 # an internal module only used for its library path
 _I_MOD=2 # a module supplied from outside, it does not contain paths
 _I_INSTALLED=1 # the package has been installed
