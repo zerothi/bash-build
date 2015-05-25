@@ -19,7 +19,7 @@ pack_set --command "module unload $tmp"
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "CFLAGS='$CFLAGS $(list ---LD-rp gen-zlib)'" \
+    --command-flag "CFLAGS='$CFLAGS $(list --LD-rp gen-zlib)'" \
     --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)" \
     --command-flag "--prefix=$(pack_get --prefix)"
 

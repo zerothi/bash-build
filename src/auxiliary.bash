@@ -368,7 +368,7 @@ function list {
     # First we collect all options
     local opts="" ; local space=" "
     while : ; do
-	local opt=$(trim_em $1) # Save the option passed
+	local opt="$(trim_em $1)"
 	case $opt in
 	    -*) ;;
 	    *)  break ;;
