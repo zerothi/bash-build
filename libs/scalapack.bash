@@ -26,7 +26,6 @@ if $(is_c intel) && ! $(is_host eris) ; then
 fi
 
 pack_set --command "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --LD-rp blas) -lblas?g' $file"
-fi
 pack_set --command "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LD-rp blas) -llapack|g' $file"
 
 pack_set --command "make $(get_make_parallel)"
