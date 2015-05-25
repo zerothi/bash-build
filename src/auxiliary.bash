@@ -246,7 +246,15 @@ function vrs_cmp {
 #
 # Example:
 #  $(lc fOObaR) == foobar
-function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
+function lc {
+    local l="${1,,}" ; shift
+    while : ; do
+	_ps "$l"
+	[ $# -eq 0 ] && break
+	l=" ${1,,}" ; shift
+    done
+}
+#function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
 
 # Returns the file time in a simple format
 function get_file_time {
