@@ -5,7 +5,10 @@ function pack_install {
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
     fi
-    local tmp=$(lc $(pack_get --alias $idx))
+    local alias=$(pack_get --alias $idx)
+    local prefix=$(pack_get --prefix $idx)
+
+    local tmp=$(lc $alias)
     if [ ${#_pack_only[@]} -gt 0 ]; then
 	if [ 0${_pack_only[$tmp]} -eq 1 ]; then
 	    pack_only $(pack_get --mod-req-all $idx)
@@ -110,11 +113,11 @@ function pack_install {
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting module-preload $idx) ; then
 	    create_module --force \
-		-n "$(pack_get --alias $idx)" \
+		-n "$alias" \
 		-v "$(pack_get --version $idx)" \
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$(pack_get --prefix $idx)"
+		-P "$prefix"
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
@@ -147,19 +150,20 @@ function pack_install {
         # Extract the archive
 	pushd $(build_get --build-path) 1> /dev/null
 	[ $? -ne 0 ] && exit 1
+
 	# Remove directory if already existing
-	local d=$(pack_get --directory $idx)
-	if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
-	    rm -rf $(pack_get --directory $idx)
+	local directory=$(pack_get --directory $idx)
+	if [ "x$directory" != "x." ] && [ "x$directory" != "x./" ]; then
+	    rm -rf $directory
 	fi
 	extract_archive $(build_get --archive-path) $idx
-	pushd $(pack_get --directory $idx) 1> /dev/null
+	pushd $directory 1> /dev/null
 	[ $? -ne 0 ] && exit 1
 
         # We are now in the package directory
 	if $(has_setting build-dir $idx) ; then
 	    rm -rf build-tmp ; mkdir -p build-tmp ; popd 1> /dev/null 
-	    pushd $(pack_get --directory $idx)/build-tmp 1> /dev/null
+	    pushd $directory/build-tmp 1> /dev/null
 	fi
 	
 	# Run all commands
@@ -174,9 +178,8 @@ function pack_install {
 	popd 1> /dev/null
 
         # Remove compilation directory
-	local d=$(pack_get --directory $idx)
-	if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
-	    rm -rf $(pack_get --directory $idx)
+	if [ "x$directory" != "x." ] && [ "x$directory" != "x./" ]; then
+	    rm -rf $directory
 	fi
 	
 	popd 1> /dev/null
@@ -210,7 +213,7 @@ function pack_install {
     # We favour lib64
     if [ ! -d $(pack_get -LD $idx) ]; then
 	for cmd in lib lib64 ; do
-	    if [ -d $(pack_get --prefix $idx)/$cmd ]; then
+	    if [ -d $prefix/$cmd ]; then
 		pack_set --library-suffix $cmd $idx
 	    fi
 	done
@@ -222,11 +225,11 @@ function pack_install {
 	if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
             # We install the module scripts here:
 	    create_module \
-		-n "$(pack_get --alias $idx)" \
+		-n "$alias" \
 		-v "$(pack_get --version $idx)" \
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$(pack_get --prefix $idx)" $reqs $(pack_get --module-opt $idx)
+		-P "$prefix" $reqs $(pack_get --module-opt $idx)
 	fi
     fi
     [ $DEBUG -ne 0 ] && do_debug --return pack_install
