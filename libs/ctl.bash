@@ -2,7 +2,7 @@
 add_package http://ab-initio.mit.edu/libctl/libctl-3.2.1.tar.gz
 
 pack_set \
-    $(list --prefix "--host-reject " ntch zeroth hemera eris ponto)
+    $(list --prefix "--host-reject " ntch zeroth)
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

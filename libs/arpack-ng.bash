@@ -39,8 +39,4 @@ pack_set --command "./configure" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
-#if ! $(is_host eris) ; then
-#	pack_set --command "make check > tmp.test 2>&1"
-#	pack_set_mv_test tmp.test
-#fi
 pack_set --command "make install"

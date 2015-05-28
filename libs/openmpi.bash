@@ -17,12 +17,6 @@ if $(is_host n-) ; then # enables the linking to the torque management system
 elif $(is_host surt muspel slid) ; then
     tmp_flags="CPPFLAGS='-I/usr/local/include' --with-verbs-libdir=/usr/lib64"
     
-elif $(is_host hemera ponto) ; then
-    tmp_flags="CPPFLAGS='-I/software/torque/include' --with-verbs-libdir=/usr/lib64"
-    
-elif $(is_host eris) ; then
-    tmp_flags="CPPFLAGS='-I/software/torque-cpuset/eris/3.0.5/include'"
-    
 fi
 
 if [ $(pack_installed flex) -eq 1 ]; then
@@ -41,11 +35,8 @@ pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host hemera eris) ; then
-    # hemera eris has problems with nfs file system...
-    pack_set --command "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test
-fi
+pack_set --command "make check > tmp.test 2>&1"
+pack_set_mv_test tmp.test
 pack_set --command "make install"
 
 if [ $(pack_installed flex) -eq 1 ] ; then

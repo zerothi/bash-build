@@ -11,8 +11,3 @@ pack_set --library-suffix lib64
 # Make commands
 pack_set --command "make OPT_CFLAGS='$CFLAGS' LDFLAGS='$(list --LD-rp numactl)' PREFIX=$(pack_get --prefix)"
 pack_set --command "make install PREFIX=$(pack_get --prefix)"
-
-if $(is_host eris) ; then
-    pack_install
-    pack_set --mod-rem gcc-4.7.2
-fi

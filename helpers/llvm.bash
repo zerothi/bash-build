@@ -5,8 +5,6 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set $(list --prefix "--host-reject " hemera eris ponto)
-
 pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
 pack_set $(list -p '-mod-req ' gen-libxml2 gen-libffi cloog gmp)

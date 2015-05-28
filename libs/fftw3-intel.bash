@@ -7,7 +7,6 @@ add_package --build vendor-intel \
 
 pack_set --directory .
 pack_set --module-requirement fftw[intel]
-pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 # Notice that we install this along with fftw2 from intel
 # The names are not overlapping, hence we do not need

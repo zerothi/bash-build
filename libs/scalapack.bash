@@ -21,7 +21,7 @@ pack_set --command "$tmp 's/CCFLAGS[[:space:]]*=.*/CCFLAGS = $CFLAGS/g' $file"
 pack_set --command "$tmp 's/ARCH[[:space:]]*=.*/ARCH = $AR/g' $file"
 
 tmp_lib=
-if $(is_c intel) && ! $(is_host eris) ; then
+if $(is_c intel) ; then
     tmp_lib="-lgfortran"
 fi
 

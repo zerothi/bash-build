@@ -4,9 +4,6 @@ add_package http://prdownloads.sourceforge.net/scons/scons-2.3.2.tar.gz
 
 pack_set -s $IS_MODULE
 
-# Do not install here
-pack_set $(list --prefix '--host-reject ' hemera eris)
-
 pack_set --install-query $(pack_get --prefix)/bin/scons
 
 # Install commands that it should run

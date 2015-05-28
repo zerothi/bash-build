@@ -5,7 +5,6 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
-pack_set $(list -p "--host-reject " hemera eris ponto)
 pack_set --host-reject $(get_hostname)
 
 pack_set --command "unset F90"

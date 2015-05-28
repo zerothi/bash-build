@@ -10,8 +10,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 if $(is_c intel) ; then
     pack_set --host-reject $(hostname)
 fi
-pack_set $(list --prefix "--host-reject " hemera eris ponto)
-
 pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
 pack_set --module-requirement gen-zlib \

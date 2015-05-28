@@ -3,8 +3,6 @@ add_package --build generic \
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix "--host-reject " hemera eris)
-
 pack_set --module-opt "--lua-family graphviz"
 
 pack_set --module-requirement gen-zlib

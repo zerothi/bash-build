@@ -29,7 +29,7 @@ pack_set --command "../configure" \
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n- hemera eris ponto surt muspel slid) ; then
+if ! $(is_host n- surt muspel slid) ; then
   pack_set --command "make check-s > tmp.test 2>&1"
   pack_set_mv_test tmp.test tmp.test.s
 fi

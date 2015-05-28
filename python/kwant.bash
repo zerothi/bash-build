@@ -6,8 +6,6 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/kwant/__init__.py
 
-pack_set --host-reject eris
-
 pack_set --module-opt "--lua-family kwant"
 
 pack_set --module-requirement cython \

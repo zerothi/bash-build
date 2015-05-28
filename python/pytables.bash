@@ -6,7 +6,6 @@ add_package \
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/ptdump
-pack_set --host-reject eris
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5-serial \

@@ -21,9 +21,6 @@ pack_set --install-query $(pack_get --prefix)/bin/python
 if ! $(is_host ntch-) ; then
     pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
 fi
-if $(is_host eris) ; then
-    pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/lib64/python2.7/lib-dynload"
-fi
 
 pCFLAGS="$CFLAGS"
 tmp=
@@ -53,7 +50,7 @@ pack_set --command "make $(get_make_parallel)"
 #    done
 #fi
 
-if $(is_host n- slid muspel surt hemera eris) ; then
+if $(is_host n- slid muspel surt) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
@@ -65,7 +62,7 @@ else
     pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-if ! $(is_host n- slid muspel surt hemera eris) ; then
+if ! $(is_host n- slid muspel surt) ; then
     pack_set_mv_test tmp.test
 fi
 
