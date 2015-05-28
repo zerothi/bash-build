@@ -91,7 +91,6 @@ source src/install.bash
 source src/module.bash
 
 
-
 # Function for editing environment variables
 # Mainly used for receiving and appending to variables
 function edit_env {

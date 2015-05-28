@@ -27,16 +27,17 @@ fi
 # Make install lua
 pack_set --command "make install INSTALL_TOP=$(pack_get --prefix)"
 
+pack_install
 lua_V=5.3
 
 # Source all the lua-packages that will be installed
-source lua/rocks.bash
-source lua/filesystem.bash
-source lua/posix.bash
-source lua/mathx.bash
-source lua/strip.bash
-source lua/complex.bash
-source lua/penlight.bash
-source lua/peg.bash
-source lua/lmod.bash
+source_pack lua/rocks.bash
+source_pack lua/filesystem.bash
+source_pack lua/posix.bash
+source_pack lua/mathx.bash
+source_pack lua/strip.bash
+source_pack lua/complex.bash
+source_pack lua/penlight.bash
+source_pack lua/peg.bash
+source_pack lua/lmod.bash
 

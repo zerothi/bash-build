@@ -1,6 +1,6 @@
 #!/bin/bash -i
 
-tmp=`pwd`
+_top_dir=`pwd`
 
 source ~/.bashrc
 module purge
@@ -9,8 +9,7 @@ module purge
 export OMP_NUM_THREADS=1
 
 # On thul and interactive nodes, sourching leads to going back
-cd $tmp
-unset tmp
+cd $_top_dir
 
 # We have here the installation of all the stuff for gray....
 source install_funcs.sh
@@ -168,9 +167,6 @@ source default.bash
 
 # Add the latest modules
 source latest.bash
-
-# We always need to finish by installing the last package
-pack_install
 
 msg_install --message "Finished installing all applications..."
 

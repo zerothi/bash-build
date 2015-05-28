@@ -52,7 +52,6 @@ declare -A _index
 # The counter to hold the archives
 _N_archives=-1
 
-
 # This function takes one argument
 # It is the name of the module that is "hidden", i.e. not
 # installed by these scripts. 
@@ -95,6 +94,76 @@ function add_test_package {
     fi
 }
 
+# Routine for sourcing a package file
+function source_pack {
+    local f=$1 ; shift
+    local i
+    local fp=$(basename $f)
+    fp=${fp%.*}
+
+    # Get current reached index
+    local cur_idx=$_N_archives
+
+    # Source the file
+    source $f
+
+    # Subsequently figure out if any excludes exists
+
+    # 1. read any global reject
+    local rej=donotexist
+    [ -e $_top_dir/local.reject ] && rej=$_top_dir/local.reject
+    [ -e $_top_dir/.reject ] && rej=$_top_dir/.reject
+    local -a lines=()
+    if [ -e $rej ]; then
+	read -d '\n' -a lines < $rej
+	set_reject_list ${lines[@]}
+    fi
+
+    # Reject based on compiler
+    rej=donotexist
+    [ -e $_top_dir/$(get_c).reject ] && rej=$_top_dir/$(get_c).reject
+    [ -e $_top_dir/.$(get_c).reject ] && rej=$_top_dir/.$(get_c).reject
+    local -a lines=()
+    if [ -e $rej ]; then
+	read -d '\n' -a lines < $rej
+	set_reject_list ${lines[@]}
+    fi
+
+    # Reject based on compiler and version
+    rej=donotexist
+    [ -e $_top_dir/$(get_c -n).reject ] && rej=$_top_dir/$(get_c -n).reject
+    [ -e $_top_dir/.$(get_c -n).reject ] && rej=$_top_dir/.$(get_c -n).reject
+    local -a lines=()
+    if [ -e $rej ]; then
+	read -d '\n' -a lines < $rej
+	set_reject_list ${lines[@]}
+    fi
+
+    # Try and install the just added packages
+    i=$cur_idx
+    let i++
+    while [ $i -le $_N_archives ]; do
+	pack_install $i
+	let i++
+    done    
+}
+
+# Parameters are used to create rejections
+# Handy when reading a file containing rejections
+function set_reject_list {
+    local v
+    local idx
+    while [ $# -gt 0 ]; do
+	idx=$(get_index -a $1)
+	if [ $? -eq 0 ]; then
+	    for v in $idx ; do
+		# No error, we have the index
+		pack_set --host-reject $(get_hostname) $v
+	    done
+	fi
+	shift
+    done
+}
 
 # Routine for shortcutting a list of values
 # through the pack_get 
@@ -125,11 +194,6 @@ function pack_list {
 # $1 http path
 function add_package {
     [ $DEBUG -ne 0 ] && do_debug --enter add_package
-    # If we have immediate install we check to see if we
-    # should install the previous package.
-    if [ $_N_archives -ge 0 ]; then
-	pack_install $_N_archives
-    fi
 
     # Increment contained packages
     let _N_archives++
@@ -151,6 +215,7 @@ function add_package {
 	    -directory|-d) d=$1 ; shift ;;
 	    -version|-v) v=$1 ; shift ;;
 	    -package|-p) package=$1 ; shift ;;
+	    -alias|-a) alias=$1 ; shift ;;
 	    -no-default-modules) no_def_mod=1 ;;
 	    -lib-path|-lp) lp=$1 ; shift
 		case $lp in
@@ -160,7 +225,6 @@ function add_package {
 		    *) # do nothing
 			;;
 		esac ;;
-	    -alias|-a) alias=$1 ; shift ;;
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
     done
@@ -524,7 +588,7 @@ function pack_installed {
     local idx
     idx=$(get_index $ret)
     if [ $? -ne 0 ]; then
-	ret=0
+	ret=$_I_REJECT
     else
 	ret=$(pack_get --installed $idx)
 	[ -z "$ret" ] && ret=0

@@ -25,8 +25,8 @@ fi
     
 add_package --build vendor \
     --version ${v//-/.} \
-    --package acml \
     --alias acml-install \
+    --package acml \
     --directory ./ \
     http://www.student.dtu.dk/~nicpa/packages/acml-$v-$c-64bit.tgz
 
@@ -58,8 +58,7 @@ tmp=${tmp//ifort/intel}
 
 add_package --build vendor \
     --version ${v//-/.} \
-    --alias acml-$tmp \
-    --package acml \
+    --package acml-$tmp \
     --directory ./ \
     acml.local
 

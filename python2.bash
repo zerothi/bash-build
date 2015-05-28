@@ -69,6 +69,7 @@ if ! $(is_host n- slid muspel surt hemera eris) ; then
     pack_set_mv_test tmp.test
 fi
 
+# Needed as it is not source_pack
 pack_install
 
 create_module \

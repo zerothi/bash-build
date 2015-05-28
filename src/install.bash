@@ -273,11 +273,20 @@ function get_index {
     if [ -z "$idx" ]; then
 	return 1
     fi
+    local v
     if [ $all -eq 1 ]; then
-	_ps "$idx"
+	if [ ! -z "$version" ]; then
+	    for v in $idx ; do
+		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
+		    _ps "$v"
+		    break
+		fi
+	    done
+	else
+	    _ps "$idx"
+	fi
 	return 0
     else
-	local v=""
 	i=-1
         # Select the latest per default..
 	for v in $idx ; do

@@ -39,110 +39,108 @@ build_set --default-build python$IpV
 build_set --default-choice[python$IpV] linalg openblas atlas blas
 
 # Python building utility
-source python/scons.bash
+source_pack python/scons.bash
 
 # Install the helper (mongodb)
-source helpers/mongo.bash
+source_pack helpers/mongo.bash
 
-source python/setuptools.bash
+source_pack python/setuptools.bash
 
 # Used for many packages
-source python/nose.bash
+source_pack python/nose.bash
 
 # Packages installed in "python-home"
-source python/pkgconfig.bash
-source python/pyparsing.bash
-source python/backports.bash
-source python/certifi.bash
-source python/tornado.bash # backports, certifi
-source python/six.bash
-source python/docutils.bash
-source python/dateutil.bash
-source python/pygments.bash
-source python/fastimport.bash
-source python/pexpect.bash
-source python/pycparser.bash
-source python/pyzmq.bash
-source python/mistune.bash
+source_pack python/pkgconfig.bash
+source_pack python/pyparsing.bash
+source_pack python/backports.bash
+source_pack python/certifi.bash
+source_pack python/tornado.bash # backports, certifi
+source_pack python/six.bash
+source_pack python/docutils.bash
+source_pack python/dateutil.bash
+source_pack python/pygments.bash
+source_pack python/fastimport.bash
+source_pack python/pexpect.bash
+source_pack python/pycparser.bash
+source_pack python/pyzmq.bash
+source_pack python/mistune.bash
 
-source python/jsonschema.bash
-source python/markupsafe.bash
-source python/jinja2.bash
-source python/sphinx.bash # jinja2
-source python/pytz.bash
-source python/pysqlite.bash
-source python/ipython.bash
-source python/monty.bash
-source python/pyyaml.bash
-source python/mock.bash # only for python 2
+source_pack python/jsonschema.bash
+source_pack python/markupsafe.bash
+source_pack python/jinja2.bash
+source_pack python/sphinx.bash # jinja2
+source_pack python/pytz.bash
+source_pack python/pysqlite.bash
+source_pack python/ipython.bash
+source_pack python/monty.bash
+source_pack python/pyyaml.bash
+source_pack python/mock.bash # only for python 2
 
-source python/pandoc.bash
+source_pack python/pandoc.bash
 
 # Done with packages only installed in python-home! ^
 
-source python/pymongo.bash
-source python/fireworks.bash
+source_pack python/pymongo.bash
+source_pack python/fireworks.bash
 
-source python/cython.bash
-source python/cffi.bash
+source_pack python/cython.bash
+source_pack python/cffi.bash
 
-source python/bzr.bash
-source python/bzr-fastimport.bash
+source_pack python/bzr.bash
+source_pack python/bzr-fastimport.bash
 
 # Units in python
-#source python/pint.bash
+#source_pack python/pint.bash
 
 # Generic scientific libraries
-source python/mpi4py.bash
-source python/numpy.bash
-source python/netcdf4.bash
-source python/scipy.bash
-source python/numexpr.bash
-source python/scientificpython.bash
-source python/matplotlib.bash
-source python/bottleneck.bash
-source python/sympy.bash
-source python/h5py.bash # [numpy,hdf5-serial]
-source python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
-source python/pandas.bash
-source python/pyamg.bash
-source python/petsc4py.bash
-source python/slepc4py.bash
+source_pack python/mpi4py.bash
+source_pack python/numpy.bash
+source_pack python/netcdf4.bash
+source_pack python/scipy.bash
+source_pack python/numexpr.bash
+source_pack python/scientificpython.bash
+source_pack python/matplotlib.bash
+source_pack python/bottleneck.bash
+source_pack python/sympy.bash
+source_pack python/h5py.bash # [numpy,hdf5-serial]
+source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
+source_pack python/pandas.bash
+source_pack python/pyamg.bash
+source_pack python/petsc4py.bash
+source_pack python/slepc4py.bash
 
-source python/krypy.bash
-source python/pygsl.bash
+source_pack python/krypy.bash
+source_pack python/pygsl.bash
 
 # Other scikit-programs
-source python/scikit-learn.bash
-source python/scikit-optimization.bash
-#source python/scikit-nano.bash
+source_pack python/scikit-learn.bash
+source_pack python/scikit-optimization.bash
+#source_pack python/scikit-nano.bash
 
 # Must be installed after numpy
-source python/llvmpy.bash
-source python/llvmmath.bash
-source python/numba-0.15.bash
+source_pack python/llvmpy.bash
+source_pack python/llvmmath.bash
+source_pack python/numba-0.15.bash
 
 # Later versions of numba
-source python/llvmlite.bash
-source python/numba.bash
+source_pack python/llvmlite.bash
+source_pack python/numba.bash
 
 # Physics related python modules
-source python/inelastica.bash
-source python/inelastica-dev.bash
-source python/inelastica-matt.bash
+source_pack python/inelastica.bash
+source_pack python/inelastica-dev.bash
+source_pack python/inelastica-matt.bash
 
-source python/qutip.bash # [numpy,scipy,cython,matplotlib]
-source python/ase.bash
-source python/gpaw.bash
-source python/gpaw-setups.bash
+source_pack python/qutip.bash # [numpy,scipy,cython,matplotlib]
+source_pack python/ase.bash
+source_pack python/gpaw.bash
+source_pack python/gpaw-setups.bash
 
-source python/pythtb.bash
-source python/phonopy.bash
+source_pack python/pythtb.bash
+source_pack python/phonopy.bash
 
 # made for kwant
-source python/tinyarray.bash
-source python/kwant.bash
-
-pack_install
+source_pack python/tinyarray.bash
+source_pack python/kwant.bash
 
 build_set --default-build $def_idx
