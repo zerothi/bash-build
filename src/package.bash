@@ -108,36 +108,18 @@ function source_pack {
     source $f
 
     # Subsequently figure out if any excludes exists
+    local rej
+    local -a lines=()
 
     # 1. read any global reject
-    local rej=donotexist
-    [ -e $_top_dir/local.reject ] && rej=$_top_dir/local.reject
-    [ -e $_top_dir/.reject ] && rej=$_top_dir/.reject
-    local -a lines=()
-    if [ -e $rej ]; then
-	read -d '\n' -a lines < $rej
-	set_reject_list ${lines[@]}
-    fi
-
-    # Reject based on compiler
-    rej=donotexist
-    [ -e $_top_dir/$(get_c).reject ] && rej=$_top_dir/$(get_c).reject
-    [ -e $_top_dir/.$(get_c).reject ] && rej=$_top_dir/.$(get_c).reject
-    local -a lines=()
-    if [ -e $rej ]; then
-	read -d '\n' -a lines < $rej
-	set_reject_list ${lines[@]}
-    fi
-
-    # Reject based on compiler and version
-    rej=donotexist
-    [ -e $_top_dir/$(get_c -n).reject ] && rej=$_top_dir/$(get_c -n).reject
-    [ -e $_top_dir/.$(get_c -n).reject ] && rej=$_top_dir/.$(get_c -n).reject
-    local -a lines=()
-    if [ -e $rej ]; then
-	read -d '\n' -a lines < $rej
-	set_reject_list ${lines[@]}
-    fi
+    for rej in local.reject .reject \
+	$(get_c -n).reject .$(get_c -n).reject
+    do
+	if [ -e $rej ]; then
+	    read -d '\n' -a lines < $rej
+	    set_reject_list ${lines[@]}
+	fi
+    done
 
     # Try and install the just added packages
     i=$cur_idx
