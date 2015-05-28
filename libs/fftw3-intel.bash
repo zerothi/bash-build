@@ -6,7 +6,8 @@ add_package --build vendor-intel \
     fftw_intel-3.local
 
 pack_set --directory .
-pack_set $(list -p '--host-reject ' surt muspel slid hemera eris ponto)
+pack_set --module-requirement fftw[intel]
+pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 # Notice that we install this along with fftw2 from intel
 # The names are not overlapping, hence we do not need

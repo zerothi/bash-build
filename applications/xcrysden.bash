@@ -3,7 +3,7 @@
 
 add_package http://www.xcrysden.org/download/xcrysden-1.5.60.tar.gz
 
-pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris)
+pack_set $(list --prefix "--host-reject " hemera eris)
 
 pack_set --install-query $(pack_get --prefix)/bin/xcrysden
 

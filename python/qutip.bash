@@ -10,7 +10,7 @@ add_package --directory qutip-2.2.0 $p
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix '--host-reject ' surt muspel slid ntch zeroth hemera eris)
+pack_set $(list --prefix '--host-reject ' ntch zeroth hemera eris)
 
 p_name=$(lc $(pack_get --alias))
 p_name=${p_name//-DEV/}

@@ -3,8 +3,7 @@ add_package \
     --package mpb-serial \
     http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
 
-pack_set --host-reject ntch --host-reject zeroth \
-    $(list --prefix "--host-reject " surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0)
+pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/mpbi
 

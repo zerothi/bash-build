@@ -7,7 +7,7 @@ add_package --build vendor-intel \
     fftw-2.local
 
 pack_set --directory .
-pack_set $(list -p '--host-reject ' surt muspel slid hemera)
+pack_set $(list -p '--host-reject ' hemera)
 
 pack_set -s $IS_MODULE
 
