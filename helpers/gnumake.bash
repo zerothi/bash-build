@@ -13,8 +13,6 @@ if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 
-pack_set --host-reject "n-"
-
 # Install commands that it should run
 pack_set --command "./configure" \
     --command-flag "--prefix $(pack_get --prefix)"
