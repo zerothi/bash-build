@@ -48,7 +48,7 @@ pack_set --command "make install"
 
 
 # Install the FORTRAN headers
-vf=4.4.1
+vf=4.4.2
 add_package --archive netcdf-fortran-$vf.tar.gz \
     --package netcdf-fortran-logging \
     https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
