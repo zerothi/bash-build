@@ -38,8 +38,9 @@ CDEFS    = -DAdd_\n\
 ' $file"
 
 if $(is_c intel) ; then
-    pack_set --command "sed -i '1 a\
+    pack_set --command "sed -i '$ a\
 BLASLIB = -mkl=sequential\n\
+CFLAGS += -std=c99\n\
 ' $file"
     
 else

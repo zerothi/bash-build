@@ -32,9 +32,10 @@ function get_c {
 # Takes one argument:
 # #1 : the compiler string to search from the beginning of the compiler-name...
 function is_c {
-    local check="$1"
+    local check="$1" ; shift
     local l="${#check}"
-    if [ "x${_c:0:$l}" == "x$check" ]; then
+    local c=$(get_c)
+    if [ "x${c:0:$l}" == "x$check" ]; then
 	return 0
     fi
     return 1
