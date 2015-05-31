@@ -28,7 +28,7 @@ pack_set \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--disable-dap" \
-    --command-flag "--disable-shared" \
+    --command-flag "--enable-shared" \
     --command-flag "--enable-static" \
     --command-flag "--enable-logging" \
     --command-flag "--enable-pnetcdf" \
@@ -46,6 +46,7 @@ pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 #pack_set_mv_test tmp.test tmp.test.c
 
+pack_install
 
 # Install the FORTRAN headers
 vf=4.4.2
@@ -70,7 +71,7 @@ pack_set --command "../configure" \
     --command-flag "CPPFLAGS='$tmp_cppflags -DLOGGING $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
     --command-flag "LIBS='$(list --LD-rp $(pack_get --mod-req-path)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--disable-shared" \
+    --command-flag "--enable-shared" \
     --command-flag "--enable-static"
 
 # Make commands
