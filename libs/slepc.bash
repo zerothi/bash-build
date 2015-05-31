@@ -33,6 +33,7 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS'" \
     --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS'" \
     --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS'" \
+    --command-flag "F90='$MPIF90'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld $tmp_lib'" \
     --command-flag "AR=$AR" \

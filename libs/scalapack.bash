@@ -13,12 +13,12 @@ pack_set --module-requirement mpi
 tmp="sed -i -e"
 file=SLmake.inc
 pack_set --command "cp $file.example $file"
-pack_set --command "$tmp 's/FC[[:space:]]*=.*/FC = $MPIF90/g' $file"
-pack_set --command "$tmp 's/CC[[:space:]]*=.*/CC = $MPICC/g' $file"
-pack_set --command "$tmp 's/NOOPT[[:space:]]*=.*/NOOPT = -fPIC/g' $file"
-pack_set --command "$tmp 's/FCFLAGS[[:space:]]*=.*/FCFLAGS = $FCFLAGS/g' $file"
-pack_set --command "$tmp 's/CCFLAGS[[:space:]]*=.*/CCFLAGS = $CFLAGS/g' $file"
-pack_set --command "$tmp 's/ARCH[[:space:]]*=.*/ARCH = $AR/g' $file"
+pack_set --command "$tmp 's;FC[[:space:]]*=.*;FC = $MPIF90;g' $file"
+pack_set --command "$tmp 's;CC[[:space:]]*=.*;CC = $MPICC;g' $file"
+pack_set --command "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC;g' $file"
+pack_set --command "$tmp 's;FCFLAGS[[:space:]]*=.*;FCFLAGS = $FCFLAGS;g' $file"
+pack_set --command "$tmp 's;CCFLAGS[[:space:]]*=.*;CCFLAGS = $CFLAGS;g' $file"
+pack_set --command "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"
 
 tmp_lib=
 if $(is_c intel) ; then
