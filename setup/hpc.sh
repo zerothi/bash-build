@@ -6,7 +6,7 @@
     echo abinit
     echo gdis
     echo gromacs
-    echo gnumake
+    echo make
     echo llvm
     echo meep
     echo meep-serial
@@ -15,10 +15,13 @@
     echo mpich
     echo pandas
     echo scons
+    echo luaposix
+    echo lmod
 } > ../local.reject
 
 {
     echo tinyarray
+    echo openblas
 } > ../intel.reject
 
 {

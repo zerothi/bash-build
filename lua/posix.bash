@@ -4,7 +4,7 @@
 #  libncurses5/libncurses5-dev (or just a curses header)
 
 v=33.3.1
-add_package --build generic \
+add_package --build generic --package luaposix \
     --archive luaposix-release-v$v.tar.gz \
     https://github.com/luaposix/luaposix/archive/release-v$v.tar.gz
 
