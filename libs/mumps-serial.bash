@@ -122,5 +122,5 @@ OPTC += $FLAG_OMP\n' Makefile.inc"
 pack_set --command "make $(get_make_parallel) alllib"
 pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
 pack_set --command "cd lib"
-pack_set --command 'for l in lib*.a ; do cp $l $(pack_get --LD)/${l//.a/_omp.a} ; done'
+pack_set --command "for l in lib*.a ; do cp \$l $(pack_get --LD)/\${l//.a/_omp.a} ; done"
 
