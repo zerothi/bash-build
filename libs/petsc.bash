@@ -42,6 +42,7 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
     --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
     --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
+    --command-flag "F90='$MPIF90'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld'" \
     --command-flag "AR=ar" \
