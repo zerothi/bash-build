@@ -12,7 +12,7 @@ export OMP_NUM_THREADS=1
 cd $_top_dir
 
 # We have here the installation of all the stuff for gray....
-source install_funcs.sh
+source src/init.bash
 
 # Default python version installed
 _python_version=2
