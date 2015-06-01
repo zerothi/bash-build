@@ -23,6 +23,7 @@
     echo tinyarray
     echo openblas
     echo boost
+    echo nco
 } > ../intel.reject
 
 {
