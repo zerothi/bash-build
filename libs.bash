@@ -33,6 +33,8 @@ source_pack libs/fftw3.bash
 source_pack libs/fftw2-intel.bash
 source_pack libs/fftw3-intel.bash
 
+source_pack libs/aotus.bash
+
 # Install my fortran dictionary library
 source_pack libs/fvar.bash
 
