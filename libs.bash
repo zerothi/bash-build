@@ -52,6 +52,7 @@ source_pack libs/plasma.bash
 source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash
+source_pack libs/elpa.bash
 
 # Some specific libraries
 source_pack libs/gsl.bash

@@ -55,7 +55,7 @@ function docmd {
     if [ ! -z "$ar" ] ; then
         echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
     fi
-    echo " # PWD: "$_cwd
+    echo " # PWD: "$(pwd)
     echo " # CMD: "${cmd[@]}
     echo " # ================================================================"
     eval ${cmd[@]}
