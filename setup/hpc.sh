@@ -22,6 +22,7 @@
 {
     echo tinyarray
     echo openblas
+    echo boost
 } > ../intel.reject
 
 {
