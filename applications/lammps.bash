@@ -61,8 +61,7 @@ fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel) npa"
-pack_set --command "make makelib"
-pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
+pack_set --command "make mode=lib $(get_make_parallel) npa"
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
