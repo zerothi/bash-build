@@ -48,8 +48,8 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
 # (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)
 pack_set --command "make SLEPC_DIR=\$(pwd)"
 
-pack_set --command "make testexamples"
-pack_set --command "make testfortran"
+#pack_set --command "make testexamples"
+#pack_set --command "make testfortran"
 
 pack_set --command "make install"
 
