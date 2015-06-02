@@ -7,7 +7,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
 
 # Install commands that it should run
-pack_set --command "module load $(pack_get --module-name-requirement mpi) $(pack_get --module-name mpi)"
+pack_set --command "module load $(list -uniq -mod-names +fftw-3 ++mpi)"
 
 mpi_flags="$(list --LD-rp mpi)"
 for flag in --enable-single nothing ; do
@@ -62,4 +62,4 @@ pack_set --command "make install"
 
 done
 
-pack_set --command "module unload $(pack_get --module-name mpi) $(pack_get --module-name-requirement mpi)"
+pack_set --command "module unload $(list -uniq -mod-names +fftw-3 ++mpi)"

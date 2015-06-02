@@ -495,6 +495,7 @@ function pack_get {
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
 		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
