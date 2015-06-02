@@ -1,4 +1,4 @@
-v=0.24
+v=0.26
 add_package \
     --archive ncdf-$v.tar.gz \
     https://github.com/zerothi/ncdf/archive/$v.tar.gz
@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/lib/libncdf.a
 
-pack_set --module-requirement fvar
+pack_set --module-requirement fdict
 pack_set --module-requirement netcdf
 
 # Create the arch-make file
@@ -18,7 +18,7 @@ FC = $MPIFC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
 PP = cpp -E -P -C \n\
-LIBVARDICT = $(pack_get --LD fvar)/libvardict.a \n\
+LIBVARDICT = $(pack_get --LD fdict)/libvardict.a \n\
 INC = $(list --INCDIRS $(pack_get --mod-req-path))\n\
 LIB_PATH = $(list --LD-rp $(pack_get --mod-req-path))\n\
 LIBS = \$(LIB_PATH) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
@@ -31,10 +31,10 @@ AR = $AR\n\
 ' $file"
 
 # Make commands
-pack_set --command "export DIR_FVAR=$(pack_get --prefix fvar)/include"
+pack_set --command "export DIR_FDICT=$(pack_get --prefix fdict)/include"
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make test > tmp.test 2>&1"
-pack_set --command "unset DIR_FVAR"
+pack_set --command "unset DIR_FDICT"
 pack_set_mv_test tmp.test
 pack_set --command "mkdir -p $(pack_get --LD)"
 pack_set --command "mkdir -p $(pack_get --prefix)/include"

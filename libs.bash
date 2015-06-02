@@ -36,7 +36,7 @@ source_pack libs/fftw3-intel.bash
 source_pack libs/aotus.bash
 
 # Install my fortran dictionary library
-source_pack libs/fvar.bash
+source_pack libs/fdict.bash
 
 # Default packages for many libs
 source_pack libs/blas.bash

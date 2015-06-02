@@ -1,7 +1,7 @@
-v=0.19
+v=0.21
 add_package \
-    --archive fvar-$v.tar.gz \
-    https://github.com/zerothi/fvar/archive/$v.tar.gz
+    --archive fdict-$v.tar.gz \
+    https://github.com/zerothi/fdict/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
