@@ -6,8 +6,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --LD)/libfftw_mpi.a
 
-# Install commands that it should run
-pack_set --command "module load $(list -uniq -mod-names +fftw-2 ++mpi)"
+pack_set --mod-req mpi
 
 pack_set --command "../configure" \
     --command-flag "--enable-mpi" \
@@ -19,6 +18,4 @@ pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 
 pack_set_mv_test tmp.test
-
-pack_set --command "module unload $(list -uniq -mod-names +fftw-2 ++mpi)"
 
