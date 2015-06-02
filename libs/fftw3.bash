@@ -62,9 +62,9 @@ for flag in --enable-single nothing ; do
 	flag=""
 	ext=d
     fi
-    flag="$flag CC='$MPICC' CFLAGS='$mpi_flags $CFLAGS'"
-    flag="$flag FC='$MPIF90' FFLAGS='$mpi_flags $FCFLAGS'"
     flag="$flag --enable-mpi"
+    flag="$flag --enable-mpi CC='$MPICC' \
+CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
 
 pack_set --command "../configure $flag" \
     --command-flag "--prefix $(pack_get --prefix)"
