@@ -14,7 +14,7 @@ pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
 pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw-mpi-3
 
 # Correct mistakes in configure script...
 pack_set --command "sed -i -e 's:= call nf90:= nf90:g' ../configure"

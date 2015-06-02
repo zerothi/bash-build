@@ -15,7 +15,7 @@ pack_set --module-requirement libxc
 pack_set --module-requirement gsl
 pack_set --module-requirement arpack-ng
 pack_set --module-requirement etsf_io
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw-mpi-3
 
 tmp=
 if $(is_c intel) ; then
@@ -25,6 +25,7 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
 
 else
+    pack_set --module-requirement scalapack
     
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then

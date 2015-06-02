@@ -68,7 +68,10 @@ function pack_only {
     [ $DEBUG -ne 0 ] && do_debug --return pack_only
 }
 
-
+# Check that FLAG_OMP has been defined
+if test -z "$FLAG_OMP" ; then
+    doerr init "Can not find the OpenMP flag (set FLAG_OMP in source.sh)"
+fi
 
 # Add any auxillary commands
 source src/auxiliary.bash
