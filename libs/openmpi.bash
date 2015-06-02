@@ -23,12 +23,12 @@ if [ $(pack_installed flex) -eq 1 ]; then
     pack_set --command "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
 
-
-# Install commands that it should run
+# Shared libraries on HPC' clusters are highly discouraged.
+# Hence, we disallow that by _only_ using static libraries.
 pack_set --command "../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-hwloc=$(pack_get --prefix hwloc)" \
-    --command-flag "--enable-mpi-cxx"
+    --command-flag "--enable-mpi-cxx --disable-shared --enable-static"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
 pack_set --command "sed -i -e '/postdeps/{s:-l ::gi}' libtool"

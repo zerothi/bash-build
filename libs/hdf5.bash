@@ -23,7 +23,6 @@ pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-zlib=$(pack_get --prefix zlib)" \
     --command-flag --enable-parallel \
-    --command-flag --enable-shared \
     --command-flag --enable-static \
     --command-flag "--enable-fortran" $tmp
 
