@@ -292,7 +292,9 @@ function rem_dup {
 function ret_uniq {
     # Apparently we cannot use _ps here!!!!
     echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | \
-	awk '{a[$0]++} END {for (b in a) if (a[b]==1) {print b}}' | tr '\n' ' '
+	awk 'BEGIN { c=0 } {
+if( $0 in a) {} else {b[c]=$0 ; c++ }
+a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | tr '\n' ' '
 }
 
 
@@ -396,7 +398,7 @@ function list {
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
 	    -no-space|-X)  space="" ;;
-	    -uniq)    uniq=1 ;;
+	    -uniq)         uniq=1 ;;
 	    *)
 		opts="$opts $opt" ;;
 	esac
@@ -407,10 +409,10 @@ function list {
 	    ++*)
 		# We gather all requirements to 
 		# make it easy
-		args="$args $(pack_get --mod-req ${1:2:}) ${1:2:}"
+		args="$args $(pack_get --mod-req ${1:2}) ${1:2}"
 		;;
 	    +*)
-		args="$args $(pack_get --mod-req ${1:1:})"
+		args="$args $(pack_get --mod-req ${1:1})"
 		;;
 	    *)
 		args="$args $1"
@@ -438,8 +440,8 @@ function list {
 		suf="/include" 
 		lcmd="pack_get --prefix " ;;
 	    -mod-names) 
-		pre="" 
-		suf=" " 
+		pre=""
+		suf=""
 		lcmd="pack_get --module-name " ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
