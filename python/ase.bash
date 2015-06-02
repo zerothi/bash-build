@@ -1,5 +1,5 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
-for v in 3.6.0.2515 3.8.1.3440 ; do
+for v in 3.6.0.2515 3.8.1.3440 3.9.0.4465 ; do
 add_package \
     --package ase \
     --version $v \
