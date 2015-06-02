@@ -12,7 +12,7 @@ pack_set --command "unset F90FLAGS"
 pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-fortran=all --enable-cxx" \
-    --command-flag "--disable-shared --enable-smpcoll"
+    --command-flag "--enable-shared --enable-smpcoll"
 
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
@@ -33,7 +33,7 @@ pack_set --command "unset F90FLAGS"
 pack_set --command "../configure" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--enable-fortran=all --enable-cxx" \
-    --command-flag "--disable-shared --enable-smpcoll"
+    --command-flag "--enable-shared --enable-smpcoll"
 
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"

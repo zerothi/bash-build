@@ -19,6 +19,7 @@ pack_set \
     --command-flag "CC=${MPICC} CXX=${MPICXX}" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--disable-dap" \
+    --command-flag "--enable-shared" \
     --command-flag "--enable-static" \
     --command-flag "--enable-pnetcdf" \
     --command-flag "--enable-netcdf-4"
