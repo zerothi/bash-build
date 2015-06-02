@@ -26,12 +26,14 @@ def_idx=$(build_get --default-build)
 
 # Ensure get_c is defined
 source $(build_get --source)
+tmp=$(pack_get --prefix $(get_parent)/../
 new_build --name python$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
-    --installation-path $(build_get --installation-path)/$(pack_get --package $(get_parent))/$IpV/packages \
+    --installation-path $tmp \
     --build-module-path "--package --version $IppV $(get_c)" \
     --build-installation-path "--package --version $(get_c)"
+unset tmp
 
 # Change to the new build default
 build_set --default-build python$IpV
