@@ -23,7 +23,7 @@ pack_set --command "../configure" \
     --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
     --command-flag "--prefix=$(pack_get --prefix)" \
     --command-flag "--with-mpi=$(pack_get --prefix mpi)" \
-    --command-flag "--enable-fortran"
+    --command-flag "--enable-fortran --disable-cxx"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

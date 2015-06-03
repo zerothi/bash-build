@@ -10,8 +10,7 @@ function tmp_func {
 }
 
 
-add_package \
-    --alias fftw-3 \
+add_package --alias fftw-3 \
     http://www.fftw.org/fftw-3.3.4.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
@@ -45,8 +44,7 @@ done
 #### COMPLETED
 
 # Create mpi fftw-3
-add_package \
-    --package fftw-mpi-3 \
+add_package --alias fftw-mpi-3 --package fftw-mpi \
     $(pack_get --archive)
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
@@ -84,3 +82,5 @@ pack_set --command "LIB='$FLAG_OMP' ../configure $flag" \
 tmp_func tmp.test.mpi.omp.$ext
 
 done
+
+unset tmp_func

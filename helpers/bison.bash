@@ -1,9 +1,6 @@
-add_package --build generic http://ftp.gnu.org/gnu/bison/bison-2.6.5.tar.xz
+add_package --build generic http://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
-
-tmp="$(which bison 2>/dev/null)"
-[ "${tmp:0:1}" == "/" ] && pack_set --host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --prefix)/bin/bison
 
