@@ -111,7 +111,7 @@ function pack_install {
 	module load $module_loads
 
 	# If the module should be preloaded (for configures which checks that the path exists)
-	if $(has_setting module-preload $idx) ; then
+	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
 		-n "$alias" \
 		-v "$(pack_get --version $idx)" \
@@ -161,7 +161,7 @@ function pack_install {
 	[ $? -ne 0 ] && exit 1
 
         # We are now in the package directory
-	if $(has_setting build-dir $idx) ; then
+	if $(has_setting $BUILD_DIR $idx) ; then
 	    rm -rf build-tmp ; mkdir -p build-tmp ; popd 1> /dev/null 
 	    pushd $directory/build-tmp 1> /dev/null
 	fi
@@ -189,7 +189,7 @@ function pack_install {
         module unload $module_loads
 
 	# Unload the module itself in case of PRELOADING
-	if $(has_setting module-preload $idx) ; then
+	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    module unload $(pack_get --module-name $idx)
 	    # We need to clean up, in order to force the
 	    # module creation.
@@ -219,10 +219,10 @@ function pack_install {
 	done
     fi
 
-    if $(has_setting module $idx) ; then
+    if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
+	if $(has_setting $IS_MODULE $idx) ; then
         # Create the list of requirements
-	local reqs="$(list --prefix '-R ' $mod_reqs)"
-	if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
+	    local reqs="$(list --prefix '-R ' $mod_reqs)"
             # We install the module scripts here:
 	    create_module \
 		-n "$alias" \
@@ -230,6 +230,16 @@ function pack_install {
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
 		-P "$prefix" $reqs $(pack_get --module-opt $idx)
+	fi
+	if $(has_setting $CRT_DEF_MODULE $idx) ; then
+	    create_module \
+		--module-path $(build_get --module-path)-npa-apps \
+		-n "Nick Papior Andersen script for loading $(pack_get --package $idx): $(get_c)" \
+		-v $(pack_get --version $idx) \
+		-M $(pack_get --alias $idx).$(pack_get --version $idx)/$(get_c) \
+		-P "/directory/should/not/exist" \
+		$(list --prefix '-L ' $(pack_get --mod-req $idx)) \
+		-L $(pack_get --alias $idx)
 	fi
     fi
     [ $DEBUG -ne 0 ] && do_debug --return pack_install

@@ -21,14 +21,3 @@ pack_set --command "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
 # Make commands
 pack_set --command "cd src"
 pack_set --command "make install"
-
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)

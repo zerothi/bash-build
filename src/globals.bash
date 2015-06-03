@@ -9,6 +9,7 @@ _NS=1000000000
 BUILD_DIR=build-dir
 PRELOAD_MODULE=module-preload
 IS_MODULE=module
+CRT_DEF_MODULE=def-module
 let "MAKE_PARALLEL=1 << 1"
 
 # A separator used for commands that can be given consequetively

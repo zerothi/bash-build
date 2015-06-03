@@ -1,7 +1,8 @@
 msg_install --message "Installing the applications..."
 
 # Make all default modules
-build_set --default-setting module
+build_set --default-setting $IS_MODULE
+build_set --default-setting $CRT_DEF_MODULE
 
 # Valgrind
 source_pack applications/valgrind.bash

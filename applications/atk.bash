@@ -15,5 +15,3 @@ pack_set --command "$(build_get --archive-path)/$(pack_get --archive)" \
     --command-flag "--prefix $(pack_get --prefix)" \
     --command-flag "--mode unattended --license_file non-existing" \
     --command-flag "--license_configuration floating"
-
-pack_install

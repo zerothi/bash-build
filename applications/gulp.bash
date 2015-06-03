@@ -70,15 +70,4 @@ pack_set --command "mv ../Libraries $(pack_get --prefix)/"
 pack_set --module-opt "--set-ENV GULP_DOC=$(pack_get --prefix)/Docs"
 pack_set --module-opt "--set-ENV GULP_LIB=$(pack_get --prefix)/Libraries"
 
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)
-
 done
