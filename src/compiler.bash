@@ -10,8 +10,9 @@ function set_c {
     shift
 }
 function get_c {
+	local c="$_c-$_c_v"
     if [ $# -eq 0 ]; then
-	printf "%s" "$_c-$_c_v"
+	printf "%s" "$c"
     else
 	local opt=$(trim_em $1) ; shift
 	case $opt in
@@ -22,7 +23,7 @@ function get_c {
 		printf "%s" "$_c_v"
 		;;
 	    -all|-a)
-		get_c
+		printf "%s" "$c"
 		;;
 	esac
     fi
@@ -34,7 +35,7 @@ function get_c {
 function is_c {
     local check="$1" ; shift
     local l="${#check}"
-    local c=$(get_c)
+    local c="$_c-$_c_v"
     if [ "x${c:0:$l}" == "x$check" ]; then
 	return 0
     fi
