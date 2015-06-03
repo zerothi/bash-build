@@ -4,7 +4,7 @@ if $(is_c gnu) ; then
 fi
 [ $tmp -eq 0 ] && return
 
-add_package ftp://ftp.gnu.org/gnu/octave/octave-3.8.2.tar.bz2
+add_package ftp://ftp.gnu.org/gnu/octave/octave-4.0.0.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -16,6 +16,7 @@ pack_set --host-reject ntch
 
 # Link gnuplot (otherwise the gnuplot backend won't work)
 pack_set --module-requirement gnuplot
+pack_set -mod-req pcre
 
 tmp_flags="--with-x --disable-docs --disable-java"
 pack_set --module-requirement arpack-ng
