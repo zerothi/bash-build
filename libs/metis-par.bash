@@ -35,6 +35,3 @@ if [ $(pack_installed cmake) -eq 1 ]; then
     pack_set --command "module unload $(pack_get --module-name cmake)"
 fi
 
-
-
-

@@ -47,7 +47,7 @@ done
 add_package --alias fftw-mpi-3 --package fftw-mpi \
     $(pack_get --archive)
 
-pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
 
