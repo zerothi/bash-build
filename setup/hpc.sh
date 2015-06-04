@@ -5,6 +5,7 @@
 {
     echo abinit
     echo gdis
+	echo bison
     echo gromacs
     echo make
     echo llvm
