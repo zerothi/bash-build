@@ -45,9 +45,10 @@ CAT = cat \n\
 CCS = $CC \n\
 CCP = $MPICC \n\
 CCD = $CC $(list --INCDIRS mpi) \n\
-CFLAGS += $CFLAGS -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DSCOTCH_PTHREAD -DIDXSIZE64 \n\
+CFLAGS += $CFLAGS -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DIDXSIZE64 \n\
+CFLAGS += -DCOMMON_PTHREAD -DSCOTCH_PTHREAD\n\
 CLIBFLAGS = \n\
-LDFLAGS = $(list --LD-rp +mpi) -lz -lm -lrt \n\
+LDFLAGS = $(list --LD-rp +mpi) -lz -lm -lrt -lpthread \n\
 CP = cp \n\
 LEX = flex -Pscotchyy -olex.yy.c \n\
 LN = ln \n\
@@ -74,6 +75,7 @@ pack_set --command "make clean"
 # Remove threads
 pack_set --command "sed -i -e 's/-DSCOTCH_PTHREAD //gi' $file"
 pack_set --command "sed -i -e 's/-DCOMMON_PTHREAD //gi' $file"
+pack_set --command "sed -i -e 's/-lpthread//gi' $file"
 pack_set --command "make $(get_make_parallel) ptscotch"
 if [ $(vrs_cmp $v 6.0.0) -lt 0 ]; then
     pack_set --command "make $(get_make_parallel) ptesmumps"

@@ -3,12 +3,10 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set $(list --prefix '--module-requirement ' \
+pack_set $(list --prefix '--module-requirement ' build-tools \
     gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
-
-pack_set --command "module load build-tools"
 
 # Install commands that it should run
 pack_set --command "../configure" \
@@ -27,8 +25,6 @@ pack_set --command "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.2] mp
 #pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
 #pack_set_mv_test tmp.test
-
-pack_set --command "module unload build-tools"
 
 # Add to LD_LIBRARY_PATH, this ensures that at least 
 # these libraries always will be present in LD

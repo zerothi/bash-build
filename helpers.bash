@@ -8,7 +8,6 @@ source_pack helpers/modules.bash
 add_package --build generic --version npa \
     --package build-tools fake
 pack_set -s $IS_MODULE
-#pack_set --installed $_I_INSTALLED # Make sure it is "installed"
 pack_set --module-name build-tools/npa
 pack_set --prefix $(build_get --installation-path[generic])/build-tools/npa
 pack_set --install-query $(pack_get --prefix)/bin

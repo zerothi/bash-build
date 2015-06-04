@@ -15,17 +15,15 @@ if ! $(is_c gnu) ; then
     pack_set --host-reject $(get_hostname)
 fi
 
-# Load build tools
-pack_set --command "module load build-tools/npa"
+pack_set --command "module load $(pack_get --module-name build-tools)"
 pack_set --command "./autogen.sh"
 
 # Install commands that it should run
-pack_set --command "./configure" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_set --command "./configure --prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 pack_set --command "make install"
 pack_set --command "cp OpenIB_Parameters $(pack_get --prefix)/"
 
-pack_set --command "module unload build-tools/npa"
+pack_set --command "module unload $(pack_get --module-name build-tools)"
