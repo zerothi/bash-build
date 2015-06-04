@@ -3,6 +3,8 @@ v=2014.2
 add_package --build generic --package ATK --version $v \
     http://quantumwise.com/download/pkgs/VNL-ATK-$v-Linux64.bin
 
+pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
+
 pack_set --install-query $(pack_get --prefix)/bin/atkpython
 
 pack_set $(list -p '--host-reject ' zero ntch)

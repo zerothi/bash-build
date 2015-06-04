@@ -8,6 +8,8 @@ add_package \
     --version $v \
     http://www.ks.uiuc.edu/Research/vmd/vmd-$v/files/final/vmd-$v.src.tar.gz
 
+pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
+
 pack_set --module-opt "--lua-family vmd"
 
 # Force the named alias

@@ -229,7 +229,7 @@ function add_package {
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
-    if [ "$url" == "fake" ]; then
+    if [ "x$url" == "xfake" ]; then
 	d=./
 	_install_query[$_N_archives]=/directory/does/not/exist
     fi
@@ -240,10 +240,10 @@ function add_package {
     local ext=${fn##*.}
     _ext[$_N_archives]=$ext
     # A binary does not have a directory
-    [ "$ext" == "bin" ] && d=./
+    [ "x$ext" == "xbin" ] && d=./
     # Infer what the directory is
     local archive_d=${fn%.*tar.$ext}
-    [ "${#archive_d}" -eq "${#fn}" ] && archive_d=${fn%.$ext}
+    [ ${#archive_d} -eq ${#fn} ] && archive_d=${fn%.$ext}
     [ -z "$d" ] && d=$archive_d
     _directory[$_N_archives]=$d
     # Save the version
@@ -281,7 +281,7 @@ function add_package {
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
     # Install prefix and the installation path
-    tmp="$(build_get --build-installation-path[$b_name])"
+    tmp="$(build_get --build-installation-path[$b_idx])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_idx])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
     if [ -z "$lp" ]; then

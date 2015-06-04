@@ -2,17 +2,16 @@ add_package \
     --build generic \
     http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
 
-# Force the named alias
+pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
+
 pack_set --install-query $(pack_get --prefix)/bin/povray
 
 pack_set --module-opt "--lua-family povray"
 
-# Compile commands
 pack_set --command "./configure" \
 	--command-flag "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
 	--command-flag "--prefix=$(pack_get --prefix)"
 
-# Make commands
 pack_set --command "make"
 pack_set --command "make install"
 
