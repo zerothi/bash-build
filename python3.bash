@@ -2,7 +2,7 @@
 # apt-get libbz2-dev
 v=3.4.3
 add_package --alias python --package python \
-    http://www.python.org/ftp/python/$v/Python-$v.tgz
+    http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
     pack_set --package Python
 fi
