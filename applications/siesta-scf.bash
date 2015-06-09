@@ -1,4 +1,4 @@
-for v in 870 ; do
+for v in 878 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -25,6 +25,7 @@ file=arch.make
 
 # Prepare the compilation $file
 pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
+pack_set --command "echo 'PP = cpp -E -P -C -nostdinc' >> $file"
 
 if [ $(vrs_cmp $v 590) -ge 0 ]; then
     pack_set --module-requirement mumps

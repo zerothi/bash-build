@@ -9,7 +9,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libctl.a
 
 # Install commands that it should run
-pack_set --command "./configure" \
+pack_set --command "LIBS='-lm' ./configure" \
     --command-flag "--prefix $(pack_get --prefix)"
 
 # Make commands
