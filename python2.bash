@@ -1,5 +1,5 @@
 # Install Python 2 versions
-# apt-get bz2-dev
+# apt-get libbz2-dev libncurses5-dev zip
 v=2.7.10
 add_package --alias python --package python \
     http://www.python.org/ftp/python/$v/Python-$v.tar.xz

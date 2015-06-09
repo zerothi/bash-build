@@ -1,5 +1,5 @@
 # Install Python 3 versions
-# apt-get libbz2-dev
+# apt-get libbz2-dev libncurses5-dev zip
 v=3.4.3
 add_package --alias python --package python \
     http://www.python.org/ftp/python/$v/Python-$v.tar.xz
