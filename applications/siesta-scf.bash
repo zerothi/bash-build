@@ -1,4 +1,4 @@
-for v in 880 ; do
+for v in 881 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -282,8 +282,8 @@ pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
 # The atom program for creating the pseudos
-#pack_set --command "cd ../Pseudo/atom"
-#make_files atm
+pack_set --command "cd ../Pseudo/atom"
+make_files atm
 
 pack_set --command "cd ../Obj"
 
