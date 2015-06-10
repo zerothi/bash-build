@@ -83,14 +83,6 @@ INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
-.F.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.F90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.f.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
-.f90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 ' $file"
 
 source applications/siesta-linalg.bash

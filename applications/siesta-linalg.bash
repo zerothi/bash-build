@@ -28,8 +28,7 @@ LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
 BLAS_LIBS=$tmp \n\
-LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n\
-' arch.make"
+LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n' arch.make"
 	    break
 	fi
     done
@@ -38,3 +37,17 @@ else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
 
 fi
+
+pack_set --command "sed -i '1 a\
+\n\
+.F.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+atom.o: atom.F:\n\
+\t\$(FC) -c -O1 \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.F90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.f.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+.f90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+\n' arch.make"
