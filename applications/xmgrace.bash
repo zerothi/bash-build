@@ -1,4 +1,5 @@
 # Install grace
+# apt-get lesstif2-dev or libmotif-dev
 add_package ftp://plasma-gate.weizmann.ac.il/pub/grace/src/grace5/grace-5.1.25.tar.gz
 
 pack_set -s $MAKE_PARALLEL
@@ -8,9 +9,6 @@ pack_set --install-query $(pack_get --prefix)/bin/fdf2fit
 pack_set --module-opt "--lua-family grace"
 
 pack_set --module-requirement netcdf-serial --module-requirement fftw-2
-
-# The motif library are in the following packages:
-# lesstif2-dev
 
 # Install commands that it should run
 pack_set --command "./configure" \

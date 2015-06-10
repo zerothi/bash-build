@@ -1,3 +1,4 @@
+# apt-get libpng
 add_package \
     --build generic \
     http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
