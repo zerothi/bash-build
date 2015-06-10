@@ -11,7 +11,7 @@ pack_set --module-requirement mpi \
     --module-requirement libctl \
     --module-requirement zlib \
     --module-requirement hdf5 \
-    --module-requirement fftw-3
+    --module-requirement fftw-mpi-3
 
 # Check for Intel MKL or not
 tmp=
