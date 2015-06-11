@@ -1,4 +1,4 @@
-for v in 881 ; do
+for v in 886 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -190,7 +190,7 @@ if [ $(vrs_cmp $v 862) -ge 0 ]; then
     make_files mprop fat
 
     pack_set --command "cd ../SpPivot"
-    make_files pvtsp
+    #make_files pvtsp
 fi
 
 pack_set --command "cd ../WFS"
@@ -241,11 +241,7 @@ fi
 if [ $(vrs_cmp $v 662) -ge 0 ]; then
     pack_set --command "cd ../TBtrans/"
     for omp in openmp none ; do
-	if [ $omp == "openmp" ]; then
-	    if $(is_c intel) ; then
-		continue
-	    fi
-	fi
+
 	pack_set --command "pushd ../../../Obj"
 	set_flag $omp
 	pack_set --command "popd ; make clean"
@@ -285,7 +281,7 @@ pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc
 pack_set --command "cd ../Pseudo/atom"
 make_files atm
 
-pack_set --command "cd ../Obj"
+pack_set --command "cd ../../Obj"
 
 # Compile the 3m equivalent versions, if applicable
 tmp=0
@@ -315,6 +311,7 @@ if [ $(vrs_cmp $v 662) -ge 0 ]; then
 		continue
 	    fi
 	fi
+
 	set_flag $omp
 	pack_set --command "make clean"
 	

@@ -19,8 +19,7 @@ elif $(is_c gnu) ; then
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    siesta_la=$la
 	    pack_set --module-requirement $la
-	    [ "x$la" == "xatlas" ] && \
-		tmp="$tmp -lf77blas -lcblas"
+	    [ "x$la" == "xatlas" ] && tmp="$tmp -lf77blas -lcblas"
 	    [ "x$la" == "xacml" ] && tmp=""
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
@@ -39,11 +38,8 @@ else
 fi
 
 pack_set --command "sed -i '1 a\
-\n\
 .F.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-atom.o: atom.F:\n\
-\t\$(FC) -c -O1 \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .F90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .f.o:\n\
@@ -51,3 +47,10 @@ atom.o: atom.F:\n\
 .f90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 \n' arch.make"
+
+pack_set --command "[ -e ../Src/atom.F ] && sed -i '$ a\
+atom.o: atom.F\n\
+\t\$(FC) -c -O1 \$(INCFLAGS) \$(FPPFLAGS) \$<\n' arch.make || echo NVM"
+pack_set --command "[ -e ../Src/atom.f ] && sed -i '$ a\
+atom.o: atom.f\n\
+\t\$(FC) -c -O1 \$(INCFLAGS) \$<\n' arch.make || echo NVM"
