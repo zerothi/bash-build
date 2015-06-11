@@ -1,4 +1,4 @@
-v=0.21
+v=0.22
 add_package \
     --archive fdict-$v.tar.gz \
     https://github.com/zerothi/fdict/archive/$v.tar.gz
@@ -14,7 +14,6 @@ pack_set --command "sed -i '1 a\
 FC = $FC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
-PP = cpp -E -P -C \n\
 AR = $AR\n\
 .F90.o:\n\
 \t\$(FC) -c \$(INC) \$(FFLAGS) \$(FPPFLAGS) \$< \n\

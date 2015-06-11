@@ -7,6 +7,7 @@ pack_set -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
 
 pack_set --module-requirement mpi --module-requirement netcdf
+pack_set --mod-req flook
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
@@ -70,7 +71,9 @@ KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
 FFLAGS=$FCFLAGS\n\
 FFLAGS += #OMPPLACEHOLDER\n\
-FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
+FPPFLAGS += -DFLOOK -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
+FLOOK_LIB = $(list -LD-rp flook) -lflookall\n\
+LIBS += \$(FLOOK_LIB) \n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
