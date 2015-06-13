@@ -52,6 +52,7 @@ source_pack python/setuptools.bash
 source_pack python/nose.bash
 
 # Packages installed in "python-home"
+source_pack python/pep8.bash
 source_pack python/pkgconfig.bash
 source_pack python/pyparsing.bash
 source_pack python/backports.bash
