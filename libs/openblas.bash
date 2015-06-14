@@ -1,5 +1,5 @@
-for v in 0.2.14 ; do
-add_package --package openblas --archive OpenBLAS-$v.tar.gz \
+for v in 0.2.14.1 ; do
+add_package --package openblas --archive OpenBLAS-$v.tar.gz --directory OpenBLAS-develop \
     https://github.com/xianyi/OpenBLAS/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE

@@ -118,6 +118,8 @@ function pack_install {
 		-M "$(pack_get --module-name $idx)" \
 		-p "$(pack_get --module-prefix $idx)" \
 		-P "$prefix"
+        # Create the prefix directory
+        mkdir -p $prefix
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi

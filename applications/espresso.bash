@@ -68,9 +68,12 @@ for v in 5.1.1 5.1.2 ; do
     fi
 
     # Install commands that it should run
+    tmp="${FCFLAGS//-floop-block/}"
+    tmp="${tmp//-qopt-prefetch/}"
+    tmp="${tmp//-opt-prefetch/}"
     pack_set --command "./configure" \
 	--command-flag "$tmp_lib" \
-	--command-flag "FFLAGS='${FCFLAGS//-floop-block/} $FLAG_OMP'" \
+	--command-flag "FFLAGS='$tmp $FLAG_OMP'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
 	--command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
 	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \

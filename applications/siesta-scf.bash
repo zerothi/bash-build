@@ -1,4 +1,4 @@
-for v in 886 ; do
+for v in 888 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -42,7 +42,7 @@ FPPFLAGS += -DNCDF -DNCDF_4\n\
 COMP_LIBS += libncdf.a libvardict.a' $file"
     fi
     pack_set --command "sed -i '1 a\
-FPPFLAGS += -DON_DOMAIN_DECOMP -DMUMPS -DTS_NOCHECKS\n\
+FPPFLAGS += -DON_DOMAIN_DECOMP -DTRANSIESTA_MUMPS -DTS_NOCHECKS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 else
     if [ $(pack_installed metis) -eq 1 ]; then
@@ -72,7 +72,7 @@ KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 FFLAGS=$FCFLAGS\n\
 FFLAGS += #OMPPLACEHOLDER\n\
 FPPFLAGS += -DFLOOK -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
-FLOOK_LIB = $(list -LD-rp flook) -lflookall\n\
+FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
 LIBS += \$(FLOOK_LIB) \n\
 \n\
 ARFLAGS_EXTRA=\n\

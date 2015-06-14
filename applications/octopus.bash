@@ -65,7 +65,7 @@ pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pac
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+pack_set --command "make check > tmp.test 2>&1 || echo NVM"
 pack_set --command "make install"
 pack_set_mv_test tmp.test tmp.test.serial
 

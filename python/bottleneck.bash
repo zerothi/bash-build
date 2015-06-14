@@ -3,12 +3,13 @@ v=1.0.0
 add_package --package bottleneck \
     https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set $(list --prefix '--host-reject ' ntch)
 
 # This devious thing will never install the same place
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages
+pack_set --command "mkdir -p $(pack_get --install-query)"
 
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' numpy cython)

@@ -34,7 +34,7 @@ DFLAGS += -D__LIBXC2 -D__parallel -D__SCALAPACK\n\
 DFLAGS += -D__HAS_NO_MPI_MOD \n\
 CC = $CC \$(DFLAGS) $CFLAGS \$(HWLOC_INC) \n\
 CPPFLAGS = \$(DFLAGS) \n\
-FCFLAGS = \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\
+FCFLAGS += \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\
 LDFLAGS = \$(FCFLAGS) \n\
 LIBS  = \$(FFTW_LIB) -lfftw3_omp -lfftw3 \n\
 LIBS += \$(HWLOC_LIB) -lhwloc \n\
@@ -47,6 +47,7 @@ if $(is_c intel) ; then
     pack_set --command "sed -i '1 a\
 LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
+FCFLAGS += -free\n\
 ' $file"
 
 elif $(is_c gnu) ; then

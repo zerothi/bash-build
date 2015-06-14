@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --LD)/libflookall.a
 
 # First download aotus
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-aotus.tar.gz
-av=0.1
+av=0.2
 mywget https://github.com/zerothi/aotus/archive/$av.tar.gz $o
 pack_set --command "rm -rf aotus"
 pack_set --command "tar xfz $o ; mv aotus-$av aotus"
