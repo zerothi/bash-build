@@ -1,4 +1,4 @@
-if $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 p0 q0) ; then
+if $(is_host never) ; then
     echo "Will make link to local installation on Niflheim."
 else
     source_pack libs/openmpi.bash

@@ -13,7 +13,7 @@ source_pack libs/libxml2.bash
 source_pack libs/hwloc.bash
 
 # Basic parallel libraries
-source_pack libs/openmpi-hpc.bash
+source_pack libs/openmpi.bash
 source_pack libs/mpich.bash
 # Set the default MPI version
 if $(is_c intel) ; then
