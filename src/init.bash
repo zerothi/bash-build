@@ -19,6 +19,16 @@ _ERROR_FILE=$_cwd/ERROR
 # Clean the error file
 rm -f $_ERROR_FILE
 
+# Make an error and exit
+function doerr {
+    local prefix="ERROR: "
+    for ln in "$@" ; do
+        echo "${prefix}${ln}" >> $_ERROR_FILE
+        echo "${prefix}${ln}"
+        prefix="       "
+    done ; exit 1
+}
+
 source src/globals.bash
 # Whether we should create TCL or LUA module files
 _module_format='TCL'
@@ -67,11 +77,6 @@ function pack_only {
     done
     [ $DEBUG -ne 0 ] && do_debug --return pack_only
 }
-
-# Check that FLAG_OMP has been defined
-if test -z "$FLAG_OMP" ; then
-    doerr init "Can not find the OpenMP flag (set FLAG_OMP in source.sh)"
-fi
 
 # Add any auxillary commands
 source src/auxiliary.bash
@@ -182,16 +187,6 @@ function exit_on_error {
 	shift
 	doerr "$@"
     fi
-}
-
-# Make an error and exit
-function doerr {
-    local prefix="ERROR: "
-    for ln in "$@" ; do
-        echo "${prefix}${ln}" >> $_ERROR_FILE
-        echo "${prefix}${ln}"
-        prefix="       "
-    done ; exit 1
 }
 
 function pack_crt_list {

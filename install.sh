@@ -125,7 +125,6 @@ while [ $tmp -lt $_N_b ]; do
     let tmp++
 done
 
-
 # Begin installation of various packages
 # List of archives
 # The order is the installation order
