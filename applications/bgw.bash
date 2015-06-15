@@ -87,6 +87,8 @@ else
 fi
 
 pack_set --command "make all-flavors"
-pack_set --command "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > tmp.test ; echo 'Success'"
-pack_set_mv_test tmp.test
+if $(is_host zero ntch) ; then
+    pack_set --command "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > tmp.test ; echo 'Success'"
+    pack_set_mv_test tmp.test
+fi
 pack_set --command "make install INSTDIR=$(pack_get --prefix)"
