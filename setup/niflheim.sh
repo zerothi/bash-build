@@ -3,6 +3,10 @@
 # Create local rejections based on the hpc cluster
 
 {
+    echo gcc[4.9.2]
+    echo luaposix
+    echo lmod
+    echo otpo
     echo gdis
     echo meep
     echo meep-serial

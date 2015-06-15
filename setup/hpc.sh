@@ -5,12 +5,12 @@
 {
     echo abinit
     echo gdis
-	echo bison
+    echo bison
+    echo otpo
+    echo gdis
     echo gromacs
     echo make
     echo llvm
-    echo meep
-    echo meep-serial
     echo pcre
     echo hydra
     echo mpich
@@ -18,6 +18,7 @@
     echo scons
     echo luaposix
     echo lmod
+    echo bigdft
 } > ../local.reject
 
 {
@@ -25,6 +26,7 @@
     echo openblas
     echo boost
     echo nco
+    echo espresso
 } > ../intel.reject
 
 {
