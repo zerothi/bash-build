@@ -6,7 +6,7 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
-pack_set --module-requirement openmpi --module-requirement netcdf
+pack_set --module-requirement mpi --module-requirement netcdf
 
 pack_set --host-reject zero --host-reject ntch
 
@@ -50,14 +50,6 @@ ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -l
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
-.F.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.F90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.f.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
-.f90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 ' arch.make"
 
 source applications/siesta-linalg.bash
@@ -129,16 +121,5 @@ pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 pack_set --command "cd ../../"
 pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
 pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)
 
 done

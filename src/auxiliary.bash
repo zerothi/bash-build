@@ -1,6 +1,72 @@
 
 # File for auxillary commands used in the command line tools
 
+# Init installation
+# Pretty prints some information about the installation
+#   $1 : the package name or index
+function msg_install {
+    local n="" ; local action=0
+    while [ $# -gt 1 ]; do
+	local opt=$(trim_em $1) ; shift
+	case $opt in
+	    -start|-S) n="Installing" ; action=1 ;;
+	    -finish|-F) n="Finished" ; action=2 ;;
+	    -already-installed) n="Already installed" ; action=3 ;;
+	    -message) n="$1" ; shift ; action=4 ;;
+	    *) break ;;
+	esac
+    done
+    if [ $# -gt 0 ]; then
+	local pack=$1
+    else
+	local pack=$_N_archives
+    fi
+    [ "$action" -ne "4" ] && \
+	local cmd=$(arc_cmd $(pack_get --ext $pack) )
+    echo " ================================== "
+    echo "   $n"
+    if [ "$action" -eq "1" ]; then
+	echo " File    : $(pack_get --archive $pack)"
+	echo " Ext     : $(pack_get --ext $pack)"
+	echo " Ext CMD : $cmd"
+    fi
+    if [ "$action" -ne "4" ]; then
+	echo " Package : $(pack_get --package $pack)"
+	if [ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]; then
+	    echo " Alias   : $(pack_get --alias $pack)"
+	fi	
+	echo " Version : $(pack_get --version $pack)"
+    fi
+    if [ "$action" -eq "1" ]; then
+	module list 2>&1
+    fi
+    echo " ================================== "
+}
+
+
+# Do the cmd 
+# This will automatically check for the error
+function docmd {
+    local ar="$1"
+    shift
+    local cmd=($*)
+    echo ""
+    echo " # ================================================================"
+    if [ ! -z "$ar" ] ; then
+        echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
+    fi
+    echo " # PWD: "$(pwd)
+    echo " # CMD: "${cmd[@]}
+    echo " # ================================================================"
+    eval ${cmd[@]}
+    local st=$?
+    if (( $st != 0 )) ; then
+	echo "STATUS = $st"
+        exit $st;
+    fi
+}
+
+
 # Print simple string (shortcut for printf "%s" "$1")
 function _ps {
     printf "%s" "$@"
@@ -180,7 +246,15 @@ function vrs_cmp {
 #
 # Example:
 #  $(lc fOObaR) == foobar
-function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
+function lc {
+    local l="${1,,}" ; shift
+    while : ; do
+	_ps "$l"
+	[ $# -eq 0 ] && break
+	l=" ${1,,}" ; shift
+    done
+}
+#function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
 
 # Returns the file time in a simple format
 function get_file_time {
@@ -210,7 +284,17 @@ function isnumber {
 #  4. translate '\n' to ' '
 function rem_dup {
     # Apparently we cannot use _ps here!!!!
-    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | awk '!_[$0]++' | tr '\n' ' '
+    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | \
+	awk '!_[$0]++' | tr '\n' ' '
+}
+
+# Returns all unique elements in the array
+function ret_uniq {
+    # Apparently we cannot use _ps here!!!!
+    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | \
+	awk 'BEGIN { c=0 } {
+if( $0 in a) {} else {b[c]=$0 ; c++ }
+a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | tr '\n' ' '
 }
 
 
@@ -298,30 +382,49 @@ function mywget {
 function list {
     [ $DEBUG -ne 0 ] && do_debug --enter list
     local suf="" ; local pre="" ; local lcmd=""
-    local cmd ; local retval=""
+    local cmd ; local retval="" ; local uniq=0
     # First we collect all options
     local opts="" ; local space=" "
     while : ; do
-	local opt=$(trim_em $1) # Save the option passed
+	local opt="$(trim_em $1)"
 	case $opt in
 	    -*) ;;
 	    *)  break ;;
 	esac
 	shift
 	case $opt in
+	    -LD-rp) opts="$opts -LDFLAGS -Wlrpath" ;;
 	    -prefix|-p)    pre="$1" ; shift ;;
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
 	    -no-space|-X)  space="" ;;
+	    -uniq)         uniq=1 ;;
 	    *)
 		opts="$opts $opt" ;;
 	esac
     done
     local args=""
     while [ $# -gt 0 ]; do
-	args="$args $1"
+	case $1 in
+	    ++*)
+		# We gather all requirements to 
+		# make it easy
+		args="$args $(pack_get --mod-req ${1:2}) ${1:2}"
+		;;
+	    +*)
+		args="$args $(pack_get --mod-req ${1:1})"
+		;;
+	    *)
+		args="$args $1"
+		;;
+	esac
 	shift
     done
+    if [ $uniq -eq 1 ]; then
+	args="$(ret_uniq $args)"
+    else
+	args="$(rem_dup $args)"
+    fi
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
@@ -336,6 +439,10 @@ function list {
 		pre="-I" 
 		suf="/include" 
 		lcmd="pack_get --prefix " ;;
+	    -mod-names) 
+		pre=""
+		suf=""
+		lcmd="pack_get --module-name " ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac

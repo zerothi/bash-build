@@ -1,7 +1,7 @@
-v=0.18
+v=0.22
 add_package \
-    --archive fvar-$v.tar.gz \
-    https://github.com/zerothi/fvar/archive/$v.tar.gz
+    --archive fdict-$v.tar.gz \
+    https://github.com/zerothi/fdict/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -14,7 +14,6 @@ pack_set --command "sed -i '1 a\
 FC = $FC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
-PP = cpp -E -P -C \n\
 AR = $AR\n\
 .F90.o:\n\
 \t\$(FC) -c \$(INC) \$(FFLAGS) \$(FPPFLAGS) \$< \n\

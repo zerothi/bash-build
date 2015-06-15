@@ -6,10 +6,7 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libpetsc.so
 
-pack_set \
-    $(list --prefix ' --module-requirement ' openmpi parmetis fftw-3 hdf5)
-
-pack_set $(list -p '--host-reject ' hemera eris ponto)
+pack_set $(list --prefix '--mod-req ' parmetis fftw-mpi-3 hdf5)
 
 tmp=''
 if $(is_c intel) ; then
@@ -22,7 +19,7 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
 
 else
-
+    pack_set --module-requirement scalapack
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
@@ -31,20 +28,20 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    tmp="--with-lapack-lib='-llapack' --with-blas-lib='$tmp'"
-	    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix $la)"
 	    break
 	fi
     done
-
+    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix scalapack)"
 fi
 
-tmp_ld="$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))"
+tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
 
 pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
     --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
     --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
     --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
+    --command-flag "F90='$MPIF90'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld'" \
     --command-flag "AR=ar" \
@@ -61,27 +58,29 @@ pack_set --command "./configure PETSC_DIR=\$(pwd)" \
     --command-flag "--with-hdf5=1" \
     --command-flag "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
     --command-flag "--with-fftw=1" \
-    --command-flag "--with-fftw-dir=$(pack_get --prefix fftw-3)"
+    --command-flag "--with-fftw-dir=$(pack_get --prefix fftw-mpi-3)"
 
-#    --command-flag "--with-mumps=1" \
-#    --command-flag "--with-mumps-lib='$(list --LDFLAGS --Wlrpath mumps) -lzmumps -ldmumps -lmumps_common -lpord'" \
-#    --command-flag "--with-mumps-include=$(pack_get --prefix mumps)/include" \
-#    --command-flag "--with-ptscotch=1" \
-#    --command-flag "--with-ptscotch-lib='$(list --LDFLAGS --Wlrpath scotch) -lptscotch'" \
-#    --command-flag "--with-ptscotch-include=$(pack_get --prefix scotch)/include"
-
+# Just does not work
 #    --command-flag "--with-superlu_dist=1" \
 #    --command-flag "--with-superlu_dist-dir=$(pack_get --prefix superlu-dist)" \
+#    --command-flag "--with-superlu_dist-lib='-lsuperlu'"
+
+# Requires ptesmumps
+#    --command-flag "--with-mumps=1" \
+#    --command-flag "--with-mumps-dir=$(pack_get --prefix mumps)" \
+#    --command-flag "--with-ptscotch=1" \
+#    --command-flag "--with-ptscotch-dir=$(pack_get --prefix scotch)"
+
+#    --command-flag "--with-netcdf=1" \
+#    --command-flag "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
+#    --command-flag "--with-netcdf-libs='-lnetcdf -lpnetcdf'"
 
 #    --command-flag "--with-cholmod=1" \
 #    --command-flag "--with-cholmod-dir=$(pack_get --prefix cholmod)"
 #    --command-flag "--with-umfpack=1" \
 #    --command-flag "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
 #    --command-flag "--with-scalar-type=complex" \ #error on hwloc
-#    --command-flag "--with-netcdf=1" \
-#    --command-flag "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
 
-# Make commands
 pack_set --command "make"
 pack_set --command "make install"
 

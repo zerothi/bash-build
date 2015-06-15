@@ -23,7 +23,7 @@ for v in 5.1.1 5.1.2 ; do
 
     pack_set --module-opt "--lua-family espresso"
 
-    pack_set --module-requirement openmpi 
+    pack_set --module-requirement mpi 
     pack_set --module-requirement fftw-3
 
     # Fetch all the packages and pack them out
@@ -34,7 +34,7 @@ for v in 5.1.1 5.1.2 ; do
     fi
 
     # Check for Intel MKL or not
-    tmp_lib="FFT_LIBS='$(list --LDFLAGS --Wlrpath fftw-3) -lfftw3'"
+    tmp_lib="FFT_LIBS='$(list --LD-rp fftw-3) -lfftw3'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
@@ -46,13 +46,14 @@ for v in 5.1.1 5.1.2 ; do
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
+	pack_set --module-requirement scalapack
 
 	for la in $(choice linalg) ; do
 	    if [ $(pack_installed $la) -eq 1 ] ; then
 		pack_set --module-requirement $la
-		tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+		tmp_ld="$(list --LD-rp $la)"
 		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
-		tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp_ld -lscalapack'"
+		tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
 		if [ "x$la" == "xatlas" ]; then
 		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
 		elif [ "x$la" == "xopenblas" ]; then
@@ -67,11 +68,14 @@ for v in 5.1.1 5.1.2 ; do
     fi
 
     # Install commands that it should run
+    tmp="${FCFLAGS//-floop-block/}"
+    tmp="${tmp//-qopt-prefetch/}"
+    tmp="${tmp//-opt-prefetch/}"
     pack_set --command "./configure" \
 	--command-flag "$tmp_lib" \
-	--command-flag "FFLAGS='${FCFLAGS//-floop-block/} $FLAG_OMP'" \
+	--command-flag "FFLAGS='$tmp $FLAG_OMP'" \
 	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req-path)) $FLAG_OMP'" \
+	--command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
 	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
 	--command-flag "--enable-parallel --enable-openmp" \
 	--command-flag "--prefix=$(pack_get --prefix)" 
@@ -89,17 +93,6 @@ for v in 5.1.1 5.1.2 ; do
     # Install the iotk-library
     pack_set --command "cp iotk/src/libiotk.a $(pack_get --LD)/"
     pack_set --command "cp iotk/src/*.mod $(pack_get --prefix)/include/"
-
-    pack_install
-
-    create_module \
-    	--module-path $(build_get --module-path)-npa-apps \
-    	-n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    	-v $(pack_get --version) \
-    	-M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-	-P "/directory/should/not/exist" \
-    	$(list --prefix '-L ' $(pack_get --mod-req)) \
-    	-L $(pack_get --alias) 
 
 done
 

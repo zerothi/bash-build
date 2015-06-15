@@ -4,7 +4,6 @@ add_package --build generic --alias gen-freetype --package gen-freetype \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/freetype-config
-pack_set --host-reject hemera
 
 # Configure calls setup
 pack_set --command "./configure --prefix $(pack_get --prefix)"

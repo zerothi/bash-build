@@ -1,6 +1,6 @@
 pack_set --host-reject ntch --host-reject zeroth
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 pack_set --module-requirement wannier90[1.2]
 
 if $(is_c gnu) ; then
@@ -67,7 +67,7 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LINK = $FLAG_OMP -mkl=parallel $(list --Wlrpath --LDFLAGS openmpi) ' $file"
+LINK = $FLAG_OMP -mkl=parallel $(list --LD-rp mpi) ' $file"
 
 elif $(is_c gnu) ; then
 
@@ -82,26 +82,27 @@ FREE = -ffree-form\n\
 FCL = \$(FC)\n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
-LINK = $FLAG_OMP $(list --Wlrpath --LDFLAGS openmpi)\n\
+LINK = $FLAG_OMP $(list --LD-rp mpi)\n\
 LINK = \n\
 DEBUG = \n' $file"
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
 	    pack_set --command "sed -i '$ a\
-SCA = $(list --Wlrpath --LDFLAGS $la) -lscalapack\n\
-LAPACK = $(list --Wlrpath --LDFLAGS $la) -llapack\n ' $file"
+SCA = $(list --LD-rp scalapack) -lscalapack\n\
+LAPACK = $(list --LD-rp $la) -llapack\n ' $file"
 	    
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '$ a\
-BLAS = $(list --Wlrpath --LDFLAGS $la) -lf77blas -lcblas -latlas\n' $file"
+BLAS = $(list --LD-rp $la) -lf77blas -lcblas -latlas\n' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '$ a\
-BLAS = $(list --Wlrpath --LDFLAGS $la) -lblas\n' $file"
+BLAS = $(list --LD-rp $la) -lblas\n' $file"
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '$ a\
-BLAS = $(list --Wlrpath --LDFLAGS $la) -lopenblas_omp\n' $file"
+BLAS = $(list --LD-rp $la) -lopenblas_omp\n' $file"
 	    fi
 	    break
 	fi

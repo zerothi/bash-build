@@ -1,4 +1,4 @@
-v=4.0.0.10
+v=4.0.0.12
 add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -16,7 +16,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    tmp="$(list --LD-rp $la) -llapack"
 	    [ "x$la" == "xatlas" ] && \
 		tmp="$tmp -lf77blas -lcblas"
 	    tmp="$tmp -l$la"

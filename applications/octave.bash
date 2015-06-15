@@ -1,11 +1,24 @@
-add_package ftp://ftp.gnu.org/gnu/octave/octave-3.8.2.tar.bz2
+tmp=0
+if $(is_c gnu) ; then
+    tmp=1
+fi
+[ $tmp -eq 0 ] && return
+
+add_package ftp://ftp.gnu.org/gnu/octave/octave-4.0.0.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/octave
 
-tmp_flags="--with-x"
+pack_set --host-reject zero
+pack_set --host-reject ntch
+
+# Link gnuplot (otherwise the gnuplot backend won't work)
+pack_set --module-requirement gnuplot
+pack_set -mod-req pcre
+
+tmp_flags="--with-x --disable-docs --disable-java"
 pack_set --module-requirement arpack-ng
 tmp_flags="$tmp_flags --with-arpack-libdir=$(pack_get --LD arpack-ng)"
 tmp_flags="$tmp_flags --with-arpack-includedir=$(pack_get --prefix arpack-ng)/include"
@@ -36,7 +49,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp_flags="$tmp_flags --with-lapack='$tmp_ld -llapack'"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
@@ -51,18 +64,12 @@ else
 
 fi
 
-
 # Install commands that it should run
-pack_set --command "LDFLAGS='$(list --Wlrpath --LDFLAGS $(pack_get --mod-req))' ../configure $tmp_flags" \
+pack_set --command "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flags" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
+#pack_set --command "make check > tmp.test 2>&1"
 pack_set --command "make install"
-pack_set_mv_test tmp.test
-
-
-if [ $(pack_installed flex) -eq 1 ] ; then
-    pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
-fi
+#pack_set_mv_test tmp.test

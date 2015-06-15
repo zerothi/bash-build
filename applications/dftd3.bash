@@ -29,14 +29,3 @@ pack_set --command "make"
 # Install the package
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 pack_set --command "cp dftd3 $(pack_get --prefix)/bin/"
-
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)

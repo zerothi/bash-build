@@ -1,14 +1,14 @@
+for v in 4.0 ; do
+
 add_package --package superlu-dist \
-    --directory SuperLU_DIST_3.3 \
-    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_3.3.tar.gz
+    --directory SuperLU_DIST_$v \
+    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix "--host-reject " surt muspel slid)
-
 pack_set --install-query $(pack_get --LD)/libsuperlu.a
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement parmetis
 
 # Prepare the make file
@@ -20,14 +20,15 @@ PLAT =\n\
 DSuperLUroot = ..\n\
 DSUPERLULIB = \$(DSuperLUroot)/lib/libsuperlu.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
-METISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lmetis\n\
-PARMETISLIB = $(list --LDFLAGS --Wlrpath parmetis) -lparmetis\n\
+METISLIB = $(list --LD-rp parmetis) -lmetis\n\
+PARMETISLIB = $(list --LD-rp parmetis) -lparmetis\n\
+I_PARMETIS = $(list --INCDIRS parmetis)\n\
 LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
 ARCHFLAGS = cr\n\
 RANLIB = ranlib\n\
 CC = $MPICC\n\
-CFLAGS = $CFLAGS\n\
+CFLAGS = $CFLAGS \$(I_PARMETIS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
@@ -37,8 +38,9 @@ CDEFS    = -DAdd_\n\
 ' $file"
 
 if $(is_c intel) ; then
-    pack_set --command "sed -i '1 a\
+    pack_set --command "sed -i '$ a\
 BLASLIB = -mkl=sequential\n\
+CFLAGS += -std=c99\n\
 ' $file"
     
 else
@@ -51,7 +53,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-BLASLIB = $(list --LDFLAGS --Wlrpath $la) $tmp\n\
+BLASLIB = $(list --LD-rp $la) $tmp\n\
 ' $file"
 	    break
 	fi
@@ -65,3 +67,4 @@ pack_set --command "make"
 pack_set --command "mkdir -p $(pack_get --LD)/"
 pack_set --command "cp lib/libsuperlu.a $(pack_get --LD)/"
 
+done

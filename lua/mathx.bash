@@ -1,7 +1,7 @@
 add_package --build generic \
-    --version 5.2 \
+    --version 5.3 \
     --directory mathx \
-    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/lmathx.tar.gz
+    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lmathx.tar.gz
 
 pack_set --module-requirement lua
 

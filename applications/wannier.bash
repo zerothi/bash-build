@@ -1,4 +1,4 @@
-for v in 2.0.0 1.2 ; do
+for v in 2.0.1 1.2 ; do
 add_package http://www.wannier.org/code/wannier90-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --prefix)/bin/wannier90
 #pack_set --host-reject ntch-l
 pack_set --module-opt "--lua-family wannier90"
 if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
-    pack_set --module-requirement openmpi
+    pack_set --module-requirement mpi
 fi
 
 # Check for Intel MKL or not
@@ -20,7 +20,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp="$(list --LDFLAGS --Wlrpath $la) -llapack"
+	    tmp="$(list --LD-rp $la) -llapack"
 	    if [ "x$la" == "xatlas" ]; then
 		tmp="$tmp -lf77blas -lcblas -latlas"
 	    else
@@ -63,7 +63,8 @@ if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
     pack_set --command "cp utility/kmesh.pl $(pack_get --prefix)/bin/"
 fi
 pack_set --command "make lib"
-pack_set --command "make test"
+pack_set --command "make test 2>&1 > tmp.test"
+pack_set_mv_test tmp.test
 pack_set --command "cp wannier90.x $(pack_get --prefix)/bin/"
 pack_set --command "cp libwannier.a $(pack_get --LD)/"
 if [ $(vrs_cmp $v 2.0) -ge 0 ]; then
@@ -75,17 +76,5 @@ fi
 # Make easy links
 pack_set --command "cd $(pack_get --prefix)/bin/"
 pack_set --command 'for f in *.x ; do ln -s $f ${f//.x/} ; done'
-
-pack_install
-
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias) 
 
 done

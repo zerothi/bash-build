@@ -7,7 +7,7 @@ def_version=$(build_get --def-module-version)
 build_set --non-default-module-version
 build_set --default-build generic-no-version
 
-source scripts/npa-scripts.bash
+source_pack scripts/npa-scripts.bash
 
 if [ $def_version -eq 1 ]; then
     build_set --default-module-version

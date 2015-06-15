@@ -1,4 +1,4 @@
-v=4.4.7
+v=4.5.0
 add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -10,8 +10,6 @@ pack_set --install-query $(pack_get --prefix)/bin/ncks
 pack_set --module-requirement gsl \
     --module-requirement udunits \
     --module-requirement netcdf-serial
-
-pack_set $(list -p '--host-reject ' hemera eris ponto)
 
 # Install commands that it should run
 pack_set \

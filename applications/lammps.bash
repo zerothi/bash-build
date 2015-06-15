@@ -15,7 +15,7 @@ pack_set --command 'cd src'
 
 pack_set --install-query $(pack_get --prefix)/bin/lmp
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement fftw-3
 
 tmp=MAKE/Makefile.npa
@@ -47,12 +47,12 @@ JPG_LIB = ' $tmp"
 
 if $(is_c intel) ; then
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
     pack_set --command "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LDFLAGS --Wlrpath $(pack_get --mod-req-path))\n\
+LINKFLAGS =  $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
 else
@@ -61,8 +61,7 @@ fi
 
 # Make commands
 pack_set --command "make $(get_make_parallel) npa"
-pack_set --command "make makelib"
-pack_set --command "make -f Makefile.lib $(get_make_parallel) npa"
+pack_set --command "make mode=lib $(get_make_parallel) npa"
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
@@ -71,16 +70,3 @@ pack_set --command "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
 # Copy headers over 
 pack_set --command "mkdir -p $(pack_get --prefix)/include"
 pack_set --command "cp library.cpp library.h $(pack_get --prefix)/include/"
-
-
-pack_install
-
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)

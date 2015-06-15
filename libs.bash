@@ -1,94 +1,104 @@
 msg_install --message "Installing all libraries..."
 
 # Basic libraries
-source libs/zlib.bash
-source libs/expat.bash
-source libs/libffi.bash
-source libs/libxml2.bash
+source_pack libs/zlib.bash
+source_pack libs/expat.bash
+source_pack libs/libffi.bash
+source_pack libs/libxml2.bash
 
-#source libs/llvm.bash
-#source libs/gmp.bash
-#source libs/guile.bash
+#source_pack libs/llvm.bash
+#source_pack libs/gmp.bash
+#source_pack libs/guile.bash
+
+source_pack libs/hwloc.bash
 
 # Basic parallel libraries
-source libs/hwloc.bash
-source libs/openmpi-hpc.bash
-source libs/mpich.bash
+source_pack libs/openmpi.bash
+source_pack libs/mpich.bash
+# Set the default MPI version
+if $(is_c intel) ; then
+    # The current implementation does not abstract the
+    # mpi differences
+    pack_set --alias mpi openmpi
+else
+    pack_set --alias mpi $_mpi_version
+fi
 
 # Optimization of openmpi parameters
-source libs/otpo.bash
+source_pack libs/otpo.bash
 
 # Default fftw libs
-source libs/fftw2.bash
-source libs/fftw3.bash
-source libs/fftw2-intel.bash
-source libs/fftw3-intel.bash
+source_pack libs/fftw2.bash
+source_pack libs/fftw3.bash
+source_pack libs/fftw2-intel.bash
+source_pack libs/fftw3-intel.bash
+
+# Currently aotus is compiled together with flook
+source_pack libs/flook.bash
 
 # Install my fortran dictionary library
-source libs/fvar.bash
+source_pack libs/fdict.bash
 
 # Default packages for many libs
-source libs/blas.bash
-source libs/cblas.bash
-source libs/lapack.bash blas
-source libs/atlas.bash
-source libs/lapack.bash atlas
-source libs/openblas.bash
-source libs/lapack.bash openblas
+source_pack libs/blas.bash
+source_pack libs/cblas.bash
+source_pack libs/lapack.bash blas
+source_pack libs/scalapack.bash
 
-source libs/plasma.bash
-#source libs/flame.bash
-source libs/scalapack.bash
-source libs/arpack.bash
-source libs/arpack-ng.bash
-source libs/parpack.bash
+source_pack libs/atlas.bash
+source_pack libs/lapack.bash atlas
+source_pack libs/openblas.bash
+source_pack libs/lapack.bash openblas
+
+source_pack libs/plasma.bash
+#source_pack libs/flame.bash
+source_pack libs/arpack.bash
+source_pack libs/arpack-ng.bash
+source_pack libs/parpack.bash
+source_pack libs/elpa.bash
 
 # Some specific libraries
-source libs/gsl.bash
-#source libs/boost.bash
-source libs/ctl.bash
-source libs/harminv.bash
+source_pack libs/gsl.bash
+source_pack libs/boost.bash
+source_pack libs/ctl.bash
+source_pack libs/harminv.bash
 
 # Install generic libraries
-source libs/hdf5.bash
-source libs/hdf5-serial.bash
-source libs/h5utils-serial.bash
-source libs/parallel-netcdf.bash
-source libs/netcdf.bash
-source libs/netcdf-logging.bash
-source libs/netcdf-serial.bash
+source_pack libs/hdf5.bash
+source_pack libs/hdf5-serial.bash
+source_pack libs/h5utils-serial.bash
+source_pack libs/parallel-netcdf.bash
+source_pack libs/netcdf.bash
+source_pack libs/netcdf-logging.bash
+source_pack libs/netcdf-serial.bash
 
 # Install my ncdf library
-source libs/ncdf.bash
+source_pack libs/ncdf.bash
 
-source libs/udunits.bash
-source libs/nco.bash
+source_pack libs/udunits.bash
+source_pack libs/nco.bash
 
 # sorting algorithms for matrices
-source libs/metis.bash
-source libs/metis-par-3.bash
-source libs/metis-par.bash
-source libs/scotch.bash
+source_pack libs/metis.bash
+source_pack libs/metis-par-3.bash
+source_pack libs/metis-par.bash
+source_pack libs/scotch.bash
 
 # A sparse library
 source libs/suitesparse.bash
-source libs/suitesparse_all.bash
+source_pack libs/suitesparse_all.bash
 
-source libs/mumps-serial.bash
-source libs/mumps.bash
-source libs/superlu.bash
-source libs/superlu-dist.bash
-source libs/petsc.bash
-source libs/slepc.bash
+source_pack libs/mumps-serial.bash
+source_pack libs/mumps.bash
+source_pack libs/superlu.bash
+source_pack libs/superlu-dist.bash
+source_pack libs/petsc.bash
+source_pack libs/slepc.bash
 
 # Libraries for DFT
-source libs/libxc.bash
-source libs/etsf_io.bash
-source libs/atompaw.bash
-
-# We need to end lib-installation
-# before proceeding
-pack_install
+source_pack libs/libxc.bash
+source_pack libs/etsf_io.bash
+source_pack libs/atompaw.bash
 
 # We install the module scripts here:
 create_module \
@@ -118,6 +128,6 @@ for bl in blas atlas openblas ; do
 	-v $(date +'%g-%j') \
 	-M mpi.$bl.scalapack/$(get_c) \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement openmpi) openmpi $bl)
+	$(list --prefix '-L ' $(pack_get --module-requirement mpi) mpi $bl)
 done
 

@@ -50,12 +50,12 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    sse "LAPACK = $(list --LDFLAGS --Wlrpath $la) -llapack"
+	    sse "LAPACK = $(list --LD-rp $la) -llapack"
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
-	    sse "BLAS = $(list --LDFLAGS --Wlrpath $la) $tmp"
+	    sse "BLAS = $(list --LD-rp $la) $tmp"
 	    break
 	fi
     done

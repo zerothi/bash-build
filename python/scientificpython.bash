@@ -12,7 +12,7 @@ pack_set --module-requirement netcdf-serial \
     --module-requirement numpy
 
 # Check for Intel MKL or not
-tmp_flags="$(list --LDFLAGS --Wlrpath netcdf-serial)"
+tmp_flags="$(list --LD-rp netcdf-serial)"
 tmp_compiler=""
 if $(is_c intel) ; then
     echo "continue" > /dev/null
@@ -22,7 +22,7 @@ elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp_flags="$tmp_flags $(list --LDFLAGS --Wlrpath $la)"
+	    tmp_flags="$tmp_flags $(list --LD-rp $la)"
 	    break
 	fi
     done

@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --LD)/libslepc.so
 pack_set --module-requirement petsc \
     --module-requirement parpack
 
-tmp_ld="$(list --LDFLAGS --Wlrpath $(pack_get --mod-req))"
+tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
 tmp_lib=
 
 if $(is_c intel) ; then
@@ -18,7 +18,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$tmp_ld $(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$tmp_ld $(list --LD-rp $la)"
 	    tmp_lib="-llapack"
 	    [ "x$la" == "xatlas" ] && \
 		tmp_lib="$tmp_lib -lf77blas -lcblas"
@@ -33,6 +33,7 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
     --command-flag "CXX='$MPICXX' CXXFLAGS='$CFLAGS'" \
     --command-flag "FC='$MPIF90' FCFLAGS='$FCFLAGS'" \
     --command-flag "F77='$MPIF77' FFLAGS='$FFLAGS'" \
+    --command-flag "F90='$MPIF90'" \
     --command-flag "LDFLAGS='$tmp_ld'" \
     --command-flag "LIBS='$tmp_ld $tmp_lib'" \
     --command-flag "AR=$AR" \
@@ -47,8 +48,8 @@ pack_set --command "CC='$MPICC' CFLAGS='$CFLAGS'" \
 # (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)
 pack_set --command "make SLEPC_DIR=\$(pwd)"
 
-pack_set --command "make testexamples"
-pack_set --command "make testfortran"
+#pack_set --command "make testexamples"
+#pack_set --command "make testfortran"
 
 pack_set --command "make install"
 

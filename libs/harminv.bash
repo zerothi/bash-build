@@ -2,7 +2,7 @@
 add_package http://ab-initio.mit.edu/harminv/harminv-1.3.1.tar.gz
 
 pack_set \
-    $(list --prefix "--host-reject " ntch zeroth surt muspel slid a0 b0 c0 d0 n0 p0 q0 g0 hemera eris ponto)
+    $(list --prefix "--host-reject " ntch zeroth)
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -18,7 +18,7 @@ else
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ]; then
 	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LDFLAGS --Wlrpath $la)"
+	    tmp_ld="$(list --LD-rp $la)"
 	    tmp=
 	    [ "x$la" == "xatlas" ] && \
 		tmp="-lf77blas -lcblas"

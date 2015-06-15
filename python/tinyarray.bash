@@ -3,9 +3,6 @@
 add_package https://pypi.python.org/packages/source/t/tinyarray/tinyarray-1.0.5.tar.gz
     
 pack_set -s $IS_MODULE
-if $(is_c intel) ; then
-    pack_set --host-reject n-
-fi
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tinyarray.so
     

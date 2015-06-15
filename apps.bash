@@ -1,36 +1,38 @@
-#source applications/git.bash
 msg_install --message "Installing the applications..."
 
 # Make all default modules
-build_set --default-setting module
+build_set --default-setting $IS_MODULE
+build_set --default-setting $CRT_DEF_MODULE
 
 # Valgrind
-source applications/valgrind.bash
+source_pack applications/valgrind.bash
 
 # Analysis tools
-source applications/bader.bash
+source_pack applications/bader.bash
 
-source applications/siesta-stable.bash
-source applications/siesta-dev.bash # my old ts-development
-source applications/siesta-mattias.bash
-source applications/siesta-scf.bash # my ts-development
-source applications/siesta-so.bash # my ts-development
-#source applications/siesta-trunk.bash # siesta trunk development
-#source applications/siesta-trunk-scf.bash # siesta trunk-scf development
+source_pack applications/siesta-stable.bash
+source_pack applications/siesta-dev.bash # my old ts-development
+source_pack applications/siesta-mattias.bash
+source_pack applications/siesta-scf.bash # my ts-development
+source_pack applications/siesta-so.bash # spin-orbit
+#source_pack applications/siesta-trunk.bash # siesta trunk development
+#source_pack applications/siesta-trunk-scf.bash # siesta trunk-scf development
 
-source applications/lammps.bash
+source_pack applications/lammps.bash
 
 # Graphics applications
-source applications/gnuplot.bash
-source applications/molden.bash
-source applications/xmgrace.bash
-source applications/xcrysden.bash
-source applications/vmd.bash
-source applications/gdis.bash
-source applications/povray.bash
+source_pack applications/gnuplot.bash
+source_pack applications/molden.bash
+source_pack applications/xmgrace.bash
+source_pack applications/xcrysden.bash
+source_pack applications/vmd.bash
+# Installed by source to get python support
+source_pack applications/vmd-python.bash
+source_pack applications/gdis.bash
+source_pack applications/povray.bash
 
 # Octave
-#source applications/octave.bash
+source_pack applications/octave.bash
 
 # Create a module with default all plotting tools
 create_module \
@@ -42,33 +44,33 @@ create_module \
     $(list --prefix '-RL ' gnuplot molden grace xcrysden)
 
 # DFT codes
-source applications/gromacs.bash
-source applications/dftb.bash
-source applications/wannier.bash
-source applications/gulp.bash
-source applications/dftd3.bash
-source applications/octopus.bash
-source applications/espresso.bash
-source applications/elk.bash
-# The OpenMX DFT code (has a NEGF routine)
-source applications/openmx.bash
-source applications/bigdft.bash
-source applications/abinit.bash
-#source applications/ape.bash
+source_pack applications/gromacs.bash
+source_pack applications/dftb.bash
+source_pack applications/wannier.bash
+source_pack applications/gulp.bash
+source_pack applications/dftd3.bash
+source_pack applications/octopus.bash
+source_pack applications/espresso.bash
+source_pack applications/elk.bash
+source_pack applications/openmx.bash
+source_pack applications/bigdft.bash
+source_pack applications/abinit.bash
+#source_pack applications/ape.bash
 
 # Needs to be installed AFTER wannier90 :)
-source applications/vasp.bash
-source applications/vasp-intel.bash
-source applications/vasp-potcar.bash
+source_pack applications/vasp.bash
+source_pack applications/vasp-intel.bash
+source_pack applications/vasp-potcar.bash
+
+source_pack applications/bgw.bash
+source_pack applications/cp2k.bash
 
 # Specfial photonics applications
-source applications/mpb.bash # [gmp,libunistring,guile]
-source applications/mpb-serial.bash # [gmp,libunistring,guile]
-source applications/meep.bash # [gmp,libunistring,guile]
-source applications/meep-serial.bash # [gmp,libunistring,guile]
+source_pack applications/mpb.bash # [gmp,libunistring,guile]
+source_pack applications/mpb-serial.bash # [gmp,libunistring,guile]
+source_pack applications/meep.bash # [gmp,libunistring,guile]
+source_pack applications/meep-serial.bash # [gmp,libunistring,guile]
 
-source applications/atk.bash
+source_pack applications/atk.bash
 
 build_set --remove-default-setting module
-
-pack_install

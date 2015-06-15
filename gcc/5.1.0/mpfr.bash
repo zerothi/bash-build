@@ -1,21 +1,18 @@
 add_package --build generic \
-    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
+    http://www.mpfr.org/mpfr-current/mpfr-3.1.2.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement isl
+pack_set --module-requirement gmp[6.0.0a]
 
-pack_set --install-query $(pack_get --prefix)/bin/cloog
+pack_set --install-query $(pack_get --prefix)/lib/libmpfr.a
 
 pack_set --command "module load build-tools"
 
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--with-isl=system" \
-    --command-flag "--with-isl-prefix=$(pack_get --prefix isl)" \
-    --command-flag "--with-gmp=system" \
-    --command-flag "--with-gmp-prefix=$(pack_get --prefix gmp)"
+    --command-flag "--with-gmp=$(pack_get --prefix gmp[6.0.0a])"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

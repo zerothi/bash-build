@@ -1,5 +1,5 @@
 add_package --build generic --package gen-libxml2 \
-    https://git.gnome.org/browse/libxml2/snapshot/libxml2-2.9.1.tar.gz
+    ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -22,4 +22,3 @@ pack_set_mv_test tmp.test
 pack_set --command "pushd $(pack_get --prefix)/include"
 pack_set --command "ln -s libxml2/libxml"
 pack_set --command "popd"
-

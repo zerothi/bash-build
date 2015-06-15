@@ -2,17 +2,41 @@
 # We here contain any information that could be relevant for compiler setups
 
 _c=""
+_c_v=""
 # Set compiler name
-function set_c { _c="$1" ; }
-function get_c { printf "%s" "$_c" ; }
+function set_c { 
+    _c="${1%-*}"
+    _c_v="${1#*-}"
+    shift
+}
+function get_c {
+	local c="$_c-$_c_v"
+    if [ $# -eq 0 ]; then
+	printf "%s" "$c"
+    else
+	local opt=$(trim_em $1) ; shift
+	case $opt in
+	    -name|-n)
+		printf "%s" "$_c"
+		;;
+	    -version|-v)
+		printf "%s" "$_c_v"
+		;;
+	    -all|-a)
+		printf "%s" "$c"
+		;;
+	esac
+    fi
+}
 
 # Check the compiler...
 # Takes one argument:
 # #1 : the compiler string to search from the beginning of the compiler-name...
 function is_c {
-    local check="$1"
+    local check="$1" ; shift
     local l="${#check}"
-    if [ "x${_c:0:$l}" == "x$check" ]; then
+    local c="$_c-$_c_v"
+    if [ "x${c:0:$l}" == "x$check" ]; then
 	return 0
     fi
     return 1

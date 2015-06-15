@@ -1,11 +1,11 @@
 msg_install --message "Installing the SUITE SPARSE libraries..."
 
 # A sparse library
-source libs/suitesparse_config.bash
-source libs/camd.bash
-source libs/amd.bash
-source libs/colamd.bash
-source libs/ccolamd.bash
-source libs/cholmod.bash
-source libs/umfpack.bash
+source_pack libs/suitesparse_config.bash
+source_pack libs/camd.bash
+source_pack libs/amd.bash
+source_pack libs/colamd.bash
+source_pack libs/ccolamd.bash
+source_pack libs/cholmod.bash
+source_pack libs/umfpack.bash
 

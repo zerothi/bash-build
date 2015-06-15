@@ -1,4 +1,4 @@
-add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.7.0.tar.gz
+add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.7.1.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
@@ -22,7 +22,7 @@ FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
 # We need the C-interface for LAPACK\n\
 INCCLAPACK = $(list --INCDIRS blas)\n\
-LIBCLAPACK = $(list --LDFLAGS --Wlrpath blas) -llapacke \n\
+LIBCLAPACK = $(list --LD-rp blas) -llapacke \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $file"
@@ -40,11 +40,11 @@ else
 		tmp="-lopenblas_omp" || tmp="$tmp -l$la"
 	    [ "x$la" == "xblas" ] && cblas="-lcblas"
 	    pack_set --command "sed -i '1 a\
-LIBBLAS  = $(list --LDFLAGS --Wlrpath $la) $tmp \n\
+LIBBLAS  = $(list --LD-rp $la) $tmp \n\
 LIBCBLAS = $cblas\n\
 INCCLAPACK = $(list --INCDIRS $la)\n\
-LIBCLAPACK = $(list --LDFLAGS --Wlrpath $la) -llapacke \n\
-LIBLAPACK  = $(list --LDFLAGS --Wlrpath $la) -ltmg -llapack\n' $file"
+LIBCLAPACK = $(list --LD-rp $la) -llapacke \n\
+LIBLAPACK  = $(list --LD-rp $la) -ltmg -llapack\n' $file"
 	    break
 	fi
     done
@@ -64,7 +64,7 @@ ARCHFLAGS = cr \n\
 RANLIB = ranlib \n\
 CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
 FFLAGS = $tmpfc $FLAG_OMP \n\
-LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LDFLAGS --Wlrpath $(pack_get --mod-req hwloc) hwloc)\n' $file"
+LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LD-rp +hwloc)\n' $file"
 unset tmpfc
 # Make and install commands
 pack_set --command "make $(get_make_parallel) all"

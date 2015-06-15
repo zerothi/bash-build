@@ -3,7 +3,7 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement gmp
+pack_set --module-requirement gmp[6.0.0a]
 
 pack_set --install-query $(pack_get --prefix)/lib/libmpfr.a
 
@@ -12,7 +12,7 @@ pack_set --command "module load build-tools"
 # Install commands that it should run
 pack_set --command "../configure" \
     --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--with-gmp=$(pack_get --prefix gmp)"
+    --command-flag "--with-gmp=$(pack_get --prefix gmp[6.0.0a])"
 
 # Make commands
 pack_set --command "make $(get_make_parallel)"

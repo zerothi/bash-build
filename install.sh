@@ -1,6 +1,6 @@
 #!/bin/bash -i
 
-tmp=`pwd`
+_top_dir=`pwd`
 
 source ~/.bashrc
 module purge
@@ -9,14 +9,15 @@ module purge
 export OMP_NUM_THREADS=1
 
 # On thul and interactive nodes, sourching leads to going back
-cd $tmp
-unset tmp
+cd $_top_dir
 
 # We have here the installation of all the stuff for gray....
-source install_funcs.sh
+source src/init.bash
 
 # Default python version installed
 _python_version=2
+# Default MPI version
+_mpi_version=openmpi
 # Default name for build which builds the generic
 # packages.
 _generic_build=generic
@@ -39,6 +40,16 @@ while [ $# -gt 0 ]; do
 		    ;;
 	    esac
 	    shift ;;
+	-mpi-version|-mpi)
+	    _mpi_version=$(lc $1)
+	    case $_mpi_version in
+		openmpi|mpich)
+		    ;; # fine
+		*)
+		    doerr "option parsing" "MPI version does not exist [OpenMPI|MPICH]"
+		    ;;
+	    esac
+	    shift ;;
 	-tcl)
 	    _module_format=TCL
 	    ;;
@@ -48,9 +59,12 @@ while [ $# -gt 0 ]; do
 	-generic)
 	    _generic_build=$1
 	    shift ;;
-	-default|-opti)
+	-default|-opti|-d)
 	    _default_build=$1
 	    shift ;;
+	-list)
+	    export PACK_LIST=1
+	    ;;
 	-only)
 	    pack_only $1
 	    shift ;;
@@ -111,7 +125,6 @@ while [ $tmp -lt $_N_b ]; do
     let tmp++
 done
 
-
 # Begin installation of various packages
 # List of archives
 # The order is the installation order
@@ -156,9 +169,6 @@ source default.bash
 
 # Add the latest modules
 source latest.bash
-
-# We always need to finish by installing the last package
-pack_install
 
 msg_install --message "Finished installing all applications..."
 

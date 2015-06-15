@@ -1,4 +1,4 @@
-v=2.3.1
+v=2.5.0
 add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -14,7 +14,7 @@ pack_set --module-requirement numpy \
 pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages"
     
 # Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py build" \
+pack_set --command "$(get_parent_exec) setup.py configure" \
     --command-flag "--hdf5=$(pack_get --prefix hdf5-serial)"
 
 pack_set --command "$(get_parent_exec) setup.py install" \

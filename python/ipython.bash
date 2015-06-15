@@ -1,5 +1,5 @@
-v=3.0.0
-add_package https://github.com/ipython/ipython/releases/download/rel-$v/ipython-$v.tar.gz
+v=3.1.0
+add_package https://pypi.python.org/packages/source/i/ipython/ipython-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/ipython${pV:0:1}
 

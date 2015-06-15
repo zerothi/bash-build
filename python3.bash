@@ -1,10 +1,10 @@
 # Install Python 3 versions
-# apt-get libbz2-dev
+# apt-get libbz2-dev libncurses5-dev zip
 v=3.4.3
+add_package --alias python --package python \
+    http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
-    add_package --alias python --package Python http://www.python.org/ftp/python/$v/Python-$v.tgz
-else
-    add_package --package python http://www.python.org/ftp/python/$v/Python-$v.tgz
+    pack_set --package Python
 fi
 
 # The settings
@@ -30,7 +30,7 @@ fi
 
 # Install commands that it should run
 pack_set --command "../configure --with-threads" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req) $lib_extra)'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --prefix)"
@@ -38,7 +38,7 @@ pack_set --command "../configure --with-threads" \
 # Make commands
 pack_set --command "make $(get_make_parallel)"
 
-if $(is_host n- slid muspel surt hemera eris) ; then
+if $(is_host n- slid muspel surt) ; then
     msg_install --message "Skipping python tests..."
     #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
@@ -46,7 +46,7 @@ else
     pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-if ! $(is_host n- slid muspel surt hemera eris) ; then
+if ! $(is_host n- slid muspel surt) ; then
     pack_set_mv_test tmp.test
 fi
 
@@ -85,16 +85,16 @@ create_module \
 create_module \
     -n "Nick Papior Andersen's basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
+    -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython numexpr netcdf4py matplotlib)
+    $(list --prefix '-RL ' scipy cython numexpr netcdf4py matplotlib)
 
 create_module \
     -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
+    -M python$pV.cython.numpy.scipy.mpi4py/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython mpi4py netcdf4py)
+    $(list --prefix '-RL ' scipy cython mpi4py netcdf4py)
 
 create_module \
     -n "Nick Papior Andersen's parallel/numba python script for: $(get_c)" \

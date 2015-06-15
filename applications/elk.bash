@@ -1,10 +1,10 @@
-add_package http://garr.dl.sourceforge.net/project/elk/elk-3.0.4.tgz
+add_package http://garr.dl.sourceforge.net/project/elk/elk-3.0.18.tgz
 
 pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/elk
 
-pack_set --module-requirement openmpi \
+pack_set --module-requirement mpi \
     --module-requirement libxc \
     --module-requirement fftw-3
 
@@ -30,9 +30,9 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list --LDFLAGS --Wlrpath openmpi libxc) -lxcf90 -lxc\n\
+LIB_libxc = $(list --LD-rp mpi libxc) -lxcf90 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
-LIB_FFT = $(list --LDFLAGS --Wlrpath fftw-3) -lfftw3\n\
+LIB_FFT = $(list --LD-rp fftw-3) -lfftw3\n\
 SRC_FFT = zfftifc.f90\n\
 ' $file"
 
@@ -44,6 +44,7 @@ LIB_LPK = $tmp\n\
 ' $file"
 
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
@@ -61,7 +62,7 @@ elif $(is_c gnu) ; then
     done
 
     pack_set --command "sed -i '1 a\
-LIB_LPK = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req)) $tmp\n\
+LIB_LPK = $(list --LD-rp $(pack_get --mod-req)) $tmp\n\
 ' $file"
 
 else
@@ -113,15 +114,3 @@ pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 # Create the species input
 pack_set --command "cp -rf species $(pack_get --prefix)/species"
 pack_set --module-opt "--set-ENV ELK_SPECIES=$(pack_get --prefix)/species"
-
-
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)

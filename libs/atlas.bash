@@ -1,9 +1,11 @@
-# 3.11.28
+# 3.11.34 (works)
+for v in 3.10.2 ; do
 tmp="--build generic-host"
 if $(is_c gnu) ; then
+    # If we use a later gnu version
+    # we will prefer that
     tmp=
 fi
-for v in 3.10.2 ; do
 if [ $(vrs_cmp $v 3.10.2) -le 0 ]; then
     add_package $tmp http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
 else
@@ -12,7 +14,7 @@ fi
 
 pack_set --directory ATLAS
 
-pack_set $(list --prefix "--host-reject " surt muspel slid hemera eris ponto n-62-17-44 n-62-26 n-62-25)
+pack_set $(list --prefix "--host-reject " n-62-17-44 n-62-26 n-62-25)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libatlas.a

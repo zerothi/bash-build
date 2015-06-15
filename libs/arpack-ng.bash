@@ -1,14 +1,14 @@
-v=3.1.5
+v=3.2.0
 add_package \
-    --directory arpack-ng-$v \
-    http://forge.scilab.org/index.php/p/arpack-ng/downloads/get/arpack-ng_$v.tar.gz
+    --archive arpack-ng-$v.tar.gz \
+    https://github.com/opencollab/arpack-ng/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
 pack_set --install-query $(pack_get --LD)/libparpack.a
 
-pack_set --module-requirement openmpi
+pack_set --module-requirement mpi
 
 tmp_flags=""
 if $(is_c intel) ; then
@@ -39,8 +39,4 @@ pack_set --command "./configure" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 pack_set --command "make"
-if ! $(is_host eris) ; then
-	pack_set --command "make check > tmp.test 2>&1"
-	pack_set_mv_test tmp.test
-fi
 pack_set --command "make install"

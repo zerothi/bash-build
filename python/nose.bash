@@ -1,4 +1,4 @@
-add_package http://pypi.python.org/packages/source/n/nose/nose-1.3.0.tar.gz
+add_package http://pypi.python.org/packages/source/n/nose/nose-1.3.6.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/nosetests
 

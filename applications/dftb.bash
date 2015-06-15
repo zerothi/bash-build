@@ -49,7 +49,7 @@ LNOPT = $FLAG_OMP' $file"
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    pack_set --command "sed -i '$ a\
-LINALG_OPT = $(list --LDFLAGS --Wlrpath $la)\n\
+LINALG_OPT = $(list --LD-rp $la)\n\
 LIB_LAPACK = \$(LINALG_OPT) -llapack\n\
 LIBOPT = \$(LINALG_OPT)\n' $file"
 	    if [ "x$la" == "xatlas" ]; then
@@ -79,16 +79,5 @@ pack_set --command "make $(get_make_parallel)"
 # Make commands
 pack_set --command "mkdir -p $(pack_get --prefix)/bin"
 pack_set --command "cp _obj_$cc/dftb+ $(pack_get --prefix)/bin/"
-
-pack_install
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)
 
 done

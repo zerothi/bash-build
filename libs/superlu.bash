@@ -4,8 +4,6 @@ add_package --package superlu \
 
 pack_set -s $IS_MODULE
 
-pack_set $(list --prefix "--host-reject " surt muspel slid)
-
 pack_set --install-query $(pack_get --LD)/libsuperlu.a
 
 # Prepare the make file
@@ -46,7 +44,7 @@ else
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    pack_set --command "sed -i '1 a\
-BLASLIB = $(list --LDFLAGS --Wlrpath $la) $tmp\n\
+BLASLIB = $(list --LD-rp $la) $tmp\n\
 ' $file"
 	    break
 	fi

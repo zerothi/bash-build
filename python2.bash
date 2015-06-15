@@ -1,12 +1,10 @@
 # Install Python 2 versions
-# apt-get bz2-dev
-v=2.7.9
+# apt-get libbz2-dev libncurses5-dev zip
+v=2.7.10
+add_package --alias python --package python \
+    http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
-    add_package --alias python --package Python \
-	http://www.python.org/ftp/python/$v/Python-$v.tgz
-else
-    add_package --alias python --package python \
-	http://www.python.org/ftp/python/$v/Python-$v.tgz
+    pack_set --package Python
 fi
 
 # The settings
@@ -23,9 +21,6 @@ pack_set --install-query $(pack_get --prefix)/bin/python
 if ! $(is_host ntch-) ; then
     pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
 fi
-if $(is_host eris) ; then
-    pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/lib64/python2.7/lib-dynload"
-fi
 
 pCFLAGS="$CFLAGS"
 tmp=
@@ -40,7 +35,7 @@ fi
 # Install commands that it should run
 pack_set --command "../configure --with-threads" \
     --command-flag "--enable-unicode=ucs4" \
-    --command-flag "LDFLAGS='$(list --LDFLAGS --Wlrpath $(pack_get --mod-req) $lib_extra)'" \
+    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
     --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
     --command-flag "--with-system-ffi --with-system-expat" \
     --command-flag "--prefix=$(pack_get --prefix)"
@@ -55,7 +50,7 @@ pack_set --command "make $(get_make_parallel)"
 #    done
 #fi
 
-if $(is_host n- slid muspel surt hemera eris) ; then
+if $(is_host n- slid muspel surt) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
@@ -67,10 +62,11 @@ else
     pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_set --command "make install"
-if ! $(is_host n- slid muspel surt hemera eris) ; then
+if ! $(is_host n- slid muspel surt) ; then
     pack_set_mv_test tmp.test
 fi
 
+# Needed as it is not source_pack
 pack_install
 
 create_module \

@@ -8,7 +8,7 @@ pack_set --host-reject ntch-l --host-reject zerothi
 
 pack_set --install-query $(pack_get --prefix)/bin/openmx
 
-pack_set --module-requirement openmpi --module-requirement fftw-3
+pack_set --module-requirement mpi --module-requirement fftw-mpi-3
 
 # Move to the source directory
 pack_set --command "cd source"
@@ -38,19 +38,20 @@ if $(is_c intel) ; then
     LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
+    pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
 	if [ $(pack_installed $la) -eq 1 ] ; then
 	    pack_set --module-requirement $la
 	    if [ "x$la" == "xatlas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lblas' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lblas' $file"
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '1 a\
-LIB += $(list --LDFLAGS --Wlrpath $la) -lscalapack -llapack -lopenblas_omp' $file"
+LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lopenblas_omp' $file"
 	    fi
 	    break
 	fi
@@ -77,7 +78,7 @@ fi
 
 # Ensure linking to the fortran libraries
 pack_set --command "sed -i '1 a\
-LIB = $(list --LDFLAGS --Wlrpath $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 $tmp \n\
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 $tmp \n\
 INCS = $(list --INCDIRS $(pack_get --mod-req-path))' $file"
 
 # prepare the directory of installation
@@ -97,15 +98,3 @@ pack_set --command "cd ../DFT_DATA13"
 pack_set --command "cp -r PAO VPS $(pack_get --prefix)/"
 pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --prefix)/PAO"
 pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --prefix)/VPS"
-
-pack_install
-
-
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --mod-req)) \
-    -L $(pack_get --alias)

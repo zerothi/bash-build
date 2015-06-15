@@ -6,13 +6,10 @@ add_package --build generic \
 [ "$v" == "3.4" ] && pack_set --directory llvm-$v
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
-pack_set --host-reject ntch
 
 if $(is_c intel) ; then
     pack_set --host-reject $(hostname)
 fi
-pack_set $(list --prefix "--host-reject " hemera eris ponto surt slid muspel)
-
 pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
 pack_set --module-requirement gen-zlib \

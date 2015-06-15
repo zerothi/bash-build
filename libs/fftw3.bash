@@ -1,65 +1,86 @@
-add_package \
-    --alias fftw-3 \
+function tmp_func {
+    pack_set --command "make $(get_make_parallel)"
+    if ! $(is_host n-) ; then
+	pack_set --command "make check > tmp.test 2>&1"
+	pack_set_mv_test tmp.test $1
+    fi
+    pack_set --command "make install"
+    pack_set --command "rm -rf ./*"
+    shift
+}
+
+
+add_package --alias fftw-3 \
     http://www.fftw.org/fftw-3.3.4.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
+pack_set --install-query $(pack_get --LD)/libfftw3_omp.a
 
-# Install commands that it should run
-pack_set --command "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
-
-mpi_flags="$(list -Wlrpath -LDFLAGS openmpi)"
 for flag in --enable-single nothing ; do
     ext=f
     if [ "$flag" == "nothing" ]; then
 	flag=""
 	ext=d
     fi
-pack_set --command "rm -rf ./*"
-pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
-    --command-flag "--enable-mpi" \
+pack_set --command "../configure $flag CFLAGS='$CFLAGS'" \
     --command-flag "--prefix $(pack_get --prefix)"
-
-pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n- hemera) ; then
-    pack_set --command "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test tmp.test.mpi.$ext
-fi
-pack_set --command "make install"
-
+tmp_func tmp.test.$ext
 
 # create the SMP version
-pack_set --command "rm -rf ./*"
-pack_set --command "../configure $flag CFLAGS='$mpi_flags $CFLAGS'" \
-    --command-flag "--enable-mpi" \
+pack_set --command "../configure $flag CFLAGS='$CFLAGS'" \
     --command-flag "--enable-threads" \
     --command-flag "--prefix $(pack_get --prefix)"
-pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n- hemera) ; then
-    pack_set --command "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test tmp.test.smp.mpi.$ext
-fi
-pack_set --command "make install"
-
+tmp_func tmp.test.smp.$ext
 
 # create the OpenMP version
-pack_set --command "rm -rf ./*"
-if test -z "$FLAG_OMP" ; then
-    doerr FFTW3 "Can not find the OpenMP flag (set FLAG_OMP in source)"
-fi
-
-pack_set --command "LIB='$FLAG_OMP' CFLAGS='$mpi_flags $CFLAGS $FLAG_OMP' FFLAGS='$mpi_flags $FFLAGS $FLAG_OMP' ../configure $flag" \
-    --command-flag "--enable-mpi" \
+pack_set --command "LIB='$FLAG_OMP' CFLAGS='$CFLAGS $FLAG_OMP' FFLAGS='$FFLAGS $FLAG_OMP' ../configure $flag" \
     --command-flag "--enable-openmp" \
     --command-flag "--prefix $(pack_get --prefix)"
-pack_set --command "make $(get_make_parallel)"
-if ! $(is_host n- hemera) ; then
-    pack_set --command "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test tmp.test.omp.mpi.$ext
-fi
-pack_set --command "make install"
+tmp_func tmp.test.omp.$ext
 
 done
 
-pack_set --command "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
+#### COMPLETED
+
+# Create mpi fftw-3
+add_package --alias fftw-mpi-3 --package fftw-mpi \
+    $(pack_get --archive)
+
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
+
+pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
+
+pack_set -mod-req mpi
+
+mpi_flags="$(list --LD-rp mpi)"
+for flag in --enable-single nothing ; do
+    ext=f
+    if [ "$flag" == "nothing" ]; then
+	flag=""
+	ext=d
+    fi
+    flag="$flag --enable-mpi"
+    flag="$flag --enable-mpi CC='$MPICC' \
+CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
+
+pack_set --command "../configure $flag" \
+    --command-flag "--prefix $(pack_get --prefix)"
+tmp_func tmp.test.mpi.$ext
+
+# create the SMP version
+pack_set --command "../configure $flag" \
+    --command-flag "--enable-threads" \
+    --command-flag "--prefix $(pack_get --prefix)"
+tmp_func tmp.test.mpi.smp.$ext
+
+# create the OpenMP version
+flag="${flag//FLAGS='/FLAGS='$FLAG_OMP}"
+pack_set --command "LIB='$FLAG_OMP' ../configure $flag" \
+    --command-flag "--enable-openmp" \
+    --command-flag "--prefix $(pack_get --prefix)"
+tmp_func tmp.test.mpi.omp.$ext
+
+done
+
+unset tmp_func

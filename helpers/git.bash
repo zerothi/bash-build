@@ -1,5 +1,5 @@
 # apt-get install gettext
-for v in 1.9.5 2.0.5 2.3.0 ; do
+for v in 1.9.5 2.0.5 2.3.5 ; do
 add_package --build generic \
 	--archive git-$v.tar.gz \
 	https://github.com/git/git/archive/v$v.tar.gz
@@ -19,7 +19,7 @@ pack_set --command "module unload $tmp"
 
 # Install commands that it should run
 pack_set --command "./configure" \
-    --command-flag "CFLAGS='$CFLAGS $(list --LDFLAGS -Wlrpath gen-zlib)'" \
+    --command-flag "CFLAGS='$CFLAGS $(list --LD-rp gen-zlib)'" \
     --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
