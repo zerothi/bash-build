@@ -7,6 +7,8 @@
     echo luaposix
     echo lmod
     echo otpo
+    echo libctl
+    echo boost
     echo gdis
     echo meep
     echo meep-serial
@@ -34,3 +36,4 @@
 {
     echo vasp
 } > ../gnu.reject
+
