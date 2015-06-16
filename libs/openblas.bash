@@ -34,9 +34,9 @@ done
 
 # Correct the linking of the threads library to make it easier to use
 pack_set --command "pushd $(pack_get --prefix)/lib"
-pack_set --command "ln -s libopenblas_[^o]*p-r$(pack_get --version).a libopenblasp.a"
-pack_set --command "ln -s libopenblas_[^o]*p-r$(pack_get --version).so libopenblasp.so"
-pack_set --command "ln -s libopenblas_[^o]*p-r$(pack_get --version).so libopenblasp.so.0"
+pack_set --command "ln -s libopenblas_[^o]*p-r*.a libopenblasp.a"
+pack_set --command "ln -s libopenblas_[^o]*p-r*.so libopenblasp.so"
+pack_set --command "ln -s libopenblas_[^o]*p-r*.so libopenblasp.so.0"
 pack_set --command "popd"
 
 unset def_flag flag test_end
