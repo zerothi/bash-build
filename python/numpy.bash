@@ -109,6 +109,8 @@ libraries = f77blas,cblas,atlas\n\
 runtime_library_dirs = $tmp\n' $file" 
 	    elif [ "x$la" == "xopenblas" ]; then
 		pack_set --command "sed -i '$ a\
+[atlas]\n\
+libraries = openblasp\n\
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
