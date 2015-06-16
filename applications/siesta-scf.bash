@@ -1,6 +1,6 @@
-for v in 889 ; do
+for v in 890 ; do
 
-add_package $opt http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
+add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
 
