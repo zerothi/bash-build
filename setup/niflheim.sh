@@ -26,6 +26,7 @@
     echo superlu-dist
     echo pygtk
     echo qutip
+    echo bigdft
 } > ../local.reject
 
 {

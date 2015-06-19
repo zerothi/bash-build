@@ -3,7 +3,6 @@
 # Create local rejections based on the hpc cluster
 
 {
-    echo abinit
     echo gdis
     echo bison
     echo otpo
