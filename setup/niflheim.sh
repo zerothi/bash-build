@@ -27,11 +27,13 @@
     echo pygtk
     echo qutip
     echo bigdft
+    echo krypy
 } > ../local.reject
 
 {
     echo fftw[intel]
     echo tinyarray
+    echo openblas
 } > ../intel.reject
 
 {
