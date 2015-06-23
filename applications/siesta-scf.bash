@@ -227,7 +227,7 @@ pack_set --command "cd ../Grid"
 make_files grid2val grid2cube grid_rotate grid_supercell
 
 pack_set --command "cd ../Vibra/Src"
-make_files fcbuild vibrator
+make_files fcbuild vibra
 
 # Install the TS-analyzer
 pack_set --command "cd ../../TS/"
