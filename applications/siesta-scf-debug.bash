@@ -1,4 +1,4 @@
-for v in 895 ; do
+for v in 897 ; do
 
 add_package --build debug --package siesta-scf-debug \
     http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.gz
