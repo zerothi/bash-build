@@ -172,6 +172,7 @@ pack_set --command "CC=$CC $(get_parent_exec) setup.py install" \
 # Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
 # loading
 pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
+pack_set --command "unset LDSHARED"
 
 
 add_test_package
