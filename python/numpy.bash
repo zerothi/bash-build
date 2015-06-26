@@ -115,13 +115,13 @@ libraries = openblasp\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = lapack,openblasp\n\
-extra_link_args = -lpthread\n\
+extra_link_args = -lpthread -lgfortran\n\
 runtime_library_dirs = $tmp\n\
 embedded_lapack = True\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp\n\
+libraries = openblasp -lgfortran\n\
 runtime_library_dirs = $tmp\n' $file"
 	    elif [ "x$la" == "xblas" ]; then
 		pack_set --command "sed -i '$ a\
@@ -151,12 +151,18 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # The DUM variable is to terminate (list) argument grabbing
     pack_set --command "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:9}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_set --command "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
+
+    # Correct the f77 designations in the blas_opt linkers
+    # sadly the fortran linker does not obey the env-variables
+    pack_set --command "sed -i -e 's|\(info\[.language.\] = .\)f77|\1c|g' numpy/distutils/system_info.py"
     
 else
     doerr numpy "Have not been configured with recognized compiler"
 
 fi
 
+# Enables distutils to setup correct LDFLAGS for current python installation
+pack_set --command "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_set --command "unset LDFLAGS"
 
 pack_set --command "CC=$CC $(get_parent_exec) setup.py config $pNumpyInstall"
