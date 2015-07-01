@@ -17,5 +17,5 @@ pack_set --command "$(get_parent_exec)" \
     --command-flag "setup.py install --prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe llvm-lite > tmp.test 2>&1 ; echo 'Succes'"
+pack_set --command "nosetests --exe llvm-lite > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test

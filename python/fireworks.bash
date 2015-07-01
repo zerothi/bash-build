@@ -15,6 +15,6 @@ pack_set --command "$(get_parent_exec) setup.py install" \
     --command-flag "--prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe fireworks > tmp.test 2>&1 ; echo 'Succes'"
+pack_set --command "nosetests --exe fireworks > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
 

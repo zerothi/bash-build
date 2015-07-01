@@ -90,6 +90,6 @@ else
 pack_set --command "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 fi
 pack_set --command "make -j $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1 && echo Succesfull >> tmp.test || echo Failure >> tmp.test"
+pack_set --command "make check > tmp.test 2>&1 && echo Successfull >> tmp.test || echo Failure >> tmp.test"
 pack_set --command "make install"
 pack_set_mv_test tmp.test tmp.test.mpi

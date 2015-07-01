@@ -25,7 +25,7 @@ fi
 
 add_test_package
 pack_set --command "unset LDFLAGS"
-pack_set --command "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Succes'"
+pack_set --command "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
 
 done

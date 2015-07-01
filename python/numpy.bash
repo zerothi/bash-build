@@ -177,7 +177,7 @@ pack_set --command "unset LDSHARED"
 
 add_test_package
 pack_set --command "unset LDFLAGS"
-pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Succes'"
+pack_set --command "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
 
 done

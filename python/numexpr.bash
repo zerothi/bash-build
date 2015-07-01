@@ -26,7 +26,7 @@ for v in 1.4.2 2.4.3 ; do
 	--command-flag "--prefix=$(pack_get --prefix)"
 
     add_test_package
-    pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Succes'"
+    pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Success'"
     pack_set_mv_test tmp.test
     
 done
