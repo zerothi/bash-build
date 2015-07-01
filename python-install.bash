@@ -115,6 +115,8 @@ source_pack python/slepc4py.bash
 source_pack python/krypy.bash
 source_pack python/pygsl.bash
 
+source_pack python/sids.bash
+
 # Other scikit-programs
 source_pack python/scikit-learn.bash
 source_pack python/scikit-optimization.bash

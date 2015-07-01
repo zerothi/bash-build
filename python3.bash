@@ -104,7 +104,7 @@ create_module \
     $(list --prefix '-RL ' numba mpi4py)
 
 tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas ; do
+for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas sids ; do
     if [ $(pack_installed $i) -eq 1 ]; then
         tmp="$tmp $i"
     fi
