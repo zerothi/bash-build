@@ -2,11 +2,9 @@
 #  zapfchan ly1 tex4ht
 
 v=1.7.6
-add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.bz2
+add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
-
-pack_set --host-reject ntch --host-reject zerothi
 
 pack_set --module-opt "--lua-family bigdft"
 
@@ -45,6 +43,7 @@ else
 
 fi
 
+
 # There are also bindings for python
 pack_set --command "module load $(pack_get --module-name-requirement python) $(pack_get --module-name python)"
 
@@ -58,14 +57,14 @@ fi
 
     #--command-flag "--enable-bindings" \
 pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
-    --command-flag "--disable-internal-libxc" \
+    --command-flag "--disable-internal-libxc --with-openmp" \
     --command-flag "--with-etsf-io" \
     --command-flag "--with-etsf-io-path=$(pack_get --prefix etsf_io)" \
     --command-flag "--with-netcdf-path=$(pack_get --prefix netcdf)" \
     --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
     --command-flag "--with-libxc-libs='$(list --LD-rp libxc) $xclib'" \
     --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
-    --command-flag "$tmp"
+    --command-flag "$tmp --prefix=$(pack_get --prefix)"
 
 pack_set --command "rm -rf doc" # don't make the documents
 pack_set --command "sed -i -e 's: doc : :g' Makefile" # fix Makefile
