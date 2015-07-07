@@ -96,7 +96,7 @@ create_module \
     -v $(date +'%g-%j') \
     -M python$pV.fireworks/$(get_c) \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement fireworks) fireworks)
+    $(list --prefix '-RL ' fireworks)
 
 create_module \
     -n "Nick Papior Andersen's basic python script for: $(get_c)" \
@@ -153,6 +153,8 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' kwant)
 
+tmp=$(build_get --module-path)-npa
+rm -rf $tmp/python$pV.numerics/$(get_c)
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas sids ; do
     if [ $(pack_installed $i) -eq 1 ]; then
