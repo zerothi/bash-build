@@ -153,7 +153,7 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' kwant)
 
-tmp=$(build_get --module-path)-npa
+tmp=$(build_get --module-path)
 rm -rf $tmp/python$pV.numerics/$(get_c)
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas sids ; do
