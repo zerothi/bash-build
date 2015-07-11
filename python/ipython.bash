@@ -1,4 +1,4 @@
-v=3.1.0
+v=3.2.0
 add_package https://pypi.python.org/packages/source/i/ipython/ipython-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/ipython${pV:0:1}
