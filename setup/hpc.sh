@@ -17,6 +17,8 @@
     echo luaposix
     echo lmod
     echo bigdft
+    echo octopus
+    echo krypy
 } > ../local.reject
 
 {
@@ -25,6 +27,8 @@
     echo boost
     echo nco
     echo espresso
+    echo meep
+    echo meep-serial
 } > ../intel.reject
 
 {
