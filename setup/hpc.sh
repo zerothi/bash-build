@@ -3,7 +3,6 @@
 # Create local rejections based on the hpc cluster
 
 {
-    echo ffmpeg
     echo bison
     echo otpo
     echo gdis

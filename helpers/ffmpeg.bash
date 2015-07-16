@@ -1,3 +1,4 @@
+# apt-get libpulse-dev libx264-* libx264-dev
 add_package --build generic \
     http://ffmpeg.org/releases/ffmpeg-2.7.1.tar.bz2
 
