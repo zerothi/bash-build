@@ -29,12 +29,16 @@
     echo qutip
     echo bigdft
     echo krypy
+    echo octave
 } > ../local.reject
 
 {
     echo fftw[intel]
     echo tinyarray
     echo openblas
+    echo gromacs
+    echo abinit
+    echo bgw
 } > ../intel.reject
 
 {
