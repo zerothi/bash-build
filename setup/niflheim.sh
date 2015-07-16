@@ -3,6 +3,7 @@
 # Create local rejections based on the hpc cluster
 
 {
+    echo ffmpeg
     echo gcc[4.9.2]
     echo luaposix
     echo lmod
