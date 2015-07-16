@@ -3,12 +3,6 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-if $(is_host ntch-2 zeroth) ; then
-    echo "Continue" > /dev/null
-else
-    pack_set --host-reject $(get_hostname)
-fi
-
 pack_set --install-query $(pack_get --prefix)/bin/ffmpeg
 
 tmp=
