@@ -1,5 +1,5 @@
-for v in 0.15.1 ; do 
-add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.gz
+for v in 0.16.0 ; do 
+add_package http://downloads.sourceforge.net/project/scipy/scipy/$v/scipy-$v.tar.xz
 
 pack_set -s $IS_MODULE
 

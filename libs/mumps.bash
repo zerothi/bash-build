@@ -1,4 +1,4 @@
-for v in 4.10.0 5.0.0 ; do
+for v in 4.10.0 5.0.1 ; do
 add_package --package mumps \
 	    http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
 
