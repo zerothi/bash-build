@@ -55,7 +55,7 @@ fi
 
 pack_set --command "sed -i '1 a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .F90\n\
+.SUFFIXES: .f .F .o .a .c .f90 .F90\n\
 SIESTA_ARCH=x86_64-linux-$(get_c)\n\
 \n\
 FPP=mpif90\n\

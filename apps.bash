@@ -13,6 +13,7 @@ source_pack applications/bader.bash
 source_pack applications/siesta-stable.bash
 source_pack applications/siesta-dev.bash # my old ts-development
 source_pack applications/siesta-mattias.bash
+source_pack applications/siesta-scf-debug.bash # my ts-development
 source_pack applications/siesta-scf.bash # my ts-development
 source_pack applications/siesta-so.bash # spin-orbit
 #source_pack applications/siesta-trunk.bash # siesta trunk development
