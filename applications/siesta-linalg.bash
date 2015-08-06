@@ -44,6 +44,8 @@ pack_set --command "sed -i '1 a\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .f.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+.c.o:\n\
+\t\$(CC) -c \$(CFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$<\n\
 .f90.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 \n' arch.make"
