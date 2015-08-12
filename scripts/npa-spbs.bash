@@ -195,14 +195,10 @@ if [ \$mpi -eq 1 ]; then
   _spbs_add_line 'exit 0 # load MPI' "Ensure that you have loaded the correct MPI command, then delete this"
   if [ \$omp -gt 0 ]; then
     _help "You are creating a hybrid MPI/OpenMP script."
-    _spbs_add_line "mpirun --map-by ppr:1:socket:pe=\$ppn -np \$nodes -x OMP_NUM_THREADS=\$ppn -x OMP_PROC_BIND=true <executable>" "Setup the MPI call to figure out the number of cores used"
+    _spbs_add_line "mpirun --map-by ppr:1:socket:pe=\$ppn -x OMP_NUM_THREADS=\$ppn -x OMP_PROC_BIND=true <executable>" "Setup the MPI call to figure out the number of cores used, for 2 sockets machines you need \$((\$ppn/2))"
   else
     _help "You are creating an MPI script."
-    if [ \$has_np_cmd -eq 1 ]; then
-      _spbs_add_line 'mpirun -np \$PBS_NP <executable>' "Setup the MPI call to figure out the number of cores used"
-    else
-      _spbs_add_line 'mpirun -np \$NPROCS <executable>' "Setup the MPI call to figure out the number of cores used"
-    fi
+    _spbs_add_line 'mpirun <executable>' "Setup the MPI call, do NOT specify -np as Torque is built in"
   fi
 elif [ \$omp -gt 0 ]; then
   _help "You are creating an OpenMP script (no MPI)."
