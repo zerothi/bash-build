@@ -353,7 +353,7 @@ unset make_files
 pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
 
 # Create the byte-compiled versions, to make it faster for users 
-tmp=$(pack_get --alias python).$(pack_get --version python)
+tmp=$(pack_get --alias python).$(pack_get --version python)/$(get_c)
 pack_set --command "module load $tmp"
 pack_set --command "pushd $(pack_get --prefix)/bin/"
 pack_set --command "python -m compileall ."
