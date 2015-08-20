@@ -14,7 +14,7 @@ pack_set --module-requirement mpi --module-requirement fftw-mpi-3
 pack_set --command "cd source"
 
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.7.10.tar.gz
-mywget http://www.openmx-square.org/bugfixed/15Feb21/patch3.7.10.tar.gz $o
+dwn_file http://www.openmx-square.org/bugfixed/15Feb21/patch3.7.10.tar.gz $o
 pack_set --command "tar xfz $o"
 
 if test -z "$FLAG_OMP" ; then

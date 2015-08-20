@@ -22,7 +22,7 @@ if [ $(vrs_cmp $v 3.3) -le 0 ]; then
     name=cfe
 fi
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.gz
-mywget ${tmp//llvm-/$name-} $o
+dwn_file ${tmp//llvm-/$name-} $o
 
 pack_set --command "tar xfz $o -C ../tools/"
 pack_set --command "pushd ../tools"

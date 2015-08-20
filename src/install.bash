@@ -32,7 +32,7 @@ function pack_install {
 
     # If we request downloading of files, do so immediately
     if [ $DOWNLOAD -eq 1 ]; then
-	dwn_file $idx $(build_get --archive-path)
+	pack_dwn $idx $(build_get --archive-path)
     fi
     
     # Check that we can install on this host
@@ -147,7 +147,7 @@ function pack_install {
 	msg_install --start $idx
 	
         # Download archive
-	dwn_file $idx $(build_get --archive-path)
+	pack_dwn $idx $(build_get --archive-path)
 
         # Extract the archive
 	pushd $(build_get --build-path) 1> /dev/null

@@ -1,30 +1,57 @@
+# This source contains data structures and routines
+# for managing several build systems.
+#
+# A build system consists of source files and default
+# modules which are used for _all_ packages associated
+# with that build.
+# Of all builds in the system the user _has_ to choose
+# a default build.
+#
+# For instance one could create a build for the
+# gnu-compiler and the intel-compiler.
+# Then the default could be gnu while certain
+# packages _needed_ to be compiled with the intel-compiler.
+# Such complex build systems is constituted using
+# these datastructures and routines.
 
-
-# The index of the default build...
+# A default build is associated using this
 _b_def_idx=0
-# Name of setup (lookup-purposes)
+
+# A build has a name for usage reference
 declare -A _b_name
-# source file
+# A source file which contains compiler information.
 declare -A _b_source
-# build path
+# A build-path, the directory of compilation
 declare -A _b_build_path
+# The default compilation path is the current working directory
+# and the .compile directory
 _b_build_path[$_b_def_idx]=$_cwd/.compile
-# installation prefix
+mkdir -p _b_build_path[$_b_def_idx]
+# An installation prefix where <packages> are installed
 declare -A _b_prefix
-# module installation prefix
+# The installation prefix for the module files
 declare -A _b_mod_prefix
-# how to build the full installation path
+# The prefix for the installation paths
+# The default is --package --version
+# which basically means that the installation path becomes:
+#   _b_prefix[0]/$(pack_get --package <package>)/$(pack_get --version <package>)
 declare -A _b_build_prefix
 _b_build_prefix[$_b_def_idx]="--package --version"
-# how to build the full module path
+# Same as _build_prefix but for the module names
 declare -A _b_build_mod_prefix
 _b_build_mod_prefix[$_b_def_idx]="--package --version"
-# default modules for this build
+# If this build requires default modules.
+# This is handy on HPC clusters where the installed
+# compilers are plentyful and you want an installation
+# with a specific compiler.
 declare -A _b_def_mod_reqs
-# default settings for this build
+# Defaults a bunch of settings for all packages associated with
+# this build.
 declare -A _b_def_settings
 # Pointers of lookup
 declare -A _b_index
+
+# Counter to keep track of number of builds.
 _N_b=-1
 
 

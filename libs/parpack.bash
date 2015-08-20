@@ -10,11 +10,11 @@ pack_set --install-query $(pack_get --LD)/libparpack.a
 pack_set --module-requirement mpi
 
 oA=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.tar.gz
-mywget http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz $oA
+dwn_file http://www.caam.rice.edu/software/ARPACK/SRC/patch.tar.gz $oA
 oP=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-parpack96.tar.gz
-mywget http://www.caam.rice.edu/software/ARPACK/SRC/parpack96.tar.gz $oP
+dwn_file http://www.caam.rice.edu/software/ARPACK/SRC/parpack96.tar.gz $oP
 oPP=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-ppatch.tar.gz
-mywget http://www.caam.rice.edu/software/ARPACK/SRC/ppatch.tar.gz $oPP
+dwn_file http://www.caam.rice.edu/software/ARPACK/SRC/ppatch.tar.gz $oPP
 
 # Apply patch
 pack_set --command "pushd ../"

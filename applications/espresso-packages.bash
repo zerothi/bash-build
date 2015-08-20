@@ -13,7 +13,7 @@ for pack in \
 do
 
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
-    mywget $pack $o
+    dwn_file $pack $o
     pack_set --command "cp $o archive/$(basename ${pack:10})"
     pack_set --command "tar xfz archive/$(basename ${pack:10})"
 
@@ -24,7 +24,7 @@ pack_set --command "mv PWgui-5.0.2 PWgui"
 # Patch it...
 pack_set --command "pushd ../"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-espresso-5.0.2-5.0.3.diff
-mywget http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff $o
+dwn_file http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff $o
 pack_set --command "patch -p0 < $o"
 pack_set --command "popd"
 
@@ -43,14 +43,14 @@ for pack in \
 do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
-    mywget $pack $o
+    dwn_file $pack $o
     pack_set --command "cp $o archive/$(basename ${pack:10})"
     pack_set --command "tar xfz archive/$(basename ${pack:10}) --strip 1"
     
 done
 pack="http://qe-forge.org/gf/download/frsrelease/116/408/PWgui-5.0.2.tgz"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
-mywget $pack $o
+dwn_file $pack $o
 pack_set --command "cp $o archive/$(basename ${pack:10})"
 pack_set --command "tar xfz archive/$(basename ${pack:10})"
 
@@ -73,7 +73,7 @@ for pack in \
 do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$pack
-    mywget http://files.qe-forge.org/index.php?file=$pack $o
+    dwn_file http://files.qe-forge.org/index.php?file=$pack $o
     pack_set --command "cp $o archive/$pack"
     pack_set --command "tar xfz archive/$pack"
     
@@ -93,7 +93,7 @@ for pack in \
     650/pwcond-$v.tar.gz
 do
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
-    mywget http://qe-forge.org/gf/download/frsrelease/173/$pack $o
+    dwn_file http://qe-forge.org/gf/download/frsrelease/173/$pack $o
     pack=$(basename $pack)
 
     pack_set --command "cp $o archive/$pack"
@@ -114,7 +114,7 @@ for pack in \
     756/pwcond-$v.tar.gz
 do
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
-    mywget http://qe-forge.org/gf/download/frsrelease/185/$pack $o
+    dwn_file http://qe-forge.org/gf/download/frsrelease/185/$pack $o
     pack=$(basename $pack)
 
     pack_set --command "cp $o archive/$pack"

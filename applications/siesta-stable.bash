@@ -105,7 +105,7 @@ if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
     tmp=siesta-3.1_esm_v1.05
     pack_set --command "cd ../"
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$tmp.tar.gz
-    mywget http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz $o
+    dwn_file http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz $o
     pack_set --command "tar xfz $o"
     pack_set --command "patch -p1 < $tmp/esm_v1.05.diff"
 

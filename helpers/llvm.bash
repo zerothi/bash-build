@@ -19,7 +19,7 @@ for name in cfe lld clang-tools-extra dragonegg ; do
     pack=$name
     [ "x$name" == "xcfe" ] && pack=clang
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.xz
-    mywget ${tmp//llvm-/$name-} $o
+    dwn_file ${tmp//llvm-/$name-} $o
     pack_set --command "tar xfJ $o -C ../tools/"
     pack_set --command "pushd ../tools"
     pack_set --command "mv $name* $pack"

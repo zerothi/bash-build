@@ -1,20 +1,54 @@
-
 # File for auxillary commands used in the command line tools
 
-# Init installation
-# Pretty prints some information about the installation
-#   $1 : the package name or index
+#  Function msg_install
+# Helps in printing out information for the user while
+# running.
+# Used heavily to inform user of things happening during the
+# installation.
+#  Arguments
+#    <package>
+#       Any message printed is associated to a package.
+#       This package name refers to an already sourced
+#       package installation so it can be looked up in the index
+#       If not supplied, it will take the last added package
+#       and use that as a reference.
+#  Options
+#    --start|-S
+#      Informs of starting an installation of a new package.
+#      Also prints the currently loaded modules
+#    --finish|-F
+#      Informs that a package has finished the installation.
+#    --already-installed
+#      Informs that a package has already been installed.
+#    --message
+#      Broadcast a specific message.
+#      If this option is used, no information regarding the
+#      <package> is used.
 function msg_install {
     local n="" ; local action=0
     while [ $# -gt 1 ]; do
-	local opt=$(trim_em $1) ; shift
+	local opt=$(trim_em $1)
 	case $opt in
-	    -start|-S) n="Installing" ; action=1 ;;
-	    -finish|-F) n="Finished" ; action=2 ;;
-	    -already-installed) n="Already installed" ; action=3 ;;
-	    -message) n="$1" ; shift ; action=4 ;;
+	    -start|-S)
+		action=1
+		n="Installing"
+		;;
+	    -finish|-F)
+		action=2
+		n="Finished"
+		;;
+	    -already-installed)
+		action=3
+		n="Already installed"
+		;;
+	    -message)
+		shift
+		action=4
+		n="$1"
+		;;
 	    *) break ;;
 	esac
+	shift
     done
     if [ $# -gt 0 ]; then
 	local pack=$1
@@ -44,8 +78,17 @@ function msg_install {
 }
 
 
-# Do the cmd 
-# This will automatically check for the error
+#  Function docmd
+# Runs all passed arguments by first informing the
+# user of said command, then executes it.
+# Everything is runned using `eval`, hence any standard
+# bash compliant function can be used in this environment.
+#  Arguments
+#    <package>
+#       Prints which package the command belongs to.
+#    commands
+#       All arguments are passed directly to `eval`.
+#       The commands will be shown for the user before execution.
 function docmd {
     local ar="$1"
     shift
@@ -60,34 +103,58 @@ function docmd {
     echo " # ================================================================"
     eval ${cmd[@]}
     local st=$?
-    if (( $st != 0 )) ; then
+    if [ $st -ne 0 ]; then
 	echo "STATUS = $st"
-        exit $st;
+        exit $st
     fi
 }
 
 
-# Print simple string (shortcut for printf "%s" "$1")
+#  Function _ps
+# Prints all arguments as a string _without_ new-line characters.
+# Uses `printf` for this.
+# Using `_ps` in favor of `echo -n` is 2-fold.
+#  1. `printf` takes no options, hence you can print `_ps -n`
+#  2. `printf` is faster than `echo -n`
+#  Arguments
+#    message
+#       All message arguments are printed, _as is_.
 function _ps {
     printf "%s" "$@"
 }
 
-# Trimmer for options or any other type of variable which has
-# an em-dash in front
+
+#  Function trim_em
+# Takes one argument, if it has two em-dashes in front,
+# it returns the equivalent with only one em-dash.
+# Otherwise it returns the argument as received.
+#  Arguments
+#    str
+#       Removes one em-dash if the `str` starts with two or
+#       more em-dashes.
 function trim_em {
-    local opt=$1 ; shift
+    local opt=$1
+    shift
     case $opt in
 	--*) opt=${opt:1} ;;
     esac
     _ps "$opt"
 }
 
-# trim spaces
+#  Function trim_spaces
+# Removes all superfluous space. Prefix, suffix and double spaces.
+# I.e. a string of "  the cat  was small  . Said I"
+# would return a string of "the cat was small . Said I"
+#  Arguments
+#    str
+#       Truncates all spaces to a minimum of one space.
 function trim_spaces {
-    local str="" ; local s=""
+    local str=""
+    local s
     local i
     while [ $# -gt 0 ]; do
-	s="$1" ; shift
+	s="$1"
+	shift
 	s=${s## } # removes prefix space (apparently does not work)
 	s=${s%% } # removes suffix space (apparently does not work)
 	i=0
@@ -101,50 +168,87 @@ function trim_spaces {
     _ps "${str:1}"
 }
 
-# A variable is passed to var_spec
-# which then returns the var or the spec
-#
-# Example:
-#  $(var_spec --var foo[bar]) == foo
-#  $(var_spec --spec foo[bar]) == bar
-#  $(var_spec foo[bar]) == foo
-#  $(var_spec foo) == foo
-#  $(var_spec -s foo) == ''
-#  $(var_spec -s foo bar[rab]) == ' rab'
+#  Function var_spec
+# Takes a package name and version specification
+# and returns what is requested.
+# Defaults to returning the package name
+#  Arguments
+#    package(s)
+#       A package specification in either of these formats:
+#         foo[bar]
+#         foo
+#       In the above case is `foo` the package name
+#       and `bar` is the version string of package `foo`.
+#       Works with multiple packages given as multiple arguments.
+#  Options
+#    --var|-v
+#      Returns the variable name, default.
+#    --spec|-s
+#      Returns the version string.
+#      If a package specification is given without version,
+#      an empty string is returned.
 function var_spec {
     local v=1
+    local opt
     while [ $# -gt 0 ]; do
-	local opt=$(trim_em "$1")
+	opt=$(trim_em $1)
 	case $opt in
-	    -var|-v) v=1 ; shift ;;
-	    -spec|-s) v=2 ; shift ;;
+	    -var|-v)
+		v=1
+		shift
+		;;
+	    -spec|-s)
+		v=2
+		shift
+		;;
 	esac
         # We add field separators
 	if [ $v -eq 1 ]; then
-        opt=${1%%\[*}
+            opt=${1%%\[*}
 	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')"
 	    _ps "${opt// /}"
 	elif [ $v -eq 2 ]; then
-        if [ "${1:${#1}-1}" == "]" ]; then
-            opt=${1##*\[}
-            opt=${opt//\]/}
-        else
-            opt=""
-        fi
+            if [ "${1:${#1}-1}" == "]" ]; then
+		opt=${1##*\[}
+		opt=${opt//\]/}
+            else
+		opt=""
+            fi
 	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
 	    _ps "${opt// /}"
 	fi
+	# Get next package
 	shift
 	# Add delimiter
-	[ $# -gt 0 ] && _ps ""
+	[ $# -gt 0 ] && _ps " "
     done
 }
 
-# routine for obtaining the versioning number of some string
-# It currently must be formatted like: <major>.<minor>.<rev>
+
+#  Function str_version
+# Enables to retrieve specific versions from a string.
+# I.e. it disects a version.
+#  Arguments
+#    str
+#       A string which is a dot separated version number.
+#         a.4.5.0
+#       Currently it runs 4 levels of versions,
+#          a == major
+#          4 == minor
+#          5 == revision
+#          0 == bug
+#  Options
+#    major|-major|-1
+#      Returns the major index (a)
+#    minor|-minor|-2
+#      Returns the minor index (4)
+#    rev|-rev|-3
+#      Returns the rev index (5)
+#    bug|-bug|-4
+#      Returns the bug index (0)
 function str_version {
     local Mv='' ; local mv='' ; local rv='' ; local fourth=''
-    local opt=all
+    local opt=-1
     if [ $# -eq 2 ]; then
 	opt=$(trim_em $1)
 	shift
@@ -177,33 +281,37 @@ function str_version {
 	    ;;
     esac
     case $opt in 
-	all|-all)
-	    _ps "$Mv $mv $rv" ;;
 	major|-major|-1)
-#	    [ -z "$Mv" ] && \
-#		doerr "$str" "Unknown type of version string 1"	
-	    _ps "$Mv" ;;
+	    _ps "$Mv"
+	    ;;
 	minor|-minor|-2)
-#	    [ -z "$mv" ] && \
-#		doerr "$str" "Unknown type of version string 2"	
-	    _ps "$mv" ;;
+	    _ps "$mv"
+	    ;;
 	rev|-rev|-3)
-#	    [ -z "$rv" ] && \
-#		doerr "$str" "Unknown type of version string 3"	
-	    _ps "$rv" ;;
-	-4)
-#	    [ -z "$fourth" ] && \
-#		doerr "$str" "Unknown type of version string 4"
-	    _ps "$fourth" ;;
+	    _ps "$rv"
+	    ;;
+	bug|-bug|-4)
+	    _ps "$fourth"
+	    ;;
 	*)
 	    doerr "$opt" "Unknown print-out of version"
+	    ;;
     esac	    
 }
 
-# Compare version of two versions
-# If #1 >  #2 returns 1
-# If #1 == #2 returns 0
-# If #1 <  #2 returns -1
+#  Function vrs_cmp
+# Compares two version arguments down till the fourth level.
+# It has this return table
+#    #1  > #2 : Return 1
+#    #1 == #2 : Return 0
+#    #1 <  #2 : Return -1
+# Uses `str_version` to extract the separate version numbers.
+# NOTE: Currently only works with integer comparisons.
+#  Arguments
+#    version1
+#       First version string.
+#    version2
+#       Second version string.
 function vrs_cmp {
     local lhs=$1 ; shift
     local rhs=$1 ; shift
@@ -222,84 +330,111 @@ function vrs_cmp {
 	fi
     done
     _ps "0"
-    return 0
-
-    local lMv=$(str_version -1 $1)
-    local lmv=$(str_version -2 $1)
-    local lrv=$(str_version -3 $1)
-    [ -z "$lrv" ] && lrv=1
-    local rMv=$(str_version -1 $2)
-    local rmv=$(str_version -2 $2)
-    local rrv=$(str_version -3 $2)
-    [ -z "$rrv" ] && rrv=1
-    [ $lMv -gt $rMv ] && _ps "1" && return 0
-    [ $lMv -lt $rMv ] && _ps "-1" && return 0
-    [ $lmv -gt $rmv ] && _ps "1" && return 0
-    [ $lmv -lt $rmv ] && _ps "-1" && return 0
-    [ $lrv -gt $rrv ] && _ps "1" && return 0
-    [ $lrv -lt $rrv ] && _ps "-1" && return 0
-    _ps "0"
-}    
+}
 
 
-# Returns the lowercase of the argument (only translating A-Z)
-#
-# Example:
-#  $(lc fOObaR) == foobar
+#  Function lc
+# Returns the argument as lowercase.
+#  Arguments
+#    <args>
+#       Returns <args> as lowercase characters.
 function lc {
-    local l="${1,,}" ; shift
-    while : ; do
-	_ps "$l"
-	[ $# -eq 0 ] && break
-	l=" ${1,,}" ; shift
+    _ps "${1,,}"
+    shift
+    while [ $# -gt 0] ; do
+	_ps " ${1,,}"
+	shift
     done
 }
-#function lc { _ps "$@" | tr '[A-Z]' '[a-z]' ; }
 
-# Returns the file time in a simple format
+#  Function get_file_time
+# Returns the date the file has last been edited.
+#  Arguments
+#    dateformat
+#       The date-format used to print the date (see `date`
+#       for available formats)
+#    file
+#       Does a `stat` on file `file` and returns the date.
 function get_file_time {
-    local format="$1" ; shift
-    local fdate=$(stat -L -c "%y" $1) ; shift
+    local format="$1"
+    shift
+    local fdate=$(stat -L -c "%y" $1)
+    shift
     _ps "`date +"$format" --date="$fdate"`"
 }
 
-# Routine for used in if statements (by checking the return value)
-# This will break if printf's return val is not always defined.
-# 
-# Example:
-#  if $(isnumber 2) ; then
-#     echo SUCCESS
-#  else
-#     echo FAILURE
-#  fi
+#  Function isnumber
+# Relies on the status return to tell whether
+# a string is a number or not.
+# Does so by trying to print the argument in `printf`.
+#  Arguments
+#    str
+#       String to check whether it is a number.
+#       If it is the status `$?` is 0, otherwise non-zero.
+#  Example
+# if $(isnumber 2) ; then
+#    echo SUCCESS
+# else
+#    echo FAILURE
+# fi
 function isnumber { 
     printf '%d' "$1" &>/dev/null
 }
 
-# Routine for removing any dublicates in a list
-# The algorithm is this:
-#  1. translate ' ' to '\n'
-#  2. remove all empty fields (removes double spaces)
-#  3. awk one-liner for not printing any dublicates
-#  4. translate '\n' to ' '
+#  Function rem_dup
+# Removes any dublicates in a string (preserves order).
+# It relies on external commands, `sed`, `tr` and `awk.
+# The algorithm is:
+#   1. translate ' ' to '\n'
+#   2. remove all empty fields (removes double spaces)
+#   3. awk one-liner for not printing any dublicates
+#   4. translate '\n' to ' '
+#  Arguments
+#    <args>
+#       The list of args to remove dublicates from
+#       The order is preserved.
 function rem_dup {
     # Apparently we cannot use _ps here!!!!
-    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | \
-	awk '!_[$0]++' | tr '\n' ' '
+    # Hence the first argument must never be an option
+    # for `echo`.
+    echo -n "$@" | \
+	sed -e 's/[[:space:]]\+/ /g' | \
+	tr ' ' '\n' | \
+	awk '!_[$0]++' | \
+	tr '\n' ' '
 }
 
-# Returns all unique elements in the array
+#  Function ret_uniq
+# Returns all unique entries in arguments.
+# Will not return any entry that is encountered more than
+# once.
+#  Arguments
+#    <args>
+#       The list of args to return unique values from
+#       The order is preserved.
 function ret_uniq {
     # Apparently we cannot use _ps here!!!!
-    echo -n "$@" | sed -e 's/[[:space:]]\+/ /g' | tr ' ' '\n' | \
+    echo -n "$@" | \
+	sed -e 's/[[:space:]]\+/ /g' | \
+	tr ' ' '\n' | \
 	awk 'BEGIN { c=0 } {
 if( $0 in a) {} else {b[c]=$0 ; c++ }
-a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | tr '\n' ' '
+a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
+	tr '\n' ' '
 }
 
 
-# Based on the extension which command should be called
-# to extract the archive
+#  Function arc_cmd
+# Returns command that extracts the extension (without verbosity).
+# Currently handles these extensions:
+#   bz2, xz, gz, tgz, tar, zip
+# The following arguments are specially treated:
+#   local, fake : returns `echo` as no extraction is necessary
+#   py : links the file so that it is local.
+#  Arguments
+#    ext
+#       Checks the extension and returns an un compression command
+#       that can un-compress that file.
 function arc_cmd {
     local ext="$(lc $1)"
     if [ "x$ext" == "xbz2" ]; then
@@ -327,9 +462,16 @@ function arc_cmd {
     fi
 }
 
-# Extract file 
-# $1 subdirectory of archive
-# $2 index or name of archive
+#  Function extract_archive
+# Takes a directory and a package name as argument.
+# Extracts the archive belonging to package and extracts it
+# to the directory.
+#  Arguments
+#    dir
+#       The directory that the archive is extracted to
+#    <package>
+#       the package name. Looks up the package, extracts the
+#       archive from the saved package, and extracts it.
 function extract_archive {
     local alias="$2"
     local d=$(pack_get --directory $alias)
@@ -344,23 +486,15 @@ function extract_archive {
     docmd "$alias" $cmd $1/$archive
 }
 
-# Using wget we will collect the giving file
-# $1 http path 
-# $2 outdirectory
+#  Function dwn_file
+# Downloads files using `wget`, without proxies or certificates.
+# Hence, if you are located behind a proxy, the script will fail.
+#  Arguments
+#    url
+#       file to download
+#    dir
+#       downloads the file to this path.
 function dwn_file {
-    local ext=$(pack_get --ext $1)
-    [ "x$ext" == "xlocal" ] && return 0
-    local subdir=./
-    if [ $# -gt 1 ]; then
-	subdir="$2"
-    fi
-    local archive=$(pack_get --archive $1)
-    local url=$(pack_get --url $1)
-    mywget $url $subdir/$archive
-}
-
-# Shorthand for my wget
-function mywget {
     local url=$1 ; shift
     local O=$1 ; shift
     # If it exists return
@@ -378,7 +512,54 @@ function mywget {
     fi
 }
 
-# Function to return a list of space seperated quantities with prefix and suffix
+#  Function list
+# Returns several options from either a list of <package>s or
+# a single package.
+# Enables the easy creation of lots of options extracted from
+# separate <package>s.
+# All "Options" that "appends" means that they are additive
+# in meaning.
+#  Arguments
+#    <packages>
+#       If the packages are prefixed with a `+` the package
+#       will be expanded to the requirements of the package.
+#       If a `++` is present, package will be expanded to
+#       all requirements and itself.
+#  Options
+#    -LD-rp
+#       returns both library path and fixed running path flags for compiler
+#       Same as
+#         -Wlrpath -LDFLAGS
+#    -prefix|-p <prefix>
+#       returns the list with <prefix> as a prefix to each entry
+#    -suffix|-s <suffix>
+#       returns the list with <suffix> as a suffix to each entry
+#    -loop-cmd|-c <cmd>
+#       Calls $(<cmd> <package>) before appending suffix, prefix,
+#       this allows for extracting a lot of different things using `pack_get`
+#       commands.
+#    -no-space|-X
+#       intrinsically `list` returns spaces between objects.
+#       This prohibits the spaces and compresses the list.
+#    -uniq
+#       intrinsically it does not remove dublicates.
+#       With this it only returns the unique values.
+#    -Wlrpath (appends)
+#       Returns the constant running path for the compiler.
+#       Same as:
+#         -prefix -Wl,-rpath= -loop-cmd "pack_get --library-path"
+#    -LDFLAGS (appends)
+#       Returns the library path for for the compiler
+#       Same as:
+#         -prefix -L -loop-cmd "pack_get --library-path"
+#    -INCDIRS (appends)
+#       Returns the include path for for the compiler
+#       Same as:
+#         -prefix -I -suffix /include -loop-cmd "pack_get --prefix"
+#    -mod-names (appends)
+#       Returns the module names of the <package> list
+#       Same as:
+#         -loop-cmd "pack_get --module-name"
 function list {
     [ $DEBUG -ne 0 ] && do_debug --enter list
     local suf="" ; local pre="" ; local lcmd=""
@@ -466,49 +647,5 @@ function list {
     _ps "$retval"
     [ $DEBUG -ne 0 ] && do_debug --return list
 }
-
-# Copy a test file to $(pack_get --prefix) 
-# And compress it immediately!
-function pack_set_mv_test {
-    local f=$1 ; shift
-    local o=$f
-    [ $# -gt 0 ] && o=$1 ; shift
-    # move and gzip
-    pack_set --command "mkdir -p $(pack_get --prefix)"
-    pack_set --command "mv $f $(pack_get --prefix)/$o"
-    pack_set --command "gzip -f $(pack_get --prefix)/$o"
-}
-
-# Debugging function for printing out every available
-# information about a package
-function pack_print {
-    # It will only take one argument...
-    local pack=$_N_archives
-    [ $# -gt 0 ] && pack=$1
-    echo " >> >> >> >> Package information"
-    echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
-    echo " V  : $(pack_get -v $pack)"
-    echo " DIR: $(pack_get -d $pack)"
-    echo " URL: $(pack_get -http $pack)"
-    echo " OUT: $(pack_get -A $pack)"
-    echo " CMD: $(pack_get -commands $pack)"
-    echo " MP : $(pack_get -module-prefix $pack)"
-    echo " IP : $(pack_get -prefix $pack)"
-    echo " LD : $(pack_get -L $pack)"
-    echo " MN : $(pack_get -module-name $pack)"
-    echo " IQ : $(pack_get -install-query $pack)"
-    echo " REQ: $(pack_get -module-requirement $pack)"
-    echo " REJ: $(pack_get -host-reject $pack)"
-    echo " OPT: $(pack_get -module-opt $pack)"
-    echo "                                 << << << <<"
-}
-
-if [ $DEBUG -gt 0 ]; then
-    echo "Debugging var_spec"
-    echo "$(var_spec foo[bar])"
-    echo "$(var_spec -v foo[bar])"
-    echo "$(var_spec -s foo[bar])"
-    [ "x$(var_spec -s foo)" == "x" ] && echo "SUCCESS"
-fi
 
 

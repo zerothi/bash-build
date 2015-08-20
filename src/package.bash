@@ -566,6 +566,92 @@ function pack_get {
     [ $DEBUG -ne 0 ] && do_debug --return pack_get
 }
 
+
+#  Function pack_set_mv_test
+# Automatically adds commands to the current <package>
+# which moves a test output to the installation folder
+# of the <package> and gzips it.
+#  Arguments
+#    file
+#       The test file to be moved.
+#    dest-file (optional)
+#       The name of the file when moved, defaults to `file`
+function pack_set_mv_test {
+    local f=$1 ; shift
+    local o=$f
+    [ $# -gt 0 ] && o=$1 ; shift
+    # move and gzip
+    pack_set --command "mkdir -p $(pack_get --prefix)"
+    pack_set --command "mv $f $(pack_get --prefix)/$o"
+    pack_set --command "gzip -f $(pack_get --prefix)/$o"
+}
+
+# Debugging function for printing out every available
+# information about a package
+function pack_print {
+    # It will only take one argument...
+    local pack=$_N_archives
+    [ $# -gt 0 ] && pack=$1
+    echo " >> >> >> >> Package information"
+    echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
+    echo " V  : $(pack_get -v $pack)"
+    echo " DIR: $(pack_get -d $pack)"
+    echo " URL: $(pack_get -http $pack)"
+    echo " OUT: $(pack_get -A $pack)"
+    echo " CMD: $(pack_get -commands $pack)"
+    echo " MP : $(pack_get -module-prefix $pack)"
+    echo " IP : $(pack_get -prefix $pack)"
+    echo " LD : $(pack_get -L $pack)"
+    echo " MN : $(pack_get -module-name $pack)"
+    echo " IQ : $(pack_get -install-query $pack)"
+    echo " REQ: $(pack_get -module-requirement $pack)"
+    echo " REJ: $(pack_get -host-reject $pack)"
+    echo " OPT: $(pack_get -module-opt $pack)"
+    echo "                                 << << << <<"
+}
+
+
+#  Function pack_dwn
+# Downloads files using `dwn_file`.
+#  Arguments
+#    <package>
+#       the package name. The package contains
+#       information regarding the external archive http address.
+#    path
+#       downloads the archive to this path.
+function pack_dwn {
+    local ext=$(pack_get --ext $1)
+    [ "x$ext" == "xlocal" ] && return 0
+    local subdir=./
+    if [ $# -gt 1 ]; then
+	subdir="$2"
+    fi
+    local archive=$(pack_get --archive $1)
+    local url=$(pack_get --url $1)
+    dwn_file $url $subdir/$archive
+}
+
+# Update the package version number by looking at the date in the file
+function pack_set_file_version {
+    local idx=$_N_archives
+    [ $# -gt 0 ] && idx=$(get_index $1)
+    # Download the archive
+    pack_dwn $idx $(build_get --archive-path)
+    local v="$(get_file_time %g-%j $(build_get --archive-path)/$(pack_get --archive $idx))"
+    pack_set --version "$v"
+     # Default the module name to this:
+    local b_name="$(pack_get --build $idx)"
+    local tmp="$(build_get --build-module-path[$b_name])"
+    tmp=$(pack_list -lf "-X -p /" $tmp)
+    tmp=${tmp%/}
+    tmp=${tmp#/}
+    pack_set --module-name $tmp $idx
+    local tmp="$(build_get --build-installation-path[$b_name])"
+    pack_set --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp) $idx
+    tmp=$(pack_get --prefix $idx)
+    pack_set --prefix ${tmp%/} $idx
+}
+
 function pack_installed {
     local ret=$1 ; shift
     local idx

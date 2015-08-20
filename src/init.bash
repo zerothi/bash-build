@@ -7,18 +7,6 @@ set -o hashall
 # Skipping unicode char's might help speed
 export LC_ALL=C
 
-if [ ${BASH_VERSION%%.*} -lt 4 ]; then
-    doerr "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
-fi
-
-_DEBUG_COUNTER=0
-function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
-
-_cwd=$(pwd)
-_ERROR_FILE=$_cwd/ERROR
-# Clean the error file
-rm -f $_ERROR_FILE
-
 # Make an error and exit
 function doerr {
     local prefix="ERROR: "
@@ -29,9 +17,14 @@ function doerr {
     done ; exit 1
 }
 
+if [ ${BASH_VERSION%%.*} -lt 4 ]; then
+    doerr "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
+fi
+
+_DEBUG_COUNTER=0
+function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
+
 source src/globals.bash
-# Whether we should create TCL or LUA module files
-_module_format='TCL'
 
 _crt_version=0
 
@@ -206,29 +199,6 @@ function pack_crt_list {
 	    echo "$(pack_get --alias $pack)"
 	} > $build/$(pack_get --alias $pack)-$(pack_get --version $pack).list
     fi
-}
-
-
-# Update the package version number by looking at the date in the file
-function pack_set_file_version {
-    local idx=$_N_archives
-    [ $# -gt 0 ] && idx=$(get_index $1)
-    # Download the archive
-    dwn_file $idx $(build_get --archive-path)
-    local v="$(get_file_time %g-%j $(build_get --archive-path)/$(pack_get --archive $idx))"
-    pack_set --version "$v"
-     # Default the module name to this:
-    local b_name="$(pack_get --build $idx)"
-    local tmp="$(build_get --build-module-path[$b_name])"
-    tmp=$(pack_list -lf "-X -p /" $tmp)
-    tmp=${tmp%/}
-    tmp=${tmp#/}
-    pack_set --module-name $tmp $idx
-    local tmp="$(build_get --build-installation-path[$b_name])"
-    pack_set --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp) $idx
-    tmp=$(pack_get --prefix $idx)
-    pack_set --prefix ${tmp%/} $idx
-
 }
 
 
