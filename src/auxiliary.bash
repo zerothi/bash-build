@@ -341,7 +341,7 @@ function vrs_cmp {
 function lc {
     _ps "${1,,}"
     shift
-    while [ $# -gt 0] ; do
+    while [ $# -gt 0 ] ; do
 	_ps " ${1,,}"
 	shift
     done

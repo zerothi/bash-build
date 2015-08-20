@@ -1,5 +1,12 @@
 #!/bin/bash -i
 
+# For debugging
+# set -v
+#  Print bash commands before they are executed
+# set -x
+#  Prints entire command trace before each command
+
+
 _top_dir=`pwd`
 
 source ~/.bashrc
