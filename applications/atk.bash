@@ -20,7 +20,7 @@ pack_set --command "$(build_get --archive-path)/$(pack_get --archive)" \
 if $(is_host n-) ; then
     # HPC, server @ QUANTUM_LICENSE_PATH=[6220]@license1.cc.dtu.dk
     pack_set --module-opt "--set-ENV QUANTUM_AUTOMATIC_SERVER_DISCOVERY=0"
-    pack_set --module-opt "--set-ENV QUANTUM_LICENSE_PATH=[6220]@license1.cc.dtu.dk"
+    pack_set --module-opt "--set-ENV QUANTUM_LICENSE_PATH=\[6220\]\@license1.cc.dtu.dk"
 fi
 
 # Add license path to PATH
