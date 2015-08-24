@@ -226,19 +226,30 @@ EOF
 	    local opt=${tmp:0:1}
 	    local lenv=${tmp%%=*}
 	    lenv=${lenv:1}
-	    local lval=${tmp##*=}
+	    local lval=${tmp#*=}
+	    #echo "$opt, $lenv $lval $force"
             # Add paths if they are available
-	    if [ "$opt" == "s" ]; then
-		opt="$(_module_fmt_routine --set-env $lenv $lval)"
-	    elif [ "$opt" == "p" ]; then
-		opt="$(_module_fmt_routine --prepend-path $lenv $lval)"
-	    elif [ "$opt" == "a" ]; then
-		opt="$(_module_fmt_routine --append-path $lenv $lval)"
-	    else
-		opt=""
-	    fi		
+	    # We add explicit quotations as certain env-vars
+	    # might not adhere to simple text 
+	    case $opt in
+		s)
+		    opt="$(_module_fmt_routine --set-env $lenv \"$lval\")"
+		    ;;
+		p)
+		    opt="$(_module_fmt_routine --prepend-path $lenv \"$lval\")"
+		    ;;
+		a)
+		    opt="$(_module_fmt_routine --append-path $lenv \"$lval\")"
+		    ;;
+		*)
+		    opt=""
+		    ;;
+	    esac
+	    # These options should probably always
+	    # be "on" , they are specified by the options by the user
+	    # and not, per-see "optional"
 	    [ ! -z "$opt" ] && \
-		_add_module_if -F $force -d "$lval" "$mfile" "$opt" 
+		_add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
 	done
 	echo "" >> $mfile
     fi
@@ -361,35 +372,47 @@ function _module_fmt_routine {
 function _add_module_if {
     local d="";local f="" ;local F=0;
     local X=0
-    while getopts ":d:f:F:Xh" opt; do
+    local opt
+    while [ $# -gt 0 ]; do
+	opt=$(trim_em $1)
 	case $opt in
-            d)  d="$OPTARG" ;;
-            f)  f="$OPTARG" ;;
-            F)  F="$OPTARG" ;;
-	    X)  X=1 ;;
-            h)  echo "Invalid option in add_module_if" 
-		exit 0 ;;
-            \?) echo "Invalid option: -$OPTARG"
-		exit 1 ;;
-            :)  echo "Option -$OPTARG requires an argument."
-		exit 1 ;;
+	    -d|-dir)
+		# The directory which should be checked for
+		# existance
+		shift
+		d="$1"
+		shift
+		;;
+	    -f|-file)
+		# The file which should be checked for
+		# existance (precedence over directory)
+		shift
+		f="$1"
+		shift
+		;;
+	    -F|-force)
+		# Force the env-creation
+		shift
+		F="$1"
+		shift
+		;;
+	    *)
+		break
+		;;
 	esac
-    done ; shift $((OPTIND-1)) ; OPTIND=1
-    local mf="$1" ; shift
+    done
+    # Get module file
+    local mf="$1" 
+    shift
+    
     local check=""
-    [ -n "$d" ] && check=$d ; [ -n "$f" ] && check=$f
-    if [ $X -eq 1 ]; then
-	# we have expressed that this module should be created
-	# if there are any executables in the directory...
-	local keep=0
-	for lf in $check/* ; do
-	    if [ -x $lf ] && [ ! -d $lf ]; then
-		keep=1
-	    fi
-	done
-	[ $keep -eq 0 ] && check=/directory/does/not/exist
-    else
-	[ "$F" -ne "0" ] && check=$HOME # Force the check to succeed
+    if [ $F -eq 1 ]; then
+	# Force check to succed
+	check=$HOME
+    elif [ -n "$f" ]; then
+	check=$f
+    elif [ -n "$d" ]; then
+	check=$d
     fi
     if [ -e $check ]; then
 	cat <<EOF >> $mf
