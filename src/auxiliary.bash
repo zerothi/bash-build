@@ -684,8 +684,13 @@ function list {
     _ps "$retval"
 }
 
-# This is a short-hand for doing nothing
+#  Function noop
+# Helps in doing nothing.
+# Sometimes in if-else-endif statementes an noop operation
+# is needed.
+# It gobbles all arguments
 function noop {
-    # do nothing
-    _ps "" > /dev/null
+    while [ $# -gt 0 ]; do
+	shift
+    done
 }

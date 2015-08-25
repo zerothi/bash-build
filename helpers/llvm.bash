@@ -1,4 +1,4 @@
-for v in 3.6.0 ; do
+for v in 3.6.2 ; do
 add_package --build generic \
 	    --directory llvm-$v.src --package llvm --version $v \
 	    http://llvm.org/releases/$v/llvm-$v.src.tar.xz
