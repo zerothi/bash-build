@@ -45,7 +45,6 @@ function get_parent_exec { _ps "$_parent_exec" ; }
 # can test certain parts.
 declare -A _pack_only
 function pack_only {
-    [ $DEBUG -ne 0 ] && do_debug --enter pack_only
     local tmp
     while [ $# -gt 0 ]; do
 	local opt=$(trim_em $1)
@@ -68,7 +67,6 @@ function pack_only {
 		;;
 	esac
     done
-    [ $DEBUG -ne 0 ] && do_debug --return pack_only
 }
 
 # Add any auxillary commands

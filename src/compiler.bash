@@ -3,12 +3,15 @@
 
 _c=""
 _c_v=""
+
 # Set compiler name
 function set_c { 
     _c="${1%-*}"
     _c_v="${1#*-}"
     shift
 }
+
+
 function get_c {
 	local c="$_c-$_c_v"
     if [ $# -eq 0 ]; then

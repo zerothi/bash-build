@@ -10,7 +10,6 @@ rm -f $_ERROR_FILE
 
 # Default debugging variables
 _NS=1000000000
-[ -z "$DEBUG" ] && DEBUG=0
 [ -z "$FORCEMODULE" ] && FORCEMODULE=0
 [ -z "$DOWNLOAD" ] && DOWNLOAD=0
 [ -z "$PACK_LIST" ] && PACK_LIST=0

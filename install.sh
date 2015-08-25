@@ -78,9 +78,6 @@ while [ $# -gt 0 ]; do
 	-only-file)
 	    pack_only --file $1
 	    shift ;;
-	-debug)
-	    export DEBUG=1
-	    ;;
 	-build)
 	    opt=$1
 	    ;& # go through

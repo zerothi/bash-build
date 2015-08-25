@@ -10,7 +10,6 @@
 #   -H <help message> 
 #   -W <what is message>
 function create_module {
-    [ $DEBUG -ne 0 ] && do_debug --enter create_module
     local name; local version; local echos
     local path; local help; local whatis; local opt
     local env="" ; local tmp="" ; local mod=""
@@ -72,13 +71,11 @@ function create_module {
     for mod in $require $load ; do
 	[ -z "${mod// /}" ] && continue
 	[ $(pack_get --installed $mod) -eq $_I_INSTALLED ] && continue
-        [ $DEBUG -ne 0 ] && do_debug --return create_module
 	return 1
     done
     
     # If the file exists simply return
     if [ -e "$mfile" ] && [ 0 -eq $force ]; then
-        [ $DEBUG -ne 0 ] && do_debug --return create_module
         return 0
     fi
 
@@ -332,7 +329,6 @@ EOF
 		;;
 	esac
     fi
-    [ $DEBUG -ne 0 ] && do_debug --return create_module
 }
 
 # Returns the module specific routine call

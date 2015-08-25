@@ -24,6 +24,7 @@
 #      Broadcast a specific message.
 #      If this option is used, no information regarding the
 #      <package> is used.
+
 function msg_install {
     local n="" ; local action=0
     while [ $# -gt 1 ]; do
@@ -89,6 +90,7 @@ function msg_install {
 #    commands
 #       All arguments are passed directly to `eval`.
 #       The commands will be shown for the user before execution.
+
 function docmd {
     local ar="$1"
     shift
@@ -119,6 +121,7 @@ function docmd {
 #  Arguments
 #    message
 #       All message arguments are printed, _as is_.
+
 function _ps {
     printf "%s" "$@"
 }
@@ -132,6 +135,7 @@ function _ps {
 #    str
 #       Removes one em-dash if the `str` starts with two or
 #       more em-dashes.
+
 function trim_em {
     local opt=$1
     shift
@@ -148,6 +152,7 @@ function trim_em {
 #  Arguments
 #    str
 #       Truncates all spaces to a minimum of one space.
+
 function trim_spaces {
     local str=""
     local s
@@ -187,6 +192,7 @@ function trim_spaces {
 #      Returns the version string.
 #      If a package specification is given without version,
 #      an empty string is returned.
+
 function var_spec {
     local v=1
     local opt
@@ -246,6 +252,7 @@ function var_spec {
 #      Returns the rev index (5)
 #    bug|-bug|-4
 #      Returns the bug index (0)
+
 function str_version {
     local Mv='' ; local mv='' ; local rv='' ; local fourth=''
     local opt=-1
@@ -312,6 +319,7 @@ function str_version {
 #       First version string.
 #    version2
 #       Second version string.
+
 function vrs_cmp {
     local lhs=$1 ; shift
     local rhs=$1 ; shift
@@ -338,6 +346,7 @@ function vrs_cmp {
 #  Arguments
 #    <args>
 #       Returns <args> as lowercase characters.
+
 function lc {
     _ps "${1,,}"
     shift
@@ -355,6 +364,7 @@ function lc {
 #       for available formats)
 #    file
 #       Does a `stat` on file `file` and returns the date.
+
 function get_file_time {
     local format="$1"
     shift
@@ -362,6 +372,7 @@ function get_file_time {
     shift
     _ps "`date +"$format" --date="$fdate"`"
 }
+
 
 #  Function isnumber
 # Relies on the status return to tell whether
@@ -377,9 +388,11 @@ function get_file_time {
 # else
 #    echo FAILURE
 # fi
+
 function isnumber { 
     printf '%d' "$1" &>/dev/null
 }
+
 
 #  Function rem_dup
 # Removes any dublicates in a string (preserves order).
@@ -393,6 +406,7 @@ function isnumber {
 #    <args>
 #       The list of args to remove dublicates from
 #       The order is preserved.
+
 function rem_dup {
     # Apparently we cannot use _ps here!!!!
     # Hence the first argument must never be an option
@@ -404,6 +418,7 @@ function rem_dup {
 	tr '\n' ' '
 }
 
+
 #  Function ret_uniq
 # Returns all unique entries in arguments.
 # Will not return any entry that is encountered more than
@@ -412,6 +427,7 @@ function rem_dup {
 #    <args>
 #       The list of args to return unique values from
 #       The order is preserved.
+
 function ret_uniq {
     # Apparently we cannot use _ps here!!!!
     echo -n "$@" | \
@@ -435,6 +451,7 @@ a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
 #    ext
 #       Checks the extension and returns an un compression command
 #       that can un-compress that file.
+
 function arc_cmd {
     local ext="$(lc $1)"
     if [ "x$ext" == "xbz2" ]; then
@@ -462,6 +479,7 @@ function arc_cmd {
     fi
 }
 
+
 #  Function extract_archive
 # Takes a directory and a package name as argument.
 # Extracts the archive belonging to package and extracts it
@@ -472,6 +490,7 @@ function arc_cmd {
 #    <package>
 #       the package name. Looks up the package, extracts the
 #       archive from the saved package, and extracts it.
+
 function extract_archive {
     local alias="$2"
     local d=$(pack_get --directory $alias)
@@ -486,6 +505,7 @@ function extract_archive {
     docmd "$alias" $cmd $1/$archive
 }
 
+
 #  Function dwn_file
 # Downloads files using `wget`, without proxies or certificates.
 # Hence, if you are located behind a proxy, the script will fail.
@@ -494,6 +514,7 @@ function extract_archive {
 #       file to download
 #    dir
 #       downloads the file to this path.
+
 function dwn_file {
     local url=$1 ; shift
     local O=$1 ; shift
@@ -511,6 +532,7 @@ function dwn_file {
 	doerr "$url" "Could not download file succesfully..."
     fi
 }
+
 
 #  Function list
 # Returns several options from either a list of <package>s or
@@ -560,8 +582,8 @@ function dwn_file {
 #       Returns the module names of the <package> list
 #       Same as:
 #         -loop-cmd "pack_get --module-name"
+
 function list {
-    [ $DEBUG -ne 0 ] && do_debug --enter list
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval="" ; local uniq=0
     # First we collect all options
@@ -645,7 +667,6 @@ function list {
 	done
     fi
     _ps "$retval"
-    [ $DEBUG -ne 0 ] && do_debug --return list
 }
 
 

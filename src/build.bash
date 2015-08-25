@@ -48,16 +48,44 @@ declare -A _b_def_mod_reqs
 # Defaults a bunch of settings for all packages associated with
 # this build.
 declare -A _b_def_settings
-# Pointers of lookup
+# Pointers of lookup (faster indexing)
 declare -A _b_index
 
 # Counter to keep track of number of builds.
 _N_b=-1
 
+#  Function build_set
+# Constructing a build is necessary using this
+# wrapper function for constructing the data structures
+# explained in the top of this file.
+# It is heavily used when creating a build.
+#  Arguments
+#    <package>
+#       Any message printed is associated to a package.
+#       This package name refers to an already sourced
+#       package installation so it can be looked up in the index
+#       If not supplied, it will take the last added package
+#       and use that as a reference.
+#  Options
+#    --archive-path|-ap <path>
+#       Set the directory where package files are stored.
+#       This is merely a data containing folder.
+#       *Currently* this is a global variable for all builds.
+#    --installation-path|-ip <path>
+#       Set the installation prefix for all packages belonging to
+#       this build.
+#    --module-path|-mp <path>
+#       Set the installation prefix for the modules.
+#       This can be different than the installation path of the
+#       packages to account for different positions of module files.
+#    --build-path|-bp <path>
+#       This build's compilation directory.
+#       All compilations of this build will occur in this
+#       folder.
+#       This allows several builds to co-run when the installations
+#       occur in differing paths.
 
-# Denote how the module paths and installation paths should be
 function build_set {
-    [ $DEBUG -ne 0 ] && do_debug --enter build_set
     # We set up default parameters for creating the 
     # default package directory
     local tmp
@@ -164,12 +192,10 @@ function build_set {
 	    *) doerr "$opt" "Not a recognized option for build_set" ;;
 	esac
     done
-    [ $DEBUG -ne 0 ] && do_debug --return build_set
 }
 
 # Retrieval of different variables
 function build_get {
-    [ $DEBUG -ne 0 ] && do_debug --enter build_get
     # We set up default parameters for creating the 
     # default package directory
     local opt=$(trim_em $1)
@@ -196,7 +222,6 @@ function build_get {
 	-source) _ps "${_b_source[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
-    [ $DEBUG -ne 0 ] && do_debug --return build_get
 }
 
 function new_build {

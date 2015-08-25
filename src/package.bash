@@ -175,7 +175,6 @@ function pack_list {
 
 # $1 http path
 function add_package {
-    [ $DEBUG -ne 0 ] && do_debug --enter add_package
 
     # Increment contained packages
     let _N_archives++
@@ -300,12 +299,10 @@ function add_package {
     _only_host[$_N_archives]=""
 
     msg_install --message "Added $package[$v] to the install list"
-    [ $DEBUG -ne 0 ] && do_debug --return add_package
 }
 
 # This function allows for setting data related to a package
 function pack_set {
-    [ $DEBUG -ne 0 ] && do_debug --enter pack_set
     local index=$_N_archives # Default to this
     local alias="" ; local version="" ; local directory=""
     local settings="" ; local install="" ; local query=""
@@ -443,13 +440,11 @@ function pack_set {
     [ ! -z "$package" ]    && _package[$index]="$package"
     [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
-    [ $DEBUG -ne 0 ] && do_debug --return pack_set
 }
 
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
 function pack_get {
-    [ $DEBUG -ne 0 ] && do_debug --enter pack_get
     local opt="$(trim_em $1)" # Save the option passed
     case $opt in
 	-*) ;;
@@ -563,7 +558,6 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
-    [ $DEBUG -ne 0 ] && do_debug --return pack_get
 }
 
 

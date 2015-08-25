@@ -1,6 +1,5 @@
 # Install the package
 function pack_install {
-    [ $DEBUG -ne 0 ] && do_debug --enter pack_install
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
 	idx=$(get_index $1) ; shift
@@ -13,14 +12,8 @@ function pack_install {
 	if [ 0${_pack_only[$tmp]} -eq 1 ]; then
 	    pack_only $(pack_get --mod-req-all $idx)
 	else
-	    [ $DEBUG -ne 0 ] && do_debug --enter pack_install
 	    return 
 	fi
-    fi
-
-    if [ $DEBUG -ne 0 ]; then
-        # Print out information for packages that are tried installed.
-	pack_print $idx
     fi
 
     # First a simple check that it hasn't already been installed...
@@ -62,7 +55,6 @@ function pack_install {
     if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
 	msg_install --already-installed $idx
 	if [ $FORCEMODULE -eq 0 ]; then
-	    [ $DEBUG -ne 0 ] && do_debug --return pack_install
 	    return 0
 	fi
     fi
@@ -95,7 +87,6 @@ function pack_install {
 	# Notify other required stuff that this can not be installed.
 	pack_set --installed $_I_REJECT $idx
 	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
-	[ $DEBUG -ne 0 ] && do_debug --return pack_install
 	return 1
     fi
 
@@ -244,7 +235,6 @@ function pack_install {
 		-L $(pack_get --alias $idx)
 	fi
     fi
-    [ $DEBUG -ne 0 ] && do_debug --return pack_install
 }
 
 # Can be used to return the index in the _arrays for the named variable
