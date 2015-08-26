@@ -104,7 +104,6 @@ function set_flag {
 	    pack_set --command "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
 	    pack_set --command "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
 
-
 	    end=_omp
 	    if [ "x$siesta_la" == "xopenblas" ]; then
 		pack_set --command "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
@@ -116,6 +115,7 @@ function set_flag {
 	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
 	    pack_set --command "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
 	    pack_set --command "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
+
 	    end=
 	    if [ "x$siesta_la" == "xopenblas" ]; then
 		pack_set --command "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"

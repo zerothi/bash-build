@@ -57,3 +57,11 @@ atom.o: atom.F\n\
 pack_set --command "[ -e ../Src/atom.f ] && sed -i '$ a\
 atom.o: atom.f\n\
 \t\$(FC) -c -O1 \$(INCFLAGS) \$<\n' arch.make || echo NVM"
+
+# Threading and m_new_dm does not work
+# Besides it is so little a routine that we simply compile it with
+# lower optimization
+pack_set --command "sed -i '$ a\
+m_new_dm.o: m_new_dm.F90\n\
+\t\$(FC) -c -O2 \$(INCFLAGS) \$(FPPFLAGS) \$<\n' arch.make || echo NVM"
+
