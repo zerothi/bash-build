@@ -3,6 +3,9 @@
 # Current working directory
 _cwd=$(pwd)
 
+# Skipping unicode char's might help speed
+export LC_ALL=C
+
 # The error file
 _ERROR_FILE=$_cwd/ERROR
 # Clean the error file
@@ -19,7 +22,7 @@ BUILD_DIR=build-dir
 PRELOAD_MODULE=module-preload
 IS_MODULE=module
 CRT_DEF_MODULE=def-module
-let "MAKE_PARALLEL=1 << 1"
+MAKE_PARALLEL=parallel
 
 # A separator used for commands that can be given consequtively
 _LIST_SEP='ø'

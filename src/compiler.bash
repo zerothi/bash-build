@@ -13,7 +13,7 @@ function set_c {
 
 
 function get_c {
-	local c="$_c-$_c_v"
+    local c="$_c-$_c_v"
     if [ $# -eq 0 ]; then
 	printf "%s" "$c"
     else

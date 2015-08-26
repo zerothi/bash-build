@@ -214,7 +214,7 @@ function pack_install {
 
     if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
 	if $(has_setting $IS_MODULE $idx) ; then
-        # Create the list of requirements
+            # Create the list of requirements
 	    local reqs="$(list --prefix '-R ' $mod_reqs)"
             # We install the module scripts here:
 	    create_module \
@@ -241,43 +241,52 @@ function pack_install {
 # $1 is the shortname for what to search for
 function get_index {
     local var=_index
-    local i ; local lookup ; local all=0
+    local i
+    local lookup
+    local all=0
     while [ $# -gt 1 ]; do
 	local opt=$(trim_em $1) ; shift
 	case $opt in
-	    -all|-a) all=1                ;;
-	    -hash-array) var="$1" ; shift ;;
+	    -all|-a)
+		all=1
+		;;
+	    -hash-array)
+		var="$1"
+		shift
+		;;
 	esac
     done
-    local l=$1 ; shift
+    local l=$1
+    shift
+    
     [ ${#l} -eq 0 ] && return 1
     # Save the thing that we want to process...
-    local name=$(var_spec $l)
+    local name=$(lc $(var_spec $l))
     local version=$(var_spec -s $l)
-    name="$(lc $name)"
     # do full variable (for ${!...})
     l=${#name}
     var="$var[$name]"
     #echo "get_index: name($name) version($version)" >&2
     if $(isnumber $name) ; then
-	if [ "$var" == "_index" ]; then
-	    [ $name -gt ${#_index[@]} ] && return 1
-	elif [ "$var" == "_b_index" ]; then
-	    [ $name -gt ${#_b_index[@]} ] && return 1
-	fi
-	[ $name -lt 0 ] && return 1
+	# We do not check for correctness
+	# This just slows it down
+	#if [ "$var" == "_index" ]; then
+	#    [ $name -gt $_N_archives ] && return 1
+	#elif [ "$var" == "_b_index" ]; then
+	#    [ $name -gt $_N_b ] && return 1
+	#fi
+	#[ $name -lt 0 ] && return 1
 	_ps "$name"
 	return 0
     fi
     # Do full expansion.
     local idx=${!var}
-    i=0
     if [ -z "$idx" ]; then
 	return 1
     fi
     local v
     if [ $all -eq 1 ]; then
-	if [ ! -z "$version" ]; then
+	if [ -n "$version" ]; then
 	    for v in $idx ; do
 		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
 		    _ps "$v"
@@ -287,24 +296,23 @@ function get_index {
 	else
 	    _ps "$idx"
 	fi
-	return 0
     else
 	i=-1
         # Select the latest per default..
-	for v in $idx ; do
-	    if [ ! -z "$version" ]; then
+	if [ -n "$version" ]; then
+	    for v in $idx ; do
 		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
 		    i="$v"
 		    break
 		fi
-	    else
+	    done
+	else
+	    for v in $idx ; do
 		i="$v"
-	    fi
-	done
+	    done
+	fi
+	_ps "$i"
     fi
-    [ -z "${i// /}" ] && i=-1
-    _ps "$i"
-    return 0
 }
 
 

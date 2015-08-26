@@ -137,12 +137,7 @@ function _ps {
 #       more em-dashes.
 
 function trim_em {
-    local opt=$1
-    shift
-    case $opt in
-	--*) opt=${opt:1} ;;
-    esac
-    _ps "$opt"
+    _ps "${1/#--/-}" ; shift
 }
 
 #  Function trim_spaces
@@ -154,20 +149,14 @@ function trim_em {
 #       Truncates all spaces to a minimum of one space.
 
 function trim_spaces {
-    local str=""
+    local str
     local s
     local i
     while [ $# -gt 0 ]; do
-	s="$1"
+	s="${1## }" # removes prefix space
 	shift
-	s=${s## } # removes prefix space (apparently does not work)
-	s=${s%% } # removes suffix space (apparently does not work)
-	i=0
-	while [ $i -ne ${#s} ]; do
-	    i=${#s}
-            # we also remove all double spaces
-	    s=${s//  / }
-	done
+	s=${s%% } # removes suffix space
+	s=${s//  / } # removes double space
 	str="$str $s"
     done
     _ps "${str:1}"
@@ -196,24 +185,28 @@ function trim_spaces {
 function var_spec {
     local v=1
     local opt
-    while [ $# -gt 0 ]; do
-	opt=$(trim_em $1)
-	case $opt in
-	    -var|-v)
-		v=1
-		shift
-		;;
-	    -spec|-s)
-		v=2
-		shift
-		;;
-	esac
-        # We add field separators
-	if [ $v -eq 1 ]; then
-            opt=${1%%\[*}
-	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $1}')"
+    opt=$(trim_em $1)
+    case $opt in
+	-var|-v)
+	    v=1
+	    shift
+	    ;;
+	-spec|-s)
+	    v=2
+	    shift
+	    ;;
+    esac
+    if [ $v -eq 1 ]; then
+	while [ $# -gt 0 ]; do
+	    opt=${1%%\[*}
 	    _ps "${opt// /}"
-	elif [ $v -eq 2 ]; then
+	    # Get next package
+	    shift
+	    # Add delimiter
+	    [ $# -gt 0 ] && _ps " "
+	done
+    elif [ $v -eq 2 ]; then
+	while [ $# -gt 0 ]; do
             if [ "${1:${#1}-1}" == "]" ]; then
 		opt=${1##*\[}
 		opt=${opt//\]/}
@@ -222,12 +215,12 @@ function var_spec {
             fi
 	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
 	    _ps "${opt// /}"
-	fi
-	# Get next package
-	shift
-	# Add delimiter
-	[ $# -gt 0 ] && _ps " "
-    done
+	    # Get next package
+	    shift
+	    # Add delimiter
+	    [ $# -gt 0 ] && _ps " "
+	done
+    fi
 }
 
 
@@ -668,5 +661,3 @@ function list {
     fi
     _ps "$retval"
 }
-
-

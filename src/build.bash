@@ -84,6 +84,61 @@ _N_b=-1
 #       folder.
 #       This allows several builds to co-run when the installations
 #       occur in differing paths.
+#    --build-installation-path|-bip "str"
+#       **APT FOR NAME CHANGE**
+#       This denotes the path creation for each package.
+#       Currently it does a:
+#          path=
+#          for opt in $str ; do path=$path/$(pack_get $opt) ; done
+#       to figure out the accumulated path.
+#    --build-module-path|-bmp "str"
+#       **APT FOR NAME CHANGE**
+#       This denotes the path creation for each package module file.
+#       Currently it does a:
+#          mod=
+#          for opt in $str ; do mod=$mod/$(pack_get $opt) ; done
+#       to figure out the accumulated path.
+#    --default-module-hidden <package>
+#       create a hidden module.
+#       This enables one to by-pass directly library paths
+#       and other options using modules "faked" by the build
+#       system.
+#       This is useful when referencing already existing modules
+#       that does not get populated in this package installation
+#       utility.
+#       NOTE: Also calls --default-module to create it.
+#    --default-module <package>
+#       Append <package> to the default loaded modules
+#       for all packages using this build.
+#       It reduces the need to add "pack_set --mod-req <package>"
+#       in all sources.
+#    --reset-module
+#       Clears all module requirements created by --default-module
+#    --default-setting <setting>
+#       Enables global settings for all packages using this build.
+#       Reduces need for setting the setting in all sources.
+#    --default-choice <name> <choice-1> <choice-2>
+#       A special setting which enables a list of choices.
+#       Can be used to select different things based on
+#       existance.
+#       For instance with BLAS libraries one could do:
+#         build_set --default-choice blas openblas acml blas
+#       which requires the package code to take into consideration
+#       these choices.
+#    --remove-default-setting
+#       Remove a specific setting from the build
+#       NOTE: Currently does not remove choices.
+#    --default-build
+#       Set the default build. I.e. it is not
+#       related to a specific build, but lets the
+#       user select a default build.
+#    --default-module-version
+#       Passing this forces the link of the module files
+#       to their default.
+#       Hence when doing several builds with, for instance, different
+#       compilers the current builds will load by default.
+#    --non-default-module-version
+#       Unset the `--default-module-version`
 
 function build_set {
     # We set up default parameters for creating the 
@@ -194,7 +249,41 @@ function build_set {
     done
 }
 
-# Retrieval of different variables
+
+#  Function build_get
+# Retrieve information from a specific build.
+#  Arguments
+#    <package>
+#       Any message printed is associated to a package.
+#       This package name refers to an already sourced
+#       package installation so it can be looked up in the index
+#       If not supplied, it will take the last added package
+#       and use that as a reference.
+#  Options
+#    --archive-path|-ap <path>
+#       Return the directory where package files are stored.
+#    --installation-path|-ip <path>
+#       Return the installation prefix for all packages belonging to
+#       this build.
+#    --module-path|-mp <path>
+#       Return the installation prefix for the modules.
+#    --build-path|-bp <path>
+#       Return this build's compilation directory.
+#    --build-installation-path|-bip "str"
+#       **APT FOR NAME CHANGE**
+#       Return the path creation for each package.
+#    --build-module-path|-bmp "str"
+#       **APT FOR NAME CHANGE**
+#       Return the path creation for each package module file.
+#    --default-build
+#       Return index of default build.
+#    --default-setting
+#       Return all settings for the current build
+#    --default-module
+#       Return all default modules
+#    --source
+#       Return source file belonging to this build
+
 function build_get {
     # We set up default parameters for creating the 
     # default package directory

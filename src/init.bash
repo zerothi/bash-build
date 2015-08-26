@@ -4,9 +4,6 @@
 # Set options
 set -o hashall
 
-# Skipping unicode char's might help speed
-export LC_ALL=C
-
 # Make an error and exit
 function doerr {
     local prefix="ERROR: "
@@ -25,6 +22,8 @@ _DEBUG_COUNTER=0
 function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
 
 source src/globals.bash
+
+source src/hidden.bash
 
 _crt_version=0
 
@@ -117,7 +116,8 @@ function edit_env {
 #   $1 : <setting>
 #   $2 : <index|name of archive>
 function has_setting {
-    local ss="" ; local s="$1" ; shift
+    local ss
+    local s="$1" ; shift
     local -a sets=()
     [ $# -gt 0 ] && ss="$1" && shift
     IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
@@ -163,22 +163,6 @@ function get_make_parallel {
 #################################################
 ###########     Helper functions     ############
 
-# Return the latest index, or the provided one, if any
-function _get_true_index {
-    if [ $# -eq 0 ]; then
-	_ps "$_N_archives"
-    else
-	_ps "$1"
-    fi
-}
-
-# Make an error and exit
-function exit_on_error {
-    if [ $1 -ne 0 ]; then
-	shift
-	doerr "$@"
-    fi
-}
 
 function pack_crt_list {
     [ $PACK_LIST -eq 0 ] && return
@@ -197,19 +181,5 @@ function pack_crt_list {
 	    echo "$(pack_get --alias $pack)"
 	} > $build/$(pack_get --alias $pack)-$(pack_get --version $pack).list
     fi
-}
-
-
-function do_debug {
-    local n=""
-    while [ $# -gt 1 ]; do
-	local opt=$(trim_em $1) ; shift
-	case $opt in
-	    -msg) n="$1" ; shift ;;
-	    -enter) n="enter routine: $1" ; shift ;;
-	    -return) n="return from routine: $1" ; shift ;;
-	esac
-    done
-    echo "$n" >> DEBUG
 }
 
