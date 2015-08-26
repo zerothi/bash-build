@@ -108,6 +108,8 @@ function set_flag {
 	    end=_omp
 	    if [ "x$siesta_la" == "xopenblas" ]; then
 		pack_set --command "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
+	    elif [ "x$siesta_la" == "xmkl" ]; then
+		pack_set --command "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
 	    fi
 	    ;;
 	*)
@@ -117,6 +119,8 @@ function set_flag {
 	    end=
 	    if [ "x$siesta_la" == "xopenblas" ]; then
 		pack_set --command "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
+	    elif [ "x$siesta_la" == "xmkl" ]; then
+		pack_set --command "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"
 	    fi
 	    ;;
     esac

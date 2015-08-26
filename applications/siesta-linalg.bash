@@ -9,7 +9,8 @@ if $(is_c intel) ; then
 LDFLAGS=$MKL_LIB $(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
-LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential\n\
+LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
+LIBS+= -lmkl_gf_lp64 -lmkl_core -lmkl_sequential\n\
 ' arch.make"
 
 elif $(is_c gnu) ; then
