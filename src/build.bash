@@ -26,7 +26,7 @@ declare -A _b_build_path
 # The default compilation path is the current working directory
 # and the .compile directory
 _b_build_path[$_b_def_idx]=$_cwd/.compile
-mkdir -p _b_build_path[$_b_def_idx]
+mkdir -p ${_b_build_path[$_b_def_idx]}
 # An installation prefix where <packages> are installed
 declare -A _b_prefix
 # The installation prefix for the module files
