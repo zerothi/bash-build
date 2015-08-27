@@ -32,8 +32,6 @@ declare -A _cmd
 declare -A _mod_req
 # Variable for holding information about "non-installation" hosts
 declare -A _reject_host
-# A variable that contains all the hosts that it will be installed on
-declare -A _only_host
 # Logical variable determines whether the package has been installed
 _I_REQ=4 # an internal module only used for its custom dependency list
          # it does not contain any paths itself
@@ -296,7 +294,6 @@ function add_package {
     [ $no_def_mod -eq 0 ] && \
 	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
     _reject_host[$_N_archives]=""
-    _only_host[$_N_archives]=""
 
     msg_install --message "Added $package[$v] to the install list"
 }
@@ -346,8 +343,6 @@ function pack_set {
 		# We add the host-rejects for this requirement
 		tmp="$(pack_get --host-reject $1)"
 		[ ! -z "$tmp" ] && reject_h="$reject_h $tmp"
-		tmp="$(pack_get --host-only $1)"
-		[ ! -z "$tmp" ] && only_h="$only_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
@@ -377,7 +372,6 @@ function pack_set {
 	    -module-opt)  mod_opt="$mod_opt $1" ; shift ;;
 	    -prefix-and-module)  mod_name="$1" ; up_pre_mod=1 ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
-	    -host-only)  only_h="$only_h $1" ; shift ;; # Can be called several times
 	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
 	    *)
 		# We do a crude check
@@ -438,7 +432,6 @@ function pack_set {
     [ ! -z "$mod_prefix" ] && _mod_prefix[$index]="$mod_prefix"
     [ ! -z "$mod_name" ]   && _mod_name[$index]="$mod_name"
     [ ! -z "$package" ]    && _package[$index]="$package"
-    [ ! -z "$only_h" ]     && _only_host[$index]="${_only_host[$index]}$only_h"
     [ ! -z "$reject_h" ]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 }
 
@@ -506,7 +499,6 @@ function pack_get {
 		-module-opt)         _ps "${_mod_opts[$index]}" ;;
 		-p|-package)         _ps "${_package[$index]}" ;;
 		-e|-ext)             _ps "${_ext[$index]}" ;;
-		-host-only)          _ps "${_only_host[$index]}" ;;
 		-host-reject)        _ps "${_reject_host[$index]}" ;;
 		*)
 		    doerr "$1" "No option for pack_get found for $1" ;;
@@ -552,7 +544,6 @@ function pack_get {
 	    -m|-module-name)     _ps "${_mod_name[$index]}" ;;
 	    -p|-package)         _ps "${_package[$index]}" ;;
 	    -e|-ext)             _ps "${_ext[$index]}" ;;
-	    -host-only)          _ps "${_only_host[$index]}" ;;
 	    -host-reject)        _ps "${_reject_host[$index]}" ;;
 	    *)
 		doerr $1 "No option for pack_get found for $1" ;;

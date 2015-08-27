@@ -2,7 +2,8 @@
 function pack_install {
     local idx=$_N_archives
     if [ $# -ne 0 ]; then
-	idx=$(get_index $1) ; shift
+	idx=$(get_index $1)
+	shift
     fi
     local alias=$(pack_get --alias $idx)
     local prefix=$(pack_get --prefix $idx)
@@ -61,17 +62,8 @@ function pack_install {
 
     local mod_reqs_paths="$(pack_get --mod-req-path $idx)"
 
-    local tmp="$(pack_get --host-only $idx)"
-    if [ ! -z "$tmp" ]; then
-	run=0
-	for host in $tmp ; do
-	    if $(is_host $host) ; then
-		run=1 && break
-	    fi
-	done
-    fi
-    local tmp="$(pack_get --host-reject $idx)"
-    if [ ! -z "$tmp" ]; then
+    tmp="$(pack_get --host-reject $idx)"
+    if [ -n "$tmp" ]; then
 	# Run should be 1 when we get here...
 	for host in $tmp ; do
 	    if $(is_host $host) ; then
@@ -94,7 +86,7 @@ function pack_install {
     if [ $(pack_get --installed $idx) -eq $_I_TO_BE ]; then
 
 	# Source the file for obtaining correct env-variables
-	local tmp=$(pack_get --build $idx)
+	tmp=$(pack_get --build $idx)
 	source $(build_get --source[$tmp])
 
         # Create the list of requirements
@@ -104,13 +96,13 @@ function pack_install {
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
-		-n "$alias" \
-		-v "$(pack_get --version $idx)" \
-		-M "$(pack_get --module-name $idx)" \
-		-p "$(pack_get --module-prefix $idx)" \
-		-P "$prefix"
-        # Create the prefix directory
-        mkdir -p $prefix
+			  -n "$alias" \
+			  -v "$(pack_get --version $idx)" \
+			  -M "$(pack_get --module-name $idx)" \
+			  -p "$(pack_get --module-prefix $idx)" \
+			  -P "$prefix"
+            # Create the prefix directory
+            mkdir -p $prefix
 	    # Load module for preloading
 	    module load $(pack_get --module-name $idx)
 	fi
@@ -155,17 +147,21 @@ function pack_install {
 
         # We are now in the package directory
 	if $(has_setting $BUILD_DIR $idx) ; then
-	    rm -rf build-tmp ; mkdir -p build-tmp ; popd 1> /dev/null 
-	    pushd $directory/build-tmp 1> /dev/null
+	    rm -rf build-tmp
+	    mkdir -p build-tmp
+	    {
+		popd
+		pushd $directory/build-tmp
+	    } 1> /dev/null 
 	fi
 	
 	# Run all commands
-	local cmd="$(pack_get --commands $idx)"
+	tmp="$(pack_get --commands $idx)"
 	local -a cmds=()
-	IFS="$_LIST_SEP" read -ra cmds <<< "$cmd"
-	for cmd in "${cmds[@]}" ; do
-	    [ -z "${cmd// /}" ] && continue # Skip the empty commands...
-	    docmd "$idx" "$cmd"
+	IFS="$_LIST_SEP" read -ra cmds <<< "$tmp"
+	for tmp in "${cmds[@]}" ; do
+	    [ -z "${tmp// /}" ] && continue # Skip the empty commands...
+	    docmd "$idx" "$tmp"
 	done
 
 	popd 1> /dev/null

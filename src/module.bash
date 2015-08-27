@@ -268,7 +268,7 @@ EOF
 #	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     _add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2 3.3 3.4 3.5 ; do
+    for PV in 2.6 2.7 3.4 3.5 ; do
 	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \

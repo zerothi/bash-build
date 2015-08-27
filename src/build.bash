@@ -360,14 +360,16 @@ function new_build {
 		;&
 	    -default-module) 
 		local tmp=$(get_index $1)
-		if [ ! -z "$tmp" ]; then
-		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $1)"
+		if [ -n "$tmp" ]; then
+		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $tmp)"
 		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1"
 		_b_def_mod_reqs[$_N_b]="$(rem_dup ${_b_def_mod_reqs[$_N_b]})"
-		shift ;;
+		shift
+		;;
 	    -source)
-		_b_source[$_N_b]="$(readlink -f $1)" ; shift
+		_b_source[$_N_b]="$(readlink -f $1)"
+		shift
 		[ ! -e ${_b_source[$_N_b]} ] && \
 		    doerr "${_b_source[$_N_b]}" "Source file does not exist"
 		;;
