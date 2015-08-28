@@ -9,10 +9,10 @@ pack_set --module-requirement lua
 pack_set --install-query $(pack_get --LD lua)//lua/$lua_V/lfs.so
 
 # Correct the installation compilation
-pack_set --command "rm config"
-pack_set --command "echo '' > config"
-pack_set --command "echo '' > config"
-pack_set --command "sed -i '1 a\
+pack_cmd "rm config"
+pack_cmd "echo '' > config"
+pack_cmd "echo '' > config"
+pack_cmd "sed -i '1 a\
 PREFIX = $(pack_get --prefix lua)\n\
 LUA_LIBDIR = \$(PREFIX)/lib/lua/$lua_V\n\
 LUA_INC =\$(PREFIX)/include\n\
@@ -24,11 +24,11 @@ CFLAGS = $CFLAGS \$(INCS)\n\
 CC = $CC' config"
 
 # Make lua package
-pack_set --command "make"
+pack_cmd "make"
 
 # Make install lua
-pack_set --command "make install"
+pack_cmd "make install"
 
 # Copy the header to the correct placement
-pack_set --command "cp src/lfs.h $(pack_get --prefix lua)/include/"
+pack_cmd "cp src/lfs.h $(pack_get --prefix lua)/include/"
 

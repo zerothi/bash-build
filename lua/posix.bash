@@ -16,15 +16,15 @@ pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/posix.so
     pack_set --module-requirement build-tools
 
 # Configure the package
-pack_set --command "./configure" \
-	--command-flag "LUA=$(pack_get --prefix lua)/bin/lua" \
-	--command-flag "LUA_INCLUDE='-I$(pack_get --prefix lua)/include'" \
-	--command-flag "--prefix=$(pack_get --prefix lua)" \
-	--command-flag "--libdir=$(pack_get --LD lua)/lua/$lua_V/" \
-	--command-flag "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/" 
+pack_cmd "./configure" \
+	    "LUA=$(pack_get --prefix lua)/bin/lua" \
+	    "LUA_INCLUDE='-I$(pack_get --prefix lua)/include'" \
+	    "--prefix=$(pack_get --prefix lua)" \
+	    "--libdir=$(pack_get --LD lua)/lua/$lua_V/" \
+	    "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/" 
 
 # Make lua package
-pack_set --command "make all"
-pack_set --command "make check"
-pack_set --command "make install"
+pack_cmd "make all"
+pack_cmd "make check"
+pack_cmd "make install"
 

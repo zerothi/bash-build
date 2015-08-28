@@ -9,18 +9,18 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --prefix)/bin/lua
 
 # Correct the installation compilation
-pack_set --command "sed -i -e '/^CC/{s:.*:CC = $CC:}' src/Makefile"
+pack_cmd "sed -i -e '/^CC/{s:.*:CC = $CC:}' src/Makefile"
 # -DLUA_COMPAT_BITLIB and -DLUA_COMPAT_APIINTCASTS are for the bit32 lib
 # -DLUA_COMPAT_ALL is not used for 5.3
-pack_set --command "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_BITLIB -DLUA_COMPAT_APIINTCASTS \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
+pack_cmd "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_BITLIB -DLUA_COMPAT_APIINTCASTS \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
 
 # Correct the default package directory
-pack_set --command "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --prefix)/\":' src/luaconf.h"
+pack_cmd "sed -i -e 's:define LUA_ROOT.*:define LUA_ROOT  \"$(pack_get --prefix)/\":' src/luaconf.h"
 
-pack_set --command "make linux test"
+pack_cmd "make linux test"
 
 # Make install lua
-pack_set --command "make install INSTALL_TOP=$(pack_get --prefix)"
+pack_cmd "make install INSTALL_TOP=$(pack_get --prefix)"
 
 pack_install
 lua_V=5.3

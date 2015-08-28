@@ -6,9 +6,9 @@ pack_set --module-requirement lua
 pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/lpeg.so
 
 # Configure the package
-pack_set --command "sed -i -e 's:^LUADIR.*:LUADIR=$(pack_get --prefix lua):' makefile"
+pack_cmd "sed -i -e 's:^LUADIR.*:LUADIR=$(pack_get --prefix lua):' makefile"
 
-pack_set --command "make linux"
+pack_cmd "make linux"
 
-pack_set --command "cp lpeg.so $(pack_get --LD lua)/lua/$lua_V/lpeg.so"
+pack_cmd "cp lpeg.so $(pack_get --LD lua)/lua/$lua_V/lpeg.so"
 
