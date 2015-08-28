@@ -144,15 +144,15 @@ function build_set {
     # We set up default parameters for creating the 
     # default package directory
     local tmp
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	local opt=$(trim_em $1)
 	local spec=$(var_spec -s $opt)
-	if [ -z "$spec" ]; then
+	if [[ -z "$spec" ]]; then
 	    local b_idx=$_b_def_idx
 	else
 	    local b_idx=$(get_index --hash-array "_b_index" $spec)
 	fi
-	if [ -z "$b_idx" ]; then
+	if [[ -z "$b_idx" ]]; then
 	    doerr "$spec" "Unrecognized build, please create it first"
 	    exit 1
 	fi
@@ -163,12 +163,12 @@ function build_set {
 		_archives="$1"
 		shift ;;
 	    -installation-path|-ip)
-		[ $b_idx -eq 0 ] && _prefix="$1"
+		[[ $b_idx -eq 0 ]] && _prefix="$1"
 		_b_prefix[$b_idx]="$1"
 		mkdir -p $1
     		shift ;;
 	    -module-path|-mp) 
-		[ $b_idx -eq 0 ] && _modulepath="$1"
+		[[ $b_idx -eq 0 ]] && _modulepath="$1"
 		_b_mod_prefix[$b_idx]="$1"
                 # Create the module folders
 		mkdir -p $1
@@ -178,23 +178,23 @@ function build_set {
 		mkdir -p $_buildpath
 		shift ;;
 	    -build-installation-path|-bip) 
-		[ $b_idx -eq 0 ] && _build_install_path="$1"
+		[[ $b_idx -eq 0 ]] && _build_install_path="$1"
 		_b_build_prefix[$b_idx]="$1"
 		shift ;;
 	    -build-module-path|-bmp) 
-		[ $b_idx -eq 0 ] && _build_module_path="$1"
+		[[ $b_idx -eq 0 ]] && _build_module_path="$1"
 		_b_build_mod_prefix[$b_idx]="$1"
 		shift ;;
 	    -default-module-hidden) 
 		local tmp=$(get_index $1)
-		if [ -z "$tmp" ]; then
+		if [[ -z "$tmp" ]]; then
 		    add_hidden_package "$1"
 		fi
 		# fall through BASH >= 4
 		;&
 	    -default-module) 
 		local tmp=$(get_index $1)
-		if [ ! -z "$tmp" ]; then
+		if [[ ! -z "$tmp" ]]; then
 		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --mod-req-all $tmp)"
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"
@@ -209,28 +209,29 @@ function build_set {
 	    -default-choice)
 		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
 		shift
-		if [ $# -eq 0 ]; then
+		if [[ $# -eq 0 ]]; then
 		    doerr "BUILD-CHOICE" "You need to specify at least one choice"
 		fi
-		while [ $# -gt 0 ]; do
+		while [[ $# -gt 0 ]]; do
 		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}|$1"
 		    shift
 		done
 		;;
 	    -remove-default-setting)
-		tmp="${_b_def_settings[$b_idx]//$1/}" ; shift
+		tmp="${_b_def_settings[$b_idx]//$1/}"
+		shift
 		# Remove the setting from the list
 		tmp="${tmp//$_LIST_SEP$_LIST_SEP/$_LIST_SEP}"
 		_b_def_settings[$b_idx]="$tmp"
 		;;
 	    -default-build)
 		switch_idx=0
-		if [ $# -gt 0 ]; then
+		if [[ $# -gt 0 ]]; then
 		    case $1 in
 			-*) ;;
 			*)
 			    local switch_idx=$(get_index --hash-array "_b_index" $1)
-			    [ -z "$switch_idx" ] && \
+			    [[ -z "$switch_idx" ]] && \
 				doerr "$1" "Unrecognized build"
 			    shift
 			    ;;
@@ -290,12 +291,12 @@ function build_get {
     local opt=$(trim_em $1)
     shift
     local spec=$(var_spec -s $opt)
-    if [ -z "$spec" ]; then
+    if [[ -z "$spec" ]]; then
 	local b_idx=$_b_def_idx
     else
 	local b_idx=$(get_index --hash-array "_b_index" $spec)
     fi
-    [ -z "$b_idx" ] && doerr "Build index" "Build not existing ($opt and $spec)"
+    [[ -z "$b_idx" ]] && doerr "Build index" "Build not existing ($opt and $spec)"
     opt=$(var_spec $opt)
     case $opt in
 	-archive-path|-ap) _ps "$_archives" ;;
@@ -324,7 +325,7 @@ function new_build {
     _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
     _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     # Read in options
-    while [ $# -gt 1 ]; do
+    while [[ $# -gt 1 ]]; do
 	local opt=$(trim_em $1)
 	shift
 	case $opt in 
@@ -352,7 +353,7 @@ function new_build {
 		;;
 	    -default-module-hidden) 
 		local tmp=$(get_index $1)
-		if [ -z "$tmp" ]; then
+		if [[ -z "$tmp" ]]; then
 		    msg_install --message "Adding hidden package $1"
 		    add_hidden_package "$1"
 		fi
@@ -360,7 +361,7 @@ function new_build {
 		;&
 	    -default-module) 
 		local tmp=$(get_index $1)
-		if [ -n "$tmp" ]; then
+		if [[ -n "$tmp" ]]; then
 		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $tmp)"
 		fi
 		_b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $1"
@@ -370,7 +371,7 @@ function new_build {
 	    -source)
 		_b_source[$_N_b]="$(readlink -f $1)"
 		shift
-		[ ! -e ${_b_source[$_N_b]} ] && \
+		[[ ! -e ${_b_source[$_N_b]} ]] && \
 		    doerr "${_b_source[$_N_b]}" "Source file does not exist"
 		;;
 	    *)
@@ -378,7 +379,7 @@ function new_build {
 		;;
 	esac
     done
-    if [ $# -gt 0 ]; then
+    if [[ $# -gt 0 ]]; then
 	_b_index[$1]=$_N_b
 	_b_name[$_N_b]="$1"
 	shift

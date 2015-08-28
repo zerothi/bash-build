@@ -27,7 +27,7 @@
 
 function msg_install {
     local n="" ; local action=0
-    while [ $# -gt 1 ]; do
+    while [[ $# -gt 1 ]]; do
 	local opt=$(trim_em $1)
 	case $opt in
 	    -start|-S)
@@ -51,28 +51,33 @@ function msg_install {
 	esac
 	shift
     done
-    if [ $# -gt 0 ]; then
-	local pack=$1
-    else
-	local pack=$_N_archives
-    fi
-    [ "$action" -ne "4" ] && \
+    case $# in
+	0)
+	    local pack=$_N_archives
+	    ;;
+	*)
+	    local pack=$1
+	    ;;
+    esac
+
+    if [[ $action -ne 4 ]]; then
 	local cmd=$(arc_cmd $(pack_get --ext $pack) )
+    fi
     echo " ================================== "
     echo "   $n"
-    if [ "$action" -eq "1" ]; then
+    if [[ $action -eq 1 ]]; then
 	echo " File    : $(pack_get --archive $pack)"
 	echo " Ext     : $(pack_get --ext $pack)"
 	echo " Ext CMD : $cmd"
     fi
-    if [ "$action" -ne "4" ]; then
+    if [[ $action -ne 4 ]]; then
 	echo " Package : $(pack_get --package $pack)"
-	if [ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]; then
+	if [[ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]]; then
 	    echo " Alias   : $(pack_get --alias $pack)"
 	fi	
 	echo " Version : $(pack_get --version $pack)"
     fi
-    if [ "$action" -eq "1" ]; then
+    if [[ $action -eq 1 ]]; then
 	module list 2>&1
     fi
     echo " ================================== "
@@ -97,7 +102,7 @@ function docmd {
     local cmd=($*)
     echo ""
     echo " # ================================================================"
-    if [ ! -z "$ar" ] ; then
+    if [[ -n "$ar" ]]; then
         echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
     fi
     echo " # PWD: "$(pwd)
@@ -105,7 +110,7 @@ function docmd {
     echo " # ================================================================"
     eval ${cmd[@]}
     local st=$?
-    if [ $st -ne 0 ]; then
+    if [[ $st -ne 0 ]]; then
 	echo "STATUS = $st"
         exit $st
     fi
@@ -152,7 +157,7 @@ function trim_spaces {
     local str
     local s
     local i
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	s="${1## }" # removes prefix space
 	shift
 	s=${s%% } # removes suffix space
@@ -196,31 +201,38 @@ function var_spec {
 	    shift
 	    ;;
     esac
-    if [ $v -eq 1 ]; then
-	while [ $# -gt 0 ]; do
-	    opt=${1%%\[*}
-	    _ps "${opt// /}"
-	    # Get next package
-	    shift
-	    # Add delimiter
-	    [ $# -gt 0 ] && _ps " "
-	done
-    elif [ $v -eq 2 ]; then
-	while [ $# -gt 0 ]; do
-            if [ "${1:${#1}-1}" == "]" ]; then
-		opt=${1##*\[}
-		opt=${opt//\]/}
-            else
-		opt=""
-            fi
-	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
-	    _ps "${opt// /}"
-	    # Get next package
-	    shift
-	    # Add delimiter
-	    [ $# -gt 0 ] && _ps " "
-	done
-    fi
+    case $v in
+	1)
+	    while [[ $# -gt 0 ]]; do
+		opt=${1%%\[*}
+		_ps "${opt// /}"
+		# Get next package
+		shift
+		# Add delimiter
+		if [[ $# -gt 0 ]]; then
+		    _ps " "
+		fi
+	    done
+	    ;;
+	2)
+	    while [[ $# -gt 0 ]]; do
+		if [[ "${1:${#1}-1}" == "]" ]]; then
+		    opt=${1##*\[}
+		    opt=${opt//\]/}
+		else
+		    opt=""
+		fi
+		#opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
+		_ps "${opt// /}"
+		# Get next package
+		shift
+		# Add delimiter
+		if [[ $# -gt 0 ]]; then
+		    _ps " "
+		fi
+	    done
+	    ;;
+    esac
 }
 
 
@@ -249,7 +261,7 @@ function var_spec {
 function str_version {
     local Mv='' ; local mv='' ; local rv='' ; local fourth=''
     local opt=-1
-    if [ $# -eq 2 ]; then
+    if [[ $# -eq 2 ]]; then
 	opt=$(trim_em $1)
 	shift
     fi
@@ -319,15 +331,15 @@ function vrs_cmp {
     for o in -1 -2 -3 -4 ; do
 	local lv=$(str_version $o $lhs)
 	local rv=$(str_version $o $rhs)
-	[ -z "$lv" ] && break
-	[ -z "$rv" ] && break
+	[[ -z "$lv" ]] && break
+	[[ -z "$rv" ]] && break
 	if $(isnumber $lv) && $(isnumber $rv) ; then
-	    [ $lv -gt $rv ] && _ps "1" && return 0
-	    [ $lv -lt $rv ] && _ps "-1" && return 0
+	    [[ $lv -gt $rv ]] && _ps "1" && return 0
+	    [[ $lv -lt $rv ]] && _ps "-1" && return 0
 	else
 	    # Currently we do not do character versioning
 	    # properly
-	    [ "$lv" != "$rv" ] && _ps "-1000" && return 0
+	    [[ "$lv" != "$rv" ]] && _ps "-1000" && return 0
 	fi
     done
     _ps "0"
@@ -343,7 +355,7 @@ function vrs_cmp {
 function lc {
     _ps "${1,,}"
     shift
-    while [ $# -gt 0 ] ; do
+    while [[ $# -gt 0 ]]; do
 	_ps " ${1,,}"
 	shift
     done
@@ -391,10 +403,9 @@ function isnumber {
 # Removes any dublicates in a string (preserves order).
 # It relies on external commands, `sed`, `tr` and `awk.
 # The algorithm is:
-#   1. translate ' ' to '\n'
-#   2. remove all empty fields (removes double spaces)
-#   3. awk one-liner for not printing any dublicates
-#   4. translate '\n' to ' '
+#   1. remove all empty fields (removes double spaces) and ' ' to '\n'
+#   2. awk one-liner for not printing any dublicates
+#   3. translate '\n' to ' '
 #  Arguments
 #    <args>
 #       The list of args to remove dublicates from
@@ -405,8 +416,7 @@ function rem_dup {
     # Hence the first argument must never be an option
     # for `echo`.
     echo -n "$@" | \
-	sed -e 's/[[:space:]]\+/ /g' | \
-	tr ' ' '\n' | \
+	sed -e 's/[[:space:]]\+/ /g;s/ /\n/g' | \
 	awk '!_[$0]++' | \
 	tr '\n' ' '
 }
@@ -424,8 +434,7 @@ function rem_dup {
 function ret_uniq {
     # Apparently we cannot use _ps here!!!!
     echo -n "$@" | \
-	sed -e 's/[[:space:]]\+/ /g' | \
-	tr ' ' '\n' | \
+	sed -e 's/[[:space:]]\+/ /g;s/ /\n/g' | \
 	awk 'BEGIN { c=0 } {
 if( $0 in a) {} else {b[c]=$0 ; c++ }
 a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
@@ -447,29 +456,32 @@ a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
 
 function arc_cmd {
     local ext="$(lc $1)"
-    if [ "x$ext" == "xbz2" ]; then
-	_ps "tar jxf"
-    elif [ "x$ext" == "xxz" ]; then
-	_ps "tar Jxf"
-    elif [ "x$ext" == "xgz" ]; then
-	_ps "tar zxf"
-    elif [ "x$ext" == "xtgz" ]; then
-	_ps "tar zxf"
-    elif [ "x$ext" == "xtar" ]; then
-	_ps "tar xf"
-    elif [ "x$ext" == "xzip" ]; then
-	_ps "unzip"
-    elif [ "x$ext" == "xpy" ]; then
-	_ps "ln -fs"
-    elif [ "x$ext" == "xlocal" ]; then
-	_ps "echo"
-    elif [ "x$ext" == "xbin" ]; then
-	_ps "echo"
-    elif [ "x$ext" == "xfake" ]; then
-	_ps "echo"
-    else
-	doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local,fake]"
-    fi
+    case $ext in
+	bz2)
+	    _ps "tar jxf"
+	    ;;
+	xz)
+	    _ps "tar Jxf"
+	    ;;
+	gz|tgz)
+	    _ps "tar zxf"
+	    ;;
+	tar)
+	    _ps "tar xf"
+	    ;;
+	zip)
+	    _ps "unzip"
+	    ;;
+	py)
+	    _ps "ln -fs"
+	    ;;
+	local|bin|fake)
+	    _ps "echo"
+	    ;;
+	*)
+	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local,fake]"
+	    ;;
+    esac
 }
 
 
@@ -490,11 +502,11 @@ function extract_archive {
     local cmd=$(arc_cmd $(pack_get --ext $alias) )
     local archive=$(pack_get --archive $alias)
     # If a previous extraction already exists (delete it!)
-    if [ "x$d" != "x." ] && [ "x$d" != "x./" ]; then
-	[ -d "$1/$d" ] && rm -rf "$1/$d"
+    if [[ "x$d" != "x." ]] && [[ "x$d" != "x./" ]]; then
+	[[ -d "$1/$d" ]] && rm -rf "$1/$d"
     fi
     local ext=$(pack_get --ext $alias)
-    [ "x$ext" == "xlocal" ] && return 0
+    [[ "x$ext" == "xlocal" ]] && return 0
     docmd "$alias" $cmd $1/$archive
 }
 
@@ -512,15 +524,15 @@ function dwn_file {
     local url=$1 ; shift
     local O=$1 ; shift
     # If it exists return
-    [ -e $O ] && return 0
+    [[ -e $O ]] && return 0
     # If the url is fake
-    [ "x$url" == "xfake" ] && return 0
+    [[ "x$url" == "xfake" ]] && return 0
     # Better circumvent the proxies...
     msg_install --message "Downloading $url to $O"
     wget --no-proxy \
 	--no-check-certificate \
 	$url -O $O
-    if [ $? -ne 0 ]; then
+    if [[ $? -ne 0 ]]; then
 	rm -f $O
 	doerr "$url" "Could not download file succesfully..."
     fi
@@ -600,7 +612,7 @@ function list {
 	esac
     done
     local args=""
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	case $1 in
 	    ++*)
 		# We gather all requirements to 
@@ -616,7 +628,7 @@ function list {
 	esac
 	shift
     done
-    if [ $uniq -eq 1 ]; then
+    if [[ $uniq -eq 1 ]]; then
 	args="$(ret_uniq $args)"
     else
 	args="$(rem_dup $args)"
@@ -643,16 +655,16 @@ function list {
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
 	for cmd in $args ; do
-	    if [ ! -z "$lcmd" ]; then
+	    if [[ -n "$lcmd" ]]; then
 		retval="$retval$space$pre$($lcmd $cmd)$suf"
 	    else
 		retval="$retval$space$pre$cmd$suf"
 	    fi
 	done
     done
-    if [ -z "$retval" ]; then
+    if [[ -z "$retval" ]]; then
 	for cmd in $args ; do
-	    if [ ! -z "$lcmd" ]; then
+	    if [[ -n "$lcmd" ]]; then
 		retval="$retval$space$pre$($lcmd $cmd)$suf"
 	    else
 		retval="$retval$space$pre$cmd$suf"

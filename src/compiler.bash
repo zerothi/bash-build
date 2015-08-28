@@ -14,7 +14,7 @@ function set_c {
 
 function get_c {
     local c="$_c-$_c_v"
-    if [ $# -eq 0 ]; then
+    if [[ $# -eq 0 ]]; then
 	printf "%s" "$c"
     else
 	local opt=$(trim_em $1) ; shift
@@ -39,7 +39,7 @@ function is_c {
     local check="$1" ; shift
     local l="${#check}"
     local c="$_c-$_c_v"
-    if [ "x${c:0:$l}" == "x$check" ]; then
+    if [[ "x${c:0:$l}" == "x$check" ]]; then
 	return 0
     fi
     return 1
@@ -68,10 +68,10 @@ function set_flags {
 function set_c_flags {
     local idx=$1 ; shift
     _c_cO[$idx]="$@"
-    [ $idx -ge 10 ] && return 0
+    [[ $idx -ge 10 ]] && return 0
     local i=$idx
     let i++
-    if [ "x${_c_cO[$i]}" == "x" ]; then
+    if [[ "x${_c_cO[$i]}" == "x" ]]; then
 	set_c_flags $i $@
     fi
 }

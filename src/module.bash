@@ -18,7 +18,7 @@ function create_module {
     local require=""; local conflict=""; local load=""
     local lua_family="" ; local fpath=
     local fm_comment="#"
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	opt="$(trim_em $1)" ; shift
 	case $opt in
 	    -n|-name)  name="$1" ; shift ;;
@@ -50,12 +50,12 @@ function create_module {
     conflict="$(rem_dup $conflict)"
 
     # Create the file to which we need to install the module script
-    if [ -z "$mod_path" ]; then
+    if [[ -z "$mod_path" ]]; then
 	local mfile=$(build_get --module-path)
     else
 	local mfile=$mod_path
     fi
-    [ -n "$mod" ] && mfile=$mfile/$mod
+    [[ -n "$mod" ]] && mfile=$mfile/$mod
     case $_module_format in
 	TCL) 
 	    fm_comment="#"
@@ -65,17 +65,17 @@ function create_module {
 	    mfile="$mfile.lua"
 	    ;;
     esac
-    [ -z "$version" ] && version=empty
+    [[ -z "$version" ]] && version=empty
 
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
-	[ -z "${mod// /}" ] && continue
-	[ $(pack_get --installed $mod) -eq $_I_INSTALLED ] && continue
+	[[ -z "${mod// /}" ]] && continue
+	[[ $(pack_get --installed $mod) -eq $_I_INSTALLED ]] && continue
 	return 1
     done
     
     # If the file exists simply return
-    if [ -e "$mfile" ] && [ 0 -eq $force ]; then
+    if [[ -e "$mfile" ]] && [[ 0 -eq $force ]]; then
         return 0
     fi
 
@@ -106,7 +106,7 @@ EOF
 	    ;;
     esac
     cmt="$(get_c)"
-    if [ ! -z "$cmt" ]; then
+    if [[ ! -z "$cmt" ]]; then
 	case $_module_format in
 	    TCL)
 		cmt=", (\$compiler)"
@@ -124,7 +124,7 @@ EOF
     case $_module_format in
 	TCL) 
 	    tmp="${path//$version/\$version}"
-	    if [ ! -z "$cmt" ]; then
+	    if [[ ! -z "$cmt" ]]; then
 		tmp="${tmp//$(get_c)/\$compiler}"
 	    fi
 	    cat <<EOF >> "$mfile"
@@ -159,18 +159,18 @@ EOF
     esac
 
     # Add pre loaders if needed
-    if [ ! -z "${load// /}" ]; then
+    if [[  -n "${load// /}" ]]; then
 	cat <<EOF >> "$mfile"
 $fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
-	    if [ $(pack_get --installed $tmp) -ge $_I_INSTALLED ]; then
+	    if [[ $(pack_get --installed $tmp) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
 		    TCL) echo "module load $tmp_load" >> "$mfile" ;;
 		    LUA) echo "load(\"$tmp_load\")" >> "$mfile" ;;
 		esac
-	    elif [ $force -eq 0 ]; then
+	    elif [[ $force -eq 0 ]]; then
 		no_install=1
 	    fi
 	done
@@ -178,43 +178,43 @@ EOF
     fi    
 
     # Add requirement if needed
-    if [ ! -z "${require// /}" ]; then
+    if [[ -n "${require// /}" ]]; then
 	cat <<EOF >> $mfile
 $fm_comment Requirements for the module:
 EOF
 	for tmp in $require ; do
-	    if [ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]; then
+	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
                     TCL) echo "prereq $tmp_load" >> "$mfile" ;;
                     LUA) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
                 esac
-            elif [ $force -eq 0 ]; then
+            elif [[ $force -eq 0 ]]; then
 		no_install=1
             fi
 	done
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [ ! -z "${conflict// /}" ]; then
+    if [[ ! -z "${conflict// /}" ]]; then
 	cat <<EOF >> $mfile
 $fm_comment Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
-	    if [ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]; then
+	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
 		case $_module_format in 
 		    TCL) echo "conflict $tmp_load" >> "$mfile" ;;
 		    LUA) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
 		esac
-	    elif [ $force -eq 0 ]; then
+	    elif [[ $force -eq 0 ]]; then
 		no_install=1
 	    fi
 	done
 	echo "" >> $mfile
     fi
     # Add specific envs if needed
-    if [ ! -z "${env// /}" ]; then
+    if [[ ! -z "${env// /}" ]]; then
 	cat <<EOF >> $mfile
 $fm_comment Specific environment variables:
 EOF
@@ -245,7 +245,7 @@ EOF
 	    # These options should probably always
 	    # be "on" , they are specified by the options by the user
 	    # and not, per-see "optional"
-	    [ ! -z "$opt" ] && \
+	    [[ ! -z "$opt" ]] && \
 		_add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
 	done
 	echo "" >> $mfile
@@ -274,7 +274,7 @@ EOF
 	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
 	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
-    if [ ! -z "$lua_family" ]; then
+    if [[ -n "$lua_family" ]]; then
 	case $_module_format in
 	    LUA)
 		cat <<EOF >> "$mfile"
@@ -287,7 +287,7 @@ EOF
 	esac
     fi
     
-    if [ ! -z "$echos" ]; then
+    if [[ -n "$echos" ]]; then
 	cat <<EOF >> "$mfile"
 
 
@@ -308,12 +308,12 @@ EOF
     fi
     
     
-    if [ $no_install -eq 1 ] && [ $force -eq 0 ]; then
+    if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then
 	rm -f $mfile
     fi
     # If we are to create the default version module we 
     # can add this version to the .version file:
-    if [ $_crt_version -eq 1 ]; then
+    if [[ $_crt_version -eq 1 ]]; then
 	case $_module_format in
 	    TCL)
 		cat <<EOF > $(dirname $mfile)/.version
@@ -334,8 +334,9 @@ EOF
 # Returns the module specific routine call
 function _module_fmt_routine {
     local lval="" ; local lenv=""
-    while [ $# -gt 0 ]; do
-	opt="$(trim_em $1)" ; shift
+    while [[ $# -gt 0 ]]; do
+	opt="$(trim_em $1)"
+	shift
 	case "$opt" in
 	    -prepend-path)
 		case $_module_format in
@@ -369,7 +370,7 @@ function _add_module_if {
     local d="";local f="" ;local F=0;
     local X=0
     local opt
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	opt=$(trim_em $1)
 	case $opt in
 	    -d|-dir)
@@ -402,15 +403,15 @@ function _add_module_if {
     shift
     
     local check=""
-    if [ $F -eq 1 ]; then
+    if [[ $F -eq 1 ]]; then
 	# Force check to succed
 	check=$HOME
-    elif [ -n "$f" ]; then
+    elif [[ -n "$f" ]]; then
 	check=$f
-    elif [ -n "$d" ]; then
+    elif [[ -n "$d" ]]; then
 	check=$d
     fi
-    if [ -e $check ]; then
+    if [[ -e $check ]]; then
 	cat <<EOF >> $mf
 $@
 EOF

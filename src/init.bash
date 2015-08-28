@@ -45,7 +45,7 @@ function get_parent_exec { _ps "$_parent_exec" ; }
 declare -A _pack_only
 function pack_only {
     local tmp
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	local opt=$(trim_em $1)
 	case $opt in
 	    -file)
@@ -55,7 +55,7 @@ function pack_only {
 		# parse file
 		while read line
 		do
-		    [ "x${line:0:1}" == "x#" ] && continue
+		    [[ "x${line:0:1}" == "x#" ]] && continue
 		    _pack_only[$line]=1
 		done < $1
 		shift
@@ -133,11 +133,11 @@ function has_setting {
 function choice {
     local ss="" ; local s="$1" ; shift
     local -a sets=()
-    [ $# -gt 0 ] && ss="$1" && shift
+    [[ $# -gt 0 ]] && ss="$1" && shift
     local len=${#s}
     IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
     for ss in "${sets[@]}" ; do
-	if [ "x$s" == "x${ss:0:$len}" ]; then
+	if [[ "x$s" == "x${ss:0:$len}" ]]; then
 	    IFS="|" read -ra sets <<< "${ss:$len}"
 	    for ss in "${sets[@]}" ; do
 		_ps " $ss"
@@ -172,7 +172,7 @@ function pack_crt_list {
     local build=$(pack_get --build $pack)
     build=$(build_get --build-path $build)
     local mr=$(pack_get --module-requirement $pack)
-    if [ ! -z "$mr" ]; then
+    if [[ ! -z "$mr" ]]; then
 	{
 	    echo "# Used packages"
 	    for p in $mr ; do

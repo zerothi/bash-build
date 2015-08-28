@@ -1,7 +1,7 @@
 # Install the package
 function pack_install {
     local idx=$_N_archives
-    if [ $# -ne 0 ]; then
+    if [[ $# -ne 0 ]]; then
 	idx=$(get_index $1)
 	shift
     fi
@@ -9,8 +9,8 @@ function pack_install {
     local prefix=$(pack_get --prefix $idx)
 
     local tmp=$(lc $alias)
-    if [ ${#_pack_only[@]} -gt 0 ]; then
-	if [ 0${_pack_only[$tmp]} -eq 1 ]; then
+    if [[ ${#_pack_only[@]} -gt 0 ]]; then
+	if [[ 0${_pack_only[$tmp]} -eq 1 ]]; then
 	    pack_only $(pack_get --mod-req-all $idx)
 	else
 	    return 
@@ -18,14 +18,14 @@ function pack_install {
     fi
 
     # First a simple check that it hasn't already been installed...
-    if [ -e $(pack_get --install-query $idx) ]; then
-	if [ $(pack_get --installed $idx) -eq $_I_TO_BE ]; then
+    if [[ -e $(pack_get --install-query $idx) ]]; then
+	if [[ $(pack_get --installed $idx) -eq $_I_TO_BE ]]; then
 	    pack_set --installed $_I_INSTALLED $idx
 	fi
     fi
 
     # If we request downloading of files, do so immediately
-    if [ $DOWNLOAD -eq 1 ]; then
+    if [[ $DOWNLOAD -eq 1 ]]; then
 	pack_dwn $idx $(build_get --archive-path)
     fi
     
@@ -39,23 +39,25 @@ function pack_install {
 
     # Make sure that every package before is installed...
     for tmp in $mod_reqs ; do
-	[ -z "${tmp// /}" ] && break
+	if [[ -z "${tmp// /}" ]]; then
+	    break
+	fi
 	tmp_idx=$(get_index $tmp)
-	if [ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]; then
+	if [[ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]]; then
 	    pack_install $tmp_idx
 	fi
 	# Capture packages that has been rejected.
 	# If it depends on rejected packages, it must itself be rejected.
-	if [ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]; then
+	if [[ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]]; then
 	    run=0
 	    break
 	fi
     done
 
     # If it is installed...
-    if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
+    if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then
 	msg_install --already-installed $idx
-	if [ $FORCEMODULE -eq 0 ]; then
+	if [[ $FORCEMODULE -eq 0 ]]; then
 	    return 0
 	fi
     fi
@@ -63,7 +65,7 @@ function pack_install {
     local mod_reqs_paths="$(pack_get --mod-req-path $idx)"
 
     tmp="$(pack_get --host-reject $idx)"
-    if [ -n "$tmp" ]; then
+    if [[ -n "$tmp" ]]; then
 	# Run should be 1 when we get here...
 	for host in $tmp ; do
 	    if $(is_host $host) ; then
@@ -75,7 +77,7 @@ function pack_install {
     # Create a list of compilation modules required
     pack_crt_list $idx
 
-    if [ $run -eq 0 ]; then
+    if [[ $run -eq 0 ]]; then
 	# Notify other required stuff that this can not be installed.
 	pack_set --installed $_I_REJECT $idx
 	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
@@ -83,7 +85,7 @@ function pack_install {
     fi
 
     # Check that the package is not already installed
-    if [ $(pack_get --installed $idx) -eq $_I_TO_BE ]; then
+    if [[ $(pack_get --installed $idx) -eq $_I_TO_BE ]]; then
 
 	# Source the file for obtaining correct env-variables
 	tmp=$(pack_get --build $idx)
@@ -134,16 +136,20 @@ function pack_install {
 
         # Extract the archive
 	pushd $(build_get --build-path) 1> /dev/null
-	[ $? -ne 0 ] && exit 1
+	if [[ $? -ne 0 ]]; then
+	    exit 1
+	fi
 
 	# Remove directory if already existing
 	local directory=$(pack_get --directory $idx)
-	if [ "x$directory" != "x." ] && [ "x$directory" != "x./" ]; then
+	if [[ "x$directory" != "x." ]] && [[ "x$directory" != "x./" ]]; then
 	    rm -rf $directory
 	fi
 	extract_archive $(build_get --archive-path) $idx
 	pushd $directory 1> /dev/null
-	[ $? -ne 0 ] && exit 1
+	if [[ $? -ne 0 ]]; then
+	    exit 1
+	fi
 
         # We are now in the package directory
 	if $(has_setting $BUILD_DIR $idx) ; then
@@ -160,14 +166,16 @@ function pack_install {
 	local -a cmds=()
 	IFS="$_LIST_SEP" read -ra cmds <<< "$tmp"
 	for tmp in "${cmds[@]}" ; do
-	    [ -z "${tmp// /}" ] && continue # Skip the empty commands...
+	    if [[ -z "${tmp// /}" ]]; then
+		continue # Skip the empty commands...
+	    fi
 	    docmd "$idx" "$tmp"
 	done
 
 	popd 1> /dev/null
 
         # Remove compilation directory
-	if [ "x$directory" != "x." ] && [ "x$directory" != "x./" ]; then
+	if [[ "x$directory" != "x." ]] && [[ "x$directory" != "x./" ]]; then
 	    rm -rf $directory
 	fi
 	
@@ -200,15 +208,15 @@ function pack_install {
 
     # Fix the library path...
     # We favour lib64
-    if [ ! -d $(pack_get -LD $idx) ]; then
+    if [[ ! -d $(pack_get -LD $idx) ]]; then
 	for cmd in lib lib64 ; do
-	    if [ -d $prefix/$cmd ]; then
+	    if [[ -d $prefix/$cmd ]]; then
 		pack_set --library-suffix $cmd $idx
 	    fi
 	done
     fi
 
-    if [ $(pack_get --installed $idx) -eq $_I_INSTALLED ]; then
+    if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then
             # Create the list of requirements
 	    local reqs="$(list --prefix '-R ' $mod_reqs)"
@@ -240,7 +248,7 @@ function get_index {
     local i
     local lookup
     local all=0
-    while [ $# -gt 1 ]; do
+    while [[ $# -gt 1 ]]; do
 	local opt=$(trim_em $1) ; shift
 	case $opt in
 	    -all|-a)
@@ -254,8 +262,10 @@ function get_index {
     done
     local l=$1
     shift
-    
-    [ ${#l} -eq 0 ] && return 1
+
+    if [[ ${#l} -eq 0 ]]; then
+	return 1
+    fi
     # Save the thing that we want to process...
     local name=$(lc $(var_spec $l))
     local version=$(var_spec -s $l)
@@ -277,45 +287,48 @@ function get_index {
     fi
     # Do full expansion.
     local idx=${!var}
-    if [ -z "$idx" ]; then
+    if [[ -z "$idx" ]]; then
 	return 1
     fi
     local v
-    if [ $all -eq 1 ]; then
-	if [ -n "$version" ]; then
-	    for v in $idx ; do
-		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
-		    _ps "$v"
+    case $all in
+	1)
+	    if [[ -n "$version" ]]; then
+		for v in $idx ; do
+		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
+			_ps "$v"
 		    break
-		fi
-	    done
-	else
-	    _ps "$idx"
-	fi
-    else
-	i=-1
-        # Select the latest per default..
-	if [ -n "$version" ]; then
-	    for v in $idx ; do
-		if [ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]; then
+		    fi
+		done
+	    else
+		_ps "$idx"
+	    fi
+	    ;;
+	*)
+	    i=-1
+            # Select the latest per default..
+	    if [[ -n "$version" ]]; then
+		for v in $idx ; do
+		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
 		    i="$v"
 		    break
-		fi
-	    done
-	else
-	    for v in $idx ; do
-		i="$v"
-	    done
-	fi
-	_ps "$i"
-    fi
+		    fi
+		done
+	    else
+		for v in $idx ; do
+		    i="$v"
+		done
+	    fi
+	    _ps "$i"
+	    ;;
+    esac
 }
 
 
 function install_all {
     # First we collect all options
     local j=0
-    while [ $# -ne 0 ]; do
+    while [[ $# -ne 0 ]]; do
 	local opt="$(trim_em $1)" # Save the option passed
 	shift
 	case $opt in
