@@ -309,6 +309,7 @@ function pack_set {
     local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
     local tmp=
+    local in_cmd=0
     while [[ $# -gt 0 ]]; do
 	# Process what is requested
 	local opt="$(trim_em $1)"
@@ -316,7 +317,14 @@ function pack_set {
 	case $opt in
 	    -no-path)
 		inst=$_I_MOD ;;
-            -C|-command)  cmd="$1" ; shift ;;
+	    -start-cmd)
+		cmd="$1" ; shift
+		in_cmd=1
+		;;
+	    -end-cmd)
+		in_cmd=0
+		;;
+            -C|-command|-cmd) cmd="$1" ; shift ;;
             -CF|-command-flag)  cmd_flags="$cmd_flags $1" ; shift ;; # called several times
             -I|-install-prefix|-prefix)  install="$1" ; shift ;;
 	    -L|-library-suffix)  lib="$1" ; shift
@@ -374,10 +382,15 @@ function pack_set {
 	    -p|-package)  package="$1" ; shift ;;
 	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
 	    *)
-		# We do a crude check
-		# We have an argument
-		index=$(get_index $opt)
-		shift $# ;; 
+		if [[ $in_cmd -eq 1 ]]; then
+		    cmd_flags="$cmd_flags $1" ; shift
+		else
+		    # We do a crude check
+		    # We have an argument
+		    index=$(get_index $opt)
+		    shift $#
+		fi
+		;; 
 	esac
     done
     if [[ $up_pre_mod -eq 1 ]]; then
@@ -433,6 +446,11 @@ function pack_set {
     [[ -n "$mod_name" ]]   && _mod_name[$index]="$mod_name"
     [[ -n "$package" ]]    && _package[$index]="$package"
     [[ -n "$reject_h" ]]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
+}
+
+# Short-hand for pack_set --start-cmd
+function pack_cmd {
+    pack_set --start-cmd $@
 }
 
 # This function allows for setting data related to a package
