@@ -22,7 +22,7 @@ pack_cmd "../configure" \
 # Make commands
 pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])' $(get_make_parallel)"
 # make check requires autogen installed
-#pack_set --command "make check > tmp.test 2>&1"
+#pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
 #pack_set_mv_test tmp.test
 

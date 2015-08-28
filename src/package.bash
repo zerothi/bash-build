@@ -448,9 +448,10 @@ function pack_set {
     [[ -n "$reject_h" ]]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 }
 
-# Short-hand for pack_set --start-cmd
+# This directly inserts the command in the list
+# However, it only works for the current module
 function pack_cmd {
-    pack_set --start-cmd "$@"
+    _cmd[$_N_archives]="${_cmd[$_N_archives]}$@${_LIST_SEP}"
 }
 
 # This function allows for setting data related to a package
