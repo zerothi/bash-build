@@ -1,42 +1,42 @@
 for v in 3.6.0 ; do
-add_package --build generic \
-    --directory llvm-$v.src --package llvm --version $v \
-    http://llvm.org/releases/$v/llvm-$v.src.tar.xz
+    add_package --build generic \
+		--directory llvm-$v.src --package llvm --version $v \
+		http://llvm.org/releases/$v/llvm-$v.src.tar.xz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+    pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
+    pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
-pack_set $(list -p '-mod-req ' gen-libxml2 gen-libffi cloog gmp)
+    pack_set $(list -p '-mod-req ' gen-libxml2 gen-libffi cloog gmp)
 
-# Create Cmake variable file
-file=NPACmake.txt
-pack_set --command "echo '# NPA Cmake script for LLVM' > $file"
+    # Create Cmake variable file
+    file=NPACmake.txt
+    pack_cmd "echo '# NPA Cmake script for LLVM' > $file"
 
-# Fetch the c-lang to build it along side
-tmp=$(pack_get --url)
-for name in cfe lld clang-tools-extra dragonegg ; do
-    pack=$name
-    [ "x$name" == "xcfe" ] && pack=clang
-    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.xz
-    dwn_file ${tmp//llvm-/$name-} $o
-    pack_set --command "tar xfJ $o -C ../tools/"
-    pack_set --command "pushd ../tools"
-    pack_set --command "mv $name* $pack"
-    pack_set --command "popd"
-    #if [ "x$name" == "xdragonegg" ]; then
-	#pack_set --command "echo 'SET(LLVM_EXTERNAL_DRAGONEGG_SOURCE_DIR ../tools/$name CACHE PATH $name-PATH)' >> $file"
-    #fi
-    if [ "x$name" == "xclang-tools-extra" ]; then
-	pack_set --command "echo 'SET(LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR ../../tools/$name CACHE PATH $name-PATH)' >> $file"
-    fi
+    # Fetch the c-lang to build it along side
+    tmp=$(pack_get --url)
+    for name in cfe lld clang-tools-extra dragonegg ; do
+	pack=$name
+	[ "x$name" == "xcfe" ] && pack=clang
+	o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.xz
+	dwn_file ${tmp//llvm-/$name-} $o
+	pack_cmd "tar xfJ $o -C ../tools/"
+	pack_cmd "pushd ../tools"
+	pack_cmd "mv $name* $pack"
+	pack_cmd "popd"
+	#if [ "x$name" == "xdragonegg" ]; then
+	#pack_cmd "echo 'SET(LLVM_EXTERNAL_DRAGONEGG_SOURCE_DIR ../tools/$name CACHE PATH $name-PATH)' >> $file"
+	#fi
+	if [ "x$name" == "xclang-tools-extra" ]; then
+	    pack_cmd "echo 'SET(LLVM_EXTERNAL_CLANG_TOOLS_EXTRA_SOURCE_DIR ../../tools/$name CACHE PATH $name-PATH)' >> $file"
+	fi
 	
 
-done
-# Add a new line
-pack_set --command "echo '' >> $file"
+    done
+    # Add a new line
+    pack_cmd "echo '' >> $file"
 
-pack_set --command "sed -i -e '$ a\
+    pack_set --command "sed -i -e '$ a\
 SET(CMAKE_INSTALL_PREFIX $(pack_get --prefix) CACHE PATH PATH)\n\
 SET(CMAKE_C_FLAGS \"$CFLAGS\" CACHE STRING CFLAGS)\n\
 SET(CMAKE_CXX_FLAGS \"$CXXFLAGS\" CACHE STRING CXXFLAGS)\n\
@@ -78,18 +78,18 @@ SET(ISL_LIBRARY $(pack_get --LD isl)/libisl.a CACHE FILEPATH isl-library)\n\
 #SET(ISL_LIBRARY \${ISL_LIBRARY} CACHE FILEPATH isl-library)\n\
 ' $file"
 
-# Install commands that it should run
-pack_set --command "module load cmake"
+    # Install commands that it should run
+    pack_cmd "module load cmake"
 
-# Prepare Cmake setup
-pack_set --command "cmake -C $file .."
+    # Prepare Cmake setup
+    pack_cmd "cmake -C $file .."
 
-# Make commands (this cmake --build removes colors)
-pack_set --command "cmake --build . -- $(get_make_parallel)"
-pack_set --command "cmake --build . --target check-all > tmp.test 2>&1 && echo Success > /dev/null || echo Failure > /dev/null"
-pack_set --command "cmake --build . --target install"
-pack_set_mv_test tmp.test
+    # Make commands (this cmake --build removes colors)
+    pack_cmd "cmake --build . -- $(get_make_parallel)"
+    pack_set --command "cmake --build . --target check-all > tmp.test 2>&1 && echo Success > /dev/null || echo Failure > /dev/null"
+    pack_cmd "cmake --build . --target install"
+    pack_set_mv_test tmp.test
 
-pack_set --command "module unload cmake"
+    pack_cmd "module unload cmake"
 
 done

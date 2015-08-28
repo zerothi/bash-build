@@ -24,23 +24,23 @@ fi
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.gz
 dwn_file ${tmp//llvm-/$name-} $o
 
-pack_set --command "tar xfz $o -C ../tools/"
-pack_set --command "pushd ../tools"
+pack_cmd "tar xfz $o -C ../tools/"
+pack_cmd "pushd ../tools"
 tmp=$(pack_get --directory)
-pack_set --command "ln -s ${tmp//llvm-/$name-} clang"
-pack_set --command "popd"
+pack_cmd "ln -s ${tmp//llvm-/$name-} clang"
+pack_cmd "popd"
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "--enable-zlib" \
-    --command-flag "--enable-libffi" \
-    --command-flag "--enable-optimized" \
-    --command-flag "--prefix $(pack_get --prefix)"
+pack_cmd "../configure" \
+	"--enable-zlib" \
+	"--enable-libffi" \
+	"--enable-optimized" \
+	"--prefix $(pack_get --prefix)"
 
 # Make commands
-pack_set --command "REQUIRES_RTTI=1 make $(get_make_parallel)"
-pack_set --command "REQUIRES_RTTI=1 make check-all LIT_ARGS='-s -j2' > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "REQUIRES_RTTI=1 make $(get_make_parallel)"
+pack_cmd "REQUIRES_RTTI=1 make check-all LIT_ARGS='-s -j2' > tmp.test 2>&1"
+pack_cmd "make install"
 pack_set_mv_test tmp.test
 
 done

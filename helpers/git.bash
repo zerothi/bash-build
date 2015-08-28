@@ -13,20 +13,20 @@ pack_set --install-query $(pack_get --prefix)/bin/git
 
 # Preload all tools for creating the configure script
 tmp="$(pack_get --mod-req-all build-tools) $(pack_get --module-name build-tools)"
-pack_set --command "module load $tmp"
-pack_set --command "make configure"
-pack_set --command "module unload $tmp"
+pack_cmd "module load $tmp"
+pack_cmd "make configure"
+pack_cmd "module unload $tmp"
 
 # Install commands that it should run
-pack_set --command "./configure" \
-    --command-flag "CFLAGS='$CFLAGS $(list --LD-rp gen-zlib)'" \
-    --command-flag "--with-zlib=$(pack_get --prefix gen-zlib)" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "./configure" \
+	 "CFLAGS='$CFLAGS $(list --LD-rp gen-zlib)'" \
+	 "--with-zlib=$(pack_get --prefix gen-zlib)" \
+	 "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make test > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+#pack_cmd "make test > tmp.test 2>&1"
+pack_cmd "make install"
 #pack_set_mv_test tmp.test
 
 done

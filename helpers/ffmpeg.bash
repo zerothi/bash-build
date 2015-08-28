@@ -1,6 +1,6 @@
 # apt-get libpulse-dev libx264-* libx264-dev
 add_package --build generic \
-    http://ffmpeg.org/releases/ffmpeg-2.7.1.tar.bz2
+	    http://ffmpeg.org/releases/ffmpeg-2.7.1.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -11,11 +11,11 @@ tmp=
 [ -e /usr/include/x264.h ] && tmp="$tmp --enable-libx264"
 
 # Install commands that it should run
-pack_set --command "./configure $tmp" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--disable-yasm --enable-x11grab" \
-    --command-flag "--enable-gpl --enable-libpulse"
+pack_cmd "./configure $tmp" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--disable-yasm --enable-x11grab" \
+	 "--enable-gpl --enable-libpulse"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

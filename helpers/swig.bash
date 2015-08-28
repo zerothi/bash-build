@@ -7,23 +7,23 @@ pack_set --module-requirement pcre
 pack_set --install-query $(pack_get --prefix)/bin/swig
 
 # Install commands that it should run
-pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--without-octave" \
-    --command-flag "--without-java" \
-    --command-flag "--without-android" \
-    --command-flag "--without-guile" \
-    --command-flag "--without-ruby" \
-    --command-flag "--without-ocaml" \
-    --command-flag "--without-php" \
-    --command-flag "--without-pike" \
-    --command-flag "--without-mzscheme" \
-    --command-flag "--without-chicken" \
-    --command-flag "--without-lua" \
-    --command-flag "--without-r" \
-    --command-flag "--without-go" \
-    --command-flag "--without-d"
+pack_cmd "./configure" \
+	 "--prefix $(pack_get --prefix)" \
+	 "--without-octave" \
+	 "--without-java" \
+	 "--without-android" \
+	 "--without-guile" \
+	 "--without-ruby" \
+	 "--without-ocaml" \
+	 "--without-php" \
+	 "--without-pike" \
+	 "--without-mzscheme" \
+	 "--without-chicken" \
+	 "--without-lua" \
+	 "--without-r" \
+	 "--without-go" \
+	 "--without-d"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

@@ -450,7 +450,7 @@ function pack_set {
 
 # Short-hand for pack_set --start-cmd
 function pack_cmd {
-    pack_set --start-cmd $@
+    pack_set --start-cmd "$@"
 }
 
 # This function allows for setting data related to a package

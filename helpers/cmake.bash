@@ -12,9 +12,9 @@ fi
 pack_set --install-query $(pack_get --prefix)/bin/cmake
 
 # Install commands that it should run
-pack_set --command "./bootstrap" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "./bootstrap" \
+	 "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

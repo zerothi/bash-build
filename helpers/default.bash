@@ -16,9 +16,9 @@ source $(build_get --source[$tmp])
 unset tmp
 
 for p in $(get_index --all gcc) \
-    $(get_index --all llvm) \
-    $(get_index --all git) \
-    doxygen graphviz 
+	     $(get_index --all llvm) \
+	     $(get_index --all git) \
+	     doxygen graphviz 
 do
     if [ $(pack_get --installed $p) -eq 1 ]; then
 	create_module \
