@@ -4,8 +4,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 p_V=$(pack_get --version)
 c_V=`cmake --version 2> /dev/null | head -1 | awk '{print $3}'`
-[ -z "${c_V// /}" ] && c_V=1.1.1
-if [ $(vrs_cmp $c_V $p_V) -eq 1 ]; then
+[[ -z "${c_V// /}" ]] && c_V=1.1.1
+if [[ $(vrs_cmp $c_V $p_V) -eq 1 ]]; then
     pack_set --host-reject "$(get_hostname)"
 fi
 

@@ -1,8 +1,8 @@
 # apt-get install gettext
 for v in 2.4.3 ; do
 add_package --build generic \
-	--archive git-$v.tar.gz \
-	https://github.com/git/git/archive/v$v.tar.gz
+	    --archive git-$v.tar.gz \
+	    https://github.com/git/git/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -1,5 +1,5 @@
 add_package --build generic \
-    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
+	    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -11,11 +11,11 @@ pack_cmd "module load build-tools"
 
 # Install commands that it should run
 pack_cmd "../configure" \
-          "--prefix $(pack_get --prefix)" \
-          "--with-isl=system" \
-          "--with-isl-prefix=$(pack_get --prefix isl[0.12.2])" \
-          "--with-gmp=system" \
-          "--with-gmp-prefix=$(pack_get --prefix gmp[6.0.0a])"
+         "--prefix $(pack_get --prefix)" \
+         "--with-isl=system" \
+         "--with-isl-prefix=$(pack_get --prefix isl[0.12.2])" \
+         "--with-gmp=system" \
+         "--with-gmp-prefix=$(pack_get --prefix gmp[6.0.0a])"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

@@ -1,7 +1,7 @@
 v=6.0.0a
 add_package --build generic \
-    --package gmp --version $v --directory gmp-${v//[a-z]/} \
-    https://ftp.gnu.org/gnu/gmp/gmp-$v.tar.xz
+	    --package gmp --version $v --directory gmp-${v//[a-z]/} \
+	    https://ftp.gnu.org/gnu/gmp/gmp-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -11,8 +11,8 @@ pack_cmd "module load build-tools"
 
 # Install commands that it should run
 pack_cmd "../configure" \
-          "--prefix $(pack_get --prefix)" \
-          "--enable-cxx"
+         "--prefix $(pack_get --prefix)" \
+         "--enable-cxx"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

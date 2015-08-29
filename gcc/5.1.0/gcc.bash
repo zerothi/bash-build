@@ -1,10 +1,10 @@
 add_package --build generic \
-    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.bz2
+	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools \
-    gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])
+		gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 

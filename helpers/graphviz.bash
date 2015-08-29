@@ -1,5 +1,5 @@
 add_package --build generic \
-    http://graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.38.0.tar.gz
+	    http://graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.38.0.tar.gz
 
 pack_set -s $IS_MODULE
 

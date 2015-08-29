@@ -20,7 +20,7 @@ for p in $(get_index --all gcc) \
 	     $(get_index --all git) \
 	     doxygen graphviz 
 do
-    if [ $(pack_get --installed $p) -eq 1 ]; then
+    if [[ $(pack_get --installed $p) -eq 1 ]]; then
 	create_module \
 	    --module-path $mp-npa \
 	    -n "Nick Papior Andersen's script for loading $(pack_get --alias $i): $(pack_get --version $p)." \
@@ -30,7 +30,7 @@ do
     fi
 done
 
-if [ $def_version -eq 1 ]; then
+if [[ $def_version -eq 1 ]]; then
     build_set --default-module-version
 fi
 build_set --default-build $def_build

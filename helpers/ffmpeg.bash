@@ -8,7 +8,7 @@ pack_set --install-query $(pack_get --prefix)/bin/ffmpeg
 
 tmp=
 # This ensures that we can encode x264 files (if header exists)
-[ -e /usr/include/x264.h ] && tmp="$tmp --enable-libx264"
+[[ -e /usr/include/x264.h ]] && tmp="$tmp --enable-libx264"
 
 # Install commands that it should run
 pack_cmd "./configure $tmp" \
