@@ -10,29 +10,27 @@ pack_set --install-query $(pack_get --LD)/libnetcdf.a
 pack_set $(list --prefix ' --module-requirement ' hdf5 pnetcdf)
 
 # bugfix for the iter test!
-pack_set \
-    --command "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"
+pack_cmd "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"
 
 # Install commands that it should run
-pack_set \
-    --command "../configure" \
-    --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--disable-dap" \
-    --command-flag "--enable-shared" \
-    --command-flag "--enable-static" \
-    --command-flag "--enable-pnetcdf" \
-    --command-flag "--enable-netcdf-4"
+pack_cmd "../configure" \
+     "CC=${MPICC} CXX=${MPICXX}" \
+     "--prefix=$(pack_get --prefix)" \
+     "--disable-dap" \
+     "--enable-shared" \
+     "--enable-static" \
+     "--enable-pnetcdf" \
+     "--enable-netcdf-4"
 
 # Make commands
 hv=$(pack_get --version hdf5)
-if [ $(vrs_cmp $hv 1.8.12) -gt 0 ]; then
-    pack_set --command "sed -i -e 's/H5Pset_fapl_mpiposix/H5Pset_fapl_mpio/gi' ../libsrc4/nc4file.c"
+if [[ $(vrs_cmp $hv 1.8.12) -gt 0 ]]; then
+    pack_cmd "sed -i -e 's/H5Pset_fapl_mpiposix/H5Pset_fapl_mpio/gi' ../libsrc4/nc4file.c"
 fi
 
-pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 #pack_set_mv_test tmp.test tmp.test.c
 
 pack_install
@@ -54,19 +52,19 @@ pack_set --install-query $(pack_get --LD)/libnetcdff.a
 tmp_cppflags="-DgFortran"
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
-    --command-flag "LIBS='$(list --LD-rp $(pack_get --mod-req-path)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--enable-shared" \
-    --command-flag "--enable-static"
+pack_cmd "../configure" \
+     "CC=${MPICC} CXX=${MPICXX}" \
+     "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
+     "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "LIBS='$(list --LD-rp $(pack_get --mod-req-path)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+     "--prefix=$(pack_get --prefix)" \
+     "--enable-shared" \
+     "--enable-static"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.f
 
 done

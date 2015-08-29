@@ -1,6 +1,6 @@
-[ $_mpi_version != "openmpi" ] && return
+[[ $_mpi_version != "openmpi" ]] && return
 add_package --directory otpo \
-    http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.tar.bz2
+	    http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -15,15 +15,15 @@ if ! $(is_c gnu) ; then
     pack_set --host-reject $(get_hostname)
 fi
 
-pack_set --command "module load $(pack_get --module-name build-tools)"
-pack_set --command "./autogen.sh"
+pack_cmd "module load $(pack_get --module-name build-tools)"
+pack_cmd "./autogen.sh"
 
 # Install commands that it should run
-pack_set --command "./configure --prefix=$(pack_get --prefix)"
+pack_cmd "./configure --prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
-pack_set --command "cp OpenIB_Parameters $(pack_get --prefix)/"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
+pack_cmd "cp OpenIB_Parameters $(pack_get --prefix)/"
 
-pack_set --command "module unload $(pack_get --module-name build-tools)"
+pack_cmd "module unload $(pack_get --module-name build-tools)"

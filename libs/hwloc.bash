@@ -9,23 +9,23 @@ pack_set --install-query $(pack_get --LD)/libhwloc.a
 pack_set --module-requirement numactl --module-requirement libxml2
 
 # Preload modules
-pack_set --command "module load build-tools"
+pack_cmd "module load build-tools"
 
-pack_set --command "./configure" \
-    --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--enable-libnuma" \
-    --command-flag "--disable-opencl" \
-    --command-flag "--disable-cuda" \
-    --command-flag "--disable-nvml" \
-    --command-flag "--disable-gl" \
-    --command-flag "--enable-static"
+pack_cmd "./configure" \
+	 "--prefix $(pack_get --prefix)" \
+	 "--enable-libnuma" \
+	 "--disable-opencl" \
+	 "--disable-cuda" \
+	 "--disable-nvml" \
+	 "--disable-gl" \
+	 "--enable-static"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
-    pack_set --command "make check > tmp.test 2>&1"
+    pack_cmd "make check > tmp.test 2>&1"
     pack_set_mv_test tmp.test
 fi
-pack_set --command "make install"
+pack_cmd "make install"
 
-pack_set --command "module unload build-tools"
+pack_cmd "module unload build-tools"

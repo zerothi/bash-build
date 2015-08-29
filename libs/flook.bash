@@ -11,12 +11,12 @@ pack_set --install-query $(pack_get --LD)/libflookall.a
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-aotus.tar.gz
 av=0.2
 dwn_file https://github.com/zerothi/aotus/archive/$av.tar.gz $o
-pack_set --command "rm -rf aotus"
-pack_set --command "tar xfz $o ; mv aotus-$av aotus"
+pack_cmd "rm -rf aotus"
+pack_cmd "tar xfz $o ; mv aotus-$av aotus"
 
 # Compile
-pack_set --command "echo '# INITIAL' > arch.make"
-pack_set --command "sed -i '1 a\
+pack_cmd "echo '# INITIAL' > arch.make"
+pack_cmd "sed -i '1 a\
 CC = $CC\n\
 FC = $FC\n\
 LUA_DIR = $(pack_get --prefix lua)\n\
@@ -30,10 +30,10 @@ FCFLAGS = $FCFLAGS\n\
 .c.o:\n\
 \t\$(CC) -c \$(CFLAGS) \$(INC) \$<\n' arch.make"
 
-pack_set --command "make liball"
+pack_cmd "make liball"
 
-pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "mkdir -p $(pack_get --prefix)/lib"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "mkdir -p $(pack_get --prefix)/lib"
 
-pack_set --command "cp libflookall.a $(pack_get --prefix)/lib/"
-pack_set --command "cp src/*.mod $(pack_get --prefix)/include/"
+pack_cmd "cp libflookall.a $(pack_get --prefix)/lib/"
+pack_cmd "cp src/*.mod $(pack_get --prefix)/include/"

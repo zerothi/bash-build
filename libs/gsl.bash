@@ -7,35 +7,35 @@ pack_set --install-query $(pack_get --LD)/libgsl.a
 
 # Install commands that it should run
 if $(is_c intel) ; then
-    pack_set --command "../configure" \
-	--command-flag "LIBS='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64'" \
-	--command-flag "LDFLAGS='$MKL_LIB'" \
-	--command-flag "--prefix $(pack_get --prefix)"
+    pack_cmd "../configure" \
+	     "LIBS='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64 -lmkl_blas95_lp64'" \
+	     "LDFLAGS='$MKL_LIB'" \
+	     "--prefix $(pack_get --prefix)"
 
 else
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp="$(list --LD-rp $la) -llapack"
-	    [ "x$la" == "xatlas" ] && \
+	    [[ "x$la" == "xatlas" ]] && \
 		tmp="$tmp -lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    break
 	fi
     done
 
-    pack_set --command "../configure" \
-	--command-flag "LIBS='-lm $tmp'" \
-	--command-flag "--prefix $(pack_get --prefix)"
+    pack_cmd "../configure" \
+	     "LIBS='-lm $tmp'" \
+	     "--prefix $(pack_get --prefix)"
 fi
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 if ! $(is_c intel) ; then
-    pack_set --command "make check > tmp.test 2>&1"
+    pack_cmd "make check > tmp.test 2>&1"
 fi
-pack_set --command "make install"
+pack_cmd "make install"
 if ! $(is_c intel) ; then
     pack_set_mv_test tmp.test
 fi

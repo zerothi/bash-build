@@ -13,15 +13,15 @@ pack_set --install-query $(pack_get --prefix)/bin/h5totxt
 pack_set --module-requirement hdf5-serial
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--without-octave" \
-    --command-flag "LDFLAGS='$(list --LD-rp +hdf5-serial)'"
+pack_cmd "../configure" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--without-octave" \
+	 "LDFLAGS='$(list --LD-rp +hdf5-serial)'"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 pack_set_mv_test tmp.test
 
 done

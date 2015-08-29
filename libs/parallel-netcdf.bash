@@ -10,30 +10,30 @@ pack_set -s $BUILD_DIR -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpnetcdf.a
 
 pack_set --module-requirement mpi
-if [ $(pack_installed bison) -eq 1 ]; then
-    pack_set --command "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
+if [[ $(pack_installed bison) -eq 1 ]]; then
+    pack_cmd "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
 fi
-if [ $(pack_installed flex) -eq 1 ]; then
-    pack_set --command "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
+if [[ $(pack_installed flex) -eq 1 ]]; then
+    pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--with-mpi=$(pack_get --prefix mpi)" \
-    --command-flag "--enable-fortran --disable-cxx"
+pack_cmd "../configure" \
+	 "CC=${MPICC} CXX=${MPICXX}" \
+	 "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--with-mpi=$(pack_get --prefix mpi)" \
+	 "--enable-fortran --disable-cxx"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 pack_set_mv_test tmp.test
 
-if [ $(pack_installed flex) -eq 1 ] ; then
-    pack_set --command "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
+if [[ $(pack_installed flex) -eq 1 ]]; then
+    pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi
-if [ $(pack_installed bison) -eq 1 ] ; then
-    pack_set --command "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
+if [[ $(pack_installed bison) -eq 1 ]]; then
+    pack_cmd "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
 fi

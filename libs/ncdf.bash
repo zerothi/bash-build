@@ -12,8 +12,8 @@ pack_set --module-requirement netcdf
 
 # Create the arch-make file
 file=arch.make
-pack_set --command "echo '# Hello' > $file"
-pack_set --command "sed -i '1 a\
+pack_cmd "echo '# Hello' > $file"
+pack_cmd "sed -i '1 a\
 FC = $MPIFC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
@@ -31,13 +31,13 @@ AR = $AR\n\
 ' $file"
 
 # Make commands
-pack_set --command "export DIR_FDICT=$(pack_get --prefix fdict)/include"
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make test > tmp.test 2>&1"
-pack_set --command "unset DIR_FDICT"
+pack_cmd "export DIR_FDICT=$(pack_get --prefix fdict)/include"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make test > tmp.test 2>&1"
+pack_cmd "unset DIR_FDICT"
 pack_set_mv_test tmp.test
-pack_set --command "mkdir -p $(pack_get --LD)"
-pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "cp src/libncdf.a $(pack_get --LD)/"
-pack_set --command "cp src/*.mod $(pack_get --prefix)/include/"
+pack_cmd "mkdir -p $(pack_get --LD)"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp src/libncdf.a $(pack_get --LD)/"
+pack_cmd "cp src/*.mod $(pack_get --prefix)/include/"
 

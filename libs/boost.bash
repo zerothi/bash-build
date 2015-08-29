@@ -9,17 +9,17 @@ pack_set --module-requirement mpi
 
 pack_set --install-query $(pack_get --LD)/libboost_random.a
 
-pack_set --command "./bootstrap.sh" \
-    --command-flag "--with-libraries=all" \
-    --command-flag "--without-libraries=python" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--includedir=$(pack_get --prefix)/include" \
-    --command-flag "--libdir=$(pack_get --LD)"
+pack_cmd "./bootstrap.sh" \
+	 "--with-libraries=all" \
+	 "--without-libraries=python" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--includedir=$(pack_get --prefix)/include" \
+	 "--libdir=$(pack_get --LD)"
 
 # Install commands that it should run
-pack_set --command "echo 'using mpi ;' >> project-config.jam"
+pack_cmd "echo 'using mpi ;' >> project-config.jam"
 
 # Make commands
-pack_set --command "./b2 --build-dir=build-tmp --without-python stage"
-pack_set --command "./b2 --build-dir=build-tmp --without-python install --prefix=$(pack_get --prefix)"
+pack_cmd "./b2 --build-dir=build-tmp --without-python stage"
+pack_cmd "./b2 --build-dir=build-tmp --without-python install --prefix=$(pack_get --prefix)"
 

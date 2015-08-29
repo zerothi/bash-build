@@ -7,15 +7,15 @@ pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
 pack_set --host-reject $(get_hostname)
 
-pack_set --command "unset F90"
-pack_set --command "unset F90FLAGS"
-pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--enable-fortran=all --enable-cxx" \
-    --command-flag "--enable-shared --enable-smpcoll"
+pack_cmd "unset F90"
+pack_cmd "unset F90FLAGS"
+pack_cmd "../configure" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--enable-fortran=all --enable-cxx" \
+	 "--enable-shared --enable-smpcoll"
 
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
 
 
 ## Also install HYDRA
@@ -28,12 +28,12 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/mpiexec
 
-pack_set --command "unset F90"
-pack_set --command "unset F90FLAGS"
-pack_set --command "../configure" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--enable-fortran=all --enable-cxx" \
-    --command-flag "--enable-shared --enable-smpcoll"
+pack_cmd "unset F90"
+pack_cmd "unset F90FLAGS"
+pack_cmd "../configure" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--enable-fortran=all --enable-cxx" \
+	 "--enable-shared --enable-smpcoll"
 
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

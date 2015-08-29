@@ -9,33 +9,33 @@ pack_set --install-query $(pack_get --LD)/libhdf5.a
 
 # Add requirments when creating the module
 pack_set --module-requirement mpi \
-    --module-requirement zlib
+	 --module-requirement zlib
 
-tmp="--command-flag --enable-fortran2003"
+tmp=" --enable-fortran2003"
 if $(is_c gnu-4.1) ; then
     unset tmp
 fi
 
 # Install commands that it should run
-pack_set --command "../configure" \
-    --command-flag "CC=${MPICC} CXX=${MPICXX}" \
-    --command-flag "F77=${MPIF90} F90=${MPIF90} FC=${MPIF90}" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--with-zlib=$(pack_get --prefix zlib)" \
-    --command-flag --enable-parallel \
-    --command-flag --enable-shared \
-    --command-flag --enable-static \
-    --command-flag "--enable-fortran" $tmp
+pack_cmd "../configure" \
+	 "CC=${MPICC} CXX=${MPICXX}" \
+	 "F77=${MPIF90} F90=${MPIF90} FC=${MPIF90}" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--with-zlib=$(pack_get --prefix zlib)" \
+	 --enable-parallel \
+	 --enable-shared \
+	 --enable-static \
+	 "--enable-fortran" $tmp
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n- surt muspel slid) ; then
-  pack_set --command "make check-s > tmp.test 2>&1"
-  pack_set_mv_test tmp.test tmp.test.s
+    pack_cmd "make check-s > tmp.test 2>&1"
+    pack_set_mv_test tmp.test tmp.test.s
 fi
 # the parallel tests cannot even complete using gnu
-#pack_set --command "NPROCS=3 make check-p > tmp.test 2>&1"
+#pack_cmd "NPROCS=3 make check-p > tmp.test 2>&1"
 #pack_set_mv_test tmp.test tmp.test.p
-pack_set --command "make install"
+pack_cmd "make install"
 
 done

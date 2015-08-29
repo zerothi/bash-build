@@ -18,10 +18,10 @@ if $(is_c intel) ; then
 else
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp=
-	    [ "x$la" == "xatlas" ] && \
+	    [[ "x$la" == "xatlas" ]] && \
 		tmp=" -lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    tmp_flags="--with-blas='${tmp:1}' --with-lapack='-llapack ${tmp:1}'"
@@ -31,12 +31,12 @@ else
 
 fi
 
-pack_set --command "./configure" \
-    --command-flag "F77='$FC'" \
-    --command-flag "FFLAGS='$FCFLAGS'" \
-    --command-flag "MPIF77='$MPIFC'" \
-    --command-flag "--enable-mpi $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "./configure" \
+	 "F77='$FC'" \
+	 "FFLAGS='$FCFLAGS'" \
+	 "MPIF77='$MPIFC'" \
+	 "--enable-mpi $tmp_flags" \
+	 "--prefix=$(pack_get --prefix)"
 
-pack_set --command "make"
-pack_set --command "make install"
+pack_cmd "make"
+pack_cmd "make install"

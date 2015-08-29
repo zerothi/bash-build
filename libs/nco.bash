@@ -8,22 +8,21 @@ pack_set --install-query $(pack_get --prefix)/bin/ncks
 # Add requirments when creating the module
 # udunits depend on NetCDF
 pack_set --module-requirement gsl \
-    --module-requirement udunits \
-    --module-requirement netcdf-serial
+	 --module-requirement udunits \
+	 --module-requirement netcdf-serial
 
 # Install commands that it should run
-pack_set \
-    --command "./configure" \
-    --command-flag "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lexpat -lnetcdf '" \
-    --command-flag "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req-path)) '" \
-    --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--enable-netcdf-4" \
-    --command-flag "--enable-udunits2" \
-    --command-flag "--enable-gsl"
+pack_cmd "./configure" \
+	 "LIBS=' -lgsl -lgslcblas -lm -ludunits2 -lexpat -lnetcdf '" \
+	 "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req-path)) '" \
+	 "--prefix $(pack_get --prefix)" \
+	 "--enable-netcdf-4" \
+	 "--enable-udunits2" \
+	 "--enable-gsl"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 #pack_set_mv_test tmp.test
 

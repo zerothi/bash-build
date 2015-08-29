@@ -17,9 +17,9 @@ fi
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
 # Create the suite sparse config file
-pack_set --command "echo '# NPA make file for suitesparse' > $mk"
+pack_cmd "echo '# NPA make file for suitesparse' > $mk"
 function sse() {
-    pack_set --command "echo '$@' >> $mk"
+    pack_cmd "echo '$@' >> $mk"
 }
 sse "CC = $CC"
 sse "CFLAGS = $CFLAGS"
@@ -48,11 +48,11 @@ else
     sse "LIB += -lgfortran"
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    sse "LAPACK = $(list --LD-rp $la) -llapack"
 	    tmp=
-	    [ "x$la" == "xatlas" ] && \
+	    [[ "x$la" == "xatlas" ]] && \
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
 	    sse "BLAS = $(list --LD-rp $la) $tmp"
@@ -92,8 +92,8 @@ sse "CLEAN = *.o *.obj *.ln *.bb *.bbg *.da *.tcov *.gcov gmon.out *.bak *.d *.g
 
 unset sse
 
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 # Install commands that it should run
-pack_set --command "mkdir -p $(pack_get --LD)/"
-pack_set --command "mkdir -p $(pack_get --prefix)/include/"
-pack_set --command "make install"
+pack_cmd "mkdir -p $(pack_get --LD)/"
+pack_cmd "mkdir -p $(pack_get --prefix)/include/"
+pack_cmd "make install"

@@ -6,32 +6,32 @@ pack_set --install-query $(pack_get --LD)/libparmetis.a
 
 pack_set --module-requirement mpi
 
-if [ $(pack_installed cmake) -eq 1 ]; then
-    pack_set --command "module load $(pack_get --module-name cmake)"
+if [[ $(pack_installed cmake) -eq 1 ]]; then
+    pack_cmd "module load $(pack_get --module-name cmake)"
 fi
 
 # Make commands 
-pack_set --command "sed -i -e 's/^\(cputype\).*/\1 = unknown/' Makefile"
-pack_set --command "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"
-pack_set --command "sed -i -e 's/^\(cputype\).*/\1 = unknown/' metis/Makefile"
-pack_set --command "sed -i -e 's/^\(systype\).*/\1 = linux/' metis/Makefile"
-pack_set --command "sed -i -e 's/^\(cc\).*/\1 = $CC/' metis/Makefile"
+pack_cmd "sed -i -e 's/^\(cputype\).*/\1 = unknown/' Makefile"
+pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"
+pack_cmd "sed -i -e 's/^\(cputype\).*/\1 = unknown/' metis/Makefile"
+pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' metis/Makefile"
+pack_cmd "sed -i -e 's/^\(cc\).*/\1 = $CC/' metis/Makefile"
 
 # Defaults to 32 bits information within METIS...
-pack_set --command "sed -i -e 's/\(define IDXTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
-pack_set --command "sed -i -e 's/\(define REALTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
-pack_set --command "cd metis"
-pack_set --command "make config prefix=$(pack_get --prefix)"
-pack_set --command "cd build/linux-unknown"
-pack_set --command "make"
-pack_set --command "make install"
-pack_set --command "cd ../../../"
-pack_set --command "make config prefix=$(pack_get --prefix)"
-pack_set --command "cd build/linux-unknown"
-pack_set --command "make"
-pack_set --command "make install"
+pack_cmd "sed -i -e 's/\(define IDXTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
+pack_cmd "sed -i -e 's/\(define REALTYPEWIDTH\).*/\1 32/' metis/include/metis.h"
+pack_cmd "cd metis"
+pack_cmd "make config prefix=$(pack_get --prefix)"
+pack_cmd "cd build/linux-unknown"
+pack_cmd "make"
+pack_cmd "make install"
+pack_cmd "cd ../../../"
+pack_cmd "make config prefix=$(pack_get --prefix)"
+pack_cmd "cd build/linux-unknown"
+pack_cmd "make"
+pack_cmd "make install"
 
-if [ $(pack_installed cmake) -eq 1 ]; then
-    pack_set --command "module unload $(pack_get --module-name cmake)"
+if [[ $(pack_installed cmake) -eq 1 ]]; then
+    pack_cmd "module unload $(pack_get --module-name cmake)"
 fi
 

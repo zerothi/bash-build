@@ -1,5 +1,5 @@
 add_package --package mumps-serial \
-    http://mumps.enseeiht.fr/MUMPS_5.0.0.tar.gz
+	    http://mumps.enseeiht.fr/MUMPS_5.0.0.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -8,24 +8,24 @@ pack_set --install-query $(pack_get --LD)/libmumps_common_omp.a
 pack_set --module-requirement metis
 # Using scotch requires a special interface :(
 
-pack_set --command "echo '# Makefile for easy installation ' > Makefile.inc"
+pack_cmd "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c intel) ; then
     tmp_flag="-nofor-main"
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp=
-	    [ "x$la" == "xatlas" ] && \
+	    [[ "x$la" == "xatlas" ]] && \
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
-	    pack_set --command "sed -i '1 a\
+	    pack_cmd "sed -i '1 a\
 LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
 	    break
 	fi
@@ -33,7 +33,7 @@ LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
 
 fi
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 LMETISDIR = $(pack_get --prefix metis) \n\
 IMETIS = $(list --INCDIRS metis) \n\
 LMETIS = $(list --LD-rp metis) -lmetis \n\
@@ -89,38 +89,38 @@ LIBS = \$(LIBSEQ) \n\
 LIBSEQNEEDED = libseqneeded \n' Makefile.inc"
 
 # Make commands
-pack_set --command "make $(get_make_parallel) alllib"
-pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
-pack_set --command "mkdir -p $(pack_get --LD)"
-pack_set --command "cp lib/lib*.a $(pack_get --LD)/"
-pack_set --command "cp libseq/lib*.a $(pack_get --LD)/"
+pack_cmd "make $(get_make_parallel) alllib"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp include/*.h $(pack_get --prefix)/include/"
+pack_cmd "mkdir -p $(pack_get --LD)"
+pack_cmd "cp lib/lib*.a $(pack_get --LD)/"
+pack_cmd "cp libseq/lib*.a $(pack_get --LD)/"
 
 # Make clean and create threaded
-pack_set --command "make clean"
+pack_cmd "make clean"
 if $(is_c intel) ; then
-    pack_set --command "sed -i -e 's:mkl=sequential:mkl=parallel:g' Makefile.inc"
+    pack_cmd "sed -i -e 's:mkl=sequential:mkl=parallel:g' Makefile.inc"
 
 else
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
-	    if [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i -e 's:lopenblas:lopenblas_omp:g' Makefile.inc"
+	if [[ $(pack_installed $la) -eq 1 ]]; then
+	    if [[ "x$la" == "xopenblas" ]]; then
+		pack_cmd "sed -i -e 's:lopenblas:lopenblas_omp:g' Makefile.inc"
 	    fi
 	fi
     done
 fi
 
-pack_set --command "sed -i '$ a\
+pack_cmd "sed -i '$ a\
 CDEFS += -DMUMPS_OPENMP\n\
 OPTF += $FLAG_OMP\n\
 OPTL += $FLAG_OMP\n\
 OPTC += $FLAG_OMP\n' Makefile.inc"
 
 # Make commands
-pack_set --command "make $(get_make_parallel) alllib"
-pack_set --command "cp include/*.h $(pack_get --prefix)/include/"
-pack_set --command "cd lib"
-pack_set --command "for l in lib*.a ; do cp \$l $(pack_get --LD)/\${l//.a/_omp.a} ; done"
+pack_cmd "make $(get_make_parallel) alllib"
+pack_cmd "cp include/*.h $(pack_get --prefix)/include/"
+pack_cmd "cd lib"
+pack_cmd "for l in lib*.a ; do cp \$l $(pack_get --LD)/\${l//.a/_omp.a} ; done"
 

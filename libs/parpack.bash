@@ -1,6 +1,6 @@
 add_package --package parpack \
-    --directory ARPACK \
-    http://www.caam.rice.edu/software/ARPACK/SRC/arpack96.tar.gz
+	    --directory ARPACK \
+	    http://www.caam.rice.edu/software/ARPACK/SRC/arpack96.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -17,20 +17,20 @@ oPP=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-ppatch.tar.gz
 dwn_file http://www.caam.rice.edu/software/ARPACK/SRC/ppatch.tar.gz $oPP
 
 # Apply patch
-pack_set --command "pushd ../"
-pack_set --command "tar xfz $oA"
+pack_cmd "pushd ../"
+pack_cmd "tar xfz $oA"
 
 # Apply parallel source and patch
-pack_set --command "tar xfz $oP"
-pack_set --command "tar xfz $oPP"
+pack_cmd "tar xfz $oP"
+pack_cmd "tar xfz $oPP"
 
-pack_set --command "popd"
+pack_cmd "popd"
 
 file=ARmake.inc
-pack_set --command "echo '# New makefile' > $file"
-pack_set --command "echo home = \$(pwd) >> $file"
+pack_cmd "echo '# New makefile' > $file"
+pack_cmd "echo home = \$(pwd) >> $file"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 PFC = $MPIFC\n\
 PFFLAGS = $FCFLAGS\n\
 FC = $FC\n\
@@ -80,7 +80,7 @@ PLIBS = \$(PARPACKLIB) \$(ALIBS) \$(MPILIBS)\n\
 ' $file"
 
 if $(is_c intel) ; then
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 LAPACKLIB = -mkl=sequential\n\
 BLASLIB  = -mkl=sequential\n\
 LDFLAGS = \n\
@@ -90,13 +90,13 @@ else
 
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp=
-	    [ "x$la" == "xatlas" ] && \
+	    [[ "x$la" == "xatlas" ]] && \
 		tmp="-lf77blas -lcblas"
 	    tmp="$tmp -l$la"
-	    pack_set --command "sed -i '1 a\
+	    pack_cmd "sed -i '1 a\
 LAPACKLIB = -llapack\n\
 BLASLIB   = $tmp \n\
 LDFLAGS   = $(list --LD-rp $la)\n\
@@ -107,13 +107,13 @@ LDFLAGS   = $(list --LD-rp $la)\n\
 
     # We need to correct for etime which has enterred as
     # an intrinsic rather than external function
-    pack_set --command "sed -i -e 's:.*EXTERNAL[ ]*ETIME.*::g' UTIL/second.f"
+    pack_cmd "sed -i -e 's:.*EXTERNAL[ ]*ETIME.*::g' UTIL/second.f"
 
 fi
 
-pack_set --command "make lib"
-pack_set --command "sed -i -e 's/^FC.*//;s/^FFLAGS.*//;s/^PFC/FC/;s/^PFFLAGS/FFLAGS/' $file"
-pack_set --command "make plib"
+pack_cmd "make lib"
+pack_cmd "sed -i -e 's/^FC.*//;s/^FFLAGS.*//;s/^PFC/FC/;s/^PFFLAGS/FFLAGS/' $file"
+pack_cmd "make plib"
 
-pack_set --command "mkdir -p $(pack_get --LD)"
-pack_set --command "cp libarpack.a libparpack.a $(pack_get --LD)/"
+pack_cmd "mkdir -p $(pack_get --LD)"
+pack_cmd "cp libarpack.a libparpack.a $(pack_get --LD)/"

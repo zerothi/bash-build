@@ -9,8 +9,8 @@ pack_set --install-query $(pack_get --prefix)/lib/libvardict.a
 
 # Create the arch-make file
 file=arch.make
-pack_set --command "echo '# Hello' > $file"
-pack_set --command "sed -i '1 a\
+pack_cmd "echo '# Hello' > $file"
+pack_cmd "sed -i '1 a\
 FC = $FC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
@@ -22,16 +22,16 @@ AR = $AR\n\
 ' $file"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make test > tmp.test 2>&1"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make test > tmp.test 2>&1"
 pack_set_mv_test tmp.test
-pack_set --command "mkdir -p $(pack_get --LD)"
-pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "cp libvardict.a $(pack_get --LD)/"
-pack_set --command "cp *.mod $(pack_get --prefix)/include/"
+pack_cmd "mkdir -p $(pack_get --LD)"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp libvardict.a $(pack_get --LD)/"
+pack_cmd "cp *.mod $(pack_get --prefix)/include/"
 # We also copy the settings file
 # Mainly because it is needed for building ncdf library.
-pack_set --command "cp settings.sh $(pack_get --prefix)/include/"
+pack_cmd "cp settings.sh $(pack_get --prefix)/include/"
 
 
 

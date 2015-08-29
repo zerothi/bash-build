@@ -7,19 +7,19 @@ pack_set --module-requirement netcdf
 
 pack_set --install-query $(pack_get --LD)/libetsf_io.a
 
-pack_set --command "CC='$MPICC' FC='$MPIFC' LIBS='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz' ./configure" \
-    --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "CC='$MPICC' FC='$MPIFC' LIBS='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz' ./configure" \
+	 "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+	 "--prefix=$(pack_get --prefix)"
 
 # Correct a bug in the test library
-pack_set --command "sed -i -e 's:len = 256:len = dims(1):g' tests/group_level/tests_module.f90"
+pack_cmd "sed -i -e 's:len = 256:len = dims(1):g' tests/group_level/tests_module.f90"
 
-pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 #pack_set_mv_test tmp.test
 
 
 # Correct the very strange partition of the module locations
-pack_set --command "mv $(pack_get --prefix)/include/*/* $(pack_get --prefix)/include/" 
+pack_cmd "mv $(pack_get --prefix)/include/*/* $(pack_get --prefix)/include/" 
 
