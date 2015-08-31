@@ -8,7 +8,7 @@ source $(build_get --source)
 function echo_modules {
     # Retrieve all modules 
     local mods=""
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	mods="$(pack_get --mod-req $1) $1"
 	shift
     done
@@ -37,7 +37,7 @@ create_module $cm_defs \
     -echo "$(echo_modules octopus)" \
     -RL octopus
 
-if [ $(pack_get --installed elk) -eq 1 ]; then
+if [[ $(pack_get --installed elk) -eq 1 ]]; then
     create_module $cm_defs \
 	-n "Nick Papior Andersen's script for loading Elk: $(get_c)" \
 	-M elk.default/$(get_c) \

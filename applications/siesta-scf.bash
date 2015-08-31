@@ -146,7 +146,7 @@ function make_files {
 
 for omp in openmp none ; do
 if [[ $omp == "openmp" ]]; then
-if [[ $(vrs_cmp $v 688) -lt 0 ]; then
+if [[ $(vrs_cmp $v 688) -lt 0 ]]; then
     continue
 fi
 if $(is_c intel) ; then
