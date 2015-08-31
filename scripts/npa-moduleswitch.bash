@@ -44,7 +44,7 @@ cat <<EOF > $script
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_modules_clean"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_modules_clean"
 
 _npa_new_name
 
@@ -66,7 +66,7 @@ cat <<EOF > $script
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_reuse_modulepath"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/_switch_reuse_modulepath"
 
 
 _npa_new_name
@@ -91,7 +91,7 @@ cat <<EOF > $script
 #}
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2lmod"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2lmod"
 
 _npa_new_name
 
@@ -116,4 +116,4 @@ cat <<EOF > $script
 EOF
 
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2em"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/switch2em"

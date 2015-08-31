@@ -34,7 +34,7 @@ function ml_prereq {
 
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/source/ml.function"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.function"
 
 _npa_new_name
 cat <<EOF > $script
@@ -52,7 +52,7 @@ complete -F _ml ml
 
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/source/ml.bashrc"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.bashrc"
 
 _npa_new_name
 cat <<EOF > $script
@@ -66,6 +66,6 @@ source \$NPA_SOURCE/ml.function
 
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/source/ml.zshrc"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.zshrc"
 
 

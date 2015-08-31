@@ -211,4 +211,4 @@ fi
 
 EOF
 
-pack_set --command "mv $(pwd)/$script $(pack_get --prefix)/bin/spbs"
+pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/spbs"
