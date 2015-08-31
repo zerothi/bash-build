@@ -585,9 +585,9 @@ function pack_set_mv_test {
     local o=$f
     [[ $# -gt 0 ]] && o=$1 ; shift
     # move and gzip
-    pack_set --command "mkdir -p $(pack_get --prefix)"
-    pack_set --command "mv $f $(pack_get --prefix)/$o"
-    pack_set --command "gzip -f $(pack_get --prefix)/$o"
+    pack_cmd "mkdir -p $(pack_get --prefix)"
+    pack_cmd "mv $f $(pack_get --prefix)/$o"
+    pack_cmd "gzip -f $(pack_get --prefix)/$o"
 }
 
 # Debugging function for printing out every available

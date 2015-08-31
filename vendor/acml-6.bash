@@ -11,11 +11,11 @@ add_package --build vendor \
 
 pack_set --install-query $(pack_get --prefix)/${c}64
 
-pack_set --command "mkdir -p $(pack_get --prefix)"
-pack_set --command "mv Doc ${c}64* ReleaseNotes util $(pack_get --prefix)/"
+pack_cmd "mkdir -p $(pack_get --prefix)"
+pack_cmd "mv Doc ${c}64* ReleaseNotes util $(pack_get --prefix)/"
 
-pack_set --command "rm ACML-EULA.txt NOTICE.txt"
-pack_set --command "chmod a+x $(pack_get --prefix)/util/cpuid.exe"
+pack_cmd "rm ACML-EULA.txt NOTICE.txt"
+pack_cmd "chmod a+x $(pack_get --prefix)/util/cpuid.exe"
 
 # We need to create all the different modules...
 for directive in nothing fma4 ; do

@@ -28,14 +28,14 @@ add_package --build vendor \
 
 pack_set --install-query $(pack_get --prefix)/${dc}64
 
-pack_set --command "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get --prefix)"
+pack_cmd "./install-acml-$v-$c-64bit.sh -accept -installdir=$(pack_get --prefix)"
 
-pack_set --command "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
+pack_cmd "rm install-acml-$v-$c-64bit.sh contents-acml-$v-$c-64bit.tgz ACML-EULA.txt README.64-bit"
 
 if $(is_host ntch zero) ; then
     # These machines at least does not have fma4, so delete it!
-    pack_set --command "rm -rf $(pack_get --prefix)/${dc}64_fma4"
-    pack_set --command "rm -rf $(pack_get --prefix)/${dc}64_fma4_mp"
+    pack_cmd "rm -rf $(pack_get --prefix)/${dc}64_fma4"
+    pack_cmd "rm -rf $(pack_get --prefix)/${dc}64_fma4_mp"
 fi
 
 # We need to create all the different modules...
