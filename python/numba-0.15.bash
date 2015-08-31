@@ -11,13 +11,13 @@ pack_set --module-requirement llvmmath
 
 pack_set --install-query $(pack_get --prefix)/bin/numba
 
-pack_set --command "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
 
-pack_set --command "$(get_parent_exec) setup.py build "
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py build "
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe numba > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe numba > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
 

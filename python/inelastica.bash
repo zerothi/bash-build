@@ -11,9 +11,9 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/Inelastica
 pack_set --module-requirement netcdf-serial \
     --module-requirement scientificpython
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py config"
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py config"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py build"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 
 

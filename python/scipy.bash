@@ -8,24 +8,24 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --a
 pack_set --module-requirement numpy
 pack_set --module-requirement cython
 
-if [ $(pack_installed swig) -eq 1 ]; then
-    pack_set --command "module load $(pack_get --module-name-requirement pcre swig) $(pack_get --module-name pcre swig)"
+if [[ $(pack_installed swig) -eq 1 ]]; then
+    pack_cmd "module load $(pack_get --module-name-requirement pcre swig) $(pack_get --module-name pcre swig)"
 fi
 
-pack_set --command "unset LDFLAGS"
+pack_cmd "unset LDFLAGS"
 
-pack_set --command "CC=$CC $(get_parent_exec) setup.py build $pNumpyInstall"
-pack_set --command "CC=$CC $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "CC=$CC $(get_parent_exec) setup.py build $pNumpyInstall"
+pack_cmd "CC=$CC $(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 
-if [ $(pack_installed swig) -eq 1 ]; then
-    pack_set --command "module unload $(pack_get --module-name swig pcre) $(pack_get --module-name-requirement pcre swig)"
+if [[ $(pack_installed swig) -eq 1 ]]; then
+    pack_cmd "module unload $(pack_get --module-name swig pcre) $(pack_get --module-name-requirement pcre swig)"
 fi
 
 
 add_test_package
-pack_set --command "unset LDFLAGS"
-pack_set --command "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "unset LDFLAGS"
+pack_cmd "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
 
 done

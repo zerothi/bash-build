@@ -11,13 +11,13 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/pygsl
 # Add requirments when creating the module
 pack_set --module-requirement numpy \
     --module-requirement gsl
-    
+
 # Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py build" \
-    --command-flag "--gsl-prefix=$(pack_get --prefix gsl)"
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
- 
+pack_cmd "$(get_parent_exec) setup.py build" \
+    "--gsl-prefix=$(pack_get --prefix gsl)"
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
+
 add_test_package
-pack_set --command "nosetests --exe pygsl > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe pygsl > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test

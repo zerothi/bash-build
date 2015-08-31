@@ -9,8 +9,8 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement cython
 
-pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages"
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 

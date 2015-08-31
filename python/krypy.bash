@@ -11,7 +11,7 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/krypy
 pack_set --module-requirement scipy
     
 # Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py build"
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py build"
+pack_cmd "$(get_parent_exec) setup.py install" \
+      "--prefix=$(pack_get --prefix)"
  

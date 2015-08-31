@@ -11,10 +11,10 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(lc $(pack_ge
 #  pygobject-2.0 >= 2.21.3
 
 # Install commands that it should run
-pack_set --command "./configure CC='$CC $pCFLAGS' CXX='$CXX $pCFLAGS'" \
-    --command-flag "CPP='$CC -E' CXXCPP='$CXX -E'" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "./configure CC='$CC $pCFLAGS' CXX='$CXX $pCFLAGS'" \
+    "CPP='$CC -E' CXXCPP='$CXX -E'" \
+    "--prefix=$(pack_get --prefix)"
 
-pack_set --command "make"
-pack_set --command "make install"
-    
+pack_cmd "make"
+pack_cmd "make install"
+

@@ -11,15 +11,15 @@ pack_set --module-requirement numpy \
     --module-requirement cython
 
 # create dir
-pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages"
-    
-# Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py configure" \
-    --command-flag "--hdf5=$(pack_get --prefix hdf5-serial)"
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+# Install commands that it should run
+pack_cmd "$(get_parent_exec) setup.py configure" \
+    "--hdf5=$(pack_get --prefix hdf5-serial)"
+
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe h5py > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe h5py > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test

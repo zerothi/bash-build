@@ -9,9 +9,9 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --a
 
 pack_set $(list --prefix ' --module-requirement ' numpy cython scipy matplotlib)
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
 
 # Install commands that it should run
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 

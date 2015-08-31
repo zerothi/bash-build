@@ -2,7 +2,7 @@
 for v in 1.4.2 2.4.3 ; do
     [ "x${pV:0:1}" == "x3" ] && [ "x$v" == "x1.4.2" ] && continue
     fv=$v
-    if [ $(vrs_cmp $v 2.3.1 ) -ge 0 ]; then
+    if [[ $(vrs_cmp $v 2.3.1 ) -ge 0 ]]; then
 	fv=v$v
     fi
     add_package --archive numexpr-$v.tar.gz \
@@ -18,15 +18,15 @@ for v in 1.4.2 2.4.3 ; do
 	--module-requirement cython
     
     # Install commands that it should run
-    pack_set --command "mkdir -p" \
-	--command-flag "$(pack_get --LD)/python$pV/site-packages"
-    pack_set --command "$(get_parent_exec) setup.py build $pNumpyInstall"
+    pack_cmd "mkdir -p" \
+	  "$(pack_get --LD)/python$pV/site-packages"
+    pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
 
-    pack_set --command "$(get_parent_exec) setup.py install" \
-	--command-flag "--prefix=$(pack_get --prefix)"
+    pack_cmd "$(get_parent_exec) setup.py install" \
+	  "--prefix=$(pack_get --prefix)"
 
     add_test_package
-    pack_set --command "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Success'"
+    pack_cmd "nosetests --exe numexpr > tmp.test 2>&1 ; echo 'Success'"
     pack_set_mv_test tmp.test
     
 done

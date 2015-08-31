@@ -13,9 +13,9 @@ pack_set --module-requirement cffi
 pack_set --module-requirement llvm[3.5]
 pack_set --host-reject $(get_hostname)
 
-pack_set --command "$(get_parent_exec)" \
-    --command-flag "setup.py install --prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec)" \
+    "setup.py install --prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "nosetests --exe llvm-lite > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe llvm-lite > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test

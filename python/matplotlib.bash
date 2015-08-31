@@ -11,17 +11,17 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
 
-pack_set --command "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
+pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
 
-pack_set --command "unset LDFLAGS"
+pack_cmd "unset LDFLAGS"
 
-pack_set --command "$(get_parent_exec) setup.py config"
-pack_set --command "$(get_parent_exec) setup.py build"
-pack_set --command "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
-pack_set --command "$(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py config"
+pack_cmd "$(get_parent_exec) setup.py build"
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
+pack_cmd "$(get_parent_exec) setup.py install" \
+    "--prefix=$(pack_get --prefix)"
 
 add_test_package
-pack_set --command "unset LDFLAGS"
-pack_set --command "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "unset LDFLAGS"
+pack_cmd "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test

@@ -17,25 +17,25 @@ pack_set --module-requirement netcdf-serial \
     --module-requirement scientificpython
 
 # patch it...
-if [ $(vrs_cmp $v 309) -lt 0 ]; then
+if [[ $(vrs_cmp $v 309) -lt 0 ]]; then
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-Inelastica.py.patch-p$v
     dwn_file http://www.student.dtu.dk/~nicpa/packages/Inelastica.py.patch-r$v $o
-    pack_set --command "patch package/Inelastica.py $o"
+    pack_cmd "patch package/Inelastica.py $o"
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-inelastica.patch-p$v
     dwn_file http://www.student.dtu.dk/~nicpa/packages/inelastica.patch-r$v $o
-    pack_set --command "patch -R scripts/Inelastica $o"
+    pack_cmd "patch -R scripts/Inelastica $o"
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-NEGF_double_electrode_r$v
     dwn_file http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v $o
-    pack_set --command "patch package/NEGF.py $o"
+    pack_cmd "patch package/NEGF.py $o"
 else
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-NEGF_double_electrode_r$v
     dwn_file http://www.student.dtu.dk/~nicpa/packages/NEGF_double_electrode_r$v $o
-    pack_set --command "patch -p0 < $o"
+    pack_cmd "patch -p0 < $o"
 fi
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py build"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py build"
 
-pack_set --command "unset LDFLAGS && $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py install" \
+      "--prefix=$(pack_get --prefix)"
 
 done

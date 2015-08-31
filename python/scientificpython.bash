@@ -4,7 +4,7 @@ add_package https://sourcesup.renater.fr/frs/download.php/4570/ScientificPython-
 
 pack_set -s $IS_MODULE
 
-[ "x${pV:0:1}" == "x3" ] && pack_set --host-reject $(get_hostname)
+[[ "x${pV:0:1}" == "x3" ]] && pack_set --host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/Scientific
 
@@ -20,7 +20,7 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_flags="$tmp_flags $(list --LD-rp $la)"
 	    break
@@ -31,11 +31,11 @@ else
     doerr Scientificpython "Could not determine compiler..."
 fi
 
-pack_set --command "sed -i -e 's|^\(extra_compile_args[[:space:]]*=.*\)|\1\nextra_link_args = [\"$tmp_flags\"]|' setup.py"
-pack_set --command "sed -i -e 's|\(extra_compile_args[[:space:]]*=[[:space:]]*extra_compile_args\)|\1,extra_link_args=extra_link_args|' setup.py"
+pack_cmd "sed -i -e 's|^\(extra_compile_args[[:space:]]*=.*\)|\1\nextra_link_args = [\"$tmp_flags\"]|' setup.py"
+pack_cmd "sed -i -e 's|\(extra_compile_args[[:space:]]*=[[:space:]]*extra_compile_args\)|\1,extra_link_args=extra_link_args|' setup.py"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
+pack_cmd "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py build ${pNumpyInstall%--fcom*}"
 
-pack_set --command "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "NETCDF_PREFIX='$(pack_get --prefix netcdf-serial)' $(get_parent_exec) setup.py install" \
+      "--prefix=$(pack_get --prefix)"
 
