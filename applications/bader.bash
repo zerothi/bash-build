@@ -6,9 +6,9 @@ pack_set -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --prefix)/bin/bader
 
 file=Makefile
-pack_set --command "echo '.SUFFIXES: .f90' > $file"
+pack_cmd "echo '.SUFFIXES: .f90' > $file"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 FC = $FC \n\
 FFLAGS = ${FCFLAGS//-O3/-O2} \n\
 LINK = \n\
@@ -20,7 +20,7 @@ bader: \$(OBJS)\n\
 \t\$(FC) \$(LINK) -o bader \$(OBJS)' $file"
 
 # Make commands
-pack_set --command "make bader"
-pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
-pack_set --command "cp bader $(pack_get --prefix)/bin/"
+pack_cmd "make bader"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
+pack_cmd "cp bader $(pack_get --prefix)/bin/"
 

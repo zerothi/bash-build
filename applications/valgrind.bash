@@ -12,9 +12,9 @@ fi
 pack_set --module-opt "--lua-family valgrind"
 pack_set --module-requirement mpi
 
-pack_set --command "../configure --with-mpicc=$MPICC" \
-    --command-flag "--enable-only64bit" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "../configure --with-mpicc=$MPICC" \
+    "--enable-only64bit" \
+    "--prefix=$(pack_get --prefix)"
 
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

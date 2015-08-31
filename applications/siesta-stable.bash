@@ -6,7 +6,7 @@ pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
 pack_set --module-requirement mpi --module-requirement netcdf-serial
 
-if [ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]; then
+if [[ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]]; then
     pack_set $(list --prefix '--host-reject ' zero ntch)
 fi
 
@@ -14,14 +14,14 @@ fi
 pack_set --module-opt "--lua-family siesta"
 
 # Change to directory:
-pack_set --command "cd Obj"
+pack_cmd "cd Obj"
 
 # Setup the compilation scheme
-pack_set --command "../Src/obj_setup.sh"
+pack_cmd "../Src/obj_setup.sh"
 
 # Prepare the compilation arch.make
-pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
-pack_set --command "sed -i '1 a\
+pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
 SIESTA_ARCH=x86_64-linux-Intel\n\
@@ -52,7 +52,7 @@ MPI_INCLUDE=.\n\
 source applications/siesta-linalg.bash
 
 # Fix the long lines in the Makefile
-pack_set --command "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
+pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 > tmp.F90\n\
 \t\@awk '{if (length>80) { cur=78; \\\\\\\\\n\\\
 \t\tprintf \\\"%s\&\\\\\\n\\\",substr(\\\$\\\$0,0,78); \\\\\\\\\n\\\
@@ -61,67 +61,67 @@ pack_set --command "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 \t\t} printf \\\"\&%s\\\\\\n\\\",substr(\\\$\\\$0,cur)} else { print \\\$\\\$0 }}' tmp.F90 > compinfo.F90/\" Makefile"
 
 # Create install directory
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 source applications/siesta-speed.bash siesta
-pack_set --command "cp siesta $(pack_get --prefix)/bin/"
+pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
-pack_set --command "make clean"
+pack_cmd "make clean"
 
 source applications/siesta-speed.bash transiesta
-pack_set --command "cp transiesta $(pack_get --prefix)/bin/"
+pack_cmd "cp transiesta $(pack_get --prefix)/bin/"
 
-pack_set --command "cd ../Util/TBTrans"
-pack_set --command "make"
-pack_set --command "cp tbtrans $(pack_get --prefix)/bin/"
+pack_cmd "cd ../Util/TBTrans"
+pack_cmd "make"
+pack_cmd "cp tbtrans $(pack_get --prefix)/bin/"
 
-pack_set --command "cd ../WFS"
-pack_set --command "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
-pack_set --command "cp info_wfsx $(pack_get --prefix)/bin/"
-pack_set --command "cp readwf $(pack_get --prefix)/bin/"
-pack_set --command "cp readwfx $(pack_get --prefix)/bin/"
-pack_set --command "cp wfs2wfsx $(pack_get --prefix)/bin/"
-pack_set --command "cp wfsx2wfs $(pack_get --prefix)/bin/"
+pack_cmd "cd ../WFS"
+pack_cmd "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
+pack_cmd "cp info_wfsx $(pack_get --prefix)/bin/"
+pack_cmd "cp readwf $(pack_get --prefix)/bin/"
+pack_cmd "cp readwfx $(pack_get --prefix)/bin/"
+pack_cmd "cp wfs2wfsx $(pack_get --prefix)/bin/"
+pack_cmd "cp wfsx2wfs $(pack_get --prefix)/bin/"
 
-pack_set --command "cd ../HSX"
-pack_set --command "make hs2hsx hsx2hs"
-pack_set --command "cp hs2hsx $(pack_get --prefix)/bin/"
-pack_set --command "cp hsx2hs $(pack_get --prefix)/bin/"
+pack_cmd "cd ../HSX"
+pack_cmd "make hs2hsx hsx2hs"
+pack_cmd "cp hs2hsx $(pack_get --prefix)/bin/"
+pack_cmd "cp hsx2hs $(pack_get --prefix)/bin/"
 
-pack_set --command "cd ../Vibra/Src"
-pack_set --command "make"
-pack_set --command "cp fcbuild vibrator $(pack_get --prefix)/bin/"
+pack_cmd "cd ../Vibra/Src"
+pack_cmd "make"
+pack_cmd "cp fcbuild vibrator $(pack_get --prefix)/bin/"
 
-pack_set --command "cd ../../"
-pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
+pack_cmd "cd ../../"
+pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
+pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
 # If the stable version of siesta has enabled the ESM module, 
 # we compile that now
 # Currently it works with 3.1
-if [ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]; then
+if [[ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]]; then
 
     # move back to head
     tmp=siesta-3.1_esm_v1.05
-    pack_set --command "cd ../"
+    pack_cmd "cd ../"
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$tmp.tar.gz
     dwn_file http://www.student.dtu.dk/~nicpa/packages/$tmp.tar.gz $o
-    pack_set --command "tar xfz $o"
-    pack_set --command "patch -p1 < $tmp/esm_v1.05.diff"
+    pack_cmd "tar xfz $o"
+    pack_cmd "patch -p1 < $tmp/esm_v1.05.diff"
 
-    pack_set --command "cd Obj"
-    pack_set --command "../Src/obj_setup.sh"
-    pack_set --command "make dep"
+    pack_cmd "cd Obj"
+    pack_cmd "../Src/obj_setup.sh"
+    pack_cmd "make dep"
 
-    pack_set --command "make clean"
+    pack_cmd "make clean"
 
     source applications/siesta-speed.bash siesta
-    pack_set --command "cp siesta $(pack_get --prefix)/bin/siesta_esm"
+    pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta_esm"
     
-    pack_set --command "make clean"
+    pack_cmd "make clean"
     
     source applications/siesta-speed.bash transiesta
-    pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta_esm"
+    pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta_esm"
 
 fi
 

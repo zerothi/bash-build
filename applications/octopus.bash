@@ -28,18 +28,22 @@ else
     pack_set --module-requirement scalapack
     
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
 	    tmp="$tmp --with-scalapack='$tmp_ld -lscalapack'"
 	    tmp="$tmp --with-lapack='$tmp_ld -llapack'"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lopenblas'"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lblas'"
-	    fi
+	    case $la in 
+		atlas)
+		    tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
+		    ;;
+		openblas)
+		    tmp="$tmp --with-blas='$tmp_ld -lopenblas'"
+		    ;;
+		blas)
+		    tmp="$tmp --with-blas='$tmp_ld -lblas'"
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -48,48 +52,48 @@ fi
 
 # The old versions had one library, the newer ones have Fortran and C divided.
 tmp_xc="$(pack_get --LD libxc)/libxc.a"
-if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
+if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
     tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
-    --command-flag "--enable-openmp" \
-    --command-flag "--enable-utils" \
-    --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
-    --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
-    --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-    --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-    --command-flag "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "$tmp"
+pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
+     "--enable-openmp" \
+     "--enable-utils" \
+     "--with-libxc-include=$(pack_get --prefix libxc)/include" \
+     "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
+     "--with-gsl-prefix=$(pack_get --prefix gsl)" \
+     "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
+     "--prefix=$(pack_get --prefix)" \
+     "$tmp"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1 || echo NVM"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > tmp.test 2>&1 || echo NVM"
+pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.serial
 
 # prep for the MPI-compilation...
-pack_set --command "rm -rf *"
+pack_cmd "rm -rf *"
 
-pack_set --command "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
-    --command-flag "--enable-mpi" \
-    --command-flag "--enable-openmp" \
-    --command-flag "--with-libxc-include=$(pack_get --prefix libxc)/include" \
-    --command-flag "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
-    --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-    --command-flag "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-    --command-flag "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "$tmp"
+pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+     "--enable-mpi" \
+     "--enable-openmp" \
+     "--with-libxc-include=$(pack_get --prefix libxc)/include" \
+     "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
+     "--with-gsl-prefix=$(pack_get --prefix gsl)" \
+     "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
+     "--prefix=$(pack_get --prefix)" \
+     "$tmp"
 
 # Make commands
-if [ $NPROCS -gt 4 ]; then
-pack_set --command "export OCT_TEST_MPI_NPROCS=4"
+if [[ $NPROCS -gt 4 ]]; then
+    pack_cmd "export OCT_TEST_MPI_NPROCS=4"
 else
-pack_set --command "export OCT_TEST_MPI_NPROCS=\$NPROCS"
+    pack_cmd "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 fi
-pack_set --command "make -j $(get_make_parallel)"
-pack_set --command "make check > tmp.test 2>&1 && echo Successfull >> tmp.test || echo Failure >> tmp.test"
-pack_set --command "make install"
+pack_cmd "make -j $(get_make_parallel)"
+pack_cmd "make check > tmp.test 2>&1 && echo Successfull >> tmp.test || echo Failure >> tmp.test"
+pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.mpi

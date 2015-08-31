@@ -11,7 +11,7 @@ pack_set --host-reject ntch --host-reject zeroth
 pack_set --module-opt "--lua-family lammps"
 
 pack_set --directory 'lammps-*'
-pack_set --command 'cd src'
+pack_cmd 'cd src'
 
 pack_set --install-query $(pack_get --prefix)/bin/lmp
 
@@ -19,9 +19,9 @@ pack_set --module-requirement mpi \
     --module-requirement fftw-3
 
 tmp=MAKE/Makefile.npa
-pack_set --command "echo '# NPA-script' > $tmp"
+pack_cmd "echo '# NPA-script' > $tmp"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 include ../MAKE/Makefile.mpi\n\
 SHELL=/bin/sh\n\
 CC =         $MPICXX\n\
@@ -46,12 +46,12 @@ JPG_LIB = ' $tmp"
 
 
 if $(is_c intel) ; then
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
 
 elif $(is_c gnu) ; then 
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 LINKFLAGS =  $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
 LIB =        -lstdc++ -lpthread ' $tmp"
 
@@ -60,13 +60,13 @@ else
 fi
 
 # Make commands
-pack_set --command "make $(get_make_parallel) npa"
-pack_set --command "make mode=lib $(get_make_parallel) npa"
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-pack_set --command "cp lmp_npa $(pack_get --prefix)/bin/lmp"
+pack_cmd "make $(get_make_parallel) npa"
+pack_cmd "make mode=lib $(get_make_parallel) npa"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
-pack_set --command "mkdir -p $(pack_get --LD)"
-pack_set --command "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
+pack_cmd "mkdir -p $(pack_get --LD)"
+pack_cmd "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
 # Copy headers over 
-pack_set --command "mkdir -p $(pack_get --prefix)/include"
-pack_set --command "cp library.cpp library.h $(pack_get --prefix)/include/"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp library.cpp library.h $(pack_get --prefix)/include/"

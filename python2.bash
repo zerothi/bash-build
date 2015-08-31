@@ -12,7 +12,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set $(list --prefix '--mod-req ' zlib expat libffi)
 lib_extra=
-if [ $(pack_get --installed sqlite) -eq 1 ]; then
+if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
 
@@ -157,7 +157,7 @@ tmp=$(build_get --module-path)
 rm -rf $tmp/python$pV.numerics/$(get_c)
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas sids ; do
-    if [ $(pack_installed $i) -eq 1 ]; then
+    if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"
     fi
 done
@@ -168,7 +168,7 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' $tmp)
 
-if [ $(pack_installed qutip) -eq 1 ]; then
+if [[ $(pack_installed qutip) -eq 1 ]]; then
     create_module \
         -n "Nick Papior Andersen's Photonics python script for QuTip: $(get_c)" \
         -v $(date +'%g-%j') \

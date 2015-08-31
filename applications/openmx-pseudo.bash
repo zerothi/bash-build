@@ -9,12 +9,12 @@ function tmp {
 
     pack_set --host-reject ntch-l --host-reject zerothi
     pack_set --module-opt "--lua-family openmx-pseudos"
-    pack_set --command "mkdir -p $(dirname $(pack_get --prefix))"
-    pack_set --command "rm -rf $(pack_get --prefix)"
+    pack_cmd "mkdir -p $(dirname $(pack_get --prefix))"
+    pack_cmd "rm -rf $(pack_get --prefix)"
     # The file permissions are not expected to be correct (we correct them
     # here)
-    pack_set --command "mv DFT_DATA13/$1 $(pack_get --prefix)"
-    pack_set --command "chmod 0644 $(pack_get --prefix)/*.$2"
+    pack_cmd "mv DFT_DATA13/$1 $(pack_get --prefix)"
+    pack_cmd "chmod 0644 $(pack_get --prefix)/*.$2"
     pack_set --module-opt "--set-ENV OPENMX_PSEUDO=$(pack_get --prefix)"
 }
 

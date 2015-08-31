@@ -12,22 +12,22 @@ pack_set --module-opt "--lua-family povray"
 pack_set --mod-req zlib
 pack_set --mod-req boost
 
-pack_set --command "cd unix"
+pack_cmd "cd unix"
 
 # create configure
-pack_set --command "module load build-tools"
-pack_set --command "./prebuild.sh"
+pack_cmd "module load build-tools"
+pack_cmd "./prebuild.sh"
 # This fixes build on debian >=7
-pack_set --command "cd .. ; automake --add-missing ; cd unix"
-pack_set --command "./prebuild.sh"
-pack_set --command "cd .."
+pack_cmd "cd .. ; automake --add-missing ; cd unix"
+pack_cmd "./prebuild.sh"
+pack_cmd "cd .."
 
-pack_set --command "./configure --with-boost-libdir=$(pack_get -LD boost)" \
-	--command-flag "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
-	--command-flag "--prefix=$(pack_get --prefix) LIBS=-lboost_system"
+pack_cmd "./configure --with-boost-libdir=$(pack_get -LD boost)" \
+	 "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
+	 "--prefix=$(pack_get --prefix) LIBS=-lboost_system"
 
-pack_set --command "make"
-pack_set --command "make install"
+pack_cmd "make"
+pack_cmd "make install"
 
 ## install commands... (this will install the non-GUI version)
-#pack_set --command "printf '%s%s\n' 'U' '$(pack_get --prefix)' | ./install -no-arch-check"
+#pack_cmd "printf '%s%s\n' 'U' '$(pack_get --prefix)' | ./install -no-arch-check"

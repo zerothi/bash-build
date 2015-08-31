@@ -11,13 +11,13 @@ pack_set --module-opt "--lua-family grace"
 pack_set --module-requirement netcdf-serial --module-requirement fftw-2
 
 # Install commands that it should run
-pack_set --command "./configure" \
-    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-    --command-flag "LIBS='-lfftw -lnetcdff -lnetcdf'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path)) $CPPFLAGS'" \
-    --command-flag "--enable-netcdf" \
-    --command-flag "--prefix=$(pack_get --prefix)" \
-    --command-flag "--enable-grace-home=$(pack_get --prefix)"
+pack_cmd "./configure" \
+     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
+     "LIBS='-lfftw -lnetcdff -lnetcdf'" \
+     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path)) $CPPFLAGS'" \
+     "--enable-netcdf" \
+     "--prefix=$(pack_get --prefix)" \
+     "--enable-grace-home=$(pack_get --prefix)"
 
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

@@ -1,19 +1,26 @@
 for v in 5.1.1 5.1.2 ; do
     libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     tmp="-package espresso -version $v"
-    if [ "$v" = "5.1.2" ]; then
-	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
-    elif [ "$v" = "5.1.1" ]; then
-	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
-    elif [ "$v" = "5.1" ]; then
-	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
-    elif [ "$v" = "5.0.3" ]; then
-	tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
-    elif [ "$v" = "5.0.99" ]; then
-	tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
-    else
-	doerr espresso "Version unknown"
-    fi
+    case $v in
+	5.1.2)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
+	    ;;
+	5.1.1)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
+	    ;;
+	5.1)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+	    ;;
+	5.0.3)
+	    tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
+	    ;;
+	5.0.99)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
+	    ;;
+	*)
+	    doerr espresso "Version unknown"
+	    ;;
+    esac
 
     add_package $tmp
     
@@ -29,7 +36,7 @@ for v in 5.1.1 5.1.2 ; do
     # Fetch all the packages and pack them out
     source applications/espresso-packages.bash
 
-    if test -z "$FLAG_OMP" ; then
+    if [ -z "$FLAG_OMP" ]; then
 	doerr espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
     fi
 
@@ -49,18 +56,22 @@ for v in 5.1.1 5.1.2 ; do
 	pack_set --module-requirement scalapack
 
 	for la in $(choice linalg) ; do
-	    if [ $(pack_installed $la) -eq 1 ] ; then
+	    if [[ $(pack_installed $la) -eq 1 ]] ; then
 		pack_set --module-requirement $la
 		tmp_ld="$(list --LD-rp $la)"
 		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
 		tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
-		if [ "x$la" == "xatlas" ]; then
-		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
-		elif [ "x$la" == "xopenblas" ]; then
-		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lopenblas_omp'"
-		elif [ "x$la" == "xblas" ]; then
-		    tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lblas'"
-		fi
+		case $la in
+		    atlas)
+			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
+			;;
+		    openblas)
+			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lopenblas_omp'"
+			;;
+		    blas)
+			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lblas'"
+			;;
+		esac
 		break
 	    fi
 	done
@@ -71,28 +82,28 @@ for v in 5.1.1 5.1.2 ; do
     tmp="${FCFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
     tmp="${tmp//-opt-prefetch/}"
-    pack_set --command "./configure" \
-	--command-flag "$tmp_lib" \
-	--command-flag "FFLAGS='$tmp $FLAG_OMP'" \
-	--command-flag "FFLAGS_NOOPT='-fPIC'" \
-	--command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
-	--command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
-	--command-flag "--enable-parallel --enable-openmp" \
-	--command-flag "--prefix=$(pack_get --prefix)" 
+    pack_cmd "./configure" \
+	 "$tmp_lib" \
+	 "FFLAGS='$tmp $FLAG_OMP'" \
+	 "FFLAGS_NOOPT='-fPIC'" \
+	 "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
+	 "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
+	 "--enable-parallel --enable-openmp" \
+	 "--prefix=$(pack_get --prefix)" 
 
     # Make commands
     for EXE in $libs ; do
- 	pack_set --command "make $(get_make_parallel) $EXE"
+ 	pack_cmd "make $(get_make_parallel) $EXE"
     done
 
     # Prepare installation directories...
-    pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-    pack_set --command "mkdir -p $(pack_get --LD)"
-    pack_set --command "mkdir -p $(pack_get --prefix)/include"
-    pack_set --command "cp bin/* $(pack_get --prefix)/bin/"
+    pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+    pack_cmd "mkdir -p $(pack_get --LD)"
+    pack_cmd "mkdir -p $(pack_get --prefix)/include"
+    pack_cmd "cp bin/* $(pack_get --prefix)/bin/"
     # Install the iotk-library
-    pack_set --command "cp iotk/src/libiotk.a $(pack_get --LD)/"
-    pack_set --command "cp iotk/src/*.mod $(pack_get --prefix)/include/"
+    pack_cmd "cp iotk/src/libiotk.a $(pack_get --LD)/"
+    pack_cmd "cp iotk/src/*.mod $(pack_get --prefix)/include/"
 
 done
 

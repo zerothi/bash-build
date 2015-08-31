@@ -14,26 +14,26 @@ pack_set --mod-req flook
 pack_set --module-opt "--lua-family siesta"
 
 # Fix the __FILE__ content in the classes
-pack_set --command 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
-pack_set --command 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
+pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
+pack_cmd 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
 
 # Change to directory:
-pack_set --command "cd Obj"
+pack_cmd "cd Obj"
 
 # Setup the compilation scheme
-pack_set --command "../Src/obj_setup.sh"
+pack_cmd "../Src/obj_setup.sh"
 
 file=arch.make
 
 # Prepare the compilation $file
-pack_set --command "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
-pack_set --command "echo 'PP = cpp -E -P -C -nostdinc' >> $file"
+pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
+pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' >> $file"
 
-if [ $(vrs_cmp $v 590) -ge 0 ]; then
+if [[ $(vrs_cmp $v 590) -ge 0 ]]; then
     pack_set --module-requirement mumps
-    if [ $(vrs_cmp $v 662) -ge 0 ]; then
+    if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
 	pack_set --module-requirement fftw-3
-	pack_set --command "sed -i '1 a\
+	pack_cmd "sed -i '1 a\
 METIS_LIB = -lmetis\n\
 FFTW_PATH = $(pack_get --prefix fftw-3)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
@@ -42,19 +42,19 @@ LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4\n\
 COMP_LIBS += libncdf.a libvardict.a' $file"
     fi
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP -DSIESTA__MUMPS -DTS_NOCHECKS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 else
-    if [ $(pack_installed metis) -eq 1 ]; then
+    if [[ $(pack_installed metis) -eq 1 ]]; then
 	pack_set --module-requirement metis
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 FPPFLAGS += -DON_DOMAIN_DECOMP\n\
 ADDLIB += -lmetis' $file"
     fi
 fi
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .f90 .F90 .c .o .a\n\
 SIESTA_ARCH=x86_64-linux-$(get_c)\n\
@@ -94,56 +94,56 @@ MPI_INCLUDE=.\n\
 
 source applications/siesta-linalg.bash
 
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 function set_flag {
     local v=$1 ; shift
     end=
     case $v in
 	openmp)
-	    pack_set --command "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
-	    pack_set --command "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
-	    pack_set --command "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
+	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
+	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
+	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
 
 
 	    end=_omp
-	    if [ "x$siesta_la" == "xopenblas" ]; then
-		pack_set --command "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
+	    if [[ "x$siesta_la" == "xopenblas" ]]; then
+		pack_cmd "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
 	    fi
 	    ;;
 	*)
-	    pack_set --command "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
-	    pack_set --command "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
-	    pack_set --command "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
+	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
+	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
+	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
 	    end=
-	    if [ "x$siesta_la" == "xopenblas" ]; then
-		pack_set --command "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
+	    if [[ "x$siesta_la" == "xopenblas" ]]; then
+		pack_cmd "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
 	    fi
 	    ;;
     esac
 }
 
 # This should ensure a correct handling of the version info...
-if [ $(vrs_cmp $v 696) -ge 0 ]; then
-    pack_set --command "siesta_install -v scf-l --siesta"
-elif [ $(vrs_cmp $v 662) -ge 0 ]; then
-    pack_set --command "siesta_install -v scf-p --siesta"
+if [[ $(vrs_cmp $v 696) -ge 0 ]]; then
+    pack_cmd "siesta_install -v scf-l --siesta"
+elif [[ $(vrs_cmp $v 662) -ge 0 ]]; then
+    pack_cmd "siesta_install -v scf-p --siesta"
 else
-    pack_set --command "siesta_install -v scf --siesta"
+    pack_cmd "siesta_install -v scf --siesta"
 fi
 
 function make_files {
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	local v=$1 ; shift
-	pack_set --command "make $v"
-	pack_set --command "cp $v $(pack_get --prefix)/bin/"
+	pack_cmd "make $v"
+	pack_cmd "cp $v $(pack_get --prefix)/bin/"
     done
 }
 
 
 for omp in openmp none ; do
-if [ $omp == "openmp" ]; then
-if [ $(vrs_cmp $v 688) -lt 0 ]; then
+if [[ $omp == "openmp" ]]; then
+if [[ $(vrs_cmp $v 688) -lt 0 ]]; then
     continue
 fi
 if $(is_c intel) ; then
@@ -152,145 +152,145 @@ fi
 fi
 set_flag $omp
 
-pack_set --command "make clean"
+pack_cmd "make clean"
 
 # This should ensure a correct handling of the version info...
-if [ $(vrs_cmp $v 772) -ge 0 ]; then
-    pack_set --command "make $(get_make_parallel) siesta"
-elif [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+    pack_cmd "make $(get_make_parallel) siesta"
+elif [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
 else
     source applications/siesta-speed.bash libSiestaXC.a siesta
 fi
-pack_set --command "cp siesta $(pack_get --prefix)/bin/siesta$end"
+pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
 
-pack_set --command "make clean"
+pack_cmd "make clean"
 
-if [ $(vrs_cmp $v 772) -ge 0 ]; then
-    pack_set --command "make $(get_make_parallel) transiesta ; make transiesta"
-elif [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+elif [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 else
     source applications/siesta-speed.bash libSiestaXC.a transiesta
 fi
-pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
 
 done
 
-pack_set --command "cd ../Util/Bands"
+pack_cmd "cd ../Util/Bands"
 make_files new.gnubands eigfat2plot fat.gplot gnubands
 
-pack_set --command "cd ../Contrib/APostnikov"
-pack_set --command "make all"
-pack_set --command "cp *xsf fmpdos $(pack_get --prefix)/bin/"
+pack_cmd "cd ../Contrib/APostnikov"
+pack_cmd "make all"
+pack_cmd "cp *xsf fmpdos $(pack_get --prefix)/bin/"
 
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
-    pack_set --command "cd ../../Denchar/Src"
+if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
+    pack_cmd "cd ../../Denchar/Src"
     make_files denchar
 fi
 
-pack_set --command "cd ../../Eig2DOS"
+pack_cmd "cd ../../Eig2DOS"
 make_files Eig2DOS
 
-if [ $(vrs_cmp $v 862) -ge 0 ]; then
-    pack_set --command "cd ../COOP"
+if [[ $(vrs_cmp $v 862) -ge 0 ]]; then
+    pack_cmd "cd ../COOP"
     make_files mprop fat
 
-    pack_set --command "cd ../SpPivot"
+    pack_cmd "cd ../SpPivot"
     #make_files pvtsp
 fi
 
-pack_set --command "cd ../WFS"
+pack_cmd "cd ../WFS"
 make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
 
 # install simple-stm
-pack_set --command "cd ../STM/simple-stm"
+pack_cmd "cd ../STM/simple-stm"
 make_files plstm
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
-    pack_set --command "cd ../ol-stm/Src"
+if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
+    pack_cmd "cd ../ol-stm/Src"
     make_files stm
-    pack_set --command "cd .."
+    pack_cmd "cd .."
 fi
 
-pack_set --command "cd ../../HSX"
+pack_cmd "cd ../../HSX"
 make_files hs2hsx hsx2hs
 
 # Install the Grimme creator
-pack_set --command "cd ../Grimme/"
+pack_cmd "cd ../Grimme/"
 make_files fdf2grimme
 
 # install the optimizer functions
-pack_set --command "cd ../Optimizer"
+pack_cmd "cd ../Optimizer"
 make_files swarm simplex
 
 # install grid-relevant utilities
 # Installing the CDF ones requires that we change the libraries (non-MPI)
-pack_set --command "cd ../Grid"
+pack_cmd "cd ../Grid"
 #make_files grid2cdf cdf2xsf cdf2grid cdf_fft cdf_diff
 make_files grid2val grid2cube grid_rotate grid_supercell
 
-pack_set --command "cd ../Vibra/Src"
+pack_cmd "cd ../Vibra/Src"
 make_files fcbuild vibra
 
 # Install the TS-analyzer
-pack_set --command "cd ../../TS/"
-pack_set --command "cp tselecs.sh $(pack_get --prefix)/bin/"
+pack_cmd "cd ../../TS/"
+pack_cmd "cp tselecs.sh $(pack_get --prefix)/bin/"
 
-if [ $(vrs_cmp $v 587) -ge 0 ]; then
-    pack_set --command "cd ts2ts"
+if [[ $(vrs_cmp $v 587) -ge 0 ]]; then
+    pack_cmd "cd ts2ts"
     make_files ts2ts
 fi
-if [ $(vrs_cmp $v 602) -ge 0 ]; then
+if [[ $(vrs_cmp $v 602) -ge 0 ]]; then
     # we need serial netcdf library to compile tshs2tshs :(
-    pack_set --command "cd ../tshs2tshs/"
+    pack_cmd "cd ../tshs2tshs/"
     make_files tshs2tshs
 fi
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
-    pack_set --command "cd ../TBtrans/"
+if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
+    pack_cmd "cd ../TBtrans/"
     for omp in openmp none ; do
 
-	pack_set --command "pushd ../../../Obj"
+	pack_cmd "pushd ../../../Obj"
 	set_flag $omp
-	pack_set --command "popd ; make clean"
-	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel) ; make"
+	pack_cmd "popd ; make clean"
+	if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+	    pack_cmd "make $(get_make_parallel) ; make"
 	else
-	    pack_set --command "make"
+	    pack_cmd "make"
 	fi
-	pack_set --command "make" # corrects version 
-	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
-	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans"
-	    pack_set --command "make phtrans" # corrects version 
-	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
-	    pack_set --command "make clean"
+	pack_cmd "make" # corrects version 
+	pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
+	if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+	    pack_cmd "make clean-tbt ; make $(get_make_parallel) phtrans"
+	    pack_cmd "make phtrans" # corrects version 
+	    pack_cmd "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
+	    pack_cmd "make clean"
 	fi
     done
-    if [ $(vrs_cmp $v 750) -lt 0 ]; then
-	pack_set --command "cp tbt_data.py $(pack_get --prefix)/bin/"
+    if [[ $(vrs_cmp $v 750) -lt 0 ]]; then
+	pack_cmd "cp tbt_data.py $(pack_get --prefix)/bin/"
     fi
 fi
-if [ $(vrs_cmp $v 681) -ge 0 ]; then
-    pack_set --command "cd ../TB/"
-    if [ $(vrs_cmp $v 767) -ge 0 ]; then
-	pack_set --command "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
+if [[ $(vrs_cmp $v 681) -ge 0 ]]; then
+    pack_cmd "cd ../TB/"
+    if [[ $(vrs_cmp $v 767) -ge 0 ]]; then
+	pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
     else
-	pack_set --command "cp tbt_tb.py $(pack_get --prefix)/bin/"
+	pack_cmd "cp tbt_tb.py $(pack_get --prefix)/bin/"
     fi
 
     pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 fi
 
-pack_set --command "cd ../../"
+pack_cmd "cd ../../"
 
-pack_set --command "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_set --command "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
+pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
+pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
 # The atom program for creating the pseudos
-pack_set --command "cd ../Pseudo/atom"
+pack_cmd "cd ../Pseudo/atom"
 make_files atm
 
-pack_set --command "cd ../../Obj"
+pack_cmd "cd ../../Obj"
 
 # Compile the 3m equivalent versions, if applicable
 tmp=0
@@ -299,8 +299,8 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
-	    if [ "x$la" == "xopenblas" ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
+	    if [[ "x$la" == "xopenblas" ]]; then
 		# Only openblas has gemm3m
 		tmp=1
 	    fi
@@ -310,57 +310,57 @@ elif $(is_c gnu) ; then
 fi
 
 
-if [ $tmp -eq 1 ] ; then
-if [ $(vrs_cmp $v 662) -ge 0 ]; then
+if [[ $tmp -eq 1 ]] ; then
+if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     # Go back
-    pack_set --command "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
+    pack_cmd "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
     for omp in openmp none ; do
-	if [ $omp == "openmp" ]; then
+	if [[ $omp == "openmp" ]]; then
 	    if $(is_c intel) ; then
 		continue
 	    fi
 	fi
 
 	set_flag $omp
-	pack_set --command "make clean"
+	pack_cmd "make clean"
 	
-	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel) transiesta ; make transiesta"
+	if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+	    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
 	else
 	    source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a transiesta
 	fi
-	pack_set --command "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
+	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
 
-	pack_set --command "pushd ../Util/TS/TBtrans ; make clean"
-	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make $(get_make_parallel) ; make"
+	pack_cmd "pushd ../Util/TS/TBtrans ; make clean"
+	if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+	    pack_cmd "make $(get_make_parallel) ; make"
 	else
-	    pack_set --command "make"
+	    pack_cmd "make"
 	fi
-	pack_set --command "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
-	if [ $(vrs_cmp $v 772) -ge 0 ]; then
-	    pack_set --command "make clean-tbt ; make $(get_make_parallel) phtrans ; make phtrans"
-	    pack_set --command "cp phtrans $(pack_get --prefix)/bin/phtrans${end}_3m"
-	    pack_set --command "make clean"
+	pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
+	if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
+	    pack_cmd "make clean-tbt ; make $(get_make_parallel) phtrans ; make phtrans"
+	    pack_cmd "cp phtrans $(pack_get --prefix)/bin/phtrans${end}_3m"
+	    pack_cmd "make clean"
 	fi
-	pack_set --command "popd"
+	pack_cmd "popd"
 
     done
 fi
 fi
 unset set_flag
 unset make_files
-pack_set --command "chmod a+x $(pack_get --prefix)/bin/*"
+pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"
 
 # Create the byte-compiled versions, to make it faster for users 
 tmp=$(pack_get --alias python).$(pack_get --version python)/$(get_c)
-pack_set --command "module load $tmp"
-pack_set --command "pushd $(pack_get --prefix)/bin/"
-pack_set --command "python -m compileall ."
-pack_set --command "popd"
-pack_set --command "module unload $tmp"
+pack_cmd "module load $tmp"
+pack_cmd "pushd $(pack_get --prefix)/bin/"
+pack_cmd "python -m compileall ."
+pack_cmd "popd"
+pack_cmd "module unload $tmp"
 
 # Save the $file file
-pack_set --command "cp $file ../../"
+pack_cmd "cp $file ../../"
 
 done

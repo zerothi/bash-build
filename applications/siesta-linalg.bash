@@ -5,7 +5,7 @@
 siesta_la=mkl
 if $(is_c intel) ; then
 
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 LDFLAGS=$MKL_LIB $(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
@@ -17,13 +17,13 @@ elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack 
     tmp="-llapack"
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    siesta_la=$la
 	    pack_set --module-requirement $la
-	    [ "x$la" == "xatlas" ] && tmp="$tmp -lf77blas -lcblas"
-	    [ "x$la" == "xacml" ] && tmp=""
+	    [[ "x$la" == "xatlas" ]] && tmp="$tmp -lf77blas -lcblas"
+	    [[ "x$la" == "xacml" ]] && tmp=""
 	    tmp="$tmp -l$la"
-	    pack_set --command "sed -i '1 a\
+	    pack_cmd "sed -i '1 a\
 LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
@@ -38,7 +38,7 @@ else
 
 fi
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 .F.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .F90.o:\n\
@@ -51,10 +51,10 @@ pack_set --command "sed -i '1 a\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 \n' arch.make"
 
-pack_set --command "[ -e ../Src/atom.F ] && sed -i '$ a\
+pack_cmd "[ -e ../Src/atom.F ] && sed -i '$ a\
 atom.o: atom.F\n\
 \t\$(FC) -c -O1 \$(INCFLAGS) \$(FPPFLAGS) \$<\n' arch.make || echo NVM"
-pack_set --command "[ -e ../Src/atom.f ] && sed -i '$ a\
+pack_cmd "[ -e ../Src/atom.f ] && sed -i '$ a\
 atom.o: atom.f\n\
 \t\$(FC) -c -O1 \$(INCFLAGS) \$<\n' arch.make || echo NVM"
 
@@ -62,7 +62,7 @@ if $(is_c intel) ; then
     # Threading and m_new_dm does not work
     # Besides it is so little a routine that we simply compile it with
     # lower optimization
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 m_new_dm.o: m_new_dm.F90\n\
 \t\$(FC) -c -O2 \$(INCFLAGS) \$(FPPFLAGS) \$<\n' arch.make || echo NVM"
 fi

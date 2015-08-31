@@ -23,17 +23,21 @@ elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_ld="-lscalapack -llapack"
 	    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp scalapack $la)'"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="$tmp --with-ext-linalg='$tmp_ld -lopenblas'"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp="$tmp --with-ext-linalg='$tmp_ld -lblas'"
-	    fi
+	    case $la in
+		atlas)
+		    tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
+		    ;;
+		openblas)
+		    tmp="$tmp --with-ext-linalg='$tmp_ld -lopenblas'"
+		    ;;
+		blas)
+		    tmp="$tmp --with-ext-linalg='$tmp_ld -lblas'"
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -45,34 +49,34 @@ fi
 
 
 # There are also bindings for python
-pack_set --command "module load $(pack_get --module-name-requirement python) $(pack_get --module-name python)"
+pack_cmd "module load $(pack_get --module-name-requirement python) $(pack_get --module-name python)"
 
-if [ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]; then
+if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
     xclib="-lxcf90 -lxc"
     # Replace the -lxc is the configure script with the correct lookup!
-    pack_set --command "sed -i -e 's/-lxc/$xclib/g' ../configure"
+    pack_cmd "sed -i -e 's/-lxc/$xclib/g' ../configure"
 else
     xclib="-lxc"
 fi
 
-    #--command-flag "--enable-bindings" \
-pack_set --command "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
-    --command-flag "--disable-internal-libxc --with-openmp" \
-    --command-flag "--with-etsf-io" \
-    --command-flag "--with-etsf-io-path=$(pack_get --prefix etsf_io)" \
-    --command-flag "--with-netcdf-path=$(pack_get --prefix netcdf)" \
-    --command-flag "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    --command-flag "--with-libxc-libs='$(list --LD-rp libxc) $xclib'" \
-    --command-flag "--with-libxc-incs='$(list --INCDIRS libxc)'" \
-    --command-flag "$tmp --prefix=$(pack_get --prefix)"
+    # "--enable-bindings" \
+pack_cmd "CC='$MPICC' FC='$MPIFC' F77='$MPIF77' ../configure" \
+     "--disable-internal-libxc --with-openmp" \
+     "--with-etsf-io" \
+     "--with-etsf-io-path=$(pack_get --prefix etsf_io)" \
+     "--with-netcdf-path=$(pack_get --prefix netcdf)" \
+     "--with-netcdf-libs='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+     "--with-libxc-libs='$(list --LD-rp libxc) $xclib'" \
+     "--with-libxc-incs='$(list --INCDIRS libxc)'" \
+     "$tmp --prefix=$(pack_get --prefix)"
 
-pack_set --command "rm -rf doc" # don't make the documents
-pack_set --command "sed -i -e 's: doc : :g' Makefile" # fix Makefile
+pack_cmd "rm -rf doc" # don't make the documents
+pack_cmd "sed -i -e 's: doc : :g' Makefile" # fix Makefile
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 # It seems like there is a bug in the check call...
-#pack_set --command "make check"
-pack_set --command "make install prefix=$(pack_get --prefix)"
+#pack_cmd "make check"
+pack_cmd "make install prefix=$(pack_get --prefix)"
 
-pack_set --command "module unload $(pack_get --module-name python) $(pack_get --module-name-requirement python)"
+pack_cmd "module unload $(pack_get --module-name python) $(pack_get --module-name-requirement python)"

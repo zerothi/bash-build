@@ -17,19 +17,19 @@ pack_set --module-requirement wannier90
 pack_set --module-requirement fftw-mpi-3
 
 # Correct mistakes in configure script...
-pack_set --command "sed -i -e 's:= call nf90:= nf90:g' ../configure"
+pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
 
 s="sed -i"
 file=build.ac
-pack_set --command "echo '# This is Nicks build.ac for Abinit' > $file"
+pack_cmd "echo '# This is Nicks build.ac for Abinit' > $file"
 
-if test -z "$FLAG_OMP" ; then
+if [[ -z "$FLAG_OMP" ]]; then
     doerr abinit "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 tmpf="${FCFLAGS//-O3/-O2}"
 tmpc="${CFLAGS//-O3/-O2}"
 tmpcx="${CXXFLAGS//-O3/-O2}"
-pack_set --command "$s '$ a\
+pack_cmd "$s '$ a\
 prefix=\"$(pack_get --prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
@@ -56,30 +56,34 @@ if $(is_c intel) ; then
     # We need to correct the configure script
     # (it checks whether linking is done correctly!)
     # STUPID, I say!
-    #pack_set --command "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
-    pack_set --command "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
+    #pack_cmd "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
+    pack_cmd "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
     tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
-    pack_set --command "$s '$ a\
+    pack_cmd "$s '$ a\
 FCLIBS=\"$tmp\"\n\
 LIBS=\"$tmp\"\n\
 with_linalg_libs=\"$tmp\"\n' $file"
     # Ensures that the build will search for the correct MPI libraries
-    pack_set --command "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
+    pack_cmd "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
     pack_set --module-requirement scalapack
     
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="-lf77blas -lcblas -latlas"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="-lopenblas_omp"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp="-lblas"
-	    fi
-	    pack_set --command "$s '$ a\
+	    case $la in
+		atlas)
+		    tmp="-lf77blas -lcblas -latlas"
+		    ;;
+		openblas)
+		    tmp="-lopenblas_omp"
+		    ;;
+		blas)
+		    tmp="-lblas"
+		    ;;
+	    esac
+	    pack_cmd "$s '$ a\
 with_linalg_incs=\"$(list --INCDIRS $la)\"\n\
 with_linalg_libs=\"$(list --LD-rp scalapack $la) -lscalapack -llapack $tmp\"\n' $file"
 	    break
@@ -89,7 +93,7 @@ with_linalg_libs=\"$(list --LD-rp scalapack $la) -lscalapack -llapack $tmp\"\n' 
 fi
 
 # Add default libraries
-pack_set --command "$s '$ a\
+pack_cmd "$s '$ a\
 with_trio_flavor=\"etsf_io+netcdf\"\n\
 with_etsf_io_incs=\"$(list --INCDIRS etsf_io)\"\n\
 with_etsf_io_libs=\"$(list --LD-rp etsf_io) -letsf_io -letsf_io_utils -letsf_io_low_level\"\n\
@@ -101,34 +105,34 @@ with_fft_libs=\"$(list --LD-rp fftw-mpi-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -l
 
 dft_flavor=atompaw+wannier90
 xc_version=$(pack_get --version libxc)
-if [ $(vrs_cmp $xc_version 2.0.2) -ge 0 ]; then
+if [[ $(vrs_cmp $xc_version 2.0.2) -ge 0 ]]; then
     pack_set --module-requirement libxc
     dft_flavor="$dft_flavor+libxc"
     xclib="-lxc"
-    if [ $(vrs_cmp $xc_version 2.2.0) -ge 0 ]; then
+    if [[ $(vrs_cmp $xc_version 2.2.0) -ge 0 ]]; then
 	xclib="-lxcf90 -lxc"
 	# Correct the check for the minor version
-	pack_set --command "sed -i -e 's/minor != 0/minor != $(str_version -2 $xc_version)/' ../configure"
-	pack_set --command "sed -i -e 's/|| (minor < 0) || (minor > 1)//' ../configure"
+	pack_cmd "sed -i -e 's/minor != 0/minor != $(str_version -2 $xc_version)/' ../configure"
+	pack_cmd "sed -i -e 's/|| (minor < 0) || (minor > 1)//' ../configure"
 
     fi
-    pack_set --command "$s '$ a\
+    pack_cmd "$s '$ a\
 with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
 with_libxc_libs=\"$(list --LD-rp libxc) $xclib\"' $file"
 fi
 
-if [ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]; then
+if [[ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]]; then
     # The interface for the later versions
     # has changed, hence we require the old-version
     pack_set --module-requirement bigdft
     dft_flavor="$dft_flavor+bigdft"
-    pack_set --command "$s '$ a\
+    pack_cmd "$s '$ a\
 with_bigdft_incs=\"$(list --INCDIRS bigdft)\"\n\
 with_bigdft_libs=\"$(list --LD-rp bigdft) -lbigdft-1\"' $file"
     
 fi
 
-pack_set --command "$s '$ a\
+pack_cmd "$s '$ a\
 with_dft_flavor=\"$dft_flavor\"\n\
 with_atompaw_bins=\"$(pack_get --prefix atompaw)/bin\"\n\
 with_atompaw_incs=\"$(list --INCDIRS atompaw)\"\n\
@@ -140,18 +144,18 @@ with_wannier90_libs=\"$(list --LD-rp wannier90) -lwannier\"' $file"
 # Configure the package...
 # We must not override the flags on the command line, it will
 # disturb the automatically added flags...
-pack_set --command "unset FCFLAGS && unset CFLAGS && ../configure --with-config-file=./$file"
+pack_cmd "unset FCFLAGS && unset CFLAGS && ../configure --with-config-file=./$file"
 
 if $(is_c intel) ; then
     # Correct the compilation for the intel compiler
-    pack_set --command "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile"
+    pack_cmd "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile"
 fi
 
 # Make commands
 tmp=$(get_make_parallel)
-pack_set --command "make multi multi_nprocs=${tmp//-j /}"
+pack_cmd "make multi multi_nprocs=${tmp//-j /}"
 # With 7.8+ the testing system has changed.
 # We should do some python calls...
-#pack_set --command "make check-local > tmp.test 2>&1" # only check local tests...
+#pack_cmd "make check-local > tmp.test 2>&1" # only check local tests...
 #pack_set_mv_test tmp.test
-pack_set --command "make install"
+pack_cmd "make install"

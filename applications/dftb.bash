@@ -15,15 +15,15 @@ elif $(is_c gnu) ; then
     cc=gnu
 fi
 file=sysmakes/make.$cc
-pack_set --command "echo '#' > $file"
+pack_cmd "echo '#' > $file"
 
-if test -z "$FLAG_OMP" ; then
+if [[ -z "$FLAG_OMP" ]]; then
     doerr dftb "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 FC90 = $FC\n\
 FC90OPT = $FCFLAGS $FLAG_OMP -mkl=parallel\n\
 CPP = cpp -traditional\n\
@@ -36,7 +36,7 @@ LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n\
 LIBOPT = $MKL_LIB' $file"
     
 else
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 FC90 = $FC\n\
 FC90OPT = $FCFLAGS $FLAG_OMP \n\
 CPP = cpp -traditional\n\
@@ -46,38 +46,42 @@ LN = \$(FC90) \n\
 LNOPT = $FLAG_OMP' $file"
     
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
-	    pack_set --command "sed -i '$ a\
+	    pack_cmd "sed -i '$ a\
 LINALG_OPT = $(list --LD-rp $la)\n\
 LIB_LAPACK = \$(LINALG_OPT) -llapack\n\
 LIBOPT = \$(LINALG_OPT)\n' $file"
-	    if [ "x$la" == "xatlas" ]; then
-		pack_set --command "sed -i '$ a\
+	    case $la in
+		atlas)
+		    pack_cmd "sed -i '$ a\
 LIB_BLAS   = \$(LINALG_OPT) -lf77blas -lcblas -latlas\n' $file"
-	    elif [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i '$ a\
+		    ;;
+		openblas)
+		    pack_cmd "sed -i '$ a\
 LIB_BLAS   = \$(LINALG_OPT) -lopenblas_omp\n' $file"
-	    elif [ "x$la" == "xblas" ]; then
-		pack_set --command "sed -i '$ a\
+		    ;;
+		blas)
+		    pack_cmd "sed -i '$ a\
 LIB_BLAS   = \$(LINALG_OPT) -lblas\n' $file"
-	    fi
+		    ;;
+	    esac
 	    break
 	fi
     done
 
 fi
 
-pack_set --command "mv Makefile.user.template Makefile.user"
-pack_set --command "sed -i -e 's/ARCH[[:space:]]*=.*/ARCH = $cc/g' Makefile.user"
+pack_cmd "mv Makefile.user.template Makefile.user"
+pack_cmd "sed -i -e 's/ARCH[[:space:]]*=.*/ARCH = $cc/g' Makefile.user"
 
 # Install commands that it should run
-pack_set --command "cd prg_dftb"
-pack_set --command "make distclean"
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "cd prg_dftb"
+pack_cmd "make distclean"
+pack_cmd "make $(get_make_parallel)"
 
 # Make commands
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-pack_set --command "cp _obj_$cc/dftb+ $(pack_get --prefix)/bin/"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "cp _obj_$cc/dftb+ $(pack_get --prefix)/bin/"
 
 done

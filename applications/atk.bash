@@ -10,11 +10,11 @@ pack_set --install-query $(pack_get --prefix)/bin/atkpython
 pack_set --module-opt "--lua-family ATK"
 
 # Make the binary x
-pack_set --command "chmod u+x $(build_get --archive-path)/$(pack_get --archive)"
-pack_set --command "$(build_get --archive-path)/$(pack_get --archive)" \
-    --command-flag "--prefix $(pack_get --prefix)" \
-    --command-flag "--mode unattended --license_file non-existing" \
-    --command-flag "--license_configuration floating"
+pack_cmd "chmod u+x $(build_get --archive-path)/$(pack_get --archive)"
+pack_cmd "$(build_get --archive-path)/$(pack_get --archive)" \
+     "--prefix $(pack_get --prefix)" \
+     "--mode unattended --license_file non-existing" \
+     "--license_configuration floating"
 
 # Define license servers etc.
 if $(is_host n-) ; then

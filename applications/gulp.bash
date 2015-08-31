@@ -5,37 +5,41 @@ pack_set --module-opt "--lua-family gulp"
 
 pack_set --install-query $(pack_get --prefix)/bin/gulp
 
-pack_set --command "cd Src"
+pack_cmd "cd Src"
 
 pack_set --module-requirement mpi
 
 file=Makefile
 if $(is_c intel) ; then
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
     LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' $file"
     
 else
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
-	    if [ "x$la" == "xatlas" ]; then
-		pack_set --command "sed -i '1 a\
+	    case $la in 
+		atlas)
+		    pack_cmd "sed -i '1 a\
 LIBS = $(list --LD-rp $la) -llapack -lf77blas -lcblas -latlas' $file"
-	    elif [ "x$la" == "xblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		blas)
+		    pack_cmd "sed -i '1 a\
 LIBS = $(list --LD-rp $la) -llapack -lblas' $file"
-	    elif [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		openblas)
+		    pack_cmd "sed -i '1 a\
 LIBS = $(list --LD-rp $la) -llapack -lopenblas' $file"
-	    fi
+		    ;;
+	    esac
 	    break
 	fi
     done
 
 fi
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 DEFS=-DMPI\n\
 OPT = \n\
 OPT1 = $CFLAGS\n\
@@ -54,18 +58,18 @@ ARCHIVE = $AR rcv\n\
 RANLIB = ranlib\n' $file"
 
 # Make commands
-pack_set --command "make $(get_make_parallel) gulp"
-pack_set --command "make $(get_make_parallel) lib"
+pack_cmd "make $(get_make_parallel) gulp"
+pack_cmd "make $(get_make_parallel) lib"
 
 # Install the package
-pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
-pack_set --command "mkdir -p $(pack_get --LD)/"
-pack_set --command "cp gulp $(pack_get --prefix)/bin/"
-pack_set --command "cp ../libgulp.a $(pack_get --LD)/"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
+pack_cmd "mkdir -p $(pack_get --LD)/"
+pack_cmd "cp gulp $(pack_get --prefix)/bin/"
+pack_cmd "cp ../libgulp.a $(pack_get --LD)/"
 
 # Move the doc and libraries
-pack_set --command "mv ../Docs $(pack_get --prefix)/"
-pack_set --command "mv ../Libraries $(pack_get --prefix)/"
+pack_cmd "mv ../Docs $(pack_get --prefix)/"
+pack_cmd "mv ../Libraries $(pack_get --prefix)/"
 # Add env variables
 pack_set --module-opt "--set-ENV GULP_DOC=$(pack_get --prefix)/Docs"
 pack_set --module-opt "--set-ENV GULP_LIB=$(pack_get --prefix)/Libraries"

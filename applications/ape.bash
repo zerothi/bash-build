@@ -8,15 +8,15 @@ pack_set --module-requirement gsl \
 
 pack_set --module-opt "--lua-family ape"
 
-pack_set --command "./configure" \
-    --command-flag "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-    --command-flag "--with-libxc-prefix=$(pack_get --prefix libxc)" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "./configure" \
+     "--with-gsl-prefix=$(pack_get --prefix gsl)" \
+     "--with-libxc-prefix=$(pack_get --prefix libxc)" \
+     "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make check 2>&1 tmp.test"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check 2>&1 tmp.test"
+pack_cmd "make install"
 pack_set_mv_test tmp.test
 
 done

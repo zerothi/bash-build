@@ -1,6 +1,6 @@
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
 
-if [ "$v" = "5.0.3" ]; then
+if [[ "$v" = "5.0.3" ]]; then
 
 for pack in \
     http://qe-forge.org/gf/download/frsrelease/116/404/neb-5.0.2.tar.gz \
@@ -14,23 +14,23 @@ do
 
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
     dwn_file $pack $o
-    pack_set --command "cp $o archive/$(basename ${pack:10})"
-    pack_set --command "tar xfz archive/$(basename ${pack:10})"
+    pack_cmd "cp $o archive/$(basename ${pack:10})"
+    pack_cmd "tar xfz archive/$(basename ${pack:10})"
 
 done
 
-pack_set --command "mv PWgui-5.0.2 PWgui"
+pack_cmd "mv PWgui-5.0.2 PWgui"
 
 # Patch it...
-pack_set --command "pushd ../"
+pack_cmd "pushd ../"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-espresso-5.0.2-5.0.3.diff
 dwn_file http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5.0.3.diff $o
-pack_set --command "patch -p0 < $o"
-pack_set --command "popd"
+pack_cmd "patch -p0 < $o"
+pack_cmd "popd"
 
 libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
 
-elif [ "$v" = "5.0.99" ]; then
+elif [[ "$v" = "5.0.99" ]]; then
     
 for pack in \
     http://qe-forge.org/gf/download/frsrelease/151/520/NEB-5.0.99.tar.gz \
@@ -44,21 +44,21 @@ do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
     dwn_file $pack $o
-    pack_set --command "cp $o archive/$(basename ${pack:10})"
-    pack_set --command "tar xfz archive/$(basename ${pack:10}) --strip 1"
+    pack_cmd "cp $o archive/$(basename ${pack:10})"
+    pack_cmd "tar xfz archive/$(basename ${pack:10}) --strip 1"
     
 done
 pack="http://qe-forge.org/gf/download/frsrelease/116/408/PWgui-5.0.2.tgz"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename ${pack:10})
 dwn_file $pack $o
-pack_set --command "cp $o archive/$(basename ${pack:10})"
-pack_set --command "tar xfz archive/$(basename ${pack:10})"
+pack_cmd "cp $o archive/$(basename ${pack:10})"
+pack_cmd "tar xfz archive/$(basename ${pack:10})"
 
-pack_set --command "mv PWgui-5.0.2 PWgui-5.0.1"
+pack_cmd "mv PWgui-5.0.2 PWgui-5.0.1"
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
 
-elif [ "$v" = "5.1" ]; then
+elif [[ "$v" = "5.1" ]]; then
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     
@@ -74,12 +74,12 @@ do
     
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$pack
     dwn_file http://files.qe-forge.org/index.php?file=$pack $o
-    pack_set --command "cp $o archive/$pack"
-    pack_set --command "tar xfz archive/$pack"
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
     
 done
 
-elif [ "$v" = "5.1.1" ]; then
+elif [[ "$v" = "5.1.1" ]]; then
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt gwl"
     
@@ -96,12 +96,12 @@ do
     dwn_file http://qe-forge.org/gf/download/frsrelease/173/$pack $o
     pack=$(basename $pack)
 
-    pack_set --command "cp $o archive/$pack"
-    pack_set --command "tar xfz archive/$pack"
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
     
 done
 
-elif [ "$v" = "5.1.2" ]; then
+elif [[ "$v" = "5.1.2" ]]; then
     
 for pack in \
     755/PHonon-$v.tar.gz \
@@ -117,8 +117,8 @@ do
     dwn_file http://qe-forge.org/gf/download/frsrelease/185/$pack $o
     pack=$(basename $pack)
 
-    pack_set --command "cp $o archive/$pack"
-    pack_set --command "tar xfz archive/$pack"
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
     
 done
 

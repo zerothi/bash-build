@@ -23,16 +23,16 @@ pack_set --mod-req netcdf-serial
 # Locate the tcl.h file (we allow 8.[4-7])
 tcl_inc=
 for tv in 8.7 8.6 8.5 8.4 ; do
-    if [ -e /usr/include/tcl$tv/tcl.h ]; then
+    if [[ -e /usr/include/tcl$tv/tcl.h ]]; then
 	tcl_inc=-I/usr/include/tcl$tv
 	tcl_lib=-ltcl$tv
 	break
     fi
 done
 # If we cannot easily find it, skip it...
-[ -z "$tcl_inc" ] && pack_set --host-reject $(get_hostname)
+[[ -z "$tcl_inc" ]] && pack_set --host-reject $(get_hostname)
 
-pack_set --command "mkdir -p $(pack_get --prefix)/lib/plugins"
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/plugins"
 
 cdf_inc="$(list -INCDIRS ++netcdf-serial)"
 cdf_lib="$(list --LD-rp ++netcdf-serial)"
@@ -46,15 +46,15 @@ add_flags="$add_flags TCLLDFLAGS='$tcl_lib'"
 add_flags="$add_flags PLUGINDIR=$(pack_get --prefix)/lib/plugins"
 
 # Fix correct placement of directory
-pack_set --command "mv ../plugins ./"
+pack_cmd "mv ../plugins ./"
 # Compile plugins
-pack_set --command "cd plugins"
-pack_set --command "$add_flags make LINUXAMD64"
-pack_set --command "$add_flags make LINUXAMD64 distrib"
-pack_set --command "cd .."
+pack_cmd "cd plugins"
+pack_cmd "$add_flags make LINUXAMD64"
+pack_cmd "$add_flags make LINUXAMD64 distrib"
+pack_cmd "cd .."
 
 # Correct python library version
-pack_set --command "sed -i -e 's:lpython2.5:lpython$pV:g' configure"
+pack_cmd "sed -i -e 's:lpython2.5:lpython$pV:g' configure"
 
 # Correct add_flags
 add_flags="${add_flags//TCLINC/TCL_INCLUDE_DIR}"
@@ -68,26 +68,26 @@ add_flags="${add_flags//-I/}"
 add_flags="${add_flags//-L/}"
 
 # Correct plugin-directory
-pack_set --command "sed -i -e 's:^\(\$plugin_dir\).*:\1 = \"$(pack_get --prefix)/lib/plugins\";:' configure"
-pack_set --command "sed -i -e 's:^\(\$netcdf_include\).*:\1 = \"$cdf_inc\";:' configure"
-pack_set --command "sed -i -e 's:^\(\$netcdf_library\).*:\1 = \"$cdf_lib\";:' configure"
-pack_set --command "sed -i -e 's:^\(\$netcdf_libs\).*:\1 = \"$cdf_libs\";:' configure"
+pack_cmd "sed -i -e 's:^\(\$plugin_dir\).*:\1 = \"$(pack_get --prefix)/lib/plugins\";:' configure"
+pack_cmd "sed -i -e 's:^\(\$netcdf_include\).*:\1 = \"$cdf_inc\";:' configure"
+pack_cmd "sed -i -e 's:^\(\$netcdf_library\).*:\1 = \"$cdf_lib\";:' configure"
+pack_cmd "sed -i -e 's:^\(\$netcdf_libs\).*:\1 = \"$cdf_libs\";:' configure"
 add_flags="$add_flags VMDEXTRALIBS='$cdf_lib $cdf_libs'"
 unset cdf_inc
 unset cdf_lib
 unset cdf_libs
 
-pack_set --command "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
-    --command-flag "VMDINSTALLLIBRARYDIR=$(pack_get --LD)" \
-    --command-flag "PYTHON_INCLUDE_DIR=$(pack_get --prefix python)/include/python$pV" \
-    --command-flag "PYTHON_LIBRARY_DIR=$(pack_get --LD python)/python$pV/config" \
-    --command-flag "NUMPY_INCLUDE_DIR=$(pack_get --LD numpy)/python$pV/site-packages/numpy/core/include" \
-    --command-flag "NUMPY_LIBRARY_DIR=$(pack_get --LD numpy)/python$pV/site-packages/numpy/core/lib" \
-    --command-flag "$add_flags ./configure" \
-    --command-flag "LINUXAMD64 COLVARS TK TCL PTHREADS OPENGL OPENGLPBUFFER XINPUT CONTRIB PYTHON NUMPY NOSILENT"
+pack_cmd "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
+    "VMDINSTALLLIBRARYDIR=$(pack_get --LD)" \
+    "PYTHON_INCLUDE_DIR=$(pack_get --prefix python)/include/python$pV" \
+    "PYTHON_LIBRARY_DIR=$(pack_get --LD python)/python$pV/config" \
+    "NUMPY_INCLUDE_DIR=$(pack_get --LD numpy)/python$pV/site-packages/numpy/core/include" \
+    "NUMPY_LIBRARY_DIR=$(pack_get --LD numpy)/python$pV/site-packages/numpy/core/lib" \
+    "$add_flags ./configure" \
+    "LINUXAMD64 COLVARS TK TCL PTHREADS OPENGL OPENGLPBUFFER XINPUT CONTRIB PYTHON NUMPY NOSILENT"
 # tried: FLTK
 
 # Make commands
-pack_set --command "cd src"
-pack_set --command "make veryclean ; $add_flags make"
-pack_set --command "make install"
+pack_cmd "cd src"
+pack_cmd "make veryclean ; $add_flags make"
+pack_cmd "make install"

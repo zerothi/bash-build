@@ -14,7 +14,7 @@ pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
 pack_set --module-requirement mpi --module-requirement fftw-3
 
-pack_set --command "module load $(pack_get --module-name cmake)"
+pack_cmd "module load $(pack_get --module-name cmake)"
 
 tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 tmp="$tmp -DGMX_GPU=OFF"
@@ -25,16 +25,20 @@ elif $(is_c gnu) ; then
 
     # We use a c-linker (which does not add gfortran library
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lf77blas -lcblas -latlas -lgfortran'"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lopenblas -lgfortran'"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lblas -lgfortran'"
-	    fi
+	    case $la in
+		atlas)
+		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lf77blas -lcblas -latlas -lgfortran'"
+		    ;;
+		openblas)
+		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lopenblas -lgfortran'"
+		    ;;
+		blas)
+		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lblas -lgfortran'"
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -49,12 +53,12 @@ clib=${clib// /}
 clib=${clib:1}
 
 # configure the build...
-pack_set --command "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
+pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 
 # Make commands (cmake --build removes color)
-pack_set --command "cmake --build ."
-pack_set --command "cmake --build . --target install"
-pack_set --command "module unload $(pack_get --module-name cmake)"
+pack_cmd "cmake --build ."
+pack_cmd "cmake --build . --target install"
+pack_cmd "module unload $(pack_get --module-name cmake)"
 
 # Add GROMACS envs
 pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --prefix)/bin"

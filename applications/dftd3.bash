@@ -7,12 +7,12 @@ pack_set --module-opt "--lua-family dftd3"
 
 pack_set --install-query $(pack_get --prefix)/bin/dftd3
 
-pack_set --command "rm pars.f"
+pack_cmd "rm pars.f"
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-pars.f
 dwn_file http://www.thch.uni-bonn.de/tc/downloads/DFT-D3/data/pars.f $o
-pack_set --command "cp $o pars.f"
+pack_cmd "cp $o pars.f"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 FC      = $FC\n\
 CC      = $CC\n\
 LINKER  = $FC\n\
@@ -21,11 +21,11 @@ CCFLAGS = $FCFLAGS -DLINUX \n\
 FFLAGS  = $FCFLAGS \n\
 LFLAGS  = \n' Makefile"
 
-pack_set --command "sed -i -e 's/^[[:space:]]*OSTYPE/#OSTYPE/gi' Makefile"
+pack_cmd "sed -i -e 's/^[[:space:]]*OSTYPE/#OSTYPE/gi' Makefile"
 
 # Make commands
-pack_set --command "make"
+pack_cmd "make"
 
 # Install the package
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-pack_set --command "cp dftd3 $(pack_get --prefix)/bin/"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "cp dftd3 $(pack_get --prefix)/bin/"

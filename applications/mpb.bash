@@ -22,17 +22,21 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
 	    tmp="$tmp --with-lapack='$tmp_ld -llapack'"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lopenblas'"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp="$tmp --with-blas='$tmp_ld -lblas'"
-	    fi
+	    case $la in 
+		atlas)
+		    tmp="$tmp --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
+		    ;;
+		openblas)
+		    tmp="$tmp --with-blas='$tmp_ld -lopenblas'"
+		    ;;
+		blas)
+		    tmp="$tmp --with-blas='$tmp_ld -lblas'"
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -44,33 +48,33 @@ fi
 # Add the CTL library
 tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
-pack_set --command "module load build-tools"
+pack_cmd "module load build-tools"
 
 # Install commands that it should run
-pack_set --command "autoconf configure.ac > configure"
-pack_set --command "./configure" \
-    --command-flag "CC='$MPICC' CXX='$MPICXX'" \
-    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
-    --command-flag "--with-mpi" \
-    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
+pack_cmd "autoconf configure.ac > configure"
+pack_cmd "./configure" \
+     "CC='$MPICC' CXX='$MPICXX'" \
+     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
+     "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "--with-mpi" \
+     "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
 
 # Install the inversion symmetric part
-pack_set --command "make distclean"
-pack_set --command "./configure" \
-    --command-flag "CC=$MPICC CXX=$MPICXX" \
-    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-    --command-flag "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
-    --command-flag "--with-inv-symmetry" \
-    --command-flag "--with-mpi" \
-    --command-flag "--prefix=$(pack_get --prefix) $tmp" 
+pack_cmd "make distclean"
+pack_cmd "./configure" \
+     "CC=$MPICC CXX=$MPICXX" \
+     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
+     "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "--with-inv-symmetry" \
+     "--with-mpi" \
+     "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
 
-pack_set --command "module unload build-tools"
+pack_cmd "module unload build-tools"

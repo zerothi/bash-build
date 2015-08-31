@@ -2,7 +2,7 @@ tmp=0
 if $(is_c gnu) ; then
     tmp=1
 fi
-[ $tmp -eq 0 ] && return
+[[ $tmp -eq 0 ]] && return
 
 add_package ftp://ftp.gnu.org/gnu/octave/octave-4.0.0.tar.xz
 
@@ -47,17 +47,21 @@ if $(is_c intel) ; then
 else 
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]] ; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
 	    tmp_flags="$tmp_flags --with-lapack='$tmp_ld -llapack'"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
-	    elif [ "x$la" == "xopenblas" ]; then
-		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lopenblas'"
-	    elif [ "x$la" == "xblas" ]; then
-		tmp_flags="$tmp_flags --with-blas='$tmp_ld -lblas'"
-	    fi
+	    case $la in
+		atlas)
+		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
+		    ;;
+		openblas)
+		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lopenblas'"
+		    ;;
+		blas)
+		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lblas'"
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -65,11 +69,11 @@ else
 fi
 
 # Install commands that it should run
-pack_set --command "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flags" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flags" \
+    "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
-#pack_set --command "make check > tmp.test 2>&1"
-pack_set --command "make install"
+pack_cmd "make $(get_make_parallel)"
+#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make install"
 #pack_set_mv_test tmp.test

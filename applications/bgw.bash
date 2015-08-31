@@ -15,9 +15,9 @@ pack_set --install-query $(pack_get --prefix)/bin/epm.x
 pack_set $(list -p '--module-requirement ' mpi fftw-3 hdf5)
 
 file=arch.mk
-pack_set --command "echo '# NPA' > $file"
+pack_cmd "echo '# NPA' > $file"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 PARAFLAG = -DMPI\n\
 MATHFLAG = -DUSESCALAPACK -DUSEFFTW3 -DHDF5\n\
 FCPP = /usr/bin/cpp -ansi\n\
@@ -43,7 +43,7 @@ TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel
 
 if $(is_c intel) ; then
 
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 COMPFLAG = -DINTEL\n\
 LAPACKLIB = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
@@ -55,28 +55,32 @@ elif $(is_c gnu) ; then
 
     # We use a c-linker (which does not add gfortran library)
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp scalapack $la)"
-	    pack_set --command "sed -i '$ a\
+	    pack_cmd "sed -i '$ a\
 COMPFLAG = -DGNU\n\
 F90free += -ffree-form -ffree-line-length-none\n\
 FOPTS   += -ffree-form -ffree-line-length-none\n\
 SCALAPACKLIB = -lscalapack \$(LAPACKLIB) \n\
 ' $file"
-	    if [ "x$la" == "xatlas" ]; then
-		pack_set --command "sed -i '1 a\
+	    case $la in
+		atlas)
+		    pack_cmd "sed -i '1 a\
 LAPACKLIB = $tmp_ld -llapack -lf77blas -lcblas -latlas -lgfortran \n\
 ' $file"
-	    elif [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		openblas)
+		    pack_cmd "sed -i '1 a\
 LAPACKLIB = $tmp_ld -llapack -lopenblas_omp -lgfortran \n\
 ' $file"
-	    elif [ "x$la" == "xblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		blas)
+		    pack_cmd "sed -i '1 a\
 LAPACKLIB = $tmp_ld -llapack -lblas -lgfortran \n\
 ' $file"
-	    fi
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -86,9 +90,9 @@ else
     
 fi
 
-pack_set --command "make all-flavors"
+pack_cmd "make all-flavors"
 if $(is_host zero ntch) ; then
-    pack_set --command "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > tmp.test ; echo 'Success'"
+    pack_cmd "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > tmp.test ; echo 'Success'"
     pack_set_mv_test tmp.test
 fi
-pack_set --command "make install INSTDIR=$(pack_get --prefix)"
+pack_cmd "make install INSTDIR=$(pack_get --prefix)"

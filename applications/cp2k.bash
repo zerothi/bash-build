@@ -9,16 +9,16 @@ pack_set --install-query $(pack_get --prefix)/bin/cp2k.psmp
 # Add the lua family
 pack_set --module-opt "--lua-family $(pack_get --alias)"
 
-if test -z "$FLAG_OMP" ; then
+if [[ -z "$FLAG_OMP" ]]; then
     doerr $(pack_get --package) "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
 arch=Linux-x86-64-NPA
 file=arch/$arch.psmp
-pack_set --command "echo '# NPA' > $file"
+pack_cmd "echo '# NPA' > $file"
 
 # Only one of HWLOC/LIBNUMA
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 CPP = \n\
 FC = $MPIFC \n\
 LD = $MPIFC \n\
@@ -44,7 +44,7 @@ LIBS += \$(SCALAPACK_L) \$(LAPACK_L) \n\
 
 if $(is_c intel) ; then
 
-    pack_set --command "sed -i '1 a\
+    pack_cmd "sed -i '1 a\
 LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
 FCFLAGS += -free\n\
@@ -53,29 +53,33 @@ FCFLAGS += -free\n\
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
 
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 FCFLAGS += -ffree-form -ffree-line-length-none \n\
 SCALAPACK_L = $(list --LD-rp scalapack) -lscalapack \n\
 ' $file"
 
     # We use a c-linker (which does not add gfortran library)
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ] ; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp $la)"
-	    if [ "x$la" == "xatlas" ]; then
-		pack_set --command "sed -i '1 a\
+	    case $la in
+		atlas)
+		    pack_cmd "sed -i '1 a\
 LAPACK_L = $tmp_ld -llapack -lf77blas -lcblas -latlas\n\
 ' $file"
-	    elif [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		openblas)
+		    pack_cmd "sed -i '1 a\
 LAPACK_L = $tmp_ld -llapack -lopenblas_omp\n\
 ' $file"
-	    elif [ "x$la" == "xblas" ]; then
-		pack_set --command "sed -i '1 a\
+		    ;;
+		blas)
+		    pack_cmd "sed -i '1 a\
 LAPACK_L = $tmp_ld -llapack -lblas\n\
 ' $file"
-	    fi
+		    ;;
+	    esac
 	    break
 	fi
     done
@@ -85,9 +89,9 @@ else
     
 fi
 
-pack_set --command "cd makefiles"
+pack_cmd "cd makefiles"
 
-pack_set --command "make $(get_make_parallel) ARCH=$arch VERSION=psmp"
+pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=psmp"
 
-pack_set --command "mkdir -p $(pack_get --prefix)/bin"
-pack_set --command "cp ../exe/$arch/* $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "cp ../exe/$arch/* $(pack_get --prefix)/bin"

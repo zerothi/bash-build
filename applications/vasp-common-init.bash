@@ -12,22 +12,22 @@ pack_set --module-opt "--lua-family vasp"
 pack_set --install-query $(pack_get --prefix)/bin/vasp_tstGNGZhalf_is2
 
 file=mymakefile
-pack_set --command "echo '# NPA' > $file"
+pack_cmd "echo '# NPA' > $file"
 
 # We can start by unpacking the stuff.
-pack_set --command "tar xfz vasp.$v.tar.gz"
-pack_set --command "tar xfz vasp.5.lib.tar.gz"
+pack_cmd "tar xfz vasp.$v.tar.gz"
+pack_cmd "tar xfz vasp.5.lib.tar.gz"
 
-if [ $(vrs_cmp $v 5.3.5) -lt 0 ]; then
+if [[ $(vrs_cmp $v 5.3.5) -lt 0 ]]; then
     # Correct the VDW algorithm, for the older versions
-    pack_set --command "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
+    pack_cmd "sed -i -e '268s/DO i=1/DO i=2/i' vasp.5.3/vdw_nl.F"
 fi
 
 # Start with creating a template makefile.
 # The cache size is determined from the L1 cache (E5-2650 have ~64KB
 # However, it has been investigated that a CACHE_SIZE of ~ 5000 is good for this
 # L1 size.
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 FC   = $MPIF90 $FLAG_OMP \n\
 FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
@@ -52,7 +52,7 @@ LIB  = -L../vasp.5.lib -ldmy \$(WANNIER) -lwannier \\\\\n\
 # Check for Intel MKL or not
 if $(is_c intel) ; then
 
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 FFLAGS_SPEC1 = -FR -lowercase -O1\n\
 FFLAGS_SPEC2 = -FR -lowercase -O2\n\
 FREE = -FR\n\
@@ -71,7 +71,7 @@ LINK = $FLAG_OMP -mkl=parallel $(list --LD-rp mpi) ' $file"
 
 elif $(is_c gnu) ; then
 
-    pack_set --command "sed -i '$ a\
+    pack_cmd "sed -i '$ a\
 FFLAGS_SPEC1 = -O1\n\
 FFLAGS_SPEC2 = -O2\n\
 LIB += -fall-intrinsics\n\
@@ -88,34 +88,38 @@ DEBUG = \n' $file"
     pack_set --module-requirement scalapack
 
     for la in $(choice linalg) ; do
-	if [ $(pack_installed $la) -eq 1 ]; then
+	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
-	    pack_set --command "sed -i '$ a\
+	    pack_cmd "sed -i '$ a\
 SCA = $(list --LD-rp scalapack) -lscalapack\n\
 LAPACK = $(list --LD-rp $la) -llapack\n ' $file"
 	    
-	    if [ "x$la" == "xatlas" ]; then
-		pack_set --command "sed -i '$ a\
+	    case $la in
+		atlas)
+		    pack_cmd "sed -i '$ a\
 BLAS = $(list --LD-rp $la) -lf77blas -lcblas -latlas\n' $file"
-	    elif [ "x$la" == "xblas" ]; then
-		pack_set --command "sed -i '$ a\
+		    ;;
+		blas)
+		    pack_cmd "sed -i '$ a\
 BLAS = $(list --LD-rp $la) -lblas\n' $file"
-	    elif [ "x$la" == "xopenblas" ]; then
-		pack_set --command "sed -i '$ a\
+		    ;;
+		openblas)
+		    pack_cmd "sed -i '$ a\
 BLAS = $(list --LD-rp $la) -lopenblas_omp\n' $file"
-	    fi
+		    ;;
+	    esac
 	    break
 	fi
     done
 
 # Fix source for gnu
-pack_set --command "sed -i -e 's:3(1x,3I):3(1x,3I0):g' vasp.5.3/spinsym.F"
-pack_set --command "sed -i -e '1463s/USE us/USE us, only: setdij_/' vasp.5.3/us.F"
-pack_set --command "sed -i -e '2696s/USE us/USE us, only: augmentation_charge/' vasp.5.3/us.F"
-pack_set --command "sed -i -e \"661s:'W':'W ':\" vasp.5.3/vdwforcefield.F"
-pack_set --command "sed -i -e '1657s:(I):(I0):' vasp.5.3/finite_diff.F"
-pack_set --command "sed -i -e '1041s:(I,:(I0,:' vasp.5.3/fcidump.F"
-pack_set --command "sed -i -e 's:==\.FALSE\.:.eqv..FALSE.:gi' vasp.5.3/ump2.F"
+pack_cmd "sed -i -e 's:3(1x,3I):3(1x,3I0):g' vasp.5.3/spinsym.F"
+pack_cmd "sed -i -e '1463s/USE us/USE us, only: setdij_/' vasp.5.3/us.F"
+pack_cmd "sed -i -e '2696s/USE us/USE us, only: augmentation_charge/' vasp.5.3/us.F"
+pack_cmd "sed -i -e \"661s:'W':'W ':\" vasp.5.3/vdwforcefield.F"
+pack_cmd "sed -i -e '1657s:(I):(I0):' vasp.5.3/finite_diff.F"
+pack_cmd "sed -i -e '1041s:(I,:(I0,:' vasp.5.3/fcidump.F"
+pack_cmd "sed -i -e 's:==\.FALSE\.:.eqv..FALSE.:gi' vasp.5.3/ump2.F"
 
 else
     do_err "VASP" "Unknown compiler: $(get_c)"

@@ -10,9 +10,9 @@ pack_set --module-opt "--lua-family xcrysden"
 pack_set --module-requirement fftw-3
 
 tmp=Make.sys
-pack_set --command "echo '# NPA-script' > $tmp"
+pack_cmd "echo '# NPA-script' > $tmp"
 
-pack_set --command "sed -i '1 a\
+pack_cmd "sed -i '1 a\
 MAKE = make \n\
 CFLAGS = $CFLAGS\n\
 CC     = $CC \n\
@@ -38,17 +38,17 @@ TK_INCDIR       = \n\
 GL_INCDIR       = \n\
 FFTW3_INCDIR    = $(list --INCDIRS fftw-3)' $tmp"
 
-if [ -e /usr/include/tcl8.5 ]; then
-    pack_set --command "sed -i '$ a\
+if [[ -e /usr/include/tcl8.5 ]]; then
+    pack_cmd "sed -i '$ a\
 TCL_INCDIR      = -I/usr/include/tcl8.5 ' $tmp"
 fi
 if $(is_host thul) ; then
-    pack_set --command "sed -i -e 's/8.5/8.4/g' $tmp"
+    pack_cmd "sed -i -e 's/8.5/8.4/g' $tmp"
 fi
 
 # Install commands that it should run
-pack_set --command "make xcrysden"
-pack_set --command "prefix=$(pack_get --prefix) make install"
+pack_cmd "make xcrysden"
+pack_cmd "prefix=$(pack_get --prefix) make install"
 
 # Add the XCRYSDEN TOP DIR env
 #pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --prefix)"

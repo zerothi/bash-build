@@ -1,6 +1,5 @@
 v=1.9.2
-add_package \
-    --build generic \
+add_package --build generic \
     --no-default-modules \
     --package vmd \
     --version $v \
@@ -16,10 +15,10 @@ pack_set --directory vmd-$(pack_get --version)
 pack_set --install-query $(pack_get --prefix)/bin/vmd
 
 # Install commands that it should run
-pack_set --command "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
-    --command-flag "VMDINSTALLLIBRARYDIR=$(pack_get --LD)" \
-    --command-flag "./configure"
+pack_cmd "VMDINSTALLBINDIR=$(pack_get --prefix)/bin" \
+    "VMDINSTALLLIBRARYDIR=$(pack_get --LD)" \
+    "./configure"
 
 # Make commands
-pack_set --command "cd src"
-pack_set --command "make install"
+pack_cmd "cd src"
+pack_cmd "make install"
