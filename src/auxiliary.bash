@@ -97,19 +97,18 @@ function msg_install {
 #       The commands will be shown for the user before execution.
 
 function docmd {
-    local ar="$1"
+    local message="$1"
     shift
     local cmd=($*)
+    local st
     echo ""
     echo " # ================================================================"
-    if [[ -n "$ar" ]]; then
-        echo " # Archive: $(pack_get --alias $ar) ($(pack_get --version $ar))"
-    fi
+    echo " # $message"
     echo " # PWD: "$(pwd)
     echo " # CMD: "${cmd[@]}
     echo " # ================================================================"
     eval ${cmd[@]}
-    local st=$?
+    st=$?
     if [[ $st -ne 0 ]]; then
 	echo "STATUS = $st"
         exit $st
@@ -142,7 +141,8 @@ function _ps {
 #       more em-dashes.
 
 function trim_em {
-    _ps "${1/#--/-}" ; shift
+    _ps "${1/#--/-}"
+    shift
 }
 
 #  Function trim_spaces
@@ -497,17 +497,27 @@ function arc_cmd {
 #       archive from the saved package, and extracts it.
 
 function extract_archive {
-    local alias="$2"
-    local d=$(pack_get --directory $alias)
-    local cmd=$(arc_cmd $(pack_get --ext $alias) )
-    local archive=$(pack_get --archive $alias)
+    local id="$2"
+    local d=$(pack_get --directory $id)
+    local ext=$(pack_get --ext $id)
+    local cmd=$(arc_cmd $ext)
+    local archive=$(pack_get --archive $id)
     # If a previous extraction already exists (delete it!)
-    if [[ "x$d" != "x." ]] && [[ "x$d" != "x./" ]]; then
-	[[ -d "$1/$d" ]] && rm -rf "$1/$d"
-    fi
-    local ext=$(pack_get --ext $alias)
-    [[ "x$ext" == "xlocal" ]] && return 0
-    docmd "$alias" $cmd $1/$archive
+    case $d in
+	.|./)
+	    noop
+	    ;;
+	*)
+	    if [[ -d "$1/$d" ]]; then
+		rm -rf "$1/$d"
+	    fi
+    esac
+    case $ext in
+	local|bin|fake)
+	    return 0
+	    ;;
+    esac
+    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $1/$archive
 }
 
 
@@ -672,4 +682,10 @@ function list {
 	done
     fi
     _ps "$retval"
+}
+
+# This is a short-hand for doing nothing
+function noop {
+    # do nothing
+    _ps "" > /dev/null
 }

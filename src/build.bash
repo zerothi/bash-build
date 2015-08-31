@@ -48,6 +48,10 @@ declare -A _b_def_mod_reqs
 # Defaults a bunch of settings for all packages associated with
 # this build.
 declare -A _b_def_settings
+# An array containing the sources that are to be rejected for this
+# build.
+# This consists of all local.reject + $(get_c -n).reject
+declare -A _b_reject
 # Pointers of lookup (faster indexing)
 declare -A _b_index
 
@@ -284,6 +288,9 @@ function build_set {
 #       Return all default modules
 #    --source
 #       Return source file belonging to this build
+#    --rejects
+#       Return all rejects that are associated with
+#       this build
 
 function build_get {
     # We set up default parameters for creating the 
@@ -310,11 +317,13 @@ function build_get {
 	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
 	-def-module-version) _ps "$_crt_version" ;; 
 	-source) _ps "${_b_source[$b_idx]}" ;; 
+	-rejects) _ps "${_b_reject[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
 }
 
 function new_build {
+    local tmp
     # Simple command to initialize a new build
     let _N_b++
     # Initialize all the stuff
@@ -384,4 +393,25 @@ function new_build {
 	_b_name[$_N_b]="$1"
 	shift
     fi
+
+    # Populate the local rejects for this build
+    # This is all the default rejects
+    for tmp in ${_host_reject[@]} ; do
+	_b_reject[$_N_b]="${_b_reject[$_N_b]} $tmp"
+    done
+    # Add the local source rejects
+    # First source the current build, to retrieve the
+    # compiler information
+    source ${_b_source[$_N_b]}
+
+    local -a lines
+    local f
+    for f in $(get_c -n).reject .$(get_c -n).reject ; do
+	if [[ -e $f ]]; then
+	    read -d '\n' -a lines < $f
+	    for tmp in ${lines[@]} ; do
+		_b_reject[$_N_b]="${_b_reject[$_N_b]} $tmp"
+	    done
+	fi
+    done
 }

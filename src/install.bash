@@ -7,6 +7,8 @@ function pack_install {
     fi
     local alias=$(pack_get --alias $idx)
     local prefix=$(pack_get --prefix $idx)
+    local version=$(pack_get --version $idx)
+    local mod_name=$(pack_get --module-name $idx)
 
     local tmp=$(lc $alias)
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
@@ -98,15 +100,14 @@ function pack_install {
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
 	    create_module --force \
-			  -n "$alias" \
-			  -v "$(pack_get --version $idx)" \
-			  -M "$(pack_get --module-name $idx)" \
+			  -n "$alias" -v "$version" \
+			  -M "$mod_name" \
 			  -p "$(pack_get --module-prefix $idx)" \
 			  -P "$prefix"
             # Create the prefix directory
             mkdir -p $prefix
 	    # Load module for preloading
-	    module load $(pack_get --module-name $idx)
+	    module load $mod_name
 	fi
 
 	# Append all relevant requirements to the relevant environment variables
@@ -142,9 +143,14 @@ function pack_install {
 
 	# Remove directory if already existing
 	local directory=$(pack_get --directory $idx)
-	if [[ "x$directory" != "x." ]] && [[ "x$directory" != "x./" ]]; then
-	    rm -rf $directory
-	fi
+	case $directory in
+	    .|./)
+		noop
+		;;
+	    *)
+		rm -rf $directory
+		;;
+	esac
 	extract_archive $(build_get --archive-path) $idx
 	pushd $directory 1> /dev/null
 	if [[ $? -ne 0 ]]; then
@@ -169,7 +175,7 @@ function pack_install {
 	    if [[ -z "${tmp// /}" ]]; then
 		continue # Skip the empty commands...
 	    fi
-	    docmd "$idx" "$tmp"
+	    docmd "Archive: $alias ($version)" "$tmp"
 	done
 
 	popd 1> /dev/null
@@ -187,10 +193,10 @@ function pack_install {
 
 	# Unload the module itself in case of PRELOADING
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
-	    module unload $(pack_get --module-name $idx)
+	    module unload $mod_name
 	    # We need to clean up, in order to force the
 	    # module creation.
-	    rm -f $(pack_get --module-prefix $idx)/$(pack_get --module-name $idx)
+	    rm -f $(pack_get --module-prefix $idx)/$mod_name
 	fi
 
 	export FCFLAGS="$old_fcflags"
@@ -223,8 +229,8 @@ function pack_install {
             # We install the module scripts here:
 	    create_module \
 		-n "$alias" \
-		-v "$(pack_get --version $idx)" \
-		-M "$(pack_get --module-name $idx)" \
+		-v "$version" \
+		-M "$mod_name" \
 		-p "$(pack_get --module-prefix $idx)" \
 		-P "$prefix" $reqs $(pack_get --module-opt $idx)
 	fi
@@ -232,11 +238,11 @@ function pack_install {
 	    create_module \
 		--module-path $(build_get --module-path)-npa-apps \
 		-n "Nick Papior Andersen script for loading $(pack_get --package $idx): $(get_c)" \
-		-v $(pack_get --version $idx) \
-		-M $(pack_get --alias $idx).$(pack_get --version $idx)/$(get_c) \
+		-v $version \
+		-M $alias.$version/$(get_c) \
 		-P "/directory/should/not/exist" \
 		$(list --prefix '-L ' $(pack_get --mod-req $idx)) \
-		-L $(pack_get --alias $idx)
+		-L $alias
 	fi
     fi
 }
@@ -332,8 +338,13 @@ function install_all {
 	local opt="$(trim_em $1)" # Save the option passed
 	shift
 	case $opt in
-	    -from|-f)    j="$(get_index $1)" ; shift ;;
-	    *) shift ;;
+	    -from|-f)
+		j="$(get_index $1)"
+		shift
+		;;
+	    *)
+		shift
+		;;
 	esac
     done
     for i in `seq $j $_N_archives` ; do

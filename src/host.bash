@@ -38,3 +38,27 @@ if [ -z "$NPROCS" ]; then
     export NPROCS=$_n_procs
 fi
 
+#  Data containers for the rejection lists
+# This considers as the local reject
+declare -A _host_reject
+_n_host_rejects=0
+
+function _add_rejects {
+    local f=$1
+    local -a lines
+    local tmp
+    shift
+
+    # Read the file
+    if [[ -e $f ]]; then
+	read -d '\n' -a lines < $f
+	for tmp in ${lines[@]} ; do
+	    let _n_host_rejects++
+	    _host_reject[$_n_host_rejects]="$tmp"
+	done
+    fi
+}
+
+# Add the local rejects
+_add_rejects local.reject
+_add_rejects .reject

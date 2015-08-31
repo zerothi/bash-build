@@ -94,10 +94,11 @@ function add_test_package {
 
 # Routine for sourcing a package file
 function source_pack {
-    local f=$1 ; shift
+    local f=$1
+    shift
     local i
-    local fp=$(basename $f)
-    fp=${fp%.*}
+    local rej
+    local v
 
     # Get current reached index
     local cur_idx=$_N_archives
@@ -105,44 +106,27 @@ function source_pack {
     # Source the file
     source $f
 
-    # Subsequently figure out if any excludes exists
-    local rej
-    local -a lines=()
-
-    # 1. read any global reject
-    for rej in local.reject .reject \
-	$(get_c -n).reject .$(get_c -n).reject
-    do
-	if [[ -e $rej ]]; then
-	    read -d '\n' -a lines < $rej
-	    set_reject_list ${lines[@]}
-	fi
-    done
-
     # Try and install the just added packages
     i=$cur_idx
-    let i++
-    while [ $i -le $_N_archives ]; do
-	pack_install $i
+    while [[ $i -lt $_N_archives ]]; do
 	let i++
+	
+	# First set the rejects
+	local bld=$(pack_get --build $i)
+	local rejs=$(build_get --rejects[$bld])
+	for rej in $rejs ; do
+	    bld=$(get_index -a $rej)
+	    if [[ $? -eq 0 ]]; then
+		for v in $bld ; do
+		    if [[ $v -eq $i ]]; then
+			pack_set --host-reject $(get_hostname) $i
+		    fi
+		done
+	    fi
+	done
+	
+	pack_install $i
     done    
-}
-
-# Parameters are used to create rejections
-# Handy when reading a file containing rejections
-function set_reject_list {
-    local v
-    local idx
-    while [[ $# -gt 0 ]]; do
-	idx=$(get_index -a $1)
-	if [[ $? -eq 0 ]]; then
-	    for v in $idx ; do
-		# No error, we have the index
-		pack_set --host-reject $(get_hostname) $v
-	    done
-	fi
-	shift
-    done
 }
 
 # Routine for shortcutting a list of values
