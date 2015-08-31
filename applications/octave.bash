@@ -16,7 +16,6 @@ pack_set --host-reject ntch
 
 # Link gnuplot (otherwise the gnuplot backend won't work)
 pack_set --module-requirement gnuplot
-pack_set -mod-req pcre
 
 tmp_flags="--with-x --disable-docs --disable-java"
 pack_set --module-requirement arpack-ng
