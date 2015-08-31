@@ -29,23 +29,23 @@ elif ! $(is_c gnu) ; then
 fi
 
 # Install commands that it should run
-pack_set --command "../configure --with-threads" \
-    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
-    --command-flag "--with-system-ffi --with-system-expat" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "../configure --with-threads" \
+    "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
+    "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
+    "--with-system-ffi --with-system-expat" \
+    "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 
 if $(is_host n- slid muspel surt) ; then
     msg_install --message "Skipping python tests..."
-    #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
     tmp=$(list -p '-x test_' urllib urllib2 urllib2net)
-    pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
-pack_set --command "make install"
+pack_cmd "make install"
 if ! $(is_host n- slid muspel surt) ; then
     pack_set_mv_test tmp.test
 fi

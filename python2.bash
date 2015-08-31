@@ -33,20 +33,20 @@ elif ! $(is_c gnu) ; then
 fi
 
 # Install commands that it should run
-pack_set --command "../configure --with-threads" \
-    --command-flag "--enable-unicode=ucs4" \
-    --command-flag "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
-    --command-flag "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
-    --command-flag "--with-system-ffi --with-system-expat" \
-    --command-flag "--prefix=$(pack_get --prefix)"
+pack_cmd "../configure --with-threads" \
+    "--enable-unicode=ucs4" \
+    "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
+    "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
+    "--with-system-ffi --with-system-expat" \
+    "--prefix=$(pack_get --prefix)"
 
 # Make commands
-pack_set --command "make $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 # Clean up intel files (with old Intel compiler <= 13.0.1
 # these tests does not pass due to unicode errors... :(
 #if $(is_c intel) ; then
 #    for f in Lib/test/test_unicode Lib/test/test_multibytecodec Lib/test/test_coding Lib/json/tests/test_unicode ; do
-#    pack_set --command "rm -f ../$f.py"
+#    pack_cmd "rm -f ../$f.py"
 #    done
 #fi
 
@@ -55,13 +55,13 @@ if $(is_host n- slid muspel surt) ; then
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
     msg_install --message "Skipping python tests..."
-    #pack_set --command "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 	
 else
     tmp=$(list -p '-x test_' urllib2_localnet)
-    pack_set --command "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
-pack_set --command "make install"
+pack_cmd "make install"
 if ! $(is_host n- slid muspel surt) ; then
     pack_set_mv_test tmp.test
 fi
