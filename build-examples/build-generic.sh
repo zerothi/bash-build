@@ -43,3 +43,5 @@ new_build --name generic-host \
     --source source-generic.sh \
     --build-module-path "--package --version $(get_c)" \
     --build-installation-path "--package --version $(get_c)"
+
+FORCEMODULE=1

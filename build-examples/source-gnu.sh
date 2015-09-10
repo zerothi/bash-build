@@ -1,4 +1,4 @@
-set_c gnu-4.7.2
+set_c gnu-5.1.0
 
 AR=ar
 CC=gcc
@@ -38,6 +38,7 @@ export CFLAGS
 export FCFLAGS
 export FFLAGS
 export MPICC
+export MPICXX
 export MPIFC
 export MPIF77
 export MPIF90

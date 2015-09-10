@@ -1,16 +1,17 @@
+source build-generic.sh
+
 module purge
 
 source source-gnu.sh
-
 new_build --name gnu \
     --installation-path /opt \
     --module-path /opt/modules \
     --build-path .compile \
     --build-module-path "--package --version $(get_c)" \
     --build-installation-path "--package --version $(get_c)" \
-    --source source-gnu.sh
+    --source source-gnu.sh \
+    --default-module gcc[5.1.0]
 
-# Set default linear algebra routines
 build_set --default-choice[gnu] linalg openblas atlas blas
 
 mkdir -p $(build_get --module-path[gnu])-npa
@@ -25,5 +26,7 @@ new_build --name debug \
     --build-path .compile \
     --build-module-path "--package --version $(get_c)" \
     --build-installation-path "--package --version $(get_c)" \
-    --source source-gnu-debug.sh
+    --source source-gnu-debug.sh \
+    --default-module gcc[5.1.0]
+
 build_set --default-choice[debug] linalg openblas atlas blas

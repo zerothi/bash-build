@@ -1,4 +1,5 @@
-set_c gnu-4.7.2
+# set to default gnu-compiler version
+set_c gnu-4.9.2
 
 AR=ar
 CC=gcc
@@ -38,6 +39,7 @@ export CFLAGS
 export FCFLAGS
 export FFLAGS
 export MPICC
+export MPICXX
 export MPIFC
 export MPIF77
 export MPIF90
