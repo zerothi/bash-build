@@ -8,6 +8,13 @@ pack_set $(list --prefix '--module-requirement ' build-tools \
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
+dwn_file http://www.student.dtu.dk/~nicpa/packages/gcc-5.2.0-isl-1.patch \
+	$(pwd_archives)/gcc-5.2.0-isl-1.patch
+
+pack_cmd "pushd ../"
+pack_cmd "patch -p1 < $(pwd_archives)/gcc-5.2.0-isl-1.patch"
+pack_cmd "popd"
+
 # Install commands that it should run
 pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)" \
