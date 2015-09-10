@@ -6,10 +6,6 @@ source_pack libs/expat.bash
 source_pack libs/libffi.bash
 source_pack libs/libxml2.bash
 
-#source_pack libs/llvm.bash
-#source_pack libs/gmp.bash
-#source_pack libs/guile.bash
-
 source_pack libs/hwloc.bash
 
 # Basic parallel libraries
