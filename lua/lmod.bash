@@ -2,7 +2,7 @@
 #  libtoolize/libtool
 #  automake
 
-v=6.0.4
+v=6.0.10
 add_package --build generic-empty \
     --archive lmod-$v.tar.gz \
     --directory Lmod-$v \
