@@ -1,5 +1,5 @@
 add_package --build generic \
-	    http://www.mpfr.org/mpfr-current/mpfr-3.1.2.tar.xz
+	    http://www.mpfr.org/mpfr-current/mpfr-3.1.3.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

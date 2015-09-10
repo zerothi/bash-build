@@ -1,10 +1,10 @@
 add_package --build generic \
-	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.1.0/gcc-5.1.0.tar.bz2
+	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.2.0/gcc-5.2.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools \
-		gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])
+		gmp[6.0.0a] mpfr[3.1.3] mpc[1.0.3] isl[0.15])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
@@ -12,15 +12,15 @@ pack_set --install-query $(pack_get --prefix)/bin/gcc
 pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)" \
 	 "--with-gmp=$(pack_get --prefix gmp[6.0.0a])" \
-	 "--with-mpfr=$(pack_get --prefix mpfr[3.1.2])" \
+	 "--with-mpfr=$(pack_get --prefix mpfr[3.1.3])" \
 	 "--with-mpc=$(pack_get --prefix mpc[1.0.3])" \
-	 "--with-isl=$(pack_get --prefix isl[0.14])" \
+	 "--with-isl=$(pack_get --prefix isl[0.15])" \
 	 "--enable-lto --enable-threads" \
 	 "--enable-stage1-languages=c,c++,fortran,go,objc,obj-c++" \
 	 "--with-multilib-list=m64"
 
 # Make commands
-pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.3] isl[0.14])' $(get_make_parallel)"
+pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.3] mpc[1.0.3] isl[0.15])' $(get_make_parallel)"
 # make check requires autogen installed
 #pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"

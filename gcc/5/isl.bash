@@ -1,5 +1,5 @@
 add_package --build generic \
-	    ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.14.tar.bz2
+	    ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-0.15.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
