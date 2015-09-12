@@ -11,7 +11,6 @@ pack_set --directory pyamg-$v
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/pyamg
 
-# Add requirments when creating the module
 pack_set --module-requirement scipy
 
 # Install commands that it should run
