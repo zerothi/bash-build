@@ -111,19 +111,16 @@ runtime_library_dirs = $tmp\n' $file"
 		    ;;
 		openblas)
 		    pack_cmd "sed -i '$ a\
-[atlas]\n\
-libraries = openblasp\n\
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = lapack,openblasp\n\
-extra_link_args = -lpthread -lgfortran\n\
+extra_link_args = -lpthread -lgfortran -lm\n\
 runtime_library_dirs = $tmp\n\
-embedded_lapack = True\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp -lgfortran\n\
+libraries = openblasp -lpthread\n\
 runtime_library_dirs = $tmp\n' $file"
 		    ;;
 		blas)
