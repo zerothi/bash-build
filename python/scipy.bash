@@ -19,6 +19,7 @@ if $(is_c gnu) ; then
     pack_cmd "sed -i '/[sdcz]geqpf/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]ggsvd/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]ggsvp/d' cython_lapack_signatures.txt"
+    pack_cmd "sed -i '/[sdcz]lahrd/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]latzm/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]tzrqf/d' cython_lapack_signatures.txt"
     pack_cmd "$(get_parent_exec) _cython_wrapper_generators.py"
