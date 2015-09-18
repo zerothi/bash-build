@@ -23,8 +23,6 @@ function debug { echo "Debug: ${_DEBUG_COUNTER} $@" ; let _DEBUG_COUNTER++ ; }
 
 source src/globals.bash
 
-source src/hidden.bash
-
 _crt_version=0
 
 _parent_package=""
