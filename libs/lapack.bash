@@ -34,6 +34,9 @@ pack_cmd "$tmp 's;TIMER[[:space:]]*=.*;TIMER = INT_CPU_TIME;g' $file"
 pack_cmd "$tmp 's;_LINUX;;g' $file"
 pack_cmd "$tmp 's;_SUN4;;g' $file"
 case $bl in
+    blis)
+	pack_cmd "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --LD-rp $bl) -lblis?g' $file"
+	;;
     blas)
 	pack_cmd "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --LD-rp $bl) -lblas?g' $file"
 	;;
