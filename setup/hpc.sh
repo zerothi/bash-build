@@ -20,6 +20,7 @@
     echo bigdft
     echo octopus
     echo krypy
+    echo octave
 } > ../local.reject
 
 {
