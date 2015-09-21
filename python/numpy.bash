@@ -80,8 +80,9 @@ include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_
 
 elif $(is_c gnu) ; then
 
-    # Force embedded_lapack (until 
-    pack_cmd "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
+    if [[ $(vrs_cmp $v 1.10.0) -lt 0 ]]; then
+	pack_cmd "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
+    fi
     pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblasp|g' numpy/distutils/system_info.py"
 
     for la in $(choice linalg) ; do
@@ -120,7 +121,7 @@ runtime_library_dirs = $tmp\n\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp -lpthread\n\
+libraries = openblasp -lgfortran -lpthread -lm\n\
 runtime_library_dirs = $tmp\n' $file"
 		    ;;
 		blas)
