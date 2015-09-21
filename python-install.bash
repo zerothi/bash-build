@@ -14,12 +14,15 @@ module unload $pModNames
 
 # Create the numpy installation sequence
 if $(is_c intel) ; then
-    pNumpyInstall="--compiler=intelem --fcompiler=intelem"
+    pNumpyInstallC="--compiler=intelem"
+    pNumpyInstallF="--fcompiler=intelem"
 elif $(is_c gnu) ; then
-    pNumpyInstall="--compiler=unix --fcompiler=gnu95"
+    pNumpyInstallC="--compiler=unix"
+    pNumpyInstallF="--fcompiler=gnu95"
 else
     doerr "Compiler python" "Could not recognize compiler"
 fi
+pNumpyInstall="$pNumpyInstallC $pNumpyInstallF"
 
 # Save the default build index
 def_idx=$(build_get --default-build)
@@ -108,7 +111,7 @@ source_pack python/sympy.bash
 source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
-source_pack python/theanos.bash
+source_pack python/theano.bash
 source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash

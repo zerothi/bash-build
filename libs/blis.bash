@@ -58,6 +58,6 @@ pack_cmd "make clean cleanlib"
 
 pack_cmd "sed -i -e 's?^\(BLIS_LIB_BASE_NAME\).*?\1 := libblis?' Makefile"
 pack_cmd "sed -si -e 's?-fopenmp? ?g' config/*/*.mk"
-pack_cmd "sed -si -e 's?-fopenmp? ?g' config/*/Makefile"
+pack_cmd "sed -si -e 's?-fopenmp? ?g' test/*/Makefile"
 pack_cmd "make"
 pack_cmd "make install"
