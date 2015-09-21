@@ -364,6 +364,6 @@ pack_cmd "popd"
 pack_cmd "module unload $tmp"
 
 # Save the $file file
-pack_cmd "cp $file ../../"
+pack_cmd "cp $file ../../$(get_c).make"
 
 done
