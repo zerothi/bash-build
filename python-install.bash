@@ -108,6 +108,7 @@ source_pack python/sympy.bash
 source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
+source_pack python/theanos.bash
 source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
