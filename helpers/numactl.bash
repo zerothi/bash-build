@@ -1,5 +1,6 @@
-add_package --build generic \
-	    ftp://oss.sgi.com/www/projects/libnuma/download/numactl-2.0.9.tar.gz
+v=2.0.10
+add_package --build generic --archive numactl-$v.tar.gz \
+    https://github.com/numactl/numactl/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
