@@ -10,5 +10,10 @@ pack_set --install-query $(pack_get --prefix)/bin/numactl
 pack_set --library-suffix lib64
 
 # Make commands
-pack_cmd "make OPT_CFLAGS='$CFLAGS' LDFLAGS='$(list --LD-rp numactl)' PREFIX=$(pack_get --prefix)"
-pack_cmd "make install PREFIX=$(pack_get --prefix)"
+# Load autoconf
+pack_cmd "module load $(list +autoconf)"
+
+pack_cmd "./autogen.sh"
+pack_cmd "./configure --prefix=$(pack_get --prefix)"
+pack_cmd "make"
+pack_cmd "make install"

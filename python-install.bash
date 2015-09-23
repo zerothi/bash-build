@@ -51,6 +51,9 @@ source_pack helpers/mongo.bash
 
 source_pack python/setuptools.bash
 
+source_pack python/mock.bash
+source_pack python/pip.bash
+
 # Used for many packages
 source_pack python/nose.bash
 
@@ -77,10 +80,12 @@ source_pack python/jinja2.bash
 source_pack python/sphinx.bash # jinja2
 source_pack python/pytz.bash
 source_pack python/pysqlite.bash
-source_pack python/ipython.bash
 source_pack python/monty.bash
 source_pack python/pyyaml.bash
-source_pack python/mock.bash # only for python 2
+
+# Jupyter framework
+#source_pack python/jupyter.bash
+source_pack python/ipython.bash
 
 source_pack python/pandoc.bash
 
