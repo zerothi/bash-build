@@ -29,6 +29,8 @@ function blis_cpu {
 # Get CPU info
 function blis_parse {
     local flags=`grep flags /proc/cpuinfo | head -1`
+    _ps reference
+    return
     # Check for avx2
     if $(blis_cpu "$flags" avx2) ; then
 	_ps haswell
