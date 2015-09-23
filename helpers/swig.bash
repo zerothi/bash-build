@@ -1,4 +1,4 @@
-add_package --build generic http://prdownloads.sourceforge.net/swig/swig-2.0.11.tar.gz
+add_package --build generic http://prdownloads.sourceforge.net/swig/swig-3.0.7.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

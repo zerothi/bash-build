@@ -1,4 +1,4 @@
-v=1.8.9.1
+v=1.8.10
 add_package --build generic \
 	    --version $v --package doxygen \
 	    --archive doxygen-Release_${v//./_}.tar.gz \
