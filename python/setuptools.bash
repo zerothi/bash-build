@@ -1,4 +1,4 @@
-add_package https://pypi.python.org/packages/source/s/setuptools/setuptools-12.2.tar.gz
+add_package https://pypi.python.org/packages/source/s/setuptools/setuptools-18.3.2.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/setuptools.pth
 
