@@ -207,13 +207,12 @@ function add_package {
     fi
     source $(build_get --source[$b_idx])
 
+    # Always force the installation
+    _install_query[$_N_archives]=/directory/does/not/exist
+
     # Save the url 
     local url=$1
     _http[$_N_archives]=$url
-    if [[ "x$url" == "xfake" ]]; then
-	d=./
-	_install_query[$_N_archives]=/directory/does/not/exist
-    fi
     # Save the archive name
     [[ -z "$fn" ]] && fn=$(basename $url)
     _archive[$_N_archives]=$fn
@@ -222,6 +221,7 @@ function add_package {
     _ext[$_N_archives]=$ext
     # A binary does not have a directory
     [[ "x$ext" == "xbin" ]] && d=./
+    [[ "x$ext" == "xlocal" ]] && d=./
     # Infer what the directory is
     local archive_d=${fn%.*tar.$ext}
     [[ ${#archive_d} -eq ${#fn} ]] && archive_d=${fn%.$ext}

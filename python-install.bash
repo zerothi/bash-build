@@ -43,51 +43,20 @@ build_set --default-build python$IpV
 
 build_set --default-choice[python$IpV] linalg openblas atlas blas
 
+# First install all pip installs
+source_pack python/pip_installs.bash
+
 # Python building utility
 source_pack python/scons.bash
 
 # Install the helper (mongodb)
 source_pack helpers/mongo.bash
 
-source_pack python/setuptools.bash
-
-source_pack python/mock.bash
-source_pack python/pip.bash
-
-# Used for many packages
-source_pack python/nose.bash
-
-# Packages installed in "python-home"
-source_pack python/pep8.bash
-source_pack python/pkgconfig.bash
-source_pack python/pyparsing.bash
-source_pack python/backports.bash
-source_pack python/certifi.bash
-source_pack python/tornado.bash # backports, certifi
-source_pack python/six.bash
-source_pack python/docutils.bash
-source_pack python/dateutil.bash
-source_pack python/pygments.bash
-source_pack python/fastimport.bash
-source_pack python/pexpect.bash
-source_pack python/pycparser.bash
-source_pack python/pyzmq.bash
-source_pack python/mistune.bash
-
-source_pack python/jsonschema.bash
-source_pack python/markupsafe.bash
-source_pack python/jinja2.bash
-source_pack python/sphinx.bash # jinja2
-source_pack python/pytz.bash
 source_pack python/pysqlite.bash
-source_pack python/monty.bash
-source_pack python/pyyaml.bash
 
 # Jupyter framework
 #source_pack python/jupyter.bash
 source_pack python/ipython.bash
-
-source_pack python/pandoc.bash
 
 # Done with packages only installed in python-home! ^
 
@@ -95,13 +64,6 @@ source_pack python/pymongo.bash
 source_pack python/fireworks.bash
 
 source_pack python/cython.bash
-source_pack python/cffi.bash
-
-source_pack python/bzr.bash
-source_pack python/bzr-fastimport.bash
-
-# Units in python
-#source_pack python/pint.bash
 
 # Generic scientific libraries
 source_pack python/mpi4py.bash
