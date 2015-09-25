@@ -1,5 +1,5 @@
 # Compiler not needed, so simply remove that variable
-v=2014.3
+v=2015.rc2
 add_package --build generic --package ATK --version $v \
     http://quantumwise.com/download/pkgs/VNL-ATK-$v-Linux64.bin
 
@@ -13,8 +13,9 @@ pack_set --module-opt "--lua-family ATK"
 pack_cmd "chmod u+x $(build_get --archive-path)/$(pack_get --archive)"
 pack_cmd "$(build_get --archive-path)/$(pack_get --archive)" \
      "--prefix $(pack_get --prefix)" \
-     "--mode unattended --license_file non-existing" \
-     "--license_configuration floating"
+     "--mode unattended --license_file $(build_get --archive-path)/201500982_DTU_A01693.lic‎" 
+
+#     "--license_configuration floating"
 
 # Define license servers etc.
 if $(is_host n-) ; then
@@ -25,4 +26,6 @@ fi
 
 # Add license path to PATH
 pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/license"
-
+# Copy license
+pack_cmd "cp $(build_get --archive-path)/201500982_DTU_A01693.lic‎ $(pack_get --prefix)/license/"
+#pack_cmd "chmod a+r $(pack_get --prefix)/license/201500982_DTU_A01693.lic"
