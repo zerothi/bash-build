@@ -14,7 +14,8 @@ pack_cmd "chmod u+x $(build_get --archive-path)/$(pack_get --archive)"
 
 if [[ $(vrs_cmp $v 2015) -ge 0 ]]; then
     pack_cmd "$(build_get --archive-path)/$(pack_get --archive)" \
-	"--prefix $(pack_get --prefix)"
+	"--prefix $(pack_get --prefix)" \
+	"--unattendedmodeui none"
 else
     pack_cmd "$(build_get --archive-path)/$(pack_get --archive)" \
 	"--prefix $(pack_get --prefix)" \
@@ -22,7 +23,7 @@ else
 	"--license_configuration floating"
 fi
 
-atklic=201500982_DTU_A01693.lic‎
+atklic="201500982_DTU_A01693.lic"
 
 # Define license servers etc.
 if $(is_host n-) ; then
@@ -34,7 +35,7 @@ fi
 # Add license path to PATH
 pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/license"
 # Copy license
-pack_cmd "cp $(build_get --archive-path)/$atklic‎ $(pack_get --prefix)/license/"
+pack_cmd "cp $(build_get --archive-path)/$atklic $(pack_get --prefix)/license/"
 #pack_cmd "chmod a+r $(pack_get --prefix)/license/$atklic"
 
 unset atklic
