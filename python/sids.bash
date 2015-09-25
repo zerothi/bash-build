@@ -1,4 +1,4 @@
-v=0.2.8
+v=0.3.0
 add_package --archive sids-$v.tar.gz \
     https://github.com/zerothi/sids/archive/$v.tar.gz
 

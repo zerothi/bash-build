@@ -10,8 +10,10 @@ LDFLAGS=$MKL_LIB $(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
 LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
-LIBS+= -lmkl_gf_lp64 -lmkl_core -lmkl_sequential\n\
+LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' arch.make"
+
+# If one ever needs MKL with gnu compiler it should be -lmkl_gf_lp64 instead of -lmkl_intel_lp64
 
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack 
