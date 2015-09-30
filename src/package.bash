@@ -212,6 +212,8 @@ function add_package {
 
     # Save the url 
     local url=$1
+    # A fake does not have a directory
+    [[ "x$url" == "xfake" ]] && d=./
     _http[$_N_archives]=$url
     # Save the archive name
     [[ -z "$fn" ]] && fn=$(basename $url)
@@ -220,6 +222,7 @@ function add_package {
     local ext=${fn##*.}
     _ext[$_N_archives]=$ext
     # A binary does not have a directory
+    [[ "x$ext" == "xfake" ]] && d=./
     [[ "x$ext" == "xbin" ]] && d=./
     [[ "x$ext" == "xlocal" ]] && d=./
     # Infer what the directory is
