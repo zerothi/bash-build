@@ -24,7 +24,8 @@ pip_install pip
 
 pip_install autopep8
 pip_install backports.ssl_match_hostname
-pip_install bzr bzr-fastimport
+pip_install bzr
+#pip_install bzr-fastimport
 pip_install certifi
 pip_install cffi
 pip_install decorator
@@ -37,7 +38,7 @@ pip_install jupyter
 pip_install markupsafe
 pip_install mistune
 pip_install mock
-pip_install monty
+#pip_install monty
 pip_install nose
 pip_install pandoc
 pip_install pep8
@@ -48,7 +49,7 @@ pip_install pyparser
 pip_install pycparser
 pip_install pygments
 pip_install python-dateutil
-pip_install pytz
+#pip_install pytz
 pip_install pyyaml
 pip_install pyzmq
 pip_install setuptools
