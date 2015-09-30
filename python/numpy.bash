@@ -1,5 +1,5 @@
-for v in 1.10.0 ; do
-add_package http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
+for v in 1.10.0rc2 ; do
+add_package --package numpy http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -115,13 +115,8 @@ runtime_library_dirs = $tmp\n' $file"
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = lapack,openblasp -lpthread -lgfortran -lm\n\
+libraries = lapack,openblasp\n\
 extra_link_args = -lpthread -lgfortran -lm\n\
-runtime_library_dirs = $tmp\n\
-[blas]\n\
-library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = openblasp -lgfortran -lpthread -lm\n\
 runtime_library_dirs = $tmp\n' $file"
 		    ;;
 		blas)

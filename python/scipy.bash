@@ -31,17 +31,17 @@ fi
 fi
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement pcre swig) $(pack_get --module-name pcre swig)"
+    pack_cmd "module load $(list ++swig)"
 fi
 
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "CC=$CC $(get_parent_exec) setup.py build $pNumpyInstall"
-pack_cmd "CC=$CC $(get_parent_exec) setup.py install" \
+pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module unload $(pack_get --module-name swig pcre) $(pack_get --module-name-requirement pcre swig)"
+    pack_cmd "module unload $(list ++swig)"
 fi
 
 
