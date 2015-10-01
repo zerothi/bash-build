@@ -149,9 +149,6 @@ if [[ $omp == "openmp" ]]; then
 if [[ $(vrs_cmp $v 688) -lt 0 ]]; then
     continue
 fi
-if $(is_c intel) ; then
-    continue
-fi
 fi
 set_flag $omp
 
@@ -318,11 +315,6 @@ if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     # Go back
     pack_cmd "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
     for omp in openmp none ; do
-	if [[ $omp == "openmp" ]]; then
-	    if $(is_c intel) ; then
-		continue
-	    fi
-	fi
 
 	set_flag $omp
 	pack_cmd "make clean"
