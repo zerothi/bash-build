@@ -1,4 +1,4 @@
-for v in 988 ; do
+for v in 996 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -38,11 +38,11 @@ FFTW_PATH = $(pack_get --prefix fftw-3)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
-FPPFLAGS += -DNCDF -DNCDF_4\n\
+FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
 COMP_LIBS += libncdf.a libvardict.a' $file"
     fi
     pack_cmd "sed -i '1 a\
-FPPFLAGS += -DON_DOMAIN_DECOMP -DSIESTA__MUMPS -DTS_NOCHECKS\n\
+FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 else
     if [[ $(pack_installed metis) -eq 1 ]]; then
