@@ -1,3 +1,11 @@
+# Add the "fake" modules on HPC
+if $(is_host n-) ; then
+    add_hidden_package intel
+    add_hidden_package intelmpi
+    add_hidden_package intelmpifix
+fi
+
+
 # Compiler not needed, so simply remove that variable
 v=2015.rc2
 add_package --build generic --package ATK --version $v \
@@ -30,6 +38,12 @@ if $(is_host n-) ; then
     # HPC, server @ QUANTUM_LICENSE_PATH=[6220]@license1.cc.dtu.dk
     pack_set --module-opt "--set-ENV QUANTUM_AUTOMATIC_SERVER_DISCOVERY=0"
     pack_set --module-opt "--set-ENV QUANTUM_LICENSE_PATH=\[6220\]\@license1.cc.dtu.dk:$(pack_get --prefix)/license/$atklic"
+
+    # Add module loads
+    pack_set --mod-req intel
+    pack_set --mod-req intelmpi 
+    pack_set --mod-req intelmpifix
+
 fi
 
 # Add license path to PATH
