@@ -72,6 +72,10 @@ while [ $# -gt 0 ]; do
 	-list)
 	    export PACK_LIST=1
 	    ;;
+	-n)
+	    export _n_procs="$1"
+	    shift
+	    ;;
 	-only)
 	    pack_only $1
 	    shift ;;
@@ -144,11 +148,11 @@ source vendor.bash
 # Install the helper
 source helpers.bash
 
-# Install helper scripts
-source scripts.bash
-
 # Install the lua-libraries
 source lua/lua.bash
+
+# Install helper scripts (requires Lmod)
+source scripts.bash
 
 build_set --reset-module[debug] \
     $(list --prefix '--default-module ' \

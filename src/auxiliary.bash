@@ -104,8 +104,8 @@ function docmd {
     echo ""
     echo " # ================================================================"
     echo " # $message"
-    echo " # PWD: "$(pwd)
-    echo " # CMD: "${cmd[@]}
+    echo " # PWD: $(pwd)"
+    echo " # CMD: ${cmd[@]}"
     echo " # ================================================================"
     eval ${cmd[@]}
     st=$?
@@ -650,8 +650,8 @@ function list {
 		suf="" 
 		lcmd="pack_get --library-path " ;;
 	    -INCDIRS) 
-		pre="-I" 
-		suf="/include" 
+		pre="-I"
+		suf="/include"
 		lcmd="pack_get --prefix " ;;
 	    -mod-names) 
 		pre=""
