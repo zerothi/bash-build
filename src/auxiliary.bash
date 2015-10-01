@@ -400,15 +400,15 @@ function isnumber {
 
 
 #  Function rem_dup
-# Removes any dublicates in a string (preserves order).
+# Removes any duplicates in a string (preserves order).
 # It relies on external commands, `sed`, `tr` and `awk.
 # The algorithm is:
 #   1. remove all empty fields (removes double spaces) and ' ' to '\n'
-#   2. awk one-liner for not printing any dublicates
+#   2. awk one-liner for not printing any duplicates
 #   3. translate '\n' to ' '
 #  Arguments
 #    <args>
-#       The list of args to remove dublicates from
+#       The list of args to remove duplicates from
 #       The order is preserved.
 
 function rem_dup {
@@ -600,7 +600,7 @@ function dwn_file {
 
 function list {
     local suf="" ; local pre="" ; local lcmd=""
-    local cmd ; local retval="" ; local uniq=0
+    local cmd ; local retval=""
     # First we collect all options
     local opts="" ; local space=" "
     while : ; do
@@ -616,7 +616,6 @@ function list {
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
 	    -no-space|-X)  space="" ;;
-	    -uniq)         uniq=1 ;;
 	    *)
 		opts="$opts $opt" ;;
 	esac
@@ -638,11 +637,8 @@ function list {
 	esac
 	shift
     done
-    if [[ $uniq -eq 1 ]]; then
-	args="$(ret_uniq $args)"
-    else
-	args="$(rem_dup $args)"
-    fi
+    # Remove all duplicates
+    args="$(rem_dup $args)"
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
@@ -664,22 +660,26 @@ function list {
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
-	for cmd in $args ; do
-	    if [[ -n "$lcmd" ]]; then
+	if [[ -n "$lcmd" ]]; then
+	    for cmd in $args ; do
 		retval="$retval$space$pre$($lcmd $cmd)$suf"
-	    else
+	    done
+	else
+	    for cmd in $args ; do
 		retval="$retval$space$pre$cmd$suf"
-	    fi
-	done
+	    done
+	fi
     done
     if [[ -z "$retval" ]]; then
-	for cmd in $args ; do
-	    if [[ -n "$lcmd" ]]; then
+	if [[ -n "$lcmd" ]]; then
+	    for cmd in $args ; do
 		retval="$retval$space$pre$($lcmd $cmd)$suf"
-	    else
+	    done
+	else
+	    for cmd in $args ; do
 		retval="$retval$space$pre$cmd$suf"
-	    fi
-	done
+	    done
+	fi
     fi
     _ps "$retval"
 }

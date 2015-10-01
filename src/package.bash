@@ -267,7 +267,10 @@ function add_package {
     # Install prefix and the installation path
     tmp="$(build_get --build-installation-path[$b_idx])"
     _install_prefix[$_N_archives]=$(build_get --installation-path[$b_idx])/$(pack_list -lf "-X -s /" $tmp)
-    _install_prefix[$_N_archives]=${_install_prefix[$_N_archives]%/}
+    _install_prefix[$_N_archives]="${_install_prefix[$_N_archives]%/}"
+    # Do not allow any white-space, what so ever
+    _install_prefix[$_N_archives]="${_install_prefix[$_N_archives]// /}"
+
     if [[ -z "$lp" ]]; then
 	_lib_prefix[$_N_archives]=lib
         # Just in case lib64 already exists
@@ -395,7 +398,7 @@ function pack_set {
 	_mod_req[$index]="$(rem_dup $req)"
     fi
     if [[ -n "$install" ]]; then
-	_install_prefix[$index]="$install"
+	_install_prefix[$index]="${install// /}"
 	[[ -d "$install/lib" ]] && lib="lib"
 	[[ -d "$install/lib64" ]] && lib="lib64"
     fi
