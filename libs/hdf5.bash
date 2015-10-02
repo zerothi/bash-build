@@ -1,7 +1,7 @@
 # Then install HDF5
 for p in 1.8.15 ; do
 
-add_package --version $p --directory hdf5-$p http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-$p-patch1.tar.bz2
+add_package --version $p http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-$p-patch1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

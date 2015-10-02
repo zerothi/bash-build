@@ -3,7 +3,7 @@ for p in 1.8.15 ; do
 
 add_package \
     --package hdf5-serial \
-    --directory hdf5-$p --version $p \
+    --version $p \
     http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-$p-patch1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
