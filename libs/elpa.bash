@@ -27,7 +27,7 @@ fi
 
 # We cannot use OpenMP threading as it requires sequential BLAS
 
-pack_cmd "../configure CC='$MPICC' CXX='$MPICXX' FC='$MPIFC' SCALAPACK_LDFLAGS='$tmp'" \
+pack_cmd "../configure CC='$MPICC' CXX='$MPICXX' F90='$MPIF90' SCALAPACK_LDFLAGS='$tmp'" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
