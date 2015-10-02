@@ -239,7 +239,7 @@ function add_package {
     # Save the settings
     _settings[$_N_archives]="$(build_get --default-setting $b_idx)"
     # Save the package name...
-    [[ -z "$package" ]] && package=${d%$v}
+    [[ -z "$package" ]] && package=${archive_d%$v}
     local len=${#package}
     if [[ ${package:$len-1} =~ [\-\._] ]]; then
 	package=${package:0:$len-1}
