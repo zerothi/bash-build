@@ -5,6 +5,11 @@
 # That makes life easier and is much easier to maintain
 #
 
+# Ensure that pip is installed before we proceed...
+source_pack python/setuptools.bash
+source_pack python/pip.bash
+
+
 add_package pip_installs.local
 
 pack_set --directory .

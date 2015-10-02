@@ -11,10 +11,10 @@ pack_set --install-query $(pack_get --LD)/libpnetcdf.a
 
 pack_set --module-requirement mpi
 if [[ $(pack_installed bison) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
+    pack_cmd "module load $(list ++bison)"
 fi
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
+    pack_cmd "module load $(list ++flex)"
 fi
 
 # Install commands that it should run
@@ -32,8 +32,8 @@ pack_cmd "make install"
 pack_set_mv_test tmp.test
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
+    pack_cmd "module unload $(list ++flex)"
 fi
 if [[ $(pack_installed bison) -eq 1 ]]; then
-    pack_cmd "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
+    pack_cmd "module unload $(list ++bison)"
 fi

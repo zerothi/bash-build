@@ -17,7 +17,7 @@ fi
 
 pack_cmd "$(get_parent_exec) setup.py build" \
     "--hdf5=$(pack_get --prefix hdf5-serial)" \
-    "--cflags='$pCFLAGS'"
+    "--cflags='${pCFLAGS//-march=native/}'"
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)" \
