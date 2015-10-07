@@ -23,6 +23,8 @@ fi
 # Optimization of openmpi parameters
 source_pack libs/otpo.bash
 
+source_pack libs/opencoarray.bash
+
 # Default fftw libs
 source_pack libs/fftw2.bash
 source_pack libs/fftw3.bash

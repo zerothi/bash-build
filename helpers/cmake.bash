@@ -1,4 +1,5 @@
-add_package --build generic http://www.cmake.org/files/v2.8/cmake-2.8.12.1.tar.gz
+add_package --build generic https://cmake.org/files/v3.3/cmake-3.3.2.tar.gz
+#http://www.cmake.org/files/v2.8/cmake-2.8.12.1.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
