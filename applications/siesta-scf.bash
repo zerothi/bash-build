@@ -156,7 +156,7 @@ pack_cmd "make clean"
 
 # This should ensure a correct handling of the version info...
 if [[ $(vrs_cmp $v 772) -ge 0 ]]; then
-    pack_cmd "make $(get_make_parallel) siesta"
+    pack_cmd "make $(get_make_parallel) siesta ; make siesta"
 elif [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a libvardict.a libncdf.a siesta
 else
