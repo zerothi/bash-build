@@ -1,4 +1,4 @@
-set_c gnu-5.1.0
+set_c gnu-5.2.0
 
 AR=ar
 CC=gcc
@@ -10,6 +10,7 @@ F90=gfortran
 FC=gfortran
 common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays"
 CFLAGS="$common_flags"
+CXXFLAGS="$common_flags"
 FCFLAGS="$common_flags -fno-second-underscore"
 FFLAGS="$common_flags -fno-second-underscore"
 

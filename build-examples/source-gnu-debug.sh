@@ -1,4 +1,4 @@
-set_c gnu-4.7.2
+set_c gnu-5.2.0
 
 AR=ar
 CC=gcc
@@ -10,6 +10,7 @@ F90=gfortran
 FC=gfortran
 common_flags="-m64 -fPIC -fbounds-check -g -fbacktrace"
 CFLAGS="$common_flags"
+CXXFLAGS="$common_flags"
 FCFLAGS="$common_flags -fno-second-underscore"
 FFLAGS="$common_flags -fno-second-underscore"
 

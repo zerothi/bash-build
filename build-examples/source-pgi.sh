@@ -10,6 +10,7 @@ F90=pgf95
 FC=pgf95
 common_flags="-m64 -fPIC -O3 -Munroll -Mvect=prefetch -Mnofpapprox -Mnofprelaxed"
 CFLAGS="$common_flags"
+CXXFLAGS="$common_flags"
 FCFLAGS="$common_flags -Mnosecond_underscore"
 FFLAGS="$common_flags -Mnosecond_underscore"
 

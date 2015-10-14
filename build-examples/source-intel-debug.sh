@@ -13,6 +13,7 @@ F90=ifort
 FC=ifort
 common_flags="-m64 -fPIC -g -check all -traceback"
 CFLAGS="$common_flags"
+CXXFLAGS="$common_flags"
 FCFLAGS="$common_flags"
 FFLAGS="$common_flags"
 
