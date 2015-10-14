@@ -1,7 +1,7 @@
 add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v0.9.0.tar.gz
 
 pack_set -s $IS_MODULE
-pack_set --install-query $(pack_get --LD)/libscalapack.a
+pack_set --install-query $(pack_get --LD)/libpexsi_suffix.a
 
 pack_set $(list -p '--mod-req ' mpi parmetis scotch)
 pack_set --mod-req superlu-dist[3.3]
