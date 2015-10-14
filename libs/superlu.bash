@@ -57,4 +57,6 @@ pack_cmd "make superlulib"
 
 pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp lib/libsuperlu.a $(pack_get --LD)/"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp SRC/*.h $(pack_get --prefix)/include"
 

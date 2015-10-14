@@ -1,4 +1,4 @@
-for v in 4.0 ; do
+for v in 3.3 4.0 ; do
 
 add_package --package superlu-dist \
 	    --directory SuperLU_DIST_$v \
@@ -66,5 +66,7 @@ pack_cmd "make"
 
 pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp lib/libsuperlu.a $(pack_get --LD)/"
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
+pack_cmd "cp SRC/*.h $(pack_get --prefix)/include"
 
 done
