@@ -13,6 +13,9 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/Inelastica
 
 pack_set --module-requirement netcdf-serial \
     --module-requirement scientificpython
+if [[ $(pack_get --version) -gt 349 ]]; then
+    pack_set --module-requirement scipy
+fi
 
 if [[ $(pack_get --version) -lt 260 ]]; then
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-Inelastica.py.patch-p$v
