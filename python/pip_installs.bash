@@ -24,6 +24,9 @@ function pip_install {
 
 # First install its own usage
 pip_install pip
+# Sadly setuptools needs to be installed prior to any of the others
+pip_install setuptools
+
 
 # Packages in alphabetic order
 
@@ -57,7 +60,6 @@ pip_install python-dateutil
 #pip_install pytz
 pip_install pyyaml
 pip_install pyzmq
-pip_install setuptools
 pip_install simplegeneric
 pip_install six
 pip_install sphinx
