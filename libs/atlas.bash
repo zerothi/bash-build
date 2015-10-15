@@ -1,5 +1,5 @@
 # 3.11.34 (works)
-for v in 3.10.2 ; do
+for v in 3.11.38 3.10.2 ; do
 tmp="--build generic-host"
 if $(is_c gnu) ; then
     # If we use a later gnu version
@@ -24,12 +24,17 @@ pack_cmd "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/s
 
 tmp=
 if [[ $(vrs_cmp $v 3.10.2) -gt 0 ]]; then
-    tmp="-D c -DWALL --accel=0"
+    tmp="--accel=0"
+    if $(is_host zero ntch) ; then
+        tmp="$tmp -m 2800"
+    fi
+    pack_cmd "sed -i -e 's/int thrchk,/int thrchk=0,/' ../CONFIG/src/config.c"
 fi
 
 # Configure command
 # -Fa alg: append to all compilers -fPIC
 pack_cmd "../configure -Fa alg '-fPIC'" \
+     "--with-netlib-lapack-tarfile=$(build_get --archive-path)/$(pack_get --archive lapack-blas)" \
 	 "-Ss flapack $(pack_get --LD blas)/liblapack.a" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--incdir=$(pack_get --prefix)/include" \
