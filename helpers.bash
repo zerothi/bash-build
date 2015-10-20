@@ -41,7 +41,7 @@ source_pack helpers/swig.bash
 # Install LLVM generically
 source_pack helpers/zlib.bash
 source_pack helpers/libxml2.bash
-source_pack helpers/llvm-3.3.bash
+
 source_pack helpers/llvm.bash
 
 source_pack helpers/numactl.bash
