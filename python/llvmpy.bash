@@ -7,9 +7,9 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/llvmpy
 
 pack_set --module-requirement $(get_parent)
-pack_set --module-requirement llvm[3.3]
+pack_set --module-requirement llvm
 
-pack_cmd "LLVM_CONFIG_PATH=$(pack_get --prefix llvm[3.3])/bin/llvm-config $(get_parent_exec)" \
+pack_cmd "LLVM_CONFIG_PATH=$(pack_get --prefix llvm)/bin/llvm-config $(get_parent_exec)" \
     "setup.py install --prefix=$(pack_get --prefix)"
 
 add_test_package

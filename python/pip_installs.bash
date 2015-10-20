@@ -39,6 +39,7 @@ pip_install cffi
 pip_install decorator
 pip_install distribute
 pip_install docutils
+pip_install enum34
 pip_install fastimport
 pip_install jinja2
 pip_install jsonschema
