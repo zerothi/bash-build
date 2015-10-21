@@ -1,4 +1,4 @@
-add_package http://valgrind.org/downloads/valgrind-3.10.1.tar.bz2
+add_package http://valgrind.org/downloads/valgrind-3.11.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
