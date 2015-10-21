@@ -22,8 +22,14 @@ elif $(is_c gnu) ; then
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    siesta_la=$la
 	    pack_set --module-requirement $la
-	    [[ "x$la" == "xatlas" ]] && tmp="$tmp -lf77blas -lcblas"
-	    [[ "x$la" == "xacml" ]] && tmp=""
+	    case $la in
+		atlas)
+		    tmp="$tmp -lf77blas -lcblas"
+		    ;;
+		acml)
+		    tmp=""
+		    ;;
+	    esac
 	    tmp="$tmp -l$la"
 	    pack_cmd "sed -i '1 a\
 LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\

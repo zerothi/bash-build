@@ -105,11 +105,14 @@ function set_flag {
 	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
 
 	    end=_omp
-	    if [[ "x$siesta_la" == "xopenblas" ]]; then
-		pack_cmd "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
-	    elif [[ "x$siesta_la" == "xmkl" ]]; then
-		pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
-	    fi
+	    case $siesta_la in
+		openblas)
+		    pack_cmd "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
+		    ;;
+		mkl)
+		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
+		    ;;
+	    esac
 	    ;;
 	*)
 	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
@@ -117,11 +120,14 @@ function set_flag {
 	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
 
 	    end=
-	    if [[ "x$siesta_la" == "xopenblas" ]]; then
-		pack_cmd "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
-	    elif [[ "x$siesta_la" == "xmkl" ]]; then
-		pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"
-	    fi
+	    case $siesta_la in
+		openblas)
+		    pack_cmd "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
+		    ;;
+		mkl)
+		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"
+		    ;;
+	    esac
 	    ;;
     esac
 }
@@ -293,22 +299,14 @@ make_files atm
 pack_cmd "cd ../../Obj"
 
 # Compile the 3m equivalent versions, if applicable
-tmp=0
-if $(is_c intel) ; then
-    tmp=1
-
-elif $(is_c gnu) ; then
-    for la in $(choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    if [[ "x$la" == "xopenblas" ]]; then
-		# Only openblas has gemm3m
-		tmp=1
-	    fi
-	    break
-	fi
-    done
-fi
-
+case $siesta_la in
+    mkl|openblas)
+	tmp=1
+	;;
+    *)
+	tmp=0
+	;;
+esac
 
 if [[ $tmp -eq 1 ]]; then
 if [[ $(vrs_cmp $v 662) -ge 0 ]]; then
