@@ -24,9 +24,6 @@ function pip_install {
 
 # First install its own usage
 pip_install pip
-# Sadly setuptools needs to be installed prior to any of the others
-pip_install setuptools
-
 
 # Packages in alphabetic order
 
