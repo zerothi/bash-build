@@ -1,6 +1,4 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
-
-for v in 0.9.0.8965 0.10.0.11364 ; do
+for v in 0.11.0.13004 ; do
 add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -14,10 +12,10 @@ pack_set --module-requirement mpi \
     --module-requirement hdf5 \
     --module-requirement libxc
 
-if [[ $(vrs_cmp $v 0.10) -lt 0 ]]; then
-    pack_set --module-requirement ase[3.6]
+if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
+    pack_set --module-requirement ase[3.9]
 else
-    pack_set --module-requirement ase[3.8]
+    doerr "$(pack_get --package)" "Could not determine needed ASE interface"
 fi
 
 # Check for Intel MKL or not
