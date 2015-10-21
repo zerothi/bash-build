@@ -1,7 +1,8 @@
+v=1.59.0
 add_package \
     --package boost \
-    --version 1.58.0 \
-    http://downloads.sourceforge.net/project/boost/boost/1.58.0/boost_1_58_0.tar.bz2
+    --version $v \
+    http://downloads.sourceforge.net/project/boost/boost/$v/boost_${v//./_}.tar.bz2
 
 pack_set -s $IS_MODULE
 
