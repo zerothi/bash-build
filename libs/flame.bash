@@ -2,12 +2,15 @@ v=5.1.0
 add_package --package flame --archive libflame-$v.tar.gz \
 	    https://github.com/flame/libflame/archive/$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --LD)/libflame.a
 
 # Clean makefile
 pack_cmd "sed -ie '/define EOL/{N;N;N;d}' Makefile"
+
+# To print-out compile lines add this to the Makefile command
+#   FLA_ENABLE_VERBOSE_MAKE_OUTPUT=yes
 
 # First install openmp
 pack_cmd "./configure" \
