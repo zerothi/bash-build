@@ -3,6 +3,7 @@
 # Create local rejections based on the hpc cluster
 
 {
+    echo flame
     echo ffmpeg
     echo bison
     echo otpo
