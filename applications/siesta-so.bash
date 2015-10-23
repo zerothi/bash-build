@@ -54,6 +54,15 @@ MPI_INCLUDE=.\n\
 
 source applications/siesta-linalg.bash
 
+# Fix the long lines in the Makefile
+pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
+> tmp.F90\n\
+\t\@awk '{if (length>80) { cur=78; \\\\\\\\\n\\\
+\t\tprintf \\\"%s\&\\\\\\n\\\",substr(\\\$\\\$0,0,78); \\\\\\\\\n\\\
+\t\twhile(length-cur>78) { cur=cur+76 ; \\\\\\\\\n\\\
+\t\tprintf \\\"\&%s\&\\\\\\n\\\",substr(\\\$\\\$0,cur-76,76) \\\\\\\\\n\\\
+\t\t} printf \\\"\&%s\\\\\\n\\\",substr(\\\$\\\$0,cur)} else { print \\\$\\\$0 }}' tmp.F90 > compinfo.F90/\" Makefile"
+
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 # This should ensure a correct handling of the version info...

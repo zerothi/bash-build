@@ -43,15 +43,16 @@ pip_install pip
 pip_append autopep8
 pip_append backports.ssl_match_hostname
 if [[ ${pV:0:1} -eq 2 ]]; then
-    pip_install bzr
-    #pip_install bzr-fastimport
+    pip_appnd bzr
+    #pip_append bzr-fastimport
+    pip_append enum34
+    pip_append six
 fi
 pip_append certifi
 pip_append cffi
 pip_append decorator
 pip_append distribute
 pip_append docutils
-pip_append enum34
 pip_append fastimport
 pip_append jinja2
 pip_append jsonschema
@@ -74,7 +75,6 @@ pip_append python-dateutil
 pip_append pyyaml
 pip_append pyzmq
 pip_append simplegeneric
-pip_append six
 pip_append sphinx
 pip_append traitlets
 pip_append tornado
