@@ -26,6 +26,8 @@ function pip_install {
     #pack_cmd "pip install $1"
     if [[ ! -z "$_pip" ]]; then
 	pack_cmd "pip install -U $_pip"
+	# Empty again
+	_pip=""
     fi
     while [[ $# -gt 0 ]]; do
 	pack_cmd "pip install -U $1"
