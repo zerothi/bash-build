@@ -14,8 +14,19 @@ add_package pip_installs.local
 
 pack_set --directory .
 
+_pip=
+function pip_append {
+    while [[ $# -gt 0 ]]; do
+	_pip="$_pip $1"
+	shift
+    done
+}
+
 function pip_install {
     #pack_cmd "pip install $1"
+    if [[ ! -z "$_pip" ]]; then
+	pack_cmd "pip install -U $_pip"
+    fi
     while [[ $# -gt 0 ]]; do
 	pack_cmd "pip install -U $1"
 	shift
@@ -27,39 +38,46 @@ pip_install pip
 
 # Packages in alphabetic order
 
-pip_install autopep8
-pip_install backports.ssl_match_hostname
-pip_install bzr
-#pip_install bzr-fastimport
-pip_install certifi
-pip_install cffi
-pip_install decorator
-pip_install distribute
-pip_install docutils
-pip_install enum34
-pip_install fastimport
-pip_install jinja2
-pip_install jsonschema
-pip_install jupyter
-pip_install markupsafe
-pip_install mistune
-pip_install mock
-#pip_install monty
-pip_install nose
-pip_install pandoc
-pip_install pep8
-pip_install pexpect
-#pip_install pint
-pip_install pkgconfig
-pip_install pyparser
-pip_install pycparser
-pip_install pygments
-pip_install python-dateutil
-#pip_install pytz
-pip_install pyyaml
-pip_install pyzmq
-pip_install simplegeneric
-pip_install six
-pip_install sphinx
-pip_install traitlets
-pip_install tornado
+pip_append autopep8
+pip_append backports.ssl_match_hostname
+if [[ ${pV:0:1} -eq 2 ]]; then
+    pip_install bzr
+    #pip_install bzr-fastimport
+fi
+pip_append certifi
+pip_append cffi
+pip_append decorator
+pip_append distribute
+pip_append docutils
+pip_append enum34
+pip_append fastimport
+pip_append jinja2
+pip_append jsonschema
+pip_append jupyter
+pip_append markupsafe
+pip_append mistune
+pip_append mock
+#pip_append monty
+pip_append nose
+pip_append pandoc
+pip_append pep8
+pip_append pexpect
+#pip_append pint
+pip_append pkgconfig
+pip_append pyparser
+pip_append pycparser
+pip_append pygments
+pip_append python-dateutil
+#pip_append pytz
+pip_append pyyaml
+pip_append pyzmq
+pip_append simplegeneric
+pip_append six
+pip_append sphinx
+pip_append traitlets
+pip_append tornado
+
+pip_install
+
+unset pip_append
+unset pip_install

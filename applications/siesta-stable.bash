@@ -1,4 +1,4 @@
-for v in siesta-3.1 siesta-3.2 ; do
+for v in siesta-3.2 ; do
 add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
 pack_set -s $MAKE_PARALLEL
 
