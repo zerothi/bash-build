@@ -65,6 +65,10 @@ function add_hidden_package {
     pack_set --index-alias $mod
     pack_set --installed $_I_INSTALLED # Make sure it is "installed"
     pack_set --module-name $mod
+    # Assert that the settings are not created.
+    # Hence if the build-settings has been edited
+    # We skip those
+    _settings[$_N_archives]=""
 }
 
 # This function takes no arguments
