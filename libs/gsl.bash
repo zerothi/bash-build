@@ -33,7 +33,7 @@ fi
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_c intel) ; then
-    pack_cmd "make check > tmp.test 2>&1"
+    pack_cmd "make check > tmp.test 2>&1 ; echo Force"
 fi
 pack_cmd "make install"
 if ! $(is_c intel) ; then

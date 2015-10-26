@@ -1,5 +1,4 @@
-return 0
-add_package http://ftp.gnu.org/gnu/glpk/glpk-4.47.tar.gz
+add_package http://ftp.gnu.org/gnu/glpk/glpk-4.56.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

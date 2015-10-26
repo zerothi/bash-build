@@ -61,6 +61,7 @@ source_pack libs/parpack.bash
 source_pack libs/elpa.bash
 
 # Some specific libraries
+source_pack libs/glpk.bash
 source_pack libs/gsl.bash
 source_pack libs/boost.bash
 source_pack libs/ctl.bash
