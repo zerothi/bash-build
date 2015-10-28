@@ -47,6 +47,7 @@ if [[ ${pV:0:1} -eq 2 ]]; then
     #pip_append bzr-fastimport
     pip_append enum34
     pip_append six
+    pip_append pandoc
 fi
 pip_append certifi
 pip_append cffi
@@ -62,7 +63,6 @@ pip_append mistune
 pip_append mock
 #pip_append monty
 pip_append nose
-pip_append pandoc
 pip_append pep8
 pip_append pexpect
 #pip_append pint
