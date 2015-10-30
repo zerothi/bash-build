@@ -36,20 +36,12 @@ LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 
 else
     pack_set --module-requirement scalapack
-
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    pack_cmd "sed -i '1 a\
+    
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '1 a\
 SCALAP  = $(list --LD-rp scalapack) -lscalapack \n\
-LIBBLAS = $(list --LD-rp $la) $tmp \n' Makefile.inc"
-	    break
-	fi
-    done
+LIBBLAS = $(list --LD-rp +$la) $(pack_get -lib $la) \n' Makefile.inc"
 
 fi
 
@@ -132,13 +124,10 @@ if $(is_c intel) ; then
 
 else
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    if [[ "x$la" == "xopenblas" ]]; then
-		pack_cmd "sed -i -e 's:lopenblas:lopenblas_omp:g' Makefile.inc"
-	    fi
-	fi
-    done
+    if [[ "x$la" == "xopenblas" ]]; then
+	pack_cmd "sed -i -e 's:$(pack_get -lib $la):$(pack_get -lib[omp] $la):g' Makefile.inc"
+    fi
+    
 fi
 
 pack_cmd "sed -i '$ a\

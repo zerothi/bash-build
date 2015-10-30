@@ -40,16 +40,13 @@ source_pack libs/fdict.bash
 # Default packages for many libs
 source_pack libs/blas.bash
 source_pack libs/cblas.bash
-source_pack libs/lapack.bash blas
+source_pack libs/lapack.bash
 source_pack libs/scalapack.bash
 
 source_pack libs/blis.bash
-source_pack libs/lapack.bash blis
 
 source_pack libs/atlas.bash
-source_pack libs/lapack.bash atlas
 source_pack libs/openblas.bash
-source_pack libs/lapack.bash openblas
 
 source_pack libs/flame.bash
 

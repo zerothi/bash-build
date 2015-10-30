@@ -60,19 +60,12 @@ LIBS += -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' $file"
 
 elif $(is_c gnu) ; then
-    tmp="-llapack"
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --mod-req $la
-	    [[ "x$la" == "xatlas" ]] && tmp="$tmp -lf77blas -lcblas"
-	    [[ "x$la" == "xacml" ]] && tmp=""
-	    tmp="$tmp -l$la"
-	    pack_cmd "sed -i '$ a\
-LIBS += $(list -LD-rp $la) $tmp\n\
+    
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '$ a\
+LIBS += $(list -LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
-	    break
-	fi
-    done
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

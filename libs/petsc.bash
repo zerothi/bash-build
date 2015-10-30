@@ -22,17 +22,9 @@ if $(is_c intel) ; then
 
 else
     pack_set --module-requirement scalapack
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    tmp="--with-lapack-lib='-llapack' --with-blas-lib='$tmp'"
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="--with-lapack-lib='$(pack_get -lib $la)' --with-blas-lib='$(pack_get -lib $la)'"
     tmp="$tmp --with-scalapack-dir=$(pack_get --prefix scalapack)"
 fi
 

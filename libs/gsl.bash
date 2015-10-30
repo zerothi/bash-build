@@ -14,19 +14,11 @@ if $(is_c intel) ; then
 
 else
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp="$(list --LD-rp $la) -llapack"
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="$tmp -lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    break
-	fi
-    done
-
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    
     pack_cmd "../configure" \
-	     "LIBS='-lm $tmp'" \
+	     "LIBS='$(pack_get -lib $la) -lm'" \
 	     "--prefix $(pack_get --prefix)"
 fi
 

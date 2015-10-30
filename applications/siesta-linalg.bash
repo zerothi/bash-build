@@ -21,21 +21,12 @@ elif $(is_c gnu) ; then
     for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    siesta_la=$la
-	    pack_set --module-requirement $la
-	    case $la in
-		atlas)
-		    tmp="$tmp -lf77blas -lcblas"
-		    ;;
-		acml)
-		    tmp=""
-		    ;;
-	    esac
-	    tmp="$tmp -l$la"
+	    pack_set --module-requirement lapack-$la
 	    pack_cmd "sed -i '1 a\
 LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
-BLAS_LIBS=$tmp \n\
+BLAS_LIBS= $(pack_get --lib lapack-$la) \n\
 LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n' arch.make"
 	    break
 	fi

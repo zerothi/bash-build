@@ -107,7 +107,7 @@ function set_flag {
 	    end=_omp
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:-lopenblas :-lopenblas_omp :g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' $file"
 		    ;;
 		mkl)
 		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
@@ -122,7 +122,7 @@ function set_flag {
 	    end=
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:-lopenblas_omp :-lopenblas :g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' $file"
 		    ;;
 		mkl)
 		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"

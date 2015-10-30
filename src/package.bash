@@ -634,14 +634,39 @@ function pack_get {
 #   $1 : name according to the choice
 #   $2 : package
 function pack_choice {
+    local inst=0
+    # First check options
+    while : ; do
+	local opt=$(trim_em $1)
+	case $opt in
+	    -installed|-i)
+		# return first choice that is installed
+		ints=1
+		shift
+		;;
+	    *)
+		break
+		;;
+	esac
+    done
     local c=$1 ; shift
     local p=""
     [[ $# -gt 0 ]] && p="$1" && shift
     # Get choice-list
     p="$(pack_get -s $p)"
     # Return choice
-    choice $c "$p"
-    return $?
+    if [[ $inst -eq 1 ]]; then
+	for opt in $(choice $c "$p") ; do
+	    if [[ $(pack_installed $opt) -eq 1 ]]; then
+		_ps $opt
+		return 0
+	    fi
+	done
+	return 1
+    else
+	choice $c "$p"
+	return $?
+    fi
 }
 
 

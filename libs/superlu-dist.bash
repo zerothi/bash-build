@@ -46,15 +46,10 @@ CFLAGS += -std=c99\n\
     
 else
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    pack_cmd "sed -i '1 a\
-BLASLIB = $(list --LD-rp $la) $tmp\n\
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '1 a\
+BLASLIB = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
 	    break
 	fi

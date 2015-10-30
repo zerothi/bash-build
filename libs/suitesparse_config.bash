@@ -57,19 +57,13 @@ if $(is_c intel) ; then
 
 else
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    break
-	fi
-    done
+    # Get the first choice of linalg that is installed
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(list -LD-rp +$la) $(pack_get -lib $la)"
 
-    pack_cmd "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = $(list --LD-rp $la) $tmp|' $mk"
-    pack_cmd "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $(list --LD-rp $la) -llapack|' $mk"
+    pack_cmd "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $tmp|' $mk"
+    pack_cmd "sed -i -e 's|^\(BLAS\)[[:space:]]*=.*|\1 = \$(LAPACK)|' $mk"
 
 fi
 

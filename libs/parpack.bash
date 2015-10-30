@@ -88,22 +88,14 @@ LDFLAGS = \n\
 
 else
 
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    pack_cmd "sed -i '1 a\
-LAPACKLIB = -llapack\n\
-BLASLIB   = $tmp \n\
-LDFLAGS   = $(list --LD-rp $la)\n\
+    pack_cmd "sed -i '1 a\
+LAPACKLIB = $(pack_get -lib $la)\n\
+BLASLIB   = \$(LAPACKLIB) \n\
+LDFLAGS   = $(list --LD-rp +$la)\n\
 ' $file"
-	    break
-	fi
-    done
 
     # We need to correct for etime which has enterred as
     # an intrinsic rather than external function

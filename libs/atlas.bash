@@ -57,5 +57,11 @@ pack_cmd "make install"
 # Move so that we can install correct lapack
 pack_cmd "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
 
+add_hidden_package lapack-atlas/$v
+pack_set -mod-req atlas
+# Denote the default libraries
+# Note that this OpenBLAS compilation has lapack built-in
+pack_set --lib -llapack_atlas $(pack_get --lib atlas[$v])
+
 done
 

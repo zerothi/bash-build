@@ -48,4 +48,12 @@ pack_cmd "popd"
 
 unset def_flag flag test_end
 
+add_hidden_package lapack-openblas/$v
+pack_set -mod-req openblas
+# Denote the default libraries
+# Note that this OpenBLAS compilation has lapack built-in
+pack_set --lib $(pack_get -lib openblas)
+pack_set --lib[omp] $(pack_get -lib[omp] openblas)
+pack_set --lib[pt] $(pack_get -lib[pt] openblas)
+
 done

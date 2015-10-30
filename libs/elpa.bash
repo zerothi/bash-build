@@ -12,17 +12,12 @@ if $(is_c intel) ; then
     tmp="$tmp -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
 
 else
+    
     pack_set --module-requirement scalapack
+    la=lapack-$(pack_choice -i linalg)
     tmp="-lscalapack"
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="$tmp -lf77blas -lcblas"
-	    tmp="$tmp -l$la"
-	    break
-	fi
-    done
+    tmp="-lscalapakc $(pack_get -lib $la)"
+    
 fi
 
 # We cannot use OpenMP threading as it requires sequential BLAS

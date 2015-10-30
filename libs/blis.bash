@@ -63,3 +63,10 @@ pack_cmd "sed -si -e 's?-fopenmp? ?g' config/*/*.mk"
 pack_cmd "sed -si -e 's?-fopenmp? ?g' test/*/Makefile"
 pack_cmd "make"
 pack_cmd "make install"
+
+add_hidden_package lapack-blis/$v
+pack_set -mod-req blis
+# Denote the default libraries
+# Note that this OpenBLAS compilation has lapack built-in
+pack_set --lib -llapack -lblis
+pack_set --lib[omp] -llapack -lblis_omp

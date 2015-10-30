@@ -29,22 +29,17 @@ LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $file"
 
 else 
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    cblas=
-	    [[ "x$la" == "xatlas" ]] && \
-		tmp="-lf77blas -lcblas"
-	    [[ "x$la" == "xopenblas" ]] && \
-		tmp="-lopenblas_omp" || tmp="$tmp -l$la"
-	    [[ "x$la" == "xblas" ]] && cblas="-lcblas"
-	    pack_cmd "sed -i '1 a\
+    la=$(pack_choice -i linalg)
+    lla=lapack-$la
+    pack_set --module-requirement $lla
+    tmp="$(pack_get -lib $la)"
+
+    pack_cmd "sed -i '1 a\
 LIBBLAS  = $(list --LD-rp $la) $tmp \n\
-LIBCBLAS = $cblas\n\
-INCCLAPACK = $(list --INCDIRS $la)\n\
-LIBCLAPACK = $(list --LD-rp $la) -llapacke \n\
-LIBLAPACK  = $(list --LD-rp $la) -ltmg -llapack\n' $file"
+LIBCBLAS = $tmp\n\
+INCCLAPACK = $(list --INCDIRS +$lla)\n\
+LIBCLAPACK = $(list --LD-rp +$lla) -llapacke \n\
+LIBLAPACK  = $(list --LD-rp +$lla) $(pack_get -lib $lla)\n' $file"
 	    break
 	fi
     done
