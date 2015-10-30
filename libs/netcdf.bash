@@ -5,6 +5,7 @@ add_package http://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-$v.tar.gz
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libnetcdf.a
+pack_set --lib[fortran] -lnetcdff -lnetcdf
 
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' hdf5 pnetcdf)

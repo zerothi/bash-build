@@ -13,10 +13,10 @@ add_package \
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libnetcdf.a
+pack_set --lib[fortran] -lnetcdff -lnetcdf
 
 # Add requirments when creating the module
 pack_set $(list --prefix ' --module-requirement ' hdf5 pnetcdf)
-
 
 # bugfix for the iter test!
 pack_cmd "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"

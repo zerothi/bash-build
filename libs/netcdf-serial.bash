@@ -10,6 +10,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --module-requirement hdf5-serial
 
 pack_set --install-query $(pack_get --LD)/libnetcdf.a
+pack_set --lib[fortran] -lnetcdff -lnetcdf
 
 # Install commands that it should run
 pack_cmd "../configure" \

@@ -6,6 +6,7 @@ add_package --package petsc \
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libpetsc.so
+pack_set --lib -lpetsc
 
 pack_set $(list --prefix '--mod-req ' parmetis fftw-mpi-3 hdf5)
 

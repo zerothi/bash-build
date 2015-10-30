@@ -8,6 +8,7 @@ add_package \
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libpnetcdf.a
+pack_set --lib -lpnetcdf
 
 pack_set --module-requirement mpi
 if [[ $(pack_installed bison) -eq 1 ]]; then

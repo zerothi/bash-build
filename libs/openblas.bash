@@ -6,16 +6,16 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libopenblas.a
 
+pack_set --lib -lopenblas
+pack_set --lib[omp] -lopenblas_omp
+pack_set --lib[pt] -lopenblasp
+
 # Default flags for all compilations of OpenBLAS here 
 # Improve allocation for small matrices
 def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048"
 # NO_LAPACK=1 means that we do not need -lgfortran
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 
-# Define libraries
-pack_set --lib -lopenblas
-pack_set --lib[omp] -lopenblas_omp
-pack_set --lib[pt] -lopenblasp
 
 for ver in thread none openmp ; do
     flag="$def_flag USE_THREAD=0"

@@ -16,6 +16,9 @@ add_package --alias fftw-3 \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --LD)/libfftw3_omp.a
+pack_set --lib -lfftw3
+pack_set --lib[omp] -lfftw3_omp
+pack_set --lib[pt] -lfftw3_threads
 
 for flag in --enable-single nothing ; do
     ext=f

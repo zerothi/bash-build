@@ -18,6 +18,8 @@ pack_set $(list --prefix "--host-reject " n-62-17-44 n-62-26 n-62-25)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libatlas.a
+pack_set --lib -lf77blas -lcblas -latlas
+
 
 # Prepare the make file
 pack_cmd "sed -i -e 's/ThrChk[[:space:]]*=[[:space:]]*1/ThrChk = 0/' ../CONFIG/src/config.c"

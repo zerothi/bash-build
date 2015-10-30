@@ -4,6 +4,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libxml2.so
 
+pack_set --lib -lxml2
+
 # Add requirments when creating the module
 pack_set --module-requirement zlib
 

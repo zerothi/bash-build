@@ -3,6 +3,7 @@ add_package ftp://sourceware.org/pub/libffi/libffi-3.1.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/include/ffi.h
+pack_set --lib -lffi
 
 # Install commands that it should run
 pack_cmd "./configure" \

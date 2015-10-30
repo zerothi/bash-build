@@ -5,6 +5,18 @@ add_package --package mumps \
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libmumps_common_omp.a
+pack_set --lib -lzmumps -ldmumps -lcmumps -lsmumps -lmumps_common -lpord
+pack_set --lib[omp] -lzmumps_omp -ldmumps_omp -lcmumps_omp -lsmumps_omp -lmumps_common_omp -lpord_omp
+pack_set --lib[z] -lzmumps -lmumps_common -lpord
+pack_set --lib[d] -ldmumps -lmumps_common -lpord
+pack_set --lib[c] -lcmumps -lmumps_common -lpord
+pack_set --lib[s] -lsmumps -lmumps_common -lpord
+
+pack_set --lib[zomp] -lzmumps_omp -lmumps_common_omp -lpord_omp
+pack_set --lib[domp] -ldmumps_omp -lmumps_common_omp -lpord_omp
+pack_set --lib[comp] -lcmumps_omp -lmumps_common_omp -lpord_omp
+pack_set --lib[somp] -lsmumps_omp -lmumps_common_omp -lpord_omp
+
 
 if [[ $(vrs_cmp $v 5.0.0) -ge 0 ]]; then
     parmetisV=parmetis
