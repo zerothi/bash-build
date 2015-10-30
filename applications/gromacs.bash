@@ -23,25 +23,10 @@ if $(is_c intel) ; then
     tmp="$tmp -DGMX_BLAS_USER='-mkl=parallel'"
 elif $(is_c gnu) ; then
 
-    # We use a c-linker (which does not add gfortran library
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]] ; then
-	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LD-rp $la)"
-	    case $la in
-		atlas)
-		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lf77blas -lcblas -latlas -lgfortran'"
-		    ;;
-		openblas)
-		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lopenblas -lgfortran'"
-		    ;;
-		blas)
-		    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) -lblas -lgfortran'"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp_ld="$(list --LD-rp +$la)"
+    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) $(pack_get -lib $la) -lgfortran'"
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"

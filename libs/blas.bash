@@ -7,6 +7,8 @@ add_package \
 pack_set_file_version
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set --lib[omp] -lblas
+pack_set --lib[pt] -lblas
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
 

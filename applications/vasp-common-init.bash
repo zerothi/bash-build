@@ -87,30 +87,12 @@ LINK = \n\
 DEBUG = \n' $file"
     pack_set --module-requirement scalapack
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    pack_cmd "sed -i '$ a\
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '$ a\
 SCA = $(list --LD-rp scalapack) -lscalapack\n\
-LAPACK = $(list --LD-rp $la) -llapack\n ' $file"
-	    
-	    case $la in
-		atlas)
-		    pack_cmd "sed -i '$ a\
-BLAS = $(list --LD-rp $la) -lf77blas -lcblas -latlas\n' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '$ a\
-BLAS = $(list --LD-rp $la) -lblas\n' $file"
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '$ a\
-BLAS = $(list --LD-rp $la) -lopenblas_omp\n' $file"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+LAPACK = $(list --LD-rp +$la) $(pack_get -lib[omp] $la)\n\
+BLAS = \$(LAPACK)\n' $file"
 
 # Fix source for gnu
 pack_cmd "sed -i -e 's:3(1x,3I):3(1x,3I0):g' vasp.5.3/spinsym.F"

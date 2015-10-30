@@ -55,26 +55,12 @@ for v in 5.1.1 5.1.2 ; do
     else
 	pack_set --module-requirement scalapack
 
-	for la in $(pack_choice linalg) ; do
-	    if [[ $(pack_installed $la) -eq 1 ]] ; then
-		pack_set --module-requirement $la
-		tmp_ld="$(list --LD-rp $la)"
-		tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld -llapack'"
-		tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
-		case $la in
-		    atlas)
-			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lf77blas -lcblas -latlas'"
-			;;
-		    openblas)
-			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lopenblas_omp'"
-			;;
-		    blas)
-			tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld -lblas'"
-			;;
-		esac
-		break
-	    fi
-	done
+	la=lapack-$(pack_choice -i linalg)
+	pack_set --module-requirement $la
+	tmp_ld="$(list --LD-rp +$la)"
+	tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld $(pack_get -lib[omp] $la)'"
+	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
+	tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld $(pack_get -lib[omp] $la)'"
 
     fi
 

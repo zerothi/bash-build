@@ -40,26 +40,10 @@ if $(is_c intel) ; then
 else
     pack_set --module-requirement scalapack
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]] ; then
-	    pack_set --module-requirement $la
-	    case $la in
-		atlas)
-		    pack_cmd "sed -i '1 a\
-LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lf77blas -lcblas -latlas' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '1 a\
-LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lblas' $file"
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '1 a\
-LIB += $(list --LD-rp scalapack $la) -lscalapack -llapack -lopenblas_omp' $file"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=$(pack_choice -i linalg)
+    pack_set --module-requirement lapack-$la
+    pack_cmd "sed -i '1 a\
+LIB += $(list --LD-rp scalapack +$la) -lscalapack $(pack_get -lib[omp] $la)' $file"
 
     # Add the gfortran library
     pack_cmd "sed -i '1 a\

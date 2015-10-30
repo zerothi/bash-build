@@ -16,21 +16,17 @@ LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 # If one ever needs MKL with gnu compiler it should be -lmkl_gf_lp64 instead of -lmkl_intel_lp64
 
 elif $(is_c gnu) ; then
+    
     pack_set --module-requirement scalapack 
-    tmp="-llapack"
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    siesta_la=$la
-	    pack_set --module-requirement lapack-$la
-	    pack_cmd "sed -i '1 a\
+    siesta_la=$(pack_choice -i linalg)
+    la=lapack-$siesta_la
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '1 a\
 LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
-BLAS_LIBS= $(pack_get --lib lapack-$la) \n\
+BLAS_LIBS= $(pack_get --lib $la) \n\
 LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n' arch.make"
-	    break
-	fi
-    done
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

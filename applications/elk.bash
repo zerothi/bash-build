@@ -46,24 +46,9 @@ LIB_LPK = $tmp\n\
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]] ; then
-	    pack_set --module-requirement $la
-	    tmp="-llapack"
-	    case $la in
-		atlas)
-		    tmp="$tmp -lf77blas -lcblas -latlas"
-		    ;;
-		openblas)
-		    tmp="$tmp -lopenblas_omp"
-		    ;;
-		blas)
-		    tmp="$tmp -lblas"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(pack_get -lib[omp] $la)"
 
     pack_cmd "sed -i '1 a\
 LIB_LPK = $(list --LD-rp $(pack_get --mod-req)) $tmp\n\

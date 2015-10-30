@@ -16,26 +16,10 @@ if $(is_c intel) ; then
     
 else
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    case $la in 
-		atlas)
-		    pack_cmd "sed -i '1 a\
-LIBS = $(list --LD-rp $la) -llapack -lf77blas -lcblas -latlas' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '1 a\
-LIBS = $(list --LD-rp $la) -llapack -lblas' $file"
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '1 a\
-LIBS = $(list --LD-rp $la) -llapack -lopenblas' $file"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '1 a\
+LIBS = $(list --LD-rp +$la) $(pack_get -lib $la)' $file"
 
 fi
 

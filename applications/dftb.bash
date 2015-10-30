@@ -44,31 +44,14 @@ CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
 CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
 LN = \$(FC90) \n\
 LNOPT = $FLAG_OMP' $file"
-    
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    pack_cmd "sed -i '$ a\
-LINALG_OPT = $(list --LD-rp $la)\n\
-LIB_LAPACK = \$(LINALG_OPT) -llapack\n\
+
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    pack_cmd "sed -i '$ a\
+LINALG_OPT = $(list --LD-rp +$la)\n\
+LIB_LAPACK = \$(LINALG_OPT) $(pack_get -lib[omp] $la)\n\
+LIB_BLAS = \$(LINALG_OPT) $(pack_get -lib[omp] $la)\n\
 LIBOPT = \$(LINALG_OPT)\n' $file"
-	    case $la in
-		atlas)
-		    pack_cmd "sed -i '$ a\
-LIB_BLAS   = \$(LINALG_OPT) -lf77blas -lcblas -latlas\n' $file"
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '$ a\
-LIB_BLAS   = \$(LINALG_OPT) -lopenblas_omp\n' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '$ a\
-LIB_BLAS   = \$(LINALG_OPT) -lblas\n' $file"
-		    ;;
-	    esac
-	    break
-	fi
-    done
 
 fi
 

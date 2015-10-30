@@ -298,15 +298,11 @@ if $(is_c intel) ; then
     tmp=1
 
 elif $(is_c gnu) ; then
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    if [[ "x$la" == "xopenblas" ]]; then
-		# Only openblas has gemm3m
-		tmp=1
-	    fi
-	    break
-	fi
-    done
+
+    if [[ "x$siesta_la" == "xopenblas" ]]; then
+	# Only openblas has gemm3m
+	tmp=1
+    fi
 fi
 
 

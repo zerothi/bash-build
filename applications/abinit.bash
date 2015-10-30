@@ -68,27 +68,13 @@ with_linalg_libs=\"$tmp\"\n' $file"
 
 else
     pack_set --module-requirement scalapack
-    
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    case $la in
-		atlas)
-		    tmp="-lf77blas -lcblas -latlas"
-		    ;;
-		openblas)
-		    tmp="-lopenblas_omp"
-		    ;;
-		blas)
-		    tmp="-lblas"
-		    ;;
-	    esac
-	    pack_cmd "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS $la)\"\n\
-with_linalg_libs=\"$(list --LD-rp scalapack $la) -lscalapack -llapack $tmp\"\n' $file"
-	    break
-	fi
-    done
+
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(pack_get -lib[omp] $la)"
+    pack_cmd "$s '$ a\
+with_linalg_incs=\"$(list --INCDIRS +$la)\"\n\
+with_linalg_libs=\"$(list --LD-rp scalapack +$la) -lscalapack $tmp\"\n' $file"
 
 fi
 

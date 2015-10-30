@@ -5,6 +5,10 @@ if ! $(is_c gnu) ; then
     pack_set --host-reject $(get_hostname)
 fi
 
+pack_set --lib -lblis
+pack_set --lib[omp] -lblis_omp
+pack_set --lib[pt] -lblis
+
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
@@ -68,5 +72,6 @@ add_hidden_package lapack-blis/$v
 pack_set -mod-req blis
 # Denote the default libraries
 # Note that this OpenBLAS compilation has lapack built-in
-pack_set --lib -llapack -lblis
-pack_set --lib[omp] -llapack -lblis_omp
+pack_set --lib -llapack $(pack_get -lib blis)
+pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis)
+pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis)

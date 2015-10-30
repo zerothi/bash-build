@@ -17,18 +17,9 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp="$(list --LD-rp $la) -llapack"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp="$tmp -lf77blas -lcblas -latlas"
-	    else
-		tmp="$tmp -l$la"
-	    fi
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(pack_get -lib $la)"
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

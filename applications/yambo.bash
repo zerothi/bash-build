@@ -26,23 +26,14 @@ if $(is_c intel) ; then
     tmp_scalapack="$tmp_blas"
 
 elif $(is_c gnu) ; then
+
     pack_set --module-requirement scalapack
     tmp_scalapack="$(list --LD-rp scalapack)"
-
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]] ; then
-	    pack_set --module-requirement $la
-	    tmp_blas="$(list --LD-rp $la)"
-	    tmp_lapack="$tmp_blas -llapack"
-	    if [ "x$la" == "xatlas" ]; then
-		tmp_blas="$tmp_blas -lf77blas -lcblas -latlas"
-	    else
-		tmp_blas="$tmp_blas -l$la"
-	    fi
-	    tmp_scalapack="$tmp_scalapack -lscalapack $tmp_lapack $tmp_blas"
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp_blas="$(list --LD-rp +$la)"
+    tmp_lapack="$tmp_blas $(pack_get -lib $la)"
+    tmp_scalapack="$tmp_scalapack -lscalapack $tmp_lapack $tmp_blas"
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

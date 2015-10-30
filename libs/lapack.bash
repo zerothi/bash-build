@@ -46,3 +46,6 @@ add_hidden_package lapack-blas/$v
 pack_set -mod-req blas
 pack_set -mod-req lapack
 pack_set -lib -llapack -lblas
+pack_set -lib[omp] -llapack $(pack_get -lib[omp] blas)
+pack_set -lib[pt] -llapack $(pack_get -lib[pt] blas)
+

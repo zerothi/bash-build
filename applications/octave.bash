@@ -42,25 +42,12 @@ if $(is_c intel) ; then
 
 else 
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]] ; then
-	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LD-rp $la)"
-	    tmp_flags="$tmp_flags --with-lapack='$tmp_ld -llapack'"
-	    case $la in
-		atlas)
-		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lf77blas -lcblas -latlas'"
-		    ;;
-		openblas)
-		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lopenblas'"
-		    ;;
-		blas)
-		    tmp_flags="$tmp_flags --with-blas='$tmp_ld -lblas'"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+
+    tmp_ld="$(list --LD-rp +$la)"
+    tmp_flags="$tmp_flags --with-lapack='$tmp_ld $(pack_get -lib $la)'"
+    tmp_flags="$tmp_flags --with-blas='$tmp_ld $(pack_get -lib $la)'"
 
 fi
 

@@ -22,25 +22,11 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp_ld="-lscalapack -llapack"
-	    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp scalapack $la)'"
-	    case $la in
-		atlas)
-		    tmp="$tmp --with-ext-linalg='$tmp_ld -lf77blas -lcblas -latlas'"
-		    ;;
-		openblas)
-		    tmp="$tmp --with-ext-linalg='$tmp_ld -lopenblas'"
-		    ;;
-		blas)
-		    tmp="$tmp --with-ext-linalg='$tmp_ld -lblas'"
-		    ;;
-	    esac
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp_ld="-lscalapack $(pack_get -lib $la)"
+    tmp="$tmp --with-ext-linalg-path='$(list --LD-rp scalapack +$la)'"
+    tmp="$tmp --with-ext-linalg='$tmp_ld $(pack_get -lib $la)'"
 
 else
     doerr BigDFT "Could not determine compiler..."

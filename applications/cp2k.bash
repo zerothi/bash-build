@@ -58,31 +58,12 @@ FCFLAGS += -ffree-form -ffree-line-length-none \n\
 SCALAPACK_L = $(list --LD-rp scalapack) -lscalapack \n\
 ' $file"
 
-    # We use a c-linker (which does not add gfortran library)
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp_ld="$(list --LD-rp $la)"
-	    case $la in
-		atlas)
-		    pack_cmd "sed -i '1 a\
-LAPACK_L = $tmp_ld -llapack -lf77blas -lcblas -latlas\n\
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp_ld="$(list --LD-rp +$la)"
+    pack_cmd "sed -i '1 a\
+LAPACK_L = $tmp_ld $(pack_get -lib[omp] $la)\n\
 ' $file"
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '1 a\
-LAPACK_L = $tmp_ld -llapack -lopenblas_omp\n\
-' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '1 a\
-LAPACK_L = $tmp_ld -llapack -lblas\n\
-' $file"
-		    ;;
-	    esac
-	    break
-	fi
-    done
 
 else
     doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
