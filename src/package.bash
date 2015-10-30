@@ -266,6 +266,9 @@ function add_package {
     else
 	_index[$lc_name]="$_N_archives"
     fi
+    # The default library is setup
+    _libs[$_N_archives]=$_LIB_DEF$_CHOICE_SEP-l$package
+    
     # Default the module name to this:
     _installed[$_N_archives]=$_I_TO_BE
     # Module prefix and the name of the module
@@ -309,6 +312,7 @@ function pack_set {
     local mod_prefix="" local m=
     local mod_opt="" ; local lib="" ; local up_pre_mod=0
     local tmp=
+    local libs_c="" ; local libs=""
     local in_cmd=0
     while [[ $# -gt 0 ]]; do
 	# Process what is requested
@@ -381,6 +385,21 @@ function pack_set {
 	    -prefix-and-module)  mod_name="$1" ; up_pre_mod=1 ; shift ;;
 	    -p|-package)  package="$1" ; shift ;;
 	    -host-reject)  reject_h="$reject_h $1" ; shift ;; # Can be called several times
+	    -lib*) # Has to be last due to *
+		# Get the library choice
+		libs_c=$(var_spec -s $opt)
+		if [[ -z "$libs_c" ]]; then
+		    libs_c=$_LIB_DEF
+		fi
+		# collect the libraries for this spec
+		libs="$_CHOICE_SEP"
+		while [[ $# -gt 1 ]]; do
+		    libs="$libs$1 "
+		    shift
+		done
+		libs="$libs$1"
+		shift
+		;;
 	    *)
 		if [[ $in_cmd -eq 1 ]]; then
 		    cmd_flags="$cmd_flags $1" ; shift
@@ -413,6 +432,29 @@ function pack_set {
 	[[ -d "$install/lib64" ]] && lib="lib64"
     fi
     [[ -n "$lib" ]]        && _lib_prefix[$index]="$lib"
+    if [[ -n "$libs_c" ]]; then
+	# Note that $libs already have the $_CHOICE_SEP as the first
+	# char...
+	local -a sets=()
+	IFS="$_LIST_SEP" read -ra sets <<< "${_libs[$index]}"
+	# Initialize the libraries
+	_libs[$index]="$libs_c$libs"
+	# Loop and re-create the "missing" libraries
+	local tmp
+	local l_c
+	local l_l
+	for tmp in "${sets[@]}" ; do
+	    # Skip empty sets
+	    [[ -z "$tmp" ]] && continue
+	    # Get library name
+	    l_c="${tmp%%$_CHOICE_SEP*}"
+	    l_l="${tmp#*$_CHOICE_SEP}"
+	    if [[ "x$l_c" != "x$libs_c" ]]; then
+		_libs[$index]="${_libs[$index]}$_LIST_SEP$l_c$_CHOICE_SEP$l_l"
+	    fi
+	done
+
+    fi
     [[ "$inst" -ne "-100" ]]    && _installed[$index]="$inst"
     [[ -n "$query" ]]      && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
@@ -503,13 +545,6 @@ function pack_get {
 		    done ;;
 		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
-                -lib*)
-		# First retrieve the option library
-		local s=$(var_spec -s $opt)
-		# If the option is use the default option
-		[[ -z "$s" ]] && s=$_LIB_DEF
-		# Search for the library
-		_ps "${_http[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -526,6 +561,15 @@ function pack_get {
 		-p|-package)         _ps "${_package[$index]}" ;;
 		-e|-ext)             _ps "${_ext[$index]}" ;;
 		-host-reject)        _ps "${_reject_host[$index]}" ;;
+                -lib*)
+		    # First retrieve the option library
+		    local s=$(var_spec -s $opt)
+		    # If the option is use the default option
+		    [[ -z "$s" ]] && s=$_LIB_DEF
+		    # Print the libraries for the choice
+		    # Search for the library
+		    choice $s "${_libs[$index]}"
+		    ;;
 		*)
 		    doerr "$1" "No option for pack_get found for $1" ;;
 	    esac
@@ -571,6 +615,15 @@ function pack_get {
 	    -p|-package)         _ps "${_package[$index]}" ;;
 	    -e|-ext)             _ps "${_ext[$index]}" ;;
 	    -host-reject)        _ps "${_reject_host[$index]}" ;;
+            -lib*)
+		# First retrieve the option library
+		local s=$(var_spec -s $opt)
+		# If the option is use the default option
+		[[ -z "$s" ]] && s=$_LIB_DEF
+		# Print the libraries for the choice
+		# Search for the library
+		choice $s "${_libs[$index]}"
+		;;
 	    *)
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
@@ -616,7 +669,7 @@ function pack_set_mv_test {
 function pack_print {
     # It will only take one argument...
     local pack=$_N_archives
-    [[ $# -gt 0 ]] && pack=$1
+    [[ $# -gt 0 ]] && pack=$(get_index $1)
     echo " >> >> >> >> Package information"
     echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
     echo " V  : $(pack_get -v $pack)"
@@ -632,6 +685,26 @@ function pack_print {
     echo " REQ: $(pack_get -module-requirement $pack)"
     echo " REJ: $(pack_get -host-reject $pack)"
     echo " OPT: $(pack_get -module-opt $pack)"
+    # Print out all the libraries associated
+    # with this package
+    local -a sets=()
+    # Get all different libraries
+    IFS="$_LIST_SEP" read -ra sets <<< "${_libs[$pack]}"
+    local libc
+    local lib
+    local c
+    for c in "${sets[@]}" ; do
+	# Skip empty sets
+	[[ -z "$c" ]] && continue
+	# Get library name
+	libc="${c%%$_CHOICE_SEP*}"
+	lib="${c#*$_CHOICE_SEP}"
+	if [[ "x$libc" == "x$_LIB_DEF" ]]; then
+	    echo " LIBS[default]: $lib"
+	else
+	    echo " LIBS[$libc]: $lib"
+	fi
+    done
     echo "                                 << << << <<"
 }
 

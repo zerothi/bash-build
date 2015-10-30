@@ -27,7 +27,7 @@ MAKE_PARALLEL=parallel
 # A separator used for commands that can be given consequtively
 _LIST_SEP='ø'
 # Separator for choices
-_CHOICE_SEP='|'
+_CHOICE_SEP='@'
 
 # Whether we should create TCL or LUA module files
 _module_format='TCL'
