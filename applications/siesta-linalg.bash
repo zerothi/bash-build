@@ -18,7 +18,7 @@ LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack 
     tmp="-llapack"
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    siesta_la=$la
 	    pack_set --module-requirement $la

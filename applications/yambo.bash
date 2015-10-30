@@ -29,7 +29,7 @@ elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
     tmp_scalapack="$(list --LD-rp scalapack)"
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]] ; then
 	    pack_set --module-requirement $la
 	    tmp_blas="$(list --LD-rp $la)"

@@ -298,7 +298,7 @@ if $(is_c intel) ; then
     tmp=1
 
 elif $(is_c gnu) ; then
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    if [[ "x$la" == "xopenblas" ]]; then
 		# Only openblas has gemm3m

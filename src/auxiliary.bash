@@ -548,6 +548,37 @@ function dwn_file {
     fi
 }
 
+#  Function choice
+# Returns choices from a string and choice give in a string formatted as:
+#     <choice-A>$_CHOICE_SEPchoice-A-1$_CHOICE_SEPchoice-A-2$_LIST_SEP<choice-B>$_CHOICE_SEPchoice-B-1
+#  Arguments
+#    choice
+#       the choice to extract from the choice-string
+#    choice-string
+#       string containing the different choices in this segment
+
+function choice {
+    # The selected choice
+    local c="$1" ; shift
+    # All choices
+    local cs="$1" ; shift
+    local -a sets=()
+    # Convert choices list ot list
+    IFS="$_LIST_SEP" read -ra sets <<< "$cs"
+    # Loop to get out the choice
+    for cc in "${sets[@]}" ; do
+	# Only compare up to the next $_CHOICE_SEP
+	if [[ "x$c" == "x${cc%%$_CHOICE_SEP*}" ]]; then
+	    IFS="$_CHOICE_SEP" read -ra sets <<< "${cc#*$_CHOICE_SEP}"
+	    for cc in "${sets[@]}" ; do
+		_ps " $cc"
+	    done
+	    return 0
+	fi
+    done
+    return 1
+}
+
 
 #  Function list
 # Returns several options from either a list of <package>s or

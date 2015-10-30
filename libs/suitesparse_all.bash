@@ -47,7 +47,7 @@ else
     # the C-compiler will work.
     sse "LIB += -lgfortran"
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    sse "LAPACK = $(list --LD-rp $la) -llapack"

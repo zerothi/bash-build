@@ -85,7 +85,7 @@ elif $(is_c gnu) ; then
     fi
     pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblasp|g' numpy/distutils/system_info.py"
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp="$(pack_get --LD $la)"

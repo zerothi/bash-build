@@ -60,7 +60,7 @@ LIBS += -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 
 elif $(is_c gnu) ; then
     tmp="-llapack"
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --mod-req $la
 	    [[ "x$la" == "xatlas" ]] && tmp="$tmp -lf77blas -lcblas"

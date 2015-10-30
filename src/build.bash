@@ -217,7 +217,7 @@ function build_set {
 		    doerr "BUILD-CHOICE" "You need to specify at least one choice"
 		fi
 		while [[ $# -gt 0 ]]; do
-		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}|$1"
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_CHOICE_SEP$1"
 		    shift
 		done
 		;;

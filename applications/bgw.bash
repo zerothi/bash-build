@@ -54,7 +54,7 @@ elif $(is_c gnu) ; then
     pack_set --module-requirement scalapack
 
     # We use a c-linker (which does not add gfortran library)
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp_ld="$(list --LD-rp scalapack $la)"

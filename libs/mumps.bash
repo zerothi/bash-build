@@ -25,7 +25,7 @@ LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
 else
     pack_set --module-requirement scalapack
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp=
@@ -120,7 +120,7 @@ if $(is_c intel) ; then
 
 else
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    if [[ "x$la" == "xopenblas" ]]; then
 		pack_cmd "sed -i -e 's:lopenblas:lopenblas_omp:g' Makefile.inc"

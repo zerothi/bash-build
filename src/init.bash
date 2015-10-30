@@ -125,26 +125,6 @@ function has_setting {
     return 1
 }
 
-# Returns a list of the choices
-#   $1 : name according to the choic
-#   $2 : this package
-function choice {
-    local ss="" ; local s="$1" ; shift
-    local -a sets=()
-    [[ $# -gt 0 ]] && ss="$1" && shift
-    local len=${#s}
-    IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
-    for ss in "${sets[@]}" ; do
-	if [[ "x$s" == "x${ss:0:$len}" ]]; then
-	    IFS="|" read -ra sets <<< "${ss:$len}"
-	    for ss in "${sets[@]}" ; do
-		_ps " $ss"
-	    done
-	    return 0
-	fi
-    done
-    return 1
-}
     
 # Returns the -j <procs> flag for the make command
 # If the MAKE_PARALLEL setting has been enabled.

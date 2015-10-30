@@ -55,7 +55,7 @@ for v in 5.1.1 5.1.2 ; do
     else
 	pack_set --module-requirement scalapack
 
-	for la in $(choice linalg) ; do
+	for la in $(pack_choice linalg) ; do
 	    if [[ $(pack_installed $la) -eq 1 ]] ; then
 		pack_set --module-requirement $la
 		tmp_ld="$(list --LD-rp $la)"

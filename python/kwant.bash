@@ -31,7 +31,7 @@ libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n' $file"
     
 elif $(is_c gnu) ; then
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    tmp=

@@ -6,6 +6,12 @@ declare -A _http
 declare -A _settings
 # Where the package is installed
 declare -A _install_prefix
+# A package library
+#  This is a list like:
+#     <opt>$_CHOICE_SEPlib1 ... $_LIST_SEP
+declare -A _libs
+# Too long for anybody to create
+_LIB_DEF='this_default_lib'
 # Where the package libraries are found
 declare -A _lib_prefix
 # What to check for when installed
@@ -360,7 +366,7 @@ function pack_set {
 		    doerr "pack_set" "You need to specify at least one choice"
 		fi
 		while [[ $# -gt 0 ]]; do
-		    settings="$settings|$1"
+		    settings="$settings$_CHOICE_SEP$1"
 		    shift
 		done
 		;;
@@ -497,6 +503,13 @@ function pack_get {
 		    done ;;
 		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
 		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
+                -lib*)
+		# First retrieve the option library
+		local s=$(var_spec -s $opt)
+		# If the option is use the default option
+		[[ -z "$s" ]] && s=$_LIB_DEF
+		# Search for the library
+		_ps "${_http[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
 		-I|-install-prefix|-prefix) 
@@ -562,6 +575,20 @@ function pack_get {
 		doerr $1 "No option for pack_get found for $1" ;;
 	esac
     fi
+}
+
+# Returns a list of the choices for the package
+#   $1 : name according to the choice
+#   $2 : package
+function pack_choice {
+    local c=$1 ; shift
+    local p=""
+    [[ $# -gt 0 ]] && p="$1" && shift
+    # Get choice-list
+    p="$(pack_get -s $p)"
+    # Return choice
+    choice $c "$p"
+    return $?
 }
 
 

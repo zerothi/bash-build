@@ -14,7 +14,7 @@ if $(is_c intel) ; then
 else
     pack_set --module-requirement scalapack
     tmp="-lscalapack"
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    [[ "x$la" == "xatlas" ]] && \

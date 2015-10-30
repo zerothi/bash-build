@@ -87,7 +87,7 @@ LINK = \n\
 DEBUG = \n' $file"
     pack_set --module-requirement scalapack
 
-    for la in $(choice linalg) ; do
+    for la in $(pack_choice linalg) ; do
 	if [[ $(pack_installed $la) -eq 1 ]]; then
 	    pack_set --module-requirement $la
 	    pack_cmd "sed -i '$ a\
