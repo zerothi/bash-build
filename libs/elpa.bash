@@ -8,6 +8,7 @@ pack_set --install-query $(pack_get --LD)/libelpa.a
 pack_set --module-requirement mpi
 
 if $(is_c intel) ; then
+    # Here we need static blacs
     tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
     tmp="$tmp -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
 
@@ -25,7 +26,11 @@ pack_cmd "../configure CC='$MPICC' CXX='$MPICXX' FC='$MPIFC' F90='$MPIF90' SCALA
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
-pack_cmd "make install"
-pack_set_mv_test tmp.test
+if $(is_c intel) ; then
+    pack_cmd "make install"
+else
+    pack_cmd "make check > tmp.test 2>&1"
+    pack_cmd "make install"
+    pack_set_mv_test tmp.test
+fi
 

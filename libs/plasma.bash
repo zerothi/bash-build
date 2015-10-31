@@ -21,8 +21,8 @@ CFLAGS  += -DPLASMA_WITH_MKL -I$MKL_PATH/include \n\
 FFLAGS  += -fltconsistency -fp-port \n\
 LDFLAGS += -nofor-main \n\
 # We need the C-interface for LAPACK\n\
-INCCLAPACK = $(list --INCDIRS blas)\n\
-LIBCLAPACK = $(list --LD-rp blas) -llapacke \n\
+INCCLAPACK = $(list --INCDIRS lapack)\n\
+LIBCLAPACK = $(list --LD-rp lapack) -llapacke \n\
 LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
 LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $file"

@@ -26,7 +26,7 @@ if $(is_c intel) ; then
 fi
 
 pack_cmd "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --LD-rp blas) -lblas?g' $file"
-pack_cmd "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LD-rp blas) -llapack|g' $file"
+pack_cmd "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LD-rp lapack) -llapack|g' $file"
 
 pack_cmd "make $(get_make_parallel)"
 
