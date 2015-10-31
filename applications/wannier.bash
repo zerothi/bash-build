@@ -19,7 +19,7 @@ elif $(is_c gnu) ; then
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp="$(pack_get -lib $la)"
+    tmp="$(list -LD-rp +$la) $(pack_get -lib $la)"
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
