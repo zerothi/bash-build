@@ -148,7 +148,7 @@ function pack_crt_list {
     local pack=$_N_archives
     [ $# -gt 0 ] && pack=$1
     local build=$(pack_get --build $pack)
-    build=$(build_get --build-path $build)
+    build=$(build_get --build-path[$build])
     local mr=$(pack_get --module-requirement $pack)
     if [[ ! -z "$mr" ]]; then
 	{

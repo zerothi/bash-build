@@ -43,6 +43,7 @@ pack_cmd "cp LAPACKE/include/*.h $(pack_get --prefix)/include/"
 
 add_hidden_package lapack-blas/$v
 # Denote the default libraries
+pack_set --installed $_I_REQ
 pack_set -mod-req blas
 pack_set -mod-req lapack
 pack_set -lib -llapack -lblas

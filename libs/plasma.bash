@@ -40,9 +40,6 @@ LIBCBLAS = $tmp\n\
 INCCLAPACK = $(list --INCDIRS +$lla)\n\
 LIBCLAPACK = $(list --LD-rp +$lla) -llapacke \n\
 LIBLAPACK  = $(list --LD-rp +$lla) $(pack_get -lib $lla)\n' $file"
-	    break
-	fi
-    done
 
 fi
 tmpfc=${FFLAGS//-fp-model /}

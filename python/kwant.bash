@@ -31,26 +31,13 @@ libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n' $file"
     
 elif $(is_c gnu) ; then
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    case $la in
-		atlas)
-		    tmp="f77blas cblas"
-		    ;;
-		openblas)
-		    la=openblas_omp
-		    ;;
-	    esac
-	    tmp="$tmp $la"
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp=$(pack_get -lib[omp] $la)
 
     pack_cmd "sed -i '1 a\
 [lapack]\n\
-libraries = lapack $tmp\n\
+libraries = lapack ${tmp//-l/}\n\
 ' $file"
 
 else

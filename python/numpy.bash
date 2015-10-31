@@ -85,54 +85,71 @@ elif $(is_c gnu) ; then
     fi
     pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblasp|g' numpy/distutils/system_info.py"
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp="$(pack_get --LD $la)"
+    la=$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(pack_get --LD $la)"
+    case $la in
+	openblas)
+	    # lapack internally
+	    noop
+	    ;;
+	atlas)
 	    pack_cmd "sed -i '$ a\
 [lapack]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = lapack_atlas\n\
+runtime_library_dirs = $tmp\n' $file"
+	    ;;
+	*)
+	    pack_set --module-requirement lapack
+	    pack_cmd "sed -i '$ a\
+[lapack]\n\
+library_dirs = $(pack_get --LD lapack)\n\
+include_dirs = $(pack_get --prefix lapack)/include\n\
 libraries = lapack\n\
-runtime_library_dirs = $tmp\n' $file" 
-	    
-	    case $la in
-		atlas)
-		    pack_cmd "sed -i '$ a\
+runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
+	    tmp="$(pack_get --LD $la)"
+	    ;;
+    esac
+    tmp_l=$(pack_get -lib[pt] $la)
+    case $la in
+	atlas)
+	    pack_cmd "sed -i '$ a\
 [atlas_threads]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ptf77blas,ptcblas,ptatlas,pthread\n\
-runtime_library_dirs = $tmp\n\
+libraries = ${tmp_l//-l/,},pthread\n\
+runtime_library_dirs = $tmp\n' $file"
+	    tmp_l=$(pack_get -lib $la)
+	    pack_cmd "sed -i '$ a\
 [atlas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = f77blas,cblas,atlas\n\
+libraries = ${tmp_l//-l/,}\n\
 runtime_library_dirs = $tmp\n' $file" 
-		    ;;
-		openblas)
-		    pack_cmd "sed -i '$ a\
+	    ;;
+	openblas)
+	    pack_cmd "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = lapack,openblasp\n\
+libraries = ${tmp_l//-l/,}\n\
 extra_link_args = -lpthread -lgfortran -lm\n\
 runtime_library_dirs = $tmp\n' $file"
-		    ;;
-		blas)
-		    pack_cmd "sed -i '$ a\
+	    ;;
+	blas|blis)
+	    pack_cmd "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = blas\n\
+libraries = ${tmp_l//-l/,}\n\
 runtime_library_dirs = $tmp\n' $file"
-		    ;;
-		*)
-		doerr "numpy" "Could not find linear-algebra library: $la"
-	    esac
-	    break
-	fi
-    done
+	    ;;
+	*)
+	    doerr "numpy" "Could not find linear-algebra library: $la"
+	    ;;
+    esac
 
     pack_cmd "sed -i '1 a\
 [ALL]\n\

@@ -15,8 +15,8 @@ else
     
     pack_set --module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
-    tmp="-lscalapack"
-    tmp="-lscalapakc $(pack_get -lib $la)"
+    pack_set --module-requirement $la
+    tmp="-lscalapack $(pack_get -lib $la)"
     
 fi
 

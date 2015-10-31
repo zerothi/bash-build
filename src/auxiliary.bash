@@ -570,8 +570,14 @@ function choice {
 	# Only compare up to the next $_CHOICE_SEP
 	if [[ "x$c" == "x${cc%%$_CHOICE_SEP*}" ]]; then
 	    IFS="$_CHOICE_SEP" read -ra sets <<< "${cc#*$_CHOICE_SEP}"
+	    local i=0
 	    for cc in "${sets[@]}" ; do
-		_ps " $cc"
+		if [[ $i -eq 0 ]]; then
+		    _ps "$cc"
+		    i=1
+		else
+		    _ps " $cc"
+		fi
 	    done
 	    return 0
 	fi

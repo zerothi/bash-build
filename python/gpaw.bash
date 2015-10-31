@@ -36,22 +36,17 @@ compiler = \"$CC $pCFLAGS \"\n\
 mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
     pack_set --module-requirement scalapack
 
-    for la in $(pack_choice linalg) ; do
-	if [[ $(pack_installed $la) -eq 1 ]]; then
-	    pack_set --module-requirement $la
-	    tmp=
-	    case $la in
-		atlas)
-		    tmp="\"f77blas\",\"cblas\","
-		    ;;
-	    esac
-	    tmp="$tmp\"$la\""
-	    pack_cmd "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD scalapack)\",\"$(pack_get --LD $la)\"]\n\
-libraries = [\"scalapack\",\"lapack\",$tmp,\"gfortran\"]' $file"
-	    break
-	fi
-    done
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp="$(pack_get -lib $la)"
+    tmp=${tmp//-l/\"}
+    tmp=${tmp// /\"}
+    tmp_ld="$(list -LD +$la)"
+    tmp_ld=\"${tmp_ld// /\"}
+    echo "$tmp and $tmp_ld"
+    pack_cmd "sed -i '$ a\
+library_dirs += [\"$(pack_get --LD scalapack)\",$tmp_ld]\n\
+libraries = [\"scalapack\",$tmp,\"gfortran\"]' $file"
 
 else
     doerr gpaw "Could not determine compiler..."

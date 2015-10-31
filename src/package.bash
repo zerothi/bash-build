@@ -247,7 +247,7 @@ function add_package {
     fi
     _version[$_N_archives]=$v
     # Save the settings
-    _settings[$_N_archives]="$(build_get --default-setting $b_idx)"
+    _settings[$_N_archives]="$(build_get --default-setting[$b_idx])"
     # Save the package name...
     [[ -z "$package" ]] && package=${archive_d%$v}
     local len=${#package}
@@ -641,7 +641,7 @@ function pack_choice {
 	case $opt in
 	    -installed|-i)
 		# return first choice that is installed
-		ints=1
+		inst=1
 		shift
 		;;
 	    *)
@@ -658,7 +658,7 @@ function pack_choice {
     if [[ $inst -eq 1 ]]; then
 	for opt in $(choice $c "$p") ; do
 	    if [[ $(pack_installed $opt) -eq 1 ]]; then
-		_ps $opt
+		_ps "$opt"
 		return 0
 	    fi
 	done

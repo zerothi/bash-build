@@ -19,6 +19,8 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libatlas.a
 pack_set --lib -lf77blas -lcblas -latlas
+pack_set --lib[omp] -lf77blas -lcblas -latlas
+pack_set --lib[pt] -lptf77blas -lptcblas -lptatlas
 
 
 # Prepare the make file
@@ -58,10 +60,13 @@ pack_cmd "make install"
 pack_cmd "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
 
 add_hidden_package lapack-atlas/$v
+pack_set --installed $_I_REQ
 pack_set -mod-req atlas
 # Denote the default libraries
 # Note that this OpenBLAS compilation has lapack built-in
 pack_set --lib -llapack_atlas $(pack_get --lib atlas[$v])
+pack_set --lib[omp] -llapack_atlas $(pack_get --lib[omp] atlas[$v])
+pack_set --lib[pt] -llapack_atlas $(pack_get --lib[pt] atlas[$v])
 
 done
 

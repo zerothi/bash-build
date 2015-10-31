@@ -69,6 +69,8 @@ pack_cmd "make"
 pack_cmd "make install"
 
 add_hidden_package lapack-blis/$v
+pack_set --installed $_I_REQ
+pack_set -mod-req lapack
 pack_set -mod-req blis
 # Denote the default libraries
 # Note that this OpenBLAS compilation has lapack built-in
