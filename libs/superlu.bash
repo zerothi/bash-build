@@ -1,6 +1,6 @@
 add_package --package superlu \
-	    --directory SuperLU_4.3 \
-	    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
+	    --directory SuperLU_5.0 \
+	    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_5.0.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -41,9 +41,6 @@ else
     pack_cmd "sed -i '1 a\
 BLASLIB = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
-	    break
-	fi
-    done
 
 fi
 

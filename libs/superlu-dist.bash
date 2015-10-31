@@ -1,4 +1,4 @@
-for v in 3.3 4.0 ; do
+for v in 3.3 4.2 ; do
 
 add_package --package superlu-dist \
 	    --directory SuperLU_DIST_$v \
@@ -51,9 +51,6 @@ else
     pack_cmd "sed -i '1 a\
 BLASLIB = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
-	    break
-	fi
-    done
 
 fi
 
