@@ -1,4 +1,4 @@
-v=7.10.4
+v=7.10.5
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
