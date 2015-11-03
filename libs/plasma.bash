@@ -38,7 +38,7 @@ else
 LIBBLAS  = $(list --LD-rp $la) $tmp \n\
 LIBCBLAS = $tmp\n\
 INCCLAPACK = $(list --INCDIRS +$lla)\n\
-LIBCLAPACK = $(list --LD-rp +$lla) -llapacke \n\
+LIBCLAPACK = $(list --LD-rp lapack) -llapacke \n\
 LIBLAPACK  = $(list --LD-rp +$lla) $(pack_get -lib $lla)\n' $file"
 
 fi
