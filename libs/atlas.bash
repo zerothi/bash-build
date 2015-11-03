@@ -38,7 +38,7 @@ fi
 # Configure command
 # -Fa alg: append to all compilers -fPIC
 pack_cmd "../configure -Fa alg '-fPIC'" \
-     "--with-netlib-lapack-tarfile=$(build_get --archive-path)/$(pack_get --archive lapack-blas)" \
+     "--with-netlib-lapack-tarfile=$(build_get --archive-path)/$(pack_get --archive lapack)" \
 	 "-Ss flapack $(pack_get --LD blas)/liblapack.a" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--incdir=$(pack_get --prefix)/include" \
@@ -48,13 +48,13 @@ pack_cmd "../configure -Fa alg '-fPIC'" \
 	 "-Ss pmake '\$(MAKE) $(get_make_parallel)'"
 
 pack_cmd "make"
+pack_cmd "make install"
 pack_cmd "make check > tmp.test 2>&1"
 pack_set_mv_test tmp.test tmp.test.s
 if ! $(is_host n-) ; then
     pack_cmd "make ptcheck > tmp.test 2>&1"
     pack_set_mv_test tmp.test tmp.test.t
 fi
-pack_cmd "make install"
 
 # Move so that we can install correct lapack
 pack_cmd "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
