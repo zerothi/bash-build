@@ -43,7 +43,7 @@ pip_install pip
 pip_append autopep8
 pip_append backports.ssl_match_hostname
 if [[ ${pV:0:1} -eq 2 ]]; then
-    pip_appnd bzr
+    pip_append bzr
     #pip_append bzr-fastimport
     pip_append enum34
     pip_append six
