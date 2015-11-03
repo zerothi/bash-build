@@ -1,6 +1,6 @@
 # The udunits2 package requires an XML library:
 #  libcunit
-v=2.2.11
+v=2.2.20
 add_package ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
