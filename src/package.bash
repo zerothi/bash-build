@@ -67,7 +67,7 @@ function add_hidden_package {
     local version="${mod#*/}"
     add_package --package $package \
 	--version $version \
-	path_to_module/$package-$version.tar.gz
+	path_to_module/$package-$version.local
     pack_set --index-alias $mod
     pack_set --installed $_I_INSTALLED # Make sure it is "installed"
     pack_set --module-name $mod

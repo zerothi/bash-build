@@ -1,7 +1,7 @@
 # Then install BLAS
 add_package \
     --package blas \
-    --directory BLAS \
+    --directory BLAS* \
     http://www.netlib.org/blas/blas.tgz
 
 pack_set_file_version
