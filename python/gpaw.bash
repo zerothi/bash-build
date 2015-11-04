@@ -39,14 +39,14 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
     tmp="$(pack_get -lib $la)"
-    tmp=${tmp//-l/\"}
-    tmp=${tmp// /\"}
-    tmp_ld="$(list -LD +$la)"
-    tmp_ld=\"${tmp_ld// /\"}
-    echo "$tmp and $tmp_ld"
+    # Remove -l in front of libraries
+    tmp=${tmp//-l/}
+    tmp_ld="$(list -c 'pack_get -LD' +$la)"
+    # We might as well use the python power here
     pack_cmd "sed -i '$ a\
-library_dirs += [\"$(pack_get --LD scalapack)\",$tmp_ld]\n\
-libraries = [\"scalapack\",$tmp,\"gfortran\"]' $file"
+library_dirs += \"$(pack_get --LD scalapack) $tmp_ld\".split()\n\
+runtime_library_dirs += \"$(pack_get --LD scalapack) $tmp_ld\".split()\n\
+libraries = \"scalapack $tmp gfortran \".split()' $file"
 
 else
     doerr gpaw "Could not determine compiler..."
@@ -83,5 +83,17 @@ include_dirs += [${tmp:2}]' $file"
 pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
+
+
+add_test_package test.exec.parallel
+# We need the setups for the tests
+pack_set --mod-req gpaw-setups
+pack_cmd "unset LDFLAGS"
+pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > test.serial"
+pack_set_mv_test test.serial
+pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > test.exec.serial"
+pack_set_mv_test test.exec.serial
+pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > test.exec.parallel"
+pack_set_mv_test test.exec.parallel
 
 done

@@ -108,9 +108,9 @@ source_pack python/inelastica-dev.bash
 source_pack python/inelastica-matt.bash
 
 source_pack python/qutip.bash # [numpy,scipy,cython,matplotlib]
+source_pack python/gpaw-setups.bash
 source_pack python/ase.bash
 source_pack python/gpaw.bash
-source_pack python/gpaw-setups.bash
 
 source_pack python/pythtb.bash
 source_pack python/phonopy.bash
