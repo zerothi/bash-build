@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-add_package http://downloads.kwant-project.org/kwant/kwant-1.0.3.tar.gz
+add_package http://downloads.kwant-project.org/kwant/kwant-1.1.1.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -34,10 +34,17 @@ elif $(is_c gnu) ; then
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
     tmp=$(pack_get -lib[omp] $la)
-
+    case $la in
+	lapack-openblas|lapack-acml)
+	    tmp="${tmp//-l/}"
+	    ;;
+	*)
+	    tmp="lapack ${tmp//-l/}"
+	    ;;
+    esac
     pack_cmd "sed -i '1 a\
 [lapack]\n\
-libraries = lapack ${tmp//-l/}\n\
+libraries = ${tmp//-l/}\n\
 ' $file"
 
 else
@@ -57,5 +64,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 
 add_test_package
-pack_cmd "nosetests -exe kwant  > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests -exe kwant 2>&1 > tmp.test ; echo 'Success'"
 pack_set_mv_test tmp.test
