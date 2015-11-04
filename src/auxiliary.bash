@@ -158,9 +158,9 @@ function trim_spaces {
     local s
     local i
     while [[ $# -gt 0 ]]; do
-	s="${1## }" # removes prefix space
+	s="${1# }" # removes prefix space
 	shift
-	s=${s%% } # removes suffix space
+	s=${s% } # removes suffix space
 	s=${s//  / } # removes double space
 	str="$str $s"
     done
