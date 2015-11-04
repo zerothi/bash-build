@@ -55,7 +55,7 @@ LIBS += -lscotchmetis -lscotch -lscotcherr \n\
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '$ a\
-LIBS += -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
+LIBS += $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
 LIBS += -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' $file"
 

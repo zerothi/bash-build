@@ -40,7 +40,7 @@ CDEFS    = -DAdd_\n\
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
-BLASLIB = -mkl=sequential\n\
+BLASLIB = $MKL_LIB -mkl=sequential\n\
 CFLAGS += -std=c99\n\
 ' $file"
     
