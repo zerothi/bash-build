@@ -71,7 +71,7 @@ pack_install
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
+    -n "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -92,28 +92,28 @@ old_path=$(build_get --module-path)
 build_set --module-path $old_path-npa
 
 create_module \
-    -n "Nick Papior Andersen's basic python script for: $(get_c)" \
+    -n "Nick R. Papior basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.fireworks/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' fireworks)
 
 create_module \
-    -n "Nick Papior Andersen's basic python script for: $(get_c)" \
+    -n "Nick R. Papior basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' scientificpython scipy cython numexpr netcdf4py matplotlib)
 
 create_module \
-    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -n "Nick R. Papior parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' scientificpython scipy cython mpi4py netcdf4py)
 
 create_module \
-    -n "Nick Papior Andersen's parallel/numba python script for: $(get_c)" \
+    -n "Nick R. Papior parallel/numba python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numpy.mpi4py.numba/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -121,7 +121,7 @@ create_module \
 
 for i in $(get_index -all Inelastica-DEV) ; do
     create_module \
-	-n "Nick Papior Andersen's Inelastica for: $(get_c)" \
+	-n "Nick R. Papior Inelastica for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.Inelastica-DEV.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -130,7 +130,7 @@ done
 
 for i in $(get_index -all ase) ; do
     create_module \
-	-n "Nick Papior Andersen's ASE for: $(get_c)" \
+	-n "Nick R. Papior ASE for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -139,7 +139,7 @@ done
 
 for i in $(get_index -all gpaw) ; do
     create_module \
-	-n "Nick Papior Andersen's GPAW for: $(get_c)" \
+	-n "Nick R. Papior GPAW for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -147,7 +147,7 @@ for i in $(get_index -all gpaw) ; do
 done
 
 create_module \
-    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -n "Nick R. Papior parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.kwant.$(pack_get --version kwant)/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -162,7 +162,7 @@ for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas thea
     fi
 done
 create_module \
-    -n "Nick Papior Andersen's parallel python script for: $(get_c)" \
+    -n "Nick R. Papior parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numerics/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -170,7 +170,7 @@ create_module \
 
 if [[ $(pack_installed qutip) -eq 1 ]]; then
     create_module \
-        -n "Nick Papior Andersen's Photonics python script for QuTip: $(get_c)" \
+        -n "Nick R. Papior Photonics python script for QuTip: $(get_c)" \
         -v $(date +'%g-%j') \
         -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
         -P "/directory/should/not/exist" \

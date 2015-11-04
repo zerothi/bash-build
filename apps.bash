@@ -38,7 +38,7 @@ source_pack applications/octave.bash
 # Create a module with default all plotting tools
 create_module \
     --module-path $(build_get --module-path)-npa \
-    -n "Nick Papior Andersen's script for loading GUI: $(get_c)" \
+    -n "Nick R. Papior script for loading GUI: $(get_c)" \
     -v $(pack_get --version) \
     -M gnuplot.molden.grace.xcrysden/$(get_c) \
     -P "/directory/should/not/exist" \

@@ -47,7 +47,7 @@ module unload openmpi/$mod
 module unload $(build_get --default-module)
 
 create_module \
-    -n "Nick Papior Andersen's script for loading $(pack_get --package): $(get_c)" \
+    -n "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
     -M $(pack_get --module-name) \
     -P "/directory/should/not/exist" \
