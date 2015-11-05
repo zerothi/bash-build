@@ -36,3 +36,10 @@ pack_cmd "make install"
 if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi
+
+# For intel we force the mkl_blacs_openmpi_lp64.so library creation (apparently necessary for 16>=)
+if [[ $(is_c intel) ]]; then
+    pack_cmd "pushd $(pack_get -LD)"
+    pack_cmd "ld -shared --whole-archive $MKL_PATH/lib/intel64/libmkl_blacs_openmpi_lp64.a -no-whole-archive -o libmkl_blacs_openmpi_lp64.so"
+    pack_cmd "popd"
+fi
