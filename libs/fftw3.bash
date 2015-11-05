@@ -20,6 +20,8 @@ pack_set --lib -lfftw3
 pack_set --lib[omp] -lfftw3_omp
 pack_set --lib[pt] -lfftw3_threads
 
+pack_cmd "unset CFLAGS"
+
 for flag in --enable-single nothing ; do
     ext=f
     if [[ "$flag" == "nothing" ]]; then
@@ -55,6 +57,8 @@ pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
 
 pack_set -mod-req mpi
+
+pack_cmd "unset CFLAGS"
 
 mpi_flags="$(list --LD-rp mpi)"
 for flag in --enable-single nothing ; do
