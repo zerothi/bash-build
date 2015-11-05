@@ -85,7 +85,7 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
 
-add_test_package test.exec.parallel
+add_test_package test.exec.parallel.gz
 # We need the setups for the tests
 pack_set --mod-req gpaw-setups
 pack_cmd "unset LDFLAGS"
