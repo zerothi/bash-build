@@ -7,7 +7,7 @@ fi
 
 
 # Compiler not needed, so simply remove that variable
-v=2015.rc2
+v=2015.0
 add_package --build generic --package ATK --version $v \
     http://quantumwise.com/download/pkgs/VNL-ATK-$v-Linux64.bin
 
