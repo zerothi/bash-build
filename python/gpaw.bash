@@ -57,12 +57,11 @@ tmp="$(list --prefix ,\" --suffix /include\" --loop-cmd 'pack_get --prefix' $(pa
 
 pack_cmd "sed -i '$ a\
 library_dirs += [\"$(pack_get --LD libxc)\"]\n\
+runtime_library_dirs += [\"$(pack_get --LD libxc)\"]\n\
 include_dirs += [\"$(pack_get --prefix libxc)/include\"]\n\
 libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get --prefix mpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
-# Same as -Wl,-rpath:\n\
-runtime_library_dirs += [\"$(pack_get --LD libxc)\"]\n\
 mpi_runtime_library_dirs += [\"$(pack_get --LD mpi)\"]\n\
 mpi_runtime_library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 scalapack = True\n\
@@ -73,9 +72,12 @@ if scalapack:\n\
 \n\
 hdf5 = True\n\
 library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
+runtime_library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 libraries += [\"hdf5_hl\",\"hdf5\"]\n\
 library_dirs += [\"$(pack_get --LD zlib)\"]\n\
+runtime_library_dirs += [\"$(pack_get --LD zlib)\"]\n\
 libraries += [\"z\"]\n\
+extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
 \n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:2}]' $file"
@@ -84,6 +86,8 @@ pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
+# Copy the customize.py file with
+pack_cmd "cp customize.py $(pack_get --prefix)/"
 
 add_test_package test.exec.parallel.gz
 # We need the setups for the tests
