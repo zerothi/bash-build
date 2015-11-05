@@ -68,6 +68,7 @@ pip_append pexpect
 #pip_append pint
 pip_append pkgconfig
 pip_append pyparser
+pip_append pyparsing
 pip_append pycparser
 pip_append pygments
 pip_append python-dateutil
