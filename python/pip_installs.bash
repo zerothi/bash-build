@@ -4,15 +4,27 @@
 #
 # That makes life easier and is much easier to maintain
 #
+# The downside is that the system requires internet
+# access.
+# However, one can circumvent that by doing a local
+# installation which will let the user tar the directory
+# and extract it on the remote node.
+#
 
 # Ensure that pip is installed before we proceed...
 source_pack python/setuptools.bash
 source_pack python/pip.bash
 
-
+# Local package for the downloading and installation
+# of pip packages (locally in the python installation)
 add_package pip_installs.local
 
 pack_set --directory .
+
+# Create folder for pip-downloads
+# Note this is version dependent
+_pip_dwn=$(pwd_archives)/pip${pV:0:1}
+mkdir -p $_pip_dwn
 
 _pip=
 function pip_append {
@@ -23,14 +35,16 @@ function pip_append {
 }
 
 function pip_install {
-    #pack_cmd "pip install $1"
     if [[ ! -z "$_pip" ]]; then
-	pack_cmd "pip install -U $_pip"
+	# First try and download, always finish with a yes
+	pack_cmd "pip install --download $_pip_dwn/ $_pip ; echo 'yes'"
+	pack_cmd "pip install --no-index --find-links $_pip_dwn $_pip"
 	# Empty again
 	_pip=""
     fi
     while [[ $# -gt 0 ]]; do
-	pack_cmd "pip install -U $1"
+	pack_cmd "pip install --download $_pip_dwn/ $1 ; echo 'yes'"
+	pack_cmd "pip install --no-index --find-links $_pip_dwn $1"
 	shift
     done
 }
@@ -42,7 +56,7 @@ pip_install pip
 
 pip_append autopep8
 pip_append backports.ssl_match_hostname
-if [[ ${pV:0:1} -eq 2 ]]; then
+if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
     #pip_append bzr-fastimport
     pip_append enum34

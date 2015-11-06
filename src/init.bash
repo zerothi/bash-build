@@ -77,6 +77,8 @@ source src/host.bash
 
 # The place of all the archives
 _archives="$_cwd/.archives"
+# Ensure the archive directory exists
+mkdir -p $_archives
 function pwd_archives { _ps "$_archives" ; }
 
 _install_prefix_no_path="HIDDEN"
