@@ -42,7 +42,7 @@ if $(is_host n- slid muspel surt) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
-    tmp=$(list -p '-x test_' urllib urllib2 urllib2net)
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_cmd "make install"
