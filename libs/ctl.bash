@@ -1,5 +1,5 @@
 # We will only install this on the super computer
-add_package http://ab-initio.mit.edu/libctl/libctl-3.2.1.tar.gz
+add_package http://ab-initio.mit.edu/libctl/libctl-3.2.2.tar.gz
 
 pack_set $(list --prefix "--host-reject " ntch zeroth)
 
