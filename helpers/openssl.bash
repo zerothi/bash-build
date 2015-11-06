@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE
 
 pack_set --mod-req gen-zlib
 
-pack_set --install-query $(pack_get --prefix)/lib/libopenssl.so
+pack_set --install-query $(pack_get --prefix)/lib/libssl.a
 
 # Install commands that it should run
 pack_cmd "./config --prefix=$(pack_get --prefix)" \
