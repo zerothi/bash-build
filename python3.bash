@@ -15,6 +15,9 @@ lib_extra=
 if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
+if [[ $(pack_get --installed openssl) -eq 1 ]]; then
+    lib_extra="$lib_extra openssl"
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python3
 
@@ -38,7 +41,7 @@ pack_cmd "../configure --with-threads" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 
-if $(is_host n- slid muspel surt) ; then
+if $(is_host n-) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 else
@@ -46,7 +49,7 @@ else
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_cmd "make install"
-if ! $(is_host n- slid muspel surt) ; then
+if ! $(is_host n-) ; then
     pack_set_mv_test tmp.test
 fi
 

@@ -42,6 +42,8 @@ source_pack helpers/swig.bash
 source_pack helpers/zlib.bash
 source_pack helpers/libxml2.bash
 
+source_pack helpers/openssl.bash
+
 source_pack helpers/llvm.bash
 
 source_pack helpers/numactl.bash

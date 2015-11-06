@@ -15,6 +15,9 @@ lib_extra=
 if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
+if [[ $(pack_get --installed openssl) -eq 1 ]]; then
+    lib_extra="$lib_extra openssl"
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python
 
@@ -50,7 +53,7 @@ pack_cmd "make $(get_make_parallel)"
 #    done
 #fi
 
-if $(is_host n- slid muspel surt) ; then
+if $(is_host n-) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
@@ -62,7 +65,7 @@ else
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 fi
 pack_cmd "make install"
-if ! $(is_host n- slid muspel surt) ; then
+if ! $(is_host n-) ; then
     pack_set_mv_test tmp.test
 fi
 
