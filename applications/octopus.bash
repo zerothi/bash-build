@@ -41,6 +41,8 @@ if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
     tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
 
+# Do not install the serial version
+if [[ 0 -eq 1 ]]; then
 pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
      "--enable-openmp" \
      "--enable-utils" \
@@ -60,6 +62,7 @@ pack_set_mv_test tmp.test tmp.test.serial
 
 # prep for the MPI-compilation...
 pack_cmd "rm -rf *"
+fi
 
 pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
      "--enable-mpi" \
