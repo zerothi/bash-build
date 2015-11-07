@@ -3,6 +3,7 @@ if $(is_c intel) ; then
 for v in 5.3.3 5.3.5 ; do
 if [[ $(vrs_cmp $v 5.3.5) -ge 0 ]]; then
     add_package \
+	--package vasp \
 	--directory vasp \
 	--version $v-fftw-intel \
 	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar

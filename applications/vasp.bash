@@ -1,10 +1,7 @@
 # Sadly, VASP only runs on Intel compiler...
 for v in 5.3.3 5.3.5 ; do
 if [[ $(vrs_cmp $v 5.3.5) -ge 0 ]]; then
-    add_package \
-	--directory vasp \
-	--version $v \
-	http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
+    add_package http://www.student.dtu.dk/~nicpa/packages/vasp-$v.tar
 else
     add_package \
 	--package vasp \
