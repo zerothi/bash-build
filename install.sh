@@ -73,7 +73,7 @@ while [ $# -gt 0 ]; do
 	    export PACK_LIST=1
 	    ;;
 	-n)
-	    export _n_procs="$1"
+	    set_procs $1
 	    shift
 	    ;;
 	-only)

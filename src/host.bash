@@ -33,9 +33,15 @@ function is_host {
 }
 
 # Figure out the number of cores on the machine
-_n_procs=$(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
-if [ -z "$NPROCS" ]; then
+_n_procs=2
+function set_procs {
+    _n_procs=$1
     export NPROCS=$_n_procs
+}
+if [[ -z "$NPROCS" ]]; then
+    set_procs $NPROCS
+else
+    set_procs $(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
 fi
 
 #  Data containers for the rejection lists
