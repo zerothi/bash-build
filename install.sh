@@ -138,7 +138,6 @@ done
 # The order is the installation order
 # Set the umask 5 means read and execute
 #umask 0
-
 # We can always set the env-variable of LMOD
 export LMOD_IGNORE_CACHE=1
 
@@ -154,13 +153,22 @@ source lua/lua.bash
 # Install helper scripts (requires Lmod)
 source scripts.bash
 
-build_set --reset-module[debug] \
-    $(list --prefix '--default-module ' \
-        $(build_get --default-module[$_default_build]))
+# Set the future correct default build as
+# requested by the user.
 build_set --default-build $_default_build
+
+# We need to update the module requirements for the
+# build (for instance if gnu-X.X.X has not been expanded)
 build_set --reset-module \
-    $(list --prefix '--default-module ' \
-        $(build_get --default-module))
+	  $(list --prefix "--default-module " \
+		 $(build_get --default-module))
+# Do the same for the debug build
+build_set --reset-module[debug] \
+	  $(list --prefix '--default-module[debug] ' \
+		 $(build_get --default-module))
+
+# Source the compiler specifications to ensure the correct
+# versions has been set etc.
 source $(build_get --source)
 
 # Install all libraries
