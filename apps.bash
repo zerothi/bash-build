@@ -10,6 +10,9 @@ source_pack applications/valgrind.bash
 # Analysis tools
 source_pack applications/bader.bash
 
+# Pseudo potential generation
+source_pack applications/ape.bash
+
 source_pack applications/siesta-stable.bash
 source_pack applications/siesta-dev.bash # my old ts-development
 source_pack applications/siesta-mattias.bash
@@ -56,7 +59,6 @@ source_pack applications/elk.bash
 source_pack applications/openmx.bash
 source_pack applications/bigdft.bash
 source_pack applications/abinit.bash
-#source_pack applications/ape.bash
 
 # Needs to be installed AFTER wannier90 :)
 source_pack applications/vasp.bash

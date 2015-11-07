@@ -1,4 +1,4 @@
-for v in 2.2.0 ; do
+for v in 2.2.1 ; do
 add_package http://www.tddft.org/programs/APE/sites/default/files/ape-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix)/bin/ape
@@ -7,6 +7,10 @@ pack_set --module-requirement gsl \
     --module-requirement libxc
 
 pack_set --module-opt "--lua-family ape"
+# APE does not allow compilation of C-flags too long,
+# we simply disable them. :(
+pack_cmd "unset CFLAGS"
+pack_cmd "unset FCFLAGS"
 
 pack_cmd "./configure" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
