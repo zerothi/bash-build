@@ -93,11 +93,11 @@ add_test_package test.exec.parallel.gz
 # We need the setups for the tests
 pack_set --mod-req gpaw-setups
 pack_cmd "unset LDFLAGS"
-pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > test.serial"
+pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > test.serial ; echo 'Forced'"
 pack_set_mv_test test.serial
-pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > test.exec.serial"
+pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > test.exec.serial ; echo 'Forced'"
 pack_set_mv_test test.exec.serial
-pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > test.exec.parallel"
+pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > test.exec.parallel ; echo 'Forced'"
 pack_set_mv_test test.exec.parallel
 
 done
