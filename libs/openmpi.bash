@@ -12,7 +12,13 @@ pack_set --module-requirement hwloc
 tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
-[[ -d /usr/include/infiniband ]] && tmp_flags="$tmp_flags --with-verbs"
+if [[ -d /usr/include/infiniband ]]; then
+    tmp_flags="$tmp_flags --with-verbs"
+else
+    if $(is_host surt muspel slid) ; then
+        pack_cmd "Cannot compile OpenMPI on this node, infiniband not present."
+    fi
+fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
     pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
