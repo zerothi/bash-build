@@ -13,6 +13,9 @@ pack_set --install-query $(pack_get --prefix)/bin/octave
 
 # Link gnuplot (otherwise the gnuplot backend won't work)
 pack_set --module-requirement gnuplot
+if [[ $(pack_get --installed pcre) -ge $_I_INSTALLED ]]; then
+    pack_set -mod-req pcre
+fi
 
 tmp_flags="--with-x --disable-docs --disable-java"
 pack_set --module-requirement arpack-ng
