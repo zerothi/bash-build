@@ -77,49 +77,7 @@ clear_parent
 old_path=$(build_get --module-path)
 build_set --module-path $old_path-npa
 
-
-create_module \
-    -n "Nick R. Papior basic python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.fireworks/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' fireworks)
-
-create_module \
-    -n "Nick R. Papior basic python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.numexpr.matplotlib/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scipy cython numexpr netcdf4py matplotlib)
-
-create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.mpi4py/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scipy cython mpi4py netcdf4py)
-
-create_module \
-    -n "Nick R. Papior parallel/numba python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.numpy.mpi4py.numba/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' numba mpi4py)
-
-tmp=$(build_get --module-path)
-rm -rf $tmp/python$pV.numerics/$(get_c)
-tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sids ; do
-    if [[ $(pack_installed $i) -eq 1 ]]; then
-        tmp="$tmp $i"
-    fi
-done
-create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.numerics/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' $tmp)
+source python/python-mods.bash
 
 build_set --module-path $old_path
 

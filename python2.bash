@@ -94,33 +94,9 @@ clear_parent
 old_path=$(build_get --module-path)
 build_set --module-path $old_path-npa
 
-create_module \
-    -n "Nick R. Papior basic python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.fireworks/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' fireworks)
+# Create common modules
+source python/python-mods.bash
 
-create_module \
-    -n "Nick R. Papior basic python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.numexpr.scientific.matplotlib/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython numexpr netcdf4py matplotlib)
-
-create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.cython.numpy.scipy.mpi4py.scientific/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' scientificpython scipy cython mpi4py netcdf4py)
-
-create_module \
-    -n "Nick R. Papior parallel/numba python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.numpy.mpi4py.numba/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' numba mpi4py)
 
 for i in $(get_index -all Inelastica-DEV) ; do
     create_module \
@@ -131,23 +107,6 @@ for i in $(get_index -all Inelastica-DEV) ; do
 	$(list --prefix '-RL ' $i)
 done
 
-for i in $(get_index -all ase) ; do
-    create_module \
-	-n "Nick R. Papior ASE for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
-
-for i in $(get_index -all gpaw) ; do
-    create_module \
-	-n "Nick R. Papior GPAW for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
 
 create_module \
     -n "Nick R. Papior parallel python script for: $(get_c)" \
@@ -156,26 +115,12 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' kwant)
 
-tmp=$(build_get --module-path)
-rm -rf $tmp/python$pV.numerics/$(get_c)
-tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sids ; do
-    if [[ $(pack_installed $i) -eq 1 ]]; then
-        tmp="$tmp $i"
-    fi
-done
-create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.numerics/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' $tmp)
 
 if [[ $(pack_installed qutip) -eq 1 ]]; then
     create_module \
         -n "Nick R. Papior Photonics python script for QuTip: $(get_c)" \
         -v $(date +'%g-%j') \
-        -M python$pV.scientific.cython.numexpr.qutip/$(get_c) \
+        -M python$pV.qutip/$(get_c) \
         -P "/directory/should/not/exist" \
         $(list --prefix '-RL ' scientificpython cython numexpr qutip)
 fi
