@@ -29,7 +29,7 @@ else
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp $la)"
+    tmp_ld="$(list --LD-rp scalapack $la)"
     tmp="$tmp --with-scalapack='$tmp_ld -lscalapack'"
     tmp="$tmp --with-lapack='$tmp_ld $(pack_get -lib $la)'"
 
