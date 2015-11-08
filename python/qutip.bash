@@ -1,19 +1,8 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
-
-for p in \
-    https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz ; do
-#    https://dl.dropboxusercontent.com/u/2244215/QuTiP-DEV-2.2.0.zip ; do
-
-#    https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz \
+for v in 3.1.0 ; do
     
-add_package --directory qutip-2.2.0 $p
+add_package http://qutip.org/downloads/$v/qutip-$v.tar.gz
 
-pack_set -s $IS_MODULE
-
-pack_set $(list --prefix '--host-reject ' ntch zeroth)
-
-p_name=$(lc $(pack_get --alias))
-p_name=${p_name//-DEV/}
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$p_name
 
@@ -22,9 +11,12 @@ pack_set --module-requirement scipy \
     --module-requirement cython \
     --module-requirement matplotlib
 
+# clean-up until it has been fixed upstream
+pack_cmd "sed -i -e '/extra_/d' qutip/fortran/setup.py"
+
 # Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py build"
-pack_cmd "$(get_parent_exec) setup.py install" \
+pack_cmd "$(get_parent_exec) setup.py build --with-f90mc"
+pack_cmd "$(get_parent_exec) setup.py install --with-f90mc" \
     "--prefix=$(pack_get --prefix)"
     
 done

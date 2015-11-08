@@ -27,6 +27,16 @@ for i in $(get_index -all gpaw) ; do
 done
 
 
+for i in $(get_index -all qutip) ; do
+    create_module \
+	-n "Nick R. Papior QuTip for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M python$pV.qutip.$(pack_get --version $i)/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-RL ' $i)
+done
+
+
 tmp=$(build_get --module-path)
 rm -rf $tmp/python$pV.numerics/$(get_c)
 tmp=

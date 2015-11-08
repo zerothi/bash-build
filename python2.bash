@@ -116,14 +116,5 @@ create_module \
     $(list --prefix '-RL ' kwant)
 
 
-if [[ $(pack_installed qutip) -eq 1 ]]; then
-    create_module \
-        -n "Nick R. Papior Photonics python script for QuTip: $(get_c)" \
-        -v $(date +'%g-%j') \
-        -M python$pV.qutip/$(get_c) \
-        -P "/directory/should/not/exist" \
-        $(list --prefix '-RL ' scientificpython cython numexpr qutip)
-fi
-
 build_set --module-path $old_path
 
