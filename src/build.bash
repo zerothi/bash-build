@@ -406,7 +406,7 @@ function new_build {
 
     local -a lines
     local f
-    for f in $(get_c -n).reject .$(get_c -n).reject ; do
+    for f in $(get_hostname).$(get_c -n).reject $(get_c -n).reject .$(get_c -n).reject ; do
 	if [[ -e $f ]]; then
 	    read -d '\n' -a lines < $f
 	    for tmp in ${lines[@]} ; do
