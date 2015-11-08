@@ -66,5 +66,6 @@ function _add_rejects {
 }
 
 # Add the local rejects
+_add_rejects $(get_hostname).reject
 _add_rejects local.reject
 _add_rejects .reject
