@@ -18,6 +18,7 @@ if [[ $(pack_get --installed pcre) -ge $_I_INSTALLED ]]; then
 fi
 
 tmp_flags="--with-x --disable-docs --disable-java"
+tmp_flags="$tmp_flags --without-fltk"
 pack_set --module-requirement arpack-ng
 tmp_flags="$tmp_flags --with-arpack-libdir=$(pack_get --LD arpack-ng)"
 tmp_flags="$tmp_flags --with-arpack-includedir=$(pack_get --prefix arpack-ng)/include"
@@ -31,15 +32,14 @@ tmp_flags="$tmp_flags --with-z-libdir=$(pack_get --LD zlib)"
 tmp_flags="$tmp_flags --with-z-includedir=$(pack_get --prefix zlib)/include"
 tmp_flags="$tmp_flags --with-hdf5-libdir=$(pack_get --LD hdf5-serial)"
 tmp_flags="$tmp_flags --with-hdf5-includedir=$(pack_get --prefix hdf5-serial)/include"
-pack_set --module-requirement umfpack
 tmp_flags="$tmp_flags --without-cxsparse"
-for m in amd camd colamd ccolamd cholmod umfpack ; do
+for m in glpk amd camd colamd ccolamd cholmod umfpack ; do
+    pack_set --module-requirement $m
     tmp_flags="$tmp_flags --with-$m-libdir=$(pack_get --LD $m)"
     tmp_flags="$tmp_flags --with-$m-includedir=$(pack_get --prefix $m)/include"
 done
 
 if $(is_c intel) ; then
-    # The tmg-lib must be included...
     tmp_flags="$tmp_flags --with-blas='$MKL_LIB -lmkl_blas95_lp64 -mkl=sequential'"
     tmp_flags="$tmp_flags --with-lapack='$MKL_LIB -lmkl_lapack95_lp64 -mkl=sequential'"
 

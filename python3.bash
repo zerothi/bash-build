@@ -53,6 +53,15 @@ if ! $(is_host n- surt muspel slid) ; then
     pack_set_mv_test tmp.test
 fi
 
+# Assert that libpython$pV.a exists
+# In certain cases libpython${pV}m.a 
+# is created and we want to symlink the two
+# as many libraries does not distinguish between the
+# two.
+tmp=libpython${v:0:3}
+pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then
+pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
+
 pack_install
 
 create_module \
