@@ -59,8 +59,7 @@ fi
 # as many libraries does not distinguish between the
 # two.
 tmp=libpython${v:0:3}
-pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then
-pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
+pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 
 pack_install
 
