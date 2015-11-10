@@ -10,7 +10,7 @@ pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-tmp="-v -f --no-numpy"
+tmp="-v -f --no-numpy --exclude test_rma"
 for i in 1 2 ; do
     pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp 2>&1 >> tmp$i.test"
     pack_set_mv_test tmp$i.test
