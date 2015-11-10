@@ -9,6 +9,17 @@ pack_set --install-query $(pack_get --prefix)/bin/mpif90
 
 pack_set --module-requirement hwloc
 
+# Download zero size scatter/gather patch
+if [[ $(vrs_cmp $(pack_get --version) 1.10.1) -eq 0 ]]; then
+    o=$(pwd_archives)/openmpi-1.10.1.nbc_copy.patch
+    [ ! -e $o ] && \
+	dwn_file http://www.student.dtu.dk/~nicpa/packages/openmpi-1.10.1.nbc_copy.patch $o
+    pack_cmd "pushd ../"
+    pack_cmd "patch -p1 < $o"
+    pack_cmd "popd"
+fi
+
+
 tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
