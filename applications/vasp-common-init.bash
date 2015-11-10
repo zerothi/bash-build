@@ -28,7 +28,7 @@ fi
 # However, it has been investigated that a CACHE_SIZE of ~ 5000 is good for this
 # L1 size.
 pack_cmd "sed -i '1 a\
-FC   = $MPIF90 $FLAG_OMP \n\
+FC   = $MPIF90 \n\
 FCL  = \$(FC) \n\
 CPP_ = fpp -f_com=no -free -w0 \$*.F \$*\$(SUFFIX) \n\
 CPP  = \$(CPP_) -DMPI \\\\\n\
@@ -67,7 +67,7 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LINK = $FLAG_OMP -mkl=parallel $(list --LD-rp mpi) ' $file"
+LINK = -mkl=parallel $(list --LD-rp mpi) ' $file"
 
 elif $(is_c gnu) ; then
 
@@ -75,14 +75,14 @@ elif $(is_c gnu) ; then
 FFLAGS_SPEC1 = -O1\n\
 FFLAGS_SPEC2 = -O2\n\
 LIB += -fall-intrinsics\n\
-CPP_ =  ./preprocess <\$*.F | cpp -P -C -traditional >\$*\$(SUFFIX)\n\
+CPP_ = ./preprocess <\$*.F | cpp -P -C -traditional >\$*\$(SUFFIX)\n\
 # Correct flags for gfortran\n\
 FFLAGS += -ffree-form -ffree-line-length-0 -ff2c\n\
 FREE = -ffree-form\n\
 FCL = \$(FC)\n\
 # Correct the CPP\n\
 CPP += -DHOST=\\\\\"$(get_c)\\\\\" \n\
-LINK = $FLAG_OMP $(list --LD-rp mpi)\n\
+LINK = $(list --LD-rp mpi)\n\
 LINK = \n\
 DEBUG = \n' $file"
     pack_set --module-requirement scalapack
@@ -91,7 +91,7 @@ DEBUG = \n' $file"
     pack_set --module-requirement $la
     pack_cmd "sed -i '$ a\
 SCA = $(list --LD-rp scalapack) -lscalapack\n\
-LAPACK = $(list --LD-rp +$la) $(pack_get -lib[omp] $la)\n\
+LAPACK = $(list --LD-rp +$la) $(pack_get -lib[pt] $la)\n\
 BLAS = \$(LAPACK)\n' $file"
 
 # Fix source for gnu
