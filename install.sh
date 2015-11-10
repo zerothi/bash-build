@@ -116,6 +116,8 @@ fi
 # Notify the user about which module files will be generated
 msg_install --message "Will create $_module_format compliant module files"
 
+msg_install --message "Will build with $_n_procs processors"
+
 tmp=0
 while [ $tmp -lt $_N_b ]; do
     if [ -z "$(build_get --installation-path[$tmp])" ]; then

@@ -38,7 +38,7 @@ function set_procs {
     _n_procs=$1
     export NPROCS=$_n_procs
 }
-if [[ -z "$NPROCS" ]]; then
+if [[ ! -z "$NPROCS" ]]; then
     set_procs $NPROCS
 else
     set_procs $(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
