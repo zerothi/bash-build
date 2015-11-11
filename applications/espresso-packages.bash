@@ -1,6 +1,9 @@
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
 
-if [[ "$v" = "5.0.3" ]]; then
+case $v in
+    
+    5.0.3)
+libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
 
 for pack in \
     http://qe-forge.org/gf/download/frsrelease/116/404/neb-5.0.2.tar.gz \
@@ -28,10 +31,12 @@ dwn_file http://www.qe-forge.org/gf/download/frsrelease/128/435/espresso-5.0.2-5
 pack_cmd "patch -p0 < $o"
 pack_cmd "popd"
 
-libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
-
-elif [[ "$v" = "5.0.99" ]]; then
+;; # end of 5.0.3
     
+    5.0.99)
+
+libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
+
 for pack in \
     http://qe-forge.org/gf/download/frsrelease/151/520/NEB-5.0.99.tar.gz \
     http://qe-forge.org/gf/download/frsrelease/151/525/XSpectra-5.0.99.tar.gz \
@@ -56,9 +61,9 @@ pack_cmd "tar xfz archive/$(basename ${pack:10})"
 
 pack_cmd "mv PWgui-5.0.2 PWgui-5.0.1"
 
-libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt gwl"
+;; # end of 5.0.99
 
-elif [[ "$v" = "5.1" ]]; then
+    5.1)
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
     
@@ -79,7 +84,9 @@ do
     
 done
 
-elif [[ "$v" = "5.1.1" ]]; then
+;; # end of 5.1
+
+    5.1.1)
 
 libs="bindir libiotk liblapack libblas mods libs cp pw pp ph neb tddfpt pwcond ld1 upf xspectra acfdt gwl"
     
@@ -100,8 +107,9 @@ do
     pack_cmd "tar xfz archive/$pack"
     
 done
+;; # end of 5.1.1
 
-elif [[ "$v" = "5.1.2" ]]; then
+    5.1.2)
     
 for pack in \
     755/PHonon-$v.tar.gz \
@@ -122,4 +130,29 @@ do
     
 done
 
-fi
+;; # end of 5.1.1
+
+    5.2.1)
+    
+for pack in \
+    845/GWW-$v.tar.gz \
+	843/atomic-$v.tar.gz \
+	846/pwcond-$v.tar.gz \
+	848/neb-$v.tar.gz \
+	849/PHonon-$v.tar.gz \
+	844/tddfpt-$v.tar.gz \
+	847/xspectra-$v.tar.gz \
+	850/PWgui-$v.tar.gz \
+	do
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
+    dwn_file http://qe-forge.org/gf/download/frsrelease/199/$pack $o
+    pack=$(basename $pack)
+    
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
+    
+done
+
+;; # end of 5.2.1
+    
+esac

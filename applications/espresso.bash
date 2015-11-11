@@ -1,7 +1,9 @@
-for v in 5.1.1 5.1.2 ; do
-    libs="bindir libiotk liblapack libblas mods libs libenviron cp pw pp ph neb tddfpt pwcond ld1 upf xspectra gui acfdt"
+for v in 5.2.1 ; do
     tmp="-package espresso -version $v"
     case $v in
+	5.2.1)
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz
+	    ;;
 	5.1.2)
 	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
 	    ;;
@@ -25,8 +27,6 @@ for v in 5.1.1 5.1.2 ; do
     add_package $tmp
     
     pack_set --install-query $(pack_get --prefix)/bin/pw.x
-
-    pack_set --host-reject ntch --host-reject zeroth
 
     pack_set --module-opt "--lua-family espresso"
 
