@@ -142,7 +142,7 @@ for pack in \
 	849/PHonon-$v.tar.gz \
 	844/tddfpt-$v.tar.gz \
 	847/xspectra-$v.tar.gz \
-	850/PWgui-$v.tar.gz \
+	850/PWgui-$v.tar.gz
 	do
     o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
     dwn_file http://qe-forge.org/gf/download/frsrelease/199/$pack $o
