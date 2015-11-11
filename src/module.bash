@@ -106,7 +106,7 @@ EOF
 	    ;;
     esac
     cmt="$(get_c)"
-    if [[ ! -z "$cmt" ]]; then
+    if [[ -n "$cmt" ]]; then
 	case $_module_format in
 	    TCL)
 		cmt=", (\$compiler)"
@@ -124,7 +124,7 @@ EOF
     case $_module_format in
 	TCL) 
 	    tmp="${path//$version/\$version}"
-	    if [[ ! -z "$cmt" ]]; then
+	    if [[ -n "$cmt" ]]; then
 		tmp="${tmp//$(get_c)/\$compiler}"
 	    fi
 	    cat <<EOF >> "$mfile"
@@ -196,7 +196,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add conflict if needed
-    if [[ ! -z "${conflict// /}" ]]; then
+    if [[ -n "${conflict// /}" ]]; then
 	cat <<EOF >> $mfile
 $fm_comment Modules which is in conflict with this module:
 EOF
@@ -214,7 +214,7 @@ EOF
 	echo "" >> $mfile
     fi
     # Add specific envs if needed
-    if [[ ! -z "${env// /}" ]]; then
+    if [[ -n "${env// /}" ]]; then
 	cat <<EOF >> $mfile
 $fm_comment Specific environment variables:
 EOF
@@ -245,7 +245,7 @@ EOF
 	    # These options should probably always
 	    # be "on" , they are specified by the options by the user
 	    # and not, per-see "optional"
-	    [[ ! -z "$opt" ]] && \
+	    [[ -n "$opt" ]] && \
 		_add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
 	done
 	echo "" >> $mfile

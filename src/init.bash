@@ -1,6 +1,12 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
+if [[ -z "$LC_ALL"]]; then
+    # Set this for doing ANSI comparisons versus
+    # unicode comparisons, much faster
+    LC_ALL=C
+fi
+
 # Set options
 set -o hashall
 
@@ -14,7 +20,7 @@ function doerr {
     done ; exit 1
 }
 
-if [ ${BASH_VERSION%%.*} -lt 4 ]; then
+if [[ ${BASH_VERSION%%.*} -lt 4 ]]; then
     doerr "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
 fi
 
@@ -107,8 +113,8 @@ function edit_env {
     shift
     [ "$echo_env" -ne "0" ] && _ps "${!env}" && return 0
     # Process what is requested
-    [ ! -z "$append" ] && export ${!env}="${!env}$append"
-    [ ! -z "$prepend" ] && eval "export $env='$prepend${!env}'"
+    [ -n "$append" ] && export ${!env}="${!env}$append"
+    [ -n "$prepend" ] && eval "export $env='$prepend${!env}'"
 }
 
 
@@ -152,7 +158,7 @@ function pack_crt_list {
     local build=$(pack_get --build $pack)
     build=$(build_get --build-path[$build])
     local mr=$(pack_get --module-requirement $pack)
-    if [[ ! -z "$mr" ]]; then
+    if [[ -n "$mr" ]]; then
 	{
 	    echo "# Used packages"
 	    for p in $mr ; do

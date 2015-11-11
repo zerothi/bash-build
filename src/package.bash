@@ -176,7 +176,8 @@ function add_package {
     local fn="" ; local package=""
     local alias="" 
     # Default to default index
-    local b_name="${_b_name[$_b_def_idx]}"
+    local b_idx=$_b_def_idx
+    local b_name=""
     local no_def_mod=0
     local lp=""
     while [[ $# -gt 1 ]]; do
@@ -210,8 +211,9 @@ function add_package {
     # Note that setting a variable local and using direct
     # assignment will set the return status of local =
     # and not the assignment operator.
-    local b_idx
-    b_idx=$(get_index --hash-array "_b_index" $b_name)
+    if [[ -n "$b_name" ]]; then
+	b_idx=$(get_index --hash-array "_b_index" $b_name)
+    fi
     if [[ $? -ne 0 ]]; then
 	doerr "$1" "Could not find associated build ($b_name), please create build before commensing compilation"
     fi
@@ -261,7 +263,7 @@ function add_package {
     # Save the hash look-up
     local tmp="${_index[$(lc $alias)]}"
     local lc_name="$(lc $alias)"
-    if [[ ! -z "$tmp" ]]; then
+    if [[ -n "$tmp" ]]; then
 	_index[$lc_name]="$tmp $_N_archives"
     else
 	_index[$lc_name]="$_N_archives"
@@ -351,10 +353,10 @@ function pack_set {
 		shift ;;
             -R|-module-requirement|-mod-req)  
 		tmp="$(pack_get --mod-req-all $1)"
-		[[ ! -z "$tmp" ]] && req="$req $tmp"
+		[[ -n "$tmp" ]] && req="$req $tmp"
 		# We add the host-rejects for this requirement
 		tmp="$(pack_get --host-reject $1)"
-		[[ ! -z "$tmp" ]] && reject_h="$reject_h $tmp"
+		[[ -n "$tmp" ]] && reject_h="$reject_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;

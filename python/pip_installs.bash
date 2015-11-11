@@ -35,7 +35,7 @@ function pip_append {
 }
 
 function pip_install {
-    if [[ ! -z "$_pip" ]]; then
+    if [[ -n "$_pip" ]]; then
 	# First try and download, always finish with a yes
 	pack_cmd "pip install --download $_pip_dwn/ $_pip ; echo 'yes'"
 	pack_cmd "pip install --no-index --find-links $_pip_dwn $_pip"

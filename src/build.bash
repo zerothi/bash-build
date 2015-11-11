@@ -198,7 +198,7 @@ function build_set {
 		;&
 	    -default-module) 
 		local tmp=$(get_index $1)
-		if [[ ! -z "$tmp" ]]; then
+		if [[ -n "$tmp" ]]; then
 		    _b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $(pack_get --mod-req-all $tmp)"
 		fi
 		_b_def_mod_reqs[$b_idx]="${_b_def_mod_reqs[$b_idx]} $1"

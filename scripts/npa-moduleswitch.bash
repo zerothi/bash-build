@@ -54,7 +54,7 @@ cat <<EOF > $script
 # Function to reinstall old modulepath
 #function _switch_reuse_modulepath {
 
-  if [ ! -z "\$_SWITCH_NPA_MODPATH" ]; then
+  if [ -n "\$_SWITCH_NPA_MODPATH" ]; then
      for p in \${_SWITCH_NPA_MODPATH//:/ } ; do
        [ -z "\${p// /}" ] && continue
        module unuse \$p
