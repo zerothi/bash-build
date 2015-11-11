@@ -1,10 +1,10 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
-if [[ -z "$LC_ALL"]]; then
+if [[ -z "$LC_ALL" ]]; then
     # Set this for doing ANSI comparisons versus
     # unicode comparisons, much faster
-    LC_ALL=C
+    export LC_ALL=C
 fi
 
 # Set options
@@ -17,7 +17,8 @@ function doerr {
         echo "${prefix}${ln}" >> $_ERROR_FILE
         echo "${prefix}${ln}"
         prefix="       "
-    done ; exit 1
+    done
+    exit 1
 }
 
 if [[ ${BASH_VERSION%%.*} -lt 4 ]]; then

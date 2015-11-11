@@ -272,14 +272,7 @@ function get_index {
     if [[ ${#l} -eq 0 ]]; then
 	return 1
     fi
-    # Save the thing that we want to process...
-    local name=$(lc $(var_spec $l))
-    local version=$(var_spec -s $l)
-    # do full variable (for ${!...})
-    l=${#name}
-    var="$var[$name]"
-    #echo "get_index: name($name) version($version)" >&2
-    if $(isnumber $name) ; then
+    if $(isnumber $l) ; then
 	# We do not check for correctness
 	# This just slows it down
 	#if [ "$var" == "_index" ]; then
@@ -288,9 +281,18 @@ function get_index {
 	#    [ $name -gt $_N_b ] && return 1
 	#fi
 	#[ $name -lt 0 ] && return 1
-	_ps "$name"
+	_ps "$l"
 	return 0
     fi
+    
+    # Save the thing that we want to process...
+    local name=$(lc $(var_spec $l))
+    local version=$(var_spec -s $l)
+    # do full variable (for ${!...})
+    l=${#name}
+    var="$var[$name]"
+    #echo "get_index: name($name) version($version)" >&2
+
     # Do full expansion.
     local idx=${!var}
     if [[ -z "$idx" ]]; then
@@ -303,7 +305,7 @@ function get_index {
 		for v in $idx ; do
 		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
 			_ps "$v"
-		    break
+			break
 		    fi
 		done
 	    else
@@ -316,8 +318,8 @@ function get_index {
 	    if [[ -n "$version" ]]; then
 		for v in $idx ; do
 		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
-		    i="$v"
-		    break
+			i="$v"
+			break
 		    fi
 		done
 	    else
