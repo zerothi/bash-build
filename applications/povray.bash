@@ -23,7 +23,7 @@ pack_cmd "./prebuild.sh"
 pack_cmd "cd .."
 
 pack_cmd "./configure --with-boost-libdir=$(pack_get -LD boost)" \
-	 "COMPILED_BY='Nick Papior Andersen <nickpapior@gmail.com>'" \
+	 "COMPILED_BY='Nick R. Papior <nickpapior@gmail.com>'" \
 	 "--prefix=$(pack_get --prefix) LIBS=-lboost_system"
 
 pack_cmd "make"
