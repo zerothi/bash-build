@@ -14,9 +14,11 @@ pack_set --module-requirement scipy \
 # clean-up until it has been fixed upstream
 pack_cmd "sed -i -e '/extra_/d' qutip/fortran/setup.py"
 
+pack_cmd "unset LDFLAGS"
+
 # Install commands that it should run
 pack_cmd "$(get_parent_exec) setup.py build --with-f90mc"
-pack_cmd "$(get_parent_exec) setup.py install --with-f90mc" \
+pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
     
 done
