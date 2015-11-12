@@ -7,9 +7,6 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family bgw"
 
-pack_set --host-reject ntch
-pack_set --host-reject zerothi
-
 pack_set --install-query $(pack_get --prefix)/bin/epm.x
 
 pack_set $(list -p '--module-requirement ' mpi fftw-3 hdf5)

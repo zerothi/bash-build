@@ -3,9 +3,6 @@ add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch
-pack_set --host-reject zerothi
-
 pack_set --module-opt "--lua-family octopus"
 
 pack_set --install-query $(pack_get --prefix)/bin/octopus_mpi
@@ -16,13 +13,14 @@ pack_set --module-requirement gsl
 pack_set --module-requirement arpack-ng
 pack_set --module-requirement etsf_io
 pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement bgw
 
 tmp=
 if $(is_c intel) ; then
-    tmp="$tmp --with-blacs='-lmkl_blacs_openmpi_lp64'"
-    tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=parallel'"
-    tmp="$tmp --with-lapack='-lmkl_lapack95_lp64'"
     tmp="$tmp --with-scalapack='-lmkl_scalapack_lp64'"
+    tmp="$tmp --with-blacs='-lmkl_blacs_openmpi_lp64'"
+    tmp="$tmp --with-lapack='-lmkl_lapack95_lp64'"
+    tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=parallel'"
 
 else
     pack_set --module-requirement scalapack
@@ -31,7 +29,9 @@ else
     pack_set --module-requirement $la
     tmp_ld="$(list --LD-rp scalapack $la)"
     tmp="$tmp --with-scalapack='$tmp_ld -lscalapack'"
+    tmp="$tmp --with-blacs='$tmp_ld -lscalapack'"
     tmp="$tmp --with-lapack='$tmp_ld $(pack_get -lib $la)'"
+    tmp="$tmp --with-blas='$tmp_ld $(pack_get -lib $la)'"
 
 fi
 
@@ -40,6 +40,10 @@ tmp_xc="$(pack_get --LD libxc)/libxc.a"
 if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
     tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
 fi
+tmp="$tmp --with-berkeleygw-prefix=$(pack_get --prefix bgw)"
+
+# Correct berkeleyGW linking
+pack_cmd "sed -i -e 's:/library:/lib:g' ../configure"
 
 # Do not install the serial version
 if [[ 0 -eq 1 ]]; then

@@ -53,7 +53,6 @@ source_pack applications/dftb.bash
 source_pack applications/wannier.bash
 source_pack applications/gulp.bash
 source_pack applications/dftd3.bash
-source_pack applications/octopus.bash
 source_pack applications/espresso.bash
 source_pack applications/elk.bash
 source_pack applications/openmx.bash
@@ -67,6 +66,9 @@ source_pack applications/vasp-potcar.bash
 
 source_pack applications/bgw.bash
 source_pack applications/cp2k.bash
+
+# Requires bgw
+source_pack applications/octopus.bash
 
 # Specfial photonics applications
 source_pack applications/mpb.bash # [gmp,libunistring,guile]
