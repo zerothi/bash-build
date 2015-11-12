@@ -82,6 +82,8 @@ extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:2}]' $file"
 
+pack_cmd "unset LDFLAGS"
+
 pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
