@@ -43,7 +43,7 @@ fi
 tmp="$tmp --with-berkeleygw-prefix=$(pack_get --prefix bgw)"
 
 # Correct berkeleyGW linking
-pack_cmd "sed -i -e 's:/library -l:/lib:g;s:/library:/include:g' ../configure"
+pack_cmd "sed -i -e 's:/library -l:/lib -l:g;s:/library:/include:g' ../configure"
 
 # Do not install the serial version
 if [[ 0 -eq 1 ]]; then
