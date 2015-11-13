@@ -242,7 +242,7 @@ function pack_install {
 		-M $alias.$version/$(get_c) \
 		-P "/directory/should/not/exist" \
 		$(list --prefix '-L ' $(pack_get --mod-req $idx)) \
-		-L $alias
+		-L $idx
 	fi
     fi
 }
@@ -251,8 +251,6 @@ function pack_install {
 # $1 is the shortname for what to search for
 function get_index {
     local var=_index
-    local i
-    local lookup
     local all=0
     while [[ $# -gt 1 ]]; do
 	local opt=$(trim_em $1) ; shift
@@ -266,13 +264,13 @@ function get_index {
 		;;
 	esac
     done
-    local l=$1
+    local i=$1
     shift
 
-    if [[ ${#l} -eq 0 ]]; then
+    if [[ ${#i} -eq 0 ]]; then
 	return 1
     fi
-    if $(isnumber $l) ; then
+    if $(isnumber $i) ; then
 	# We do not check for correctness
 	# This just slows it down
 	#if [ "$var" == "_index" ]; then
@@ -281,15 +279,14 @@ function get_index {
 	#    [ $name -gt $_N_b ] && return 1
 	#fi
 	#[ $name -lt 0 ] && return 1
-	_ps "$l"
+	_ps "$i"
 	return 0
     fi
     
     # Save the thing that we want to process...
-    local name=$(lc $(var_spec $l))
-    local version=$(var_spec -s $l)
+    local name=$(lc $(var_spec $i))
+    local version=$(var_spec -s $i)
     # do full variable (for ${!...})
-    l=${#name}
     var="$var[$name]"
     #echo "get_index: name($name) version($version)" >&2
 
