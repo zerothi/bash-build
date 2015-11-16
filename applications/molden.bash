@@ -4,7 +4,7 @@ add_package --build generic-host ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden
 
 #pack_set --directory molden5.2
 
-pack_set -s $IS_MODULE -s $MAKE_PARALLEL -s $CRT_DEF_MODULE
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 
 pack_set --module-opt "--lua-family molden"
 pack_set --install-query "$(pack_get --prefix)/bin/molden"
