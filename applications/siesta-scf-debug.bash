@@ -1,9 +1,9 @@
-for v in 996 ; do
+for v in 1054 ; do
 
 add_package --build debug --package siesta-scf-debug \
     http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
-pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
 
