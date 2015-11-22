@@ -1,10 +1,12 @@
 add_package --build generic \
 	    http://prdownloads.sourceforge.net/optipng/optipng-0.7.5.tar.gz
 
+pack_set -s $IS_MODULE
+
 pack_set --install-query $(pack_get --prefix)/bin/optipng
 
 # Install commands that it should run
-pack_cmd "./configure CC=$CC CFLAGS='$CFLAGS'" \
+pack_cmd "CC=$CC CFLAGS='$CFLAGS' ./configure" \
 	 "--prefix=$(pack_get --prefix)"
 
 # Make commands
