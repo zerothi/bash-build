@@ -127,6 +127,12 @@ with_wannier90_bins=\"$(pack_get --prefix wannier90)/bin\"\n\
 with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
 with_wannier90_libs=\"$(list --LD-rp wannier90) -lwannier\"' $file"
 
+
+# Denote specific directory compilation flags
+pack_cmd "$s '$ a\
+fcflags_opt_98_main=\"-g -O1\"\n' $file"
+
+
 # Configure the package...
 # We must not override the flags on the command line, it will
 # disturb the automatically added flags...
@@ -142,6 +148,8 @@ tmp=$(get_make_parallel)
 pack_cmd "make multi multi_nprocs=${tmp//-j /}"
 # With 7.8+ the testing system has changed.
 # We should do some python calls...
-#pack_cmd "make check-local > tmp.test 2>&1" # only check local tests...
-#pack_set_mv_test tmp.test
+pack_cmd "make test_fast > fast.test 2>&1" # only check local tests...
+pack_set_mv_test fast.test
+pack_cmd "make tests_in > in.test 2>&1" # only check local tests...
+pack_set_mv_test in.test 
 pack_cmd "make install"
