@@ -32,4 +32,5 @@ pack_cmd "make $(get_make_parallel)"
 
 pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp libscalapack.a $(pack_get --LD)/"
-
+# simply to force it to exist
+pack_cmd "mkdir -p $(pack_get --prefix)/include"
