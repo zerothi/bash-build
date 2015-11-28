@@ -77,3 +77,5 @@ pack_set -mod-req blis
 pack_set --lib -llapack $(pack_get -lib blis)
 pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis)
 pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis)
+pack_set --lib[lapacke] -llapacke
+				 

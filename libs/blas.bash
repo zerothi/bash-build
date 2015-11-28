@@ -31,4 +31,3 @@ pack_cmd "cp blas.a $(pack_get --LD)/libblas.a"
 
 #pack_set --module-opt "-echo \"Netlib BLAS is used, expect poor performance.\""
 #pack_set --module-opt "-echo 'Consider using another module with othel BLAS implementation.'"
-

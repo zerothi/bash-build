@@ -67,6 +67,7 @@ pack_set -mod-req atlas
 pack_set --lib -llapack_atlas $(pack_get --lib atlas[$v])
 pack_set --lib[omp] -llapack_atlas $(pack_get --lib[omp] atlas[$v])
 pack_set --lib[pt] -llapack_atlas $(pack_get --lib[pt] atlas[$v])
+pack_set --lib[lapacke] ""
 
 done
 

@@ -56,5 +56,6 @@ pack_set -mod-req openblas
 pack_set --lib $(pack_get -lib openblas)
 pack_set --lib[omp] $(pack_get -lib[omp] openblas)
 pack_set --lib[pt] $(pack_get -lib[pt] openblas)
+pack_set --lib[lapacke] ""
 
 done

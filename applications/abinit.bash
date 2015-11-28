@@ -94,11 +94,11 @@ else
 	pack_set --module-requirement scalapack
 	tmp="$tmp $(list --LD-rp scalapack) -lscalapack"
     fi
-
+    
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
     tmp_inc="$tmp_inc $(list --INCDIRS +$la)"
-    tmp="$tmp -llapacke $(pack_get -lib[omp] $la)"
+    tmp="$tmp $(pack_get -lib[lapacke] $la) $(pack_get -lib[omp] $la)"
     pack_cmd "$s '$ a\
 with_linalg_libs=\"$(list --LD-rp +$la) $tmp\"\n' $file"
 
