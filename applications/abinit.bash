@@ -3,8 +3,6 @@ add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set $(list -p '--host-reject ' ntch zerothi n-62-25 n-62-26)
-
 pack_set --module-opt "--lua-family abinit"
 
 pack_set --install-query $(pack_get --prefix)/bin/abinit
@@ -14,13 +12,19 @@ pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
 pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement fftw-3
 
 # Correct mistakes in configure script...
 pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
-
 s="sed -i"
 file=build.ac
+
+for mpila in elpa scalapack
+do
+
+# clean up the previous compilation
+pack_cmd "rm -rf *"
+
 pack_cmd "echo '# This is Nicks build.ac for Abinit' > $file"
 
 if [[ -z "$FLAG_OMP" ]]; then
@@ -51,6 +55,21 @@ with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list --INCDIRS gsl)\"\n\
 with_math_libs=\"$(list --LD-rp gsl) -lgsl\"\n' $file"
+
+# Create LINALG libraries
+if [[ $mpila == elpa ]]; then
+    pack_set --module-requirement elpa
+    tmp="$(list --LD-rp elpa)"
+    tmp="$tmp -lelpa"
+    tmp_inc="$(list --INCDIRS elpa)"
+else
+    tmp_inc=
+    tmp=
+fi
+pack_set --module-requirement plasma
+tmp="$tmp $(list --LD-rp plasma)"
+tmp="$tmp -lplasma -lcoreblasqw -lcoreblas -lquark"
+tmp_inc="$tmp_inc $(list --INCDIRS plasma)"
     
 if $(is_c intel) ; then
     # We need to correct the configure script
@@ -58,7 +77,11 @@ if $(is_c intel) ; then
     # STUPID, I say!
     #pack_cmd "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
     pack_cmd "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
-    tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+    if [[ $mpila == elpa ]]; then
+	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+    else
+	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+    fi
     pack_cmd "$s '$ a\
 FCLIBS=\"$tmp\"\n\
 LIBS=\"$tmp\"\n\
@@ -67,16 +90,22 @@ with_linalg_libs=\"$tmp\"\n' $file"
     pack_cmd "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
-    pack_set --module-requirement scalapack
+    if [[ $mpila == scalapack ]]; then
+	pack_set --module-requirement scalapack
+	tmp="$tmp $(list --LD-rp scalapack) -lscalapack"
+    fi
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp="$(pack_get -lib[omp] $la)"
+    tmp_inc="$tmp_inc $(list --INCDIRS +$la)"
+    tmp="$tmp -llapacke $(pack_get -lib[omp] $la)"
     pack_cmd "$s '$ a\
-with_linalg_incs=\"$(list --INCDIRS +$la)\"\n\
-with_linalg_libs=\"$(list --LD-rp scalapack +$la) -lscalapack $tmp\"\n' $file"
+with_linalg_libs=\"$(list --LD-rp +$la) $tmp\"\n' $file"
 
 fi
+
+pack_cmd "$s '$ a\
+with_linalg_incs=\"$tmp_inc\"\n' $file"
 
 # Add default libraries
 pack_cmd "$s '$ a\
@@ -128,11 +157,6 @@ with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
 with_wannier90_libs=\"$(list --LD-rp wannier90) -lwannier\"' $file"
 
 
-# Denote specific directory compilation flags
-pack_cmd "$s '$ a\
-fcflags_opt_98_main=\"-g -O1\"\n' $file"
-
-
 # Configure the package...
 # We must not override the flags on the command line, it will
 # disturb the automatically added flags...
@@ -140,7 +164,7 @@ pack_cmd "unset FCFLAGS && unset CFLAGS && ../configure --with-config-file=./$fi
 
 if $(is_c intel) ; then
     # Correct the compilation for the intel compiler
-    pack_cmd "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile"
+    pack_cmd "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile src/98_main/Makefile"
 fi
 
 # Make commands
@@ -148,8 +172,17 @@ tmp=$(get_make_parallel)
 pack_cmd "make multi multi_nprocs=${tmp//-j /}"
 # With 7.8+ the testing system has changed.
 # We should do some python calls...
-pack_cmd "make test_fast > fast.test 2>&1" # only check local tests...
-pack_set_mv_test fast.test
-pack_cmd "make tests_in > in.test 2>&1" # only check local tests...
-pack_set_mv_test in.test 
+pack_cmd "make test_fast > fast.$mpila.test 2>&1" # only check local tests...
+pack_set_mv_test fast.$mpila.test
+pack_cmd "make tests_in > in.$mpila.test 2>&1 ; echo succes" # only check local tests...
+pack_set_mv_test in.$mpila.test 
 pack_cmd "make install"
+pack_cmd "pushd $(pack_get --prefix)/bin"
+pack_cmd "mv abinit abinit_$mpila"
+pack_cmd "popd"
+
+done
+
+pack_cmd "pushd $(pack_get --prefix)/bin"
+pack_cmd "ln -s abinit_elpa abinit"
+pack_cmd "popd"
