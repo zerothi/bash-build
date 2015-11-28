@@ -1,4 +1,7 @@
-for v in 1061 ; do
+# We should retain 1061 for some time to
+# allow the usage of both the old Gf.G.Gf product
+# and all later versions using the newer triple matrix product
+for v in 1061 1064 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
