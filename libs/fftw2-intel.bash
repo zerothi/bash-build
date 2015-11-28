@@ -72,5 +72,4 @@ pack_cmd "module unload $(pack_get --module-name openmpi) $(pack_get --module-na
 
 # Install a link to the include files
 pack_cmd "cd $(pack_get --prefix)"
-# Needs to be a softlink!
 pack_cmd "ln -fs $MKL_PATH/include/fftw include"

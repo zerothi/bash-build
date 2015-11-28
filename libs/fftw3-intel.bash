@@ -51,3 +51,6 @@ pack_cmd "module unload $(pack_get --module-name openmpi) $(pack_get --module-na
 
 pack_cmd "rm -rf $(pack_get --LD)/obj*"
 
+# create link for include
+pack_cmd "cd $(pack_get --prefix)"
+pack_cmd "ln -fs $MKL_PATH/include/fftw include"
