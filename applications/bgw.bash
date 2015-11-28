@@ -43,7 +43,7 @@ if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
 COMPFLAG = -DINTEL\n\
 LAPACKLIB = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
-SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
+SCALAPACKLIB = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
 F90free += -free\n\
 ' $file"
 
