@@ -57,7 +57,6 @@ Basically what you need to add to your `.bashrc` is the following:
 
     source /opt/generic/modules/Modules/default/init/bash
     module use --append /opt/modules-generic
-    module use --append /opt/modules-vendor
     module use --append /opt/modules
     module use --append /opt/modules-npa
     module use --append /opt/modules-npa-apps
