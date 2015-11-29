@@ -30,7 +30,7 @@ new_build --name generic-empty \
 # Create a vendor buld
 new_build --name vendor \
     --installation-path /opt/vendor \
-    --module-path /opt/modules-vendor \
+    --module-path /opt/modules-generic \
     --build-path .compile \
     --source source-generic.sh \
     --build-module-path "--package --version" \

@@ -23,7 +23,7 @@ FORCEMODULE=1
 tmp=$(get_c)
 new_build --name vendor-intel \
     --installation-path /opt/vendor \
-    --module-path /opt/modules-vendor \
+    --module-path /opt/modules \
     --source source-intel.sh \
     --build-module-path "--package --version ${tmp//intel-/}" \
     --build-installation-path "--package --version ${tmp//intel-/}"
