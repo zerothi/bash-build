@@ -12,7 +12,7 @@ pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement etsf_io
 pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw-mpi-3
 
 # Correct mistakes in configure script...
 pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
@@ -170,12 +170,21 @@ fi
 # Make commands
 tmp=$(get_make_parallel)
 pack_cmd "make multi multi_nprocs=${tmp//-j /}"
+
 # With 7.8+ the testing system has changed.
 # We should do some python calls...
-pack_cmd "make test_fast > fast.$mpila.test 2>&1" # only check local tests...
-pack_set_mv_test fast.$mpila.test
-pack_cmd "make tests_in > in.$mpila.test 2>&1 ; echo succes" # only check local tests...
-pack_set_mv_test in.$mpila.test 
+tmp="--loglevel=INFO -v -v -n $NPROCS --pedantic"
+pack_cmd "pushd tests"
+pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test ; echo succes"
+pack_set_mv_test $mpila.fast.test
+
+pack_cmd "../../tests/runtests.py $tmp atompaw etsf_io libxc wannier90 2>&1 > $mpila.in.test ; echo succes"
+pack_set_mv_test $mpila.in.test
+
+pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test ; echo succes"
+pack_set_mv_test $mpila.v1.test
+pack_cmd "popd"
+
 pack_cmd "make install"
 pack_cmd "pushd $(pack_get --prefix)/bin"
 pack_cmd "mv abinit abinit_$mpila"
