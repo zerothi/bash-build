@@ -1,6 +1,7 @@
 # Add the "fake" modules on HPC
 if $(is_host n-) ; then
-    add_hidden_package intel
+    add_hidden_package intel-hpc
+    pack_set --mod-name intel
     add_hidden_package intelmpi
     add_hidden_package intelmpifix
 fi
@@ -40,7 +41,7 @@ if $(is_host n-) ; then
     pack_set --module-opt "--set-ENV QUANTUM_LICENSE_PATH=\[6220\]\@license1.cc.dtu.dk:$(pack_get --prefix)/license/$atklic"
 
     # Add module loads
-    pack_set --mod-req intel
+    pack_set --mod-req intel-hpc
     pack_set --mod-req intelmpi 
     pack_set --mod-req intelmpifix
 
