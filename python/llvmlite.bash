@@ -9,7 +9,6 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/llvm-lite
 
 pack_set --module-requirement $(get_parent)
-pack_set --module-requirement cffi
 pack_set --module-requirement llvm
 
 pack_cmd "$(get_parent_exec)" \

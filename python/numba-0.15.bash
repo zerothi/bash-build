@@ -5,7 +5,6 @@ add_package --archive numba-$v.tar.gz \
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-requirement cython
-pack_set --module-requirement cffi
 pack_set --module-requirement llvmpy
 pack_set --module-requirement llvmmath
 
