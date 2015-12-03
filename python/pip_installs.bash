@@ -76,6 +76,7 @@ pip_append markupsafe
 pip_append mistune
 pip_append mock
 #pip_append monty
+pip_append numpydoc
 pip_append nose
 pip_append pep8
 pip_append pexpect
