@@ -11,7 +11,10 @@ pack_cmd "module load $(pack_get --module-name build-tools)"
 
 # Install commands that it should run
 pack_cmd "./configure --prefix=$(pack_get --prefix)" \
-	 "--with-mpi-dir=$(pack_get --prefix mpi)"
+	 "--with-mpi-dir=$(pack_get --prefix mpi)" \
+	 "--with-mpi-f90='$MPIFC'" \
+	 "--with-mpi-cc='$MPICC'" \
+	 "--with-mpi-cxx='$MPICXX'"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
