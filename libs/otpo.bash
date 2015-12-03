@@ -1,12 +1,12 @@
 [[ $_mpi_version != "openmpi" ]] && return
 add_package http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.1.tar.bz2
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $IS_MODULE
+
+pack_set --module-requirement adcl
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/otpo
-
-pack_set --module-requirement adcl
 
 pack_cmd "module load $(pack_get --module-name build-tools)"
 pack_cmd "./autogen.sh"
