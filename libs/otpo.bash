@@ -1,5 +1,5 @@
 [[ $_mpi_version != "openmpi" ]] && return
-add_package http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.1.tar.bz2
+add_package --build debug http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.1.tar.bz2
 
 pack_set -s $IS_MODULE
 

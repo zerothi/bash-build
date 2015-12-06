@@ -1,4 +1,4 @@
-add_package http://pstl.cs.uh.edu/projects/adcl-2.0.tar.gz
+add_package --build debug http://pstl.cs.uh.edu/projects/adcl-2.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -10,7 +10,7 @@ pack_set --module-requirement mpi
 pack_cmd "module load $(pack_get --module-name build-tools)"
 
 # Install commands that it should run
-pack_cmd "./configure --prefix=$(pack_get --prefix)" \
+pack_cmd "./configure CC=$CC MPICC=$MPICC --prefix=$(pack_get --prefix)" \
 	 "--enable-printf-tofile" \
 	 "--enable-userlevel-timings" \
 	 "--with-num-tests=1" \
