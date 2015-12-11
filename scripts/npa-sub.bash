@@ -6,28 +6,28 @@ cat <<EOF > $script
 
 function sub {
    local name=
-   local tmp=$(pwd)
+   local dir=\$(pwd)
    local i=0
-   case $1 in 
+   case \$1 in 
      +*)
-       let i=${#1}
+       let i=\${#1}
        # Get current directory
-       tmp=$(pwd)
-       name="$(basename $tmp)"
-       tmp=$(dirname $tmp)
+       dir=\$(pwd)
+       name="\$(basename \$dir)"
+       dir=\$(dirname \$dir)
        let i--
-       while [[ $i -gt 0 ]]; do
-          name="$(basename $tmp):$name"
-          tmp=$(dirname $tmp)
+       while [[ \$i -gt 0 ]]; do
+          name="\$(basename \$dir):\$name"
+          dir=\$(dirname \$dir)
           let i--
        done
        shift
        ;;
    esac
-   if [[ -z "$name" ]]; then
-     qsub $@
+   if [[ -z "\$name" ]]; then
+     qsub \$@
    else
-     qsub $@ -N "$name"
+     qsub \$@ -N "\$name"
    fi
 }
 
