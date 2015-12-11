@@ -23,6 +23,7 @@ _npa_new_name
 source scripts/npa-spbs.bash
 source scripts/npa-moduleswitch.bash
 source scripts/npa-ml.bash
+source scripts/npa-sub.bash
 
 unset _npa_new_name
 unset script
