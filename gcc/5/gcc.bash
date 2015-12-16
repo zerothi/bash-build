@@ -1,5 +1,5 @@
 add_package --build generic \
-	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.2.0/gcc-5.2.0.tar.bz2
+	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-5.3.0/gcc-5.3.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -7,13 +7,6 @@ pack_set $(list --prefix '--module-requirement ' build-tools \
 		gmp[6.0.0a] mpfr[3.1.3] mpc[1.0.3] isl[0.15])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
-
-dwn_file http://www.student.dtu.dk/~nicpa/packages/gcc-5.2.0-isl-1.patch \
-	$(pwd_archives)/gcc-5.2.0-isl-1.patch
-
-pack_cmd "pushd ../"
-pack_cmd "patch -p1 < $(pwd_archives)/gcc-5.2.0-isl-1.patch"
-pack_cmd "popd"
 
 # Install commands that it should run
 pack_cmd "../configure" \
