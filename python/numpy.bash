@@ -1,4 +1,4 @@
-for v in 1.10.1 ; do
+for v in 1.10.4 ; do
 add_package --package numpy http://downloads.sourceforge.net/project/numpy/NumPy/$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE
