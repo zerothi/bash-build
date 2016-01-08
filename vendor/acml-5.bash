@@ -9,7 +9,7 @@ if $(is_host surt muspel slid) ; then
     [ "$c" == "pgi" ] && continue
 fi
 # On my machines I will only ever use gfortran and ifort (for now...)
-if $(is_host zero ntch) ; then
+if $(is_host zero ntch nano pico) ; then
     continue
 fi
 if $(is_host ntch-2) ; then
