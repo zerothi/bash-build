@@ -18,6 +18,11 @@ fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
 fi
+if $(is_host nano pico) ; then
+  if [[ $(pack_get --installed readline) -eq 1 ]]; then
+    lib_extra="$lib_extra readline"
+  fi
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python
 
@@ -59,7 +64,10 @@ if $(is_host n- surt muspel slid) ; then
     # everything else.
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
-	
+
+elif $(is_host pico nano) ; then
+    tmp=$(list -p '-x test_' urllib2_localnet gdb)
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 else
     tmp=$(list -p '-x test_' urllib2_localnet)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
