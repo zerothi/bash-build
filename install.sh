@@ -150,7 +150,7 @@ source vendor.bash
 source helpers.bash
 
 # Install the lua-libraries
-source lua/lua.bash
+source lua/install.bash
 
 # Install helper scripts (requires Lmod)
 source scripts.bash
