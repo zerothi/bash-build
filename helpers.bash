@@ -4,6 +4,7 @@ msg_install --message "Installing all helper modules if needed..."
 # Install modules
 source_pack helpers/modules.bash
 
+
 # Add a module which contains the default build tools
 add_package --build generic --version npa \
     --package build-tools fake
@@ -43,6 +44,7 @@ source_pack helpers/optipng.bash
 source_pack helpers/zlib.bash
 source_pack helpers/libxml2.bash
 
+source_pack helpers/readline.bash
 source_pack helpers/openssl.bash
 
 source_pack helpers/llvm.bash
