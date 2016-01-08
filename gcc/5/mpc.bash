@@ -12,7 +12,7 @@ pack_cmd "module load build-tools"
 # Install commands that it should run
 pack_cmd "../configure" \
          "--prefix $(pack_get --prefix)" \
-         "--with-gmp=$(pack_get --prefix gmp[6.0.0a])" \
+         "--with-gmp=$(pack_get --prefix gmp[6.1.0])" \
          "--with-mpfr=$(pack_get --prefix mpfr[3.1.3])"
 
 # Make commands

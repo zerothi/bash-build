@@ -4,14 +4,14 @@ add_package --build generic \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools \
-		gmp[6.0.0a] mpfr[3.1.3] mpc[1.0.3] isl[0.15])
+		mpfr[3.1.3] mpc[1.0.3] isl[0.15])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
 # Install commands that it should run
 pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)" \
-	 "--with-gmp=$(pack_get --prefix gmp[6.0.0a])" \
+	 "--with-gmp=$(pack_get --prefix gmp[6.1.0])" \
 	 "--with-mpfr=$(pack_get --prefix mpfr[3.1.3])" \
 	 "--with-mpc=$(pack_get --prefix mpc[1.0.3])" \
 	 "--with-isl=$(pack_get --prefix isl[0.15])" \
@@ -20,7 +20,7 @@ pack_cmd "../configure" \
 	 "--with-multilib-list=m64"
 
 # Make commands
-pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.3] mpc[1.0.3] isl[0.15])' $(get_make_parallel)"
+pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.1.0] mpfr[3.1.3] mpc[1.0.3] isl[0.15])' $(get_make_parallel)"
 # make check requires autogen installed
 #pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
