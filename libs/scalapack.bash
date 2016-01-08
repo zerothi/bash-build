@@ -2,7 +2,7 @@
 # library
 # Hence any linking to scalapack will require an mpi compliant
 # linking.
-add_package --package scalapack http://www.student.dtu.dk/~nicpa/packages/scalapack-200.tar.gz
+add_package --package scalapack http://www.student.dtu.dk/~nicpa/packages/scalapack-200.tar.bz2
 
 pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libscalapack.a
