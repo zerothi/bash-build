@@ -1,4 +1,4 @@
-add_package ftp://xmlsoft.org/libxml2/libxml2-2.9.2.tar.gz
+add_package ftp://xmlsoft.org/libxml2/libxml2-2.9.3.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
