@@ -1,4 +1,4 @@
-for v in 4.6.7 5.0.4 ; do
+for v in 4.6.7 5.1.1 ; do
 add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
