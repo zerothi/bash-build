@@ -1,5 +1,6 @@
-add_package --build generic --version 1.0.2e --package openssl \
-	    https://www.openssl.org/source/openssl-1.0.2e.tar.gz
+v=1.0.2e
+add_package --build generic --version $v --package openssl \
+            ftp://ftp.openssl.org/source/openssl-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
