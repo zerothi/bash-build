@@ -18,6 +18,9 @@ fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
 fi
+if [[ $(pack_get --installed readline) -eq 1 ]]; then
+    lib_extra="$lib_extra readline"
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python3
 
@@ -44,6 +47,9 @@ pack_cmd "make $(get_make_parallel)"
 if $(is_host n- surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+elif $(is_host pico nano) ; then
+    tmp=$(list -p '-x test_' urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver)
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 else
     tmp=$(list -p '-x test_' urllib urllib2 urllib2net json)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
