@@ -159,7 +159,9 @@ _spbs_add_PBS_option -l "nodes=\$nodes:ppn=\$ppn" "Determines the processors, no
 if [ \$has_np_cmd -eq 1 ]; then
   if [ \$((\$nodes*\$ppn)) -le 8 ]; then
     _help "With <= 8 cores you will automatically only be assigned to the AMD machines"
-    _spbs_add_PBS_option -l "feature='Opteron2220|Opteron2354|Opteron2382|Opteron6136'" "Only requests processors of AMD type"
+    if [ "\$queue" == "fotonano" ]; then
+      _spbs_add_PBS_option -l "feature='Opteron2220|Opteron2354|Opteron2382|Opteron6136'" "Only requests processors of AMD type"
+    fi
   fi
 fi
 _spbs_add_PBS_option -l "walltime=\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
