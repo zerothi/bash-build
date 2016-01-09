@@ -12,14 +12,14 @@ single_paffinity=0
 walltime=01:00:00
 nodes=1
 ppn=1
-has_np_cmd=0
+# Default to have the PBS_NP env-var
+has_np_cmd=1
 
 if [ "xn-" == "x\${_hostname:0:2}" ] || \
    [ "xgray" == "x\${_hostname:0:4}" ] || \
    [ "xhpc-fe" == "x\${_hostname:0:6}" ] || \
    [ "xhpclogin" == "x\${_hostname:0:8}" ]
 then
-    has_np_cmd=1
     queue="fotonano"
 fi
 
@@ -28,7 +28,10 @@ mail=""
 inout=""
 show_flag=0
 access_policy=SHARED
-omp=1
+# Default to not use OpenMP
+# By far the greatest majority do not even know
+# its existence.
+omp=0
 mpi=0
 
 function _spbs_add_PBS_option {
