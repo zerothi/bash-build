@@ -137,7 +137,7 @@ function set_flag {
 
 # This should ensure a correct handling of the version info...
 if [[ $(vrs_cmp $v 696) -ge 0 ]]; then
-    pack_cmd "siesta_install -v scf-l --siesta"
+    pack_cmd "echo 'None'" # "siesta_install -v scf-l --siesta"
 elif [[ $(vrs_cmp $v 662) -ge 0 ]]; then
     pack_cmd "siesta_install -v scf-p --siesta"
 else
