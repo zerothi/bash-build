@@ -16,6 +16,9 @@ pack_set --module-requirement gnuplot
 if [[ $(pack_get --installed pcre) -ge $_I_INSTALLED ]]; then
     pack_set -mod-req pcre
 fi
+if [[ $(pack_get --installed readline) -ge $_I_INSTALLED ]]; then
+    pack_set -mod-req readline
+fi
 
 tmp_flags="--with-x --disable-docs --disable-java"
 tmp_flags="$tmp_flags --without-fltk"
