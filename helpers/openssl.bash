@@ -1,5 +1,5 @@
-add_package --build generic --version 1.0.2d --package openssl \
-	    https://www.openssl.org/source/openssl-1.0.2d.tar.gz
+add_package --build generic --version 1.0.2e --package openssl \
+	    https://www.openssl.org/source/openssl-1.0.2e.tar.gz
 
 pack_set -s $IS_MODULE
 
