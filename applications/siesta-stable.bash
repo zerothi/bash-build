@@ -1,5 +1,4 @@
-for v in siesta-3.2 ; do
-add_package http://icmab.cat/leem/siesta/CodeAccess/Code/$v.tgz
+add_package --version 3.2 https://dl.dropbox.com/u/20267285/SIESTA-DOWNLOADS/siesta-3.2-pl-5.tgz
 pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
@@ -125,4 +124,3 @@ if [[ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]]; then
 
 fi
 
-done
