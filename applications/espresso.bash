@@ -1,8 +1,11 @@
 for v in 5.2.1 ; do
     tmp="-package espresso -version $v"
     case $v in
+	5.3.0)
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/911/espresso-$v.tar.gz
+	    ;;
 	5.2.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-$v.tar.gz
 	    ;;
 	5.1.2)
 	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"

@@ -154,5 +154,28 @@ for pack in \
 done
 
 ;; # end of 5.2.1
+
+    5.3.0)
+	
+for pack in \
+    908/GWW-$v.tar.gz \
+	904/atomic-$v.tar.gz \
+	910/pwcond-$v.tar.gz \
+	909/neb-$v.tar.gz \
+	905/PHonon-$v.tar.gz \
+	902/tddfpt-$v.tar.gz \
+	903/xspectra-$v.tar.gz \
+	906/PWgui-$v.tar.gz
+	do
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
+    dwn_file http://www.qe-forge.org/gf/download/frsrelease/204/$pack $o
+    pack=$(basename $pack)
+    
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
+    
+done
+
+;; # done 5.3.0
     
 esac
