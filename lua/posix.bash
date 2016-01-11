@@ -8,6 +8,8 @@ add_package --build generic --package luaposix \
     --archive luaposix-release-v$v.tar.gz \
     https://github.com/luaposix/luaposix/archive/release-v$v.tar.gz
 
+tmp=$(pack_get --package)
+
 pack_set --module-requirement lua
 
 pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/posix.so
@@ -21,7 +23,8 @@ pack_cmd "./configure" \
 	    "LUA_INCLUDE='-I$(pack_get --prefix lua)/include'" \
 	    "--prefix=$(pack_get --prefix lua)" \
 	    "--libdir=$(pack_get --LD lua)/lua/$lua_V/" \
-	    "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/" 
+	    "--datarootdir=$(pack_get --prefix lua)/share/lua/$lua_V/$tmp" \
+	    "--datadir=$(pack_get --prefix lua)/share/lua/$lua_V/$tmp/lua"
 
 # Make lua package
 pack_cmd "make all"
