@@ -9,7 +9,7 @@ pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
 
 pack_set --host-reject $(get_hostname)
 
-pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi cloog gmp)
+pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gmp)
 
 # Create Cmake variable file
 file=NPACmake.txt
@@ -108,8 +108,6 @@ SET(ZLIB_LIBRARY_DIR $(pack_get -L gen-zlib) CACHE PATH zlib-lib-dir)\n\
 SET(LIBXML2_INCLUDE_DIR $(pack_get --prefix gen-libxml2)/include CACHE PATH libxml2-inc-dir)\n\
 #FIND_LIBRARY(LIBXML2_LIBRARY xml2 $(pack_get --LD gen-libxml2))\n\
 SET(LIBXML2_LIBRARIES $(pack_get --LD gen-libxml2)/libxml2.so CACHE FILEPATH libxml2-library)\n\
-\n\
-SET(CLOOG_INCLUDE_DIR $(pack_get --prefix cloog)/include CACHE PATH cloog-inc-dir)\n\
 \n\
 SET(GMP_INCLUDE_DIR $(pack_get --prefix gmp)/include CACHE PATH gmp-inc-dir)\n\
 SET(GMP_LIBRARY $(pack_get --LD gmp)/libgmp.a CACHE FILEPATH gmp-library)\n\
