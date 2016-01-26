@@ -72,7 +72,7 @@ source_pack libs/harminv.bash
 source_pack libs/hdf5.bash
 source_pack libs/hdf5-serial.bash
 source_pack libs/h5utils-serial.bash
-source_pack libs/parallel-netcdf.bash
+source_pack libs/pnetcdf.bash
 source_pack libs/netcdf.bash
 source_pack libs/netcdf-logging.bash
 source_pack libs/netcdf-serial.bash
