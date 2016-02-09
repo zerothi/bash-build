@@ -155,7 +155,7 @@ function pack_list {
 	esac
     done
     local ret=""
-    while [ $# -gt 0 ]; do
+    while [[ $# -gt 0 ]]; do
 	opt=$(trim_em $1) ; shift
 	case $opt in
 	    -*) ret="$ret$(list $lf -c "pack_get $opt" $_N_archives)" ;;

@@ -273,12 +273,12 @@ function get_index {
     if $(isnumber $i) ; then
 	# We do not check for correctness
 	# This just slows it down
-	#if [ "$var" == "_index" ]; then
-	#    [ $name -gt $_N_archives ] && return 1
-	#elif [ "$var" == "_b_index" ]; then
-	#    [ $name -gt $_N_b ] && return 1
+	#if [[ "$var" == "_index" ]]; then
+	#    [[ $name -gt $_N_archives ]] && return 1
+	#elif [[ "$var" == "_b_index" ]]; then
+	#    [[ $name -gt $_N_b ]] && return 1
 	#fi
-	#[ $name -lt 0 ] && return 1
+	#[[ $name -lt 0 ]] && return 1
 	_ps "$i"
 	return 0
     fi

@@ -1,12 +1,6 @@
 # This file should be sourced and used to compile the tools for compiling 
 # different libraries.
 
-if [[ -z "$LC_ALL" ]]; then
-    # Set this for doing ANSI comparisons versus
-    # unicode comparisons, much faster
-    export LC_ALL=C
-fi
-
 # Set options
 set -o hashall
 
@@ -74,7 +68,7 @@ function pack_only {
 }
 
 # Add any auxillary commands
-source src/auxiliary.bash
+source src/auxilliary.bash
 
 # Add the compiler stuff 
 source src/compiler.bash
@@ -112,10 +106,10 @@ function edit_env {
     esac
     local env=$1
     shift
-    [ "$echo_env" -ne "0" ] && _ps "${!env}" && return 0
+    [[ "$echo_env" -ne "0" ]] && _ps "${!env}" && return 0
     # Process what is requested
-    [ -n "$append" ] && export ${!env}="${!env}$append"
-    [ -n "$prepend" ] && eval "export $env='$prepend${!env}'"
+    [[ -n "$append" ]] && export ${!env}="${!env}$append"
+    [[ -n "$prepend" ]] && eval "export $env='$prepend${!env}'"
 }
 
 
@@ -126,10 +120,10 @@ function has_setting {
     local ss
     local s="$1" ; shift
     local -a sets=()
-    [ $# -gt 0 ] && ss="$1" && shift
+    [[ $# -gt 0 ]] && ss="$1" && shift
     IFS="$_LIST_SEP" read -ra sets <<< "$(pack_get -s $ss)"
     for ss in "${sets[@]}" ; do
-	[ "x$s" == "x$ss" ] && return 0
+	[[ "x$s" == "x$ss" ]] && return 0
     done
     return 1
 }

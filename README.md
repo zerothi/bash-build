@@ -63,7 +63,3 @@ Basically what you need to add to your `.bashrc` is the following:
 
 If you change the default module path installation please alter
 the above paths to your module paths.
-
-
-    
-

@@ -3,8 +3,11 @@
 # Current working directory
 _cwd=$(pwd)
 
-# Skipping unicode char's might help speed
-export LC_ALL=C
+if [[ -z "$LC_ALL" ]]; then
+    # Set this for doing ANSI comparisons versus
+    # unicode comparisons, much faster
+    export LC_ALL=C
+fi
 
 # The error file
 _ERROR_FILE=$_cwd/ERROR

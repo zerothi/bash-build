@@ -154,9 +154,8 @@ function trim_em {
 #       Truncates all spaces to a minimum of one space.
 
 function trim_spaces {
-    local str
+    local str=""
     local s
-    local i
     while [[ $# -gt 0 ]]; do
 	s="${1# }" # removes prefix space
 	shift
@@ -326,8 +325,9 @@ function str_version {
 #       Second version string.
 
 function vrs_cmp {
-    local lhs=$1 ; shift
-    local rhs=$1 ; shift
+    local lhs=$1
+    local rhs=$2
+    shift 2
     for o in -1 -2 -3 -4 ; do
 	local lv=$(str_version $o $lhs)
 	local rv=$(str_version $o $rhs)
@@ -372,9 +372,8 @@ function lc {
 
 function get_file_time {
     local format="$1"
-    shift
-    local fdate=$(stat -L -c "%y" $1)
-    shift
+    local fdate=$(stat -L -c "%y" $2)
+    shift 2
     _ps "`date +"$format" --date="$fdate"`"
 }
 
@@ -479,7 +478,7 @@ function arc_cmd {
 	    _ps "echo"
 	    ;;
 	*)
-	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local,fake]"
+	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local/bin/fake]"
 	    ;;
     esac
 }
@@ -595,10 +594,10 @@ function choice {
 # in meaning.
 #  Arguments
 #    <packages>
-#       If the packages are prefixed with a `+` the package
-#       will be expanded to the requirements of the package.
-#       If a `++` is present, package will be expanded to
-#       all requirements and itself.
+#       If a package is prefixed with a `+` the package
+#       will be expanded to the requirements of the package, excluding itself.
+#       If `++` is prefixed, package will be expanded to
+#       all requirements, including itself.
 #  Options
 #    -LD-rp
 #       returns both library path and fixed running path flags for compiler
@@ -723,11 +722,9 @@ function list {
 
 #  Function noop
 # Helps in doing nothing.
-# Sometimes in if-else-endif statementes an noop operation
+# Sometimes in if-else-endif statementes a noop operation
 # is needed.
-# It gobbles all arguments
+# It gobbles all arguments.
 function noop {
-    while [ $# -gt 0 ]; do
-	shift
-    done
+    shift $#
 }
