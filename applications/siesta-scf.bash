@@ -1,7 +1,7 @@
 # We should retain 1061 for some time to
 # allow the usage of both the old Gf.G.Gf product
 # and all later versions using the newer triple matrix product
-for v in 1061 1107 ; do
+for v in 1061 1114 ; do
 
 add_package http://www.student.dtu.dk/~nicpa/packages/siesta-scf-$v.tar.bz2
 
@@ -160,6 +160,10 @@ if [[ $(vrs_cmp $v 688) -lt 0 ]]; then
 fi
 fi
 set_flag $omp
+if [[ $omp == "none" ]]; then
+    # copy the arch-make file
+    pack_cmd "cp arch.make $(pack_get --prefix)/arch.make"
+fi
 
 pack_cmd "make clean"
 
