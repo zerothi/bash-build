@@ -2,7 +2,7 @@
 #  apt-get libreadlineX-dev
 unset LUA_PATH
 
-add_package --build generic http://www.lua.org/ftp/lua-5.3.1.tar.gz
+add_package --build generic http://www.lua.org/ftp/lua-5.3.2.tar.gz
 
 pack_set -s $IS_MODULE
 
