@@ -11,7 +11,7 @@ pack_set --mod-req hwloc
 tmp=$(pack_get --prefix)
 pack_set --prefix ${tmp//hydra/mpich}
 
-pack_set --install-query $(pack_get --prefix)/bin/hydra
+pack_set --install-query $(pack_get --prefix)/bin/mpiexec.hydra
 
 pack_cmd "unset F90"
 pack_cmd "unset F90FLAGS"
@@ -28,7 +28,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --mod-req hydra
 
-pack_set --install-query $(pack_get --prefix)/bin/mpiexec
+pack_set --install-query $(pack_get --prefix)/bin/mpicc
 
 tmp_flags=
 if [[ -d /usr/include/infiniband ]]; then
