@@ -1,6 +1,6 @@
 msg_install --message "Installing the SUITE SPARSE libraries..."
 
-v=4.4.5
+v=4.5.1
 add_package \
     --alias suitesparse \
     --directory SuiteSparse \
@@ -64,8 +64,8 @@ sse "GPU_CONFIG = "
 #pack_set --module-requirement metis
 sse "METIS_PATH = $(pack_set --prefix metis)"
 sse "METIS = $(pack_set --LD metis)/libmetis.a"
-sse "METIS_PATH = ../../metis-4.0"
-sse "METIS = ../../metis-4.0/libmetis.a"
+sse "METIS_PATH = ../../metis-5.1.0"
+sse "METIS = ../../metis-5.1.0/libmetis.a"
 
 # UMFpack configuration
 sse "UMFPACK_CONFIG ="
