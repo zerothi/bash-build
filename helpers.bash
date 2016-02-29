@@ -30,6 +30,9 @@ source_pack helpers/freetype.bash
 source_pack helpers/libunistring.bash
 source_pack helpers/libffi.bash
 
+# Install parallel binary
+source_pack helpers/parallel.bash
+
 # Install my GCC versions
 source gcc/gcc.bash
 
