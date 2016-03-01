@@ -1,4 +1,4 @@
-add_package --build generic http://ftpmirror.gnu.org/libtool/libtool-2.4.3.tar.gz
+add_package --build generic http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
