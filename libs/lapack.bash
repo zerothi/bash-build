@@ -1,4 +1,4 @@
-v=1671
+v=1732
 add_package --package lapack http://www.student.dtu.dk/~nicpa/packages/lapack-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
