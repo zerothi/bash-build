@@ -1,4 +1,4 @@
-add_package http://downloads.sourceforge.net/project/elk/elk-3.1.12.tgz
+add_package http://downloads.sourceforge.net/project/elk/elk-3.3.17.tgz
 
 pack_set --host-reject ntch --host-reject zeroth
 
