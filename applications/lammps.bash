@@ -70,3 +70,7 @@ pack_cmd "cp liblammps_npa.a $(pack_get --LD)/liblammps.a"
 # Copy headers over 
 pack_cmd "mkdir -p $(pack_get --prefix)/include"
 pack_cmd "cp library.cpp library.h $(pack_get --prefix)/include/"
+
+# Add potential files and env-var
+pack_set --module-opt "--set-ENV LAMMPS_POTENTIALS=$(pack_get --prefix)/potentials"
+pack_cmd "cp -rf ../potentials $(pack_get --prefix)/"
