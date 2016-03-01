@@ -66,7 +66,7 @@ pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 pack_cmd "cp lmp_npa $(pack_get --prefix)/bin/lmp"
 # Copy the library over 
 pack_cmd "mkdir -p $(pack_get --LD)"
-pack_cmd "cp liblammps_npa.a $(pack_get --prefix)/bin/liblammps.a"
+pack_cmd "cp liblammps_npa.a $(pack_get --LD)/liblammps.a"
 # Copy headers over 
 pack_cmd "mkdir -p $(pack_get --prefix)/include"
 pack_cmd "cp library.cpp library.h $(pack_get --prefix)/include/"
