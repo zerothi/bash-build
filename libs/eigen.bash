@@ -1,6 +1,6 @@
 add_package -package eigen \
-	    --archive eigen-3.2.7.tar.bz2 \
-	    http://bitbucket.org/eigen/eigen/get/3.2.7.tar.bz2
+	    --archive eigen-3.2.8.tar.bz2 \
+	    http://bitbucket.org/eigen/eigen/get/3.2.8.tar.bz2
 
 pack_set --directory 'eigen-*'
 
