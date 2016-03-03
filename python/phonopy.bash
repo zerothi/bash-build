@@ -1,7 +1,8 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 1.8.4.1 1.9.4 ; do
-    add_package http://downloads.sourceforge.net/project/phonopy/phonopy/phonopy-${v:0:3}/phonopy-$v.tar.gz
+for v in 1.10.2 ; do
+    add_package --archive phonopy-$v.tar.gz \
+        https://github.com/atztogo/phonopy/archive/v$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
