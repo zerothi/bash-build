@@ -1,4 +1,4 @@
-isl_v=0.15
+isl_v=0.16.1
 add_package --build generic \
 	    ftp://gcc.gnu.org/pub/gcc/infrastructure/isl-$isl_v.tar.bz2
 
