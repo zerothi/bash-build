@@ -3,7 +3,7 @@
 # Install the Parallel NetCDF
 add_package \
     --package pnetcdf \
-    http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.6.1.tar.bz2
+    http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.7.0.tar.bz2
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
