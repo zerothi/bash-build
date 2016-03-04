@@ -1,6 +1,7 @@
 # Now we can install NetCDF (we need the C version to be first added!)
 for v in 4.4.0 ; do
-add_package --archive netcdf-$v.tar.gz \
+add_package --archive netcdf-c-$v.tar.gz \
+    --package netcdf \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
