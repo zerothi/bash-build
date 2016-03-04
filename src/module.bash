@@ -224,6 +224,7 @@ EOF
 	    local lenv=${tmp%%=*}
 	    lenv=${lenv:1}
 	    local lval=${tmp#*=}
+	    
 	    #echo "$opt, $lenv $lval $force"
             # Add paths if they are available
 	    # We add explicit quotations as certain env-vars
@@ -341,19 +342,19 @@ function _module_fmt_routine {
 	    -prepend-path)
 		case $_module_format in
 		    TCL) _ps "prepend-path $1 $2" ;;
-		    LUA) _ps "prepend_path(\"$1\",\"$2\")" ;;
+		    LUA) _ps "prepend_path($1,$2)" ;;
 		esac
 		shift ; shift ;;
 	    -append-path)
 		case $_module_format in
 		    TCL) _ps "append-path $1 $2" ;;
-		    LUA) _ps "append_path(\"$1\",\"$2\")" ;;
+		    LUA) _ps "append_path($1,$2)" ;;
 		esac
 		shift ; shift ;;
 	    -set-env)
 		case $_module_format in
 		    TCL) _ps "setenv $1 $2" ;;
-		    LUA) _ps "setenv(\"$1\",\"$2\",true)" ;;
+		    LUA) _ps "setenv($1,$2,true)" ;;
 		esac
 		shift ; shift ;;
 	esac
