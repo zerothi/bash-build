@@ -1,4 +1,4 @@
-v=3.6.1
+v=3.6.3
 add_package --package petsc \
 	    --directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz
