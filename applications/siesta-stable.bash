@@ -1,4 +1,6 @@
-add_package --version 3.2 https://dl.dropbox.com/u/20267285/SIESTA-DOWNLOADS/siesta-3.2-pl-5.tgz
+add_package --package siesta \
+    --version 3.2 \
+    https://dl.dropbox.com/u/20267285/SIESTA-DOWNLOADS/siesta-3.2-pl-5.tgz
 pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
