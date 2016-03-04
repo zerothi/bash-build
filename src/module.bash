@@ -231,13 +231,13 @@ EOF
 	    # might not adhere to simple text 
 	    case $opt in
 		s)
-		    opt="$(_module_fmt_routine --set-env $lenv \"$lval\")"
+		    opt="$(_module_fmt_routine --set-env $lenv $lval)"
 		    ;;
 		p)
-		    opt="$(_module_fmt_routine --prepend-path $lenv \"$lval\")"
+		    opt="$(_module_fmt_routine --prepend-path $lenv $lval)"
 		    ;;
 		a)
-		    opt="$(_module_fmt_routine --append-path $lenv \"$lval\")"
+		    opt="$(_module_fmt_routine --append-path $lenv $lval)"
 		    ;;
 		*)
 		    opt=""
@@ -325,7 +325,7 @@ EOF
 		;;
 	    LUA)
 		pushd $(dirname $mfile) 1> /dev/null
-		ln -s $(basename $mfile) default
+		ln -fs $(basename $mfile) default
 		popd 1> /dev/null 
 		;;
 	esac
@@ -342,19 +342,19 @@ function _module_fmt_routine {
 	    -prepend-path)
 		case $_module_format in
 		    TCL) _ps "prepend-path $1 $2" ;;
-		    LUA) _ps "prepend_path($1,$2)" ;;
+		    LUA) _ps "prepend_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -append-path)
 		case $_module_format in
 		    TCL) _ps "append-path $1 $2" ;;
-		    LUA) _ps "append_path($1,$2)" ;;
+		    LUA) _ps "append_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -set-env)
 		case $_module_format in
 		    TCL) _ps "setenv $1 $2" ;;
-		    LUA) _ps "setenv($1,$2,true)" ;;
+		    LUA) _ps "setenv(\"$1\",\"$2\",true)" ;;
 		esac
 		shift ; shift ;;
 	esac
