@@ -40,6 +40,7 @@ pack_cmd "unset F90FLAGS"
 pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
+	 "--enable-threads=runtime" \
 	 "--enable-shared --enable-smpcoll" \
 	 "--with-pm=hydra $tmp_flags"
 

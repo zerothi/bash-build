@@ -50,10 +50,10 @@ while [ $# -gt 0 ]; do
 	-mpi-version|-mpi)
 	    _mpi_version=$(lc $1)
 	    case $_mpi_version in
-		openmpi|mpich)
+		openmpi|mpich|mvapich)
 		    ;; # fine
 		*)
-		    doerr "option parsing" "MPI version does not exist [OpenMPI|MPICH]"
+		    doerr "option parsing" "MPI version does not exist [OpenMPI|MPICH|MVAPICH]"
 		    ;;
 	    esac
 	    shift ;;

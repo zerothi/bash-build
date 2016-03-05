@@ -11,6 +11,8 @@ source_pack libs/hwloc.bash
 # Basic parallel libraries
 source_pack libs/openmpi.bash
 source_pack libs/mpich.bash
+source_pack libs/mvapich.bash
+
 # Set the default MPI version
 if $(is_c intel) ; then
     # The current implementation does not abstract the
