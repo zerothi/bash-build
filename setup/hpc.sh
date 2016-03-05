@@ -13,7 +13,7 @@
     echo llvm
     echo pcre
     echo hydra
-    echo mpich
+    echo mvapich
     echo pandas
     echo scons
     echo luaposix

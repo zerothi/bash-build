@@ -23,7 +23,7 @@
     echo ctl
     echo harminv
     echo hydra
-    echo mpich
+    echo mvapich
     echo superlu
     echo superlu-dist
     echo pygtk

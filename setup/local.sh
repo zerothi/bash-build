@@ -19,7 +19,7 @@
     echo gpaw-setups
     echo inelastica-matt
     echo hydra
-    echo mpich
+    echo mvapich
     echo pygtk
     echo qutip
     echo bigdft
