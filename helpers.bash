@@ -1,10 +1,6 @@
 msg_install --message "Installing all helper modules if needed..."
 
 
-# Install modules
-source_pack helpers/modules.bash
-
-
 # Add a module which contains the default build tools
 add_package --build generic --version npa \
     --package build-tools fake

@@ -143,6 +143,9 @@ done
 # We can always set the env-variable of LMOD
 export LMOD_IGNORE_CACHE=1
 
+# Far more often than not, we need Modules to be installed before
+source_pack helpers/modules.bash
+
 # Vendor libraries do not depend on anything...
 source vendor.bash
 
