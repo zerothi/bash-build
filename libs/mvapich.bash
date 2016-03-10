@@ -1,4 +1,6 @@
-add_package http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-2.2b.tar.gz
+v=2.2b
+add_package --package mvapich --version $v \
+    http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
