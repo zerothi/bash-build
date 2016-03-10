@@ -311,7 +311,6 @@ function add_package {
     fi
     # Install default values
     _mod_req[$_N_archives]=""
-    echo "Build: $_N_archives $(build_get --default-module[$b_idx])"
     [[ $no_def_mod -eq 0 ]] && \
 	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
     _reject_host[$_N_archives]=""
