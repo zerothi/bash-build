@@ -177,7 +177,7 @@ function add_package {
     local alias="" 
     # Default to default index
     local b_idx=$_b_def_idx
-    local b_name=""
+    local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
     local lp=""
     while [[ $# -gt 1 ]]; do
@@ -202,7 +202,22 @@ function add_package {
 	    *) doerr "$opt" "Not a recognized option for add_package" ;;
 	esac
     done
+
+    # Convert possible
+    
     # Save the build name
+    # check for possible build-conversions
+    case ${b_name} in
+	mpi)
+	    # Grab the default mpi name
+	    b_name=internal-$_mpi_version
+	    ;;
+	la)
+	    # Grab the default LA name
+	    b_name=internal-$_la_version
+	    doerr "$b_name" "Default LA build is not implemented"
+	    ;;
+    esac
     _build[$_N_archives]=$b_name
 
     # When adding a package we need to ensure that all variables
@@ -296,6 +311,7 @@ function add_package {
     fi
     # Install default values
     _mod_req[$_N_archives]=""
+    echo "Build: $_N_archives $(build_get --default-module[$b_idx])"
     [[ $no_def_mod -eq 0 ]] && \
 	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
     _reject_host[$_N_archives]=""
@@ -700,6 +716,7 @@ function pack_print {
     echo " >> >> >> >> Package information"
     echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
     echo " V  : $(pack_get -v $pack)"
+    echo " BLD: $(pack_get -build $pack)"
     echo " DIR: $(pack_get -d $pack)"
     echo " URL: $(pack_get -http $pack)"
     echo " OUT: $(pack_get -A $pack)"
@@ -712,6 +729,7 @@ function pack_print {
     echo " REQ: $(pack_get -module-requirement $pack)"
     echo " REJ: $(pack_get -host-reject $pack)"
     echo " OPT: $(pack_get -module-opt $pack)"
+    
     # Print out all the libraries associated
     # with this package
     local -a sets=()

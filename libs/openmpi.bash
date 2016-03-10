@@ -54,3 +54,12 @@ if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
 fi
 
+
+new_build --name internal-openmpi \
+    --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
+    --module-path $(build_get -mp)-openmpi \
+    --build-path $(build_get -bp) \
+    --build-module-path "$(build_get -bmp)" \
+    --build-installation-path "$(build_get -bip)" \
+    --source $(build_get --source) \
+    $(list -p '--default-module ' $(build_get --default-module) openmpi)

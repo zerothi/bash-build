@@ -31,3 +31,14 @@ done
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+
+
+
+new_build --name internal-mvapich \
+  --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
+  --module-path $(build_get -mp)-mvapich \
+  --build-path $(build_get -bp) \
+  --build-module-path "$(build_get -bmp)" \
+  --build-installation-path "$(build_get -bip)" \
+  --source $(build_get --source) \
+  $(list -p '--default-module ' $(build_get --default-module) mvapich)

@@ -1,9 +1,12 @@
-[[ $_mpi_version != "openmpi" ]] && return
 add_package --build debug http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.1.tar.bz2
 
 pack_set -s $IS_MODULE
 
 pack_set --module-requirement adcl
+
+if [[ $_mpi_version != "openmpi" ]]; then
+    pack_set --host-reject $(get_hostname)
+fi
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/otpo

@@ -307,6 +307,7 @@ function build_get {
     opt=$(var_spec $opt)
     case $opt in
 	-archive-path|-ap) _ps "$_archives" ;;
+	-name) _ps "${_b_name[$b_idx]}" ;;
 	-installation-path|-ip) _ps "${_b_prefix[$b_idx]}" ;;
 	-module-path|-mp) _ps "${_b_mod_prefix[$b_idx]}" ;;
 	-build-path|-bp) _ps "${_b_build_path[$b_idx]}" ;;
@@ -333,6 +334,7 @@ function new_build {
     _b_build_prefix[$_N_b]="${_b_build_prefix[$_b_def_idx]}"
     _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
     _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
+    _b_def_mod_reqs[$_N_b]=""
     # Read in options
     while [[ $# -gt 1 ]]; do
 	local opt=$(trim_em $1)
@@ -342,7 +344,8 @@ function new_build {
 	    # creates aliases! :)
 	    -name) 
 		_b_index[$1]=$_N_b
-		_b_name[$_N_b]="$1" ; shift ;;
+		_b_name[$_N_b]="$1"
+		shift ;;
 	    -installation-path) 
 		_b_prefix[$_N_b]="$1"
 		mkdir -p $1
@@ -352,24 +355,28 @@ function new_build {
 		mkdir -p $1
 		shift ;;
 	    -build-installation-path|-bip) 
-		_b_build_prefix[$_N_b]="$1" ; shift ;;
+		_b_build_prefix[$_N_b]="$1"
+		shift ;;
 	    -build-module-path|-bmp)
-		_b_build_mod_prefix[$_N_b]="$1" ; shift ;;
+		_b_build_mod_prefix[$_N_b]="$1"
+		shift ;;
 	    -build-path|-bp)
-		_b_build_path[$_N_b]="$1" ; mkdir -p $1 ; shift ;;
+		_b_build_path[$_N_b]="$1"
+		mkdir -p $1
+		shift ;;
 	    -reset-module) 
 		_b_def_mod_reqs[$_N_b]=""
 		;;
 	    -default-module-hidden) 
-		local tmp=$(get_index $1)
+		tmp=$(get_index $1)
 		if [[ -z "$tmp" ]]; then
 		    msg_install --message "Adding hidden package $1"
 		    add_hidden_package "$1"
 		fi
 		# fall through BASH >= 4
 		;&
-	    -default-module) 
-		local tmp=$(get_index $1)
+	    -default-module)
+		tmp=$(get_index $1)
 		if [[ -n "$tmp" ]]; then
 		    _b_def_mod_reqs[$_N_b]="${_b_def_mod_reqs[$_N_b]} $(pack_get --module-requirement $tmp)"
 		fi
@@ -393,7 +400,14 @@ function new_build {
 	_b_name[$_N_b]="$1"
 	shift
     fi
-
+    
+    # Check for valid build-names
+    case ${_b_name[$_N_b]} in
+	mpi|la)
+	    doerr "${_b_name[$_N_b]}" "Build names may not be any of: mpi|la"
+	    ;;
+    esac
+    
     # Populate the local rejects for this build
     # This is all the default rejects
     for tmp in ${_host_reject[@]} ; do

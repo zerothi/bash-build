@@ -1,5 +1,4 @@
 v=3.2
-
 add_package http://www.mpich.org/static/downloads/$v/mpich-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -34,6 +33,15 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
 
+
+new_build --name internal-mpich \
+  --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
+  --module-path $(build_get -mp)-mpich \
+  --build-path $(build_get -bp) \
+  --build-module-path "$(build_get -bmp)" \
+  --build-installation-path "$(build_get -bip)" \
+  --source $(build_get --source) \
+  $(list -p '--default-module ' $(build_get --default-module) mpich)
 
 # install HYDRA
 # MPICH installs its own, minimal hydra.
