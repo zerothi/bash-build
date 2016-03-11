@@ -1,9 +1,10 @@
+cloog_v=0.18.1
 add_package --build generic \
-	    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-0.18.1.tar.gz
+	    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-$cloog_v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement isl[0.12.2]
+pack_set --module-requirement isl[$isl_v]
 
 pack_set --install-query $(pack_get --prefix)/bin/cloog
 
@@ -13,9 +14,9 @@ pack_cmd "module load build-tools"
 pack_cmd "../configure" \
          "--prefix $(pack_get --prefix)" \
          "--with-isl=system" \
-         "--with-isl-prefix=$(pack_get --prefix isl[0.12.2])" \
+         "--with-isl-prefix=$(pack_get --prefix isl[$isl_v])" \
          "--with-gmp=system" \
-         "--with-gmp-prefix=$(pack_get --prefix gmp[6.0.0a])"
+         "--with-gmp-prefix=$(pack_get --prefix gmp[$gmp_v])"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

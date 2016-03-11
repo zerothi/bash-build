@@ -4,7 +4,7 @@ add_package --build generic \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools \
-		gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.2] isl[0.12.2] cloog)
+		gmp[$gmp_v] mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v] cloog[$cloog_v])
 
 pack_set --host-reject zero --host-reject ntch
 
@@ -13,16 +13,16 @@ pack_set --install-query $(pack_get --prefix)/bin/gcc
 # Install commands that it should run
 pack_cmd "../configure" \
          "--prefix $(pack_get --prefix)" \
-         "--with-gmp=$(pack_get --prefix gmp[6.0.0a])" \
-         "--with-mpfr=$(pack_get --prefix mpfr[3.1.2])" \
-         "--with-mpc=$(pack_get --prefix mpc[1.0.2])" \
-         "--with-isl=$(pack_get --prefix isl[0.12.2])" \
-         "--with-cloog=$(pack_get --prefix cloog)" \
+         "--with-gmp=$(pack_get --prefix gmp[$gmp_v])" \
+         "--with-mpfr=$(pack_get --prefix mpfr[$mpfr_v])" \
+         "--with-mpc=$(pack_get --prefix mpc[$mpc_v])" \
+         "--with-isl=$(pack_get --prefix isl[$isl_v])" \
+         "--with-cloog=$(pack_get --prefix cloog[$cloog_v])" \
          "--enable-lto --enable-threads" \
          "--enable-languages=c,c++,fortran,go,objc,obj-c++" \
          "--with-multilib-list=m64"
 
-pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.0.0a] mpfr[3.1.2] mpc[1.0.2] isl[0.12.2] cloog)' $(get_make_parallel)"
+pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[$gmp_v] mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v] cloog[$cloog_v])' $(get_make_parallel)"
 # make check requires autogen installed
 #pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
