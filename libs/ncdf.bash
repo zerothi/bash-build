@@ -33,7 +33,7 @@ AR = $AR\n\
 # Make commands
 pack_cmd "export DIR_FDICT=$(pack_get --prefix fdict)/include"
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make test > tmp.test 2>&1"
+pack_cmd "make test > tmp.test 2>&1 || echo 'Fail'"
 pack_cmd "unset DIR_FDICT"
 pack_set_mv_test tmp.test
 pack_cmd "mkdir -p $(pack_get --LD)"
