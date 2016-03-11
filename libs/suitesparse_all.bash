@@ -14,6 +14,8 @@ if $(is_c intel) ; then
     pack_set --host-reject $(get_hostname)
 fi
 
+pack_cm "module load $(list ++cmake)"
+
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
 # Create the suite sparse config file
