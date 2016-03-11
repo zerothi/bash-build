@@ -1,9 +1,10 @@
+mpc_v=1.0.3
 add_package --build generic \
-	    ftp://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz
+	    ftp://ftp.gnu.org/gnu/mpc/mpc-$mpc_v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement mpfr[3.1.3]
+pack_set --module-requirement mpfr[$mpfr_v]
 
 pack_set --install-query $(pack_get --prefix)/lib/libmpc.a
 
@@ -12,8 +13,8 @@ pack_cmd "module load build-tools"
 # Install commands that it should run
 pack_cmd "../configure" \
          "--prefix $(pack_get --prefix)" \
-         "--with-gmp=$(pack_get --prefix gmp[6.1.0])" \
-         "--with-mpfr=$(pack_get --prefix mpfr[3.1.3])"
+         "--with-gmp=$(pack_get --prefix gmp[$gmp_v])" \
+         "--with-mpfr=$(pack_get --prefix mpfr[$mpfr_v])"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

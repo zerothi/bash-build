@@ -4,23 +4,23 @@ add_package --build generic \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools \
-		mpfr[3.1.3] mpc[1.0.3] isl[0.15])
+		mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v])
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
 # Install commands that it should run
 pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)" \
-	 "--with-gmp=$(pack_get --prefix gmp[6.1.0])" \
-	 "--with-mpfr=$(pack_get --prefix mpfr[3.1.3])" \
-	 "--with-mpc=$(pack_get --prefix mpc[1.0.3])" \
-	 "--with-isl=$(pack_get --prefix isl[0.15])" \
+	 "--with-gmp=$(pack_get --prefix gmp[$gmp_v])" \
+	 "--with-mpfr=$(pack_get --prefix mpfr[$mpfr_v])" \
+	 "--with-mpc=$(pack_get --prefix mpc[$mpc_v])" \
+	 "--with-isl=$(pack_get --prefix isl[$isl_v])" \
 	 "--enable-lto --enable-threads" \
 	 "--enable-stage1-languages=c,c++,fortran,go,objc,obj-c++" \
 	 "--with-multilib-list=m64"
 
 # Make commands
-pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[6.1.0] mpfr[3.1.3] mpc[1.0.3] isl[0.15])' $(get_make_parallel)"
+pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[$gmp_v] mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v])' $(get_make_parallel)"
 # make check requires autogen installed
 #pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"

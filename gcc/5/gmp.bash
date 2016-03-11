@@ -1,7 +1,7 @@
-v=6.1.0
+gmp_v=6.1.0
 add_package --build generic \
-	    --package gmp --version $v --directory gmp-${v//[a-z]/} \
-        https://gmplib.org/download/gmp/gmp-$v.tar.xz
+	    --package gmp --version $gmp_v --directory gmp-${gmp_v//[a-z]/} \
+        https://gmplib.org/download/gmp/gmp-$gmp_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

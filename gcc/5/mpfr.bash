@@ -1,9 +1,10 @@
+mpfr_v=3.1.3
 add_package --build generic \
-	    http://www.mpfr.org/mpfr-3.1.3/mpfr-3.1.3.tar.xz
+	    http://www.mpfr.org/mpfr-$mpfr_v/mpfr-$mpfr_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement gmp[6.1.0]
+pack_set --module-requirement gmp[$gmp_v]
 
 pack_set --install-query $(pack_get --prefix)/lib/libmpfr.a
 
@@ -12,7 +13,7 @@ pack_cmd "module load build-tools"
 # Install commands that it should run
 pack_cmd "../configure" \
          "--prefix $(pack_get --prefix)" \
-         "--with-gmp=$(pack_get --prefix gmp[6.1.0])"
+         "--with-gmp=$(pack_get --prefix gmp[$gmp_v])"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
