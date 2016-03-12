@@ -245,7 +245,7 @@ make_files grid2val grid2cube grid_rotate grid_supercell
 pack_cmd "cd ../Vibra/Src"
 make_files fcbuild vibra
 
-# Install the TS-analyzer
+# Install the TS-short hand
 pack_cmd "cd ../../TS/"
 pack_cmd "cp tselecs.sh $(pack_get --prefix)/bin/"
 
@@ -286,9 +286,9 @@ fi
 if [[ $(vrs_cmp $v 681) -ge 0 ]]; then
     pack_cmd "cd ../TB/"
     if [[ $(vrs_cmp $v 767) -ge 0 ]]; then
-	pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
+	    pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
     else
-	pack_cmd "cp tbt_tb.py $(pack_get --prefix)/bin/"
+    	pack_cmd "cp tbt_tb.py $(pack_get --prefix)/bin/"
     fi
 
     pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
@@ -299,11 +299,14 @@ pack_cmd "cd ../../"
 pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
 pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 
-# The atom program for creating the pseudos
-pack_cmd "cd ../Pseudo/atom"
-make_files atm
-
-pack_cmd "cd ../../Obj"
+if [[ $(vrs_cmp $v 1120) -lt 0 ]]; then
+    # The atom program for creating the pseudos
+    pack_cmd "cd ../Pseudo/atom"
+    make_files atm
+    pack_cmd "cd ../../Obj"
+else
+    pack_cmd "cd Obj"
+fi
 
 # Compile the 3m equivalent versions, if applicable
 case $siesta_la in
