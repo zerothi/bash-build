@@ -1,5 +1,5 @@
-v=1.1.0
-add_package https://github.com/sourceryinstitute/opencoarrays/releases/download/$v/opencoarrays-$v.tar.gz
+v=1.3.8
+add_package -package opencoarrays https://github.com/sourceryinstitute/opencoarrays/releases/download/$v/OpenCoarrays-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
