@@ -56,6 +56,7 @@ source_pack helpers/git.bash
 # Other helpers
 source_pack helpers/doxygen.bash
 source_pack helpers/ffmpeg.bash
+source_pack helpers/gts.bash
 source_pack helpers/graphviz.bash
 source_pack helpers/sqlite.bash
 
