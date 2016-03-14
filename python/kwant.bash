@@ -1,8 +1,10 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
-
 add_package http://downloads.kwant-project.org/kwant/kwant-1.2.2.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
+
+if [[ $(vrs_cmp $pV 3.4) -lt 0 ]]; then
+    pack_set --host-reject
+fi
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"

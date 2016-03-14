@@ -36,6 +36,15 @@ for i in $(get_index -all qutip) ; do
 	$(list --prefix '-RL ' $i)
 done
 
+for i in $(get_index -all kwant) ; do
+    create_module \
+	-n "Nick R. Papior kwant for: $(get_c)" \
+	-v $(date +'%g-%j') \
+	-M python$pV.kwant.$(pack_get --version $i)/$(get_c) \
+	-P "/directory/should/not/exist" \
+	$(list --prefix '-RL ' $i)
+done
+
 
 tmp=$(build_get --module-path)
 rm -rf $tmp/python$pV.numerics/$(get_c)

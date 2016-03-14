@@ -116,13 +116,5 @@ for i in $(get_index -all Inelastica-DEV) ; do
 done
 
 
-create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
-    -v $(date +'%g-%j') \
-    -M python$pV.kwant.$(pack_get --version kwant)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' kwant)
-
-
 build_set --module-path $old_path
 
