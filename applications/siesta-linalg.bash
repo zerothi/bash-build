@@ -9,9 +9,21 @@ if $(is_c intel) ; then
 LDFLAGS=$MKL_LIB $(list --LD-rp $(pack_get --mod-req-path))\n\
 FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
 \n\
+' arch.make"
+    case $_mpi_version in
+	openmpi)
+	    pack_cmd "sed -i '1 a\
 LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
 LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' arch.make"
+	    ;;
+	mpich)
+	    pack_cmd "sed -i '1 a\
+LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
+LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
+' arch.make"
+	    ;;
+    esac
 
 # If one ever needs MKL with gnu compiler it should be -lmkl_gf_lp64 instead of -lmkl_intel_lp64
 
