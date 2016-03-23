@@ -3,6 +3,7 @@
 # Create local rejections
 
 {
+    echo gts
     echo blis
     echo flame
     echo acml-install[5.3.1]
