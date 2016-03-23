@@ -38,7 +38,7 @@ pack_cmd "rm -rf $(pack_get --LD)/obj*"
 
 if [ -d $MKL_PATH/interfaces/fftw3x_cdft ]; then
     pack_cmd "cd $MKL_PATH/interfaces/fftw3x_cdft"
-    pack_cmd "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
+    pack_cmd "module load $(pack_get --module-name-requirement mpi) $(pack_get --module-name mpi)"
 
     pack_cmd "make libintel64" \
 	     "compiler=intel" \
@@ -47,7 +47,7 @@ if [ -d $MKL_PATH/interfaces/fftw3x_cdft ]; then
 	     "INSTALL_DIR=$(pack_get --LD)"
 fi
 
-pack_cmd "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
+pack_cmd "module unload $(pack_get --module-name mpi) $(pack_get --module-name-requirement mpi)"
 
 pack_cmd "rm -rf $(pack_get --LD)/obj*"
 

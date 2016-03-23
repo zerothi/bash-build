@@ -50,7 +50,7 @@ pack_cmd "rm -rf $(pack_get --LD)/obj*"
 
 if [[ -d $MKL/interfaces/fftw2x_cdft ]]; then
     pack_cmd "cd $MKL_PATH/interfaces/fftw2x_cdft"
-    pack_cmd "module load $(pack_get --module-name-requirement openmpi) $(pack_get --module-name openmpi)"
+    pack_cmd "module load $(pack_get --module-name-requirement mpi) $(pack_get --module-name mpi)"
     pack_cmd "make libintel64" \
 	     "compiler=intel" \
 	     "mpi=openmpi" \
@@ -68,7 +68,7 @@ if [[ -d $MKL/interfaces/fftw2x_cdft ]]; then
     pack_cmd "rm -rf $(pack_get --LD)/obj*"
 fi
 
-pack_cmd "module unload $(pack_get --module-name openmpi) $(pack_get --module-name-requirement openmpi)"
+pack_cmd "module unload $(pack_get --module-name mpi) $(pack_get --module-name-requirement mpi)"
 
 # Install a link to the include files
 pack_cmd "cd $(pack_get --prefix)"
