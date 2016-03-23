@@ -1,4 +1,4 @@
-for v in 3.7.1 ; do
+v=3.7.1
 add_package --build generic \
 	    --directory llvm-$v.src --package llvm --version $v \
 	    http://llvm.org/releases/$v/llvm-$v.src.tar.xz
@@ -6,8 +6,6 @@ add_package --build generic \
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
-
-pack_set --host-reject $(get_hostname)
 
 pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gmp)
 
@@ -129,4 +127,3 @@ pack_cmd "cmake --build . --target install"
 
 pack_cmd "module unload cmake"
 
-done

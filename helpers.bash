@@ -46,7 +46,8 @@ source_pack helpers/libxml2.bash
 source_pack helpers/readline.bash
 source_pack helpers/openssl.bash
 
-source_pack helpers/llvm.bash
+# Install LLVM compiler
+source llvm/llvm.bash
 
 source_pack helpers/numactl.bash
 
