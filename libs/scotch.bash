@@ -1,6 +1,6 @@
 # MUMPS 4.10.0 only works with 5.1.12b, MUMPS 5 works with >=6.0.1
-for v in 6.0.3 ; do
-add_package --package scotch --alias scotch --version $v \
+for v in 6.0.4 ; do
+add_package --package scotch --alias scotch --version $v --directory scotch_6.0.3 \
     http://gforge.inria.fr/frs/download.php/file/34099/scotch_$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -74,16 +74,16 @@ pack_cmd "make install"
 pack_cmd "make clean"
 
 # Remove threads
-pack_cmd "sed -i -e 's/-DSCOTCH_PTHREAD //gi' $file"
-pack_cmd "sed -i -e 's/-DCOMMON_PTHREAD //gi' $file"
+pack_cmd "sed -i -e 's/-DSCOTCH_PTHREAD//gi' $file"
+pack_cmd "sed -i -e 's/-DCOMMON_PTHREAD//gi' $file"
 pack_cmd "sed -i -e 's/-lpthread//gi' $file"
 pack_cmd "make $(get_make_parallel) scotch"
 if [[ $(vrs_cmp $v 6.0.0) -lt 0 ]]; then
     pack_cmd "make $(get_make_parallel) esmumps"
 fi
-pack_cmd "make check > tmp.test 2>&1"
+#pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+#pack_set_mv_test tmp.test
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
