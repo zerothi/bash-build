@@ -3,7 +3,7 @@ add_package --directory sympy-$v \
     --package sympy --version $v \
     https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
 
