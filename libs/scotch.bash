@@ -63,27 +63,27 @@ prefix = $(pack_get --prefix)\n\
 pack_cmd "mkdir -p $(pack_get --prefix)"
 
 # Make commands
-pack_cmd "make $(get_make_parallel) scotch"
+pack_cmd "make $(get_make_parallel) ptscotch"
 if [[ $(vrs_cmp $v 6.0.0) -lt 0 ]]; then
-    pack_cmd "make $(get_make_parallel) esmumps"
+    pack_cmd "make $(get_make_parallel) ptesmumps"
 fi
 pack_cmd "make install"
-pack_cmd "make check > tmp.test 2>&1"
-pack_set_mv_test tmp.test
+# this check waits for a key-press????
+#pack_cmd "make ptcheck > tmp.test 2>&1"
+pack_set_mv_test tmp.test ptmp.test
 pack_cmd "make clean"
 
 # Remove threads
 pack_cmd "sed -i -e 's/-DSCOTCH_PTHREAD //gi' $file"
 pack_cmd "sed -i -e 's/-DCOMMON_PTHREAD //gi' $file"
 pack_cmd "sed -i -e 's/-lpthread//gi' $file"
-pack_cmd "make $(get_make_parallel) ptscotch"
+pack_cmd "make $(get_make_parallel) scotch"
 if [[ $(vrs_cmp $v 6.0.0) -lt 0 ]]; then
-    pack_cmd "make $(get_make_parallel) ptesmumps"
+    pack_cmd "make $(get_make_parallel) esmumps"
 fi
-# this check waits for a key-press????
-#pack_cmd "make ptcheck > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
-#pack_set_mv_test tmp.test ptmp.test
+pack_set_mv_test tmp.test
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
