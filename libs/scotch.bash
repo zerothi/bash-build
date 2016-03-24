@@ -70,7 +70,7 @@ fi
 pack_cmd "make install"
 # this check waits for a key-press????
 #pack_cmd "make ptcheck > tmp.test 2>&1"
-pack_set_mv_test tmp.test ptmp.test
+#pack_set_mv_test tmp.test ptmp.test
 pack_cmd "make clean"
 
 # Remove threads
