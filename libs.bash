@@ -70,6 +70,9 @@ source_pack libs/boost.bash
 source_pack libs/ctl.bash
 source_pack libs/harminv.bash
 
+# Requires BOOST for additional libraries.
+source_pack libs/blaze.bash
+
 # Install generic libraries
 source_pack libs/hdf5.bash
 source_pack libs/hdf5-serial.bash

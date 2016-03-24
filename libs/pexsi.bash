@@ -5,7 +5,8 @@ pack_set --install-query $(pack_get --LD)/libpexsi_linux.a
 pack_set --lib -lpexsi_linux
 
 pack_set $(list -p '--mod-req ' mpi parmetis scotch)
-pack_set --mod-req superlu-dist[4.2]
+sd_v=4.3
+pack_set --mod-req superlu-dist[$sd_v]
 
 # Prepare the make file
 tmp="sed -i -e"
@@ -32,7 +33,7 @@ RM = rm \n\
 RMFLAGS = -f \n\
 ##\n\
 PEXSI_LIB = \$(PEXSI_DIR)/src/libpexsi_\$(SUFFIX).a \n\
-DSUPERLU_DIR = $(pack_get --prefix superlu-dist[4.2])\n\
+DSUPERLU_DIR = $(pack_get --prefix superlu-dist[$sd_v])\n\
 METIS_DIR = $(pack_get --prefix parmetis)\n\
 SCOTCH_DIR = $(pack_get --prefix scotch)\n\
 #\n\
@@ -46,10 +47,11 @@ CCDEFS = -DRELEASE -DDEBUG=0 -DAdd_ \n\
 CPPDEFS = -std=c++11 \$(CCDEFS) \n\
 #\n\
 LIBS = \$(PEXSI_LIB) \n\
-LIBS += $(list -LD-rp superlu-dist[4.2] parmetis scotch)\n\
-LIBS += -lsuperlu \n\
+LIBS += $(list -LD-rp superlu-dist[$sd_v] parmetis scotch)\n\
+LIBS += -Wl,--allow-multiple-definition -lsuperlu \n\
 #LIBS += -lptscotchparmetis -lptscotch -lptscotcherr \n\
 LIBS += -lscotchmetis -lscotch -lscotcherr \n\
+LIBS += -lparmetis -lmetis \n\
 ' $file"
 
 # Add LAPACK and BLAS libraries
