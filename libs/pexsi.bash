@@ -75,9 +75,18 @@ else
 
 fi
 
+case $_mpi_version in
+    mpich)
+	mpi_libs="-lmpi -lmpicxx"
+	;;
+    *)
+	mpi_libs="-lmpi -lmpi_cxx"
+	;;
+esac
+
 pack_cmd "sed -i '$ a\
 LOADOPTS = \$(LIBS) -lgfortran \n\
-FLOADOPTS = \$(LIBS) -lstdc++ -lmpi -lmpi_cxx \n\
+FLOADOPTS = \$(LIBS) -lstdc++ $mpi_libs \n\
 # Generate autodependencies\n\
 %.d: %.c\n\
 \t@set -e \n\
