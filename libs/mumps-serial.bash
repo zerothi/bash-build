@@ -86,7 +86,7 @@ CDEFS   = -DAdd_ \n\
 #Begin Optimized options\n\
 OPTF    = $FCFLAGS -O -DALLOW_NON_INIT $tmp_flag \n\
 OPTL    = $FCFLAGS -O $tmp_flag \n\
-OPTC    = $CFLAGS -O \n\
+OPTC    = $CFLAGS -O -DWITHOUT_PTHREAD \n\
 \n\
 INCS = \$(INCSEQ) \n\
 LIBS = \$(LIBSEQ) \n\
