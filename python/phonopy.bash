@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 1.10.2 ; do
+for v in 1.10.4 ; do
     add_package --archive phonopy-$v.tar.gz \
         https://github.com/atztogo/phonopy/archive/v$v.tar.gz
     
