@@ -5,7 +5,7 @@ add_package --directory sympy-$v \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set $(list --prefix ' --module-requirement ' numpy cython scipy matplotlib)
 
