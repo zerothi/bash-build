@@ -1,7 +1,10 @@
-for v in 0.11.0.13004 ; do
-add_package https://wiki.fysik.dtu.dk/gpaw-files/gpaw-$v.tar.gz
+for v in 1.0.0 ; do
+add_package --archive gpaw-$v.tar.gz \
+    https://gitlab.com/gpaw/gpaw/repository/archive.tar.gz?ref=$v
 
 pack_set -s $IS_MODULE
+
+pack_set -directory gpaw-$v-*
 
 pack_set --module-opt "--lua-family gpaw"
 
@@ -13,7 +16,7 @@ pack_set --module-requirement mpi \
     --module-requirement libxc
 
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
-    pack_set --module-requirement ase[3.9]
+    pack_set --module-requirement ase[3.10]
 else
     doerr "$(pack_get --package)" "Could not determine needed ASE interface"
 fi

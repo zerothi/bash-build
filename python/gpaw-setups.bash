@@ -1,5 +1,5 @@
 # Add the installation of the gpaw setups
-for v in 0.9.11271 ; do
+for v in 0.9.11271 0.9.20000 ; do
     add_package --build generic \
 	http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
     
