@@ -3,7 +3,7 @@ add_package http://downloads.kwant-project.org/kwant/kwant-1.2.2.tar.gz
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 if [[ $(vrs_cmp $pV 3.4) -lt 0 ]]; then
-    pack_set --host-reject
+    pack_set --host-reject $(get_hostname)
 fi
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
