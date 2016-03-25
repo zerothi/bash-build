@@ -4,6 +4,8 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tinyarray.so
 
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
+
 pack_set --module-requirement numpy \
     --module-requirement cython
 
