@@ -11,3 +11,9 @@ source_pack gcc/5/mpc.bash
 source_pack gcc/5/isl.bash
 source_pack gcc/5/gcc.bash
 
+source_pack gcc/6/gmp.bash
+source_pack gcc/6/mpfr.bash
+source_pack gcc/6/mpc.bash
+source_pack gcc/6/isl.bash
+source_pack gcc/6/gcc.bash
+
