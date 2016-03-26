@@ -2,7 +2,7 @@ add_package https://pypi.python.org/packages/source/t/tinyarray/tinyarray-1.1.0.
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/tinyarray.so
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
