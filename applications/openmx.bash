@@ -64,11 +64,11 @@ FC = $MPIF90 $FFLAGS \$(INCS)\n\
 case $_mpi_version in
     mpich)
 	pack_cmd "sed -i '1 a\
-LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n' $file"
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpifort -lmpi \n' $file"
 	;;
     *)
 	pack_cmd "sed -i '1 a\
-LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpifort -lmpi \n' $file"
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n' $file"
 	;;
 esac
 
