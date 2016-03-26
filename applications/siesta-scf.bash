@@ -305,7 +305,7 @@ if [[ $(vrs_cmp $v 1120) -lt 0 ]]; then
     make_files atm
     pack_cmd "cd ../../Obj"
 else
-    pack_cmd "cd Obj"
+    pack_cmd "cd ../Obj"
 fi
 
 # Compile the 3m equivalent versions, if applicable
