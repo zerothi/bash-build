@@ -54,14 +54,23 @@ CC += $FLAG_OMP\nFC += $FLAG_OMP' $file"
     
 fi
 pack_cmd "sed -i '1 a\
+INCS = $(list --INCDIRS $(pack_get --mod-req-path))\n\
 DESTDIR = $(pack_get --prefix)/bin\n\
 CC = $MPICC $CFLAGS \$(INCS)\n\
-FC = $MPIF90 $FFLAGS \$(INCS)' $file"
+FC = $MPIF90 $FFLAGS \$(INCS)\n\
+' $file"
 
 # Ensure linking to the fortran libraries
-pack_cmd "sed -i '1 a\
-LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n\
-INCS = $(list --INCDIRS $(pack_get --mod-req-path))' $file"
+case $_mpi_version in
+    mpich)
+	pack_cmd "sed -i '1 a\
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpi_mpifh -lmpi \n' $file"
+	;;
+    *)
+	pack_cmd "sed -i '1 a\
+LIB = $(list --LD-rp $(pack_get --mod-req-path)) -lfftw3_mpi -lfftw3 -lmpifort -lmpi \n' $file"
+	;;
+esac
 
 # prepare the directory of installation
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
