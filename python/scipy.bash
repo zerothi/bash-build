@@ -14,7 +14,6 @@ if [[ $(vrs_cmp $v 0.16.0) -ge 0 ]]; then
 if $(is_c gnu) ; then
     pack_cmd "pushd scipy/linalg"
     pack_cmd "sed -i '/[sdcz]gegs/d' cython_lapack_signatures.txt"
-    pack_cmd "sed -i '/[sdcz]gegv/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]gelsx/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]geqpf/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]ggsvd/d' cython_lapack_signatures.txt"
@@ -23,8 +22,6 @@ if $(is_c gnu) ; then
     pack_cmd "sed -i '/[sdcz]latzm/d' cython_lapack_signatures.txt"
     pack_cmd "sed -i '/[sdcz]tzrqf/d' cython_lapack_signatures.txt"
     pack_cmd "$(get_parent_exec) _cython_wrapper_generators.py"
-    # Remove interfaces in flapack.pyf.src
-    pack_cmd "sed -i '/2[c]*>gegv/{N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;N;d}' flapack.pyf.src"
     pack_cmd "popd"
     pack_cmd "$(get_parent_exec) tools/cythonize.py"
 fi
