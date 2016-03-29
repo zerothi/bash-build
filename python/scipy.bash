@@ -10,7 +10,7 @@ pack_set --module-requirement cython
 
 # The later LAPACK versions have gegv routines deprecated and replaced by ggev
 # However, ggev routines are already existing.
-if [[ $(vrs_cmp $v 0.16.0) -ge 0 ]]; then
+if [[ $(vrs_cmp $v 0.16.0) -eq 0 ]]; then
 if $(is_c gnu) ; then
     pack_cmd "pushd scipy/linalg"
     pack_cmd "sed -i '/[sdcz]gegs/d' cython_lapack_signatures.txt"
