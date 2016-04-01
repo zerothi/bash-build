@@ -11,6 +11,8 @@ else
 fi
 pack_set $(list -p '-mod-req ' fftw-2 fftw-3 umfpack cython)
 
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
+
 # For future maybe this flag is important: NPY_SEPARATE_COMPILATION=0
 
 file=site.cfg
