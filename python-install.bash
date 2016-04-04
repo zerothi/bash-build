@@ -29,7 +29,7 @@ def_idx=$(build_get --default-build)
 
 # Ensure get_c is defined
 source $(build_get --source)
-tmp=$(pack_get --prefix $(get_parent))/../packages
+tmp=$(dirname $(pack_get --prefix $(get_parent)))/packages
 new_build --name python$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
