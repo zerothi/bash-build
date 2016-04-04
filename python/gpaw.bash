@@ -25,6 +25,7 @@ fi
 file=customize.py
 pack_cmd "echo '#' > $file"
 
+
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
 compiler = \"$CC $pCFLAGS $MKL_LIB -mkl=sequential\"\n\
@@ -84,6 +85,12 @@ extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
 \n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:2}]' $file"
+
+# Add python directory
+pack_cmd "sed -i '$ a\
+library_dirs += [\"$(pack_get --LD $(get_parent))\"]\n\
+runtime_library_dirs += [\"$(pack_get --LD $(get_parent))\"]\n\
+' $file"
 
 pack_cmd "unset LDFLAGS"
 
