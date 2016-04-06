@@ -51,7 +51,7 @@ function pip_install {
 
 # First install its own usage (and update it)
 pip_install pip
-pack_cmd "pip update pip"
+pack_cmd "pip install -U pip"
 
 
 # Packages in alphabetic order
