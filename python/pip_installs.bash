@@ -49,8 +49,10 @@ function pip_install {
     done
 }
 
-# First install its own usage
+# First install its own usage (and update it)
 pip_install pip
+pack_cmd "pip update pip"
+
 
 # Packages in alphabetic order
 
