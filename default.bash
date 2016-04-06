@@ -62,8 +62,8 @@ msg_install --message "Inelastica"
 create_module $cm_defs \
     -n "Nick R. Papior script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
-    -echo "$(echo_modules Inelastica-DEV[323])" \
-    -RL Inelastica-DEV[323]
+    -echo "$(echo_modules Inelastica-DEV[407])" \
+    -RL Inelastica-DEV[407]
 
 msg_install --message "siesta-dev, siesta-scf"
 
