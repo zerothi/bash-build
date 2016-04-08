@@ -22,12 +22,29 @@ pack_set --lib[pt] -lfftw3_threads
 
 pack_cmd "unset CFLAGS"
 
+# Create generic flags for SSE/SIMD extensions
+tmp_flags=
+if $(grep "sse2 " /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-sse2"
+fi
+if $(grep "avx " /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-avx"
+fi
+
 for flag in --enable-single nothing ; do
     ext=f
     if [[ "$flag" == "nothing" ]]; then
 	flag=""
 	ext=d
+    else
+	if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
+	    # Only allow SSE for float
+	    flag="$flag --enable-sse"
+	fi
     fi
+    # Add default flags
+    flag="$flag $tmp_flags"
+    
     pack_cmd "../configure $flag CFLAGS='$CFLAGS'" \
 	     "--prefix $(pack_get --prefix)"
     tmp_func tmp.test.$ext
@@ -66,9 +83,14 @@ for flag in --enable-single nothing ; do
     if [[ "$flag" == "nothing" ]]; then
 	flag=""
 	ext=d
+    else
+	if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
+	    # Only allow SSE for float
+	    flag="$flag --enable-sse"
+	fi
     fi
-    flag="$flag --enable-mpi"
-    flag="$flag --enable-mpi CC='$MPICC' \
+    flag="$flag --enable-mpi $tmp_flags"
+    flag="$flag CC='$MPICC' \
 CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
 
     pack_cmd "../configure $flag" \
