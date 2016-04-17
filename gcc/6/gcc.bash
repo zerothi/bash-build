@@ -1,4 +1,4 @@
-v=6.0.1
+v=6.1.0
 add_package --build generic \
 	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-$v/gcc-$v.tar.bz2
 
