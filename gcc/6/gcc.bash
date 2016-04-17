@@ -1,5 +1,6 @@
+v=6.0.1
 add_package --build generic \
-	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-6.0.0/gcc-6.0.0.tar.bz2
+	    ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-$v/gcc-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
