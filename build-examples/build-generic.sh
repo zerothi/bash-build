@@ -1,4 +1,5 @@
 source source-generic.sh
+module purge
 
 # Create a new build with name generic
 new_build --name generic \

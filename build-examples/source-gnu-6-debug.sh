@@ -1,4 +1,4 @@
-set_c gnu-5.2.0
+set_c gnu-6.1.0
 
 AR=ar
 CC=gcc
@@ -8,7 +8,7 @@ CXX=g++
 F77=gfortran
 F90=gfortran
 FC=gfortran
-common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays"
+common_flags="-m64 -fPIC -fbounds-check -g -fbacktrace"
 CFLAGS="$common_flags"
 CXXFLAGS="$common_flags"
 
@@ -40,7 +40,6 @@ export CFLAGS
 export FCFLAGS
 export FFLAGS
 export MPICC
-export MPICXX
 export MPIFC
 export MPIF77
 export MPIF90
