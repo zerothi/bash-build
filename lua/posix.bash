@@ -3,7 +3,7 @@
 #  automake
 #  libncurses5/libncurses5-dev (or just a curses header)
 
-v=33.3.1
+v=33.4.0
 add_package --build generic --package luaposix \
     --archive luaposix-release-v$v.tar.gz \
     https://github.com/luaposix/luaposix/archive/release-v$v.tar.gz
