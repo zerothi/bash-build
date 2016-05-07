@@ -34,3 +34,30 @@ _CHOICE_SEP='@'
 
 # Whether we should create TCL or LUA module files
 _module_format='TCL'
+
+# Simple help print-out function
+
+function help_() {
+    echo "Usage: $0 [options] [build-file [...]]"
+    echo "Options:"
+    echo "  --mpi-version|-mpi <openmpi|mpich|mvapich>"
+    echo "    specify the MPI library used as the default MPI dependency"
+    echo "  --python-version|-pv <2|3>"
+    echo "    determine the python version to be installed"
+    echo "  --tcl/lua"
+    echo "    create tcl (env-modules) or lua (Lmod) module files"
+    echo "  --generic <build-name> [generic]"
+    echo "    build used for generic builds (non-optimized)"
+    echo "  --default|-opti|-d <build-name> [generic]"
+    echo "    set the default build used for optimized compilations"
+    echo "  --list"
+    echo "    create package lists which may subsequently be passed to --only-file"
+    echo "  --only <package>"
+    echo "    reduce installation to only this package (+)"
+    echo "  --only-file <file>"
+    echo "    reduce installation to packages listed in <file> (+)"
+    echo "  --build <file>"
+    echo "    source <file> to add builds"
+    echo "  --help|-h"
+    echo "    show this help"
+}

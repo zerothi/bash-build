@@ -82,6 +82,10 @@ while [ $# -gt 0 ]; do
 	-only-file)
 	    pack_only --file $1
 	    shift ;;
+	-help|-h)
+	    help_
+	    exit 0
+	    ;;
 	-build)
 	    opt=$1
 	    ;& # go through
