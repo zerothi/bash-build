@@ -1,4 +1,4 @@
-v=1.59.0
+v=1.60.0
 add_package \
     --package boost \
     --version $v \
