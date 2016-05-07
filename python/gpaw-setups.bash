@@ -1,7 +1,7 @@
 # Add the installation of the gpaw setups
 for v in 0.9.20000 ; do
     add_package --build generic \
-	http://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
+       https://wiki.fysik.dtu.dk/gpaw-files/gpaw-setups-$v.tar.gz
     
     pack_set -s $IS_MODULE
 
