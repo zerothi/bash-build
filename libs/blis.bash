@@ -1,4 +1,4 @@
-v=0.1.8
+v=0.2.0
 add_package --archive blis-$v.tar.gz https://github.com/flame/blis/archive/$v.tar.gz
 
 if ! $(is_c gnu) ; then
@@ -57,23 +57,38 @@ unset blis_parse
 
 # Create omp
 pack_cmd "sed -i -e 's?^\(BLIS_LIB_BASE_NAME\).*?\1 := libblis_omp?' Makefile"
-pack_cmd "make"
+pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+# Run test
+pack_cmd "cd testsuite"
+pack_cmd "sed -i -e '/^BLIS_LIB/s?libblis.a?libblis_omp.a?' Makefile"
+pack_cmd "make ; ./test_libblis.x > omp.test"
+pack_set_mv_test omp.test
+pack_cmd "make clean"
+pack_cmd "sed -i -e '/^BLIS_LIB/s?libblis_omp.a?libblis.a?' Makefile"
+pack_cmd "cd .."
 
 pack_cmd "make clean cleanlib"
 
 pack_cmd "sed -i -e 's?^\(BLIS_LIB_BASE_NAME\).*?\1 := libblis?' Makefile"
 pack_cmd "sed -si -e 's?-fopenmp? ?g' config/*/*.mk"
 pack_cmd "sed -si -e 's?-fopenmp? ?g' test/*/Makefile"
-pack_cmd "make"
+pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+# Run test
+pack_cmd "cd testsuite"
+pack_cmd "make ; ./test_libblis.x > single.test"
+pack_set_mv_test single.test
+pack_cmd "cd .."
 
+
+
+# Add lapack-blis
 add_hidden_package lapack-blis/$v
 pack_set --installed $_I_REQ
 pack_set -mod-req lapack
 pack_set -mod-req blis
 # Denote the default libraries
-# Note that this OpenBLAS compilation has lapack built-in
 pack_set --lib -llapack $(pack_get -lib blis)
 pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis)
 pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis)
