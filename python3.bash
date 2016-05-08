@@ -48,7 +48,7 @@ if $(is_host n- surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 elif $(is_host pico nano) ; then
-    tmp=$(list -p '-x test_' urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver)
+    tmp=$(list -p '-x test_' httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 else
     tmp=$(list -p '-x test_' urllib urllib2 urllib2net json)
