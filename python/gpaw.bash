@@ -94,6 +94,11 @@ runtime_library_dirs += [\"$(pack_get --LD $(get_parent))\"]\n\
 
 pack_cmd "unset LDFLAGS"
 
+if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
+    # If python 3 correct the hdf5.c file
+    pack_cmd "sed -i -e 's:PyInt_FromLong:PyLong_FromLong:g' c/hdf5.c"
+fi
+
 pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
