@@ -51,7 +51,11 @@ while [ $# -gt 0 ]; do
 	    _mpi_version=$(lc $1)
 	    case $_mpi_version in
 		openmpi|mpich|mvapich)
+		    noop
 		    ;; # fine
+		ompi)
+		    _mpi_version=openmpi
+		    ;;
 		*)
 		    doerr "option parsing" "MPI version does not exist [OpenMPI|MPICH|MVAPICH]"
 		    ;;
