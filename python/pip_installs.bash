@@ -97,6 +97,8 @@ pip_append simplegeneric
 pip_append sphinx
 pip_append traitlets
 pip_append tornado
+pip_append twine
+pip_append wheel
 
 pip_install
 
