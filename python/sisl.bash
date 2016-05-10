@@ -1,6 +1,6 @@
-v=0.5.3
+v=0.5.4
 add_package --archive sids-$v.tar.gz \
-    https://github.com/zerothi/sids/archive/$v.tar.gz
+    https://github.com/zerothi/sisl/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -15,5 +15,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe sids > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe sisl > tmp.test 2>&1 ; echo 'Success'"
 pack_set_mv_test tmp.test
