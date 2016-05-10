@@ -1,5 +1,5 @@
 v=0.5.4
-add_package --archive sids-$v.tar.gz \
+add_package --archive sisl-$v.tar.gz \
     https://github.com/zerothi/sisl/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE

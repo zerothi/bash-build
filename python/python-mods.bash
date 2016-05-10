@@ -49,7 +49,7 @@ done
 tmp=$(build_get --module-path)
 rm -rf $tmp/python$pV.numerics/$(get_c)
 tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sids ; do
+for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sisl ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"
     fi
