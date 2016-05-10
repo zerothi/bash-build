@@ -94,7 +94,7 @@ pip_append python-dateutil
 pip_append pyyaml
 pip_append pyzmq
 pip_append simplegeneric
-pip_append sphinx
+pip_append sphinx sphinx_rtd_theme
 pip_append traitlets
 pip_append tornado
 pip_append twine
