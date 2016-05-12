@@ -49,6 +49,7 @@ pack_cmd "make $(get_make_parallel) lib"
 pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
 pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp gulp $(pack_get --prefix)/bin/"
+pack_cmd "cp $file $(pack_get --prefix)/"
 pack_cmd "cp ../libgulp.a $(pack_get --LD)/"
 
 # Move the doc and libraries
