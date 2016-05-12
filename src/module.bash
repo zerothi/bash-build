@@ -140,7 +140,7 @@ set modulename  "$name"
 set version	$version
 EOF
 	    if [[ $_mod_survey -ne 0 ]]; then
-		cat <<EOF > "$mfile"
+		cat <<EOF >> "$mfile"
 
 if { [module-info mode load] } {
     system echo $_mod_survey_cmd >> $_mod_survey_file
