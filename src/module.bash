@@ -1,3 +1,49 @@
+
+# Determine whether the module files should contain a
+# survey dispatch.
+_mod_survey=0
+_mod_survey_cmd='system echo `whoami` `date +%Y-%m-%d-%H` $modulename/$version'
+_mod_survey_file=''
+
+# Globally set whether modules should dispatch
+# to a survey file.
+# This may be handy to figure out how many modules are
+# being used, etc.
+# Flags for setting module commands
+#   -s|--survey:
+#     Create survey
+#   -cmd|--survey-cmd:
+#     Command to create survey with.
+#     Defaults to:
+#       `whoami` `date +%Y-%m-%d-%H` $modulename/$version'
+#   -f|--survey-file:
+#     The file where the survey is saved in.
+#     This will automatically enable creating a survey
+function module_set {
+    while [[ $# -gt 0 ]]; do
+	opt="$(trim_em $1)"
+	shift
+	case $opt in
+	    -s|-survey)
+		_mod_survey=1
+		;;
+	    -cmd|-survey-cmd)
+		_mod_survey_cmd="$1"
+		shift
+		;;
+	    -f|-survey-file)
+		_mod_survey_file="$1"
+		_mod_survey=1
+		shift
+		;;
+	    *)
+		doerr "$opt" "Option for module_set $opt was not recognized"
+		;;
+	esac
+    done
+}
+
+
 # Create a module for loading
 # Flags for creating the module:
 #   -n <name>
@@ -42,6 +88,7 @@ function create_module {
 	    -F|-force)  force=1 ;;
 	    *)
 		doerr "$opt" "Option for create_module $opt was not recognized"
+		;;
 	esac
     done
     fpath=$path
@@ -92,6 +139,14 @@ function create_module {
 set modulename  "$name"
 set version	$version
 EOF
+	    if [[ $_mod_survey -ne 0 ]]; then
+		cat <<EOF > "$mfile"
+
+if { [module-info mode load] } {
+    system echo $_mod_survey_cmd >> $_mod_survey_file
+}
+EOF
+	    fi
 	    ;;
 	LUA)
 	    cat <<EOF > "$mfile"
@@ -231,13 +286,13 @@ EOF
 	    # might not adhere to simple text 
 	    case $opt in
 		s)
-		    opt="$(_module_fmt_routine --set-env $lenv $lval)"
+		    opt="$(module_fmt_routine --set-env $lenv $lval)"
 		    ;;
 		p)
-		    opt="$(_module_fmt_routine --prepend-path $lenv $lval)"
+		    opt="$(module_fmt_routine --prepend-path $lenv $lval)"
 		    ;;
 		a)
-		    opt="$(_module_fmt_routine --append-path $lenv $lval)"
+		    opt="$(module_fmt_routine --append-path $lenv $lval)"
 		    ;;
 		*)
 		    opt=""
@@ -247,33 +302,33 @@ EOF
 	    # be "on" , they are specified by the options by the user
 	    # and not, per-see "optional"
 	    [[ -n "$opt" ]] && \
-		_add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
+		add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
 	done
 	echo "" >> $mfile
     fi
     # Add paths if they are available
-    _add_module_if -F $force -d "$path/bin" $mfile \
-	"$(_module_fmt_routine --prepend-path PATH $fpath/bin)"
-    _add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
-    _add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
-	"$(_module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
-    _add_module_if -F $force -d "$path/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $fpath/man)"
-    _add_module_if -F $force -d "$path/share/man" $mfile \
-	"$(_module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
+    add_module_if -F $force -d "$path/bin" $mfile \
+	"$(module_fmt_routine --prepend-path PATH $fpath/bin)"
+    add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
+	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
+    add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
+	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
+    add_module_if -F $force -d "$path/man" $mfile \
+	"$(module_fmt_routine --prepend-path MANPATH $fpath/man)"
+    add_module_if -F $force -d "$path/share/man" $mfile \
+	"$(module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
     # The LD_LIBRARY_PATH is DANGEROUS!
-    #_add_module_if -F $force -d "$path/lib" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
- #   _add_module_if -F $force -d "$path/lib64" $mfile \
-#	"$(_module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
-    _add_module_if -F $force -d "$path/lib/python" $mfile \
-	"$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.6 2.7 3.4 3.5 ; do
-	_add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
-	_add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
-	    "$(_module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
+    #add_module_if -F $force -d "$path/lib" $mfile \
+#	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
+ #   add_module_if -F $force -d "$path/lib64" $mfile \
+#	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
+    add_module_if -F $force -d "$path/lib/python" $mfile \
+	"$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
+    for PV in 2.6 2.7 3.4 3.5 3.6 ; do
+	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
+	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
+	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
+	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
     if [[ -n "$lua_family" ]]; then
 	case $_module_format in
@@ -333,7 +388,7 @@ EOF
 }
 
 # Returns the module specific routine call
-function _module_fmt_routine {
+function module_fmt_routine {
     local lval="" ; local lenv=""
     while [[ $# -gt 0 ]]; do
 	opt="$(trim_em $1)"
@@ -367,7 +422,7 @@ function _module_fmt_routine {
 #   -f <file>
 #   $1 module file to append to
 #   $2-? append this in one line to the file
-function _add_module_if {
+function add_module_if {
     local d="";local f="" ;local F=0;
     local X=0
     local opt
@@ -405,7 +460,7 @@ function _add_module_if {
     
     local check=""
     if [[ $F -eq 1 ]]; then
-	# Force check to succed
+	# Force check to succeed
 	check=$HOME
     elif [[ -n "$f" ]]; then
 	check=$f
