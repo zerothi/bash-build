@@ -72,4 +72,4 @@ pack_cmd "module unload $(pack_get --module-name mpi) $(pack_get --module-name-r
 
 # Install a link to the include files
 pack_cmd "cd $(pack_get --prefix)"
-pack_cmd "ln -fs $MKL_PATH/include/fftw include"
+pack_cmd "[ ! -d include ] && ln -fs $MKL_PATH/include/fftw include"
