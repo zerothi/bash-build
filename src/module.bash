@@ -2,7 +2,7 @@
 # Determine whether the module files should contain a
 # survey dispatch.
 _mod_survey=0
-_mod_survey_cmd='system echo `whoami` `date +%Y-%m-%d-%H` $modulename/$version'
+_mod_survey_cmd='`whoami` `date +%Y-%m-%d-%H` $modulename/$version'
 _mod_survey_file=''
 
 # Globally set whether modules should dispatch
