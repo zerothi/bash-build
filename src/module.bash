@@ -142,9 +142,22 @@ EOF
 	    if [[ $_mod_survey -ne 0 ]]; then
 		cat <<EOF >> "$mfile"
 
-if { [module-info mode load] } {
-    system echo $_mod_survey_cmd >> $_mod_survey_file
+# Check that we may create survey
+set cerr [catch {set in_survey $::env(NPA__SURVEY_IN)}]
+if { $cerr != 0 } {
+    set in_survey 0
 }
+if { $in_survey == 0 } {
+    if { [module-info mode load] } {
+        # This is the controlling sequence
+        set in_survey 2
+        set $::env(NPA__SURVEY_IN) 1
+        system echo $_mod_survey_cmd >> $_mod_survey_file
+    } else {
+        set in_survey 1
+    }
+}
+
 EOF
 	    fi
 	    ;;
@@ -362,6 +375,19 @@ EOF
 		;;
 	esac
     fi
+
+
+    case $_module_format in
+	TCL)
+    	    if [[ $_mod_survey -ne 0 ]]; then
+		cat <<EOF >> "$mfile"
+
+# Reset in_survey
+if { $in_survey == 2 } {
+    set $::env(NPA__SURVEY_IN) ""
+}
+EOF
+
     
     
     if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then
