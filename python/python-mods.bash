@@ -1,6 +1,7 @@
 
 create_module \
-    -n "Nick R. Papior basic python script for: $(get_c)" \
+    -n python$pV.fireworks \
+    -W "Nick R. Papior basic python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.fireworks/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -9,7 +10,8 @@ create_module \
 
 for i in $(get_index -all ase) ; do
     create_module \
-	-n "Nick R. Papior ASE for: $(get_c)" \
+	-n python$pV.ase.$(pack_get --version $i) \
+	-W "Nick R. Papior ASE for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -19,7 +21,8 @@ done
 
 for i in $(get_index -all gpaw) ; do
     create_module \
-	-n "Nick R. Papior GPAW for: $(get_c)" \
+	-n python$pV.gpaw.$(pack_get --version $i) \
+	-W "Nick R. Papior GPAW for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -29,7 +32,8 @@ done
 
 for i in $(get_index -all qutip) ; do
     create_module \
-	-n "Nick R. Papior QuTip for: $(get_c)" \
+	-n python$pV.qutip.$(pack_get --version $i) \
+	-W "Nick R. Papior QuTip for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.qutip.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -38,7 +42,8 @@ done
 
 for i in $(get_index -all kwant) ; do
     create_module \
-	-n "Nick R. Papior kwant for: $(get_c)" \
+	-n python$pV.kwant.$(pack_get --version $i) \
+	-W "Nick R. Papior kwant for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.kwant.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -55,7 +60,8 @@ for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas thea
     fi
 done
 create_module \
-    -n "Nick R. Papior parallel python script for: $(get_c)" \
+    -n python$pV.numerics \
+    -W "Nick R. Papior parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numerics/$(get_c) \
     -P "/directory/should/not/exist" \

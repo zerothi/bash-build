@@ -30,21 +30,24 @@ function echo_modules {
 
 rm_latest Inelastica.latest/$(get_c)
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading Inelastica: $(get_c)" \
+    -n Inelastica.latest \
+    -W "Nick R. Papior script for loading Inelastica: $(get_c)" \
     -M Inelastica.latest/$(get_c) \
     -echo "$(echo_modules Inelastica-DEV)" \
     -RL Inelastica-DEV
 
 rm_latest siesta.latest/$(get_c)
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -n siesta.latest \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta.latest/$(get_c) \
     -echo "$(echo_modules siesta-dev)" \
     -RL siesta-dev
 
 rm_latest siesta-scf.latest/$(get_c)
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -n siesta-scf.latest \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta-scf.latest/$(get_c) \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf

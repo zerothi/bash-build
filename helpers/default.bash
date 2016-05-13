@@ -23,7 +23,8 @@ do
     if [[ $(pack_get --installed $p) -eq 1 ]]; then
 	create_module \
 	    --module-path $mp-npa \
-	    -n "Nick R. Papior script for loading $(pack_get --alias $i): $(pack_get --version $p)." \
+	    -n $(pack_get --alias $p).$(pack_get --version $p) \
+	    -W "Nick R. Papior script for loading $(pack_get --alias $p): $(pack_get --version $p)." \
 	    -v $(pack_get --version $p) \
 	    -M $(pack_get --alias $p).$(pack_get --version $p) \
 	    -P "/directory/should/not/exist" -RL $p 

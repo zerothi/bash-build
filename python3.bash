@@ -71,7 +71,8 @@ pack_install
 
 create_module \
     --module-path $(build_get --module-path)-npa-apps \
-    -n "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
+    -n $(pack_get --alias).$(pack_get --version) \
+    -W "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
     -P "/directory/should/not/exist" \

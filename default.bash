@@ -26,33 +26,38 @@ function echo_modules {
 msg_install --message "abinit, octopus, elk, espresso"
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading Abinit: $(get_c)" \
+    -n "abinit.default" \
+    -W "Nick R. Papior script for loading Abinit: $(get_c)" \
     -M abinit.default/$(get_c) \
     -echo "$(echo_modules abinit)" \
     -RL abinit
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading Octopus: $(get_c)" \
+    -n "octopus.default" \
+    -W "Nick R. Papior script for loading Octopus: $(get_c)" \
     -M octopus.default/$(get_c) \
     -echo "$(echo_modules octopus)" \
     -RL octopus
 
 if [[ $(pack_get --installed elk) -eq 1 ]]; then
     create_module $cm_defs \
-	-n "Nick R. Papior script for loading Elk: $(get_c)" \
+        -n "elk.default" \
+	-W "Nick R. Papior script for loading Elk: $(get_c)" \
 	-M elk.default/$(get_c) \
 	-echo "$(echo_modules elk)" \
 	-RL elk
 fi
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading Gulp: $(get_c)" \
+    -n "gulp.default" \
+    -W "Nick R. Papior script for loading Gulp: $(get_c)" \
     -M gulp.default/$(get_c) \
     -echo "$(echo_modules gulp)" \
     -RL gulp
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading QuantumEspresso: $(get_c)" \
+    -n "espresso.default" \
+    -W "Nick R. Papior script for loading QuantumEspresso: $(get_c)" \
     -M espresso.default/$(get_c) \
     -echo "$(echo_modules espresso)" \
     -RL espresso
@@ -60,7 +65,8 @@ create_module $cm_defs \
 msg_install --message "Inelastica"
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading Inelastica: $(get_c)" \
+    -n "Inelastica.default" \
+    -W "Nick R. Papior script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
     -echo "$(echo_modules Inelastica-DEV[407])" \
     -RL Inelastica-DEV[407]
@@ -68,13 +74,15 @@ create_module $cm_defs \
 msg_install --message "siesta-dev, siesta-scf"
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -n siesta.default \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta.default/$(get_c) \
     -echo "$(echo_modules siesta-dev[475])" \
     -RL siesta-dev[475]
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -n siesta-scf.default \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta-scf.default/$(get_c) \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
@@ -90,19 +98,22 @@ create_module $cm_defs \
 msg_install --message "openmx, vasp"
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading OpenMX: $(get_c)" \
+    -n openmx.default \
+    -W "Nick R. Papior script for loading OpenMX: $(get_c)" \
     -M openmx.default/$(get_c) \
     -echo "$(echo_modules openmx)" \
     -RL openmx
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading VASP: $(get_c)" \
+    -n vasp.default \
+    -W "Nick R. Papior script for loading VASP: $(get_c)" \
     -M vasp.default/$(get_c) \
     -echo "$(echo_modules vasp[5.3.5])" \
     -RL vasp[5.3.5]
 
 create_module $cm_defs \
-    -n "Nick R. Papior script for loading plotting routines: $(get_c)" \
+    -n plot.default \
+    -W "Nick R. Papior script for loading plotting routines: $(get_c)" \
     -M plot.default/$(get_c) \
     -echo "$(echo_modules gnuplot molden grace xcrysden povray vmd matplotlib)" \
     $(list --prefix '-RL ' gnuplot molden grace xcrysden povray vmd matplotlib)

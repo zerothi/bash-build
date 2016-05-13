@@ -116,7 +116,8 @@ source_pack libs/atompaw.bash
 # We install the module scripts here:
 create_module \
     --module-path $(build_get --module-path)-npa \
-    -n "Nick R. Papior module script for: $(get_c)" \
+    -n mpi.zlib.hdf5.netcdf \
+    -W "Nick R. Papior module script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M mpi.zlib.hdf5.netcdf/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -127,7 +128,8 @@ retval=$?
 if [ $retval -eq 0 ]; then
     create_module \
 	--module-path $(build_get --module-path)-npa \
-	-n "Nick R. Papior module script for: $(get_c)" \
+        -n hdf5.netcdf.utils \
+	-W "Nick R. Papior module script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M hdf5.netcdf.utils/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -137,7 +139,8 @@ fi
 for bl in blas atlas openblas ; do
     create_module \
 	--module-path $(build_get --module-path)-npa \
-	-n "Nick R. Papior parallel math script for: $(get_c)" \
+        -n mpi.$bl.scalapack \
+	-W "Nick R. Papior parallel math script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M mpi.$bl.scalapack/$(get_c) \
 	-P "/directory/should/not/exist" \
