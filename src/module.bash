@@ -387,7 +387,9 @@ if { $in_survey == 2 } {
     set $::env(NPA__SURVEY_IN) ""
 }
 EOF
-
+	    fi
+	    ;;
+    esac
     
     
     if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then
