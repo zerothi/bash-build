@@ -65,8 +65,15 @@ MPI_INCLUDE=.\n\
 
 source applications/siesta-linalg.bash
 
-# Fix the long lines in the Makefile
-pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
+# Create install directory
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+
+
+if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
+    source applications/siesta-speed.bash libSiestaXC.a siesta
+else
+    # Fix the long lines in the Makefile
+    pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 > tmp.F90\n\
 \t\@awk '{if (length>80) { cur=78; \\\\\\\\\n\\\
 \t\tprintf \\\"%s\&\\\\\\n\\\",substr(\\\$\\\$0,0,78); \\\\\\\\\n\\\
@@ -74,19 +81,17 @@ pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 \t\tprintf \\\"\&%s\&\\\\\\n\\\",substr(\\\$\\\$0,cur-76,76) \\\\\\\\\n\\\
 \t\t} printf \\\"\&%s\\\\\\n\\\",substr(\\\$\\\$0,cur)} else { print \\\$\\\$0 }}' tmp.F90 > compinfo.F90/\" Makefile"
 
-# Create install directory
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
-
-if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
-    source applications/siesta-speed.bash libSiestaXC.a siesta
-else
     source applications/siesta-speed.bash siesta
 fi
 pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
 pack_cmd "make clean"
 
-source applications/siesta-speed.bash transiesta
+if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
+    source applications/siesta-speed.bash libSiestaXC.a transiesta
+else
+    source applications/siesta-speed.bash transiesta
+fi
 pack_cmd "cp transiesta $(pack_get --prefix)/bin/"
 
 pack_cmd "cd ../Util/TBTrans"
@@ -117,7 +122,7 @@ pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 # If the stable version of siesta has enabled the ESM module, 
 # we compile that now
 # Currently it works with 3.1
-if [[ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]]; then
+if [[ $(vrs_cmp $v -eq 0 ]]; then
 
     # move back to head
     tmp=siesta-3.1_esm_v1.05
@@ -142,6 +147,5 @@ if [[ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]]; then
     pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta_esm"
 
 fi
-
 
 done
