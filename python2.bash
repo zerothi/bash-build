@@ -65,12 +65,14 @@ if $(is_host n- surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 
-elif $(is_host pico nano) ; then
+elif $(is_host nano pico femto atto) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    
 else
     tmp=$(list -p '-x test_' urllib2_localnet)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    
 fi
 pack_cmd "make install"
 if ! $(is_host n- surt muspel slid) ; then
