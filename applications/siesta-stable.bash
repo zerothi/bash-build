@@ -1,6 +1,16 @@
+for v in 3.2 4.0-b2
+do
+
+if [[ $v == "3.2" ]]; then
 add_package --package siesta \
     --version 3.2 \
     https://dl.dropbox.com/u/20267285/SIESTA-DOWNLOADS/siesta-3.2-pl-5.tgz
+else
+add_package --package siesta \
+    --version $v \
+    https://launchpad.net/siesta/4.0/$v/+download/siesta-$v.tgz
+fi
+
 pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/tbtrans
@@ -126,3 +136,5 @@ if [[ $(vrs_cmp $(pack_get --version) 3.1) -eq 0 ]]; then
 
 fi
 
+
+done
