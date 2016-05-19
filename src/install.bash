@@ -237,12 +237,12 @@ function pack_install {
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \
 		--module-path $(build_get --module-path)-npa-apps \
-		-n "Nick R. Papior script for loading $(pack_get --package $idx): $(get_c)" \
+		-n $alias.$version/$(get_c) \
+		-W "Nick R. Papior script for loading $(pack_get --package $idx): $(get_c)" \
 		-v $version \
 		-M $alias.$version/$(get_c) \
 		-P "/directory/should/not/exist" \
-		$(list --prefix '-L ' $(pack_get --mod-req $idx)) \
-		-L $idx
+		$(list --prefix '-L ' $(pack_get --mod-req $idx) $idx)
 	fi
     fi
 }
