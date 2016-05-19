@@ -25,7 +25,7 @@ fi
 pack_set --module-opt "--lua-family siesta"
 
 # Fix possible error in Src/Makefile
-pack_cmd "sed -i -e 's:)-c:) -c:' Src/Makefile"
+pack_cmd "sed -i -e 's/)-c/) -c/' Src/Makefile"
 
 # Change to directory:
 pack_cmd "cd Obj"
@@ -69,7 +69,7 @@ source applications/siesta-linalg.bash
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 
-if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
+if [[ $(vrs_cmp $v 3.2) -gt 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a siesta
 else
     # Fix the long lines in the Makefile
@@ -80,14 +80,14 @@ else
 \t\twhile(length-cur>78) { cur=cur+76 ; \\\\\\\\\n\\\
 \t\tprintf \\\"\&%s\&\\\\\\n\\\",substr(\\\$\\\$0,cur-76,76) \\\\\\\\\n\\\
 \t\t} printf \\\"\&%s\\\\\\n\\\",substr(\\\$\\\$0,cur)} else { print \\\$\\\$0 }}' tmp.F90 > compinfo.F90/\" Makefile"
-
+    
     source applications/siesta-speed.bash siesta
 fi
 pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
 pack_cmd "make clean"
 
-if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
+if [[ $(vrs_cmp $v 3.2) -gt 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a transiesta
 else
     source applications/siesta-speed.bash transiesta
@@ -113,7 +113,11 @@ pack_cmd "cp hsx2hs $(pack_get --prefix)/bin/"
 
 pack_cmd "cd ../Vibra/Src"
 pack_cmd "make"
-pack_cmd "cp fcbuild vibrator $(pack_get --prefix)/bin/"
+if [[ $(vrs_cmp $v 3.2) -le 0 ]]; then
+    pack_cmd "cp fcbuild vibrator $(pack_get --prefix)/bin/"
+else
+    pack_cmd "cp fcbuild vibra $(pack_get --prefix)/bin/"
+fi
 
 pack_cmd "cd ../../"
 pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
@@ -122,7 +126,7 @@ pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 # If the stable version of siesta has enabled the ESM module, 
 # we compile that now
 # Currently it works with 3.1
-if [[ $(vrs_cmp $v -eq 0 ]]; then
+if [[ $(vrs_cmp $v 3.1) -eq 0 ]]; then
 
     # move back to head
     tmp=siesta-3.1_esm_v1.05
