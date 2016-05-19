@@ -17,7 +17,7 @@ pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
 pack_set --module-requirement mpi --module-requirement netcdf-serial
 
-if [[ $(vrs_cmp $(pack_get --version) "3.1") -lt 0 ]]; then
+if [[ $(vrs_cmp $v "3.1") -lt 0 ]]; then
     pack_set $(list --prefix '--host-reject ' zero ntch)
 fi
 
@@ -77,7 +77,11 @@ pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 # Create install directory
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
-source applications/siesta-speed.bash siesta
+if [[ $(vrs_cmp 3.2 $v) -le 0 ]]; then
+    source applications/siesta-speed.bash siesta
+else
+    source applications/siesta-speed.bash libSiestaXC.a siesta
+fi
 pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
 pack_cmd "make clean"
