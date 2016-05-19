@@ -77,10 +77,10 @@ pack_cmd "sed -i -e \"s/>[[:space:]]*compinfo.F90.*/\
 # Create install directory
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
-if [[ $(vrs_cmp 3.2 $v) -le 0 ]]; then
-    source applications/siesta-speed.bash siesta
-else
+if [[ $(vrs_cmp $v 3.2 ) -gt 0 ]]; then
     source applications/siesta-speed.bash libSiestaXC.a siesta
+else
+    source applications/siesta-speed.bash siesta
 fi
 pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
