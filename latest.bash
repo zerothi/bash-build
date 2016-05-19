@@ -28,6 +28,8 @@ function echo_modules {
     _ps "Loading: $echos"
 }
 
+msg_install --message "Inelastica"
+
 rm_latest Inelastica.latest/$(get_c)
 create_module $cm_defs \
     -n Inelastica.latest \
@@ -36,13 +38,16 @@ create_module $cm_defs \
     -echo "$(echo_modules Inelastica-DEV)" \
     -RL Inelastica-DEV
 
+
+msg_install --message "siesta and its variants"
+
 rm_latest siesta.latest/$(get_c)
 create_module $cm_defs \
     -n siesta.latest \
     -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta.latest/$(get_c) \
-    -echo "$(echo_modules siesta-dev)" \
-    -RL siesta-dev
+    -echo "$(echo_modules siesta)" \
+    -RL siesta
 
 rm_latest siesta-scf.latest/$(get_c)
 create_module $cm_defs \
@@ -51,6 +56,25 @@ create_module $cm_defs \
     -M siesta-scf.latest/$(get_c) \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
+
+rm_latest siesta-trunk.latest/$(get_c)
+create_module $cm_defs \
+    -n siesta-trunk.latest \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -M siesta-trunk.latest/$(get_c) \
+    -echo "$(echo_modules siesta-trunk)" \
+    -RL siesta-trunk
+
+
+msg_install --message "lammps"
+
+rm_latest lammps.latest/$(get_c)
+create_module $cm_defs \
+    -n lammps.latest \
+    -W "Nick R. Papior script for loading LAMMPS: $(get_c)" \
+    -M lammps.latest/$(get_c) \
+    -echo "$(echo_modules lammps)" \
+    -RL lammps
 
 unset echo_modules
 unset rm_latest

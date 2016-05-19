@@ -1,6 +1,8 @@
-for v in 458 ; do
+for v in 503 ; do
 
-add_package http://www.student.dtu.dk/~nicpa/packages/siesta-trunk-$v.tar.gz
+add_package --archive siesta-trunk-$v.tar.gz \
+    --directory './~siesta-maint' \
+    http://bazaar.launchpad.net/~siesta-maint/siesta/trunk/tarball/$v/index.html
 
 pack_set -s $MAKE_PARALLEL
 
@@ -13,6 +15,10 @@ fi
 
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
+
+# Go into correct directory
+# Sadly launchpad adds shit-loads of paths... :(
+pack_cmd "cd siesta/trunk"
 
 # Fix __FILE__
 pack_cmd 'f=Src/fdf/utils.F90 ; sed -i -e "s:__FILE__:\"$f\":g" $f'
@@ -108,17 +114,11 @@ pack_cmd "cp hsx2hs $(pack_get --prefix)/bin/"
 
 pack_cmd "cd ../Vibra/Src"
 pack_cmd "make"
-pack_cmd "cp fcbuild vibrator $(pack_get --prefix)/bin/"
+pack_cmd "cp fcbuild vibra $(pack_get --prefix)/bin/"
 
 pack_cmd "cd ../../"
 pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
 pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
-
-# The atom program for creating the pseudos
-pack_cmd "cd ../Pseudo/atom"
-pack_cmd "make"
-pack_cmd "cp atm $(pack_get --prefix)/bin/"
 
 
 pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"

@@ -62,6 +62,7 @@ create_module $cm_defs \
     -echo "$(echo_modules espresso)" \
     -RL espresso
 
+
 msg_install --message "Inelastica"
 
 create_module $cm_defs \
@@ -71,14 +72,15 @@ create_module $cm_defs \
     -echo "$(echo_modules Inelastica-DEV[407])" \
     -RL Inelastica-DEV[407]
 
-msg_install --message "siesta-dev, siesta-scf"
+
+msg_install --message "siesta, siesta-scf, siesta-trunk"
 
 create_module $cm_defs \
     -n siesta.default \
     -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta.default/$(get_c) \
-    -echo "$(echo_modules siesta-dev[475])" \
-    -RL siesta-dev[475]
+    -echo "$(echo_modules siesta)" \
+    -RL siesta
 
 create_module $cm_defs \
     -n siesta-scf.default \
@@ -87,13 +89,13 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
 
-#msg_install --message "siesta-trunk"
+create_module $cm_defs \
+    -n siesta-trunk.default \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -M siesta-trunk.default/$(get_c) \
+    -echo "$(echo_modules siesta-trunk)" \
+    -RL siesta-trunk
 
-#create_module $cm_defs \
-#    -n "Nick R. Papior script for loading SIESTA: $(get_c)" \
-#    -M siesta-trunk.default/$(get_c) \
-#    -echo "$(echo_modules siesta-trunk)" \
-#    -RL siesta-trunk
 
 msg_install --message "openmx, vasp"
 
@@ -110,6 +112,9 @@ create_module $cm_defs \
     -M vasp.default/$(get_c) \
     -echo "$(echo_modules vasp[5.3.5])" \
     -RL vasp[5.3.5]
+
+
+msg_install --message "plotting utilities"
 
 create_module $cm_defs \
     -n plot.default \
