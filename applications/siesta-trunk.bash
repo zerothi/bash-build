@@ -4,7 +4,7 @@ add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
     http://bazaar.launchpad.net/~siesta-maint/siesta/trunk/tarball/$v/index.html
 
-#pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
 

@@ -24,6 +24,9 @@ fi
 # Add the lua family
 pack_set --module-opt "--lua-family siesta"
 
+# Fix possible error in Src/Makefile
+pack_cmd "sed -i -e 's:)-c:) -c:' Src/Makefile"
+
 # Change to directory:
 pack_cmd "cd Obj"
 
