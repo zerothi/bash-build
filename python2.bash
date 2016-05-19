@@ -18,10 +18,8 @@ fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
 fi
-if $(is_host nano pico) ; then
-  if [[ $(pack_get --installed readline) -eq 1 ]]; then
+if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
-  fi
 fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python
