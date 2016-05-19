@@ -27,6 +27,9 @@ IS_MODULE=module
 CRT_DEF_MODULE=def-module
 MAKE_PARALLEL=parallel
 
+# To by-pass creating survey when using the install script
+export NPA__SURVEY_IN=1
+
 # A separator used for commands that can be given consequtively
 _LIST_SEP='ø'
 # Separator for choices
