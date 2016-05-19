@@ -73,7 +73,7 @@ create_module $cm_defs \
     -RL Inelastica-DEV[407]
 
 
-msg_install --message "siesta, siesta-scf, siesta-trunk"
+msg_install --message "siesta, siesta-scf"
 
 create_module $cm_defs \
     -n siesta.default \
@@ -88,13 +88,6 @@ create_module $cm_defs \
     -M siesta-scf.default/$(get_c) \
     -echo "$(echo_modules siesta-scf)" \
     -RL siesta-scf
-
-create_module $cm_defs \
-    -n siesta-trunk.default \
-    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
-    -M siesta-trunk.default/$(get_c) \
-    -echo "$(echo_modules siesta-trunk)" \
-    -RL siesta-trunk
 
 
 msg_install --message "openmx, vasp"
