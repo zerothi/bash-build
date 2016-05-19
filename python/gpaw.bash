@@ -8,8 +8,9 @@ pack_set -directory gpaw-$v-*
 
 pack_set --module-opt "--lua-family gpaw"
 
+hdf=True
 if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
-    pack_set --host-reject $(get_hostname)
+    hdf=False
 fi
 
 pack_set --install-query $(pack_get --prefix)/bin/gpaw-python
@@ -78,7 +79,7 @@ if scalapack:\n\
     define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
     define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
 \n\
-hdf5 = True\n\
+hdf5 = $hdf\n\
 library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 runtime_library_dirs += [\"$(pack_get --LD hdf5)\"]\n\
 libraries += [\"hdf5_hl\",\"hdf5\"]\n\
@@ -89,6 +90,7 @@ extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
 \n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:2}]' $file"
+unset hdf
 
 # Add python directory
 pack_cmd "sed -i '$ a\
