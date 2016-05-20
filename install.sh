@@ -61,11 +61,11 @@ while [ $# -gt 0 ]; do
 		    ;;
 	    esac
 	    shift ;;
-	-tcl)
-	    _module_format=TCL
+	-tcl|-env-mod)
+	    _mod_format=$_mod_format_ENVMOD
 	    ;;
-	-lua)
-	    _module_format=LUA
+	-lua|-lmod)
+	    _mod_format=$_mod_format_LMOD
 	    ;;
 	-generic)
 	    _generic_build=$1
@@ -122,7 +122,7 @@ else
 fi
 
 # Notify the user about which module files will be generated
-msg_install --message "Will create $_module_format compliant module files"
+msg_install --message "Will create $_mod_format compliant module files"
 
 msg_install --message "Will build with $_n_procs processors"
 

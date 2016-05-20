@@ -35,8 +35,6 @@ _LIST_SEP='ø'
 # Separator for choices
 _CHOICE_SEP='@'
 
-# Whether we should create TCL or LUA module files
-_module_format='TCL'
 
 # Simple help print-out function
 

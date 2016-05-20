@@ -5,10 +5,20 @@ cm_defs="-P /directory/should/not/exist --module-path $(build_get --module-path)
 # Source the file for obtaining correct env-variables
 source $(build_get --source)
 
-function rm_latest {
-    local latest_mod=$(build_get --module-path)-npa-apps
-    rm -rf $latest_mod/$1
-}
+case $_mod_format in
+    $_mod_format_ENVMOD)
+	function rm_latest {
+	    local latest_mod=$(build_get --module-path)-npa-apps
+	    rm -rf $latest_mod/$1
+	}
+	;;
+    $_mod_format_LMOD)
+	function rm_latest {
+	    local latest_mod=$(build_get --module-path)-npa-apps
+	    rm -rf $latest_mod/$1.lua
+	}
+	;;
+esac
 
 function echo_modules {
     # Retrieve all modules 

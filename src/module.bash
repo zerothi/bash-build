@@ -1,9 +1,21 @@
 
+# Whether we should create TCL or LUA module files
+_mod_format='ENVMOD'
+_mod_format_ENVMOD='ENVMOD'
+_mod_format_LMOD='LMOD'
+
+
 # Determine whether the module files should contain a
 # survey dispatch.
 _mod_survey=0
 _mod_survey_cmd='`whoami` `date +%Y-%m-%d-%H` $modulename/$version'
 _mod_survey_file=''
+
+
+# Query module format
+function module_format {
+    _ps $_mod_format
+}
 
 # Globally set whether modules should dispatch
 # to a survey file.
@@ -103,11 +115,11 @@ function create_module {
 	local mfile=$mod_path
     fi
     [[ -n "$mod" ]] && mfile=$mfile/$mod
-    case $_module_format in
-	TCL) 
+    case $_mod_format in
+	$_mod_format_ENVMOD) 
 	    fm_comment="#"
 	    ;;
-	LUA)
+	$_mod_format_LMOD)
 	    fm_comment="--"
 	    mfile="$mfile.lua"
 	    ;;
@@ -130,8 +142,8 @@ function create_module {
     mkdir -p $(dirname $mfile)
     
     # Create the module file
-    case $_module_format in
-	TCL)
+    case $_mod_format in
+	$_mod_format_ENVMOD)
 	    cat <<EOF > "$mfile"
 #%Module1.0
 #####################################################################
@@ -161,7 +173,7 @@ if { \$in_survey == 0 } {
 EOF
 	    fi
 	    ;;
-	LUA)
+	$_mod_format_LMOD)
 	    cat <<EOF > "$mfile"
 $fm_comment LUA file for Lmod
 
@@ -175,22 +187,22 @@ EOF
     esac
     cmt="$(get_c)"
     if [[ -n "$cmt" ]]; then
-	case $_module_format in
-	    TCL)
+	case $_mod_format in
+	    $_mod_format_ENVMOD)
 		cmt=", (\$compiler)"
 		cat <<EOF >> "$mfile"
 set compiler	$(get_c)
 EOF
 		;;
-	    LUA) cat <<EOF >> "$mfile"
+	    $_mod_format_LMOD) cat <<EOF >> "$mfile"
 local compiler      = "$(get_c)"
 EOF
 		;;
 	esac
     fi
 
-    case $_module_format in
-	TCL) 
+    case $_mod_format in
+	$_mod_format_ENVMOD) 
 	    tmp="${path//$version/\$version}"
 	    if [[ -n "$cmt" ]]; then
 		tmp="${tmp//$(get_c)/\$compiler}"
@@ -200,14 +212,14 @@ set basepath	$tmp
 EOF
 	    fpath="\$basepath"
 	    ;;
-	LUA) cat <<EOF >> "$mfile"
+	$_mod_format_LMOD) cat <<EOF >> "$mfile"
 local basepath      = "${path%$version*}" .. version .. "${path#*$version}"
 EOF
 	    ;;
     esac
 
-    case $_module_format in
-	TCL) cat <<EOF >> "$mfile"
+    case $_mod_format in
+	$_mod_format_ENVMOD) cat <<EOF >> "$mfile"
 
 proc ModulesHelp { } {
     puts stderr "\tLoads \$modulename (\$version)"
@@ -217,7 +229,7 @@ module-whatis "Loads \$modulename (\$version)$cmt."
 
 EOF
 	    ;;
-	LUA) cat <<EOF >> "$mfile"
+	$_mod_format_LMOD) cat <<EOF >> "$mfile"
 
 help("    Loads " .. modulename .. " (" .. version .. ")")
 whatis("Loads " .. modulename .. " (" .. version .. ") using " .. compiler .. " compiler.")
@@ -234,9 +246,9 @@ EOF
 	for tmp in $load ; do
 	    if [[ $(pack_get --installed $tmp) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		case $_module_format in 
-		    TCL) echo "module load $tmp_load" >> "$mfile" ;;
-		    LUA) echo "load(\"$tmp_load\")" >> "$mfile" ;;
+		case $_mod_format in 
+		    $_mod_format_ENVMOD) echo "module load $tmp_load" >> "$mfile" ;;
+		    $_mod_format_LMOD) echo "load(\"$tmp_load\")" >> "$mfile" ;;
 		esac
 	    elif [[ $force -eq 0 ]]; then
 		no_install=1
@@ -253,9 +265,9 @@ EOF
 	for tmp in $require ; do
 	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		case $_module_format in 
-                    TCL) echo "prereq $tmp_load" >> "$mfile" ;;
-                    LUA) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
+		case $_mod_format in 
+                    $_mod_format_ENVMOD) echo "prereq $tmp_load" >> "$mfile" ;;
+                    $_mod_format_LMOD) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
                 esac
             elif [[ $force -eq 0 ]]; then
 		no_install=1
@@ -271,9 +283,9 @@ EOF
 	for tmp in $conflict ; do
 	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
 		local tmp_load=$(pack_get --module-name $tmp)
-		case $_module_format in 
-		    TCL) echo "conflict $tmp_load" >> "$mfile" ;;
-		    LUA) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
+		case $_mod_format in 
+		    $_mod_format_ENVMOD) echo "conflict $tmp_load" >> "$mfile" ;;
+		    $_mod_format_LMOD) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
 		esac
 	    elif [[ $force -eq 0 ]]; then
 		no_install=1
@@ -344,8 +356,8 @@ EOF
 	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
     if [[ -n "$lua_family" ]]; then
-	case $_module_format in
-	    LUA)
+	case $_mod_format in
+	    $_mod_format_LMOD)
 		cat <<EOF >> "$mfile"
 
 
@@ -362,13 +374,13 @@ EOF
 
 $fm_comment echo to the user:
 EOF
-	case $_module_format in
-	    TCL)
+	case $_mod_format in
+	    $_mod_format_ENVMOD)
 		cat <<EOF >> "$mfile"
 puts stderr "$echos"
 EOF
 		;;
-	    LUA)
+	    $_mod_format_LMOD)
 		cat <<EOF >> "$mfile"
 LmodMessage("$echos")
 EOF
@@ -377,8 +389,8 @@ EOF
     fi
 
 
-    case $_module_format in
-	TCL)
+    case $_mod_format in
+	$_mod_format_ENVMOD)
     	    if [[ $_mod_survey -ne 0 ]]; then
 		cat <<EOF >> "$mfile"
 
@@ -398,15 +410,15 @@ EOF
     # If we are to create the default version module we 
     # can add this version to the .version file:
     if [[ $_crt_version -eq 1 ]]; then
-	case $_module_format in
-	    TCL)
+	case $_mod_format in
+	    $_mod_format_ENVMOD)
 		cat <<EOF > $(dirname $mfile)/.version
 #%Module1.0
 #####################################################################
 set ModulesVersion $(basename $mfile)
 EOF
 		;;
-	    LUA)
+	    $_mod_format_LMOD)
 		pushd $(dirname $mfile) 1> /dev/null
 		ln -fs $(basename $mfile) default
 		popd 1> /dev/null 
@@ -423,21 +435,21 @@ function module_fmt_routine {
 	shift
 	case "$opt" in
 	    -prepend-path)
-		case $_module_format in
-		    TCL) _ps "prepend-path $1 $2" ;;
-		    LUA) _ps "prepend_path(\"$1\",\"$2\")" ;;
+		case $_mod_format in
+		    $_mod_format_ENVMOD) _ps "prepend-path $1 $2" ;;
+		    $_mod_format_LMOD) _ps "prepend_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -append-path)
-		case $_module_format in
-		    TCL) _ps "append-path $1 $2" ;;
-		    LUA) _ps "append_path(\"$1\",\"$2\")" ;;
+		case $_mod_format in
+		    $_mod_format_ENVMOD) _ps "append-path $1 $2" ;;
+		    $_mod_format_LMOD) _ps "append_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -set-env)
-		case $_module_format in
-		    TCL) _ps "setenv $1 $2" ;;
-		    LUA) _ps "setenv(\"$1\",\"$2\",true)" ;;
+		case $_mod_format in
+		    $_mod_format_ENVMOD) _ps "setenv $1 $2" ;;
+		    $_mod_format_LMOD) _ps "setenv(\"$1\",\"$2\",true)" ;;
 		esac
 		shift ; shift ;;
 	esac
