@@ -58,8 +58,7 @@ source_pack applications/bigdft.bash
 source_pack applications/abinit.bash
 
 # Needs to be installed AFTER wannier90 :)
-source_pack applications/vasp.bash
-source_pack applications/vasp-intel.bash
+source applications/vasp/vasp.bash
 source_pack applications/vasp-potcar.bash
 
 source_pack applications/bgw.bash

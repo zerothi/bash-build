@@ -16,14 +16,14 @@ else
 fi
 pack_set --module-requirement fftw[intel]
 
-source applications/vasp-common-init.bash
+source applications/vasp/vasp-common-init.bash
 
 pack_cmd "sed -i '$ a\
 FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\\\n\
       $(pack_get --LD fftw[intel])/libfftw3xf.a\n\
 INCS    = -I$(pack_get --prefix fftw[intel])/include' $file"
 
-source applications/vasp-common-end.bash
+source applications/vasp/vasp-common-end.bash
 
 done
 fi
