@@ -1,7 +1,7 @@
 # For completion of the version string...
 # However, a first install should be fine...
 # rm .archives/lammps.tar.gz
-add_package http://lammps.sandia.gov/tars/lammps.tar.gz
+add_package http://lammps.sandia.gov/tars/lammps-stable.tar.gz
 
 pack_set_file_version
 pack_set -s $MAKE_PARALLEL
