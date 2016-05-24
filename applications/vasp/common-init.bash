@@ -1,11 +1,17 @@
+# Ensure this is only installed at DTU
+if ! $(is_host n- surt muspel slid) ; then
+    pack_set --host-reject $(get_hostname)
+fi
+
+if $(is_c gnu) ; then
+    pack_set --host-reject $(get_hostname)
+fi
+
 pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --module-requirement mpi
 pack_set --module-requirement wannier90[1.2]
 
-if $(is_c gnu) ; then
-    pack_set --host-reject $(get_hostname)
-fi
 
 pack_set --module-opt "--lua-family vasp"
 
