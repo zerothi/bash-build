@@ -74,6 +74,10 @@ fi
 tmp=libpython${v:0:3}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 
+# Correct the cc compilation
+pack_cmd "cd $(pack_get --prefix)/lib/python$pV/distutils"
+pack_cmd "sed -i -e 's/"cc"/"gcc"/g' unixccompiler.py"
+
 pack_install
 
 create_module \

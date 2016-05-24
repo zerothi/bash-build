@@ -81,6 +81,11 @@ if ! $(is_host n- surt muspel slid) ; then
     pack_set_mv_test tmp.test
 fi
 
+# Correct the cc compilation
+pack_cmd "cd $(pack_get --prefix)/lib/python$pV/distutils"
+pack_cmd "sed -i -e 's/"cc"/"gcc"/g' unixccompiler.py"
+
+
 # Needed as it is not source_pack
 pack_install
 
