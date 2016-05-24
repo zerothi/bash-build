@@ -85,7 +85,7 @@ ARFLAGS_EXTRA=\n\
 \n\
 NETCDF_INCFLAGS=$(list --INCDIRS netcdf)\n\
 NETCDF_LIBS=$(list --LD-rp netcdf)\n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lz\n\
 ADDLIB += #OMPPLACEHOLDER\n\
 INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 \n\

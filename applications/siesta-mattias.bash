@@ -45,7 +45,7 @@ FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\n\
+ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lz\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
