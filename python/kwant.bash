@@ -57,7 +57,7 @@ fi
 
 pack_cmd "sed -i '1 a\
 [mumps]\n\
-libraries = zmumps_omp mumps_common_omp pord metis\n\
+libraries = zmumps_omp mumps_common_omp pord metis mpiseq\n\
 ' $file"
 
 pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
