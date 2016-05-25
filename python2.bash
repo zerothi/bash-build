@@ -82,7 +82,7 @@ if ! $(is_host n- surt muspel slid) ; then
 fi
 
 # Correct the cc compilation
-pack_cmd "cd $(pack_get --prefix)/lib/python$pV/distutils"
+pack_cmd "cd $(pack_get --prefix)/lib/python${v%.*}/distutils"
 pack_cmd "sed -i -e 's/"cc"/"gcc"/g' unixccompiler.py"
 
 
