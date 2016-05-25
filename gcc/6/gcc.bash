@@ -9,6 +9,11 @@ pack_set $(list --prefix '--module-requirement ' build-tools \
 
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
+languages="c,c++,fortran,objc,obj-c++"
+if ! $(is_host atto) ; then
+    languages="$languages,go"
+fi
+
 # Install commands that it should run
 pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)" \
@@ -17,8 +22,9 @@ pack_cmd "../configure" \
 	 "--with-mpc=$(pack_get --prefix mpc[$mpc_v])" \
 	 "--with-isl=$(pack_get --prefix isl[$isl_v])" \
 	 "--enable-lto --enable-threads" \
-	 "--enable-stage1-languages=c,c++,fortran,go,objc,obj-c++" \
+	 "--enable-stage1-languages=$languages" \
 	 "--with-multilib-list=m64"
+unset languages
 
 # Make commands
 pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gmp[$gmp_v] mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v])' $(get_make_parallel)"
