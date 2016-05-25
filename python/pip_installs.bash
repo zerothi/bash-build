@@ -54,7 +54,8 @@ pip_install pip
 pack_cmd "pip install -U pip"
 
 
-# Packages in alphabetic order
+# Nose needs to be isntalled first
+pip_install nose
 
 pip_append autopep8
 pip_append backports.ssl_match_hostname
@@ -66,6 +67,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append pandoc
 fi
 pip_append certifi
+pip_append cycler # for matplotlib
 pip_append cffi
 pip_append decorator
 pip_append distribute
@@ -73,9 +75,9 @@ pip_append docutils
 pip_append fastimport
 pip_append jinja2
 pip_append jsonschema
-pip_append jupyter
 pip_append markupsafe
 pip_append mistune
+pip_append mpmath # for sympy
 pip_append mock
 #pip_append monty
 pip_append numpydoc
@@ -92,13 +94,19 @@ pip_append pygments
 pip_append python-dateutil
 #pip_append pytz
 pip_append pyyaml
-pip_append pyzmq
 pip_append simplegeneric
 pip_append sphinx sphinx_rtd_theme
 pip_append traitlets
 pip_append tornado
 pip_append twine
 pip_append wheel
+
+
+if ! $(is_host atto) ; then
+    # Only install jupyter on this machine
+    pip_append pyzmq
+    pip_append jupyter
+fi
 
 pip_install
 
