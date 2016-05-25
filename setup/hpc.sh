@@ -36,5 +36,6 @@
 } > ../intel.reject
 
 {
-    echo vasp
+    echo vasp[5.3.3]
+    echo vasp[5.3.5]
 } > ../gnu.reject
