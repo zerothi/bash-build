@@ -38,6 +38,13 @@ elif ! $(is_c gnu) ; then
     tmp="--without-gcc"
 fi
 
+
+# Correct the UNIX C-compiler to GCC
+pack_cmd "pushd ../Lib/distutils"
+pack_cmd "sed -i -e 's/\"cc\"/\"gcc\"/g' unixccompiler.py"
+pack_cmd "popd"
+
+
 # Install commands that it should run
 pack_cmd "../configure --with-threads" \
     "--enable-unicode=ucs4" \
@@ -80,10 +87,6 @@ pack_cmd "make install"
 if ! $(is_host n- surt muspel slid) ; then
     pack_set_mv_test tmp.test
 fi
-
-# Correct the cc compilation
-pack_cmd "cd $(pack_get --prefix)/lib/python${v%.*}/distutils"
-pack_cmd "sed -i -e 's/"cc"/"gcc"/g' unixccompiler.py"
 
 
 # Needed as it is not source_pack
