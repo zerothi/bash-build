@@ -8,16 +8,17 @@ pack_set -directory gpaw-$v-*
 
 pack_set --module-opt "--lua-family gpaw"
 
-hdf=True
 if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
     hdf=False
+else
+    hdf=True
+    pack_set --module-requirement hdf5
 fi
 
 pack_set --install-query $(pack_get --prefix)/bin/gpaw-python
 
 pack_set --module-requirement mpi \
     --module-requirement matplotlib \
-    --module-requirement hdf5 \
     --module-requirement libxc
 
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
@@ -37,7 +38,7 @@ compiler = \"$CC $pCFLAGS $MKL_LIB -mkl=sequential\"\n\
 mpicompiler = \"$MPICC $pCFLAGS $MKL_LIB\"\n\
 libraries = [\"mkl_scalapack_lp64\",\"mkl_blacs_openmpi_lp64\",\"mkl_lapack95_lp64\",\"mkl_blas95_lp64\"]\n\
 extra_link_args = [\"$MKL_LIB\",\"-mkl=sequential\"]\n\
-platform_id = \"$(get_hostname)\"' $file"
+platform_id = \"$(get_hostname)\"\n' $file"
 
 elif $(is_c gnu) ; then
     pack_cmd "sed -i '1 a\
@@ -55,7 +56,7 @@ mpicompiler = \"$MPICC $pCFLAGS \"\n' $file"
     pack_cmd "sed -i '$ a\
 library_dirs += \"$(pack_get --LD scalapack) $tmp_ld\".split()\n\
 runtime_library_dirs += \"$(pack_get --LD scalapack) $tmp_ld\".split()\n\
-libraries = \"scalapack $tmp gfortran \".split()' $file"
+libraries = \"scalapack $tmp gfortran \".split()\n' $file"
 
 else
     doerr gpaw "Could not determine compiler..."
