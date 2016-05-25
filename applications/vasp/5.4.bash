@@ -118,7 +118,7 @@ function compile_ispin {
     local exe=$1 ; shift
     pack_cmd "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' src/pardens.F"
     pack_cmd "make all"
-    for e in std gam ncl
+    for e in gam ncl std
     do
 	pack_cmd "cp bin/vasp_$e $(pack_get --prefix)/bin/${exe}_${e}_is$i"
 	if [[ $i -eq 0 ]]; then
