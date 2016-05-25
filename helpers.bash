@@ -21,6 +21,9 @@ source_pack helpers/texinfo.bash
 # After all build-tools have been installed
 source_pack helpers/binutils.bash
 
+source_pack helpers/zlib.bash
+source_pack helpers/libpng.bash
+
 source_pack helpers/cmake.bash
 source_pack helpers/freetype.bash
 source_pack helpers/libunistring.bash
@@ -40,7 +43,6 @@ source_pack helpers/swig.bash
 source_pack helpers/optipng.bash
 
 # Install LLVM generically
-source_pack helpers/zlib.bash
 source_pack helpers/libxml2.bash
 
 source_pack helpers/readline.bash
