@@ -18,6 +18,8 @@ pack_set --module-requirement wannier90[1.2]
 
 pack_set --module-opt "--lua-family vasp"
 
+pack_set --install-query "$(pack_get --prefix)/bin/vasp_tst_ncl_is2"
+
 file=makefile.include
 pack_cmd "echo '# NPA' > $file"
 
