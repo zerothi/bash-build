@@ -144,7 +144,9 @@ done
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstcode.tar.gz"
 pack_cmd "wget http://theory.cm.utexas.edu/code/vtstcode.tgz"
 pack_cmd "tar xfz vtstcode.tgz"
-pack_cmd "cp -r vtstcode-*/* ./"
+pack_cmd "cp -r vtstcode-*/* ./src/"
+
+pack_cmd "pushd src"
 
 # Bugfix for code
 pack_cmd "sed -i -e 's:<NBAS>:10000:gi' bbm.F"
@@ -152,7 +154,9 @@ pack_cmd "sed -i -e 's:<NBAS>:10000:gi' bbm.F"
 # Install module compilations...
 pack_cmd "sed -i -e 's:\(CHAIN_FORCE[^\&]*\):\1TSIF, :i' main.F"
 pack_cmd "sed -s -i -e 's:[[:space:]]*\(\#[end]*if\):\1:i' chain.F dimer.F"
-pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' $tmp"
+pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' .objects"
+
+pack_cmd "popd"
 
 # Install vtst scripts
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
@@ -168,13 +172,6 @@ for i in 0 1 2 ; do
 done
 
 unset compile_ispin
-
-# Copy over the vdw_kernel
-tmp=vdw_kernel.bindat
-pack_cmd "mkdir -p $(pack_get --prefix)/data"
-pack_cmd "cp $tmp $(pack_get --prefix)/data/$tmp"
-# Add an ENV-flag for the kernel to be copied
-pack_set --module-opt "--set-ENV VASP_VDWKERNEL=$(pack_get --prefix)/data/$tmp"
 
 # Ensure that the group is correctly set
 tmp="$(pack_get --prefix)/bin"
