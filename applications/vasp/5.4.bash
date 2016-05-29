@@ -185,7 +185,7 @@ elif $(is_host surt muspel slid a0 b0 c0 d0 g0 m0 n0 q0 p0 a1 b1 c1 d1 g1 m1 n1 
     pack_cmd "chgrp vasp $tmp/vasp*"
 elif $(is_host nano pico femto atto) ; then
     pack_cmd "chmod o-rwx $tmp/vasp*"
-    pack_cmd "chgrp theory-vasp $tmp/vasp*"
+    pack_cmd "chgrp Theory-VASP $tmp/vasp*"
 fi
 
 
