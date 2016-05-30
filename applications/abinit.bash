@@ -1,4 +1,5 @@
-v=7.10.5
+for v in 7.10.5 8.0.6
+do
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -195,3 +196,5 @@ done
 pack_cmd "pushd $(pack_get --prefix)/bin"
 pack_cmd "ln -s abinit_elpa abinit"
 pack_cmd "popd"
+
+done
