@@ -1,4 +1,6 @@
-for v in 503 ; do
+# 507 pre SOC
+# 508 SOC
+for v in 507 508 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
