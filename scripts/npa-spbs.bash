@@ -12,17 +12,19 @@ single_paffinity=0
 walltime=01:00:00
 nodes=1
 ppn=1
+
 # Default to have the PBS_NP env-var
 has_np_cmd=1
-
-if [ "xn-" == "x\${_hostname:0:2}" ] || \
-   [ "xgray" == "x\${_hostname:0:4}" ] || \
-   [ "xhpc-fe" == "x\${_hostname:0:6}" ] || \
-   [ "xhpclogin" == "x\${_hostname:0:8}" ]
-then
-    queue="fotonano"
-fi
-
+queue=
+case \$_hostname in
+    nano*|pico*|femto*|atto*)
+        has_np_cmd=0
+        ;;
+    n-*|gray*|hpc-fe*|hpclogin*)
+        queue=fotonano
+        ;;
+esac
+    
 message=""
 mail=""
 inout=""
@@ -187,7 +189,7 @@ _spbs_add_line 'cd \$PBS_O_WORKDIR' "Change directory to the actual execution fo
 if [ \$has_np_cmd -eq 1 ]; then
   _spbs_add_line '# \$PBS_NP is the number of processors available' "The total number of cores is precomputed for you [\$((nodes*ppn))] and saved in the env-variable PBS_NP"
 else
-  _spbs_add_line 'NPROCS=\$(wc -l < \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
+  _spbs_add_line 'PBS_NP=\$(wc -l < \$PBS_NODEFILE)' "Retrieve the number of cores used in total [should be \$((nodes*ppn))]"
 fi
 if [ \$nodes -eq 1 ] && [ \$single_paffinity -eq 1 ]; then
   _spbs_add_line 'export OMPI_MCA_mpi_paffinity_alone=1' "Ensure that MPI utilizes the best connection mode when on a single node DO NOT USE IF NOT OCCUPYING FULL NODE"
