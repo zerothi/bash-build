@@ -86,7 +86,7 @@ elif $(is_c gnu) ; then
     if [[ $(vrs_cmp $v 1.10.0) -lt 0 ]]; then
 	pack_cmd "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
     fi
-    pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblasp|g' numpy/distutils/system_info.py"
+    pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblas_omp|g' numpy/distutils/system_info.py"
 
     la=$(pack_choice -i linalg)
     pack_set --module-requirement $la
@@ -115,7 +115,7 @@ runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
 	    tmp="$(pack_get --LD $la)"
 	    ;;
     esac
-    tmp_l=$(pack_get -lib[pt] $la)
+    tmp_l=$(pack_get -lib[omp] $la)
     case $la in
 	atlas)
 	    pack_cmd "sed -i '$ a\
@@ -164,7 +164,7 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
     p_flags="DUM ${pFCFLAGS} -I$(pack_get --prefix ss_config)/include $FLAG_OMP"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
+    p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing
     pack_cmd "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:9}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_cmd "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
@@ -182,9 +182,10 @@ fi
 pack_cmd "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "CC=$CC $(get_parent_exec) setup.py config $pNumpyInstall"
-pack_cmd "CC=$CC $(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
 
 # Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
 # loading

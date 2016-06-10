@@ -33,9 +33,11 @@ fi
 
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "CC=$CC $(get_parent_exec) setup.py build $pNumpyInstall"
-pack_cmd "CC=$CC $(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
+
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
     pack_cmd "module unload $(list ++swig)"

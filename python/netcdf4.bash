@@ -25,7 +25,7 @@ netCDF4_dir = $(pack_get --prefix netcdf-serial)\n\
 HDF5_dir = $(pack_get --prefix hdf5-serial)\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build $pNumpyInstall"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
