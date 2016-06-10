@@ -1,6 +1,6 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
-for v in 1.6.2 ; do
+for v in 1.7.0 ; do
     add_package http://www.physics.rutgers.edu/pythtb/_downloads/pythtb-$v.tar.gz
     
     pack_set -s $IS_MODULE
