@@ -61,7 +61,7 @@ elif $(is_host nano pico femto) ; then
 
 elif $(is_host atto) ; then
     tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver mailbox tarfile bz2)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1 ; echo force"
 
 else
     tmp=$(list -p '-x test_' urllib urllib2 urllib2net json)
