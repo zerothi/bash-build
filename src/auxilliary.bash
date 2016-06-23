@@ -60,23 +60,28 @@ function msg_install {
 	    ;;
     esac
 
-    if [[ $action -ne 4 ]]; then
-	local cmd=$(arc_cmd $(pack_get --ext $pack) )
-    fi
+    local _p=$(pack_get --package $pack)
+    local _e=$(pack_get --ext $pack)
+    local _a=$(pack_get --alias $pack)
+
     echo " ================================== "
     echo "   $n"
-    if [[ $action -eq 1 ]]; then
-	echo " File    : $(pack_get --archive $pack)"
-	echo " Ext     : $(pack_get --ext $pack)"
-	echo " Ext CMD : $cmd"
-    fi
-    if [[ $action -ne 4 ]]; then
-	echo " Package : $(pack_get --package $pack)"
-	if [[ "$(pack_get --package $pack)" != "$(pack_get --alias $pack)" ]]; then
-	    echo " Alias   : $(pack_get --alias $pack)"
-	fi	
-	echo " Version : $(pack_get --version $pack)"
-    fi
+    case $action in
+	4)
+	    ;;
+	1)
+	    echo " File    : $(pack_get --archive $pack)"
+	    echo " Ext     : $_e"
+	    echo " Ext CMD : $(arc_cmd $_e)"
+	    ;;
+	*)
+	    echo " Package : $_p"
+	    if [[ "$_p" != "$_a" ]]; then
+		echo " Alias   : $_a"
+	    fi	
+	    echo " Version : $(pack_get --version $pack)"
+	    ;;
+    esac
     if [[ $action -eq 1 ]]; then
 	module list 2>&1
     fi

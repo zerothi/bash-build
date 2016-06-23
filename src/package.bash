@@ -91,14 +91,15 @@ function add_test_package {
     add_package --package $name-test \
 	--version $version fake
     # Update install-prefix
-    pack_set --prefix $(pack_get --prefix $name[$version])
+    local top_prefix=$(pack_get --prefix $name[$version])
+    pack_set --prefix $top_prefix
     pack_set --module-requirement $name[$version]
     pack_set --remove-setting module
     if [[ $# -gt 0 ]]; then
-	pack_set --install-query $(pack_get --prefix $name[$version])/$1
+	pack_set --install-query $top_prefix/$1
 	shift
     else
-	pack_set --install-query $(pack_get --prefix $name[$version])/tmp.*
+	pack_set --install-query $top_prefix/tmp.*
     fi
 }
 
