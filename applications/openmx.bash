@@ -5,8 +5,6 @@ add_package --package openmx \
 
 pack_set --module-opt "--lua-family openmx"
 
-pack_set --host-reject ntch-l --host-reject zerothi
-
 pack_set --install-query $(pack_get --prefix)/bin/openmx
 
 pack_set --module-requirement mpi --module-requirement fftw-mpi-3
