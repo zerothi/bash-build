@@ -51,12 +51,17 @@ They are variants to control the module names and their installation
 path (to separate different types of installations).
 
 The module names can be described in this list:
+
 1. `generic`
+
   - Module name consists of package name and package version
   - Installation path consists of package name and package version
+  
 2. `generic-no-version`
+  
   - Module name consists of package name
   - Installation path consists of package name
+  
 3. `generic-empty`
   - Module name consists of package name
   - Installation path is in the top directory (mainly used for packages which themselves add their package name)
