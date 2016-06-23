@@ -191,6 +191,7 @@ source_pack helpers/modules.bash
 # rerun the script..
 if [[ $_has_module_cmd -eq 0 ]]; then
     msg_install --message "Please rerun the script and add $(pack_get --prefix modules) to your path (for correct environement variable)"
+    msg_install --message "For environment modules you need something like: 'source $(pack_get --prefix modules)/Modules/default/init/bash'"
     exit 1
 fi
 # Now check that all module-paths are actually used
