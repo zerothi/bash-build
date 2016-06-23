@@ -4,6 +4,13 @@
 # Set options
 set -o hashall
 
+# Check whether the module command is actually installed
+_has_module_cmd=1
+type module 2>&1 > /dev/null
+if [[ $? -eq 1 ]]; then
+    _has_module_cmd=0
+fi
+
 # Make an error and exit
 function doerr {
     local prefix="ERROR: "

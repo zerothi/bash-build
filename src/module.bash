@@ -17,6 +17,23 @@ function module_format {
     _ps $_mod_format
 }
 
+# Assert that a given path is in the MODULEPATH.
+# This is mainly for asserting that every build has their
+# module path accessible.
+function check_modulepath {
+    local path=$1
+    shift
+    local found=0
+    # Loop on paths in MODULEPATH
+    for mp in `echo $MODULEPATH | tr ':' ' '`
+    do
+	if [[ "$mp" == "$path" ]]; then
+	    found=1
+	fi
+    done
+    _ps $found
+}
+
 # Globally set whether modules should dispatch
 # to a survey file.
 # This may be handy to figure out how many modules are

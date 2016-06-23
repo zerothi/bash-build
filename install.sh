@@ -6,7 +6,6 @@
 # set -x
 #  Prints entire command trace before each command
 
-
 _top_dir=`pwd`
 
 source ~/.bashrc
@@ -20,6 +19,10 @@ cd $_top_dir
 
 # We have here the installation of all the stuff for gray....
 source src/init.bash
+
+# Default prefix installation
+_prefix=/opt
+_signal_default=1
 
 # Default python version installed
 _python_version=2
@@ -37,6 +40,28 @@ while [ $# -gt 0 ]; do
 	    ;;
     esac
     case $opt in
+
+	-prefix)
+	    _prefix=$1
+	    touch $_prefix/.bash-build-test-file
+	    if [[ $? -ne 0 ]]; then
+		doerr "Prefix" "cannot write to installation directory, please chmod"
+		exit 1
+	    else
+		rm $_prefix/.bash-build-test-file
+	    fi
+	    ;;
+	
+	-gnu-version)
+	    gnu_version=$1
+	    ;;
+	
+	-gen-gnu-version)
+	    gen_gnu_version=$1
+	    ;;
+
+	# Basic options for every kind of
+	# build customization...
 	-python-version|-pv)
 	    _python_version=$1
 	    case $_python_version in
@@ -47,7 +72,7 @@ while [ $# -gt 0 ]; do
 		    ;;
 	    esac
 	    shift ;;
-	-mpi-version|-mpi)
+	-mpi)
 	    _mpi_version=$(lc $1)
 	    case $_mpi_version in
 		openmpi|mpich|mvapich)
@@ -70,7 +95,7 @@ while [ $# -gt 0 ]; do
 	-generic)
 	    _generic_build=$1
 	    shift ;;
-	-default|-opti|-d)
+	-default|-d)
 	    _default_build=$1
 	    shift ;;
 	-list)
@@ -98,11 +123,18 @@ while [ $# -gt 0 ]; do
 	    if [ ! -e $opt ]; then
 		doerr "option parsing" "Build source $opt does not exist!"
 	    fi
+	    _signal_default=0
 	    source $opt
 	    shift
 	    ;;
     esac
 done
+
+# If the user have not specified any build-instructions
+# we will commense our own default build
+if [[ $_signal_default -eq 1 ]]; then
+    source src/default_build.bash
+fi
 
 # We should now have populated all builds
 # Check if the _generic_build exists
@@ -153,6 +185,27 @@ export LMOD_IGNORE_CACHE=1
 
 # Far more often than not, we need Modules to be installed before
 source_pack helpers/modules.bash
+
+# Check that modules was installed previously, and if
+# that isn't the case, error out and denote the user should
+# rerun the script..
+if [[ $_has_module_cmd -eq 0 ]]; then
+    msg_install --message "Please rerun the script and add $(pack_get --prefix modules) to your path (for correct environement variable)"
+    exit 1
+fi
+# Now check that all module-paths are actually used
+_has_module_path=1
+for ib in `seq 0 $_N_b` ; do
+    path=$(build_get --module-path[$ib])
+    if [[ $(check_modulepath $path) -eq 0 ]]; then
+	msg_install --message "Module path: '$path' is not in env(MODULEPATH)"
+	_has_module_path=0
+    fi
+done
+if [[ $_has_module_path -eq 0 ]]; then
+    msg_install --message "Please correct your environment, the module path is not consistent with your build."
+    exit 1
+fi
 
 # Vendor libraries do not depend on anything...
 source vendor.bash
