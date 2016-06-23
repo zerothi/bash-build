@@ -26,11 +26,6 @@ fi
 file=makefile
 pack_cmd "sed -i -e 's/^LIB[^E].*//g;s/^[FC]C[[:space:]]*=.*//g' $file"
 pack_cmd "sed -i -e 's/^CFLAGS.*//g;s:^-I/usr/local/include.*::g' $file"
-# Ensures that linking gets the FORTRAN files, we could also add -lgfortran
-#tools="openmx TranMain esp check_lead polB analysis_example jx DosMain"
-#for tool in $tools ; do
-#    pack_cmd "sed -i -e '/-o $tool/{s/CC/FC/}' $file"
-#done
 pack_cmd "sed -i -e '/^DESTDIR*/d' $file"
 
 if $(is_c intel) ; then    
@@ -77,13 +72,17 @@ esac
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 # Make commands
-pack_cmd "make"
-pack_cmd "make install"
-for tool in TranMain esp polB analysis_example jx DosMain ; do
-    pack_cmd "make $tool"
-done
-# Apparently this is the only tool that is not automatically installed
-pack_cmd "cp TranMain $(pack_get --prefix)/bin/"
+if [[ $(vrs_cmp $v 3.8) -ge 0 ]]; then
+    pack_cmd "make all"
+else
+    pack_cmd "make"
+    pack_cmd "make install"
+    for tool in TranMain esp polB analysis_example jx DosMain ; do
+	pack_cmd "make $tool"
+    done
+    # Apparently this is the only tool that is not automatically installed
+    pack_cmd "cp TranMain $(pack_get --prefix)/bin/"
+fi
 
 # Add an ENV-flag for the pseudos to be accesible
 pack_cmd "cd ../DFT_DATA13"
