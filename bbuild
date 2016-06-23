@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!bash -i
 
 # For debugging
 # set -v
