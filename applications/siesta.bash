@@ -1,4 +1,4 @@
-for v in 3.2 4.0-b2
+for v in 3.2 4.0
 do
 
 if [[ $v == "3.2" ]]; then
