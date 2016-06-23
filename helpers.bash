@@ -63,4 +63,6 @@ source_pack helpers/gts.bash
 source_pack helpers/graphviz.bash
 source_pack helpers/sqlite.bash
 
+source_pack helpers/boost.bash
+
 source_pack helpers/default.bash
