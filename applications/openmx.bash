@@ -1,6 +1,7 @@
+v=3.8
 add_package --package openmx \
-    --version 3.7.10 \
-    http://www.openmx-square.org/openmx3.7.tar.gz
+    --version $v.0 \
+    http://www.openmx-square.org/openmx$v.tar.gz
 
 pack_set --module-opt "--lua-family openmx"
 
@@ -13,9 +14,11 @@ pack_set --module-requirement mpi --module-requirement fftw-mpi-3
 # Move to the source directory
 pack_cmd "cd source"
 
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.7.10.tar.gz
-dwn_file http://www.openmx-square.org/bugfixed/15Feb21/patch3.7.10.tar.gz $o
-pack_cmd "tar xfz $o"
+if [[ $(vrs_cmp $v 3.7) -eq 0 ]]; then
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.7.10.tar.gz
+    dwn_file http://www.openmx-square.org/bugfixed/15Feb21/patch3.7.10.tar.gz $o
+    pack_cmd "tar xfz $o"
+fi
 
 if [[ -z "$FLAG_OMP" ]]; then
     doerr OpenMX "Can not find the OpenMP flag (set FLAG_OMP in source)"
