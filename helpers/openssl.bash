@@ -1,4 +1,4 @@
-v=1.0.2g
+v=1.0.2h
 add_package --build generic --version $v --package openssl \
             ftp://ftp.openssl.org/source/openssl-$v.tar.gz
 
