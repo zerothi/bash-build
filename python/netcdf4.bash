@@ -11,7 +11,6 @@ pack_set --module-requirement cython \
     --module-requirement netcdf-serial \
     --module-requirement numpy
 
-# Check for Intel MKL or not
 tmp_flags="$(list --LD-rp netcdf-serial hdf5-serial)"
 
 file=setup.cfg
@@ -20,6 +19,7 @@ pack_cmd "echo '#' > $file"
 pack_cmd "sed -i '1 a\
 [options]\n\
 use_ncconfig = True\n\
+use_cython = True\n\
 [directories]\n\
 netCDF4_dir = $(pack_get --prefix netcdf-serial)\n\
 HDF5_dir = $(pack_get --prefix hdf5-serial)\n\
