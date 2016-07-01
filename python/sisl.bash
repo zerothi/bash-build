@@ -1,4 +1,4 @@
-v=0.7.3
+v=0.7.4
 add_package --archive sisl-$v.tar.gz \
     https://github.com/zerothi/sisl/archive/$v.tar.gz
 
