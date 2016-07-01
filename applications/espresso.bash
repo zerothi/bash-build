@@ -3,6 +3,7 @@ for v in 5.3.0 ; do
     case $v in
 	5.4.0)
 	    tmp=http://www.qe-forge.org/gf/download/frsrelease/211/968/espresso-5.4.0.tar.gz
+	    ;;
 	5.3.0)
 	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-$v.tar.gz
 	    ;;
