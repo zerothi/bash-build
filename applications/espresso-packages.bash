@@ -177,5 +177,29 @@ for pack in \
 done
 
 ;; # done 5.3.0
+
+    5.4.0)
+	
+for pack in \
+    957/GWW-$v.tar.gz \
+	954/atomic-$v.tar.gz \
+	960/pwcond-$v.tar.gz \
+	959/neb-$v.tar.gz \
+	962/PHonon-$v.tar.gz \
+	956/tddfpt-$v.tar.gz \
+	958/xspectra-$v.tar.gz \
+	961/PWgui-$v.tar.gz \
+	969/EPW-$v.tar.gz
+	do
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$(basename $pack)
+    dwn_file http://www.qe-forge.org/gf/download/frsrelease/211/$pack $o
+    pack=$(basename $pack)
     
+    pack_cmd "cp $o archive/$pack"
+    pack_cmd "tar xfz archive/$pack"
+    
+done
+
+;; # done 5.4.0
+
 esac
