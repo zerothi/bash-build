@@ -1,4 +1,4 @@
-v=3.7.1
+v=3.8.0
 add_package --build generic \
 	    --directory llvm-$v.src --package llvm --version $v \
 	    http://llvm.org/releases/$v/llvm-$v.src.tar.xz
