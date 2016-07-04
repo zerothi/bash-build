@@ -1,4 +1,4 @@
-for v in 5.3.0 ; do
+for v in 5.3.0 5.4.0 ; do
     tmp="-package espresso -version $v"
     case $v in
 	5.4.0)
