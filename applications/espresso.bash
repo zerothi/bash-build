@@ -47,7 +47,7 @@ for v in 5.3.0 5.4.0 ; do
     fi
 
     # Check for Intel MKL or not
-    tmp_lib="FFT_LIBS='$(list --LD-rp fftw-3) -lfftw3'"
+    tmp_lib="FFT_LIBS='$(list --LD-rp fftw-3) -lfftw3_omp'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
@@ -71,12 +71,13 @@ for v in 5.3.0 5.4.0 ; do
     fi
 
     # Install commands that it should run
-    tmp="${FCFLAGS//-floop-block/}"
+    tmp="${FFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
     tmp="${tmp//-opt-prefetch/}"
+    tmp_inc="$(list --INCDIRS $(pack_get --mod-req-path))"
     pack_cmd "./configure" \
 	 "$tmp_lib" \
-	 "FFLAGS='$tmp $FLAG_OMP'" \
+	 "FFLAGS='$tmp $tmp_inc $FLAG_OMP'" \
 	 "FFLAGS_NOOPT='-fPIC'" \
 	 "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
 	 "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
