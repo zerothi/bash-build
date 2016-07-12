@@ -35,6 +35,9 @@ source_pack helpers/parallel.bash
 # Install my GCC versions
 source gcc/gcc.bash
 
+# GPP
+source_pack helpers/gpp.bash
+
 # Install bison
 source_pack helpers/bison.bash
 source_pack helpers/flex.bash
