@@ -1,6 +1,7 @@
 # Install the package
 function pack_install {
     local idx=$_N_archives
+    local err=0
     if [[ $# -ne 0 ]]; then
 	idx=$(get_index $1)
 	shift
@@ -137,8 +138,10 @@ function pack_install {
 
         # Extract the archive
 	pushd $(build_get --build-path) 1> /dev/null
-	if [[ $? -ne 0 ]]; then
-	    exit 1
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install --package "Could not go to the build-path: $(build_get --build-path)" $idx
+	    exit $err
 	fi
 
 	# Remove directory if already existing
@@ -152,9 +155,19 @@ function pack_install {
 		;;
 	esac
 	extract_archive $(build_get --archive-path) $idx
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install \
+		--package "Failed to install package..." \
+		$idx
+	    exit $err
+	fi
+	
 	pushd $directory 1> /dev/null
-	if [[ $? -ne 0 ]]; then
-	    exit 1
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install --package "Could not go to the source directory: $directory" $idx
+	    exit $err
 	fi
 
         # We are now in the package directory
@@ -176,6 +189,14 @@ function pack_install {
 		continue # Skip the empty commands...
 	    fi
 	    docmd "Archive: $alias ($version)" "$tmp"
+	    err=$?
+	    if [[ $err -ne 0 ]]; then
+		# Show error about the package installed
+		msg_install \
+		    --package "Failed to install package..." \
+		    $idx
+		exit $err
+	    fi
 	done
 
 	popd 1> /dev/null

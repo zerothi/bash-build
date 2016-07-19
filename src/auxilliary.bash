@@ -47,6 +47,11 @@ function msg_install {
 		action=4
 		n="$1"
 		;;
+	    -package)
+		shift
+		action=5
+		n="$1"
+		;;
 	    *) break ;;
 	esac
 	shift
@@ -115,11 +120,35 @@ function docmd {
     eval ${cmd[@]}
     st=$?
     if [[ $st -ne 0 ]]; then
-	echo "STATUS = $st"
-        exit $st
+	msg_install --message "Failed CMD (STATUS=$st): ${cmd[@]}"
+        return $st
     fi
 }
 
+# Array containing the stack of the routines currently in
+declare -a _r_stack
+_N_r=0
+
+#  Function push_r
+# Pushes a routine name to the top of the stack such that
+# a traceback may be created.
+#
+
+function push_r {
+    let _N_r++
+    _r_stack[$_N_r]="$1"
+    shift
+}
+    
+#  Function pop_r
+# Pops a routine and removes it from the stack.
+#
+
+function pop_r {
+    unset _r_stack[$_N_r]
+    let _N_r--
+}
+    
 
 #  Function _ps
 # Prints all arguments as a string _without_ new-line characters.
@@ -467,7 +496,7 @@ function arc_cmd {
 	xz)
 	    _ps "tar Jxf"
 	    ;;
-	gz|tgz)
+	tar.gz|gz|tgz)
 	    _ps "tar zxf"
 	    ;;
 	tar)
@@ -522,11 +551,15 @@ function extract_archive {
 	    ;;
     esac
     docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $1/$archive
+    return $?
 }
 
+# Denote the download function
+_dwn_exe="wget --no-proxy --no-check-certificate -O"
 
 #  Function dwn_file
 # Downloads files using `wget`, without proxies or certificates.
+# If the download fails, it will produce an error.
 # Hence, if you are located behind a proxy, the script will fail.
 #  Arguments
 #    url
@@ -543,9 +576,7 @@ function dwn_file {
     [[ "x$url" == "xfake" ]] && return 0
     # Better circumvent the proxies...
     msg_install --message "Downloading $url to $O"
-    wget --no-proxy \
-	--no-check-certificate \
-	$url -O $O
+    $_dwn_exe $O $url
     if [[ $? -ne 0 ]]; then
 	rm -f $O
 	doerr "$url" "Could not download file succesfully..."
