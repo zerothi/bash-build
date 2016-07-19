@@ -1,6 +1,6 @@
 msg_install --message "Installing the SUITE SPARSE libraries..."
 
-v=4.5.1
+v=4.5.3
 add_package \
     --alias suitesparse \
     --directory SuiteSparse \
