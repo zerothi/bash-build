@@ -2,11 +2,11 @@ msg_install --message "Installing all helper modules if needed..."
 
 
 # Add a module which contains the default build tools
-add_package --build generic --version npa \
+add_package --build generic --version 1.0 \
     --package build-tools fake
 pack_set -s $IS_MODULE
-pack_set --module-name build-tools/npa
-pack_set --prefix $(build_get --installation-path[generic])/build-tools/npa
+pack_set --module-name build-tools/1.0
+pack_set --prefix $(build_get --installation-path[generic])/build-tools/1.0
 pack_set --install-query $(pack_get --prefix)/bin
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
 
