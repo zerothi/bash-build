@@ -70,8 +70,12 @@ if $(is_host n- surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
 
-elif $(is_host nano pico femto frontend.dragonfly) ; then
+elif $(is_host nano pico femto) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb)
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+
+elif $(is_host frontend.dragonfly) ; then
+    tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
 elif $(is_host atto) ; then
