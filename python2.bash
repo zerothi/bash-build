@@ -74,7 +74,7 @@ elif $(is_host nano pico femto) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
-elif $(is_host frontend.dragonfly) ; then
+elif $(is_host frontend) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
