@@ -220,9 +220,9 @@ EOF
 
     case $_mod_format in
 	$_mod_format_ENVMOD) 
-	    tmp="${path//$version/\$version}"
+	    tmp="${path//\/$version\//\/\$version\/}"
 	    if [[ -n "$cmt" ]]; then
-		tmp="${tmp//$(get_c)/\$compiler}"
+		tmp="${tmp//\/$(get_c)\//\/\$compiler\/}"
 	    fi
 	    cat <<EOF >> "$mfile"
 set basepath	$tmp
