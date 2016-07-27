@@ -60,7 +60,7 @@ elif $(is_host nano pico femto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
 elif $(is_host frontend) ; then
-    tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm)
+    tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm asyncio httplib multiprocessing_forkserver ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
 elif $(is_host atto) ; then
