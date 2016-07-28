@@ -20,10 +20,8 @@ pack_cmd "../configure" \
      "CC=${MPICC} CXX=${MPICXX}" \
      "--prefix=$(pack_get --prefix)" \
      "--disable-dap" \
-     "--enable-shared" \
-     "--enable-static" \
-     "--enable-pnetcdf" \
-     "--enable-netcdf-4"
+     "$(list --prefix --enable- shared static pnetcdf netcdf-4 parallel-tests)"
+
 
 # Make commands
 hv=$(pack_get --version hdf5)
@@ -32,13 +30,16 @@ if [[ $(vrs_cmp $hv 1.8.12) -gt 0 ]]; then
 fi
 
 pack_cmd "make $(get_make_parallel)"
-#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
-#pack_set_mv_test tmp.test tmp.test.c
+pack_set_mv_test tmp.test tmp.test.c
 
 pack_install
 
-# Install the FORTRAN headers
+###############################
+#                             #
+# Install the FORTRAN headers #
+###############################
 vf=4.4.3
 add_package --archive netcdf-fortran-$vf.tar.gz \
     --package netcdf-fortran \
@@ -61,12 +62,11 @@ pack_cmd "../configure" \
      "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
      "LIBS='$(list --LD-rp $(pack_get --mod-req-path)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
      "--prefix=$(pack_get --prefix)" \
-     "--enable-shared" \
-     "--enable-static"
+     "$(list --prefix --enable- shared static parallel-tests)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.f
 
