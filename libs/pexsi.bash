@@ -114,3 +114,4 @@ pack_cmd "cp src/libpexsi_linux.a $(pack_get -LD)/"
 
 pack_cmd "mkdir -p $(pack_get -prefix)/include"
 pack_cmd "cp fortran/*.mod $(pack_get -prefix)/include/"
+pack_cmd "cp fortran/f_interface.f90 $(pack_get -prefix)/include/"
