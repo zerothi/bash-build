@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 ; do
+for v in 507 508 514 527 550 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -53,6 +53,11 @@ file=arch.make
 pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
 pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > $file"
 
+fdict=libvardict.a
+if [[ $(vrs_cmp $v 535) -ge 0 ]]; then
+    fdict=libfdict.a
+fi
+
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
     pack_set --module-requirement mumps
     pack_set --module-requirement fftw-3
@@ -63,7 +68,7 @@ FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
-COMP_LIBS += libncdf.a libvardict.a' $file"
+COMP_LIBS += libncdf.a $fdict' $file"
 
     pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
@@ -194,7 +199,7 @@ for omp in openmp none ; do
 done
 
 pack_cmd "cd ../Util/Bands"
-make_files new.gnubands eigfat2plot fat.gplot gnubands
+make_files gnubands eigfat2plot fat.gplot gnubands
 
 pack_cmd "cd ../Contrib/APostnikov"
 pack_cmd "make all"
