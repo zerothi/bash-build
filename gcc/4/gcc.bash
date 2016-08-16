@@ -1,4 +1,4 @@
-v=4.9.3
+v=4.9.4
 add_package --build generic \
 	    http://ftp.download-by.net/gnu/gnu/gcc/gcc-$v/gcc-$v.tar.bz2
 
