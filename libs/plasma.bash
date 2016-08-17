@@ -37,7 +37,7 @@ else
     pack_cmd "sed -i '1 a\
 LIBBLAS  = $(list --LD-rp $la) $tmp \n\
 LIBCBLAS = $tmp\n\
-INCCLAPACK = $(list --INCDIRS +$la)\n\
+INCCLAPACK = $(list --INCDIRS lapack)\n\
 LIBCLAPACK = $(list --LD-rp lapack) -llapacke \n\
 LIBLAPACK  = $(list --LD-rp +$la) $(pack_get -lib $lla)\n' $file"
 
