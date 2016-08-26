@@ -44,6 +44,36 @@ else
     set_procs $(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
 fi
 
+# Try and decipher the frequency of the host
+# Returns in MHz
+function get_Hz {
+    local s=1
+    if [[ $# -gt 0 ]]; then
+	local opt=$(trim_em $1)
+	shift
+	case $opt in
+	    -GHz)
+		s=0.001
+		;;
+	    -MHz)
+		;;
+	    -Hz)
+		s=1000000
+		;;
+	    *)
+		;;
+	esac
+	shift
+    fi
+    # In case there is a frequency stepper we will try and retrieve
+    # it from the model-name
+    local mname=`grep "model name" /proc/cpuinfo | head -1`
+    local cpuHz=`grep "cpu MHz" /proc/cpuinfo | head -1`
+    local Hz=2800
+    # Now we first try the modelname
+    _ps $(($Hz*$s))
+}
+
 #  Data containers for the rejection lists
 # This considers as the local reject
 declare -A _host_reject

@@ -21,6 +21,11 @@ source_pack helpers/texinfo.bash
 # After all build-tools have been installed
 source_pack helpers/binutils.bash
 
+# xdev (utilities)
+source_pack helpers/imake.bash
+source_pack helpers/makedepend.bash
+
+
 source_pack helpers/zlib.bash
 source_pack helpers/libpng.bash
 
