@@ -1,4 +1,4 @@
-v=1.4.0
+v=1.6.2
 add_package -package opencoarrays https://github.com/sourceryinstitute/opencoarrays/releases/download/$v/OpenCoarrays-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
@@ -6,6 +6,10 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set --mod-req mpi
 
 if $(is_c intel) ; then
+    pack_set --host-reject $(get_hostname)
+fi
+# Only allow opencoarray installation for gcc >= 6.1
+if [ $(vrs_cmp $(get_c --version) 6.1.0) -lt 0 ]; then
     pack_set --host-reject $(get_hostname)
 fi
 
