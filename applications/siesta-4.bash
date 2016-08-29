@@ -1,11 +1,10 @@
-# 507 pre SOC
-# 508 SOC
-# 510 Transiesta
-for v in 507 508 514 527 550 ; do
+for v in 4.1-b1 ; do
 
-add_package --archive siesta-trunk-$v.tar.gz \
-    --directory './~siesta-maint' \
-    http://bazaar.launchpad.net/~siesta-maint/siesta/trunk/tarball/$v/index.html
+bv=$(str_version -1 $v).$(str_version -2 $v)
+add_package --archive siesta-$v.tar.gz \
+	    --package siesta \
+	    --version $v \
+	    https://launchpad.net/siesta/$bv/$v/+download/siesta-$v.tgz
 
 pack_set -s $MAKE_PARALLEL
 
@@ -16,31 +15,11 @@ pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
 
 pack_set --module-requirement mpi --module-requirement netcdf
 
+pack_set --module-requirement flook
 
-# Go into correct directory
-# Sadly launchpad adds shit-loads of paths... :(
-pack_cmd "cd siesta/trunk"
-
-
-# Initial setup for new trunk with transiesta
-if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    pack_set --module-requirement flook
-    
-    # Fix the __FILE__ content in the classes
-    pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
-    pack_cmd 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
-
-else
-    # Fix __FILE__
-    pack_cmd 'f=Src/fdf/utils.F90 ; sed -i -e "s:__FILE__:\"$f\":g" $f'
-    
-fi
-
-# Fix SOC
-if [[ $(vrs_cmp $v 508) -eq 0 ]]; then
-    pack_cmd "sed -i -e '634s:e_spin_dim:h_spin_dim:' Src/new_dm.F"
-    pack_cmd "sed -i -e 's:cdiag.o:cdiag.o m_diagon_opt.o :' Util/TBTrans_rep/Makefile"
-fi
+# Fix the __FILE__ content in the classes
+pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
+pack_cmd 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
 
 # Change to directory:
 pack_cmd "cd Obj"
@@ -51,51 +30,8 @@ pack_cmd "../Src/obj_setup.sh"
 file=arch.make
 
 pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
-pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > $file"
 
-# Add LTO in case of gcc-6.1 and above version 4.1
-if [[ $(vrs_cmp $v 562) -ge 0 ]]; then
-if $(is_c gnu) ; then
-    if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
-	pack_cmd "sed -i '$ a\
-LIBS += -flto -fuse-linker-plugin \n\
-FFLAGS += -flto\n'" arch.make
-    fi
-fi
-fi
-
-fdict=libvardict.a
-if [[ $(vrs_cmp $v 535) -ge 0 ]]; then
-    fdict=libfdict.a
-fi
-
-if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    pack_set --module-requirement mumps
-    pack_set --module-requirement fftw-3
-    pack_cmd "sed -i '1 a\
-METIS_LIB = -lmetis\n\
-FFTW_PATH = $(pack_get --prefix fftw-3)\n\
-FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
-FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
-LIBS += \$(METIS_LIB)\n\
-FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
-COMP_LIBS += libncdf.a $fdict' $file"
-
-    pack_cmd "sed -i '1 a\
-FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
-
-else 
-    if [[ $(pack_installed metis) -eq 1 ]]; then
-	pack_set --module-requirement metis
-	pack_cmd "sed -i '1 a\
-FPPFLAGS += -DSIESTA__METIS\n\
-ADDLIB += -lmetis' $file"
-    fi
-fi
-
-
-pack_cmd "sed -i '1 a\
+pack_cmd "sed -i '$ a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .F90\n\
 SIESTA_ARCH=x86_64-linux-Intel\n\
@@ -131,6 +67,30 @@ MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
 ' $file"
+
+# Add LTO in case of gcc-6.1 and above version 4.1
+if $(is_c gnu) ; then
+    if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
+	pack_cmd "sed -i '$ a\
+LIBS += -flto -fuse-linker-plugin \n\
+FFLAGS += -flto\n'" arch.make
+    fi
+fi
+
+pack_set --module-requirement mumps
+pack_set --module-requirement fftw-3
+pack_cmd "sed -i '$ a\
+METIS_LIB = -lmetis\n\
+FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
+FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
+COMP_LIBS += libncdf.a libfdict.a' $file"
+
+pack_cmd "sed -i '$ a\
+FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DSIESTA__MRRR -DTS_NOCHECKS\n\
+ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 
 source applications/siesta-linalg.bash
 
@@ -186,11 +146,6 @@ function make_files {
     done
 }
 
-# We split this into two segments... One with
-# the old way, and one with the new utilities etc.
-if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    # new transiesta-merge
-    
 for omp in openmp none ; do
     
     set_flag $omp
@@ -210,7 +165,7 @@ for omp in openmp none ; do
 done
 
 pack_cmd "cd ../Util/Bands"
-make_files gnubands eigfat2plot fat.gplot gnubands
+make_files gnubands eigfat2plot fat.gplot
 
 pack_cmd "cd ../Contrib/APostnikov"
 pack_cmd "make all"
@@ -339,56 +294,6 @@ pack_cmd "python -m compileall ."
 pack_cmd "popd"
 pack_cmd "module unload $tmp"
 
-
-else
-
-    # This should ensure a correct handling of the version info...
-    source applications/siesta-speed.bash libSiestaXC.a siesta
-    pack_cmd "cp siesta $(pack_get --prefix)/bin/"
-    
-    pack_cmd "make clean"
-    
-    source applications/siesta-speed.bash libSiestaXC.a transiesta
-    pack_cmd "cp transiesta $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../Util/Contrib/APostnikov"
-    pack_cmd "make all"
-    pack_cmd "cp *xsf fmpdos $(pack_get --prefix)/bin/"
-
-    #pack_cmd "cd ../../Denchar/Src"
-    #pack_cmd "make denchar"
-    #pack_cmd "cp denchar $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../../Eig2DOS"
-    pack_cmd "make"
-    pack_cmd "cp Eig2DOS $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../HSX"
-    pack_cmd "make hs2hsx hsx2hs"
-    pack_cmd "cp hs2hsx hsx2hs $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../TBTrans"
-    pack_cmd "make"
-    pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans_orig"
-
-    pack_cmd "cd ../TBTrans_rep"
-    pack_cmd "make"
-    pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans"
-
-    pack_cmd "cd ../WFS"
-    pack_cmd "make info_wfsx readwf readwfx wfs2wfsx wfsx2wfs"
-    pack_cmd "cp info_wfsx $(pack_get --prefix)/bin/"
-    pack_cmd "cp readwf readwfx $(pack_get --prefix)/bin/"
-    pack_cmd "cp wfs2wfsx wfsx2wfs $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../Vibra/Src"
-    pack_cmd "make"
-    pack_cmd "cp fcbuild vibra $(pack_get --prefix)/bin/"
-
-    pack_cmd "cd ../../"
-    pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-    pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-fi
 
 unset set_flag
 unset make_files
