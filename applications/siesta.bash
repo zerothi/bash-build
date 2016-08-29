@@ -8,7 +8,7 @@ add_package --package siesta \
 else
 add_package --package siesta \
     --version $v \
-    https://launchpad.net/siesta/4.0/$v/+download/siesta-$v.tgz
+    https://launchpad.net/siesta/$(str_version -1 $v).$(str_version -2 $v)/$v/+download/siesta-$v.tgz
 fi
 
 pack_set -s $MAKE_PARALLEL
@@ -17,7 +17,7 @@ pack_set --install-query $(pack_get --prefix)/bin/tbtrans
 
 pack_set --module-requirement mpi --module-requirement netcdf-serial
 
-if [[ $(vrs_cmp $v "3.1") -lt 0 ]]; then
+if [[ $(vrs_cmp $v 3.1) -lt 0 ]]; then
     pack_set $(list --prefix '--host-reject ' zero ntch)
 fi
 
@@ -63,10 +63,22 @@ MPI_INCLUDE=.\n\
 \n\
 ' arch.make"
 
+
 source applications/siesta-linalg.bash
 
 # Create install directory
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+
+# Add LTO in case of gcc-6.1 and version 4.1
+if [[ $(vrs_cmp $v 4.1) -ge 0 ]]; then
+if $(is_c gnu) ; then
+    if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
+	pack_cmd "sed -i '$ a\
+LIBS += -flto -fuse-linker-plugin \n\
+FFLAGS += -flto\n'" arch.make
+    fi
+fi
+fi
 
 
 if [[ $(vrs_cmp $v 3.2) -gt 0 ]]; then
