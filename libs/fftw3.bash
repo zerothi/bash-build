@@ -30,6 +30,9 @@ fi
 if $(grep "avx " /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx"
 fi
+if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-avx2"
+fi
 
 for flag in --enable-single nothing ; do
     ext=f
