@@ -39,6 +39,7 @@ fi
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-hwloc=$(pack_get --prefix hwloc)" \
+     "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
