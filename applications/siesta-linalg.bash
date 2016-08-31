@@ -45,7 +45,7 @@ else
 
 fi
 
-pack_cmd "sed -i '1 a\
+pack_cmd "sed -i '$ a\
 .F.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .F90.o:\n\

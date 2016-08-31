@@ -89,7 +89,7 @@ FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
 COMP_LIBS += libncdf.a libfdict.a' $file"
 
 pack_cmd "sed -i '$ a\
-FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DSIESTA__MRRR -DTS_NOCHECKS\n\
+FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
 ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
 
 source applications/siesta-linalg.bash
