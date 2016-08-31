@@ -42,7 +42,7 @@ CC=$CC\n\
 FC=$MPIF90\n\
 FC_SERIAL=$FC\n\
 AR=$AR\n\
-RANLIB=ranlib\n\
+RANLIB=$RANLIB\n\
 SYS=nag\n\
 SP_KIND=4\n\
 DP_KIND=8\n\
@@ -154,12 +154,12 @@ for omp in openmp none ; do
     pack_cmd "make clean"
     
     # This should ensure a correct handling of the version info...
-    pack_cmd "make $(get_make_parallel) siesta ; make siesta"
+    pack_cmd "make $(get_make_parallel) siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
     
     pack_cmd "make clean"
     
-    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+    pack_cmd "make $(get_make_parallel) transiesta"
     pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
     
 done
@@ -224,10 +224,8 @@ for omp in openmp none ; do
     set_flag $omp
     pack_cmd "popd ; make clean"
     pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make" # corrects version 
     pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
     pack_cmd "make clean-tbt ; make $(get_make_parallel) phtrans"
-    pack_cmd "make phtrans" # corrects version 
     pack_cmd "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
     pack_cmd "make clean"
     
