@@ -1,4 +1,4 @@
-for v in 0.2.17 ; do
+for v in 0.2.18 ; do
 add_package --package openblas --archive OpenBLAS-$v.tar.gz \
 	    https://github.com/xianyi/OpenBLAS/archive/v$v.tar.gz
 
