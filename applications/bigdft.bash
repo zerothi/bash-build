@@ -1,7 +1,7 @@
 # requires tex-packages:
 #  zapfchan ly1 tex4ht
 
-v=1.7.7
+v=1.8.0
 add_package https://launchpad.net/bigdft/1.7/$v/+download/bigdft-$v.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
