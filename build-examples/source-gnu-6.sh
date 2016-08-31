@@ -1,6 +1,7 @@
 set_c gnu-6.1.0
 
-AR=ar
+AR=gcc-ar
+RANLIB=gcc-ranlib
 CC=gcc
 CXX=g++
 #CPP="gcc -E"
@@ -28,6 +29,7 @@ LDFLAGS=
 
 export FLAG_OMP
 export AR
+export RANLIB
 export CC
 export CXX
 export CPP

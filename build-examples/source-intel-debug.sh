@@ -4,6 +4,7 @@ set_c intel-13.1.1
 #export LC_ALL=en_US
 
 AR=xiar
+RANLIB=ranlib
 CC=icc
 CXX=icpc
 #CPP="icc -E"
@@ -41,6 +42,7 @@ LDFLAGS=
 
 export FLAG_OMP
 export AR
+export RANLIB
 export CC
 export CXX
 export CPP

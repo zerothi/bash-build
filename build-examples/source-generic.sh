@@ -2,6 +2,7 @@
 set_c gnu-4.9.2
 
 AR=ar
+RANLIB=ranlib
 CC=gcc
 CXX=g++
 #CPP="gcc -E"
@@ -28,6 +29,7 @@ LDFLAGS=
 
 export FLAG_OMP
 export AR
+export RANLIB
 export CC
 export CXX
 export CPP

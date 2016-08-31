@@ -1,6 +1,7 @@
 set_c pgi-13.10-0
 
 AR=ar
+RANLIB=ranlib
 CC=pgcc
 CXX=pgcpp
 #CPP="gcc -E"
@@ -27,6 +28,7 @@ LDFLAGS=
 
 export FLAG_OMP
 export AR
+export RANLIB
 export CC
 export CXX
 export CPP
