@@ -1,6 +1,6 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=1.5.1
+v=1.5.2
 add_package \
     --archive matplotlib-$v.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz

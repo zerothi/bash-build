@@ -1,5 +1,5 @@
 v=2016.05.003
-add_package http://elpa.rzg.mpg.de/elpa-$v.tar.gz
+add_package http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

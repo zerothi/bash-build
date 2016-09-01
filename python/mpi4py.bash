@@ -13,10 +13,11 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 tmp="-v -f --exclude test_rma --exclude test_spawn"
 for i in 1 2 ; do
+    continue
     pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy 2>&1 >> tmp$i.test"
     pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp 2>&1 >> tmp$i.test"
     pack_set_mv_test tmp$i.test
-    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --thread-level funneled 2>&1 >> tmpthread$i.test"
     pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy --thread-level funneled 2>&1 >> tmpthread$i.test"
+    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --thread-level funneled 2>&1 >> tmpthread$i.test"
     pack_set_mv_test tmpthread$i.test
 done
