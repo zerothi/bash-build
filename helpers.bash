@@ -37,8 +37,8 @@ source_pack helpers/libffi.bash
 # Install parallel binary
 source_pack helpers/parallel.bash
 
-# Install my GCC versions
-source gcc/gcc.bash
+# Install all compilers
+source compiler/compilers.bash
 
 # GPP
 source_pack helpers/gpp.bash

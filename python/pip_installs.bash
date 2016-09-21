@@ -67,6 +67,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append pandoc
 fi
 pip_append certifi
+pip_append codecov
 pip_append cycler # for matplotlib
 pip_append cffi
 pip_append decorator
