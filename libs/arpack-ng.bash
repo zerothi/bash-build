@@ -1,4 +1,4 @@
-v=3.2.0
+v=3.4.0
 add_package \
     --archive arpack-ng-$v.tar.gz \
     https://github.com/opencollab/arpack-ng/archive/$v.tar.gz
@@ -21,15 +21,17 @@ else
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
     tmp_flags="--with-blas='$(pack_get -lib $la)' --with-lapack='$(pack_get -lib $la)'"
-
+    
 fi
 
+pack_cmd "./bootstrap"
 pack_cmd "./configure" \
-	 "F77='$FC'" \
-	 "FFLAGS='$FCFLAGS'" \
-	 "MPIF77='$MPIFC'" \
+	 "F77='$FC' FC='$FC'" \
+	 "FFLAGS='$FCFLAGS' FCLAGS='$FCFLAGS'" \
+	 "MPIF77='$MPIFC' MPIFC='$MPIFC'" \
 	 "--enable-mpi $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make"
 pack_cmd "make install"
+
