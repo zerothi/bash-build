@@ -4,7 +4,7 @@ if $(is_c gnu) ; then
 fi
 [[ $tmp -eq 0 ]] && return
 
-add_package ftp://ftp.gnu.org/gnu/octave/octave-4.0.2.tar.xz
+add_package ftp://ftp.gnu.org/gnu/octave/octave-4.0.3.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
