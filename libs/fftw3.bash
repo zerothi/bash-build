@@ -29,9 +29,15 @@ if $(grep "sse2 " /proc/cpuinfo > /dev/null) ; then
 fi
 if $(grep "avx " /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx"
+    if $(grep "fma " /proc/cpuinfo > /dev/null) ; then
+	tmp_flags="$tmp_flags --enable-avx128-fma"
+    fi
 fi
 if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx2"
+fi
+if $(grep "avx512" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-avx512"
 fi
 
 for flag in --enable-single nothing ; do
