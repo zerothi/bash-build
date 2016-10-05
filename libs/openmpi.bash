@@ -8,6 +8,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --install-query $(pack_get --prefix)/bin/mpif90
 
 pack_set --module-requirement hwloc
+pack_set --module-opt "--set-ENV OMPI_HOME=$(pack_get --prefix)"
 
 # Download zero size scatter/gather patch
 if [[ $(vrs_cmp $(pack_get --version) 1.10.1) -eq 0 ]]; then
@@ -49,6 +50,8 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > tmp.test 2>&1"
 pack_set_mv_test tmp.test
 pack_cmd "make install"
+
+
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
