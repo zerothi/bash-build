@@ -1,29 +1,32 @@
-for v in 5.3.0 5.4.0 ; do
+for v in 5.3.0 5.4.0 6.0.0 ; do
     tmp="-package espresso -version $v"
     case $v in
+	6.0.0)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/224/1044/qe-6.0.tar.gz"
+	    ;;
 	5.4.0)
 	    tmp=http://www.qe-forge.org/gf/download/frsrelease/211/968/espresso-5.4.0.tar.gz
 	    ;;
 	5.3.0)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-$v.tar.gz
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-5.3.0.tar.gz
 	    ;;
 	5.2.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-$v.tar.gz
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz
 	    ;;
 	5.1.2)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz
 	    ;;
 	5.1.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz
 	    ;;
 	5.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz
 	    ;;
 	5.0.3)
 	    tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
 	    ;;
 	5.0.99)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
 	    ;;
 	*)
 	    doerr espresso "Version unknown"
