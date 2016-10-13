@@ -1,4 +1,4 @@
-set_c gnu-5.3.0
+set_c gnu-5.4.0
 
 AR=ar
 RANLIB=ranlib
