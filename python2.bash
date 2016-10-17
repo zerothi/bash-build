@@ -38,6 +38,14 @@ elif ! $(is_c gnu) ; then
     tmp="--without-gcc"
 fi
 
+if [[ $(vrs_cmp 2.7.12 $v) -ge 0 ]]; then
+    # We have to patch Python for openssl >= 1.1.0
+    o=$(pwd_archives)/$(pack_get --package)-2.7-SSL-1.1.0.patch
+    dwn_file https://bugs.python.org/file44296/Port-Python-2.7-s-SSL-module-to-OpenSSL-1.1.0-4.patch $o
+    pack_cmd "pushd ../"
+    pack_cmd "patch -p0 < $o"
+    pack_cmd "popd"
+fi
 
 # Correct the UNIX C-compiler to GCC
 pack_cmd "pushd ../Lib/distutils"
