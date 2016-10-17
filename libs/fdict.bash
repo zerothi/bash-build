@@ -15,7 +15,6 @@ FC = $FC\n\
 FC_SERIAL = $FC\n\
 FFLAGS = $FCFLAGS\n\
 AR = $AR\n\
->>>>>>> Stashed changes
 ' $file"
 
 # Make commands

@@ -9,7 +9,7 @@ CXX=g++
 F77=gfortran
 F90=gfortran
 FC=gfortran
-common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays"
+common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays -march=native"
 CFLAGS="$common_flags"
 CXXFLAGS="$common_flags"
 

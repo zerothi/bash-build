@@ -12,6 +12,7 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set $(list --prefix '--mod-req ' zlib expat libffi)
 lib_extra=
+tmp_lib=
 if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
@@ -20,6 +21,9 @@ if [[ $(pack_get --installed openssl) -eq 1 ]]; then
 fi
 if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
+    if $(is_host nano pico femto atto) ; then
+        tmp_lib="$tmp_lib -ltinfo"
+    fi
 fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python3
@@ -39,7 +43,7 @@ if [[ $(vrs_cmp 3.5.2 $v) -ge 0 ]]; then
     o=$(pwd_archives)/$(pack_get --package)-3.5-SSL-1.1.0.patch
     dwn_file https://bugs.python.org/file44360/Port-Python-s-SSL-module-to-OpenSSL-1.1.0-5.patch $o
     pack_cmd "pushd ../"
-    pack_cmd "patch -p0 < $o"
+    pack_cmd "patch -p1 < $o"
     pack_cmd "popd"
 fi
 
@@ -51,7 +55,7 @@ pack_cmd "popd"
 
 # Install commands that it should run
 pack_cmd "../configure --with-threads" \
-    "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra)'" \
+    "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra) $tmp_lib'" \
     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
     "--with-system-ffi --with-system-expat" \
     "--prefix=$(pack_get --prefix)"
