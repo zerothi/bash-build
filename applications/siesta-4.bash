@@ -4,7 +4,7 @@ bv=$(str_version -1 $v).$(str_version -2 $v)
 add_package --archive siesta-$v.tar.gz \
 	    --package siesta \
 	    --version $v \
-	    https://launchpad.net/siesta/$bv/$v/+download/siesta-$v.tgz
+	    https://launchpad.net/siesta/$bv/$v/+download/siesta-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
