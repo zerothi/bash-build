@@ -8,6 +8,9 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 pack_set --module-requirement numpy
 pack_set --module-requirement cython
 
+# Ensure directory exists (for writing)
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
+
 # The later LAPACK versions have gegv routines deprecated and replaced by ggev
 # However, ggev routines are already existing.
 if [[ $(vrs_cmp $v 0.16.0) -eq 0 ]]; then

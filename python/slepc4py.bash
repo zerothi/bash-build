@@ -1,4 +1,4 @@
-add_package https://pypi.python.org/packages/source/s/slepc4py/slepc4py-3.7.0.tar.gz
+add_package https://bitbucket.org/slepc/slepc4py/downloads/slepc4py-3.7.0.tar.gz
 
 pack_set -s $IS_MODULE
 
