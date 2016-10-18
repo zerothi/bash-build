@@ -97,7 +97,7 @@ fi
 
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .F90\n\
+.SUFFIXES: .f .F .o .a .f90 .c .F90\n\
 SIESTA_ARCH=x86_64-linux-Intel\n\
 \n\
 FPP=mpif90\n\
