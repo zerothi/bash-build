@@ -21,7 +21,7 @@ if [[ $(pack_get --installed openssl) -eq 1 ]]; then
 fi
 if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
-    if $(is_host nano pico femto atto) ; then
+    if $(is_host nano pico femto) ; then
        tmp_lib="$tmp_lib -ltinfo"
     fi
 fi
@@ -91,7 +91,7 @@ elif $(is_host frontend) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
 elif $(is_host atto) ; then
-    tmp=$(list -p '-x test_' urllib2_localnet gdb mailbox tarfile bz2)
+    tmp=$(list -p '-x test_' urllib2_localnet gdb mailbox tarfile bz2 ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
     
 else
