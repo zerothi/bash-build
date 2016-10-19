@@ -59,6 +59,7 @@ if $(is_c gnu) ; then
     if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
 	pack_cmd "sed -i '$ a\
 LIBS += -flto -fuse-linker-plugin \n\
+FC_SERIAL += -flto -fuse-linker-plugin\n\
 FFLAGS += -flto\n'" arch.make
     fi
 fi
@@ -106,7 +107,7 @@ CC=$CC\n\
 FC=$MPIF90\n\
 FC_SERIAL=$FC\n\
 AR=$AR\n\
-RANLIB=ranlib\n\
+RANLIB=$RANLIB\n\
 SYS=nag\n\
 SP_KIND=4\n\
 DP_KIND=8\n\
