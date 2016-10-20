@@ -38,8 +38,8 @@ fi
 
 # Make commands
 pack_cmd "make"
-pack_cmd "mkdir -p $(pack_get --prefix)"
-pack_cmd "cp -p src/*.x $(pack_get --prefix)"
+pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "cp -p src/*.x $(pack_get --prefix)/bin"
 pack_cmd "cp tests/data/TEST.report $(pack_get --prefix)/"
 
 done
