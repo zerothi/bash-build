@@ -43,7 +43,7 @@ if [[ $(vrs_cmp 3.5.2 $v) -ge 0 ]]; then
     o=$(pwd_archives)/$(pack_get --package)-3.5-SSL-1.1.0.patch
     dwn_file https://bugs.python.org/file44360/Port-Python-s-SSL-module-to-OpenSSL-1.1.0-5.patch $o
     pack_cmd "pushd ../"
-    pack_cmd "patch -p1 < $o"
+    pack_cmd "patch -p1 < $o ; echo FORCE"
     pack_cmd "popd"
 fi
 
@@ -63,12 +63,13 @@ pack_cmd "../configure --with-threads" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 
+# Common tests
 if $(is_host n- surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
     
 elif $(is_host nano pico femto) ; then
-    tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver)
+    tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
 
 elif $(is_host frontend) ; then
@@ -80,7 +81,7 @@ elif $(is_host atto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1 ; echo force"
 
 else
-    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json)
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
     
 fi
