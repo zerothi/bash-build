@@ -21,7 +21,7 @@ if [[ $(pack_get --installed openssl) -eq 1 ]]; then
 fi
 if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
-    if $(is_host nano pico femto atto) ; then
+    if $(is_host nano pico femto) ; then
         tmp_lib="$tmp_lib -ltinfo"
     fi
 fi
