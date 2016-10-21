@@ -73,6 +73,11 @@ for v in 5.3.0 5.4.0 6.0.0 ; do
 
     fi
 
+    # If we are in 6.0 we should fix CPV/src/forces.f90
+    if [[ $(vrs_cmp $v 6.0.0) -eq 0 ]]; then
+	pack_cmd "sed -i -e '100,102s:\&:,\&:g' CPV/src/forces.f90"
+    fi
+
     # Install commands that it should run
     tmp="${FFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
@@ -86,11 +91,6 @@ for v in 5.3.0 5.4.0 6.0.0 ; do
 	 "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
 	 "--enable-parallel --enable-openmp" \
 	 "--prefix=$(pack_get --prefix)"
-
-    # If we are in 6.0 we should fix CPV/src/forces.f90
-    if [[ $(vrs_cmp $v 6.0.0) -eq 0 ]]; then
-	sed -i -e '100,102s:\&:,\&:g' CPV/src/forces.f90
-    fi
 
     # Make commands
     for EXE in $libs ; do
