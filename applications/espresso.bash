@@ -75,7 +75,7 @@ for v in 5.3.0 5.4.0 6.0.0 ; do
 
     # If we are in 6.0 we should fix CPV/src/forces.f90
     if [[ $(vrs_cmp $v 6.0.0) -eq 0 ]]; then
-	pack_cmd "sed -i -e '100,102s:\&:,\&:g' CPV/src/forces.f90"
+	pack_cmd "sed -i -e '99,102s: \&:, \&:g' CPV/src/forces.f90"
     fi
 
     # Install commands that it should run
