@@ -29,6 +29,14 @@ pack_cmd "echo '# Makefile for easy installation ' > Makefile.inc"
 
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c intel) ; then
+    
+    # We need a patch for 5.0.X
+    if [[ $(vrs_cmp $v 5.0) -eq 0 ]]; then
+        o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-SIZE_OF$v
+        dwn_file http://www.student.dtu.dk/~nicpa/packages/patch_MUMPS_sizeof $o
+        pack_cmd "patch -p1 < $o"
+    fi
+
     tmp_flag="-nofor-main"
     pack_cmd "sed -i '1 a\
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
