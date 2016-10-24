@@ -69,7 +69,7 @@ esac
 
 rm_latest python$pV.numerics/$(get_c)
 tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sisl ; do
+for i in scipy cython mpi4py netcdf4py matplotlib h5py numexpr sympy pandas theano sisl kwant ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"
     fi
