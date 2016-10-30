@@ -53,4 +53,4 @@ pack_cmd "rm -rf $(pack_get --LD)/obj*"
 
 # create link for include
 pack_cmd "cd $(pack_get --prefix)"
-pack_cmd "[ ! -d include ] && ln -fs $MKL_PATH/include/fftw include"
+pack_cmd "if [ ! -d include ]; then ln -fs $MKL_PATH/include/fftw include ; fi"

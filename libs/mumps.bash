@@ -32,7 +32,7 @@ if $(is_c intel) ; then
     
     # We need a patch for 5.0.X
     if [[ $(vrs_cmp $v 5.0) -eq 0 ]]; then
-        o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-SIZE_OF$v
+        o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-SIZE_OF
         dwn_file http://www.student.dtu.dk/~nicpa/packages/patch_MUMPS_sizeof $o
         pack_cmd "patch -p1 < $o"
     fi
