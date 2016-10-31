@@ -1,12 +1,15 @@
-for v in 0.17.0 ; do 
+for v in 0.18.1 ; do 
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.xz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy
 pack_set --module-requirement cython
+
+# Ensure directory exists (for writing)
+pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 
 # The later LAPACK versions have gegv routines deprecated and replaced by ggev
 # However, ggev routines are already existing.

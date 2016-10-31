@@ -1,4 +1,4 @@
-for v in 1.11.0 ; do
+for v in 1.11.2 ; do
 add_package --archive numpy-$v.tar.gz \
      https://github.com/numpy/numpy/archive/v$v.tar.gz
 

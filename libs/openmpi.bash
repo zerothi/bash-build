@@ -1,6 +1,6 @@
 # apt-get libc6-dev
 add_package -package openmpi \
-    http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.2.tar.bz2
+    http://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.1.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -40,6 +40,7 @@ fi
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-hwloc=$(pack_get --prefix hwloc)" \
+     "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)

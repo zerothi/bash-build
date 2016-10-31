@@ -24,6 +24,8 @@ else
     
 fi
 
+pack_cmd "module load $(pack_get --module-name build-tools)"
+
 pack_cmd "./bootstrap"
 pack_cmd "./configure" \
 	 "F77='$FC' FC='$FC'" \
@@ -35,3 +37,4 @@ pack_cmd "./configure" \
 pack_cmd "make"
 pack_cmd "make install"
 
+pack_cmd "module unload $(pack_get --module-name build-tools)"

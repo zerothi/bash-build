@@ -1,29 +1,32 @@
-for v in 5.3.0 5.4.0 ; do
+for v in 5.3.0 5.4.0 6.0.0 ; do
     tmp="-package espresso -version $v"
     case $v in
+	6.0.0)
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/224/1044/qe-6.0.tar.gz"
+	    ;;
 	5.4.0)
 	    tmp=http://www.qe-forge.org/gf/download/frsrelease/211/968/espresso-5.4.0.tar.gz
 	    ;;
 	5.3.0)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-$v.tar.gz
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-5.3.0.tar.gz
 	    ;;
 	5.2.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-$v.tar.gz
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz
 	    ;;
 	5.1.2)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz
 	    ;;
 	5.1.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz
 	    ;;
 	5.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz
 	    ;;
 	5.0.3)
 	    tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
 	    ;;
 	5.0.99)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
+	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
 	    ;;
 	*)
 	    doerr espresso "Version unknown"
@@ -70,6 +73,11 @@ for v in 5.3.0 5.4.0 ; do
 
     fi
 
+    # If we are in 6.0 we should fix CPV/src/forces.f90
+    if [[ $(vrs_cmp $v 6.0.0) -le 0 ]]; then
+	pack_cmd "sed -i -e '99,102s: \&:, \&:g' CPV/src/forces.f90"
+    fi
+
     # Install commands that it should run
     tmp="${FFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
@@ -82,7 +90,7 @@ for v in 5.3.0 5.4.0 ; do
 	 "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
 	 "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
 	 "--enable-parallel --enable-openmp" \
-	 "--prefix=$(pack_get --prefix)" 
+	 "--prefix=$(pack_get --prefix)"
 
     # Make commands
     for EXE in $libs ; do

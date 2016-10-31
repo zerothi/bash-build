@@ -179,11 +179,13 @@ pack_cmd "pushd tests"
 pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test ; echo succes"
 pack_set_mv_test $mpila.fast.test
 
-pack_cmd "../../tests/runtests.py $tmp atompaw etsf_io libxc wannier90 2>&1 > $mpila.in.test ; echo succes"
-pack_set_mv_test $mpila.in.test
+if ! $(is_c intel) ; then
+    pack_cmd "../../tests/runtests.py $tmp atompaw etsf_io libxc wannier90 2>&1 > $mpila.in.test ; echo succes"
+    pack_set_mv_test $mpila.in.test
 
-pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test ; echo succes"
-pack_set_mv_test $mpila.v1.test
+    pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test ; echo succes"
+    pack_set_mv_test $mpila.v1.test
+fi
 pack_cmd "popd"
 
 pack_cmd "make install"

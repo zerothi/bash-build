@@ -66,8 +66,8 @@ source_pack python/fireworks.bash
 source_pack python/cython.bash
 
 # Generic scientific libraries
-source_pack python/mpi4py.bash
 source_pack python/numpy.bash
+source_pack python/mpi4py.bash
 source_pack python/netcdf4.bash
 source_pack python/scipy.bash
 source_pack python/numexpr.bash

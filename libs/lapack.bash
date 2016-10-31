@@ -1,5 +1,5 @@
-v=1739
-add_package --package lapack http://www.student.dtu.dk/~nicpa/packages/lapack-$v.tar.bz2
+v=3.6.1-b71
+add_package --version $v --package lapack http://www.student.dtu.dk/~nicpa/packages/lapack-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
 

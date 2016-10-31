@@ -1,4 +1,4 @@
-set_c gnu-6.1.0
+set_c gnu-6.2.0
 
 AR=gcc-ar
 RANLIB=gcc-ranlib
@@ -21,9 +21,9 @@ MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
 #MPICXXCPP="mpicxx -E"
-MPIFC=mpif90
-MPIF77=mpif77
-MPIF90=mpif90
+MPIFC=mpifort
+MPIF77=mpifort
+MPIF90=mpifort
 
 LDFLAGS=
 

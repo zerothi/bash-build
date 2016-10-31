@@ -23,8 +23,9 @@ MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
 #MPICXXCPP="mpicxx -E"
-MPIF77=mpif77
-MPIF90=mpif90
+MPIFC=mpifort
+MPIF77=mpifort
+MPIF90=mpifort
 
 
 INTEL_PATH=/opt/intel/composer_xe_2013.3.163/composerxe
@@ -55,6 +56,7 @@ export CFLAGS
 export FCFLAGS
 export FFLAGS
 export MPICC
+export MPIFC
 export MPIF77
 export MPIF90
 export MKL_PATH

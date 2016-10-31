@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 550 ; do
+for v in 507 508 514 527 576 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -24,8 +24,10 @@ pack_cmd "cd siesta/trunk"
 
 # Initial setup for new trunk with transiesta
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    pack_set --module-requirement flook
-    
+    if [[ $(pack_installed flook) -eq 1 ]]; then
+        pack_set --module-requirement flook
+    fi
+
     # Fix the __FILE__ content in the classes
     pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
     pack_cmd 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
@@ -59,7 +61,8 @@ if $(is_c gnu) ; then
     if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
 	pack_cmd "sed -i '$ a\
 LIBS += -flto -fuse-linker-plugin \n\
-FFLAGS += -flto\n'" arch.make
+FC_SERIAL += -flto -fuse-linker-plugin\n\
+FFLAGS += -flto -fuse-linker-plugin\n'" arch.make
     fi
 fi
 fi
@@ -97,16 +100,16 @@ fi
 
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .F90\n\
+.SUFFIXES: .f .F .o .a .f90 .c .F90\n\
 SIESTA_ARCH=x86_64-linux-Intel\n\
 \n\
-FPP=mpif90\n\
+FPP=$MPIFC\n\
 FPP_OUTPUT= \n\
 CC=$CC\n\
-FC=$MPIF90\n\
+FC=$MPIFC\n\
 FC_SERIAL=$FC\n\
 AR=$AR\n\
-RANLIB=ranlib\n\
+RANLIB=$RANLIB\n\
 SYS=nag\n\
 SP_KIND=4\n\
 DP_KIND=8\n\
@@ -115,9 +118,6 @@ KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 FFLAGS=$FCFLAGS\n\
 FFLAGS += #OMPPLACEHOLDER\n\
 FPPFLAGS += -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF -DCDF4\n\
-FPPFLAGS += -DSIESTA__FLOOK \n\
-FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
-LIBS += \$(FLOOK_LIB) \n\
 \n\
 ARFLAGS_EXTRA=\n\
 \n\
@@ -131,6 +131,13 @@ MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
 ' $file"
+
+if [[ $(pack_installed flook) -eq 1 ]]; then
+    pack_cmd "sed -i '$ a\
+FPPFLAGS += -DSIESTA__FLOOK \n\
+FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
+LIBS += \$(FLOOK_LIB) \n' $file"
+fi
 
 source applications/siesta-linalg.bash
 

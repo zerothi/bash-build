@@ -1,4 +1,4 @@
-set_c gnu-5.3.0
+set_c gnu-5.4.0
 
 AR=ar
 RANLIB=ranlib
@@ -9,7 +9,7 @@ CXX=g++
 F77=gfortran
 F90=gfortran
 FC=gfortran
-common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays"
+common_flags="-m64 -fPIC -O3 -ftree-vectorize -fexpensive-optimizations -funroll-loops -fprefetch-loop-arrays -march=native"
 CFLAGS="$common_flags"
 CXXFLAGS="$common_flags"
 
@@ -21,9 +21,9 @@ MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
 #MPICXXCPP="mpicxx -E"
-MPIFC=mpif90
-MPIF77=mpif77
-MPIF90=mpif90
+MPIFC=mpifort
+MPIF77=mpifort
+MPIF90=mpifort
 
 LDFLAGS=
 

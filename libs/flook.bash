@@ -7,6 +7,10 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libflookall.a
 
+if [[ $(pack_installed lua) -ne 1 ]]; then
+    pack_set --host-reject $(get_hostname)
+fi
+
 # First download aotus
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-aotus.tar.gz
 av=0.2
