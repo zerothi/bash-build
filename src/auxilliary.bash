@@ -764,3 +764,13 @@ function list {
 function noop {
     shift $#
 }
+
+
+#  Function tmp_file
+# This creates a temporary file which may be
+# used to create content and later moved.
+function tmp_file {
+    local file=$(mktemp /tmp/bbuild.XXXXXX)
+    trap 'rm -f -- "$file"' INT TERM HUP EXIT
+    _ps $file
+}

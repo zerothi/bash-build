@@ -1,5 +1,4 @@
-
-_npa_new_name
+script=$(tmp_file)
 cat <<EOF > $script
 # This creates a function for 
 # easier submission with respect to names
@@ -33,4 +32,5 @@ function sub {
 
 EOF
 
-pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/sub.bashrc"
+pack_cmd "mv $script $(pack_get --prefix)/source/sub.bashrc"
+unset script

@@ -1,4 +1,4 @@
-_npa_new_name
+script=$(tmp_file)
 cat <<EOF > $script
 #!/bin/bash
 
@@ -218,4 +218,5 @@ fi
 
 EOF
 
-pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/bin/spbs"
+pack_cmd "mv $script $(pack_get --prefix)/bin/spbs"
+unset script

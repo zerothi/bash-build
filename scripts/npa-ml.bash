@@ -1,6 +1,4 @@
-
-# Create new file
-_npa_new_name
+script=$(tmp_file)
 cat <<EOF > $script
 #!/bin/bash
 
@@ -34,9 +32,10 @@ function ml_prereq {
 
 EOF
 
-pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.function"
+pack_cmd "mv $script $(pack_get --prefix)/source/ml.function"
 
-_npa_new_name
+
+script=$(tmp_file)
 cat <<EOF > $script
 #!/bin/bash
 
@@ -52,9 +51,9 @@ complete -F _ml ml
 
 EOF
 
-pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.bashrc"
+pack_cmd "mv $script $(pack_get --prefix)/source/ml.bashrc"
 
-_npa_new_name
+script=$(tmp_file)
 cat <<EOF > $script
 #!/bin/zsh
 
@@ -66,6 +65,6 @@ source \$NPA_SOURCE/ml.function
 
 EOF
 
-pack_cmd "mv $(pwd)/$script $(pack_get --prefix)/source/ml.zshrc"
-
+pack_cmd "mv $script $(pack_get --prefix)/source/ml.zshrc"
+unset script
 
