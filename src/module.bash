@@ -62,6 +62,10 @@ function module_set {
 		;;
 	    -f|-survey-file)
 		_mod_survey_file="$1"
+		if [ ! -e $_mod_survey_file ]; then
+		    touch $_mod_survey_file
+		    chmod 622 $_mod_survey_file
+		fi
 		_mod_survey=1
 		shift
 		;;
