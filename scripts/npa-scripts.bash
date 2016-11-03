@@ -18,5 +18,5 @@ source scripts/npa-moduleswitch.bash
 source scripts/npa-ml.bash
 source scripts/npa-sub.bash
 
-pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"
+pack_cmd "chmod a+rx $(pack_get --prefix)/bin/*"
 pack_cmd "chmod a+r $(pack_get --prefix)/source/*"
