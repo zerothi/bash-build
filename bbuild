@@ -6,6 +6,10 @@
 # set -x
 #  Prints entire command trace before each command
 
+# Set the umask 022 means read and execute
+# This should be the default for our installation
+umask 022
+
 _top_dir=`pwd`
 
 source ~/.bashrc
@@ -178,8 +182,6 @@ done
 # Begin installation of various packages
 # List of archives
 # The order is the installation order
-# Set the umask 5 means read and execute
-#umask 0
 # We can always set the env-variable of LMOD
 export LMOD_IGNORE_CACHE=1
 
