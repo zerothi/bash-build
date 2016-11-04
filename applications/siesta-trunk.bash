@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 576 ; do
+for v in 507 508 514 527 582 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
