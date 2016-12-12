@@ -1,4 +1,4 @@
-v=1.8.11
+v=1.8.12
 add_package --build generic \
 	    --version $v --package doxygen \
 	    --archive doxygen-Release_${v//./_}.tar.gz \
@@ -17,6 +17,8 @@ pack_set --install-query $(pack_get --prefix)/bin/doxygen
 pack_cmd "module load $(list ++cmake)"
 
 pack_cmd "cmake -G 'Unix Makefiles'" \
+	 "-D use-libclang=ON" \
 	 "-D CMAKE_INSTALL_PREFIX=$(pack_get --prefix) ../"
+
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
