@@ -1,4 +1,5 @@
 vv=5.4.1.24Jun15
+vv=5.4.1.05Feb16
 v=${vv%.*}
 add_package \
     --package vasp \
@@ -20,26 +21,24 @@ file=makefile.include
 pack_cmd "echo '# NPA' > $file"
 
 # Start by downloading patches...
-p=5.4.1.08072015
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
-dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
-pack_cmd "gunzip -c $o | patch -p0"
-p=5.4.1.27082015
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
-dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
-pack_cmd "gunzip -c $o | patch -p1"
-p=5.4.1.06112015
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
-dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
-pack_cmd "gunzip -c $o | patch -p0"
-# This is a GPU patch which is not applicable for me
-#p=5.4.1.14032016
+#### THESE APPLY TO 5.4.1.24Jun15
+#p=5.4.1.08072015
 #o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
 #dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 #pack_cmd "gunzip -c $o | patch -p0"
-# This patch requires this file:
-#   ./arch/makefile.include.linux_intel_cuda
-pack_cmd "touch ./arch/makefile.include.linux_intel_cuda"
+#p=5.4.1.27082015
+#o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+#dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+#pack_cmd "gunzip -c $o | patch -p1"
+#p=5.4.1.06112015
+#o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+#dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+#pack_cmd "gunzip -c $o | patch -p0"
+#### THESE APPLY TO 5.4.1.05Feb16
+p=5.4.1.14032016
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+pack_cmd "gunzip -c $o | patch -p0"
 p=5.4.1.03082016
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
