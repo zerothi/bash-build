@@ -6,10 +6,6 @@ add_package \
     --version $v \
     http://www.student.dtu.dk/~nicpa/packages/vasp.$vv.tar.gz
 
-if ! $(is_host nano pico femto atto ntch) ; then
-    pack_set --host-reject $(get_hostname)
-fi
-
 pack_set --host-reject zeroth
 
 pack_set --module-requirement mpi
