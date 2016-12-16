@@ -37,6 +37,9 @@ pack_cmd "gunzip -c $o | patch -p0"
 #o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
 #dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 #pack_cmd "gunzip -c $o | patch -p0"
+# This patch requires this file:
+#   ./arch/makefile.include.linux_intel_cuda
+pack_cmd "touch ./arch/makefile.include.linux_intel_cuda"
 p=5.4.1.03082016
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
