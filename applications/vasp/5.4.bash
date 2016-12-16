@@ -36,6 +36,14 @@ p=5.4.1.06112015
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 pack_cmd "gunzip -c $o | patch -p0"
+p=5.4.1.14032016
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+pack_cmd "gunzip -c $o | patch -p0"
+p=5.4.1.03082016
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+pack_cmd "gunzip -c $o | patch -p0"
 
 # Start with creating a template makefile.
 # The cache size is determined from the L1 cache (E5-2650 have ~64KB
