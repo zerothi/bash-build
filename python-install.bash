@@ -114,6 +114,7 @@ source_pack python/gpaw.bash
 
 source_pack python/pythtb.bash
 source_pack python/phonopy.bash
+#source_pack python/phono3py.bash
 
 # made for kwant
 source_pack python/tinyarray.bash

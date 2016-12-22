@@ -1,15 +1,13 @@
-for v in 1.11.6 ; do
-    add_package --archive phonopy-$v.tar.gz \
-        https://github.com/atztogo/phonopy/archive/v$v.tar.gz
+for v in 1.11.7 ; do
+    add_package --archive phono3py-$v.tar.gz \
+		https://github.com/atztogo/phono3py/archive/v$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-    pack_set --install-query $(pack_get --prefix)/bin/phonopy
+    pack_set --install-query $(pack_get --prefix)/bin/phono3py
     
     # Add requirements when creating the module
-    pack_set --module-requirement scipy
-    pack_set --module-requirement matplotlib
-    pack_set --module-requirement h5py
+    pack_set --module-requirement phonopy
     
     # Install commands that it should run
     pack_cmd "mkdir -p" \
