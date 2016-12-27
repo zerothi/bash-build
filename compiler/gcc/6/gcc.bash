@@ -1,4 +1,4 @@
-v=6.2.0
+v=6.3.0
 add_package --build generic \
 	    http://ftp.download-by.net/gnu/gnu/gcc/gcc-$v/gcc-$v.tar.bz2
 
