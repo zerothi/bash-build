@@ -77,6 +77,7 @@ pip_append docutils
 pip_append fastimport
 pip_append jinja2
 pip_append jsonschema
+pip_append line_profiler
 pip_append markupsafe
 pip_append mistune
 pip_append mpmath # for sympy
