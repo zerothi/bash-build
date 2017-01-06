@@ -4,6 +4,12 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+# Ensure that we install conda
+source_pack applications/conda2.bash
+source_pack applications/conda_install.bash 2
+source_pack applications/conda3.bash
+source_pack applications/conda_install.bash 3
+
 # Valgrind
 source_pack applications/valgrind.bash
 

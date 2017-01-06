@@ -480,7 +480,7 @@ a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
 # Currently handles these extensions:
 #   bz2, xz, gz, tgz, tar, zip
 # The following arguments are specially treated:
-#   local, fake : returns `echo` as no extraction is necessary
+#   local, fake, sh : returns `echo` as no extraction is necessary
 #   py : links the file so that it is local.
 #  Arguments
 #    ext
@@ -505,14 +505,14 @@ function arc_cmd {
 	zip)
 	    _ps "unzip"
 	    ;;
-	py)
+	py|sh)
 	    _ps "ln -fs"
 	    ;;
 	local|bin|fake)
 	    _ps "echo"
 	    ;;
 	*)
-	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,local/bin/fake]"
+	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,sh,local/bin/fake]"
 	    ;;
     esac
 }

@@ -250,9 +250,11 @@ function add_package {
     local ext=${fn##*.}
     _ext[$_N_archives]=$ext
     # A binary does not have a directory
-    [[ "x$ext" == "xfake" ]] && d=./
-    [[ "x$ext" == "xbin" ]] && d=./
-    [[ "x$ext" == "xlocal" ]] && d=./
+    case "x$ext" in
+	xfake|xbin|xsh|xlocal)
+	    d=./
+	    ;;
+    esac
     # Infer what the directory is
     local archive_d=${fn%.*tar.$ext}
     [[ ${#archive_d} -eq ${#fn} ]] && archive_d=${fn%.$ext}
