@@ -2,7 +2,7 @@ conda_V=$1
 
 # Local package for the downloading and installation
 # of conda packages (locally in the conda installation)
-add_package conda${conda_V}_installs.local
+add_package --build generic conda${conda_V}_installs.local
 
 pack_set --module-requirement conda
 pack_set --directory .
