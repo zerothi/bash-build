@@ -4,8 +4,10 @@ conda_V=$1
 # of conda packages (locally in the conda installation)
 add_package conda${conda_V}_installs.local
 
-pack_set --module-requirement conda[${conda_V}]
+pack_set --module-requirement conda
 pack_set --directory .
+
+pack_cmd "source activate python$conda_V"
 
 _channel=
 _conda=
@@ -39,13 +41,8 @@ function conda_install {
     _conda=""
 }
 
-# First update it-self
-pack_cmd "conda update -y conda anaconda-client conda-build"
-
 # Add conda packages that is not part of a channel
 conda_install nose
-
-conda_append anaconda-client conda-build
 
 conda_append ssl_match_hostname
 if [[ $(vrs_cmp $conda_V 2) -eq 0 ]]; then
@@ -97,6 +94,11 @@ conda_append h5py netcdf4
 conda_append theano
 conda_install
 
+
+# Do my stuff
+conda_channel zerothi
+conda_append sisl sisl-dev
+conda_install
 
 unset conda_append
 unset conda_install
