@@ -23,6 +23,3 @@ pack_cmd "conda upgrade -y conda anaconda-client conda-build"
 pack_cmd "conda create -y --name python2 python=2.7 || echo already there"
 pack_cmd "conda create -y --name python3 python=3.6 || echo already there"
 
-
-
-

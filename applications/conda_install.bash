@@ -94,6 +94,9 @@ conda_append h5py netcdf4
 conda_append theano
 conda_install
 
+# Do pypi needed stuff
+conda_channel pypi
+conda_install twine
 
 # Do my stuff
 conda_channel zerothi
