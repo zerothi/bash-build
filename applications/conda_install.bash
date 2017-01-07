@@ -7,7 +7,10 @@ add_package --build generic conda${conda_V}_installs.local
 pack_set --module-requirement conda
 pack_set --directory .
 
-pack_cmd "source activate python$conda_V"
+# Only activate if python3
+if [[ $conda_V -eq 3 ]]; then
+    pack_cmd "source activate python$conda_V"
+fi
 
 _channel=
 _conda=
@@ -95,7 +98,7 @@ conda_append theano
 conda_install
 
 # Do pypi needed stuff
-conda_channel pypi
+conda_channel conda-forge
 conda_install twine
 
 # Do my stuff

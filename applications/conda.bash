@@ -19,7 +19,6 @@ pack_set --directory .
 pack_cmd "conda install -y conda anaconda-client conda-build"
 pack_cmd "conda upgrade -y conda anaconda-client conda-build"
 
-# Create a python2 and python3 environment
-pack_cmd "conda create -y --name python2 python=2.7 || echo already there"
-pack_cmd "conda create -y --name python3 python=3.6 || echo already there"
+# Create a python3 environment
+pack_cmd "conda create -y --name python3 python=3.5 || echo already there"
 
