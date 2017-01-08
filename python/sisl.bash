@@ -2,7 +2,7 @@ v=0.8.0
 add_package --archive sisl-$v.tar.gz \
     https://github.com/zerothi/sisl/archive/$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
 
