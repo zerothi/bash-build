@@ -1,4 +1,4 @@
-add_package --version 0.95a \
+add_package --version 1.0 \
     http://theory.cm.utexas.edu/henkelman/code/bader/download/bader.tar.gz
 
 pack_set -s $MAKE_PARALLEL
