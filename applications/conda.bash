@@ -22,5 +22,5 @@ pack_cmd "conda upgrade -y conda anaconda-client conda-build"
 # Create a python3 environment
 pack_cmd "conda create -y --name python3 python=3.5 anaconda || echo already there"
 pack_cmd "source activate python3"
-pack_cmd "conda install python=3.5"
+pack_cmd "conda install -y python=3.5"
 pack_cmd "source deactivate"
