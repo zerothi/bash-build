@@ -44,6 +44,9 @@ function conda_install {
     _conda=""
 }
 
+# Add default compilers
+conda_install gcc libgfortran
+
 # Add conda packages that is not part of a channel
 conda_install nose
 
@@ -96,10 +99,6 @@ conda_append numexpr
 conda_append h5py netcdf4
 conda_append theano
 conda_install
-
-# Do pypi needed stuff
-conda_channel conda-forge
-conda_install twine
 
 # Do my stuff
 conda_channel zerothi

@@ -8,6 +8,8 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --a
 
 pack_set $(list --prefix ' --module-requirement ' scipy netcdf4py)
 
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
+
 pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py build ${pNumpyInstall}"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"

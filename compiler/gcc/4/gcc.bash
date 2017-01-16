@@ -7,8 +7,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set $(list --prefix '--module-requirement ' build-tools \
 		gmp[$gmp_v] mpfr[$mpfr_v] mpc[$mpc_v] isl[$isl_v] cloog[$cloog_v])
 
-pack_set --host-reject zero --host-reject ntch
-
 pack_set --install-query $(pack_get --prefix)/bin/gcc
 
 # Install commands that it should run
