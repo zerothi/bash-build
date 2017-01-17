@@ -1,7 +1,7 @@
-v=1.1b2
+v=1.2.0
 add_package --package berkeley-GW -alias bgw -version $v \
-    --directory BerkeleyGW-1.1-beta2 \
-    http://www.student.dtu.dk/~nicpa/packages/BGW-1.1-beta2.tar.gz
+    --directory BerkeleyGW-1.2.0 \
+    http://www.student.dtu.dk/~nicpa/packages/BGW-1.2.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
