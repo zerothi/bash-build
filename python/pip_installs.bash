@@ -75,6 +75,7 @@ pip_append decorator
 pip_append distribute
 pip_append docutils
 pip_append fastimport
+pip_append FORD
 pip_append jinja2
 pip_append jsonschema
 pip_append line_profiler
