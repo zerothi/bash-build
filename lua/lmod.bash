@@ -8,7 +8,7 @@ add_package --build generic-empty \
     --directory Lmod-$v \
     https://github.com/TACC/Lmod/archive/$v.tar.gz
 
-pack_set --module-requirement lua
+pack_set --module-requirement luafilesystem
 
 pack_set --install-query $(pack_get --prefix)/lmod/$(pack_get --version)/init/bash
 
