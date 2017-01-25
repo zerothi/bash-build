@@ -1,8 +1,9 @@
 v=1_6_3
 add_package --build generic \
-    -archive luafilesystem-v_$v.tar.gz \
-    -version ${v//_/.} \
-    https://github.com/keplerproject/luafilesystem/archive/v_$v.tar.gz
+	    --package luafilesystem \
+	    -archive luafilesystem-v_$v.tar.gz \
+	    -version ${v//_/.} \
+	    https://github.com/keplerproject/luafilesystem/archive/v_$v.tar.gz
 
 pack_set --module-requirement lua
 
