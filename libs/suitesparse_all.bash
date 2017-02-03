@@ -10,6 +10,14 @@ pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
 
+# We do not use the build-in metis library
+# According to SuiteSparse the only changes are:
+#  default integers => long
+#  removal of comments (for some compiler types)
+#  removal of compiler warnings
+# Basically nothing has changed.
+pack_set --mod-req metis
+
 if $(is_c intel) ; then
     pack_set --host-reject $(get_hostname)
 fi
@@ -19,23 +27,33 @@ pack_cmd "module load $(list ++cmake)"
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
 # Create the suite sparse config file
-pack_cmd "echo '# NPA make file for suitesparse' > $mk"
+function ssb() {
+    pack_cmd "sed -i '1 a\
+$@\n' $mk"
+}
 function sse() {
     pack_cmd "echo '$@' >> $mk"
 }
+
+# First insert the flags that control the flow at the top
+ssb "MY_METIS_LIB = $(list --LD-rp metis) -lmetis"
+ssb "MY_METIS_INC = $(pack_get -prefix metis)/include"
+
+sse ""
+sse "# NPA make file for suitesparse"
 sse "CC = $CC"
+sse "CXX = $CXX"
 sse "CFLAGS = $CFLAGS"
 sse "CF = \$(CFLAGS) \$(CPPFLAGS) \$(TARGET_ARCH) -fexceptions -fPIC"
+sse "CFOPENMP = $FLAG_OMP"
+sse "CF += \$(CFOPENMP)"
 sse "RANLIB = ranlib"
 sse "ARCHIVE = \$(AR) \$(ARFLAGS)"
 sse "CP = cp -f"
 sse "MV = mv -f"
 sse "F77 = $FC"
 sse "F77FLAGS = $FCFLAGS"
-sse "F77LIBS = "
-sse "LIB = -lm -lrt"
-sse "INSTALL_LIB = $(pack_get --LD)"
-sse "INSTALL_INCLUDE = $(pack_get --prefix)/include"
+
 
 # Add lapack/blas
 # Check for Intel MKL or not
@@ -47,7 +65,7 @@ else
 
     # This ensures that the linking step using
     # the C-compiler will work.
-    sse "LIB += -lgfortran"
+    sse "LBLIBS += -lgfortran"
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
@@ -56,38 +74,12 @@ else
 
 fi
 
-# Force to use XERBLA distributed with the BLAS version
-sse "XERBLA = "
-
 # No GPU support
-sse "GPU_CONFIG = "
+ssb "GPU_CONFIG = "
 
-# Add METIS
-#pack_set --module-requirement metis
-sse "METIS_PATH = $(pack_set --prefix metis)"
-sse "METIS = $(pack_set --LD metis)/libmetis.a"
-sse "METIS_PATH = ../../metis-5.1.0"
-sse "METIS = ../../metis-5.1.0/libmetis.a"
-
-# UMFpack configuration
-sse "UMFPACK_CONFIG ="
-
-# CHOLmod configuration
-sse "CHOLMOD_CONFIG = \$(GPU_CONFIG)"
-
-# QR configuration
-sse "SPQR_CONFIG = \$(GPU_CONFIG)"
-
-# standard 
-sse "PRETTY = grep -v \"^\#\" | indent -bl -nce -bli0 -i4 -sob -l120"
-
-# clean
-sse "CLEAN = *.o *.obj *.ln *.bb *.bbg *.da *.tcov *.gcov gmon.out *.bak *.d *.gcda *.gcno"
-
+unset ssb
 unset sse
 
-pack_cmd "make $(get_make_parallel)"
+pack_cmd "make"
 # Install commands that it should run
-pack_cmd "mkdir -p $(pack_get --LD)/"
-pack_cmd "mkdir -p $(pack_get --prefix)/include/"
-pack_cmd "make install"
+pack_cmd "make install INSTALL=$(pack_get --prefix)"
