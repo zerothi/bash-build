@@ -1,7 +1,8 @@
 v=1.3.2
 add_package --build generic \
-    --archive Penlight-$v.tar.gz \
-    https://github.com/stevedonovan/Penlight/archive/$v.tar.gz
+	    --package penlight \
+	    --archive Penlight-$v.tar.gz \
+	    https://github.com/stevedonovan/Penlight/archive/$v.tar.gz
 
 pack_set --module-requirement lua
 
