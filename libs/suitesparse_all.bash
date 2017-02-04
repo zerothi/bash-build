@@ -39,7 +39,7 @@ function sse() {
 ssb "MY_METIS_LIB = $(list --LD-rp metis) -lmetis"
 ssb "MY_METIS_INC = $(pack_get -prefix metis)/include"
 
-sse ""
+sse " "
 sse "# NPA make file for suitesparse"
 sse "CC = $CC"
 sse "CXX = $CXX"
