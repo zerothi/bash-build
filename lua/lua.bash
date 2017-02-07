@@ -19,7 +19,8 @@ fi
 pack_set --install-query $(pack_get --prefix)/bin/lua
 
 # Correct the installation compilation
-pack_cmd "sed -i -e '/^CC/{s:.*:CC = $CC $tmp:}' src/Makefile"
+pack_cmd "sed -i -e '/^CC/{s:.*:CC = $CC:}' src/Makefile"
+pack_cmd "sed -i -e '/^MYLIBS/{s:.*:MYLIBS = $tmp:}' src/Makefile"
 # -DLUA_COMPAT_BITLIB and -DLUA_COMPAT_APIINTCASTS are for the bit32 lib
 # -DLUA_COMPAT_ALL is not used for 5.3
 pack_cmd "sed -i -e '/^CFLAGS/{s:.*:CFLAGS = $CFLAGS -DLUA_COMPAT_BITLIB -DLUA_COMPAT_APIINTCASTS \$(SYSCFLAGS) \$(MYCFLAGS):}' src/Makefile"
