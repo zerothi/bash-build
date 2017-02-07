@@ -54,6 +54,7 @@ source_pack helpers/optipng.bash
 source_pack helpers/libxml2.bash
 
 source_pack helpers/readline.bash
+source_pack helpers/termcap.bash
 source_pack helpers/openssl.bash
 
 # Install LLVM compiler

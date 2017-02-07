@@ -19,6 +19,9 @@ fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
 fi
+if [[ $(pack_get --installed termcap) -eq 1 ]]; then
+    lib_extra="$lib_extra termcap"
+fi
 if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
     if $(is_host nano pico femto) ; then
