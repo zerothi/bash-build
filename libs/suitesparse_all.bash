@@ -8,7 +8,7 @@ add_package \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
+pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.so
 
 # We do not use the build-in metis library
 # According to SuiteSparse the only changes are:
