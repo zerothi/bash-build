@@ -13,7 +13,7 @@ if [[ $(pack_installed readline) -eq 1 ]]; then
 fi
 if [[ $(pack_installed termcap) -eq 1 ]]; then
     pack_set --mod-req termcap
-    tmp="$(list -LD-rp termcap) $(pack_get --lib termcap)"
+    tmp="$tmp $(list -LD-rp termcap) $(pack_get --lib termcap)"
 fi
 
 pack_set --install-query $(pack_get --prefix)/bin/lua
