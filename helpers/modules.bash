@@ -4,6 +4,13 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/Modules
 
+local f=$(pwd_archives)/modules-env-8.6.patch
+
+dwn_file http://www.student.dtu.dk/~nicpa/packages/environment-modules-tcl86.patch $f
+
+# Patch for compatibility with 8.6
+pack_cmd "patch -p1 < $f"
+
 # Install commands that it should run
 pack_cmd "./configure" \
 	 "--prefix $(pack_get --prefix)"
