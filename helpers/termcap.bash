@@ -4,7 +4,7 @@ pack_set -s $IS_MODULE
 pack_set --lib "-ltermcap"
 
 
-pack_set --install-query $(pack_get --prefix)/lib/libtermcap.so
+pack_set --install-query $(pack_get --prefix)/lib/libtermcap.a
 
 # Install commands that it should run
 pack_cmd "./configure --prefix=$(pack_get --prefix)"
