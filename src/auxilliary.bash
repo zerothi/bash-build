@@ -499,6 +499,12 @@ function arc_cmd {
 	tar.gz|gz|tgz)
 	    _ps "tar zxf"
 	    ;;
+	tar.lz)
+	    _ps "tar --lzib zxf"
+	    ;;
+	lz)
+	    _ps "lzip -d"
+	    ;;
 	tar)
 	    _ps "tar xf"
 	    ;;
@@ -512,7 +518,7 @@ function arc_cmd {
 	    _ps "echo"
 	    ;;
 	*)
-	    doerr "Unrecognized extension $ext in [bz2,xz,tgz,gz,tar,zip,py,sh,local/bin/fake]"
+	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,local/bin/fake]"
 	    ;;
     esac
 }
