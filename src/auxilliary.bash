@@ -478,7 +478,7 @@ a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
 #  Function arc_cmd
 # Returns command that extracts the extension (without verbosity).
 # Currently handles these extensions:
-#   bz2, xz, gz, tgz, tar, zip
+#   bz2, lz, xz, gz, tgz, tar, zip
 # The following arguments are specially treated:
 #   local, fake, sh : returns `echo` as no extraction is necessary
 #   py : links the file so that it is local.
@@ -499,11 +499,8 @@ function arc_cmd {
 	tar.gz|gz|tgz)
 	    _ps "tar zxf"
 	    ;;
-	tar.lz)
-	    _ps "tar --lzib zxf"
-	    ;;
-	lz)
-	    _ps "lzip -d"
+	tar.lz|lz|tlz)
+	    _ps "tar --lzib xf"
 	    ;;
 	tar)
 	    _ps "tar xf"
