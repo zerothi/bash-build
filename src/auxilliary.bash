@@ -500,7 +500,7 @@ function arc_cmd {
 	    _ps "tar zxf"
 	    ;;
 	tar.lz|lz|tlz)
-	    _ps "tar --lzib xf"
+	    _ps "tar xf"
 	    ;;
 	tar)
 	    _ps "tar xf"
