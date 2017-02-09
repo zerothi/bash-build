@@ -17,7 +17,6 @@ pack_cmd "echo '# NPA' > $file"
 pack_cmd "sed -i '1 a\
 PARAFLAG = -DMPI\n\
 MATHFLAG = -DUSESCALAPACK -DUSEFFTW3 -DHDF5\n\
-FCPP = /usr/bin/cpp -ansi\n\
 F90free = $MPIFC $FCFLAGS\n\
 LINK = $MPIFC $FLAG_OMP\n\
 FOPTS = $FCFLAGS $FLAG_OMP\n\
@@ -41,6 +40,7 @@ TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '$ a\
+FCPP = $MPIFC -E -P -xc\n\
 COMPFLAG = -DINTEL\n\
 LAPACKLIB = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
@@ -56,6 +56,7 @@ elif $(is_c gnu) ; then
     tmp_ld="$(list --LD-rp scalapack +$la)"
     pack_cmd "sed -i '$ a\
 COMPFLAG = -DGNU\n\
+FCPP = $MPIFC -E -P -x c\n\
 F90free += -ffree-form -ffree-line-length-none\n\
 FOPTS   += -ffree-form -ffree-line-length-none\n\
 SCALAPACKLIB = -lscalapack \$(LAPACKLIB) \n\
