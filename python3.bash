@@ -19,6 +19,9 @@ fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
 fi
+if [[ $(pack_get --installed termcap) -eq 1 ]]; then
+    lib_extra="$lib_extra termcap"
+fi
 if [[ $(pack_get --installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
     if $(is_host nano pico femto) ; then
@@ -64,7 +67,7 @@ pack_cmd "../configure --with-threads" \
 pack_cmd "make $(get_make_parallel)"
 
 # Common tests
-if $(is_host n- surt muspel slid) ; then
+if $(is_host n- sylg surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
     
