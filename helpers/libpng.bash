@@ -1,5 +1,5 @@
 add_package --build generic --alias gen-libpng --package gen-libpng \
-	    https://sourceforge.net/projects/libpng/files/libpng16/1.6.21/libpng-1.6.28.tar.xz
+	    https://sourceforge.net/projects/libpng/files/libpng16/1.6.28/libpng-1.6.28.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
