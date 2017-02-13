@@ -1,5 +1,5 @@
 # 3.11.34 (works)
-for v in 3.10.2 ; do
+for v in 3.10.3 ; do
 tmp="--build generic-host"
 if $(is_c gnu) ; then
     # If we use a later gnu version

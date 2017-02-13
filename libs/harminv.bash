@@ -1,5 +1,5 @@
 # We will only install this on the super computer
-add_package http://ab-initio.mit.edu/harminv/harminv-1.3.1.tar.gz
+add_package http://ab-initio.mit.edu/harminv/harminv-1.4.tar.gz
 
 pack_set $(list --prefix "--host-reject " ntch zeroth)
 

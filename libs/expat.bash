@@ -1,4 +1,4 @@
-v=2.1.0
+v=2.2.0
 add_package \
     http://sourceforge.net/projects/expat/files/expat/$v/expat-$v.tar.gz
 

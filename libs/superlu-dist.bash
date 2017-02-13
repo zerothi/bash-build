@@ -1,4 +1,4 @@
-for v in 3.3 4.3 ; do
+for v in 3.3 4.3 5.1.3 ; do
 
 add_package --package superlu-dist \
 	    --directory SuperLU_DIST_$v \

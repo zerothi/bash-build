@@ -1,4 +1,4 @@
-add_package ftp://ftp.gnu.org/gnu/guile/guile-2.0.6.tar.gz
+add_package ftp://ftp.gnu.org/gnu/guile/guile-2.0.13.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

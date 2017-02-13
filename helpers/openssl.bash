@@ -1,4 +1,4 @@
-v=1.1.0b
+v=1.1.0e
 add_package --build generic --version $v --package openssl \
         https://www.openssl.org/source/openssl-$v.tar.gz
 

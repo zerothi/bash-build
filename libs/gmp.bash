@@ -1,4 +1,4 @@
-add_package ftp://ftp.gmplib.org/pub/gmp-5.0.5/gmp-5.0.5.tar.bz2
+add_package https://gmplib.org/download/gmp/gmp-6.1.2.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

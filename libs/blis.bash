@@ -1,4 +1,4 @@
-v=0.2.0
+v=0.2.1
 add_package --archive blis-$v.tar.gz https://github.com/flame/blis/archive/$v.tar.gz
 
 if ! $(is_c gnu) ; then

@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.4.1 ; do
+for v in 4.4.1.1 ; do
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-serial \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
@@ -29,7 +29,7 @@ pack_set_mv_test tmp.test tmp.test.c
 pack_install 
 
 # Install the FORTRAN headers
-vf=4.4.3
+vf=4.4.4
 add_package --archive netcdf-fortran-$vf.tar.gz \
 	    --package netcdf-fortran-serial \
 	    https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz

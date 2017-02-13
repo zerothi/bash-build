@@ -1,12 +1,11 @@
-add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v0.9.2.tar.gz
+add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v0.10.0.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpexsi_linux.a
 pack_set --lib -lpexsi_linux
 
 pack_set $(list -p '--mod-req ' mpi parmetis scotch)
-sd_v=4.3
-pack_set --mod-req superlu-dist[$sd_v]
+pack_set --mod-req superlu-dist
 
 # Prepare the make file
 tmp="sed -i -e"

@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.cwru.edu/pub/bash/readline-6.3.tar.gz
+add_package --build generic ftp://ftp.cwru.edu/pub/bash/readline-7.0.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set --lib "-lreadline -lncurses"
