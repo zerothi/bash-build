@@ -1,5 +1,5 @@
 add_package --build generic \
-    http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.0.tar.gz
+    http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.1.tar.gz
 
 pack_set --module-requirement lua
 

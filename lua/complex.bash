@@ -1,7 +1,7 @@
 add_package --build generic \
     --directory complex \
-    --version 5.2 \
-    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/lcomplex.tar.gz
+    --version 5.3 \
+    http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lcomplex.tar.gz
 
 pack_set --module-requirement lua
 

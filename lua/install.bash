@@ -22,5 +22,6 @@ source_pack lua/strip.bash
 source_pack lua/complex.bash
 source_pack lua/penlight.bash
 source_pack lua/peg.bash
+source_pack lua/ldoc.bash
 source_pack lua/lmod.bash
 
