@@ -4,6 +4,7 @@ add_package \
     --package hdf5-serial \
     --version $p \
     --archive hdf5-$p.tar.bz2 \
+    --directory hdf5-$p-patch1 \
     https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-$p-patch1/src/hdf5-$p-patch1.tar.bz2
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
