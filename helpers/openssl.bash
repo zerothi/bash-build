@@ -1,6 +1,7 @@
-v=1.1.0e
-add_package --build generic --version $v --package openssl \
-        https://www.openssl.org/source/openssl-$v.tar.gz
+Pv=1.1.0
+v=${Pv}d
+add_package --build generic --version $Pv --package openssl \
+        https://www.openssl.org/source/openssl-${v}.tar.gz
 
 pack_set -s $IS_MODULE
 
