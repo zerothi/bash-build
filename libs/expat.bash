@@ -1,6 +1,6 @@
 v=2.2.0
 add_package \
-    http://sourceforge.net/projects/expat/files/expat/$v/expat-$v.tar.gz
+    https://vorboss.dl.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
