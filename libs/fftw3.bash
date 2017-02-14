@@ -11,7 +11,8 @@ function tmp_func {
 
 
 add_package --alias fftw-3 \
-	    http://www.fftw.org/fftw-3.3.6.tar.gz
+        --version 3.3.6 \
+	    http://www.fftw.org/fftw-3.3.6-pl1.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
