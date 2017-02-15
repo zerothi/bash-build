@@ -25,6 +25,7 @@ source_pack applications/siesta-mattias.bash
 source_pack applications/siesta-scf-debug.bash # my ts-development
 source_pack applications/siesta-scf.bash # my ts-development
 source_pack applications/siesta-trunk.bash # siesta trunk development
+source_pack applications/siesta-trunk-debug.bash
 
 source_pack applications/lammps.bash
 
