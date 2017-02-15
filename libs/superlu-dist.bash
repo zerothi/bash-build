@@ -31,13 +31,13 @@ ARCH = $AR\n\
 ARCHFLAGS = cr\n\
 RANLIB = ranlib\n\
 CC = $MPICC\n\
-CFLAGS = $CFLAGS $FLAG_OMP \$(I_PARMETIS)\n\
+CFLAGS = $CFLAGS \$(I_PARMETIS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
-F90FLAGS = $FCFLAGS $FLAG_OMP\n\
+F90FLAGS = $FCFLAGS\n\
 LOADER   = $MPICC\n\
 LOADOPTS = \$(CFLAGS)\n\
-CDEFS    = -DAdd_ -D_OPENMP\n\
+CDEFS    = -DAdd_\n\
 ' $file"
 
 else
