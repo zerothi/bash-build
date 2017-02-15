@@ -6,7 +6,7 @@ add_package --package superlu-dist \
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libsuperlu.a
+pack_set --install-query $(pack_get --LD)/libsuperlu_dist.a
 pack_set --lib -lsuperlu
 
 pack_set --module-requirement mpi \
