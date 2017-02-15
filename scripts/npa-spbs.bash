@@ -3,6 +3,9 @@ cat <<EOF > $script
 #!/bin/bash
 
 # This script will enable the creation of easy PBS scripts
+# This script has been created by:
+#  Nick R. Papior, 2015.
+# Copyright.
 
 # First retreive the hostname
 _hostname="\$(hostname -s)"

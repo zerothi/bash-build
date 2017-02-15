@@ -57,7 +57,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 # Just does not work
 #     "--with-superlu_dist=1" \
 #     "--with-superlu_dist-dir=$(pack_get --prefix superlu-dist)" \
-#     "--with-superlu_dist-lib='-lsuperlu'"
+#     "--with-superlu_dist-lib='-lsuperlu_dist'"
 
 # Requires ptesmumps
 #     "--with-mumps=1" \

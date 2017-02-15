@@ -47,7 +47,7 @@ CPPDEFS = -std=c++11 \$(CCDEFS) \n\
 #\n\
 LIBS = \$(PEXSI_LIB) \n\
 LIBS += $(list -LD-rp superlu-dist[$sd_v] parmetis scotch)\n\
-LIBS += -Wl,--allow-multiple-definition -lsuperlu \n\
+LIBS += -Wl,--allow-multiple-definition -lsuperlu_dist \n\
 #LIBS += -lptscotchparmetis -lptscotch -lptscotcherr \n\
 LIBS += -lscotchmetis -lscotch -lscotcherr \n\
 LIBS += -lparmetis -lmetis \n\

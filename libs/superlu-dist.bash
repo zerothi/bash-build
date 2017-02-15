@@ -15,11 +15,38 @@ pack_set --module-requirement mpi \
 # Prepare the make file
 file=make.inc
 pack_cmd "echo '# Make file' > make.inc"
+if [[ $(vrs_cmp $(pack_get --version) 5) -ge 0 ]]; then
+
+pack_cmd "sed -i '1 a\
+PLAT =\n\
+VERSION = $(pack_get --version)\n\
+SuperLUroot = ..\n\
+DSUPERLULIB = \$(SuperLUroot)/SRC/libsuperlu_dist.a\n\
+BLASDEF = -DUSE_VENDOR_BLAS\n\
+METISLIB = $(list --LD-rp parmetis) -lmetis\n\
+PARMETISLIB = $(list --LD-rp parmetis) -lparmetis\n\
+I_PARMETIS = $(list --INCDIRS parmetis)\n\
+LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
+ARCH = $AR\n\
+ARCHFLAGS = cr\n\
+RANLIB = ranlib\n\
+CC = $MPICC\n\
+CFLAGS = $CFLAGS $FLAG_OMP \$(I_PARMETIS)\n\
+NOOPTS = ${CFLAGS//-O./}\n\
+FORTRAN = $MPIF90\n\
+F90FLAGS = $FCFLAGS $FLAG_OMP\n\
+LOADER   = $MPICC\n\
+LOADOPTS = \$(CFLAGS)\n\
+CDEFS    = -DAdd_ -D_OPENMP\n\
+' $file"
+
+else
+    # this is versions prior to 5
 
 pack_cmd "sed -i '1 a\
 PLAT =\n\
 DSuperLUroot = ..\n\
-DSUPERLULIB = \$(DSuperLUroot)/lib/libsuperlu.a\n\
+DSUPERLULIB = \$(DSuperLUroot)/SRC/libsuperlu_dist.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
 METISLIB = $(list --LD-rp parmetis) -lmetis\n\
 PARMETISLIB = $(list --LD-rp parmetis) -lparmetis\n\
@@ -39,6 +66,9 @@ CDEFS    = -DAdd_\n\
 CFLAGS += -std=c99\n\
 ' $file"
 
+fi
+
+# These are standard options
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
 BLASLIB = $MKL_LIB -mkl=sequential\n\
@@ -58,7 +88,7 @@ fi
 pack_cmd "make"
 
 pack_cmd "mkdir -p $(pack_get --LD)/"
-pack_cmd "cp lib/libsuperlu.a $(pack_get --LD)/"
+pack_cmd "cp SRC/libsuperlu_dist.a $(pack_get --LD)/"
 pack_cmd "mkdir -p $(pack_get --prefix)/include"
 pack_cmd "cp SRC/*.h $(pack_get --prefix)/include"
 
