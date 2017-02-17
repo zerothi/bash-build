@@ -103,7 +103,7 @@ else
     
 fi
 pack_cmd "make install"
-if ! $(is_host n- surt muspel slid) ; then
+if ! $(is_host n- sylg surt muspel slid) ; then
     pack_set_mv_test tmp.test
 fi
 
