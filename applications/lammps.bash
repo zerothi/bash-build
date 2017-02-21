@@ -7,8 +7,6 @@ add_package --package lammps \
 pack_set_file_version
 pack_set -s $MAKE_PARALLEL
 
-pack_set --host-reject ntch --host-reject zeroth
-
 pack_set --module-opt "--lua-family lammps"
 
 pack_set --directory 'lammps-*'
@@ -59,6 +57,11 @@ LIB =        -lstdc++ -lpthread ' $tmp"
 else
     doerror lammps "Could not recognize the compiler: $(get_c)"
 fi
+
+# Enable packages
+pack_cmd "make yes-standard"
+# Disable packages not applicable for compilation
+pack_cmd "make $(list -p 'no-' gpu kim kokkos meam poems python reax voronoi)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel) npa"
