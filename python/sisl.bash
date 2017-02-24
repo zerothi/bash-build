@@ -1,6 +1,6 @@
 v=0.8.1
 add_package --archive sisl-$v.tar.gz \
-    https://github.com/zerothi/sisl/archive/$v.tar.gz
+    https://github.com/zerothi/sisl/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
