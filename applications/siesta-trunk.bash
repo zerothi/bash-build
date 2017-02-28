@@ -136,6 +136,7 @@ if [[ $(pack_installed flook) -eq 1 ]]; then
     pack_cmd "sed -i '$ a\
 FPPFLAGS += -DSIESTA__FLOOK \n\
 FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
+INCFLAGS += $(list -INCDIRS flook)\n\
 LIBS += \$(FLOOK_LIB) \n' $file"
 fi
 
