@@ -1,7 +1,6 @@
 v=0.7.0
 add_package \
-    --archive flook-$v.tar.gz \
-    https://github.com/ElectronicStructureLibrary/flook/archive/v$v.tar.gz
+    https://github.com/ElectronicStructureLibrary/flook/releases/download/v$v/flook-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
