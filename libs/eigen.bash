@@ -1,4 +1,4 @@
-v=3.3.2
+v=3.3.3
 add_package -package eigen \
 	    --archive eigen-$v.tar.bz2 \
 	    http://bitbucket.org/eigen/eigen/get/$v.tar.bz2
