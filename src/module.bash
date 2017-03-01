@@ -11,6 +11,9 @@ _mod_survey=0
 _mod_survey_cmd='`whoami` `date +%Y-%m-%d-%H` $modulename/$version'
 _mod_survey_file=''
 
+# Disable LMOD spider cache
+export LMOD_IGNORE_CACHE=1
+
 
 # Query module format
 function module_format {
