@@ -24,7 +24,7 @@ fi
 tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
-[[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-pmi=/usr/include/slurm"
+[[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-slurm --with-pmi=/usr"
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 else
