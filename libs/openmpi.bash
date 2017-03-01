@@ -24,6 +24,7 @@ fi
 tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
+[[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-pmi=/usr/include/slurm"
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 else
@@ -40,7 +41,7 @@ fi
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-hwloc=$(pack_get --prefix hwloc)" \
-     "--enable-mpi-thread-multiple" \
+	 "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
