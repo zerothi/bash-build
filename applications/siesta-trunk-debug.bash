@@ -1,4 +1,4 @@
-for v in 604 ; do
+for v in 610 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --package siesta-trunk-debug \
