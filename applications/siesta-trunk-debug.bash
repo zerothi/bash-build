@@ -101,7 +101,7 @@ fi
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
 .SUFFIXES: .f .F .o .a .f90 .c .F90\n\
-SIESTA_ARCH=x86_64-linux-Intel\n\
+SIESTA_ARCH=x86_64-linux-$(get_hostname)\n\
 \n\
 FPP=$MPIFC\n\
 FPP_OUTPUT= \n\
