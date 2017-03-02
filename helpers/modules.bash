@@ -1,3 +1,4 @@
+# apt-get install tcl8.X-dev
 add_package --build generic-no-version http://downloads.sourceforge.net/project/modules/Modules/modules-3.2.10/modules-3.2.10.tar.gz
 
 pack_set -s $MAKE_PARALLEL

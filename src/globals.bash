@@ -64,3 +64,7 @@ function help_() {
     echo "  --help|-h"
     echo "    show this help"
 }
+
+
+# It is imperative that these packages are installed
+# apt-get build-essential gcc gfortran
