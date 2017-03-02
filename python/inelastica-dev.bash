@@ -11,10 +11,14 @@ pack_set --module-opt "--lua-family inelastica"
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/Inelastica
 
-pack_set --module-requirement netcdf-serial \
-    --module-requirement scientificpython
-if [[ $(pack_get --version) -gt 349 ]]; then
+pack_set --module-requirement netcdf-serial
+if [[ $v -gt 349 ]]; then
     pack_set --module-requirement scipy
+fi
+if [[ $v -gt 425 ]]; then
+    pack_set --module-requirement netcdf4py
+else
+    pack_set --module-requirement scientificpython
 fi
 
 if [[ $(pack_get --version) -lt 260 ]]; then
