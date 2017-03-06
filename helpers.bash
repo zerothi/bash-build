@@ -28,6 +28,7 @@ source_pack helpers/makedepend.bash
 
 source_pack helpers/zlib.bash
 source_pack helpers/libpng.bash
+source_pack helpers/libgd.bash
 
 source_pack helpers/cmake.bash
 source_pack helpers/freetype.bash
