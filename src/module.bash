@@ -13,6 +13,8 @@ _mod_survey_file=''
 
 # Disable LMOD spider cache
 export LMOD_IGNORE_CACHE=1
+# Disable LMOD pager
+export LMOD_PAGER=none
 
 
 # Query module format
