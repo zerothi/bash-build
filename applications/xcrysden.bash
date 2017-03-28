@@ -41,8 +41,13 @@ FFTW3_INCDIR    = $(list --INCDIRS fftw-3)' $tmp"
 if [[ -e /usr/include/tcl8.5 ]]; then
     pack_cmd "sed -i '$ a\
 TCL_INCDIR      = -I/usr/include/tcl8.5 ' $tmp"
-fi
-if $(is_host thul) ; then
+elif [[ -e /usr/include/tcl8.6 ]]; then
+    pack_cmd "sed -i '$ a\
+TCL_INCDIR      = -I/usr/include/tcl8.6 -DUSE_INTERP_RESULT' $tmp"
+    pack_cmd "sed -i -e 's/8.5/8.6/g' $tmp"
+elif [[ -e /usr/include/tcl8.4 ]]; then
+    pack_cmd "sed -i '$ a\
+TCL_INCDIR      = -I/usr/include/tcl8.4 ' $tmp"
     pack_cmd "sed -i -e 's/8.5/8.4/g' $tmp"
 fi
 
@@ -51,6 +56,6 @@ pack_cmd "make xcrysden"
 pack_cmd "prefix=$(pack_get --prefix) make install"
 
 # Add the XCRYSDEN TOP DIR env
-#pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --prefix)"
-#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/scripts"
-#pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/util"
+pack_set --module-opt "--set-ENV XCRYSDEN_TOPDIR=$(pack_get --prefix)"
+pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/scripts"
+pack_set --module-opt "--prepend-ENV PATH=$(pack_get --prefix)/util"
