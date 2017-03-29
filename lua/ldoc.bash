@@ -1,6 +1,7 @@
 v=1.4.6
 add_package --build generic \
-    --archive ldoc-$v.tar.gz \
+    --archive LDoc-$v.tar.gz \
+    --package ldoc \
     https://github.com/stevedonovan/LDoc/archive/$v.tar.gz
 
 pack_set --module-requirement penlight
