@@ -91,5 +91,5 @@ new_build --name debug \
 build_set --default-choice[debug] linalg openblas atlas blis blas
 
 # Override default build to gnu
-_default_build=gnu
+_b_name_default=gnu
 

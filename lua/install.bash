@@ -2,11 +2,11 @@
 source_pack lua/lua.bash
 
 create_module \
-    --module-path $(build_get --module-path)-npa-apps \
+    --module-path $(build_get --module-path[default])-npa \
     -n $(pack_get --alias).$(pack_get --version) \
-    -W "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
+    -W "Nick R. Papior script for loading $(pack_get --package)" \
     -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
+    -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias) 

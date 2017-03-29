@@ -14,8 +14,13 @@
 # Such complex build systems is constituted using
 # these datastructures and routines.
 
-# A default build is associated using this
+
+# The currently used default build is associated using this
 _b_def_idx=0
+
+# The name of the default build (not necessarily the same as _b_def_idx)
+_b_name_default=generic
+_b_name_generic=generic
 
 # A build has a name for usage reference
 declare -A _b_name
@@ -300,6 +305,10 @@ function build_get {
     local spec=$(var_spec -s $opt)
     if [[ -z "$spec" ]]; then
 	local b_idx=$_b_def_idx
+    elif [[ "$spec" == "default" ]]; then
+       	local b_idx=$(get_index --hash-array "_b_index" $_b_name_default)
+    elif [[ "$spec" == "generic" ]]; then
+       	local b_idx=$(get_index --hash-array "_b_index" $_b_name_generic)
     else
 	local b_idx=$(get_index --hash-array "_b_index" $spec)
     fi
@@ -345,6 +354,10 @@ function new_build {
 	    -name) 
 		_b_index[$1]=$_N_b
 		_b_name[$_N_b]="$1"
+		if [[ $1 == default ]]; then
+		    doerr "build-name" "A build cannot be name 'default'!"
+		    exit 1
+		fi
 		shift ;;
 	    -installation-path) 
 		_b_prefix[$_N_b]="$1"

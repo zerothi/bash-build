@@ -34,8 +34,8 @@ _python_version=2
 _mpi_version=openmpi
 # Default name for build which builds the generic
 # packages.
-_generic_build=generic
-_default_build=generic
+_b_name_generic=generic
+_b_name_default=generic
 while [ $# -gt 0 ]; do
     opt=$(trim_em $1)
     case $opt in
@@ -97,10 +97,10 @@ while [ $# -gt 0 ]; do
 	    _mod_format=$_mod_format_LMOD
 	    ;;
 	-generic)
-	    _generic_build=$1
+	    _b_name_generic=$1
 	    shift ;;
 	-default|-d)
-	    _default_build=$1
+	    _b_name_default=$1
 	    shift ;;
 	-list)
 	    export PACK_LIST=1
@@ -141,20 +141,20 @@ if [[ $_signal_default -eq 1 ]]; then
 fi
 
 # We should now have populated all builds
-# Check if the _generic_build exists
-tmp=$(get_index --hash-array "_b_index" $_generic_build)
+# Check if the _b_name_generic exists
+tmp=$(get_index --hash-array "_b_index" $_b_name_generic)
 if [ -z "$tmp" ]; then
-    doerr "option parsing" "Unrecognized build $_generic_build, create it first"
+    doerr "option parsing" "Unrecognized build $_b_name_generic, create it first"
 else
-    build_set --default-build $_generic_build
-    msg_install --message "The default build for the generic packages is: $_generic_build"
+    build_set --default-build $_b_name_generic
+    msg_install --message "The default build for the generic packages is: $_b_name_generic"
     source $(build_get --source)
 fi
-tmp=$(get_index --hash-array "_b_index" $_default_build)
+tmp=$(get_index --hash-array "_b_index" $_b_name_default)
 if [ -z "$tmp" ]; then
-    doerr "option parsing" "Unrecognized build $_default_build, create it first"
+    doerr "option parsing" "Unrecognized build $_b_name_default, create it first"
 else
-    msg_install --message "The default build for packages is: $_default_build"
+    msg_install --message "The default build for packages is: $_b_name_default"
 fi
 
 # Notify the user about which module files will be generated
@@ -226,7 +226,7 @@ source scripts.bash
 
 # Set the future correct default build as
 # requested by the user.
-build_set --default-build $_default_build
+build_set --default-build $_b_name_default
 
 # We need to update the module requirements for the
 # build (for instance if gnu-X.X.X has not been expanded)
