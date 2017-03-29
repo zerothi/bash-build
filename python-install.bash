@@ -65,6 +65,11 @@ source_pack python/fireworks.bash
 
 source_pack python/cython.bash
 
+# GUI based stuff
+#source_pack python/wxwidgets.bash
+source_pack python/sip.bash
+source_pack python/pyqt5.bash
+
 # Generic scientific libraries
 source_pack python/numpy.bash
 source_pack python/mpi4py.bash

@@ -1,6 +1,6 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=1.5.3
+v=2.0.0
 add_package \
     --archive matplotlib-$v.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz
@@ -10,6 +10,12 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
+for m in wxwidgets pyqt ; do
+    if [[ $(pack_installed $m) -eq 1 ]]; then
+	pack_set --module-requirement $m
+    fi
+done
+
 
 pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
 
