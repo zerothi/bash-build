@@ -63,6 +63,7 @@ pip_append backports.ssl_match_hostname
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
     #pip_append bzr-fastimport
+    pip_append distribute
     pip_append enum34
     pip_append six
     pip_append pandoc
@@ -72,7 +73,6 @@ pip_append codecov
 pip_append cycler # for matplotlib
 pip_append cffi
 pip_append decorator
-pip_append distribute
 pip_append docutils
 pip_append fastimport
 pip_append FORD
