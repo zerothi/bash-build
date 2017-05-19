@@ -88,6 +88,7 @@ source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
 
+#source_pack python/yt.bash
 source_pack python/krypy.bash
 source_pack python/pygsl.bash
 
