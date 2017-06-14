@@ -1,7 +1,7 @@
-set_c gnu-5.4.0
+set_c gnu-7.1.0
 
-AR=ar
-RANLIB=ranlib
+AR=gcc-ar
+RANLIB=gcc-ranlib
 CC=gcc
 CXX=g++
 #CPP="gcc -E"
