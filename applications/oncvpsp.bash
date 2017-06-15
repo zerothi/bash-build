@@ -1,4 +1,4 @@
-for v in 3.2.3 ; do
+for v in 3.3.0 ; do
 add_package http://www.mat-simresearch.com/oncvpsp-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix)/bin/oncvpsp.x

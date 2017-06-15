@@ -17,7 +17,8 @@ if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
-    lib_extra="$lib_extra openssl"
+    pack_set --mod-req openssl[1.0.2]
+    lib_extra="$lib_extra openssl[1.0.2]"
 fi
 if [[ $(pack_get --installed termcap) -eq 1 ]]; then
     lib_extra="$lib_extra termcap"

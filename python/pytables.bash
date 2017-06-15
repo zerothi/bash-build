@@ -1,7 +1,8 @@
-v=3.2.0
+v=3.4.2
 add_package \
     --package pytables \
-    http://sourceforge.net/projects/pytables/files/pytables/$v/tables-$v.tar.gz
+    --archive PyTables-$v.tar.gz \
+    https://github.com/PyTables/PyTables/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

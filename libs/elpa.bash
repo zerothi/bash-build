@@ -1,4 +1,4 @@
-v=2016.05.004
+v=2017.05.001.rc1
 add_package http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR

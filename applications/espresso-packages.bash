@@ -202,7 +202,7 @@ done
 
 ;; # done 5.4.0
 
-    6.0.0)
+    6.1)
 
 	# Nothing should be done, everything is released with QE
 	noop

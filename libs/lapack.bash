@@ -1,4 +1,4 @@
-v=3.7.0-b87
+v=3.7.0-b234
 add_package --version $v --package lapack http://www.student.dtu.dk/~nicpa/packages/lapack-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
@@ -28,26 +28,50 @@ pack_cmd "$tmp 's;LOADOPTS[[:space:]]*=.*;LOADOPTS = $FCFLAGS;g' $file"
 pack_cmd "$tmp 's;TIMER[[:space:]]*=.*;TIMER = INT_CPU_TIME;g' $file"
 pack_cmd "$tmp 's;_LINUX;;g' $file"
 pack_cmd "$tmp 's;_SUN4;;g' $file"
-pack_cmd "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $(list --LD-rp blas) -lblas?g' $file"
 pack_cmd "echo '' >> $file"
 pack_cmd "echo 'LAPACKE_WITH_TMG = Yes' >> $file"
 
 # Make commands
+pack_cmd "make $(get_make_parallel) blaslib cblaslib"
 pack_cmd "make $(get_make_parallel) lapacklib lapackelib tmglib"
 
+# Make test commands
+pack_cmd "make blas_testing 2>&1 > blas.test"
+pack_cmd "make cblas_testing 2>&1 > cblas.test"
+pack_cmd "make lapack_testing 2>&1 > lapack.test"
+pack_set_mv_test blas.test
+pack_set_mv_test cblas.test
+pack_set_mv_test lapack.test
+
+# Installation commands
 pack_cmd "mkdir -p $(pack_get --LD)"
 pack_cmd "mkdir -p $(pack_get --prefix)/include/"
+pack_cmd "cp libcblas.a $(pack_get --LD)/"
+pack_cmd "cp librefblas.a $(pack_get --LD)/libblas.a"
 pack_cmd "cp liblapack.a liblapacke.a $(pack_get --LD)/"
 pack_cmd "cp libtmglib.a $(pack_get --LD)/libtmg.a"
+# Install header-files
+pack_cmd "cp CBLAS/include/*.h $(pack_get --prefix)/include/"
 pack_cmd "cp LAPACKE/include/*.h $(pack_get --prefix)/include/"
 
-add_hidden_package lapack-blas/$v
+add_hidden_package blas/$v
 # Denote the default libraries
 pack_set --installed $_I_REQ
-pack_set -mod-req blas
+pack_set -lib -lblas
+pack_set -lib[omp] -lblas
+pack_set -lib[pt] -lblas
+
+add_hidden_package cblas/$v
+pack_set --installed $_I_REQ
+pack_set -lib -lcblas -lblas
+pack_set -lib[omp] -lcblas -lblas
+pack_set -lib[pt] -lcblas -lblas
+
+add_hidden_package lapack-blas/$v
+pack_set --installed $_I_REQ
 pack_set -mod-req lapack
 pack_set -lib -llapack -lblas
-pack_set -lib[omp] -llapack $(pack_get -lib[omp] blas)
-pack_set -lib[pt] -llapack $(pack_get -lib[pt] blas)
+pack_set -lib[omp] -llapack -lblas
+pack_set -lib[pt] -llapack -lblas
 pack_set -lib[lapacke] -llapacke
 

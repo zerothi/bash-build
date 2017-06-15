@@ -1,6 +1,6 @@
 # Package requires:
 #  libffi-dev
-v=0.8.1
+v=1.10.0
 add_package https://pypi.python.org/packages/source/c/cffi/cffi-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

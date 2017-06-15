@@ -34,7 +34,7 @@ for ver in thread none openmp ; do
     # Ensure it is clean
     pack_cmd "make clean"
     pack_cmd "make $flag libs netlib shared"
-    pack_cmd "make $flag tests 2>&1 > tmp.test"
+    pack_cmd "make $flag tests 2>&1 > tmp.test || echo forced"
     pack_cmd "make $flag PREFIX=$(pack_get --prefix) install"
     pack_set_mv_test tmp.test openblas${test_end}.test
 done

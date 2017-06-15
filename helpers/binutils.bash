@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/binutils/binutils-2.27.tar.bz2
+add_package --build generic http://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 

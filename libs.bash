@@ -42,10 +42,9 @@ source_pack libs/flook.bash
 source_pack libs/fdict.bash
 
 # Default packages for many libs
-source_pack libs/blas.bash
-source_pack libs/cblas.bash
 source_pack libs/lapack.bash
 source_pack libs/scalapack.bash
+source_pack libs/scalapack-debug.bash
 
 source_pack libs/blis.bash
 
@@ -59,7 +58,7 @@ source_pack libs/plasma.bash
 source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash
-source_pack libs/elpa.bash
+#source_pack libs/elpa.bash
 
 source_pack libs/eigen.bash
 

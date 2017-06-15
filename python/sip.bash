@@ -3,8 +3,7 @@ add_package https://sourceforge.net/projects/pyqt/files/sip/sip-$v/sip-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --module-requirement $(get_parent)
-pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/sip.so
+pack_set --install-query $(pack_get --prefix)/bin/sip
 
 # This module requires flex and bison to be built, try by loading
 # those that are installed...

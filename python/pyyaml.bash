@@ -1,4 +1,4 @@
-v=3.11
+v=3.12
 add_package \
     --package pyyaml --version $v \
     http://pyyaml.org/download/pyyaml/PyYAML-$v.tar.gz

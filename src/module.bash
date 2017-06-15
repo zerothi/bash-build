@@ -270,15 +270,19 @@ EOF
 $fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
-	    if [[ $(pack_get --installed $tmp) -ge $_I_INSTALLED ]]; then
-		local tmp_load=$(pack_get --module-name $tmp)
-		case $_mod_format in 
-		    $_mod_format_ENVMOD) echo "module load $tmp_load" >> "$mfile" ;;
-		    $_mod_format_LMOD) echo "load(\"$tmp_load\")" >> "$mfile" ;;
-		esac
-	    elif [[ $force -eq 0 ]]; then
-		no_install=1
-	    fi
+	    local inst=$(pack_get --installed $tmp)
+	    case $inst in
+		$_I_INSTALLED|$_I_MOD)
+		    local tmp_load=$(pack_get --module-name $tmp)
+		    case $_mod_format in 
+			$_mod_format_ENVMOD) echo "module load $tmp_load" >> "$mfile" ;;
+			$_mod_format_LMOD) echo "load(\"$tmp_load\")" >> "$mfile" ;;
+		    esac
+		    ;;
+		*)
+		    [[ $force -eq 0 ]] && no_install=1
+		    ;;
+	    esac
 	done
 	echo "" >> $mfile
     fi    
@@ -289,15 +293,19 @@ EOF
 $fm_comment Requirements for the module:
 EOF
 	for tmp in $require ; do
-	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
-		local tmp_load=$(pack_get --module-name $tmp)
-		case $_mod_format in 
-                    $_mod_format_ENVMOD) echo "prereq $tmp_load" >> "$mfile" ;;
-                    $_mod_format_LMOD) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
-                esac
-            elif [[ $force -eq 0 ]]; then
-		no_install=1
-            fi
+	    local inst=$(pack_get --installed $tmp)
+	    case $inst in
+		$_I_INSTALLED|$_I_MOD)
+		    local tmp_load=$(pack_get --module-name $tmp)
+		    case $_mod_format in 
+			$_mod_format_ENVMOD) echo "prereq $tmp_load" >> "$mfile" ;;
+			$_mod_format_LMOD) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
+                    esac
+		    ;;
+		*)
+		    [[ $force -eq 0 ]] && no_install=1
+		    ;;
+	    esac
 	done
 	echo "" >> $mfile
     fi
@@ -307,15 +315,19 @@ EOF
 $fm_comment Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
-	    if [[ $(pack_get --installed $tmp ) -ge $_I_INSTALLED ]]; then
-		local tmp_load=$(pack_get --module-name $tmp)
-		case $_mod_format in 
-		    $_mod_format_ENVMOD) echo "conflict $tmp_load" >> "$mfile" ;;
-		    $_mod_format_LMOD) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
-		esac
-	    elif [[ $force -eq 0 ]]; then
-		no_install=1
-	    fi
+	    local inst=$(pack_get --installed $tmp)
+	    case $inst in
+		$_I_INSTALLED|$_I_MOD)
+		    local tmp_load=$(pack_get --module-name $tmp)
+		    case $_mod_format in 
+			$_mod_format_ENVMOD) echo "conflict $tmp_load" >> "$mfile" ;;
+			$_mod_format_LMOD) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
+		    esac
+		    ;;
+		*)
+		    [[ $force -eq 0 ]] && no_install=1
+		    ;;
+	    esac
 	done
 	echo "" >> $mfile
     fi

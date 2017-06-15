@@ -1,6 +1,6 @@
 v=3.8
 add_package --package openmx \
-    --version $v.1 \
+    --version $v.3 \
     http://www.openmx-square.org/openmx$v.tar.gz
 
 pack_set --module-opt "--lua-family openmx"
@@ -13,8 +13,8 @@ pack_set --module-requirement mpi --module-requirement fftw-mpi-3
 pack_cmd "cd source"
 
 if [[ $(vrs_cmp $v 3.8) -eq 0 ]]; then
-    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.8.1.tar.gz
-    dwn_file http://www.openmx-square.org/bugfixed/16Oct21/patch3.8.1.tar.gz $o
+    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch3.8.3.tar.gz
+    dwn_file http://www.openmx-square.org/bugfixed/17Mar08/patch3.8.3.tar.gz $o
     pack_cmd "tar xfz $o"
 fi
 
