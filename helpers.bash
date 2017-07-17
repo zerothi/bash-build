@@ -20,6 +20,7 @@ source_pack helpers/gnumake.bash
 source_pack helpers/texinfo.bash
 # After all build-tools have been installed
 source_pack helpers/binutils.bash
+source_pack helpers/dejagnu.bash
 
 # xdev (utilities)
 source_pack helpers/imake.bash

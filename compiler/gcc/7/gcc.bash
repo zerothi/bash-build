@@ -5,11 +5,13 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list --prefix '--module-requirement ' build-tools gcc-prereq[$gcc_v])
 
+pack_set --library-suffix "lib lib64"
+
 pre=$(pack_get --prefix)
 pack_set --install-query $pre/bin/gcc
 
 
-languages="c,c++,fortran,objc,obj-c++,java"
+languages="c,c++,fortran,objc,obj-c++"
 if ! $(is_host atto) ; then
     languages="$languages,go"
 fi
@@ -31,6 +33,7 @@ pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gcc-prereq[$gcc_v])' $(get_make_para
 pack_cmd "make -k check > gcc.test 2>&1 ; echo 'Succes'"
 pack_cmd "make install"
 pack_set_mv_test gcc.test
+pack_cmd 'for f in **/testsuite/*.log **/testsuite/*.sum ; do mv $f $pre/gcc.$(basename $f) ; gzip -f $pre/gcc.$(basename $f) ; done'
 
 # Add to LD_LIBRARY_PATH, this ensures that at least 
 # these libraries always will be present in LD

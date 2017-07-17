@@ -10,6 +10,9 @@ F77=gfortran
 F90=gfortran
 FC=gfortran
 common_flags="-m64 -fPIC -fbounds-check -g -fbacktrace"
+# Possibly add:
+#  -fcheck-pointer-bounds -mmpx
+# for pointer checks
 CFLAGS="$common_flags"
 CXXFLAGS="$common_flags"
 

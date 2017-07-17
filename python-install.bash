@@ -118,6 +118,7 @@ source_pack python/gpaw-setups.bash
 source_pack python/ase.bash
 source_pack python/gpaw.bash
 
+#source_pack python/pybinding.bash
 source_pack python/pythtb.bash
 source_pack python/phonopy.bash
 #source_pack python/phono3py.bash

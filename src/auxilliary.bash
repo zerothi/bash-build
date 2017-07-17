@@ -676,6 +676,7 @@ function choice {
 function list {
     local suf="" ; local pre="" ; local lcmd=""
     local cmd ; local retval=""
+    local v
     # First we collect all options
     local opts="" ; local space=" "
     while : ; do
@@ -719,11 +720,11 @@ function list {
 	    -Wlrpath)
 		pre="-Wl,-rpath=" 
 		suf="" 
-		lcmd="pack_get --library-path " ;;
+		lcmd="pack_get --library-path-all " ;;
 	    -LDFLAGS)   
 		pre="-L"  
 		suf="" 
-		lcmd="pack_get --library-path " ;;
+		lcmd="pack_get --library-path-all " ;;
 	    -INCDIRS) 
 		pre="-I"
 		suf="/include"
@@ -737,7 +738,9 @@ function list {
 	esac
 	if [[ -n "$lcmd" ]]; then
 	    for cmd in $args ; do
-		retval="$retval$space$pre$($lcmd $cmd)$suf"
+		for v in $($lcmd $cmd) ; do
+		    retval="$retval$space$pre$v$suf"
+		done
 	    done
 	else
 	    for cmd in $args ; do
@@ -748,7 +751,9 @@ function list {
     if [[ -z "$retval" ]]; then
 	if [[ -n "$lcmd" ]]; then
 	    for cmd in $args ; do
-		retval="$retval$space$pre$($lcmd $cmd)$suf"
+		for v in $($lcmd $cmd) ; do
+		    retval="$retval$space$pre$v$suf"
+		done
 	    done
 	else
 	    for cmd in $args ; do

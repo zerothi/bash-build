@@ -3,6 +3,7 @@
 
 # Set options
 set -o hashall
+shopt -s globstar
 
 # Check whether the module command is actually installed
 _has_module_cmd=1

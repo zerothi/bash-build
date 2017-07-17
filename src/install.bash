@@ -234,13 +234,15 @@ function pack_install {
     fi
 
     # Fix the library path...
-    # We favour lib64
     if [[ ! -d $(pack_get -LD $idx) ]]; then
+	local _lib=""
 	for cmd in lib lib64 ; do
 	    if [[ -d $prefix/$cmd ]]; then
-		pack_set --library-suffix $cmd $idx
+		_lib="$_lib $cmd"
 	    fi
 	done
+	[[ -n "$_lib" ]] && \
+	    pack_set --library-suffix "${_lib:1:}" $idx
     fi
 
     if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then

@@ -1,6 +1,6 @@
 # apt-get libpulse-dev libx264-* libx264-dev
 add_package --build generic \
-	    http://ffmpeg.org/releases/ffmpeg-3.0.tar.bz2
+	    http://ffmpeg.org/releases/ffmpeg-3.3.2.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -13,7 +13,7 @@ tmp=
 # Install commands that it should run
 pack_cmd "./configure $tmp" \
 	 "--prefix=$(pack_get --prefix)" \
-	 "--disable-yasm --enable-x11grab" \
+	 "--disable-yasm" \
 	 "--enable-gpl --enable-libpulse"
 
 # Make commands

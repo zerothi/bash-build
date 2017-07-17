@@ -28,9 +28,9 @@ unset languages
 # Make commands
 pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gcc-prereq[$gcc_v])' $(get_make_parallel)"
 # make check requires autogen installed
-#pack_cmd "make check > gcc.test 2>&1"
+pack_cmd "make -k check > gcc.test 2>&1 ; echo 'Succes'"
 pack_cmd "make install"
-#pack_set_mv_test gcc.test
+pack_set_mv_test gcc.test
 
 # Add to LD_LIBRARY_PATH, this ensures that at least 
 # these libraries always will be present in LD

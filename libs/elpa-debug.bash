@@ -1,5 +1,5 @@
 v=2017.05.001.rc2
-add_package --package elpa --version 2017.05.001 \
+add_package --build debug --package elpa-debug --version 2017.05.001 \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
@@ -27,7 +27,8 @@ fi
 
 # We cannot use OpenMP threading as it requires sequential BLAS
 pack_cmd "../configure CPP='$MPICC -E -P -x c' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
-	 "--prefix=$(pack_get --prefix)"
+	 "--prefix=$(pack_get --prefix)" \
+	 "$(list --prefix ' --disable-' sse sse-assembly avx avx2)"
 
 # This will fail, we have to circumvent it
 pack_cmd "make $(get_make_parallel) ; echo force"
@@ -35,11 +36,5 @@ pack_cmd "make $(get_make_parallel) ; echo force"
 pack_cmd "sed -i 's/_COMPILED@) \\\\//g;s/@//g' elpa/elpa_constants.h"
 pack_cmd "make clean"
 pack_cmd "make $(get_make_parallel)"
-if $(is_c intel) ; then
-    pack_cmd "make install"
-else
-    pack_cmd "make check > tmp.test 2>&1 ; echo force"
-    pack_cmd "make install"
-    pack_set_mv_test tmp.test
-fi
+pack_cmd "make install"
 

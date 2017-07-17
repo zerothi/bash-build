@@ -79,6 +79,7 @@ pip_append FORD
 pip_append jinja2
 pip_append jsonschema
 pip_append line_profiler
+pip_append pylint pytest
 pip_append markupsafe
 pip_append memory_profiler
 pip_append mistune

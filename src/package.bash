@@ -305,12 +305,17 @@ function add_package {
     _install_prefix[$_N_archives]="${_install_prefix[$_N_archives]// /}"
 
     if [[ -z "$lp" ]]; then
+        # Just in case lib already exists
 	_lib_prefix[$_N_archives]=lib
-        # Just in case lib64 already exists
-	[[ -d ${_install_prefix[$_N_archives]}/lib64 ]] && \
+	if [[ -d "${_install_prefix[$_N_archives]}/lib" ]]; then
+	    if [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
+		_lib_prefix[$_N_archives]="lib lib64"
+	    fi
+	elif [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
 	    _lib_prefix[$_N_archives]=lib64
+	fi
     else
-	_lib_prefix[$_N_archives]=$lp
+	_lib_prefix[$_N_archives]="$lp"
     fi
     # Install default values
     _mod_req[$_N_archives]=""
@@ -448,10 +453,17 @@ function pack_set {
     fi
     if [[ -n "$install" ]]; then
 	_install_prefix[$index]="${install// /}"
-	[[ -d "$install/lib" ]] && lib="lib"
-	[[ -d "$install/lib64" ]] && lib="lib64"
+	if [[ -d "$install/lib" ]]; then
+	    if [[ -d "$install/lib64" ]]; then
+		lib="lib lib64"
+	    else
+		lib="lib"
+	    fi
+	elif [[ -d "$install/lib64" ]]; then
+	    lib="lib64"
+	fi
     fi
-    [[ -n "$lib" ]]        && _lib_prefix[$index]="$lib"
+    [[ -n "$lib" ]] && _lib_prefix[$index]="$lib"
     if [[ -n "$libs_c" ]]; then
 	# Note that $libs already have the $_CHOICE_SEP as the first
 	# char...
@@ -563,7 +575,20 @@ function pack_get {
 		    for m in ${_mod_req[$index]} ; do
 			_ps "$(pack_get --module-name $m) "
 		    done ;;
-		-L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+		-L|-LD|-library-path)
+		    for p in ${_lib_prefix[$index]} ; do
+			_ps "${_install_prefix[$index]}/$p"
+			break
+		    done
+		    ;;
+		-L-all|-LD-all|-library-path-all)
+		    local i=0
+		    for p in ${_lib_prefix[$index]} ; do
+			[[ $i -ge 1 ]] && _ps " "
+			_ps "${_install_prefix[$index]}/$p"
+			let i++
+		    done
+		    ;;
 		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
 		-MP|-module-prefix) 
                                      _ps "${_mod_prefix[$index]}" ;;
@@ -620,7 +645,20 @@ function pack_get {
 		    _ps "$(pack_get --module-name $m) "
 		done ;;
 	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-LD|-library-path)    _ps "${_install_prefix[$index]}/${_lib_prefix[$index]}" ;;
+	    -L|-LD|-library-path)
+		for p in ${_lib_prefix[$index]} ; do
+		    _ps "${_install_prefix[$index]}/$p"
+		    break
+		done
+		;;
+	    -L-all|-LD-all|-library-path-all)
+		local i=0
+		for p in ${_lib_prefix[$index]} ; do
+		    [[ $i -ge 1 ]] && _ps " "
+		    _ps "${_install_prefix[$index]}/$p"
+		    let i++
+		done
+		;;
 	    -I|-install-prefix|-prefix) 
                                  _ps "${_install_prefix[$index]}" ;;
 	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
@@ -725,7 +763,7 @@ function pack_print {
     echo " CMD: $(pack_get -commands $pack)"
     echo " MP : $(pack_get -module-prefix $pack)"
     echo " IP : $(pack_get -prefix $pack)"
-    echo " LD : $(pack_get -L $pack)"
+    echo " LD : $(pack_get -L-all $pack)"
     echo " MN : $(pack_get -module-name $pack)"
     echo " IQ : $(pack_get -install-query $pack)"
     echo " REQ: $(pack_get -module-requirement $pack)"
