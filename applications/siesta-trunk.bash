@@ -140,7 +140,18 @@ INCFLAGS += $(list -INCDIRS flook)\n\
 LIBS += \$(FLOOK_LIB) \n' $file"
 fi
 
+# ELPA should be added before the linear algebra libraries
+if [[ $(vrs_cmp $v 626) -ge 0 ]]; then
+    pack_set --module-requirement elpa
+    pack_cmd "sed -i '$ a\
+FPPFLAGS += -DSIESTA__ELPA \n\
+ELPA_LIB = $(list -LD-rp elpa) -lelpa\n\
+INCFLAGS += $(list -INCDIRS elpa)/elpa\n\
+LIBS += \$(ELPA_LIB) \n' $file"
+fi
+
 source applications/siesta-linalg.bash
+
 
 function set_flag {
     local v=$1 ; shift

@@ -43,3 +43,9 @@ else
     pack_set_mv_test tmp.test
 fi
 
+# Correct include paths
+pack_cmd "cd $(pack_get --prefix)/include"
+pack_cmd 'cd */'
+pack_cmd "mv elpa ../"
+pack_cmd "cp modules/* ../elpa/"
+

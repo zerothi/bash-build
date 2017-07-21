@@ -45,6 +45,12 @@ else
 
 fi
 
+# Add the MRRR libraries (we know they always have MRRR)
+pack_cmd "sed -i '$ a\
+FPPFLAGS += -DSIESTA__MRRR\n\
+\n\
+' arch.make"
+
 pack_cmd "sed -i '$ a\
 .F.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
