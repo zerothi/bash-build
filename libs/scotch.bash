@@ -68,7 +68,7 @@ pack_cmd "mkdir -p $(pack_get --prefix)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel) ptscotch"
-if [[ $(vrs_cmp $v 6.0.0) -lt 0 ]]; then
+if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
     pack_cmd "make $(get_make_parallel) ptesmumps"
 fi
 pack_cmd "make install"
@@ -82,12 +82,20 @@ pack_cmd "sed -i -e 's/-DSCOTCH_PTHREAD//gi' $file"
 pack_cmd "sed -i -e 's/-DCOMMON_PTHREAD//gi' $file"
 pack_cmd "sed -i -e 's/-lpthread//gi' $file"
 pack_cmd "make $(get_make_parallel) scotch"
-if [[ $(vrs_cmp $v 6.0.0) -lt 0 ]]; then
+if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
     pack_cmd "make $(get_make_parallel) esmumps"
 fi
 #pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
 #pack_set_mv_test tmp.test
+
+if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
+    # the esmumps libraries are not "installed"
+    pack_cmd "cd ../lib"
+    pack_cmd "cp libesmumps.a libptesmumps.a $(pack_get --LD)/"
+    pack_cmd "cd ../include"
+    pack_cmd "cp metis.h parmetis.h esmumps.h $(pack_get --prefix)/include/"
+fi
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
     pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"

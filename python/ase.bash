@@ -5,7 +5,7 @@ add_package --archive ase-$v.tar.gz \
 
 pack_set --directory ase-$v-*
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-opt "--lua-family ase"
 

@@ -5,12 +5,12 @@ add_package --package mumps \
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libmumps_common_omp.a
-pack_set --lib -lzmumps -ldmumps -lcmumps -lsmumps -lmumps_common -lpord
-pack_set --lib[omp] -lzmumps_omp -ldmumps_omp -lcmumps_omp -lsmumps_omp -lmumps_common_omp -lpord_omp
-pack_set --lib[z] -lzmumps -lmumps_common -lpord
-pack_set --lib[d] -ldmumps -lmumps_common -lpord
-pack_set --lib[c] -lcmumps -lmumps_common -lpord
-pack_set --lib[s] -lsmumps -lmumps_common -lpord
+pack_set --lib -lzmumps -ldmumps -lcmumps -lsmumps -lmumps_common -lpord -lesmumps -lscotch -lscotcherr
+pack_set --lib[omp] -lzmumps_omp -ldmumps_omp -lcmumps_omp -lsmumps_omp -lmumps_common_omp -lpord_omp -lesmumps -lscotch -lscotcherr
+pack_set --lib[z] -lzmumps -lmumps_common -lpord -lesmumps -lscotch -lscotcherr
+pack_set --lib[d] -ldmumps -lmumps_common -lpord -lesmumps -lscotch -lscotcherr
+pack_set --lib[c] -lcmumps -lmumps_common -lpord -lesmumps -lscotch -lscotcherr
+pack_set --lib[s] -lsmumps -lmumps_common -lpord -lesmumps -lscotch -lscotcherr
 
 pack_set --lib[zomp] -lzmumps_omp -lmumps_common_omp -lpord_omp
 pack_set --lib[domp] -ldmumps_omp -lmumps_common_omp -lpord_omp
@@ -53,6 +53,8 @@ LIBBLAS = $(list --LD-rp +$la) $(pack_get -lib $la) \n' Makefile.inc"
 
 fi
 
+pack_set --module-requirement scotch
+
 pack_cmd "sed -i '$ a\
 LMETISDIR = $(pack_get --prefix $parmetisV) \n\
 IMETIS = $(list --INCDIRS $parmetisV) \n\
@@ -62,23 +64,19 @@ LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
 LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
 \n\
-#SCOTCHDIR = $(pack_get --prefix scotch)\n\
-#LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
-#ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch \n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch \n\
+SCOTCHDIR = $(pack_get --prefix scotch)\n\
+LSCOTCHDIR = -L\$(SCOTCHDIR)/lib \n\
+ISCOTCH = -I\$(SCOTCHDIR)/include \n\
+LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr\n\
+#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr -lscotch \n\
 \n\
-#ORDERINGSF = -Dpord -Dmetis -Dscotch \n\
 #ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
-ORDERINGSF = -Dpord -Dparmetis \n\
+ORDERINGSF = -Dpord -Dparmetis -Dscotch\n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
-#LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
-#IORDERINGSF = \$(ISCOTCH) \n\
-#IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
-LORDERINGS  = \$(LMETIS) \$(LPORD) \n\
-IORDERINGSF = \n\
-IORDERINGSC = \$(IMETIS) \$(IPORD) \n\
+LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
+IORDERINGSF = \$(ISCOTCH) \n\
+IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
 \n\
 \n\
 PLAT = \n\
