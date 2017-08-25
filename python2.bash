@@ -79,7 +79,7 @@ pack_cmd "make $(get_make_parallel)"
 #    done
 #fi
 
-if $(is_host n- sylg fjorm surt muspel slid) ; then
+if $(is_host n- sylg thul fjorm surt muspel slid) ; then
     # The test of creating/deleting folders does not go well with 
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
@@ -104,7 +104,7 @@ else
     
 fi
 pack_cmd "make install"
-if ! $(is_host n- sylg fjorm surt muspel slid) ; then
+if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
     pack_set_mv_test tmp.test
 fi
 
