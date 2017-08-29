@@ -1,4 +1,4 @@
-for v in 7.10.5 8.4.2
+for v in 7.10.5 8.4.3
 do
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 

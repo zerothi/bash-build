@@ -10,6 +10,11 @@ pack_set --install-query $(pack_get --LD)/libscalapack.a
 
 pack_set --module-requirement mpi
 
+_fcflags=${FCFLAGS//-fbounds-check/}
+_fcflags=${_fcflags//-fcheck=all/}
+_cflags=${CFLAGS//-fbounds-check/}
+_cflags=${_cflags//-fcheck=all/}
+
 # Prepare the make file
 tmp="sed -i -e"
 file=SLmake.inc
@@ -17,8 +22,8 @@ pack_cmd "cp $file.example $file"
 pack_cmd "$tmp 's;FC[[:space:]]*=.*;FC = $MPIF90;g' $file"
 pack_cmd "$tmp 's;CC[[:space:]]*=.*;CC = $MPICC;g' $file"
 pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC;g' $file"
-pack_cmd "$tmp 's;FCFLAGS[[:space:]]*=.*;FCFLAGS = $FCFLAGS;g' $file"
-pack_cmd "$tmp 's;CCFLAGS[[:space:]]*=.*;CCFLAGS = $CFLAGS;g' $file"
+pack_cmd "$tmp 's;FCFLAGS[[:space:]]*=.*;FCFLAGS = $_fcflags;g' $file"
+pack_cmd "$tmp 's;CCFLAGS[[:space:]]*=.*;CCFLAGS = $_cflags;g' $file"
 pack_cmd "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"
 
 tmp_lib=

@@ -1,4 +1,4 @@
-v=0.20.2
+v=0.20.3
 add_package --archive pandas-$v.tar.gz \
     https://github.com/pandas-dev/pandas/archive/v$v.tar.gz
 

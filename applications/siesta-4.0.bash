@@ -1,4 +1,4 @@
-v=4.0
+v=4.0.1
 add_package --package siesta \
     --version $v \
     https://launchpad.net/siesta/$v/$v/+download/siesta-$v.tgz

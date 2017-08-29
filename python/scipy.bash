@@ -1,4 +1,4 @@
-for v in 0.19.0 ; do 
+for v in 0.19.1 ; do 
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.xz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

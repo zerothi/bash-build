@@ -1,4 +1,4 @@
-for v in 4.1-b2 ; do
+for v in 4.1-b3 ; do
 
 bv=$(str_version -1 $v).$(str_version -2 $v)
 add_package --archive siesta-$v.tar.gz \
@@ -33,7 +33,7 @@ pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
 
 pack_cmd "sed -i '$ a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .F90\n\
+.SUFFIXES: .f .F .o .a .f90 .F90 .c\n\
 SIESTA_ARCH=x86_64-linux-$(get_hostname)\n\
 \n\
 FPP=mpif90\n\
@@ -90,7 +90,7 @@ COMP_LIBS += libncdf.a libfdict.a' $file"
 
 pack_cmd "sed -i '$ a\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
+ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' $file"
 
 source applications/siesta-linalg.bash
 

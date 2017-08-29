@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 622 ; do
+for v in 507 508 514 527 630 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -86,7 +86,7 @@ COMP_LIBS += libncdf.a $fdict' $file"
 
     pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
+ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' $file"
 
 else 
     if [[ $(pack_installed metis) -eq 1 ]]; then
@@ -100,7 +100,7 @@ fi
 
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .c .F90\n\
+.SUFFIXES: .f .F .o .a .f90 .F90 .c\n\
 SIESTA_ARCH=x86_64-linux-$(get_hostname)\n\
 \n\
 FPP=$MPIFC\n\

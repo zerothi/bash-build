@@ -1,25 +1,28 @@
 # Generic routine for adding linear algebra
 # libraries to siesta
 
+# SIESTA also enables ELPA kernel
+pack_set --module-requirement elpa
+
 # Check for Intel MKL or not
 siesta_la=mkl
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '1 a\
 LDFLAGS=$MKL_LIB $(list --LD-rp $(pack_get --mod-req-path))\n\
-FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
+FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path)) -DSIESTA__ELPA\n\
 \n\
 ' arch.make"
     case $_mpi_version in
 	openmpi)
 	    pack_cmd "sed -i '1 a\
-LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
+LIBS=\$(ADDLIB) -lelpa -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
 LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' arch.make"
 	    ;;
 	mpich)
 	    pack_cmd "sed -i '1 a\
-LIBS=\$(ADDLIB) -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
+LIBS=\$(ADDLIB) -lelpa -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64\n\
 LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 ' arch.make"
 	    ;;
@@ -29,16 +32,16 @@ LIBS+= -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 
 elif $(is_c gnu) ; then
     
-    pack_set --module-requirement scalapack 
+    pack_set --module-requirement scalapack
     siesta_la=$(pack_choice -i linalg)
     la=lapack-$siesta_la
     pack_set --module-requirement $la
     pack_cmd "sed -i '1 a\
 LDFLAGS=$(list --LD-rp $(pack_get --mod-req-path))\n\
-FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path))\n\
+FPPFLAGS=$(list --INCDIRS $(pack_get --mod-req-path)) -DSIESTA__ELPA\n\
 \n\
 BLAS_LIBS= $(pack_get --lib $la) \n\
-LIBS=\$(ADDLIB) -lscalapack \$(BLAS_LIBS)\n' arch.make"
+LIBS=\$(ADDLIB) -lelpa -lscalapack \$(BLAS_LIBS)\n' arch.make"
 
 else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"

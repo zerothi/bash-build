@@ -1,5 +1,5 @@
 # Install gnuplot, which is a simple library
-for v in 4.6.6 5.0.5 ; do
+for v in 4.6.7 5.0.7 ; do
 add_package http://downloads.sourceforge.net/project/gnuplot/gnuplot/$v/gnuplot-$v.tar.gz
 
 pack_set --module-opt "--lua-family gnuplot"
