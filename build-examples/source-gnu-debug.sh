@@ -1,4 +1,4 @@
-set_c gnu-7.1.0
+set_c gnu-6.4.0
 
 AR=gcc-ar
 RANLIB=gcc-ranlib
