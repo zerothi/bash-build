@@ -36,6 +36,11 @@ pack_cmd "$tmp 's|^LAPACKLIB[[:space:]]*=.*|LAPACKLIB = $(list --LD-rp lapack) -
 
 pack_cmd "make $(get_make_parallel)"
 
+pack_cmd "cd TESTING"
+pack_cmd 'for x in x* ; do echo "RUNNING: $x" >> tmp.test ; mpiexec -np $NPROCS ./$x >> tmp.test ; echo "" >> tmp.test ; done'
+pack_set_mv_test tmp.test
+pack_cmd "cd .."
+
 pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp libscalapack.a $(pack_get --LD)/"
 # simply to force it to exist

@@ -1,5 +1,5 @@
 # 3.11.34 (works)
-for v in 3.10.3 ; do
+for v in 3.11.39 3.10.3 ; do
 tmp="--build generic-host"
 if $(is_c gnu) ; then
     # If we use a later gnu version
@@ -9,7 +9,7 @@ fi
 if [[ $(vrs_cmp $v 3.10.3) -le 0 ]]; then
     add_package $tmp http://downloads.sourceforge.net/project/math-atlas/Stable/$v/atlas$v.tar.bz2
 else
-    add_package $tmp http://www.student.dtu.dk/~nicpa/packages/atlas$v.tar.bz2
+    add_package $tmp http://downloads.sourceforge.net/project/math-atlas/Developer%20%28unstable%29/$v/atlas$v.tar.bz2
 fi
 
 pack_set --directory ATLAS
@@ -77,7 +77,7 @@ pack_cmd "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
 
 add_hidden_package lapack-atlas/$v
 pack_set --installed $_I_REQ
-pack_set -mod-req atlas
+pack_set -mod-req atlas[$v]
 # Denote the default libraries
 # Note that this ATLAS compilation has lapack built-in
 pack_set --lib -llapack_atlas $(pack_get --lib atlas[$v])

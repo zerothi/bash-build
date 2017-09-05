@@ -1,5 +1,5 @@
-v=2017.05.001.rc2
-add_package --build debug --package elpa-debug --version 2017.05.001 \
+v=2017.05.002
+add_package --build debug --package elpa-debug \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
@@ -12,7 +12,7 @@ if $(is_c intel) ; then
     # Here we need static blacs
     tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
     tmp="$tmp -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
-    if $(is_host slid muspel surt) ; then
+    if $(is_host slid muspel thul surt) ; then
         tmp="$tmp -L/usr/lib64"
     fi
 

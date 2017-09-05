@@ -16,17 +16,21 @@ def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048"
 # NO_LAPACK=1 means that we do not need -lgfortran
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 
+_num_threads=48
+
+# OpenBLAS grabs the *FLAGS env vars, ensure they are not set.
+pack_cmd "unset FCFLAGS CFLAGS"
 
 for ver in thread none openmp ; do
     flag="$def_flag USE_THREAD=0"
     test_end=""
     case $ver in
 	thread)
-	    flag="$def_flag USE_THREAD=1"
+	    flag="$def_flag USE_THREAD=1 NUM_THREADS=$_num_threads"
 	    test_end="_pt"
 	    ;;
 	openmp)
-	    flag="$def_flag USE_OPENMP=1 USE_THREAD=1 LIBNAMESUFFIX=omp"
+	    flag="$def_flag USE_OPENMP=1 USE_THREAD=1 NUM_THREADS=$_num_threads LIBNAMESUFFIX=omp"
 	    test_end="_omp"
 	    ;;
     esac

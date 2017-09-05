@@ -79,7 +79,6 @@ pip_append FORD
 pip_append jinja2
 pip_append jsonschema
 pip_append line_profiler
-pip_append pylint pytest
 pip_append markupsafe
 pip_append memory_profiler
 pip_append mistune
@@ -87,7 +86,7 @@ pip_append mpmath # for sympy
 pip_append mock
 #pip_append monty
 pip_append numpydoc
-pip_append nose
+pip_append nose nose2
 pip_append pep8
 pip_append pexpect
 #pip_append pint
@@ -96,6 +95,8 @@ pip_append ply
 pip_append pyparser
 pip_append pyparsing
 pip_append pycparser
+pip_append pylint
+pip_append pytest pytest-cov
 pip_append pygments
 pip_append python-dateutil
 #pip_append pytz

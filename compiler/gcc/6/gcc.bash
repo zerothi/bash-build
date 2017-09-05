@@ -22,6 +22,7 @@ pack_cmd "../configure --prefix $pre" \
 	 "--with-mpfr=$pre" \
 	 "--with-mpc=$pre" \
 	 "--with-isl=$pre" \
+	 "--with-quad" \
 	 "--enable-lto --enable-threads" \
 	 "--enable-stage1-languages=$languages" \
 	 "--with-multilib-list=m64"
