@@ -25,15 +25,9 @@ else
     
 fi
 
-# We cannot use OpenMP threading as it requires sequential BLAS
 pack_cmd "../configure CPP='$MPICC -E -P -x c' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
 	 "--prefix=$(pack_get --prefix)"
 
-# This will fail, we have to circumvent it
-pack_cmd "make $(get_make_parallel) ; echo force"
-# Fix
-pack_cmd "sed -i 's/_COMPILED@) \\\\//g;s/@//g' elpa/elpa_constants.h"
-pack_cmd "make clean"
 pack_cmd "make $(get_make_parallel)"
 if $(is_c intel) ; then
     pack_cmd "make install"
