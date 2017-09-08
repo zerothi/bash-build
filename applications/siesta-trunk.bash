@@ -313,12 +313,8 @@ pack_cmd "cd ../../WFS"
 make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
 
 
-pack_cmd "cd ../"
-pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
 # Compile the 3m equivalent versions, if applicable
-pack_cmd "cd ../Obj"
+pack_cmd "cd ../../Obj"
 case $siesta_la in
     mkl|openblas)
 	tmp=1
