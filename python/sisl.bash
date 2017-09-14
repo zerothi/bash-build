@@ -17,5 +17,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe sisl > tmp.test 2>&1 ; echo 'Success'"
+pack_cmd "pytest --pyargs sisl > tmp.test 2>&1"
 pack_set_mv_test tmp.test

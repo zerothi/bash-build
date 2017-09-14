@@ -1,5 +1,6 @@
+v=2.2.5
 add_package --build generic \
-	    https://github.com/libgd/libgd/releases/download/gd-2.2.4/libgd-2.2.4.tar.xz
+	    https://github.com/libgd/libgd/releases/download/gd-$v/libgd-$v.tar.xz
 
 pack_set -s $IS_MODULE
 

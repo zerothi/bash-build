@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.gnu.org/pub/gnu/guile/guile-2.0.11.tar.xz
+add_package --build generic ftp://ftp.gnu.org/pub/gnu/guile/guile-2.2.2.tar.xz
 
 pack_set -s $MAKE_PARALLEL
 

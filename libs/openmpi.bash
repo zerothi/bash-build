@@ -1,12 +1,13 @@
 # apt-get libc6-dev
 add_package -package openmpi \
-    http://www.open-mpi.org/software/ompi/v2.1/downloads/openmpi-2.1.1.tar.bz2
+    http://www.open-mpi.org/software/ompi/v2.1/downloads/openmpi-3.0.0.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/mpif90
 
+pack_set --module-requirement zlib
 pack_set --module-requirement hwloc
 pack_set --module-opt "--set-ENV OMPI_HOME=$(pack_get --prefix)"
 
@@ -28,7 +29,7 @@ tmp_flags=""
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 else
-    if $(is_host surt muspel slid) ; then
+    if $(is_host thul surt muspel slid) ; then
         pack_cmd "Cannot compile OpenMPI on this node, infiniband not present."
     fi
 fi
@@ -41,6 +42,7 @@ fi
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-hwloc=$(pack_get --prefix hwloc)" \
+	 "--with-zlib=$(pack_get --prefix zlib)" \
 	 "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"
 

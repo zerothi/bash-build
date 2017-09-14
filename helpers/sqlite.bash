@@ -1,7 +1,7 @@
-v=3.14.2
-dv=3140200
+v=3.20.1
+dv=3200100
 add_package --package sqlite --build generic --version $v \
-	    http://www.sqlite.org/2016/sqlite-autoconf-$dv.tar.gz
+	    http://www.sqlite.org/2017/sqlite-autoconf-$dv.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

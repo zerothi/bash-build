@@ -64,6 +64,9 @@ source_pack python/pymongo.bash
 source_pack python/fireworks.bash
 
 source_pack python/cython.bash
+# In fact pybind11 is more like a normal library
+#   libs/pybind11.bash would maybe be more appropiate.
+source_pack python/pybind11.bash
 
 # GUI based stuff
 #source_pack python/wxwidgets.bash
@@ -118,7 +121,7 @@ source_pack python/gpaw-setups.bash
 source_pack python/ase.bash
 source_pack python/gpaw.bash
 
-#source_pack python/pybinding.bash
+source_pack python/pybinding.bash
 source_pack python/pythtb.bash
 source_pack python/phonopy.bash
 #source_pack python/phono3py.bash

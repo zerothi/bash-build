@@ -1,5 +1,5 @@
 add_package --build generic --package gen-libxml2 \
-	    ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz
+	    ftp://xmlsoft.org/libxml2/libxml2-2.9.5.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/libunistring/libunistring-0.9.4.tar.gz
+add_package --build generic http://ftp.gnu.org/gnu/libunistring/libunistring-0.9.7.tar.xz
 
 pack_set -s $MAKE_PARALLEL
 

@@ -1,4 +1,5 @@
-add_package --build generic http://prdownloads.sourceforge.net/flex/flex-2.5.37.tar.gz
+v=2.6.4
+add_package --build generic https://github.com/westes/flex/releases/download/v$v/flex-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

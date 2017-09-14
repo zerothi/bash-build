@@ -1,4 +1,4 @@
-v=0.9.3
+v=0.9.4
 add_package --archive pybinding-$v.tar.gz https://github.com/dean0x7d/pybinding/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -13,7 +13,9 @@ pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 pack_set --module-opt "--lua-family pybinding"
 
 pack_set --module-requirement cython \
-    --module-requirement scipy
+	 --module-requirement scipy \
+	 --module-requirement matplotlib \
+	 --module-requirement pybind11
 
 pack_cmd "module load cmake"
 
@@ -25,5 +27,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 pack_cmd "module unload cmake"
 
 add_test_package
-pack_cmd "nosetests -exe pybinding 2>&1 > tmp.test ; echo 'Success'"
+pack_cmd "pytest --pyargs pybinding 2>&1 > tmp.test ; echo 'Success'"
 pack_set_mv_test tmp.test

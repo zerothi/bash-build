@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.17.tar.gz
+add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz
 
 pack_set -s $MAKE_PARALLEL
 

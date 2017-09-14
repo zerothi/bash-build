@@ -1,4 +1,4 @@
-v=1.65.0
+v=1.65.1
 add_package --package gen-boost \
     --version $v \
     http://downloads.sourceforge.net/project/boost/boost/$v/boost_${v//./_}.tar.bz2

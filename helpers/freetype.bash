@@ -1,5 +1,5 @@
 add_package --build generic --alias gen-freetype --package gen-freetype \
-    http://download.savannah.gnu.org/releases/freetype/freetype-2.7.1.tar.bz2
+    http://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

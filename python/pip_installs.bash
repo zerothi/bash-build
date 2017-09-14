@@ -92,9 +92,11 @@ pip_append pexpect
 #pip_append pint
 pip_append pkgconfig
 pip_append ply
+pip_append psutil
 pip_append pyparser
 pip_append pyparsing
 pip_append pycparser
+pip_append pyflakes
 pip_append pylint
 pip_append pytest pytest-cov
 pip_append pygments
@@ -103,8 +105,9 @@ pip_append python-dateutil
 pip_append pyyaml
 pip_append simplegeneric
 pip_append sphinx sphinx_rtd_theme
-pip_append traitlets
+pip_append tqdm
 pip_append tornado
+pip_append traitlets
 pip_append twine
 pip_append wheel
 
