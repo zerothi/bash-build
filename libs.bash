@@ -2,6 +2,7 @@ msg_install --message "Installing all libraries..."
 
 # Basic libraries
 source_pack libs/zlib.bash
+source_pack libs/szip.bash
 source_pack libs/expat.bash
 source_pack libs/libffi.bash
 source_pack libs/libxml2.bash

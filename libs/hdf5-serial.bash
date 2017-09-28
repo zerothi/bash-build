@@ -12,7 +12,8 @@ pack_set --lib[hl] -lhdf5_hl -lhdf5
 pack_set --lib[fortranhl] -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5
 
 # Add requirments when creating the module
-pack_set --module-requirement zlib
+pack_set --module-requirement zlib \
+	 --module-requirement szip
 
 tmp="--enable-fortran2003"
 if $(is_c gnu-4.1) ; then
@@ -23,6 +24,7 @@ fi
 pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-zlib=$(pack_get --prefix zlib)" \
+	 "--with-szlib=$(pack_get --prefix szip)" \
 	 "--enable-shared" \
 	 "--enable-static" \
 	 "--enable-fortran" $tmp

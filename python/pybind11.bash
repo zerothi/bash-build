@@ -8,7 +8,9 @@ pack_set --install-query $(pack_get --prefix)/include/pybind11/pybind11.h
 
 pack_cmd "module load cmake"
 
-pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix) .."
+pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)" \
+	 "-DPYTHON_EXECUTABLE=$(pack_get --prefix python[$pV])/bin/$(get_parent_exec)" ..
+
 pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make check > test.tmp"
 #pack_set_mv_test tmp.test

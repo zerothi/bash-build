@@ -15,7 +15,8 @@ pack_set --lib[fortranhl] -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5
 
 # Add requirments when creating the module
 pack_set --module-requirement mpi \
-	 --module-requirement zlib
+	 --module-requirement zlib \
+	 --module-requirement szip
 
 tmp=" --enable-fortran2003"
 if $(is_c gnu-4.1) ; then
@@ -28,6 +29,7 @@ pack_cmd "../configure" \
 	 "F77=${MPIF90} F90=${MPIF90} FC=${MPIF90}" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-zlib=$(pack_get --prefix zlib)" \
+	 "--with-szlib=$(pack_get --prefix szip)" \
 	 --enable-parallel \
 	 --enable-shared \
 	 --enable-static \

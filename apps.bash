@@ -11,6 +11,7 @@ source_pack applications/conda_install.bash 2
 
 # Valgrind
 source_pack applications/valgrind.bash
+source_pack applications/tau.bash
 
 # Analysis tools
 source_pack applications/bader.bash

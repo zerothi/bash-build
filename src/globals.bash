@@ -26,6 +26,10 @@ PRELOAD_MODULE=module-preload
 IS_MODULE=module
 CRT_DEF_MODULE=def-module
 MAKE_PARALLEL=parallel
+PIC=pic
+NO_PIC=no-pic
+PIE=pie
+NO_PIE=no-pie
 
 # To by-pass creating survey when using the install script
 export NPA__SURVEY_IN=1

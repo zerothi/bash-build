@@ -1,5 +1,6 @@
 # Install the package
 function pack_install {
+    local tmp
     local idx=$_N_archives
     local err=0
     if [[ $# -ne 0 ]]; then
@@ -11,7 +12,7 @@ function pack_install {
     local version=$(pack_get --version $idx)
     local mod_name=$(pack_get --module-name $idx)
 
-    local tmp=$(lc $alias)
+    tmp=$(lc $alias)
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
 	if [[ 0${_pack_only[$tmp]} -eq 1 ]]; then
 	    pack_only $(pack_get --mod-req-all $idx)
@@ -37,7 +38,6 @@ function pack_install {
 
     # Save the module requirements for later...
     local mod_reqs="$(pack_get --mod-req $idx)"
-    local tmp
     local tmp_idx
 
     # Make sure that every package before is installed...
@@ -113,20 +113,31 @@ function pack_install {
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp=$(trim_spaces "$(list --LD-rp $mod_reqs_paths)")
+	local tmp_ld=$(trim_spaces "$(list --LD-rp $mod_reqs_paths)")
+	local tmp_inc=$(trim_spaces "$(list --INCDIRS $mod_reqs_paths)")
 	old_fcflags="$FCFLAGS"
-	export FCFLAGS="$(trim_spaces $FCFLAGS) $tmp"
 	old_fflags="$FFLAGS"
-	export FFLAGS="$(trim_spaces $FFLAGS) $tmp"
 	old_cflags="$CFLAGS"
-	export CFLAGS="$(trim_spaces $CFLAGS) $tmp"
 	old_cxxflags="$CXXFLAGS"
-	export CXXFLAGS="$(trim_spaces $CXXFLAGS) $tmp"
 	old_ldflags="$LDFLAGS"
-	export LDFLAGS="$(trim_spaces $LDFLAGS) $tmp"
-	tmp=$(trim_spaces "$(list --INCDIRS $mod_reqs_paths)")
 	old_cppflags="$CPPFLAGS"
-	export CPPFLAGS="$(trim_spaces $CPPFLAGS) $tmp"
+	if $(has_setting $NO_PIC $idx) ; then
+	    export FCFLAGS="$(trim_spaces ${FCFLAGS//-fPIC/}) $tmp_ld"
+	    export FFLAGS="$(trim_spaces ${FFLAGS//-fPIC/}) $tmp_ld"
+	    export CFLAGS="$(trim_spaces ${CFLAGS//-fPIC/}) $tmp_ld"
+	    export CXXFLAGS="$(trim_spaces ${CXXFLAGS//-fPIC/}) $tmp_ld"
+	    export LDFLAGS="$(trim_spaces ${LDFLAGS//-fPIC/}) $tmp_ld"
+	    export CPPFLAGS="$(trim_spaces ${CPPFLAGS//-fPIC/}) $tmp_inc"
+	else
+	    export FCFLAGS="$(trim_spaces $FCFLAGS) $tmp_ld"
+	    export FFLAGS="$(trim_spaces $FFLAGS) $tmp_ld"
+	    export CFLAGS="$(trim_spaces $CFLAGS) $tmp_ld"
+	    export CXXFLAGS="$(trim_spaces $CXXFLAGS) $tmp_ld"
+	    export LDFLAGS="$(trim_spaces $LDFLAGS) $tmp_ld"
+	    export CPPFLAGS="$(trim_spaces $CPPFLAGS) $tmp_inc"
+	fi
+	unset tmp_ld tmp_inc
+
 	#old_ld_lib_path="$LD_LIBRARY_PATH"
 	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --prefix' --suffix '/lib' $mod_reqs_paths)"
 
