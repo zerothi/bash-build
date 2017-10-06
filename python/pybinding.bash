@@ -19,6 +19,11 @@ pack_set --module-requirement cython \
 
 pack_cmd "module load cmake"
 
+pack_cmd "echo 'Fake' > changelog.md"
+
+# Fix CMakelists.txt
+pack_cmd "sed -i -e 's/add_subdirectory.*/add_subdirectory($(pack_get --prefix pybind11)/share/cmake/pybind11 EXCLUDE_FROM_ALL)/' cppmodule/CCMakeLists.txt"
+
 pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
 pack_cmd "$(get_parent_exec) setup.py install" \

@@ -26,6 +26,8 @@ pack_set --directory .
 _pip_dwn=$(pwd_archives)/pip${pV:0:1}
 mkdir -p $_pip_dwn
 
+_pip_cmd=$(pack_get --prefix python)/bin/pip
+
 _pip=
 function pip_append {
     while [[ $# -gt 0 ]]; do
@@ -37,21 +39,21 @@ function pip_append {
 function pip_install {
     if [[ -n "$_pip" ]]; then
 	# First try and download, always finish with a yes
-	pack_cmd "pip download -d $_pip_dwn/ $_pip ; echo 'yes'"
-	pack_cmd "pip install --no-index --find-links $_pip_dwn $_pip"
+	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $_pip ; echo 'yes'"
+	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $_pip"
 	# Empty again
 	_pip=""
     fi
     while [[ $# -gt 0 ]]; do
-	pack_cmd "pip download -d $_pip_dwn/ $1 ; echo 'yes'"
-	pack_cmd "pip install --no-index --find-links $_pip_dwn $1"
+	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $1 ; echo 'yes'"
+	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $1"
 	shift
     done
 }
 
 # First install its own usage (and update it)
 pip_install pip
-pack_cmd "pip install -U pip"
+pack_cmd "$_pip_cmd install -U pip"
 
 
 # Nose needs to be isntalled first
