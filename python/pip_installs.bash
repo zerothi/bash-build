@@ -107,6 +107,9 @@ pip_append python-dateutil
 pip_append pyyaml
 pip_append simplegeneric
 pip_append sphinx sphinx_rtd_theme
+if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
+    pip_append subprocess32
+fi
 pip_append tqdm
 pip_append tornado
 pip_append traitlets

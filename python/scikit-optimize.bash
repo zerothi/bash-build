@@ -1,8 +1,10 @@
-v=0.3
+v=0.4
 add_package \
-    --archive scikit-optimization-$v.tar.gz \
-    --directory scikits.optimization-$v \
-    https://pypi.python.org/packages/source/s/scikits.optimization/scikits.optimization-$v.tar.gz
+    --archive scikit-optimize-$v.tar.gz \
+    --directory scikit.optimize-$v \
+    https://github.com/scikit-optimize/scikit-optimize/archive/v$v.tar.gz
+
+pack_set -s $IS_MODULE
 
 pack_set --module-requirement numpy
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages

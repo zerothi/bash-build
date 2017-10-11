@@ -1,4 +1,4 @@
-for v in 3.1.0 ; do
+for v in 4.2.0 ; do
     
 add_package http://qutip.org/downloads/$v/qutip-$v.tar.gz
 
@@ -12,13 +12,14 @@ pack_set --module-requirement scipy \
     --module-requirement matplotlib
 
 # clean-up until it has been fixed upstream
-pack_cmd "sed -i -e '/extra_/d' qutip/fortran/setup.py"
+#pack_cmd "sed -i -e '/extra_/d' qutip/fortran/setup.py"
+
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
 pack_cmd "unset LDFLAGS"
 
 # Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py build --with-f90mc"
-pack_cmd "$(get_parent_exec) setup.py install" \
+pack_cmd "$(get_parent_exec) setup.py install --with-openmp" \
     "--prefix=$(pack_get --prefix)"
     
 done

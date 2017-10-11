@@ -1,4 +1,4 @@
-v=4.19.1
+v=4.19.3
 add_package https://sourceforge.net/projects/pyqt/files/sip/sip-$v/sip-$v.tar.gz
 
 pack_set -s $IS_MODULE

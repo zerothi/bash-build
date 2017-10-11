@@ -1,6 +1,6 @@
 # Install Python 3 versions
 # apt-get libbz2-dev libncurses5-dev zip
-v=3.6.2
+v=3.6.3
 add_package --alias python --package python \
     http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
@@ -69,28 +69,28 @@ pack_cmd "make $(get_make_parallel)"
 # Common tests
 if $(is_host n- sylg thul fjorm surt muspel slid) ; then
     msg_install --message "Skipping python tests..."
-    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > python.test 2>&1"
     
 elif $(is_host nano pico femto) ; then
     tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
 elif $(is_host frontend) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm asyncio httplib multiprocessing_forkserver ssl)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
 elif $(is_host atto) ; then
     tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver mailbox tarfile bz2)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1 ; echo force"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1 ; echo force"
 
 else
     tmp=$(list -p '-x test_' urllib urllib2 urllib2net json ssl imaplib)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi
 pack_cmd "make install"
 if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
-    pack_set_mv_test tmp.test
+    pack_set_mv_test python.test
 fi
 
 # Assert that libpython$pV.a exists

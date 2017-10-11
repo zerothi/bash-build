@@ -1,5 +1,6 @@
-v=2.5.0
-add_package https://pypi.python.org/packages/source/h/h5py/h5py-$v.tar.gz
+v=2.7.1
+add_package --archive h5py-$v.tar.gz \
+	    https://github.com/h5py/h5py/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
@@ -20,6 +21,6 @@ pack_cmd "$(get_parent_exec) setup.py configure" \
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-add_test_package
-pack_cmd "nosetests --exe h5py > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package h5py.test
+pack_cmd "nosetests --exe h5py > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT

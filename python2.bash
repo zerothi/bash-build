@@ -1,6 +1,6 @@
 # Install Python 2 versions
 # apt-get libbz2-dev libncurses5-dev zip libssl-dev
-v=2.7.13
+v=2.7.14
 add_package --alias python --package python \
     http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
@@ -84,28 +84,28 @@ if $(is_host n- sylg thul fjorm surt muspel slid) ; then
     # NFS file systems. Hence we just skip one test to be able to test
     # everything else.
     msg_install --message "Skipping python tests..."
-    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > tmp.test 2>&1"
+    #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > python.test 2>&1"
 
 elif $(is_host nano pico femto) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
 elif $(is_host frontend) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
 elif $(is_host atto) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb mailbox tarfile bz2 ssl)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 else
     tmp=$(list -p '-x test_' urllib2_localnet)
-    pack_cmd "make EXTRATESTOPTS='$tmp' test > tmp.test 2>&1"
+    pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi
 pack_cmd "make install"
 if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
-    pack_set_mv_test tmp.test
+    pack_set_mv_test python.test
 fi
 
 

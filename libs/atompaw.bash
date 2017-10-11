@@ -1,4 +1,4 @@
-v=4.0.0.14
+v=4.0.1.0
 add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -20,7 +20,8 @@ else
 fi
 
 pack_cmd "./configure" \
-	 "--with-libxc-incs=$(pack_get --prefix libxc)/include" \
+	 --enable-libxc \
+	 "--with-libxc-prefix=$(pack_get --prefix libxc)" \
 	 "--with-libxc-libs=$(pack_get --LD libxc)" \
 	 "--with-linalg-libs='$tmp'" \
 	 "--prefix=$(pack_get --prefix)"

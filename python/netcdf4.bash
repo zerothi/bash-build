@@ -1,5 +1,6 @@
-v=1.2.8
-add_package --version $v --package netcdf4py \
+v=1.3.0
+add_package \
+    --version $v --package netcdf4py \
     --archive netcdf4-python-${v}rel.tar.gz \
     https://github.com/Unidata/netcdf4-python/archive/v${v}rel.tar.gz
 

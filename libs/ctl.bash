@@ -1,9 +1,9 @@
 # We will only install this on the super computer
 add_package http://ab-initio.mit.edu/libctl/libctl-3.2.2.tar.gz
 
-pack_set $(list --prefix "--host-reject " ntch zeroth)
-
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --module-requirement guile
 
 pack_set --install-query $(pack_get --LD)/libctl.a
 pack_set --lib -lctl

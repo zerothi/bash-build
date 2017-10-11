@@ -96,10 +96,12 @@ function add_test_package {
     pack_set --module-requirement $name[$version]
     pack_set --remove-setting module
     if [[ $# -gt 0 ]]; then
-	pack_set --install-query $top_prefix/$1
+	pack_set --install-query $top_prefix/$1*
+	TEST_OUT=$1
 	shift
     else
 	pack_set --install-query $top_prefix/tmp.*
+	TEST_OUT=tmp.test
     fi
 }
 

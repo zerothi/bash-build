@@ -1,4 +1,4 @@
-for v in 1.2.0 ; do
+for v in 1.3.0 ; do
 add_package --archive gpaw-$v.tar.gz \
     https://gitlab.com/gpaw/gpaw/repository/archive.tar.gz?ref=$v
 
@@ -109,17 +109,17 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 # Copy the customize.py file with
 pack_cmd "cp customize.py $(pack_get --prefix)/"
 
-add_test_package test.exec.parallel.gz
+add_test_package gpaw.exec.parallel
 
 pack_set --host-reject $(get_hostname)
 # We need the setups for the tests
 pack_set --mod-req gpaw-setups
 pack_cmd "unset LDFLAGS"
-pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > test.serial ; echo 'Forced'"
-pack_set_mv_test test.serial
-pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > test.exec.serial ; echo 'Forced'"
-pack_set_mv_test test.exec.serial
-pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > test.exec.parallel ; echo 'Forced'"
-pack_set_mv_test test.exec.parallel
+pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > gpaw.serial ; echo 'Forced'"
+pack_set_mv_test gpaw.serial
+pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.serial ; echo 'Forced'"
+pack_set_mv_test gpaw.exec.serial
+pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.parallel ; echo 'Forced'"
+pack_set_mv_test gpaw.exec.parallel
 
 done

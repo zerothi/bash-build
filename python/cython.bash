@@ -1,4 +1,4 @@
-v=0.25.2
+v=0.27.1
 add_package --archive cython-$v.tar.gz \
     https://github.com/cython/cython/archive/$v.tar.gz
 

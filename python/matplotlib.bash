@@ -1,6 +1,6 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=2.0.2
+v=2.1.0
 add_package \
     --archive matplotlib-$v.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz
@@ -17,9 +17,17 @@ for m in wxwidgets pyqt ; do
 done
 
 
-pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
+if [ $(vrs_cmp $v 2.1.0) -ge 0 ]; then
+    pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/libqhull/qhull_a.h"
+else
+    pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
+fi
 
 pack_cmd "unset LDFLAGS"
+
+pack_cmd "echo '# setup.cfg' > setup.cfg"
+pack_cmd "echo '[test]' >> setup.cfg"
+pack_cmd "echo 'local_freetype = False' >> setup.cfg"
 
 pack_cmd "$(get_parent_exec) setup.py config"
 pack_cmd "$(get_parent_exec) setup.py build"
@@ -27,7 +35,7 @@ pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-add_test_package
+add_test_package matplotlib.test
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe matplotlib > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+pack_cmd "pytest --pyargs matplotlib > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT

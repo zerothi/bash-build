@@ -1,7 +1,6 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
-
 # We only accept bzr installation on python 2.x
-add_package https://launchpad.net/bzr/2.6/2.6.0/+download/bzr-2.6.0.tar.gz
+v=2.7.0
+add_package https://launchpad.net/bzr/${v:0:3}/$v/+download/bzr-$v.tar.gz
 
 pack_set -s $IS_MODULE
 

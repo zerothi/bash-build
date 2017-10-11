@@ -9,7 +9,7 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix $(get_parent))"
 
 return
-add_test_package
-pack_cmd "nosetests --exe monty > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package monty.test
+pack_cmd "nosetests --exe monty > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT
 

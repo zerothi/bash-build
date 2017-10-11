@@ -25,7 +25,7 @@ else
     
 fi
 
-pack_cmd "../configure CPP='$MPICC -E -P -x c' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
+pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"

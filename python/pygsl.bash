@@ -6,6 +6,8 @@ add_package \
 
 pack_set -s $IS_MODULE
 
+pack_set --host-reject $(get_hostname)
+
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/pygsl
 
 # Add requirments when creating the module
@@ -18,6 +20,6 @@ pack_cmd "$(get_parent_exec) setup.py build" \
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-add_test_package
-pack_cmd "nosetests --exe pygsl > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package pygsl.test
+pack_cmd "nosetests --exe pygsl > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT

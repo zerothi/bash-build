@@ -6,9 +6,10 @@ set_c intel-13.1.1
 AR=xiar
 RANLIB=ranlib
 CC=icc
+CPP="icc -E -C"
 CXX=icpc
-#CPP="icc -E"
-#CXXCPP="icpc -E"
+#CXXCPP="g++ -E"
+FPP="ifort -E -C -x none"
 F77=ifort
 F90=ifort
 FC=ifort

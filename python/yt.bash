@@ -1,7 +1,7 @@
-v=3.3.5
-add_package --directory yt-$v \
+v=3.4.0
+add_package --directory yt-yt-$v \
     --package yt --version $v \
-    https://github.com/yt-project/yt/archive/yt-3.3.5.tar.gz
+    https://github.com/yt-project/yt/archive/yt-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

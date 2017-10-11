@@ -72,6 +72,7 @@ source_pack python/pybind11.bash
 #source_pack python/wxwidgets.bash
 source_pack python/sip.bash
 source_pack python/pyqt5.bash
+source_pack python/pyqt3d.bash
 
 # Generic scientific libraries
 source_pack python/numpy.bash
@@ -91,7 +92,10 @@ source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
 
-#source_pack python/yt.bash
+# Additional plotting stuff
+source_pack python/seaborn.bash
+
+source_pack python/yt.bash
 source_pack python/krypy.bash
 source_pack python/pygsl.bash
 
@@ -99,7 +103,7 @@ source_pack python/sisl.bash
 
 # Other scikit-programs
 source_pack python/scikit-learn.bash
-source_pack python/scikit-optimization.bash
+source_pack python/scikit-optimize.bash
 #source_pack python/scikit-nano.bash
 
 # Must be installed after numpy

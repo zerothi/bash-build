@@ -1,4 +1,4 @@
-v=4.6.8
+v=4.6.9
 add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -22,7 +22,7 @@ pack_cmd "./configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-#pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1"
 pack_cmd "make install"
-#pack_set_mv_test tmp.test
+pack_set_mv_test tmp.test
 

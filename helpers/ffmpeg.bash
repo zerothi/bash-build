@@ -1,6 +1,6 @@
 # apt-get libpulse-dev libx264-* libx264-dev
 add_package --build generic \
-	    http://ffmpeg.org/releases/ffmpeg-3.3.3.tar.bz2
+	    http://ffmpeg.org/releases/ffmpeg-3.3.4.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

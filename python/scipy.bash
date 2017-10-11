@@ -47,9 +47,9 @@ if [[ $(pack_installed swig) -eq 1 ]]; then
 fi
 
 
-add_test_package
+add_test_package scipy.test
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe scipy > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+pack_cmd "nosetests --exe scipy > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT
 
 done

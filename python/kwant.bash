@@ -66,6 +66,6 @@ pack_cmd "$(get_parent_exec) setup.py install" \
       "--prefix=$(pack_get --prefix)"
 
 
-add_test_package
-pack_cmd "nosetests -exe kwant 2>&1 > tmp.test ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package kwant.test
+pack_cmd "pytest --pyargs kwant 2>&1 > $TEST_OUT ; echo 'Success'"
+pack_set_mv_test $TEST_OUT

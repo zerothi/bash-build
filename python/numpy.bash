@@ -1,4 +1,4 @@
-for v in 1.13.1 ; do
+for v in 1.13.3 ; do
 add_package --archive numpy-$v.tar.gz \
      https://github.com/numpy/numpy/archive/v$v.tar.gz
 
@@ -9,7 +9,7 @@ if [[ "x${pV:0:1}" == "x3" ]]; then
 else
     pack_set --install-query $(pack_get --prefix)/bin/f2py
 fi
-pack_set $(list -p '-mod-req ' fftw-2 fftw-3 umfpack cython)
+pack_set $(list -p '-mod-req ' cython)
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
 
@@ -193,9 +193,9 @@ pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
 pack_cmd "unset LDSHARED"
 
 
-add_test_package
+add_test_package numpy.test
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe numpy > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+pack_cmd "nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT
 
 done

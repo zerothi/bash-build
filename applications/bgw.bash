@@ -1,7 +1,7 @@
 v=1.2.0
 add_package --package berkeley-GW -alias bgw -version $v \
-    --directory BerkeleyGW-1.2.0 \
-    http://www.student.dtu.dk/~nicpa/packages/BGW-1.2.0.tar.gz
+    --directory BerkeleyGW-$v \
+    http://www.student.dtu.dk/~nicpa/packages/BGW-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
@@ -15,7 +15,7 @@ file=arch.mk
 pack_cmd "echo '# NPA' > $file"
 
 pack_cmd "sed -i '1 a\
-PARAFLAG = -DMPI\n\
+PARAFLAG = -DMPI -DOMP\n\
 MATHFLAG = -DUSESCALAPACK -DUSEFFTW3 -DHDF5\n\
 F90free = $MPIFC $FCFLAGS\n\
 LINK = $MPIFC $FLAG_OMP\n\
@@ -40,7 +40,7 @@ TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '$ a\
-FCPP = $MPIFC -E -P -xc\n\
+FCPP = $FPP\n\
 COMPFLAG = -DINTEL\n\
 LAPACKLIB = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
@@ -56,7 +56,7 @@ elif $(is_c gnu) ; then
     tmp_ld="$(list --LD-rp scalapack +$la)"
     pack_cmd "sed -i '$ a\
 COMPFLAG = -DGNU\n\
-FCPP = $MPIFC -E -P -x c\n\
+FCPP = $FPP\n\
 F90free += -ffree-form -ffree-line-length-none\n\
 FOPTS   += -ffree-form -ffree-line-length-none\n\
 SCALAPACKLIB = -lscalapack \$(LAPACKLIB) \n\

@@ -12,6 +12,6 @@ pack_set --module-requirement llvm
 pack_cmd "LLVM_CONFIG_PATH=$(pack_get --prefix llvm)/bin/llvm-config $(get_parent_exec)" \
     "setup.py install --prefix=$(pack_get --prefix)"
 
-add_test_package
-pack_cmd "nosetests --exe llvm > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package llvmpy.test
+pack_cmd "nosetests --exe llvm > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT

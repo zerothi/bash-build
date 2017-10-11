@@ -1,4 +1,4 @@
-v=5.8.1
+v=5.9
 add_package --version $v --package pyqt \
 	    https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-$v/PyQt5_gpl-$v.tar.gz
 

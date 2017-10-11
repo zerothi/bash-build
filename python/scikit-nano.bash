@@ -1,10 +1,10 @@
-v=0.2.24
+v=0.3.21
 add_package \
     --archive scikit-nano-$v.tar.gz \
-    https://github.com/androomerrill/scikit-nano/archive/v$v.tar.gz
+    https://github.com/scikit-nano/scikit-nano/archive/v$v.tar.gz
 
 pack_set --module-requirement pint \
-    --module-requirement numpy
+    --module-requirement scipy
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/$(pack_get --alias)
 

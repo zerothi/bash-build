@@ -20,6 +20,6 @@ pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-#add_test_package
-#pack_cmd "nosetests --exe pandas > tmp.test 2>&1 ; echo 'Success'"
-#pack_set_mv_test tmp.test
+#add_test_package pandas.test
+#pack_cmd "nosetests --exe pandas > $TEST_OUT 2>&1 ; echo 'Success'"
+#pack_set_mv_test $TEST_OUT

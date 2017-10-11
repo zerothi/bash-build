@@ -30,7 +30,7 @@ if [[ $(vrs_cmp $v 3.10.2) -le 0 ]]; then
     tmp="$tmp --with-netlib-lapack-tarfile=$(build_get --archive-path)/$(pack_get --archive lapack) -Ss flapack $(pack_get --LD lapack)/liblapack.a"
 else
     # Do not do threadcheck
-    tmp="$tmp -Si cripple-perf 1"
+    tmp="$tmp --cripple-atlas-performance"
     tmp="$tmp --with-netlib-lapack-tarfile=$(build_get --archive-path)/$(pack_get --archive lapack)"
 fi
 

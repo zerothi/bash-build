@@ -3,9 +3,10 @@ set_c gnu-6.4.0
 AR=gcc-ar
 RANLIB=gcc-ranlib
 CC=gcc
+CPP="gcc -E -C"
 CXX=g++
-#CPP="gcc -E"
 #CXXCPP="g++ -E"
+FPP="gfortran -cpp -E -C -x none"
 F77=gfortran
 F90=gfortran
 FC=gfortran

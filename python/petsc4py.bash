@@ -13,8 +13,8 @@ pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
-add_test_package
-pack_cmd "nosetests --exe petsc4py > tmp.test 2>&1 ; echo 'Success'"
-pack_set_mv_test tmp.test
+add_test_package petsc4py.test
+pack_cmd "nosetests --exe petsc4py > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_set_mv_test $TEST_OUT
 
 
