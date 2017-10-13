@@ -78,11 +78,13 @@ source_pack libs/blaze.bash
 # Install generic libraries
 source_pack libs/hdf5.bash
 source_pack libs/hdf5-serial.bash
+source_pack libs/hdf5-serial-noszip.bash
 source_pack libs/h5utils-serial.bash
 source_pack libs/pnetcdf.bash
 source_pack libs/netcdf.bash
 source_pack libs/netcdf-logging.bash
 source_pack libs/netcdf-serial.bash
+source_pack libs/netcdf-serial-noszip.bash
 
 # Install my ncdf library
 source_pack libs/ncdf.bash
