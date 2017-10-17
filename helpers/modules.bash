@@ -20,7 +20,3 @@ pack_cmd "./configure" \
 # Make commands
 pack_cmd "make all $(get_make_parallel)"
 pack_cmd "make install"
-
-# Make link to default version (always the newest version, latest installation)
-pack_cmd "cd $(pack_get --prefix)/Modules/"
-pack_cmd "ln -fs $(pack_get --version) default" 
