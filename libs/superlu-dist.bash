@@ -1,8 +1,14 @@
-for v in 3.3 4.3 5.1.3 ; do
+for v in 3.3 4.3 5.2.1 ; do
 
-add_package --package superlu-dist \
-	    --directory SuperLU_DIST_$v \
-	    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_$v.tar.gz
+if [[ $(vrs_cmp $v 5.0) -gt 0 ]]; then
+    add_package --package superlu-dist \
+		--archive superlu_dist-$v.tar.gz \
+		https://github.com/xiaoyeli/superlu_dist/archive/v$v.tar.gz
+else
+    add_package --package superlu-dist \
+		--directory SuperLU_DIST_$v \
+		http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_$v.tar.gz
+fi
 
 pack_set -s $IS_MODULE
 

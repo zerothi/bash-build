@@ -1,6 +1,6 @@
-add_package --package superlu \
-	    --directory SuperLU_5.2.1 \
-	    http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_5.2.1.tar.gz
+v=5.2.1
+add_package --archive superlu-$v.tar.gz \
+	    https://github.com/xiaoyeli/superlu/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 
