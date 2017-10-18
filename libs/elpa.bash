@@ -24,9 +24,20 @@ else
     tmp="$(list -LD-rp scalapack $la) -lscalapack $(pack_get -lib $la)"
     
 fi
+tmp_flags=
+if ! $(grep "sse" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --disable-sse"
+fi
+if ! $(grep "avx" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --disable-avx"
+fi
+if ! $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --disable-avx2"
+fi
+
 
 pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
-	 "--prefix=$(pack_get --prefix)"
+	 "$tmp_flags --prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
 if $(is_c intel) ; then
