@@ -9,7 +9,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-opt "--lua-family ase"
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)
+pack_set --install-query $(pack_get --prefix)/bin/ase
 
 pack_set --module-requirement scipy
 

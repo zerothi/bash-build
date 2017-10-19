@@ -1,7 +1,7 @@
 v=4.0.1
 add_package --package siesta \
     --version $v \
-    https://launchpad.net/siesta/$v/$v/+download/siesta-$v.tgz
+    https://launchpad.net/siesta/4.0/$v/+download/siesta-$v.tgz
 
 pack_set -s $MAKE_PARALLEL
 
