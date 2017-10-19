@@ -81,17 +81,19 @@ _n_host_rejects=0
 
 function _add_rejects {
     local f=$1
-    local -a lines
-    local tmp
+    local line
     shift
 
     # Read the file
     if [[ -e $f ]]; then
-	read -d '\n' -a lines < $f
-	for tmp in ${lines[@]} ; do
+	while read -r line || [[ -n "$line" ]]
+	do
+	    line=${line// /}
+	    [[ ${#line} == 0 ]] && continue
+	    [[ "${line:0:1}" == '#' ]] && continue
 	    let _n_host_rejects++
-	    _host_reject[$_n_host_rejects]="$tmp"
-	done
+	    _host_reject[$_n_host_rejects]="$line"
+	done < $f
     fi
 }
 

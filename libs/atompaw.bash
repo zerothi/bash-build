@@ -22,7 +22,6 @@ fi
 pack_cmd "./configure" \
 	 --enable-libxc \
 	 "--with-libxc-prefix=$(pack_get --prefix libxc)" \
-	 "--with-libxc-libs=$(pack_get --LD libxc)" \
 	 "--with-linalg-libs='$tmp'" \
 	 "--prefix=$(pack_get --prefix)"
 

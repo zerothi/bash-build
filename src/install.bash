@@ -96,7 +96,9 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
-	module load $module_loads
+	if [[ -n "${module_loads}" ]]; then
+	    module load $module_loads
+	fi
 
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
@@ -221,7 +223,9 @@ function pack_install {
 	msg_install --finish $idx
 	
 	# Unload the requirement modules
-        module unload $module_loads
+	if [[ -n "${module_loads}" ]]; then
+	    module unload $module_loads
+	fi
 
 	# Unload the module itself in case of PRELOADING
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
