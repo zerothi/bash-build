@@ -22,7 +22,7 @@ pack_set --module-requirement mpi \
     --module-requirement libxc
 
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
-    pack_set --module-requirement ase[3.10]
+    pack_set --module-requirement ase
 else
     doerr "$(pack_get --package)" "Could not determine needed ASE interface"
 fi
