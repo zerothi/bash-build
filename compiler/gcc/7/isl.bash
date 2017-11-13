@@ -1,6 +1,7 @@
 isl_v=0.18
 add_package --build generic \
 	    --package $gcc-isl \
+	    --alias isl \
 	    http://isl.gforge.inria.fr/isl-$isl_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR

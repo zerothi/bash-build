@@ -1,4 +1,4 @@
-v=3.3.0
+v=3.3.2
 add_package \
     --archive pyamg-$v.tar.gz --version $v \
     https://github.com/pyamg/pyamg/archive/v$v.tar.gz

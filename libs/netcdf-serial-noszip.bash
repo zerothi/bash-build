@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.4.1.1 ; do
+for v in 4.5.0 ; do
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-serial-noszip \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
@@ -22,7 +22,7 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.c
 
@@ -53,7 +53,7 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
 pack_set_mv_test tmp.test tmp.test.f
 

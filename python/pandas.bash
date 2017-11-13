@@ -1,6 +1,6 @@
-v=0.20.3
-add_package --archive pandas-$v.tar.gz \
-    https://github.com/pandas-dev/pandas/archive/v$v.tar.gz
+v=0.21.0
+add_package \
+    https://github.com/pandas-dev/pandas/releases/download/v$v/pandas-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

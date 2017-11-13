@@ -1,6 +1,6 @@
 for v in 1.13.3 ; do
-add_package --archive numpy-$v.tar.gz \
-     https://github.com/numpy/numpy/archive/v$v.tar.gz
+add_package \
+     https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
@@ -195,7 +195,7 @@ pack_cmd "unset LDSHARED"
 
 add_test_package numpy.test
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "OMP_NUM_THREADS=2 nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
 pack_set_mv_test $TEST_OUT
 
 done

@@ -215,15 +215,16 @@ fi
 # Vendor libraries do not depend on anything...
 source vendor.bash
 
-# Install helper scripts
-# These should _never_ have any dependencies.
-source scripts.bash
-
 # Install the helper
 source helpers.bash
 
 # Install the lua-libraries
 source lua/install.bash
+
+# Install helper scripts
+# These should _never_ have any dependencies.
+# However, the Lmod switch requires LMOD
+source scripts.bash
 
 # Set the future correct default build as
 # requested by the user.

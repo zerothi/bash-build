@@ -1,4 +1,4 @@
-v=0.9.0
+v=0.9.2
 add_package --archive sisl-$v.tar.gz \
     https://github.com/zerothi/sisl/archive/v$v.tar.gz
 
@@ -15,7 +15,6 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
 
-return 0
 add_test_package sisl.test
 pack_cmd "unset LDFLAGS"
 pack_cmd "pytest --pyargs sisl > $TEST_OUT 2>&1"

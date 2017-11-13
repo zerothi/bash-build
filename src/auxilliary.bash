@@ -110,6 +110,8 @@ function docmd {
     local message="$1"
     shift
     local cmd=($*)
+    # Shift to prevent msg_install to be passed extra arguments
+    shift $#
     local st
     echo ""
     echo " # ================================================================"
@@ -120,7 +122,8 @@ function docmd {
     eval ${cmd[@]}
     st=$?
     if [[ $st -ne 0 ]]; then
-	msg_install --message "Failed CMD (STATUS=$st): ${cmd[@]}"
+	local msg="Failed CMD (STATUS=$st): ${cmd[@]}"
+	msg_install --message "$msg"
         return $st
     fi
 }
@@ -547,6 +550,7 @@ function extract_archive {
 	    if [[ -d "$1/$d" ]]; then
 		rm -rf "$1/$d"
 	    fi
+	    ;;
     esac
     case $ext in
 	local|bin|fake)

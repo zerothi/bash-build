@@ -1,6 +1,7 @@
 mpfr_v=3.1.5
 add_package --build generic \
 	    --package $gcc-mpfr \
+	    --alias mpfr \
 	    http://www.mpfr.org/mpfr-$mpfr_v/mpfr-$mpfr_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR

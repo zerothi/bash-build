@@ -11,7 +11,7 @@ pack_set --host-reject zeroth
 
 pack_set --module-requirement mpi
 pack_set --module-requirement fftw-3
-pack_set --module-requirement wannier90[1.2]
+pack_set --module-requirement wannier90
 
 pack_set --module-opt "--lua-family vasp"
 

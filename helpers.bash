@@ -45,11 +45,13 @@ source compiler/compilers.bash
 # GPP
 source_pack helpers/gpp.bash
 
-# Install bison
+# Build helpers
+source_pack helpers/guile.bash
 source_pack helpers/bison.bash
 source_pack helpers/flex.bash
 source_pack helpers/pcre.bash
 source_pack helpers/swig.bash
+
 source_pack helpers/optipng.bash
 
 # Install LLVM generically

@@ -1,6 +1,7 @@
 mpc_v=1.0.3
 add_package --build generic \
 	    --package $gcc-mpc \
+	    --alias mpc \
 	    ftp://ftp.gnu.org/gnu/mpc/mpc-$mpc_v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR

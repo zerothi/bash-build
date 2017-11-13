@@ -1,4 +1,4 @@
-for v in 0.19.1 ; do 
+for v in 1.0.0 ; do
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.xz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -46,10 +46,13 @@ if [[ $(pack_installed swig) -eq 1 ]]; then
     pack_cmd "module unload $(list ++swig)"
 fi
 
-
 add_test_package scipy.test
 pack_cmd "unset LDFLAGS"
-pack_cmd "nosetests --exe scipy > $TEST_OUT 2>&1 ; echo 'Success'"
+if [[ $(vrs_cmp $v 1.0.0) -ge 0 ]]; then
+    pack_cmd "OMP_NUM_THREADS=2 pytest --pyargs scipy > $TEST_OUT 2>&1 ; echo Success"
+else
+    pack_cmd "OMP_NUM_THREADS=2 nosetests --exe scipy > $TEST_OUT 2>&1 ; echo Success"
+fi
 pack_set_mv_test $TEST_OUT
 
 done

@@ -99,7 +99,7 @@ elif $(is_host atto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 else
-    tmp=$(list -p '-x test_' urllib2_localnet)
+    tmp=$(list -p '-x test_' urllib2_localnet distutils)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi

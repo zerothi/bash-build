@@ -31,10 +31,3 @@ source_pack compiler/gcc/7/gdb.bash
 # Local variables which should only be visible here...
 unset gcc_v
 unset gcc
-
-# Generic compiler libraries (always the latest)
-source_pack compiler/gcc/gmp.bash
-source_pack compiler/gcc/mpfr.bash
-source_pack compiler/gcc/mpc.bash
-source_pack compiler/gcc/isl.bash
-source_pack compiler/gcc/gdb.bash
