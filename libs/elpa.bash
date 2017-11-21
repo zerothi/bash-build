@@ -1,4 +1,4 @@
-v=2017.05.002
+v=2017.05.003
 add_package --package elpa \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
