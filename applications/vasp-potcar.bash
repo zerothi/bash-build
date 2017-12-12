@@ -44,7 +44,9 @@ function tmp_end {
     pack_cmd "cd ../"
     # The file permissions are not expected to be correct (we correct them
     # here)
-    pack_cmd "chmod 0644 tmp/*/*"
+    pack_cmd "chmod 0755 -R tmp/"
+    # Make files readable, but not executable
+    pack_cmd 'find tmp -type f -exec chmod 444 {} \;'
     pack_cmd "mv tmp $(pack_get --prefix)"
     pack_set --module-opt "--set-ENV POTCARS=$(pack_get --prefix)"
     # We only check for one
