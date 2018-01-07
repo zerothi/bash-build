@@ -15,7 +15,7 @@ fi
 
 # Install commands that it should run
 pack_cmd "./configure" \
-	 "--prefix=$(pack_get --prefix)"
+	 "--prefix=$(pack_get --prefix) --enable-versioning"
 
 # Make commands
 pack_cmd "make all $(get_make_parallel)"

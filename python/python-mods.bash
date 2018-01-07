@@ -72,6 +72,7 @@ tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	 h5py numexpr theano numba seaborn networkx \
 	 sisl kwant pybinding yt pythtb \
+	 dask xarray \
 	 pyamg scikit-learn scikit-nano scikit-optimize ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"

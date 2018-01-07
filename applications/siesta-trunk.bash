@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 638 ; do
+for v in 507 508 514 527 655 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -51,6 +51,7 @@ pack_cmd "cd Obj"
 pack_cmd "../Src/obj_setup.sh"
 
 file=arch.make
+prefix=$(pack_get --prefix)
 
 pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
 pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > $file"
@@ -220,11 +221,17 @@ for omp in openmp none ; do
     # This should ensure a correct handling of the version info...
     pack_cmd "make $(get_make_parallel) siesta ; make siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
-    
-    pack_cmd "make clean"
-    
-    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
-    pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+
+    if [ $(vrs_cmp $v 655) -ge 0 ]; then 
+	pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta$end"
+	pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta$end"
+	pack_cmd "chmod a+x $prefix/bin/transiesta$end"
+    else
+	pack_cmd "make clean"
+	
+	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+    fi
     
 done
 
@@ -330,11 +337,17 @@ if [[ $tmp -eq 1 ]]; then
     for omp in openmp none ; do
 
 	set_flag $omp
-	pack_cmd "make clean"
+	if [ $(vrs_cmp $v 655) -ge 0 ]; then
+	    pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta${end}_3m"
+	    pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta${end}_3m"
+	    pack_cmd "chmod a+x $prefix/bin/transiesta${end}_3m"
+	else
+	    pack_cmd "make clean"
+	    
+	    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+	    pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
+	fi
 	
-	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
-	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
-
 	pack_cmd "pushd ../Util/TS/TBtrans ; make clean"
 	pack_cmd "make $(get_make_parallel) ; make"
 	pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"

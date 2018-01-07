@@ -88,6 +88,7 @@ source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
 source_pack python/theano.bash
+source_pack python/dask.bash
 source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
@@ -95,6 +96,8 @@ source_pack python/networkx.bash
 
 # Additional plotting stuff
 source_pack python/seaborn.bash
+
+source_pack python/xarray.bash
 
 source_pack python/yt.bash
 source_pack python/krypy.bash

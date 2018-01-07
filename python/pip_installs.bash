@@ -84,6 +84,7 @@ pip_append jsonschema
 pip_append line_profiler
 pip_append lxml
 pip_append markupsafe
+pip_append Markdown
 pip_append memory_profiler
 pip_append mistune
 pip_append mpmath # for sympy
