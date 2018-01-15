@@ -90,6 +90,7 @@ pip_append mistune
 pip_append mpmath # for sympy
 pip_append mock
 #pip_append monty
+pip_append nbsphinx
 pip_append numpydoc
 pip_append nose nose2
 pip_append pep8

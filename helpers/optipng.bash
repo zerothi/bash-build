@@ -1,5 +1,5 @@
 add_package --build generic \
-	    http://prdownloads.sourceforge.net/optipng/optipng-0.7.6.tar.gz
+	    http://prdownloads.sourceforge.net/optipng/optipng-0.7.7.tar.gz
 
 pack_set -s $IS_MODULE
 
