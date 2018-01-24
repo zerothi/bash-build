@@ -11,6 +11,7 @@ pack_set --module-requirement gsl \
 pack_set --module-opt "--lua-family ape"
 # APE does not allow compilation of C-flags too long,
 # we simply disable them. :(
+pack_cmd "unset CPP"
 pack_cmd "unset CFLAGS"
 pack_cmd "unset FCFLAGS"
 
