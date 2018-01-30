@@ -110,7 +110,8 @@ source_pack libs/petsc.bash
 source_pack libs/slepc.bash
 
 # PEXSI
-source_pack libs/pexsi.bash
+#source_pack libs/sympack.bash
+#source_pack libs/pexsi.bash
 
 # Libraries for DFT
 source_pack libs/libxc.bash

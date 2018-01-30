@@ -11,6 +11,10 @@ pack_set --install-query $(pack_get --prefix)/bin/epm.x
 
 pack_set $(list -p '--module-requirement ' mpi fftw-3 hdf5)
 
+if [[ "x$FPP" == "x" ]]; then
+    export FPP="gfortran -cpp"
+fi
+
 file=arch.mk
 pack_cmd "echo '# NPA' > $file"
 

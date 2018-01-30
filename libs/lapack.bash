@@ -1,5 +1,5 @@
-v=3.7.0-b234
-add_package --version $v --package lapack http://www.student.dtu.dk/~nicpa/packages/lapack-$v.tar.bz2
+v=3.8.0
+add_package --version $v --archive lapack-$v.tar.gz https://github.com/Reference-LAPACK/lapack/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 

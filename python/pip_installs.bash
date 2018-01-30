@@ -99,6 +99,9 @@ pip_append pexpect
 pip_append pkgconfig
 pip_append ply
 pip_append psutil
+#if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
+#    pip_append pybinding
+#fi
 pip_append pyparser
 pip_append pyparsing
 pip_append pycparser
