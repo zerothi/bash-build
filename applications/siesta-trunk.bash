@@ -303,9 +303,6 @@ for omp in openmp none ; do
     pack_cmd "make clean"
     
 done
-pack_cmd "cd ../TB"
-pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
-pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 pack_cmd "cd ../"
 
 # end TS
@@ -358,15 +355,6 @@ if [[ $tmp -eq 1 ]]; then
 
     done
 fi
-
-# Create the byte-compiled versions, to make it faster for users 
-tmp=$(pack_get --alias python).$(pack_get --version python)/$(get_c)
-pack_cmd "module load $tmp"
-pack_cmd "pushd $(pack_get --prefix)/bin/"
-pack_cmd "python -m compileall ."
-pack_cmd "popd"
-pack_cmd "module unload $tmp"
-
 
 else
 
