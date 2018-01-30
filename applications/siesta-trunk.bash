@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 621 ; do
+for v in 507 508 514 527 657 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -21,6 +21,7 @@ pack_set --module-requirement mpi --module-requirement netcdf
 # Sadly launchpad adds shit-loads of paths... :(
 pack_cmd "cd siesta/trunk"
 
+prefix=$(pack_get --prefix)
 
 # Initial setup for new trunk with transiesta
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
@@ -209,11 +210,16 @@ for omp in openmp none ; do
     # This should ensure a correct handling of the version info...
     pack_cmd "make $(get_make_parallel) siesta ; make siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
-    
+   
+    if [[ $(vrs_cmp $v 655) -ge 0 ]]; then 
+    pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta$end"
+    pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta$end"
+    else
     pack_cmd "make clean"
     
     pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
     pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+    fi 
     
 done
 
@@ -302,12 +308,8 @@ pack_cmd "cd ../../WFS"
 make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
 
 
-pack_cmd "cd ../"
-pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
 # Compile the 3m equivalent versions, if applicable
-pack_cmd "cd ../Obj"
+pack_cmd "cd ../../Obj"
 case $siesta_la in
     mkl|openblas)
 	tmp=1
@@ -323,10 +325,15 @@ if [[ $tmp -eq 1 ]]; then
     for omp in openmp none ; do
 
 	set_flag $omp
+    if [[ $(vrs_cmp $v 655) -ge 0 ]]; then
+    pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta${end}_3m"
+    pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta${end}_3m"
+    else
 	pack_cmd "make clean"
 	
 	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
 	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
+    fi
 
 	pack_cmd "pushd ../Util/TS/TBtrans ; make clean"
 	pack_cmd "make $(get_make_parallel) ; make"
@@ -394,10 +401,9 @@ else
     pack_cmd "cp fcbuild vibra $(pack_get --prefix)/bin/"
 
     pack_cmd "cd ../../"
-    pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-    pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
 fi
 
+unset prefix
 unset set_flag
 unset make_files
 pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"
