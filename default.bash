@@ -83,13 +83,6 @@ create_module $cm_defs \
     -RL siesta[4.0]
 
 create_module $cm_defs \
-    -n siesta-scf.default \
-    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
-    -M siesta-scf.default/$(get_c) \
-    -echo "$(echo_modules siesta-scf)" \
-    -RL siesta-scf
-
-create_module $cm_defs \
     -n siesta-trunk.default \
     -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
     -M siesta-trunk.default/$(get_c) \
