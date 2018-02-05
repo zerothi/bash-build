@@ -1,4 +1,4 @@
-v=7.1
+v=7.2
 add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

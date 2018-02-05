@@ -1,4 +1,4 @@
-for v in 7.10.5 8.4.3
+for v in 7.10.5 8.6.3
 do
 add_package http://ftp.abinit.org/abinit-$v.tar.gz
 
@@ -119,23 +119,18 @@ with_fft_flavor=\"fftw3-mpi\"\n\
 with_fft_incs=\"$(list --INCDIRS fftw-mpi-3)\"\n\
 with_fft_libs=\"$(list --LD-rp fftw-mpi-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
-dft_flavor=atompaw+wannier90
+dft_flavor=atompaw+wannier90+libxc
 xc_version=$(pack_get --version libxc)
-if [[ $(vrs_cmp $xc_version 2.0.2) -ge 0 ]]; then
-    pack_set --module-requirement libxc
-    dft_flavor="$dft_flavor+libxc"
-    xclib="-lxc"
-    if [[ $(vrs_cmp $xc_version 2.2.0) -ge 0 ]]; then
-	xclib="-lxcf90 -lxc"
-	# Correct the check for the minor version
-	pack_cmd "sed -i -e 's/minor != 0/minor != $(str_version -2 $xc_version)/' ../configure"
-	pack_cmd "sed -i -e 's/|| (minor < 0) || (minor > 1)//' ../configure"
-
-    fi
-    pack_cmd "$s '$ a\
+if [[ $(vrs_cmp 8 $v) -gt 0 ]]; then
+    pack_set --module-requirement libxc[$xc_version]
+else
+    pack_set --module-requirement libxc[2.2.3]
+fi
+xclib="-lxcf90 -lxc"
+# Correct the check for the minor version
+pack_cmd "$s '$ a\
 with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
 with_libxc_libs=\"$(list --LD-rp libxc) $xclib\"' $file"
-fi
 
 if [[ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]]; then
     # The interface for the later versions
