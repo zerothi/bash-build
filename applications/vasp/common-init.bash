@@ -10,7 +10,7 @@ fi
 pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --module-requirement mpi
-pack_set --module-requirement wannier90[1.2]
+pack_set --module-requirement wannier90
 
 
 pack_set --module-opt "--lua-family vasp"
@@ -50,7 +50,7 @@ OBJ_HIGH  = \n\
 OBJ_NOOPT = \n\
 DEBUG  = -O0 \n\
 INLINE = \$(OFLAG) \n\
-WANNIER_PATH = $(pack_get --LD wannier90[1.2])\n\
+WANNIER_PATH = $(pack_get --LD wannier90)\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
 LIB  = -L../vasp.5.lib -ldmy \$(WANNIER) -lwannier \\\\\n\
      ../vasp.5.lib/linpack_double.o \$(SCA) \$(LAPACK) \$(BLAS)' $file"

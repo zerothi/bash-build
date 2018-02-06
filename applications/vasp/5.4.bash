@@ -65,7 +65,7 @@ OFLAG  = \$(FFLAGS) \n\
 OFLAG_IN  = \$(OFLAG) \n\
 DEBUG  = -O0 \n\
 OBJECTS = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \n\
-WANNIER_PATH = $(pack_get --LD wannier90[1.2])\n\
+WANNIER_PATH = $(pack_get --LD wannier90)\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
 INCS += -I$(pack_get --prefix fftw-3)/include\n\
 FFTW_PATH = $(pack_get --LD fftw-3)\n\
