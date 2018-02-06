@@ -6,7 +6,7 @@ add_package --build generic \
 
 pack_set --module-requirement penlight
 
-pack_set --install-query $(pack_get --prefix)/bin/ldoc
+pack_set --install-query $(pack_get --prefix lua)/bin/ldoc
 
 pack_cmd "make install"
 

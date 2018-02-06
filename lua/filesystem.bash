@@ -7,7 +7,7 @@ add_package --build generic \
 
 pack_set --module-requirement lua
 
-pack_set --install-query $(pack_get --LD lua)//lua/$lua_V/lfs.so
+pack_set --install-query $(pack_get --LD lua)/lua/$lua_V/lfs.so
 
 # Correct the installation compilation
 pack_cmd "rm config"

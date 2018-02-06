@@ -59,14 +59,6 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta)" \
     -RL siesta
 
-rm_latest siesta-scf.latest/$(get_c)
-create_module $cm_defs \
-    -n siesta-scf.latest \
-    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
-    -M siesta-scf.latest/$(get_c) \
-    -echo "$(echo_modules siesta-scf)" \
-    -RL siesta-scf
-
 rm_latest siesta-trunk.latest/$(get_c)
 create_module $cm_defs \
     -n siesta-trunk.latest \
