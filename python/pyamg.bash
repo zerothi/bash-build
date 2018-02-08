@@ -13,7 +13,7 @@ pack_set --module-requirement scipy
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
-# Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstallC"
+# Install commands that it should run (pyamg does not use numpy builds)
+pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
