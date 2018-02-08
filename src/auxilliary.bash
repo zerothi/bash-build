@@ -517,8 +517,11 @@ function arc_cmd {
 	local|bin|fake)
 	    _ps "echo"
 	    ;;
+	git)
+	    _ps "git clone"
+	    ;;
 	*)
-	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,local/bin/fake]"
+	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,git,local/bin/fake]"
 	    ;;
     esac
 }
@@ -529,14 +532,16 @@ function arc_cmd {
 # Extracts the archive belonging to package and extracts it
 # to the directory.
 #  Arguments
-#    dir
-#       The directory that the archive is extracted to
 #    <package>
 #       the package name. Looks up the package, extracts the
 #       archive from the saved package, and extracts it.
+#    dir
+#       The directory that the archive is located in
 
 function extract_archive {
-    local id="$2"
+    local id="$1"
+    shift
+    local loc="$1/"
     local d=$(pack_get --directory $id)
     local ext=$(pack_get --ext $id)
     local cmd=$(arc_cmd $ext)
@@ -547,8 +552,8 @@ function extract_archive {
 	    noop
 	    ;;
 	*)
-	    if [[ -d "$1/$d" ]]; then
-		rm -rf "$1/$d"
+	    if [[ -d "$loc$d" ]]; then
+		rm -rf "$loc$d"
 	    fi
 	    ;;
     esac
@@ -556,8 +561,11 @@ function extract_archive {
 	local|bin|fake)
 	    return 0
 	    ;;
+	git)
+	    loc=""
+	    ;;
     esac
-    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $1/$archive
+    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $loc$archive
     return $?
 }
 

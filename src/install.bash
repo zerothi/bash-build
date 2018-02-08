@@ -167,7 +167,9 @@ function pack_install {
 		rm -rf $directory
 		;;
 	esac
-	extract_archive $(build_get --archive-path) $idx
+
+	# We need to check whether it is a git/svn/cvs repo
+	extract_archive $idx $(build_get --archive-path)
 	err=$?
 	if [[ $err -ne 0 ]]; then
 	    msg_install \

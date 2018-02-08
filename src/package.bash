@@ -251,10 +251,15 @@ function add_package {
     # Save the type of archive
     local ext=${fn##*.}
     _ext[$_N_archives]=$ext
-    # A binary does not have a directory
     case "x$ext" in
 	xfake|xbin|xsh|xlocal)
+	    # A binary/executable does not have a directory
 	    d=./
+	    ;;
+	xgit)
+	    # Since the archive cannot be downloaded we
+	    # use the direct archive directory
+	    _archive[$_N_archives]=$url
 	    ;;
     esac
     # Infer what the directory is
@@ -806,7 +811,11 @@ function pack_print {
 #       downloads the archive to this path.
 function pack_dwn {
     local ext=$(pack_get --ext $1)
-    [[ "x$ext" == "xlocal" ]] && return 0
+    case "x$ext" in
+	xlocal|xgit|xsvn)
+	    return 0
+	    ;;
+    esac
     local subdir=./
     if [[ $# -gt 1 ]]; then
 	subdir="$2"
