@@ -193,9 +193,11 @@ pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
 pack_cmd "unset LDSHARED"
 
 
-add_test_package numpy.test
-pack_cmd "unset LDFLAGS"
-pack_cmd "OMP_NUM_THREADS=2 nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+if ! $(is_c intel) ; then
+    add_test_package numpy.test
+    pack_cmd "unset LDFLAGS"
+    pack_cmd "OMP_NUM_THREADS=2 nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+    pack_set_mv_test $TEST_OUT
+fi
 
 done
