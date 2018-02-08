@@ -38,7 +38,11 @@ pack_cmd "make $(get_make_parallel) lapacklib lapackelib tmglib"
 # Make test commands
 pack_cmd "make blas_testing 2>&1 > blas.test"
 pack_cmd "make cblas_testing 2>&1 > cblas.test"
-pack_cmd "make lapack_testing 2>&1 > lapack.test"
+if $(is_c intel) ; then
+    pack_cmd "make lapack_testing 2>&1 > lapack.test ; echo forced"
+else
+    pack_cmd "make lapack_testing 2>&1 > lapack.test"
+fi
 pack_set_mv_test blas.test
 pack_set_mv_test cblas.test
 pack_set_mv_test lapack.test

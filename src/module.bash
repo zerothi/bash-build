@@ -380,6 +380,10 @@ EOF
 	"$(module_fmt_routine --prepend-path MANPATH $fpath/man)"
     add_module_if -F $force -d "$path/share/man" $mfile \
 	"$(module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
+    add_module_if -F $force -d "$path/share/aclocal" $mfile \
+	"$(module_fmt_routine --prepend-path M4PATH $fpath/share/aclocal)"
+    add_module_if -F $force -d "$path/share/aclocal" $mfile \
+	"$(module_fmt_routine --prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
     # The LD_LIBRARY_PATH is DANGEROUS!
     #add_module_if -F $force -d "$path/lib" $mfile \
 #	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
