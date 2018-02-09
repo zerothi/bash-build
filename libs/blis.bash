@@ -85,6 +85,7 @@ pack_cmd "cd .."
 
 # Add lapack-blis
 add_hidden_package lapack-blis/$v
+pack_set --prefix $(pack_get --prefix blis)
 pack_set --installed $_I_REQ
 pack_set -mod-req lapack
 pack_set -mod-req blis

@@ -76,6 +76,7 @@ fi
 pack_cmd "mv $(pack_get --LD)/liblapack.a $(pack_get --LD)/liblapack_atlas.a"
 
 add_hidden_package lapack-atlas/$v
+pack_set --prefix $(pack_get --prefix atlas)
 pack_set --installed $_I_REQ
 pack_set -mod-req atlas[$v]
 # Denote the default libraries

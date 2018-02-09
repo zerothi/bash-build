@@ -10,6 +10,7 @@ pack_set --prefix $(build_get --installation-path[generic])/build-tools/1.0
 pack_set --install-query $(pack_get --prefix)/bin
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
 
+# These packages are installed in build-tools
 source_pack helpers/help2man.bash
 source_pack helpers/m4.bash
 source_pack helpers/autoconf.bash
@@ -61,6 +62,10 @@ source_pack helpers/libxml2.bash
 source_pack helpers/readline.bash
 source_pack helpers/termcap.bash
 source_pack helpers/openssl.bash
+
+# This will recreate the module with AC_LOCAL etc.
+pack_set --installed $_I_TO_BE build-tools # Make sure it is "installed"
+pack_install build-tools
 
 # Install LLVM compiler
 source llvm/llvm.bash

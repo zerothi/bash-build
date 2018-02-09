@@ -52,6 +52,7 @@ pack_cmd "popd"
 unset def_flag flag test_end
 
 add_hidden_package lapack-openblas/$v
+pack_set --prefix $(pack_get --prefix openblas)
 pack_set --installed $_I_REQ
 pack_set -mod-req openblas
 # Denote the default libraries
@@ -61,4 +62,5 @@ pack_set --lib[omp] $(pack_get -lib[omp] openblas)
 pack_set --lib[pt] $(pack_get -lib[pt] openblas)
 pack_set --lib[lapacke] ""
 
+pack_print
 done

@@ -18,7 +18,7 @@ else
     pack_set --module-requirement $la
     
     pack_cmd "../configure" \
-	     "LIBS='$(pack_get -lib $la) -lm'" \
+	     "LIBS='$(list -LD-rp $la) $(pack_get -lib $la) -lm'" \
 	     "--prefix $(pack_get --prefix)"
 fi
 

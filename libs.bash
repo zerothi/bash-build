@@ -59,6 +59,7 @@ source_pack libs/plasma.bash
 source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash
+
 source_pack libs/elpa.bash
 source_pack libs/elpa-debug.bash
 #source_pack libs/eigenexa.bash
