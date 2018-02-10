@@ -105,7 +105,6 @@ runtime_library_dirs += [\"$(pack_get --LD $(get_parent))\"]\n\
 
 pack_cmd "unset LDFLAGS"
 
-
 pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"

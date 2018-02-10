@@ -100,6 +100,7 @@ fi
 # two.
 tmp=libpython${v:0:3}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
+unset tmp
 
 
 # Needed as it is not source_pack
