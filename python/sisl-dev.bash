@@ -3,7 +3,7 @@ add_package --package sisl-dev --version 0 \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
+pack_set --install-query always-install-this-module
 
 pack_set $(list --prefix ' --module-requirement ' scipy netcdf4py)
 
