@@ -27,6 +27,10 @@ else
     doerr "$(pack_get --package)" "Could not determine needed ASE interface"
 fi
 
+# First we need to fix gpaw compilation
+pack_cmd "sed -i 's/-Wl,-R/-Wl,-rpath=/g' config.py"
+pack_cmd "sed -i 's/-R/-Wl,-rpath=/g' config.py"
+
 # Check for Intel MKL or not
 file=customize.py
 pack_cmd "echo '#' > $file"
