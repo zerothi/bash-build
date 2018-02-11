@@ -62,6 +62,11 @@ pack_cmd "popd"
 
 
 # Install commands that it should run
+# When building non-shared it may break some builds.
+# We could later build python with static linking and then
+# later install the shared library (so that we both have .a and .so).
+# For now we require that builds requiring a shared build is "fixed".
+#    enable shared build with: --enable-shared and adding python[$v] to list --LD-rp
 pack_cmd "../configure --with-threads" \
     "--enable-unicode=ucs4" \
     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra) $tmp_lib'" \
