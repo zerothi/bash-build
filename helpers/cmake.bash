@@ -1,6 +1,9 @@
-add_package --build generic https://cmake.org/files/v3.9/cmake-3.9.4.tar.gz
+add_package --build generic https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
+
+pack_set --module-requirement build-tools
+pack_set --prefix $(pack_get --prefix build-tools)
 
 p_V=$(pack_get --version)
 c_V=`cmake --version 2> /dev/null | head -1 | awk '{print $3}'`

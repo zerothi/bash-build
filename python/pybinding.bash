@@ -17,8 +17,6 @@ pack_set --module-requirement cython \
 	 --module-requirement matplotlib \
 	 --module-requirement pybind11
 
-pack_cmd "module load cmake"
-
 pack_cmd "echo 'Fake' > changelog.md"
 
 # Fix CMakelists.txt
@@ -28,8 +26,6 @@ pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 
 pack_cmd "$(get_parent_exec) setup.py install" \
       "--prefix=$(pack_get --prefix)"
-
-pack_cmd "module unload cmake"
 
 add_test_package pybinding.test
 pack_cmd "pytest --pyargs pybinding 2>&1 > $TEST_OUT ; echo 'Success'"

@@ -77,15 +77,10 @@ opt="-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
 opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=$NPROCS"
 
-# Install commands that it should run
-pack_cmd "module load cmake"
-
 # Prepare Cmake setup
 pack_cmd "CC=$CC CXX=$CXX cmake -G 'Unix Makefiles' $opt .."
 
 # Make commands (this cmake --build removes colors)
 pack_cmd "cmake --build . -- $(get_make_parallel)"
 pack_cmd "cmake --build . --target install"
-
-pack_cmd "module unload cmake"
 
