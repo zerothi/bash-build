@@ -9,6 +9,7 @@ pack_set --module-name build-tools/1.0
 pack_set --prefix $(build_get --installation-path[generic])/build-tools/1.0
 pack_set --install-query $(pack_get --prefix)/bin
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
+pack_set --module-opt "--set-ENV PKG_CONFIG=$(pack_get --prefix)/bin/pkg-config"
 
 # These packages are installed in build-tools
 source_pack helpers/help2man.bash
