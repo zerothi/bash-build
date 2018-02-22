@@ -27,8 +27,9 @@
 
 function msg_install {
     local n="" ; local action=0
+    local opt
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1)
+	opt=$(trim_em $1)
 	case $opt in
 	    -start|-S)
 		action=1
@@ -65,10 +66,6 @@ function msg_install {
 	    ;;
     esac
 
-    local _p=$(pack_get --package $pack)
-    local _e=$(pack_get --ext $pack)
-    local _a=$(pack_get --alias $pack)
-
     echo " ================================== "
     echo "   $n"
     case $action in
@@ -76,10 +73,13 @@ function msg_install {
 	    ;;
 	1)
 	    echo " File    : $(pack_get --archive $pack)"
+	    local _e=$(pack_get --ext $pack)
 	    echo " Ext     : $_e"
 	    echo " Ext CMD : $(arc_cmd $_e)"
 	    ;;
 	*)
+	    local _p=$(pack_get --package $pack)
+	    local _a=$(pack_get --alias $pack)
 	    echo " Package : $_p"
 	    if [[ "$_p" != "$_a" ]]; then
 		echo " Alias   : $_a"

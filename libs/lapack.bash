@@ -1,7 +1,7 @@
 v=3.8.0
 add_package --version $v --archive lapack-$v.tar.gz https://github.com/Reference-LAPACK/lapack/archive/v$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/liblapack.a
 

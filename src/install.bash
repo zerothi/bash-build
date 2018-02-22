@@ -83,7 +83,7 @@ function pack_install {
     if [[ $run -eq 0 ]]; then
 	# Notify other required stuff that this can not be installed.
 	pack_set --installed $_I_REJECT $idx
-	msg_install --message "Installation rejected for $(pack_get --package $idx)" $idx
+	msg_install --message "Installation rejected for $(pack_get --package $idx)[$version]" $idx
 	return 1
     fi
 
