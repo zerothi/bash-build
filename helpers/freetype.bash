@@ -13,3 +13,7 @@ pack_cmd "./configure --prefix $(pack_get --prefix)"
 pack_cmd "make"
 pack_cmd "make install"
 
+# Sadly some installations does not check the correct
+# place for the ft2build.h header
+pack_cmd "cd $(pack_get --prefix)/include ; ln -s freetype2/ft2build.h"
+
