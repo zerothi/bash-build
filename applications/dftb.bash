@@ -1,12 +1,16 @@
-for v in 1.2.2 ; do
-add_package http://www.student.dtu.dk/~nicpa/packages/dftb+_$v.tar.gz
+for v in 17.1 ; do
+add_package --archive dftbplus-$v.tar.gz \
+	    https://github.com/dftbplus/dftbplus/archive/17.1.tar.gz
 
-pack_set --host-reject ntch-l --host-reject zerothi
+pack_set -s $MAKE_PARALLEL
+
+pack_set --host-reject ntch-l
 
 pack_set --module-opt "--lua-family dftb+"
 
+pack_set --module-requirement arpack-ng
+
 pack_set --install-query $(pack_get --prefix)/bin/dftb+
-pack_set --directory $(pack_get --directory)_src
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -14,8 +18,9 @@ if $(is_c intel) ; then
 elif $(is_c gnu) ; then
     cc=gnu
 fi
-file=sysmakes/make.$cc
+file=make.arch
 pack_cmd "echo '#' > $file"
+pack_cmd "echo 'FPP = \$(ROOT)/utils/build/fpp/fpp.sh general' > $file"
 
 if [[ -z "$FLAG_OMP" ]]; then
     doerr dftb "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -24,47 +29,49 @@ fi
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
-FC90 = $FC\n\
-FC90OPT = $FCFLAGS $FLAG_OMP -mkl=parallel\n\
+FXX = $FC\n\
+CC = $CC\n\
+FXXOPT = $FCFLAGS $FLAG_OMP\n\
+CPPOPT = $CFLAGS $FLAG_OMP\n\
 CPP = cpp -traditional\n\
-CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
-CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
-LN = \$(FC90) \n\
+LN = \$(FXX) \n\
 LNOPT = -mkl=parallel $FLAG_OMP\n\
 LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
-LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n\
-LIBOPT = $MKL_LIB' $file"
+LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n' $file"
     
 else
     pack_cmd "sed -i '1 a\
-FC90 = $FC\n\
-FC90OPT = $FCFLAGS $FLAG_OMP \n\
+FXX = $FC\n\
+CC = $CC\n\
+FXXOPT = $FCFLAGS $FLAG_OMP\n\
+CPPOPT = $CFLAGS $FLAG_OMP\n\
 CPP = cpp -traditional\n\
-CPPOPT = -DDEBUG=\$(DEBUG) # -DEXTERNALERFC\n\
-CPPPOST = \$(ROOT)/utils/fpp/fpp.sh general\n\
-LN = \$(FC90) \n\
-LNOPT = $FLAG_OMP' $file"
+LN = \$(FXX) \n\
+LNOPT = $FLAG_OMP\n' $file"
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
     pack_cmd "sed -i '$ a\
-LINALG_OPT = $(list --LD-rp +$la)\n\
+LINALG_OPT = $(list --LD-rp ++$la)\n\
 LIB_LAPACK = \$(LINALG_OPT) $(pack_get -lib[omp] $la)\n\
-LIB_BLAS = \$(LINALG_OPT) $(pack_get -lib[omp] $la)\n\
-LIBOPT = \$(LINALG_OPT)\n' $file"
+LIB_BLAS = \$(LINALG_OPT) $(pack_get -lib[omp] $la)\n' $file"
 
 fi
 
-pack_cmd "mv Makefile.user.template Makefile.user"
-pack_cmd "sed -i -e 's/ARCH[[:space:]]*=.*/ARCH = $cc/g' Makefile.user"
+pack_cmd "echo '#' > make.config"
+pack_cmd "sed -i '$ a\
+BUILDDIR = \$(ROOT)/build\n\
+INSTALLDIR = $(pack_get --prefix)\n\
+WITH_DFTD3 = 0\n\
+COMPILE_DFTD3 = 0\n\
+WITH_ARPACK = 1\n\
+ARPACK_LIBS = $(list -LD-rp arpack-ng) $(pack_get --lib arpack-ng)\n\
+DEBUG = 0\n\
+include \$(ROOT)/make.arch\n' make.config"
 
-# Install commands that it should run
-pack_cmd "cd prg_dftb"
-pack_cmd "make distclean"
 pack_cmd "make $(get_make_parallel)"
 
 # Make commands
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
-pack_cmd "cp _obj_$cc/dftb+ $(pack_get --prefix)/bin/"
+pack_cmd "make install"
 
 done
