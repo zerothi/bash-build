@@ -20,7 +20,16 @@ elif $(is_c gnu) ; then
 fi
 file=make.arch
 pack_cmd "echo '#' > $file"
-pack_cmd "echo 'FPP = \$(ROOT)/utils/build/fpp/fpp.sh general' > $file"
+pack_cmd "sed -i '$ a\
+FXX = $FC\n\
+FXXOPT = $FCFLAGS $FLAG_OMP\n\
+CC = $CC\n\
+CPP = cpp -traditional\n\
+CPPOPT = \n\
+FPP = \$(ROOT)/utils/build/fpp/fpp.sh general\n\
+LN = \$(FXX) \n\
+LIBOPT = \n\
+OTHERLIBS = \n' $file"
 
 if [[ -z "$FLAG_OMP" ]]; then
     doerr dftb "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -28,25 +37,13 @@ fi
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    pack_cmd "sed -i '1 a\
-FXX = $FC\n\
-CC = $CC\n\
-FXXOPT = $FCFLAGS $FLAG_OMP\n\
-CPPOPT = $CFLAGS $FLAG_OMP\n\
-CPP = cpp -traditional\n\
-LN = \$(FXX) \n\
+    pack_cmd "sed -i '$ a\
 LNOPT = -mkl=parallel $FLAG_OMP\n\
 LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
 LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n' $file"
     
 else
-    pack_cmd "sed -i '1 a\
-FXX = $FC\n\
-CC = $CC\n\
-FXXOPT = $FCFLAGS $FLAG_OMP\n\
-CPPOPT = $CFLAGS $FLAG_OMP\n\
-CPP = cpp -traditional\n\
-LN = \$(FXX) \n\
+    pack_cmd "sed -i '$ a\
 LNOPT = $FLAG_OMP\n' $file"
 
     la=lapack-$(pack_choice -i linalg)
