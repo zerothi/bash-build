@@ -90,7 +90,7 @@ create_module $cm_defs \
     -RL siesta-trunk
 
 
-msg_install --message "openmx, vasp"
+msg_install --message "openmx, vasp, dftb"
 
 create_module $cm_defs \
     -n openmx.default \
@@ -106,6 +106,12 @@ create_module $cm_defs \
     -echo "$(echo_modules vasp[5.3.5])" \
     -RL vasp[5.3.5]
 
+create_module $cm_defs \
+    -n dftbplus.default \
+    -W "Nick R. Papior script for loading DFTB+: $(get_c)" \
+    -M dftbplus.default/$(get_c) \
+    -echo "$(echo_modules dftbplus)" \
+    -RL dftbplus
 
 msg_install --message "plotting utilities"
 
