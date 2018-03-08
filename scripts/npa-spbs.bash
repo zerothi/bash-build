@@ -31,6 +31,8 @@ case \$_hostname in
         # than ntch or ftnk as the first group
         case \${_groups} in
             ntch*|ftnk*)
+               ;;
+            *ntch*|*ftnk*)
                account=fotonano
                ;;
         esac
