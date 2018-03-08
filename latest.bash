@@ -45,8 +45,8 @@ create_module $cm_defs \
     -n Inelastica.latest \
     -W "Nick R. Papior script for loading Inelastica: $(get_c)" \
     -M Inelastica.latest/$(get_c) \
-    -echo "$(echo_modules Inelastica-DEV)" \
-    -RL Inelastica-DEV
+    -echo "$(echo_modules Inelastica-dev)" \
+    -RL Inelastica-dev
 
 
 msg_install --message "siesta and its variants"

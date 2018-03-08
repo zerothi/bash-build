@@ -519,7 +519,7 @@ function arc_cmd {
 	    ;;
 	git)
 	    # This of course limits to depth 5, so the url should have additional options
-	    _ps "git clone --depth 5"
+	    _ps "git clone -q"
 	    ;;
 	*)
 	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,git,local/bin/fake]"

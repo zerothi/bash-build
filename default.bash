@@ -69,8 +69,8 @@ create_module $cm_defs \
     -n "Inelastica.default" \
     -W "Nick R. Papior script for loading Inelastica: $(get_c)" \
     -M Inelastica.default/$(get_c) \
-    -echo "$(echo_modules Inelastica-DEV[407])" \
-    -RL Inelastica-DEV[407]
+    -echo "$(echo_modules Inelastica-dev)" \
+    -RL Inelastica-dev
 
 
 msg_install --message "siesta and its variants"

@@ -9,6 +9,7 @@ cat <<EOF > $script
 
 # First retreive the hostname
 _hostname="\$(hostname -s)"
+_groups="\$(groups \$USER)"
 
 # Set default options:
 single_paffinity=0
@@ -19,12 +20,20 @@ ppn=1
 # Default to have the PBS_NP env-var
 has_np_cmd=1
 queue=
+account=
 case \$_hostname in
     nano*|pico*|femto*|atto*)
         has_np_cmd=0
         ;;
-    n-*|gray*|hpc-fe*|hpclogin*)
+    n-*|gray*|hpc-fe*|hpclogin*|login*.hpc*)
         queue=fotonano
+        # Check whether the user has something different
+        # than ntch or ftnk as the first group
+        case \${_groups} in
+            ntch*|ftnk*)
+               account=fotonano
+               ;;
+        esac
         ;;
 esac
     
@@ -34,8 +43,7 @@ inout=""
 show_flag=0
 access_policy=SHARED
 # Default to not use OpenMP
-# By far the greatest majority do not even know
-# its existence.
+# By far the greatest majority do not even know its existence.
 omp=0
 mpi=0
 
@@ -75,6 +83,7 @@ function _spbs_help {
     printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--nodes|-n|-p" "Number of nodes requested"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
+    printf "\$format" "--account|-A" "Account name to submit job in (typically not needed)"
     printf "\$format" "--mail-begin|-m-b" "Mail when the job begins"
     printf "\$format" "--mail-error|-m-e" "Mail when the job quits on error"
     printf "\$format" "--mail-abort|-m-a" "Mail when the PBS system aborts the job"
@@ -107,6 +116,7 @@ while [ \$# -ne 0 ]; do
     shift
     case \$opt in 
         -name|-N) name="\$1" ; shift ;;
+        -account|-A) account="\$1" ; shift ;;
         -queue|-q) queue="\$1" ; shift ;;
         -walltime|-W) walltime="\$1" ; shift ;;
         -days|-dd) walltime="\$((\$1*24)):\${walltime#*:}" ; shift ;;
@@ -159,16 +169,12 @@ fi
 
 echo "#!/bin/sh"
 _spbs_add_PBS_option -N "\$name" "The name of the PBS script"
-_spbs_add_PBS_option -q "\$queue" "The queue that the script is submitted to"
-_spbs_add_PBS_option -l "nodes=\$nodes:ppn=\$ppn" "Determines the processors, nodes = computers, ppn = cores used on each computer [nodes=2:ppn=4] => 8 cpu's"
-if [ \$has_np_cmd -eq 1 ]; then
-  if [ \$((\$nodes*\$ppn)) -le 8 ]; then
-    _help "With <= 8 cores you will automatically only be assigned to the AMD machines"
-    if [ "\$queue" == "fotonano" ]; then
-      _spbs_add_PBS_option -l "feature='Opteron2220|Opteron2354|Opteron2382|Opteron6136'" "Only requests processors of AMD type"
-    fi
-  fi
+if [[ ! -z "\$account" ]]; then
+    _spbs_add_PBS_option -A "\$account" "The account name the script is submitted through"
 fi
+_spbs_add_PBS_option -q "\$queue" "The queue that the script is submitted to"
+
+_spbs_add_PBS_option -l "nodes=\$nodes:ppn=\$ppn" "Determines the processors, nodes = computers, ppn = cores used on each computer [nodes=2:ppn=4] => 8 cpu's"
 _spbs_add_PBS_option -l "walltime=\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 _spbs_add_PBS_option -m "\$message" "Mail upon [a] = PBS abort, [e] = execution error, [b] = begin execution."
 _spbs_add_PBS_option -M "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."

@@ -143,17 +143,5 @@ build_set --module-path $old_path-npa
 # Create common modules
 source python/python-mods.bash
 
-
-for i in $(get_index -all Inelastica-DEV) ; do
-    create_module \
-        -n $(pack_get --alias $i).$(pack_get --version $i) \
-	-W "Nick R. Papior Inelastica for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.Inelastica-DEV.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
-
-
 build_set --module-path $old_path
 
