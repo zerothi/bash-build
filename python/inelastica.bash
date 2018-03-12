@@ -1,8 +1,9 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
+v=1.3.2
 add_package --package Inelastica \
-	    --archive inelastica-1.3.1.tar.gz \
-	    https://github.com/tfrederiksen/inelastica/archive/v1.3.1.tar.gz
+	    --archive inelastica-$v.tar.gz \
+	    https://github.com/tfrederiksen/inelastica/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 

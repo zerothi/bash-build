@@ -9,6 +9,9 @@ pack_cmd "cd Src"
 
 pack_set --module-requirement mpi
 
+pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
+pack_cmd "mkdir -p $(pack_get --LD)/"
+
 file=Makefile
 pack_cmd "echo '# Gulp Makefile' > $file"
 
@@ -77,8 +80,6 @@ pack_cmd "make $(get_make_parallel) gulp"
 pack_cmd "make $(get_make_parallel) lib"
 
 # Install the package
-pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
-pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp gulp $(pack_get --prefix)/bin/"
 pack_cmd "cp $file $(pack_get --prefix)/"
 pack_cmd "cp ../libgulp.a $(pack_get --LD)/"
