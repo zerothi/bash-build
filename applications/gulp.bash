@@ -1,6 +1,8 @@
 for v in 4.3 5.0 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
+pack_set -s $MAKE_PARALLEL
+
 pack_set --module-opt "--lua-family gulp"
 
 pack_set --install-query $(pack_get --prefix)/bin/gulp
@@ -13,21 +15,34 @@ pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
 pack_cmd "mkdir -p $(pack_get --LD)/"
 
 file=Makefile
-pack_cmd "echo '# Gulp Makefile' > $file"
 
-pack_cmd "sed -i '$ a\
-INC = -I..\n\
+if [[ $(vrs_cmp $v 5.0) -ge 0 ]]; then
+    pack_set --module-requirement fftw-mpi-3
+
+    pack_cmd "mkdir build-tmp ; cd build-tmp"
+    pack_cmd "echo '# Gulp Makefile' > $file"
+
+    pack_cmd "sed -i '$ a\
+UDEFS = -DFLUSH\n\
+INC = -I.. $(list -INCDIRS fftw-mpi-3) \n\
 OPT = $FCFLAGS \n\
 OPT1 = ${FCFLAGS//-O3/-O1}\n\
 OPT2 = ${FCFLAGS//-O3/-O2}\n\
+BAGGER = -g\n\
 RUNF90 = $MPIF90\n\
 RUNCC = $MPICC\n\
+MDEFS = -DMPI\n\
+FDEFS = -DFFTW3\n\
+FLIBS = $(list -LD-rp fftw-mpi-3) -lfftw3_mpi -lfftw3\n\
+ARCHIVE = $AR rcv\n\
+RANLIB = $RANLIB\n\
+CDABS = cdabs.o\n\
+GULPENV = \n\
 ' $file"
 
-if [[ $(vrs_cmp $v 5.0) -ge 0 ]]; then
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
-LIBS = $MKL_LIB -mkl=sequential -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64' $file"
+SLIBS = $MKL_LIB -mkl=sequential -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64' $file"
     
 else
 
@@ -35,15 +50,28 @@ else
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    pack_cmd "sed -i '1 a\
-LIBS = $(list --LD-rp +$la) $(pack_get -lib $la)' $file"
+    pack_cmd "sed -i '$ a\
+SLIBS = $(list --LD-rp scalapack $la) -lscalapack $(pack_get -lib $la)' $file"
 
 fi
 
+pack_cmd "cp $file $(pack_get --prefix)/"
+pack_cmd "cat ../Makefile >> $file"
+
+# Make commands
+pack_cmd "make $(get_make_parallel) gulp"
+pack_cmd "make $(get_make_parallel) lib"
+
+# Install the package
+pack_cmd "cp gulp $(pack_get --prefix)/bin/"
+pack_cmd "cp libgulp.a $(pack_get --LD)/"
+
+# Move the doc and libraries
+pack_cmd "mv ../../Docs $(pack_get --prefix)/"
+pack_cmd "mv ../../Libraries $(pack_get --prefix)/"
 
 else
 
-    
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
     LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' $file"
@@ -84,11 +112,11 @@ pack_cmd "cp gulp $(pack_get --prefix)/bin/"
 pack_cmd "cp $file $(pack_get --prefix)/"
 pack_cmd "cp ../libgulp.a $(pack_get --LD)/"
 
-fi
-
 # Move the doc and libraries
 pack_cmd "mv ../Docs $(pack_get --prefix)/"
 pack_cmd "mv ../Libraries $(pack_get --prefix)/"
+
+fi
 
 # Add env variables
 pack_set --module-opt "--set-ENV GULP_DOC=$(pack_get --prefix)/Docs"
