@@ -122,6 +122,4 @@ fi
 pack_set --module-opt "--set-ENV GULP_DOC=$(pack_get --prefix)/Docs"
 pack_set --module-opt "--set-ENV GULP_LIB=$(pack_get --prefix)/Libraries"
 
-
-
 done
