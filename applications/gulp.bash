@@ -1,7 +1,9 @@
 for v in 4.3 5.0 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL
+if ! $(is_c intel) ; then
+    pack_set -s $MAKE_PARALLEL
+fi
 
 pack_set --module-opt "--lua-family gulp"
 
