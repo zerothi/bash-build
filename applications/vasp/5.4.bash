@@ -127,15 +127,21 @@ function compile_ispin {
     local exe=$1 ; shift
     pack_cmd "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' src/pardens.F"
     pack_cmd "make all"
+    # std has to be the final one
     for e in gam ncl std
     do
 	pack_cmd "cp bin/vasp_$e $(pack_get --prefix)/bin/${exe}_${e}_is$i"
 	if [[ $i -eq 0 ]]; then
 	    pack_cmd "pushd $(pack_get --prefix)/bin"
-	    pack_cmd "ln -fs ${exe}_${e}_is0 ${exe}"
+	    pack_cmd "ln -fs ${exe}_${e}_is0 ${exe}_${e}"
 	    pack_cmd "popd"
 	fi
     done
+    if [[ $i -eq 0 ]]; then
+	pack_cmd "pushd $(pack_get --prefix)/bin"
+	pack_cmd "ln -fs ${exe}_std_is0 ${exe}"
+	pack_cmd "popd"
+    fi
     pack_cmd "make veryclean"
 }
 
