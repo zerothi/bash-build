@@ -26,6 +26,7 @@ PRELOAD_MODULE=module-preload
 IS_MODULE=module
 CRT_DEF_MODULE=def-module
 MAKE_PARALLEL=parallel
+BUILD_TOOLS=build-tools
 PIC=pic
 NO_PIC=no-pic
 PIE=pie

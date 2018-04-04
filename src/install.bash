@@ -94,6 +94,10 @@ function pack_install {
 	tmp=$(pack_get --build $idx)
 	source $(build_get --source[$tmp])
 
+	if $(has_setting $BUILD_TOOLS $idx) ; then
+	    module load build-tools
+	fi
+
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
 	if [[ -n "${module_loads}" ]]; then
@@ -235,6 +239,10 @@ function pack_install {
 	    # We need to clean up, in order to force the
 	    # module creation.
 	    rm -f $(pack_get --module-prefix $idx)/$mod_name
+	fi
+
+	if $(has_setting $BUILD_TOOLS $idx) ; then
+	    module unload build-tools
 	fi
 
 	export FCFLAGS="$old_fcflags"

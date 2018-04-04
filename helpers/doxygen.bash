@@ -4,7 +4,7 @@ add_package --build generic \
 	    --archive doxygen-Release_${v//./_}.tar.gz \
 	    https://github.com/doxygen/doxygen/archive/Release_${v//./_}.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
 
 pack_set --install-query $(pack_get --prefix)/bin/doxygen
 
