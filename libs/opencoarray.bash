@@ -15,8 +15,6 @@ fi
 
 pack_set --install-query $(pack_get --LD)/libcaf_mpi.a
 
-pack_cmd "module load $(pack_get -m cmake)"
-
 # Install commands that it should run
 pack_cmd "CC=$MPICC FC=$MPIFC cmake" \
 	 "-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix) .."
@@ -26,5 +24,3 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test > tmp.test 2>&1 || echo 'Forced success'"
 pack_cmd "make install"
 pack_set_mv_test tmp.test
-
-pack_cmd "module unload $(pack_get -m cmake)"

@@ -8,8 +8,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --prefix)/bin/doxygen
 
-pack_cmd "module load $(list ++cmake)"
-
 pack_cmd "cmake -G 'Unix Makefiles'" \
 	 "-D use-libclang=ON" \
 	 "-D CMAKE_INSTALL_PREFIX=$(pack_get --prefix) ../"

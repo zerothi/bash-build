@@ -6,10 +6,6 @@ pack_set --install-query $(pack_get --LD)/libparmetis.a
 
 pack_set --module-requirement mpi
 
-if [[ $(pack_installed cmake) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name cmake)"
-fi
-
 # Make commands 
 pack_cmd "sed -i -e 's/^\(cputype\).*/\1 = unknown/' Makefile"
 pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"
@@ -30,8 +26,3 @@ pack_cmd "make config prefix=$(pack_get --prefix)"
 pack_cmd "cd build/linux-unknown"
 pack_cmd "make"
 pack_cmd "make install"
-
-if [[ $(pack_installed cmake) -eq 1 ]]; then
-    pack_cmd "module unload $(pack_get --module-name cmake)"
-fi
-

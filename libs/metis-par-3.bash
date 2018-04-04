@@ -8,10 +8,6 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libparmetis.a
 
-if [[ $(pack_installed cmake) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name cmake)"
-fi
-
 pack_set --module-requirement mpi
 
 # Make commands 
@@ -36,10 +32,6 @@ pack_cmd "cp libparmetis.a $(pack_get --LD)"
 pack_cmd "cp parmetis.h $(pack_get --prefix)/include"
 pack_cmd "cp METISLib/metis.h $(pack_get --prefix)/include"
 pack_cmd "sed -i -e 's|.../parmetis.h.|<parmetis.h>|' $(pack_get --prefix)/include/metis.h"
-
-if [[ $(pack_installed cmake) -eq 1 ]]; then
-    pack_cmd "module unload $(pack_get --module-name cmake)"
-fi
 
 done
 

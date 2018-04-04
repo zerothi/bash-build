@@ -14,8 +14,6 @@ pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
 pack_set --module-requirement mpi --module-requirement fftw-3
 
-pack_cmd "module load $(pack_get --module-name cmake)"
-
 tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 tmp="$tmp -DGMX_GPU=OFF"
 if $(is_c intel) ; then
@@ -43,7 +41,6 @@ pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 # Make commands (cmake --build removes color)
 pack_cmd "cmake --build ."
 pack_cmd "cmake --build . --target install"
-pack_cmd "module unload $(pack_get --module-name cmake)"
 
 # Add GROMACS envs
 pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --prefix)/bin"
