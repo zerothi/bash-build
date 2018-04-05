@@ -86,6 +86,12 @@ function add_hidden_package {
 #   pack_set --module-requirement $name[$version]
 #   pack_set --install-query $(pack_get --prefix $name[$version])/test.output
 function add_test_package {
+    if [[ $# -gt 0 ]]; then
+	TEST_OUT=$1
+	shift
+    else
+	TEST_OUT=tmp.test
+    fi
     local name=$(pack_get --alias)
     local version=$(pack_get --version)
     add_package --package $name-test \
@@ -95,14 +101,7 @@ function add_test_package {
     pack_set --prefix $top_prefix
     pack_set --module-requirement $name[$version]
     pack_set --remove-setting module
-    if [[ $# -gt 0 ]]; then
-	pack_set --install-query $top_prefix/$1*
-	TEST_OUT=$1
-	shift
-    else
-	pack_set --install-query $top_prefix/tmp.*
-	TEST_OUT=tmp.test
-    fi
+    pack_set --install-query $top_prefix/${TEST_OUT}*
 }
 
 # Routine for sourcing a package file

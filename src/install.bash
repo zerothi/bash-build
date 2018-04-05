@@ -7,6 +7,7 @@ function pack_install {
 	idx=$(get_index $1)
 	shift
     fi
+    local ext=$(pack_get --ext $idx)
     local alias=$(pack_get --alias $idx)
     local prefix=$(pack_get --prefix $idx)
     local version=$(pack_get --version $idx)
@@ -90,10 +91,91 @@ function pack_install {
     # Check that the package is not already installed
     if [[ $(pack_get --installed $idx) -eq $_I_TO_BE ]]; then
 
+	# Show that we will install
+	msg_install --start $idx
+
+        # Download archive
+	pack_dwn $idx $(build_get --archive-path)
+
+        # Go into the build directory
+	pushd $(build_get --build-path) 1> /dev/null
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install --package "Could not go to the build-path: $(build_get --build-path)" $idx
+	    exit $err
+	fi
+
+	# Remove directory if already existing
+	local directory=$(pack_get --directory $idx)
+	case $directory in
+	    .|./)
+		noop
+		;;
+	    *)
+		rm -rf $directory
+		;;
+	esac
+
+	# Extract the archive.
+	# For repositories this will be equivalent to git clone etc.
+	extract_archive $idx $(build_get --archive-path)
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install --package "Failed to extract archive from package..." $idx
+	    exit $err
+	fi
+
+	# Go into source directory
+	pushd $directory 1> /dev/null
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    msg_install --package "Could not go to the source directory: $directory" $idx
+	    exit $err
+	fi
+
+	# In case this build is a repository
+	# Then we check whether there are updates.
+	tmp=-1
+	local hash
+	case x$ext in
+	    xgit)
+		# Check that we haven't already found this has
+		if [[ -e $prefix/.bb.hash ]]; then
+		    tmp=0
+		    local installed_hash=$(cat $prefix/.bb.hash)
+		    hash=$(git rev-parse HEAD)
+		    [[ "x$hash" == "x$installed_hash" ]] && tmp=1
+		fi
+		;;
+	esac
+	case $tmp in
+	    0)
+		msg_install --message "Hash mismatch, proceeding with installation old / new: $installed_hash / $hash" $idx
+		;;
+	    1)
+		msg_install --message "Already have ($hash) installed... Skipping" $idx
+		popd 1> /dev/null
+		popd 1> /dev/null
+		pack_set --installed $_I_INSTALLED $idx
+		return 0
+		;;
+	esac
+	
+        # We are now in the package, check for optional build-directory
+	if $(has_setting $BUILD_DIR $idx) ; then
+	    rm -rf build-tmp
+	    mkdir -p build-tmp
+	    {
+		popd
+		pushd $directory/build-tmp
+	    } 1> /dev/null 
+	fi
+	
 	# Source the file for obtaining correct env-variables
 	tmp=$(pack_get --build $idx)
 	source $(build_get --source[$tmp])
 
+	# Begin loading modules before running the commands
 	if $(has_setting $BUILD_TOOLS $idx) ; then
 	    module load build-tools
 	fi
@@ -144,60 +226,8 @@ function pack_install {
 	fi
 	unset tmp_ld tmp_inc
 
-	#old_ld_lib_path="$LD_LIBRARY_PATH"
-	#export LD_LIBRARY_PATH="$LD_LIBRARY_PATH$(list --prefix : --loop-cmd 'pack_get --prefix' --suffix '/lib' $mod_reqs_paths)"
-
-        # Show that we will install
-	msg_install --start $idx
-	
-        # Download archive
-	pack_dwn $idx $(build_get --archive-path)
-
-        # Extract the archive
-	pushd $(build_get --build-path) 1> /dev/null
-	err=$?
-	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Could not go to the build-path: $(build_get --build-path)" $idx
-	    exit $err
-	fi
-
-	# Remove directory if already existing
-	local directory=$(pack_get --directory $idx)
-	case $directory in
-	    .|./)
-		noop
-		;;
-	    *)
-		rm -rf $directory
-		;;
-	esac
-
-	# We need to check whether it is a git/svn/cvs repo
-	extract_archive $idx $(build_get --archive-path)
-	err=$?
-	if [[ $err -ne 0 ]]; then
-	    msg_install \
-		--package "Failed to install package..." \
-		$idx
-	    exit $err
-	fi
-	
-	pushd $directory 1> /dev/null
-	err=$?
-	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Could not go to the source directory: $directory" $idx
-	    exit $err
-	fi
-
-        # We are now in the package directory
-	if $(has_setting $BUILD_DIR $idx) ; then
-	    rm -rf build-tmp
-	    mkdir -p build-tmp
-	    {
-		popd
-		pushd $directory/build-tmp
-	    } 1> /dev/null 
-	fi
+	# Show currently loaded modules before executing commands
+	msg_install --modules $idx
 	
 	# Run all commands
 	tmp="$(pack_get --commands $idx)"
@@ -255,6 +285,13 @@ function pack_install {
 
         # For sure it is now installed...
 	pack_set --installed $_I_INSTALLED $idx
+
+	# Store hash if required
+	case x$ext in
+	    xgit)
+		echo "$hash" > $prefix/.bb.hash
+		;;
+	esac
 
     fi
 

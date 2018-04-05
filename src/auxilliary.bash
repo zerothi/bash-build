@@ -53,6 +53,10 @@ function msg_install {
 		action=5
 		n="$1"
 		;;
+	    -modules)
+		action=6
+		n="List currently loaded modules"
+		;;
 	    *) break ;;
 	esac
 	shift
@@ -70,7 +74,10 @@ function msg_install {
     echo "   $n"
     case $action in
 	4)
-	    ;;
+	;;
+	6)
+	    module list 2>&1
+	;;
 	1)
 	    echo " File    : $(pack_get --archive $pack)"
 	    local _e=$(pack_get --ext $pack)
@@ -87,9 +94,6 @@ function msg_install {
 	    echo " Version : $(pack_get --version $pack)"
 	    ;;
     esac
-    if [[ $action -eq 1 ]]; then
-	module list 2>&1
-    fi
     echo " ================================== "
 }
 
