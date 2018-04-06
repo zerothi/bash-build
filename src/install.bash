@@ -31,13 +31,14 @@ function pack_install {
 
     # Check the hash if it is a git clone, and if so check that the hash
     # is not already installed
+    local hash="UNDEFINED"
     case x$ext in
 	xgit)
 	    # Check that we haven't already found this has
 	    if [[ -e $prefix/.bb.hash ]]; then
 		local installed_hash=$(cat $prefix/.bb.hash)
-		tmp=$(git ls-remote $(pack_get --url $idx) HEAD | awk '{print $1}')
-		[[ "x$tmp" == "x$installed_hash" ]] && pack_set --installed $_I_INSTALLED $idx
+		hash=$(git ls-remote $(pack_get --url $idx) HEAD | awk '{print $1}')
+		[[ "x$hash" == "x$installed_hash" ]] && pack_set --installed $_I_INSTALLED $idx
 	    fi
 	    ;;
     esac
