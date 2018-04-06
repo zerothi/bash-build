@@ -29,6 +29,19 @@ function pack_install {
 	fi
     fi
 
+    # Check the hash if it is a git clone, and if so check that the hash
+    # is not already installed
+    case x$ext in
+	xgit)
+	    # Check that we haven't already found this has
+	    if [[ -e $prefix/.bb.hash ]]; then
+		local installed_hash=$(cat $prefix/.bb.hash)
+		tmp=$(git ls-remote $(pack_get --url $idx) HEAD | awk '{print $1}')
+		[[ "x$tmp" == "x$installed_hash" ]] && pack_set --installed $_I_INSTALLED $idx
+	    fi
+	    ;;
+    esac
+
     # If we request downloading of files, do so immediately
     if [[ $DOWNLOAD -eq 1 ]]; then
 	pack_dwn $idx $(build_get --archive-path)
@@ -133,34 +146,6 @@ function pack_install {
 	    exit $err
 	fi
 
-	# In case this build is a repository
-	# Then we check whether there are updates.
-	tmp=-1
-	local hash
-	case x$ext in
-	    xgit)
-		# Check that we haven't already found this has
-		if [[ -e $prefix/.bb.hash ]]; then
-		    tmp=0
-		    local installed_hash=$(cat $prefix/.bb.hash)
-		    hash=$(git rev-parse HEAD)
-		    [[ "x$hash" == "x$installed_hash" ]] && tmp=1
-		fi
-		;;
-	esac
-	case $tmp in
-	    0)
-		msg_install --message "Hash mismatch, proceeding with installation old / new: $installed_hash / $hash" $idx
-		;;
-	    1)
-		msg_install --message "Already have ($hash) installed... Skipping" $idx
-		popd 1> /dev/null
-		popd 1> /dev/null
-		pack_set --installed $_I_INSTALLED $idx
-		return 0
-		;;
-	esac
-	
         # We are now in the package, check for optional build-directory
 	if $(has_setting $BUILD_DIR $idx) ; then
 	    rm -rf build-tmp

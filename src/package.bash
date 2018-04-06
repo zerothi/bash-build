@@ -809,18 +809,21 @@ function pack_print {
 #    path
 #       downloads the archive to this path.
 function pack_dwn {
-    local ext=$(pack_get --ext $1)
+    local idx=$(get_index $1)
+    shift
+    local ext=$(pack_get --ext $idx)
     case "x$ext" in
 	xlocal|xgit|xsvn)
 	    return 0
 	    ;;
     esac
     local subdir=./
-    if [[ $# -gt 1 ]]; then
-	subdir="$2"
+    if [[ $# -gt 0 ]]; then
+	subdir="$1"
+	shift
     fi
-    local archive=$(pack_get --archive $1)
-    local url=$(pack_get --url $1)
+    local archive=$(pack_get --archive $idx)
+    local url=$(pack_get --url $idx)
     dwn_file $url $subdir/$archive
 }
 
