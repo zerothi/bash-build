@@ -70,10 +70,11 @@ esac
 rm_latest python$pV.numerics/$(get_c)
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
-	 h5py numexpr theano numba seaborn networkx \
-	 sisl Inelastica kwant pybinding phonopy pythtb qutip \
-	 dask xarray yt \
-	 pyamg scikit-learn scikit-nano scikit-optimize ; do
+	       h5py numexpr theano numba seaborn networkx \
+	       Inelastica kwant pybinding phonopy pythtb qutip \
+	       dask xarray yt \
+	       pyamg scikit-learn scikit-nano scikit-optimize \
+	       ipi-dev sisl-dev ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"
     fi

@@ -105,6 +105,7 @@ source_pack python/pygsl.bash
 
 source_pack python/sisl.bash
 source_pack python/sisl-dev.bash
+source_pack python/ipi-dev.bash
 
 # Other scikit-programs
 source_pack python/scikit-learn.bash
