@@ -1,4 +1,4 @@
-# apt-get install gettext
+# apt-get install gettext libcurl4-openssl-dev
 for v in 2.17.0 ; do
 add_package --build generic \
 	    --archive git-$v.tar.gz \
