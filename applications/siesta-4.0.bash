@@ -60,6 +60,9 @@ pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 source applications/siesta-speed.bash libSiestaXC.a siesta
 pack_cmd "cp siesta $(pack_get --prefix)/bin/"
 
+# Save the arch.make file
+pack_cmd "cp arch.make $(pack_get --prefix)/arch.make"
+
 pack_cmd "make clean"
 
 source applications/siesta-speed.bash libSiestaXC.a transiesta

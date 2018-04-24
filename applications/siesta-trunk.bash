@@ -50,11 +50,10 @@ pack_cmd "cd Obj"
 # Setup the compilation scheme
 pack_cmd "../Src/obj_setup.sh"
 
-file=arch.make
 prefix=$(pack_get --prefix)
 
-pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
-pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > $file"
+pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > arch.make"
 
 # Add LTO in case of gcc-6.1 and above version 4.1
 if [[ $(vrs_cmp $v 562) -ge 0 ]]; then
@@ -83,18 +82,18 @@ FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
-COMP_LIBS += libncdf.a $fdict' $file"
+COMP_LIBS += libncdf.a $fdict' arch.make"
 
     pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' $file"
+ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
 
 else 
     if [[ $(pack_installed metis) -eq 1 ]]; then
 	pack_set --module-requirement metis
 	pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS\n\
-ADDLIB += -lmetis' $file"
+ADDLIB += -lmetis' arch.make"
     fi
 fi
 
@@ -131,14 +130,14 @@ INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
-' $file"
+' arch.make"
 
 if [[ $(pack_installed flook) -eq 1 ]]; then
     pack_cmd "sed -i '$ a\
 FPPFLAGS += -DSIESTA__FLOOK \n\
 FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
 INCFLAGS += $(list -INCDIRS flook)\n\
-LIBS += \$(FLOOK_LIB) \n' $file"
+LIBS += \$(FLOOK_LIB) \n' arch.make"
 fi
 
 # ELPA should be added before the linear algebra libraries
@@ -148,7 +147,7 @@ if [[ $(vrs_cmp $v 626) -ge 0 ]]; then
 FPPFLAGS += -DSIESTA__ELPA \n\
 ELPA_LIB = $(list -LD-rp elpa) -lelpa\n\
 INCFLAGS += $(list -INCDIRS elpa)/elpa\n\
-LIBS += \$(ELPA_LIB) \n' $file"
+LIBS += \$(ELPA_LIB) \n' arch.make"
 fi
 
 source applications/siesta-linalg.bash
@@ -159,32 +158,32 @@ function set_flag {
     end=
     case $v in
 	openmp)
-	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
-	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
-	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
+	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' arch.make"
+	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' arch.make"
+	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' arch.make"
 	    
 	    end=_omp
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' arch.make"
 		    ;;
 		mkl)
-		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
+		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' arch.make"
 		    ;;
 	    esac
 	    ;;
 	*)
-	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
-	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
-	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
+	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' arch.make"
+	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' arch.make"
+	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' arch.make"
 	    
 	    end=
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' arch.make"
 		    ;;
 		mkl)
-		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"
+		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' arch.make"
 		    ;;
 	    esac
 	    ;;
@@ -195,7 +194,7 @@ function set_flag {
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 # Save the arch.make file
-pack_cmd "cp $file $(pack_get --prefix)/$file"
+pack_cmd "cp arch.make $(pack_get --prefix)/arch.make"
 
 # Shorthand for compiling utilities
 function make_files {
@@ -330,7 +329,7 @@ esac
 
 if [[ $tmp -eq 1 ]]; then
     # Go back
-    pack_cmd "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
+    pack_cmd "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
     for omp in openmp none ; do
 
 	set_flag $omp
