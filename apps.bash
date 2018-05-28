@@ -33,7 +33,8 @@ source_pack applications/molden.bash
 source_pack applications/xmgrace.bash
 source_pack applications/xcrysden.bash
 source_pack applications/vmd.bash
-source_pack applications/vtk.bash
+# Currently VTK is an API not used anywhere, hence we do not install it
+#source_pack applications/vtk.bash
 # Installed by source to get python support
 source_pack applications/vmd-python.bash
 source_pack applications/gdis.bash
