@@ -33,6 +33,7 @@ source_pack applications/molden.bash
 source_pack applications/xmgrace.bash
 source_pack applications/xcrysden.bash
 source_pack applications/vmd.bash
+source_pack applications/vtk.bash
 # Installed by source to get python support
 source_pack applications/vmd-python.bash
 source_pack applications/gdis.bash
@@ -53,6 +54,7 @@ create_module \
 # DFT codes
 source_pack applications/gromacs.bash
 source_pack applications/dftb.bash
+source_pack applications/dftb_slako.bash
 source_pack applications/wannier.bash
 source_pack applications/gulp.bash
 source_pack applications/dftd3.bash

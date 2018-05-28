@@ -1,6 +1,6 @@
 for v in 17.1 ; do
 add_package --archive dftbplus-$v.tar.gz \
-	    https://github.com/dftbplus/dftbplus/archive/17.1.tar.gz
+	    https://github.com/dftbplus/dftbplus/archive/$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
