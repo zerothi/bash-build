@@ -74,6 +74,7 @@ for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	       Inelastica kwant pybinding phonopy pythtb qutip \
 	       dask xarray yt \
 	       pyamg scikit-learn scikit-nano scikit-optimize \
+	       orthopy quadpy \
 	       ipi-dev sisl-dev ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"

@@ -107,6 +107,9 @@ source_pack python/sisl.bash
 source_pack python/sisl-dev.bash
 source_pack python/ipi-dev.bash
 
+source_pack python/orthopy.bash
+source_pack python/quadpy.bash
+
 # Other scikit-programs
 source_pack python/scikit-learn.bash
 source_pack python/scikit-optimize.bash
