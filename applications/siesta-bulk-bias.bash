@@ -19,7 +19,7 @@ pack_set --module-requirement mpi --module-requirement netcdf
 
 # Go into correct directory
 # Sadly launchpad adds shit-loads of paths... :(
-pack_cmd "cd siesta/trunk"
+pack_cmd "cd siesta/trunk-bulk-bias"
 
 
 # Initial setup for new trunk with transiesta
