@@ -32,6 +32,6 @@ RANLIB = $RANLIB \n\
 pack_cmd "make"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
-pack_cmd "cp atm $(pack_get --prefix)/bin/atm"
+pack_cmd "cp atm $(pack_get --prefix)/bin/"
 pack_cmd "cd $(pack_get --prefix)/bin/ ; ln -s atm atom"
 
