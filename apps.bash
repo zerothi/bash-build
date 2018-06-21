@@ -17,6 +17,7 @@ source_pack applications/tau.bash
 source_pack applications/bader.bash
 
 # Pseudo potential generation
+source_pack applications/atom.bash
 source_pack applications/ape.bash
 source_pack applications/oncvpsp.bash
 

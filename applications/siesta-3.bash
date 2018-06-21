@@ -56,8 +56,7 @@ ADDLIB=-lnetcdff -lnetcdf\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
-\n\
-' arch.make"
+\n' arch.make"
 
 
 source applications/siesta-linalg.bash
