@@ -67,6 +67,14 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta-trunk)" \
     -RL siesta-trunk
 
+rm_latest siesta-trunk-bulk-bias.latest/$(get_c)
+create_module $cm_defs \
+    -n siesta-trunk-bulk-bias.latest \
+    -W "Nick R. Papior script for loading SIESTA: $(get_c)" \
+    -M siesta-trunk-bulk-bias.latest/$(get_c) \
+    -echo "$(echo_modules siesta-trunk-bulk-bias)" \
+    -RL siesta-trunk-bulk-bias
+
 
 msg_install --message "lammps"
 
