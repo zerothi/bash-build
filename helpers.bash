@@ -11,6 +11,7 @@ pack_set --install-query $(pack_get --prefix)/bin
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
 pack_set --module-opt "--set-ENV PKG_CONFIG=$(pack_get --prefix)/bin/pkg-config"
 
+
 # These packages are installed in build-tools
 source_pack helpers/help2man.bash
 source_pack helpers/m4.bash
