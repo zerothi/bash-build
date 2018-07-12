@@ -48,6 +48,7 @@ source_pack python/pip_installs.bash
 
 # Python building utility
 source_pack python/scons.bash
+source_pack python/meson.bash
 
 # Install the helper (mongodb)
 source_pack helpers/mongo.bash
