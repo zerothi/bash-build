@@ -1,5 +1,3 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
-
 add_package --package Inelastica-dev --version 0 \
 	    https://github.com/tfrederiksen/inelastica.git
 
