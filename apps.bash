@@ -34,6 +34,7 @@ source_pack applications/gnuplot.bash
 source_pack applications/molden.bash
 source_pack applications/xmgrace.bash
 source_pack applications/xcrysden.bash
+source_pack applications/vesta.bash
 source_pack applications/vmd.bash
 # Currently VTK is an API not used anywhere, hence we do not install it
 #source_pack applications/vtk.bash
