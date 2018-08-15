@@ -101,8 +101,8 @@ conda_append theano
 conda_install
 
 # Do my stuff
-conda_channel zerothi
-conda_append sisl sisl-dev
+conda_channel conda-forge
+conda_append sisl
 conda_install
 
 unset conda_append
