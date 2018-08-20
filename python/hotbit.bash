@@ -15,6 +15,7 @@ pack_cmd "echo '#' > $file"
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
+libs = []\n\
 libraries = \"mkl_lapack95_lp64 mkl_blas95_lp64\".split()\n\
 extra_link = [\"$MKL_LIB\",\"-mkl=sequential\"]\n' $file"
 
