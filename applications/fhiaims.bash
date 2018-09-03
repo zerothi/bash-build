@@ -71,3 +71,4 @@ do
 done
 
 pack_set --module-opt "--set-ENV FHIAIMS_VERSION=$v"
+pack_cmd "chmod o-rwx $(pack_get --prefix)/bin/*"
