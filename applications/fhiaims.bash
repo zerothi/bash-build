@@ -7,6 +7,7 @@ add_package --package fhi-aims \
 pack_set -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family fhi-aims"
+pack_set --module-opt "--set-ENV FHIAIMS_VERSION=$v"
 
 pack_set --install-query $(pack_get --prefix)/bin/aims.$v.scalapack.mpi.x
 
@@ -70,5 +71,7 @@ do
     pack_cmd "make $(get_make_parallel) $target"
 done
 
-pack_set --module-opt "--set-ENV FHIAIMS_VERSION=$v"
-pack_cmd "chmod o-rwx $(pack_get --prefix)/bin/*"
+pack_cmd "cd $(pack_get --prefix)/bin"
+pack_cmd 'chmod o-rwx *'
+pack_cmd "ln -fs aims.$v.scalapack.mpi.x aims.x"
+pack_cmd "ln -fs aims.$v.scalapack.mpi.x aims"
