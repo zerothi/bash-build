@@ -4,6 +4,8 @@ add_package --archive pybind11-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
+pack_set --module-requirement build-tools
+
 pack_set --install-query $(pack_get --prefix)/include/pybind11/pybind11.h
 
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)" \
