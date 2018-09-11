@@ -387,8 +387,10 @@ EOF
     add_module_if -F $force -d "$path/share/cmake" $mfile \
 	"$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
     tmp=$(ls -d $path/share/$name*)
-    add_module_if -F $force -d "$tmp" $mfile \
-	"$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $tmp)"
+    if [[ -n "$tmp" ]]; then
+	add_module_if -F $force -d "$tmp" $mfile \
+	    "$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $tmp)"
+    fi
     # The LD_LIBRARY_PATH is DANGEROUS!
     #add_module_if -F $force -d "$path/lib" $mfile \
 #	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
@@ -396,7 +398,7 @@ EOF
 #	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.6 2.7 3.4 3.5 3.6 ; do
+    for PV in 2.6 2.7 3.4 3.5 3.6 3.7 ; do
 	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
