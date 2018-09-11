@@ -1,6 +1,6 @@
 # Install Python 2 versions
 # apt-get libbz2-dev libncurses5-dev zip libssl-dev
-v=2.7.14
+v=2.7.15
 add_package --alias python --package python \
     http://www.python.org/ftp/python/$v/Python-$v.tar.xz
 if $(is_host n-) ; then
