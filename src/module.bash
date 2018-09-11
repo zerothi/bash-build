@@ -384,6 +384,11 @@ EOF
 	"$(module_fmt_routine --prepend-path M4PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
 	"$(module_fmt_routine --prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
+    add_module_if -F $force -d "$path/share/cmake" $mfile \
+	"$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
+    tmp=$(ls -d $path/share/$name*)
+    add_module_if -F $force -d "$tmp" $mfile \
+	"$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $tmp)"
     # The LD_LIBRARY_PATH is DANGEROUS!
     #add_module_if -F $force -d "$path/lib" $mfile \
 #	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
