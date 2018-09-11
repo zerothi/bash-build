@@ -90,5 +90,7 @@ pack_cmd "make"
 pack_cmd "cp fcbuild vibra $(pack_get --prefix)/bin/"
 
 pack_cmd "cd ../../"
-pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
+if [[ $(vrs_cmp $v 4.0.2) -lt 0 ]]; then
+    pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
+    pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
+fi
