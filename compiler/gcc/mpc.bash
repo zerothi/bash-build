@@ -1,4 +1,4 @@
-mpc_v=1.0.3
+mpc_v=1.1.0
 add_package --build generic \
 	    ftp://ftp.gnu.org/gnu/mpc/mpc-$mpc_v.tar.gz
 

@@ -1,4 +1,4 @@
-add_package --build generic https://ftp.gnu.org/gnu/gdb/gdb-8.0.tar.xz
+add_package --build generic https://ftp.gnu.org/gnu/gdb/gdb-8.2.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 

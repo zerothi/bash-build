@@ -28,6 +28,16 @@ source_pack compiler/gcc/7/isl.bash
 source_pack compiler/gcc/7/gcc.bash
 source_pack compiler/gcc/7/gdb.bash
 
+gcc_v=8.2.0
+gcc=gcc_$gcc_v
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/8/gmp.bash
+source_pack compiler/gcc/8/mpfr.bash
+source_pack compiler/gcc/8/mpc.bash
+source_pack compiler/gcc/8/isl.bash
+source_pack compiler/gcc/8/gcc.bash
+source_pack compiler/gcc/8/gdb.bash
+
 # Local variables which should only be visible here...
 unset gcc_v
 unset gcc
