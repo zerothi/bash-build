@@ -72,12 +72,10 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
 
-v=18.1
-add_package http://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/18.1/dftbplus-18.1.tar.xz
+v=18.2
+add_package http://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/$v/dftbplus-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL
-
-pack_set --host-reject ntch-l
 
 pack_set --module-opt "--lua-family dftb+"
 
