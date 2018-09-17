@@ -30,28 +30,6 @@ for i in $(get_index -all gpaw) ; do
 done
 
 
-for i in $(get_index -all qutip) ; do
-    create_module \
-	-n python$pV.qutip.$(pack_get --version $i) \
-	-W "Nick R. Papior QuTip for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.qutip.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
-
-for i in $(get_index -all kwant) ; do
-    create_module \
-	-n python$pV.kwant.$(pack_get --version $i) \
-	-W "Nick R. Papior kwant for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.kwant.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
-
-
-
 case $_mod_format in
     $_mod_format_ENVMOD)
 	function rm_latest {
@@ -74,7 +52,7 @@ for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	       kwant pybinding phonopy pythtb qutip \
 	       dask xarray yt \
 	       pyamg scikit-learn scikit-nano scikit-optimize \
-	       orthopy quadpy \
+	       orthopy quadpy lmfit \
 	       Inelastica-dev ipi-dev sisl-dev hotbit-dev ; do
     if [[ $(pack_installed $i) -eq 1 ]]; then
         tmp="$tmp $i"
