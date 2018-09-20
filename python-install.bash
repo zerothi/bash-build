@@ -120,6 +120,7 @@ source_pack python/quadpy.bash
 source_pack python/scikit-learn.bash
 source_pack python/scikit-optimize.bash
 #source_pack python/scikit-nano.bash
+source_pack python/scikit-image.bash
 
 # Must be installed after numpy
 source_pack python/llvmpy.bash

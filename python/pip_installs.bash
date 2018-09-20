@@ -98,6 +98,7 @@ pip_append pep8
 pip_append pexpect
 #pip_append pint
 pip_append pkgconfig
+pip_append Pillow
 pip_append ply
 pip_append psutil
 #if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
