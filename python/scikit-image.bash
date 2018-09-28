@@ -3,7 +3,7 @@ v=0.14.1
 add_package --archive scikit-image-$v.tar.gz \
 	    https://github.com/scikit-image/scikit-image/archive/v$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/sklearn/__init__.py
 
