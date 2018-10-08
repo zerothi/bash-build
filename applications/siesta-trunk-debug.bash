@@ -1,4 +1,7 @@
-for v in 621 635 ; do
+# 507 pre SOC
+# 508 SOC
+# 510 Transiesta
+for v in 733 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --package siesta-trunk-debug \
@@ -6,7 +9,6 @@ add_package --archive siesta-trunk-$v.tar.gz \
     --build debug \
     http://bazaar.launchpad.net/~siesta-maint/siesta/trunk/tarball/$v/index.html
 
-pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
 pack_set -s $MAKE_PARALLEL
 
 # Add the lua family
@@ -50,10 +52,10 @@ pack_cmd "cd Obj"
 # Setup the compilation scheme
 pack_cmd "../Src/obj_setup.sh"
 
-file=arch.make
+prefix=$(pack_get --prefix)
 
-pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > $file"
-pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > $file"
+pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
+pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > arch.make"
 
 # Add LTO in case of gcc-6.1 and above version 4.1
 if [[ $(vrs_cmp $v 562) -ge 0 ]]; then
@@ -82,25 +84,25 @@ FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
-COMP_LIBS += libncdf.a $fdict' $file"
+COMP_LIBS += libncdf.a $fdict' arch.make"
 
     pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lpord -lparmetis -lmetis' $file"
+ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
 
 else 
     if [[ $(pack_installed metis) -eq 1 ]]; then
 	pack_set --module-requirement metis
 	pack_cmd "sed -i '1 a\
 FPPFLAGS += -DSIESTA__METIS\n\
-ADDLIB += -lmetis' $file"
+ADDLIB += -lmetis' arch.make"
     fi
 fi
 
 
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\
-.SUFFIXES: .f .F .o .a .f90 .c .F90\n\
+.SUFFIXES: .f .F .o .a .f90 .F90 .c\n\
 SIESTA_ARCH=x86_64-linux-$(get_hostname)\n\
 \n\
 FPP=$MPIFC\n\
@@ -130,48 +132,60 @@ INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
 \n\
-' $file"
+' arch.make"
 
 if [[ $(pack_installed flook) -eq 1 ]]; then
     pack_cmd "sed -i '$ a\
 FPPFLAGS += -DSIESTA__FLOOK \n\
 FLOOK_LIB = $(list -LD-rp flook) -lflookall -ldl\n\
-LIBS += \$(FLOOK_LIB) \n' $file"
+INCFLAGS += $(list -INCDIRS flook)\n\
+LIBS += \$(FLOOK_LIB) \n' arch.make"
+fi
+
+# ELPA should be added before the linear algebra libraries
+if [[ $(vrs_cmp $v 626) -ge 0 ]]; then
+    pack_set --module-requirement elpa
+    pack_cmd "sed -i '$ a\
+FPPFLAGS += -DSIESTA__ELPA \n\
+ELPA_LIB = $(list -LD-rp elpa) -lelpa\n\
+INCFLAGS += $(list -INCDIRS elpa)/elpa\n\
+LIBS += \$(ELPA_LIB) \n' arch.make"
 fi
 
 source applications/siesta-linalg.bash
+
 
 function set_flag {
     local v=$1 ; shift
     end=
     case $v in
 	openmp)
-	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
-	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
-	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
+	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' arch.make"
+	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' arch.make"
+	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' arch.make"
 	    
 	    end=_omp
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' arch.make"
 		    ;;
 		mkl)
-		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' $file"
+		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' arch.make"
 		    ;;
 	    esac
 	    ;;
 	*)
-	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
-	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
-	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
+	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' arch.make"
+	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' arch.make"
+	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' arch.make"
 	    
 	    end=
 	    case $siesta_la in
 		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' $file"
+		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' arch.make"
 		    ;;
 		mkl)
-		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' $file"
+		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' arch.make"
 		    ;;
 	    esac
 	    ;;
@@ -182,7 +196,7 @@ function set_flag {
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 # Save the arch.make file
-pack_cmd "cp $file $(pack_get --prefix)/$file"
+pack_cmd "cp arch.make $(pack_get --prefix)/arch.make"
 
 # Shorthand for compiling utilities
 function make_files {
@@ -208,11 +222,17 @@ for omp in openmp none ; do
     # This should ensure a correct handling of the version info...
     pack_cmd "make $(get_make_parallel) siesta ; make siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
-    
-    pack_cmd "make clean"
-    
-    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
-    pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+
+    if [ $(vrs_cmp $v 655) -ge 0 ]; then 
+	pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta$end"
+	pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta$end"
+	pack_cmd "chmod a+x $prefix/bin/transiesta$end"
+    else
+	pack_cmd "make clean"
+	
+	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
+    fi
     
 done
 
@@ -284,9 +304,6 @@ for omp in openmp none ; do
     pack_cmd "make clean"
     
 done
-pack_cmd "cd ../TB"
-pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
-pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
 pack_cmd "cd ../"
 
 # end TS
@@ -301,12 +318,8 @@ pack_cmd "cd ../../WFS"
 make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
 
 
-pack_cmd "cd ../"
-pack_cmd "$FC $FCFLAGS vpsa2bin.f -o $(pack_get --prefix)/bin/vpsa2bin"
-pack_cmd "$FC $FCFLAGS vpsb2asc.f -o $(pack_get --prefix)/bin/vpsb2asc"
-
 # Compile the 3m equivalent versions, if applicable
-pack_cmd "cd ../Obj"
+pack_cmd "cd ../../Obj"
 case $siesta_la in
     mkl|openblas)
 	tmp=1
@@ -318,15 +331,21 @@ esac
 
 if [[ $tmp -eq 1 ]]; then
     # Go back
-    pack_cmd "echo '' >> $file ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> $file"
+    pack_cmd "echo '' >> arch.make ; echo 'FPPFLAGS += -DUSE_GEMM3M' >> arch.make"
     for omp in openmp none ; do
 
 	set_flag $omp
-	pack_cmd "make clean"
+	if [ $(vrs_cmp $v 655) -ge 0 ]; then
+	    pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta${end}_3m"
+	    pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta${end}_3m"
+	    pack_cmd "chmod a+x $prefix/bin/transiesta${end}_3m"
+	else
+	    pack_cmd "make clean"
+	    
+	    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
+	    pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
+	fi
 	
-	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
-	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
-
 	pack_cmd "pushd ../Util/TS/TBtrans ; make clean"
 	pack_cmd "make $(get_make_parallel) ; make"
 	pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans${end}_3m"
@@ -337,15 +356,6 @@ if [[ $tmp -eq 1 ]]; then
 
     done
 fi
-
-# Create the byte-compiled versions, to make it faster for users 
-tmp=$(pack_get --alias python).$(pack_get --version python)/$(get_c)
-pack_cmd "module load $tmp"
-pack_cmd "pushd $(pack_get --prefix)/bin/"
-pack_cmd "python -m compileall ."
-pack_cmd "popd"
-pack_cmd "module unload $tmp"
-
 
 else
 
