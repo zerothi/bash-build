@@ -57,18 +57,6 @@ prefix=$(pack_get --prefix)
 pack_cmd "echo '# Compilation $(pack_get --version) on $(get_c)' > arch.make"
 pack_cmd "echo 'PP = cpp -E -P -C -nostdinc' > arch.make"
 
-# Add LTO in case of gcc-6.1 and above version 4.1
-if [[ $(vrs_cmp $v 562) -ge 0 ]]; then
-if $(is_c gnu) ; then
-    if [[ $(vrs_cmp $(get_c --version) 6.1.0) -ge 0 ]]; then
-	pack_cmd "sed -i '$ a\
-LIBS += -flto -fuse-linker-plugin \n\
-FC_SERIAL += -flto -fuse-linker-plugin\n\
-FFLAGS += -flto -fuse-linker-plugin\n'" arch.make
-    fi
-fi
-fi
-
 fdict=libvardict.a
 if [[ $(vrs_cmp $v 535) -ge 0 ]]; then
     fdict=libfdict.a

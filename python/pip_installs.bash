@@ -121,8 +121,9 @@ pip_append sphinx sphinx_rtd_theme
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
-pip_append tqdm
+pip_append toolz
 pip_append tornado
+pip_append tqdm
 pip_append traitlets
 pip_append twine
 pip_append wheel
