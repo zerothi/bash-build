@@ -9,6 +9,7 @@ add_package --archive siesta-trunk-$v.tar.gz \
     --build debug \
     http://bazaar.launchpad.net/~siesta-maint/siesta/trunk/tarball/$v/index.html
 
+pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
 pack_set -s $MAKE_PARALLEL
 
 # Add the lua family
