@@ -7,6 +7,7 @@ add_package --build debug --package scalapack-debug \
 
 pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libscalapack.a
+pack_set -lib -lscalapack
 
 pack_set --module-requirement mpi
 
