@@ -80,7 +80,7 @@ fi
 # Make commands
 for target in libaims \
 		  scalapack.libaims \
-		  serial mpi scalapack.mpi multi.scalapack.mpi
+		  mpi scalapack.mpi multi.scalapack.mpi
 do
     pack_cmd "make $(get_make_parallel) $target"
 done
