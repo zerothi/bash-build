@@ -8,6 +8,8 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family fhi-aims"
 pack_set --module-opt "--set-ENV FHIAIMS_VERSION=$v"
+# FHI-aims complains about omp-num-threads even if it isn't used
+pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
 
 pack_set --install-query $(pack_get --prefix)/bin/aims.$v.scalapack.mpi.x
 
@@ -18,6 +20,17 @@ pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 
 # Go into src directory
 pack_cmd "cd src"
+
+tmp_arch="Generic"
+if $(grep "sse" /proc/cpuinfo > /dev/null) ; then
+    tmp_arch="AMD64_SSE"
+fi
+if $(grep "avx" /proc/cpuinfo > /dev/null) ; then
+    tmp_arch="AMD64_AVX"
+fi
+if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
+    tmp_arch="AMD64_AVX"
+fi
 
 # Prepare to use external input file
 file=Makefile.nicpa
@@ -39,6 +52,7 @@ USE_MPI = yes\n\
 USE_LIBXC = yes\n\
 BINDIR = $(pack_get --prefix)/bin\n\
 AUTODEPEND = yes\n\
+ARCHITECTURE = $tmp_arch\n\
 ' $file"
 
 if $(is_c intel) ; then
@@ -70,6 +84,7 @@ for target in libaims \
 do
     pack_cmd "make $(get_make_parallel) $target"
 done
+
 
 pack_cmd "cd $(pack_get --prefix)/bin"
 pack_cmd 'chmod o-rwx *'
