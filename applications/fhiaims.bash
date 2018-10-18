@@ -22,14 +22,19 @@ pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 pack_cmd "cd src"
 
 tmp_arch="Generic"
+tmp_ld=
 if $(grep "sse" /proc/cpuinfo > /dev/null) ; then
     tmp_arch="AMD64_SSE"
 fi
 if $(grep "avx" /proc/cpuinfo > /dev/null) ; then
     tmp_arch="AMD64_AVX"
+    # ELPA-AVX is using a cpp code which requires the stdC++ library
+    tmp_ld="-lstdc++"
 fi
 if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_arch="AMD64_AVX"
+    # ELPA-AVX is using a cpp code which requires the stdC++ library
+    tmp_ld="-lstdc++"
 fi
 
 # Prepare to use external input file
@@ -53,6 +58,7 @@ USE_LIBXC = yes\n\
 BINDIR = $(pack_get --prefix)/bin\n\
 AUTODEPEND = yes\n\
 ARCHITECTURE = $tmp_arch\n\
+LDFLAGS = $tmp_ld\n\
 ' $file"
 
 if $(is_c intel) ; then
@@ -80,11 +86,10 @@ fi
 # Make commands
 for target in libaims \
 		  scalapack.libaims \
-		  mpi scalapack.mpi multi.scalapack.mpi
+		  serial mpi scalapack.mpi multi.scalapack.mpi
 do
     pack_cmd "make $(get_make_parallel) $target"
 done
-
 
 pack_cmd "cd $(pack_get --prefix)/bin"
 pack_cmd 'chmod o-rwx *'

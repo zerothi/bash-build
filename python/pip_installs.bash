@@ -65,7 +65,9 @@ pip_append backports.ssl_match_hostname
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
     #pip_append bzr-fastimport
-    pip_append distribute
+    # the distribute package is horrendeous!!!
+    # Therefore we need to install it without downloading it first.
+    pack_cmd "$_pip_cmd install --upgrade distribute"
     pip_append enum34
     pip_append six
     pip_append pandoc
