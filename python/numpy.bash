@@ -116,6 +116,8 @@ runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
 	    ;;
     esac
     tmp_l=$(pack_get -lib[omp] $la)
+    tmp_l=${tmp_l//-l/,}
+    tmp_l=${tmp_l:1}
     case $la in
 	atlas)
 	    pack_cmd "sed -i '$ a\
@@ -125,6 +127,8 @@ include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ${tmp_l//-l/,},pthread\n\
 runtime_library_dirs = $tmp\n' $file"
 	    tmp_l=$(pack_get -lib $la)
+	    tmp_l=${tmp_l//-l/,}
+	    tmp_l=${tmp_l:1}
 	    pack_cmd "sed -i '$ a\
 [atlas]\n\
 library_dirs = $tmp\n\
@@ -138,7 +142,7 @@ runtime_library_dirs = $tmp\n' $file"
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ${tmp_l//-l/,}\n\
-extra_link_args = -lpthread -lgfortran -lm\n\
+extra_link_args = -lpthread -lgfortran -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blas|blis)
