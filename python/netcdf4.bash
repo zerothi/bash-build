@@ -1,4 +1,4 @@
-v=1.3.1
+v=1.4.2
 add_package \
     --version $v --package netcdf4py \
     --archive netcdf4-python-${v}rel.tar.gz \

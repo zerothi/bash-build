@@ -1,4 +1,4 @@
-v=0.2.2
+v=1.0.3
 add_package https://pypi.python.org/packages/source/m/monty/monty-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/monty-$v-py${pV}.egg

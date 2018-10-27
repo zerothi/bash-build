@@ -1,4 +1,4 @@
-v=3.4.0
+v=3.5.0
 add_package --directory yt-yt-$v \
     --package yt --version $v \
     https://github.com/yt-project/yt/archive/yt-$v.tar.gz

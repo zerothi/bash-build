@@ -1,4 +1,4 @@
-v=0.4.2
+v=0.8.1
 add_package \
     --package pint \
     --archive pint-$v.zip \

@@ -1,4 +1,4 @@
-v=2.7.3
+v=2.10
 add_package \
     --package jinja2 \
     https://pypi.python.org/packages/source/J/Jinja2/Jinja2-$v.tar.gz

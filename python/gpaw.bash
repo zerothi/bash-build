@@ -1,4 +1,4 @@
-for v in 1.3.0 ; do
+for v in 1.4.0 ; do
 add_package --archive gpaw-$v.tar.gz \
     https://gitlab.com/gpaw/gpaw/repository/archive.tar.gz?ref=$v
 

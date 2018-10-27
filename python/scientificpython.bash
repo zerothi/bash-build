@@ -1,4 +1,3 @@
-
 add_package https://sourcesup.renater.fr/frs/download.php/file/4570/ScientificPython-2.9.4.tar.gz
 
 pack_set -s $IS_MODULE

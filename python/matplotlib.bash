@@ -1,6 +1,10 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=2.1.1
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=3.0.1
+else
+    v=2.2.3
+fi
 add_package \
     --archive matplotlib-$v.tar.gz \
     https://github.com/matplotlib/matplotlib/archive/v$v.tar.gz

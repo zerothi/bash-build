@@ -1,4 +1,4 @@
-v=2.2.1
+v=2.2.4
 add_package --archive pybind11-$v.tar.gz \
 	    https://github.com/pybind/pybind11/archive/v$v.tar.gz
 

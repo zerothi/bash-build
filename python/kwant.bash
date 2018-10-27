@@ -1,4 +1,4 @@
-add_package http://downloads.kwant-project.org/kwant/kwant-1.3.1.tar.gz
+add_package http://downloads.kwant-project.org/kwant/kwant-1.3.3.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

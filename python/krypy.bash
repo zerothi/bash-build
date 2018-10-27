@@ -1,4 +1,4 @@
-v=2.1.1
+v=2.1.7
 add_package \
     --archive krypy-$v.tar.gz \
     https://github.com/andrenarchy/krypy/archive/v$v.tar.gz

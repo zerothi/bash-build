@@ -1,4 +1,4 @@
-add_package https://downloads.kwant-project.org/tinyarray/tinyarray-1.2.0.tar.gz
+add_package https://downloads.kwant-project.org/tinyarray/tinyarray-1.2.1.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
