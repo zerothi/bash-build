@@ -1,4 +1,4 @@
-v=4.7.1
+v=4.7.7
 add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

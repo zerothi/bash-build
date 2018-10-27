@@ -1,4 +1,4 @@
-add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v1.0.tar.gz
+add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v1.0.3.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpexsi_linux.a

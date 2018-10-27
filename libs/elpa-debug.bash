@@ -1,4 +1,4 @@
-v=2017.05.003
+v=2018.05.001
 add_package --build debug --package elpa-debug \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
