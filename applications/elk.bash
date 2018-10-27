@@ -1,11 +1,11 @@
-add_package http://downloads.sourceforge.net/project/elk/elk-4.3.6.tgz
+add_package http://downloads.sourceforge.net/project/elk/elk-5.2.14.tgz
 
 pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/elk
 
 pack_set --module-requirement mpi \
-    --module-requirement libxc \
+    --module-requirement libxc[4.2.3] \
     --module-requirement fftw-3
 
 # Add the lua family

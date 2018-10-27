@@ -1,4 +1,4 @@
-for v in 8.6.3
+for v in 8.10.1
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 

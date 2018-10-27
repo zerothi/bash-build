@@ -365,7 +365,7 @@ EOF
 	    # be "on" , they are specified by the options by the user
 	    # and not, per-see "optional"
 	    [[ -n "$opt" ]] && \
-		add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
+		add_module_if -F 1 "$mfile" "$opt"
 	done
 	echo "" >> $mfile
     fi

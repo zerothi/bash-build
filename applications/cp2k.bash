@@ -1,4 +1,4 @@
-add_package http://sourceforge.net/projects/cp2k/files/cp2k-4.1.tar.bz2
+add_package http://sourceforge.net/projects/cp2k/files/cp2k-6.1.tar.bz2
 
 pack_set --host-reject ntch --host-reject zeroth
 

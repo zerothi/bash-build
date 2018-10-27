@@ -10,7 +10,11 @@ pack_set --prefix $(build_get --installation-path[generic])/build-tools/1.0
 pack_set --install-query $(pack_get --prefix)/bin
 pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
 pack_set --module-opt "--set-ENV PKG_CONFIG=$(pack_get --prefix)/bin/pkg-config"
-
+tmp=$(which pkg-config)
+if [[ $? -eq 0 ]]; then
+    tmp=$(pkg-config --variable pc_path pkg-config)
+    pack_set --module-opt "--prepend-ENV PKG_CONFIG_PATH=$tmp"
+fi
 
 # These packages are installed in build-tools
 source_pack helpers/help2man.bash

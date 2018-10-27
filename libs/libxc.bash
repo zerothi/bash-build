@@ -1,5 +1,5 @@
 # abinit has specific link to 2.2.3
-for v in 2.2.3 4.2.1 3.0.1
+for v in 2.2.3 4.2.3 3.0.1
 do
 if [[ $(vrs_cmp $v 3.0) -ge 0 ]]; then
    add_package http://www.tddft.org/programs/octopus/download/libxc/$v/libxc-$v.tar.gz
