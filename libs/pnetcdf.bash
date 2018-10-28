@@ -1,9 +1,10 @@
 # This package requires that flex and bison is installed
 
 # Install the Parallel NetCDF
+v=1.10.0
 add_package \
     --package pnetcdf \
-    http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-1.10.0.tar.bz2
+    https://parallel-netcdf.github.io/Release/parallel-netcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 

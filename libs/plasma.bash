@@ -1,4 +1,4 @@
-add_package http://icl.cs.utk.edu/projectsfiles/plasma/pubs/plasma_2.8.0.tar.gz
+add_package https://bitbucket.org/icl/plasma/downloads/plasma-18.10.0.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 

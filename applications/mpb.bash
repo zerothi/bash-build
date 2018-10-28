@@ -1,5 +1,5 @@
 # Install
-add_package http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
+add_package https://github.com/stevengj/mpb/releases/download/v1.6.2/mpb-1.6.2.tar.gz
 
 pack_set --install-query $(pack_get --prefix)/bin/mpbi-mpi
 

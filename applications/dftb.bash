@@ -1,4 +1,4 @@
-v=17.1
+v=18.2
 add_package --archive dftbplus-$v.tar.gz \
 	    https://github.com/dftbplus/dftbplus/archive/$v.tar.gz
 

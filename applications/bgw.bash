@@ -1,4 +1,4 @@
-v=1.2.0
+v=2.0.0
 add_package --package berkeley-GW -alias bgw -version $v \
     --directory BerkeleyGW-$v \
     http://www.student.dtu.dk/~nicpa/packages/BGW-$v.tar.gz

@@ -1,7 +1,7 @@
 # Install
 add_package \
     --package mpb-serial \
-    http://ab-initio.mit.edu/mpb/mpb-1.5.tar.gz
+    https://github.com/stevengj/mpb/releases/download/v1.6.2/mpb-1.6.2.tar.gz
 
 pack_set --host-reject ntch --host-reject zeroth
 

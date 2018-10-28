@@ -1,6 +1,6 @@
 # Install
 add_package --package meep-serial \
-    http://ab-initio.mit.edu/meep/meep-1.3.tar.gz
+	    add_package https://github.com/stevengj/meep/releases/download/v1.6.0/meep-1.6.tar.gz
 
 pack_set --host-reject ntch --host-reject zeroth
 
