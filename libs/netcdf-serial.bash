@@ -4,7 +4,8 @@ add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-serial \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+# Apparently the serial version has some problems with parallel build
+pack_set -s $BUILD_DIR -s $IS_MODULE
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5-serial

@@ -4,8 +4,6 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --LD)/libplasma.a
 
-pack_set --module-requirement hwloc
-
 file=make.inc
 pack_cmd "echo '# Makefile for easy installation ' > $file"
 
@@ -17,47 +15,35 @@ fi
 if $(is_c intel) ; then
     # The tmg-lib must be included...
     pack_cmd "sed -i '1 a\
-CFLAGS  += -DPLASMA_WITH_MKL -I$MKL_PATH/include \n\
-FFLAGS  += -fltconsistency -fp-port \n\
-LDFLAGS += -nofor-main \n\
-# We need the C-interface for LAPACK\n\
-INCCLAPACK = $(list --INCDIRS lapack)\n\
-LIBCLAPACK = $(list --LD-rp lapack) -llapacke \n\
-LIBBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
-LIBCBLAS  = $MKL_LIB -lmkl_blas95_lp64 -mkl=parallel \n\
-LIBLAPACK = $MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel \n' $file"
+CFLAGS  += -DHAVE_MKL \n\
+INC = -I$MKL_PATH/include\n\
+LIBS = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel \n' $file"
 
 else 
-
+    
     la=$(pack_choice -i linalg)
     lla=lapack-$la
     pack_set --module-requirement $lla
     tmp="$(pack_get -lib $la)"
 
     pack_cmd "sed -i '1 a\
-LIBBLAS  = $(list --LD-rp $la) $tmp \n\
-LIBCBLAS = $tmp\n\
-INCCLAPACK = $(list --INCDIRS lapack)\n\
-LIBCLAPACK = $(list --LD-rp lapack) -llapacke \n\
-LIBLAPACK  = $(list --LD-rp +$la) $(pack_get -lib $lla)\n' $file"
+LIBS = $(list --LD-rp $la) $tmp \n' $file"
 
 fi
 tmpfc=${FFLAGS//-fp-model /}
 tmpfc=${tmpfc//precise/}
 tmpfc=${tmpfc//source/}
 pack_cmd "sed -i '1 a\
-PLASMA_F90 =1\n\
-prefix = $(pack_get --prefix)\n\
+lua_platform = linux\n\
+fortran = 1\n\
 CC = $CC \n\
 FC = $FC \n\
-LOADER = \$(FC) \n\
-ARCH = $AR \n\
-ARCHFLAGS = cr \n\
-RANLIB = ranlib \n\
-CFLAGS = $CFLAGS $FLAG_OMP -DADD_\n\
-FFLAGS = $tmpfc $FLAG_OMP \n\
-LDFLAGS := \$(LDFLAGS) \$(FFLAGS) $(list --LD-rp +hwloc)\n' $file"
-unset tmpfc
+AR = $AR \n\
+RANLIB = $RANLIB \n\
+CFLAGS = $CFLAGS $FLAG_OMP\n\
+FCFLAGS = $FFLAGS $FLAG_OMP \n\
+LDFLAGS = \$(LDFLAGS) $FLAG_OMP\n' $file"
+
 # Make and install commands
 pack_cmd "make $(get_make_parallel) all"
 pack_cmd "make test > tmp.test 2>&1"

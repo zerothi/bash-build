@@ -55,7 +55,6 @@ source_pack libs/openblas.bash
 source_pack libs/flame.bash
 
 source_pack libs/plasma.bash
-#source_pack libs/flame.bash
 source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash

@@ -6,6 +6,7 @@ do
     
     pack_set -s $IS_MODULE
     
+    pack_set -lib -lssl -lcrypto
     pack_set --mod-req gen-zlib
     
     pack_set --install-query $(pack_get --prefix)/lib/libssl.a

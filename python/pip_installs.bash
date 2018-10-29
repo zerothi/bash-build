@@ -56,7 +56,7 @@ pip_install pip
 pack_cmd "$_pip_cmd install -U pip"
 
 
-# Nose needs to be isntalled first
+# Nose needs to be installed first
 pip_install nose
 
 pip_append autopep8
@@ -71,6 +71,8 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append enum34
     pip_append six
     pip_append pandoc
+    pip_append lxml
+    pip_append Pillow
 fi
 pip_append certifi
 pip_append codecov
@@ -84,8 +86,7 @@ pip_append ipyvolume
 pip_append joblib
 pip_append jinja2
 pip_append jsonschema
-pip_append line_profiler
-pip_append lxml
+#pip_append line_profiler
 pip_append markupsafe
 pip_append Markdown
 pip_append memory_profiler
@@ -100,7 +101,6 @@ pip_append pep8
 pip_append pexpect
 #pip_append pint
 pip_append pkgconfig
-pip_append Pillow
 pip_append ply
 pip_append psutil
 #if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
@@ -138,6 +138,11 @@ if ! $(is_host atto) ; then
 fi
 
 pip_install
+
+# Finally we need to remove the packages that are to be installed
+# separately.
+# This is because otherwise the "wrong" library will be used
+pack_cmd "$_pip_cmd uninstall -y numpy ; echo 'yes'"
 
 unset pip_append
 unset pip_install

@@ -13,12 +13,14 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set $(list --prefix '--mod-req ' zlib expat libffi)
 lib_extra=
 tmp_lib=
+tmp=
 if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
 if [[ $(pack_get --installed openssl) -eq 1 ]]; then
     pack_set --mod-req openssl[1.0.2]
     lib_extra="$lib_extra openssl[1.0.2]"
+    tmp="--with-openssl=$(pack_get --prefix openssl[1.0.2])"
 fi
 if [[ $(pack_get --installed termcap) -eq 1 ]]; then
     lib_extra="$lib_extra termcap"
@@ -37,22 +39,12 @@ if ! $(is_host ntch-) ; then
 fi
 
 pCFLAGS="$CFLAGS"
-tmp=
 if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
-    tmp="--without-gcc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
 elif ! $(is_c gnu) ; then
-    tmp="--without-gcc"
-fi
-
-if [[ $(vrs_cmp 2.7.12 $v) -ge 0 ]]; then
-    # We have to patch Python for openssl >= 1.1.0
-    o=$(pwd_archives)/$(pack_get --package)-2.7-SSL-1.1.0.patch
-    dwn_file https://bugs.python.org/file44296/Port-Python-2.7-s-SSL-module-to-OpenSSL-1.1.0-4.patch $o
-    pack_cmd "pushd ../"
-    pack_cmd "patch -p1 < $o"
-    pack_cmd "popd"
+    tmp="$tmp --without-gcc"
 fi
 
 # Correct the UNIX C-compiler to GCC
@@ -104,7 +96,7 @@ elif $(is_host atto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 else
-    tmp=$(list -p '-x test_' urllib2_localnet distutils)
+    tmp=$(list -p '-x test_' urllib2_localnet distutils ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi
