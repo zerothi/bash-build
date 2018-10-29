@@ -11,6 +11,8 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/sklearn/__init
 pack_set --module-requirement dask \
     --module-requirement scipy
 
+pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
+
 # Install commands that it should run
 pack_cmd "$(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
