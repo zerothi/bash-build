@@ -9,6 +9,10 @@ pack_set --module-opt "--lua-family xcrysden"
 
 pack_set --module-requirement fftw-3
 
+o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch
+dwn_file http://www.student.dtu.dk/~nicpa/packages/xcrysden.patch $o
+pack_cmd "patch -p1 < $o"
+
 tmp=Make.sys
 pack_cmd "echo '# NPA-script' > $tmp"
 

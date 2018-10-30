@@ -1,9 +1,5 @@
-# Install
-add_package \
-    --package mpb-serial \
+add_package --package mpb-serial \
     https://github.com/stevengj/mpb/releases/download/v1.6.2/mpb-1.6.2.tar.gz
-
-pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/mpbi
 

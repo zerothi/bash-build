@@ -1,7 +1,4 @@
-# Install
 add_package https://github.com/stevengj/meep/releases/download/v1.6.0/meep-1.6.tar.gz
-
-pack_set --host-reject ntch --host-reject zeroth
 
 pack_set --install-query $(pack_get --prefix)/bin/meep-mpi
 

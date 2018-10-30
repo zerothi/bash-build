@@ -1,8 +1,5 @@
-# Install
 add_package --package meep-serial \
-	    add_package https://github.com/stevengj/meep/releases/download/v1.6.0/meep-1.6.tar.gz
-
-pack_set --host-reject ntch --host-reject zeroth
+	    https://github.com/stevengj/meep/releases/download/v1.6.0/meep-1.6.tar.gz
 
 pack_set --module-opt "--lua-family meep"
 
