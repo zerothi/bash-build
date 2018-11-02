@@ -1,6 +1,8 @@
 add_package --package mpb-serial \
     https://github.com/stevengj/mpb/releases/download/v1.6.2/mpb-1.6.2.tar.gz
 
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
+
 pack_set --install-query $(pack_get --prefix)/bin/mpbi
 
 pack_set --module-opt "--lua-family mpb"
@@ -29,13 +31,11 @@ else
 
 fi
 # Add the CTL library
-tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
-
-pack_cmd "module load build-tools"
+tmp="$tmp --with-libctl=$(pack_get --prefix libctl)"
 
 # Install commands that it should run
-pack_cmd "autoconf configure.ac > configure"
-pack_cmd "./configure" \
+pack_cmd "../configure" \
+     "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
      "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
      "--without-mpi" \
@@ -47,7 +47,8 @@ pack_cmd "make install"
 
 # Install the inversion symmetric part
 pack_cmd "make distclean"
-pack_cmd "./configure" \
+pack_cmd "../configure" \
+     "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
      "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
      "--with-inv-symmetry" \
@@ -57,5 +58,3 @@ pack_cmd "./configure" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-
-pack_cmd "module unload build-tools"

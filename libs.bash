@@ -36,6 +36,9 @@ source_pack libs/fftw3.bash
 source_pack libs/fftw2-intel.bash
 source_pack libs/fftw3-intel.bash
 
+# ONETEPs multigrid Poisson solver
+source_pack libs/dl_mg.bash
+
 # Currently aotus is compiled together with flook
 source_pack libs/flook.bash
 

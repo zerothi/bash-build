@@ -38,3 +38,8 @@ pack_cmd "make clean"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
+pack_cmd "cd $(pack_get --prefix)/include"
+pack_cmd 'cd */'
+pack_cmd "mv elpa ../"
+pack_cmd "cp modules/* ../elpa/"
+
