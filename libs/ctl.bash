@@ -5,7 +5,7 @@ add_package https://github.com/stevengj/libctl/releases/download/v$v/libctl-$v.t
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-if [[ $(pack_installed guile) -eq 1 ]]; the
+if [[ $(pack_installed guile) -eq 1 ]]; then
    pack_set --module-requirement guile
 fi
 

@@ -29,30 +29,36 @@ else
 fi
 
 tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
-
+# We need to fix d_type such that complex also works
+# Should this really be a separate package???
+for d_type in real
+do
 pack_cmd "./configure PETSC_DIR=\$(pwd)" \
-	  "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
-	  "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
-	  "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
-	  "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
-	  "F90='$MPIF90'" \
-	  "LDFLAGS='$tmp_ld'" \
-	  "LIBS='$tmp_ld'" \
-	  "AR=ar" \
-	  "RANLIB=ranlib" \
-	  "--prefix=$(pack_get --prefix)" \
-	  "--with-fortran-interfaces=1" \
-	  "--with-pic=1 $tmp" \
-	  "--with-parmetis=1" \
-	  "--with-parmetis-dir=$(pack_get --prefix parmetis)" \
-	  "--with-metis=1" \
-	  "--with-metis-dir=$(pack_get --prefix parmetis)" \
-	  "--with-hwloc=1" \
-	  "--with-hwloc-dir=$(pack_get --prefix hwloc)" \
-	  "--with-hdf5=1" \
-	  "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
-	  "--with-fftw=1" \
-	  "--with-fftw-dir=$(pack_get --prefix fftw-mpi-3)"
+	 "PETSC_ARCH=$d_type" \
+	 "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
+	 "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
+	 "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
+	 "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
+	 "F90='$MPIF90'" \
+	 "LDFLAGS='$tmp_ld'" \
+	 "LIBS='$tmp_ld'" \
+	 "AR=ar" \
+	 "RANLIB=ranlib" \
+	 "--with-scalar-type=$d_type" \
+	 "--prefix=$(pack_get --prefix)" \
+	 "--with-petsc-arch=$d_type" \
+	 "--with-fortran-interfaces=1" \
+	 "--with-pic=1 $tmp" \
+	 "--with-parmetis=1" \
+	 "--with-parmetis-dir=$(pack_get --prefix parmetis)" \
+	 "--with-metis=1" \
+	 "--with-metis-dir=$(pack_get --prefix parmetis)" \
+	 "--with-hwloc=1" \
+	 "--with-hwloc-dir=$(pack_get --prefix hwloc)" \
+	 "--with-hdf5=1" \
+	 "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
+	 "--with-fftw=1" \
+	 "--with-fftw-dir=$(pack_get --prefix fftw-mpi-3)"
 
 # Just does not work
 #     "--with-superlu_dist=1" \
@@ -75,15 +81,18 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 #     "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
 #     "--with-scalar-type=complex" \ #error on hwloc
 
-pack_cmd "make"
-pack_cmd "make install"
+pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$d_type all"
+pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$d_type install"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH= test > tmp.test 2>&1"
-pack_set_mv_test tmp.test
-
+pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH=$d_type test > tmp.test 2>&1"
+pack_set_mv_test tmp.test $d_type.test
+pack_set_mv_test $d_type/lib/petsc/conf/configure.log $d_type.configure.log
+done
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
+# Default to the complex architecture
+pack_set --module-opt "--set-ENV PETSC_ARCH=complex"
 
 # Clean up the unused module
 pack_cmd "rm -rf $(pack_get --LD)/modules"
