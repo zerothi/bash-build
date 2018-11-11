@@ -1,4 +1,4 @@
-for v in 4.1-b3 ; do
+for v in 4.1-b4 ; do
 
 bv=$(str_version -1 $v).$(str_version -2 $v)
 add_package --archive siesta-$v.tar.gz \
