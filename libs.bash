@@ -31,11 +31,11 @@ source_pack libs/netpipe.bash
 source_pack libs/opencoarray.bash
 
 # Default fftw libs
-source_pack libs/nfft.bash
 source_pack libs/fftw2.bash
 source_pack libs/fftw3.bash
 source_pack libs/fftw2-intel.bash
 source_pack libs/fftw3-intel.bash
+source_pack libs/nfft.bash
 
 # Currently aotus is compiled together with flook
 source_pack libs/flook.bash
