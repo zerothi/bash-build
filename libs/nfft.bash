@@ -3,7 +3,7 @@ add_package https://github.com/NFFT/nfft/releases/download/3.4.1/nfft-3.4.1.tar.
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --module-requirement fftw-3
-pack_set --install-query $(pack_get --LD)/libnfft.a
+pack_set --install-query $(pack_get --LD)/libnfft3.a
 pack_set --lib -lnfft
 
 pack_cmd "../configure" \
