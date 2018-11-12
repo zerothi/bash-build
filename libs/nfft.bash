@@ -6,8 +6,10 @@ pack_set --module-requirement fftw-3
 pack_set --install-query $(pack_get --LD)/libnfft3.a
 pack_set --lib -lnfft
 
-pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP'" \
-     "--enable-openmp" \
+tmp_LIBS="$(list --LD-rp fftw-3) $(pack_get --lib[omp] fftw-3) $FLAG_OMP"
+
+pack_cmd "../configure LIBS='$tmp_LIBS' CFLAGS='$CFLAGS $FLAG_OMP'" \
+	 "--enable-openmp" \
 	 "--enable-nfct" \
 	 "--enable-nfst" \
 	 "--enable-nfsft" \
@@ -20,4 +22,6 @@ pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP'" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > nfft.test 2>&1 || echo 'forced'"
+pack_set_mv_test nfft.test
 pack_cmd "make install"

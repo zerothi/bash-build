@@ -18,9 +18,13 @@ add_package --alias fftw-3 \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --LD)/libfftw3_omp.a
-pack_set --lib -lfftw3
-pack_set --lib[omp] -lfftw3_omp
-pack_set --lib[pt] -lfftw3_threads
+
+pack_set --lib -lfftw3 -lm
+pack_set --lib[omp] -lfftw3_omp -lfftw3 -lm
+pack_set --lib[pt] -lfftw3_threads -lfftw3 -lm
+pack_set --lib[f] -lfftw3f -lm
+pack_set --lib[fomp] -lfftw3f_omp -lfftw3f -lm
+pack_set --lib[fpt] -lfftw3f_threads -lfftw3f -lm
 
 pack_cmd "unset CFLAGS"
 
@@ -83,6 +87,13 @@ add_package --alias fftw-mpi-3 --package fftw-mpi \
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
+
+pack_set --lib -lfftw3_mpi -lfftw3 -lm
+pack_set --lib[omp] -lfftw3_mpi -lfftw3_omp -lfftw3 -lm
+pack_set --lib[pt] -lfftw3_mpi -lfftw3_threads -lfftw3 -lm
+pack_set --lib[f] -lfftw3f_mpi -lfftw3f -lm
+pack_set --lib[fomp] -lfftw3f_mpi -lfftw3f_omp -lfftw3f -lm
+pack_set --lib[fpt] -lfftw3f_mpi -lfftw3f_threads -lfftw3f -lm
 
 pack_set -mod-req mpi
 
