@@ -50,6 +50,7 @@ source_pack libs/fdict.bash
 source_pack libs/lapack.bash
 source_pack libs/scalapack.bash
 source_pack libs/scalapack-debug.bash
+source_pack libs/spike.bash
 
 source_pack libs/blis.bash
 
