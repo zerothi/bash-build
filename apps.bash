@@ -44,6 +44,7 @@ source_pack applications/vmd.bash
 source_pack applications/vmd-python.bash
 source_pack applications/gdis.bash
 source_pack applications/povray.bash
+source_pack applications/getfem.bash
 
 # Octave
 source_pack applications/octave.bash

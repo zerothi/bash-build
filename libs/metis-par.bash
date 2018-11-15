@@ -6,6 +6,8 @@ pack_set --install-query $(pack_get --LD)/libparmetis.a
 
 pack_set --module-requirement mpi
 
+pack_set --lib -lparmetis -lmetis
+
 # Make commands 
 pack_cmd "sed -i -e 's/^\(cputype\).*/\1 = unknown/' Makefile"
 pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"

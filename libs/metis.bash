@@ -4,6 +4,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libmetis.a
 
+pack_set --lib -lmetis
+
 # Make commands
 pack_cmd "sed -i -e 's/^cputype.*/cputype = unknown/' Makefile"
 pack_cmd "sed -i -e 's/^systype.*/systype = linux/' Makefile"
