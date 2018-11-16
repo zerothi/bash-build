@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --LD)/libnfft3.a
 pack_set --lib -lnfft
 
 pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP'" \
-     "--enable-openmp" \
+	 "--enable-openmp" \
 	 "--enable-nfct" \
 	 "--enable-nfst" \
 	 "--enable-nfsft" \
