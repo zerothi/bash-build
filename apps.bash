@@ -20,6 +20,7 @@ source_pack applications/bader.bash
 source_pack applications/atom.bash
 source_pack applications/ape.bash
 source_pack applications/oncvpsp.bash
+source_pack applications/getfem.bash
 
 source_pack applications/siesta.bash
 source_pack applications/siesta-dev.bash # my old ts-development
