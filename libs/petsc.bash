@@ -1,5 +1,7 @@
+for d_type in d z
+do
 v=3.10.2
-add_package --package petsc \
+add_package --package petsc-$d_type \
 	    --directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz
 
@@ -28,13 +30,20 @@ else
     tmp="$tmp --with-scalapack-dir=$(pack_get --prefix scalapack)"
 fi
 
+case $d_type in
+    d)
+	tmp_arch='real'
+	;;
+    z)
+	tmp_arch='complex'
+	;;
+esac
+
 tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
 # We need to fix d_type such that complex also works
 # Should this really be a separate package???
-for d_type in real
-do
 pack_cmd "./configure PETSC_DIR=\$(pwd)" \
-	 "PETSC_ARCH=$d_type" \
+	 "PETSC_ARCH=$tmp_arch" \
 	 "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
 	 "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
 	 "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
@@ -44,9 +53,9 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "LIBS='$tmp_ld'" \
 	 "AR=ar" \
 	 "RANLIB=ranlib" \
-	 "--with-scalar-type=$d_type" \
+	 "--with-scalar-type=$tmp_arch" \
 	 "--prefix=$(pack_get --prefix)" \
-	 "--with-petsc-arch=$d_type" \
+	 "--with-petsc-arch=$tmp_arch" \
 	 "--with-fortran-interfaces=1" \
 	 "--with-pic=1 $tmp" \
 	 "--with-parmetis=1" \
@@ -81,18 +90,17 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 #     "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
 #     "--with-scalar-type=complex" \ #error on hwloc
 
-pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$d_type all"
-pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$d_type install"
+pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
+pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH=$d_type test > tmp.test 2>&1"
-pack_set_mv_test tmp.test $d_type.test
-pack_set_mv_test $d_type/lib/petsc/conf/configure.log $d_type.configure.log
-done
+pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH=$tmp_arch test > tmp.test 2>&1"
+pack_set_mv_test tmp.test
+pack_set_mv_test $tmp_arch/lib/petsc/conf/configure.log $tmp_arch.configure.log
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
-# Default to the complex architecture
-pack_set --module-opt "--set-ENV PETSC_ARCH=complex"
 
 # Clean up the unused module
 pack_cmd "rm -rf $(pack_get --LD)/modules"
+
+done

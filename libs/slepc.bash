@@ -1,10 +1,13 @@
-add_package http://www.grycap.upv.es/slepc/download/distrib/slepc-3.10.1.tar.gz
+for d_type in d z
+do
+add_package --package slepc-$d_type \
+	    http://www.grycap.upv.es/slepc/download/distrib/slepc-3.10.1.tar.gz
 
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libslepc.so
 
-pack_set --module-requirement petsc \
+pack_set --module-requirement petsc-$d_type \
 	 --module-requirement parpack
 
 tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
@@ -22,12 +25,16 @@ else
 
 fi
 
-pack_cmd "unset PETSC_ARCH"
+case $d_type in
+    d)
+	tmp_arch='real'
+	;;
+    z)
+	tmp_arch='complex'
+	;;
+esac
 
-# We need to fix d_type such that complex also works
-# Should this really be a separate package???
-for d_type in real
-do
+pack_cmd "unset PETSC_ARCH"
 pack_cmd "CC='$MPICC' CFLAGS='$CFLAGS'" \
 	 "CXX='$MPICXX' CXXFLAGS='$CFLAGS'" \
 	 "FC='$MPIF90' FCFLAGS='$FCFLAGS'" \
@@ -37,7 +44,6 @@ pack_cmd "CC='$MPICC' CFLAGS='$CFLAGS'" \
 	 "LIBS='$tmp_ld $tmp_lib'" \
 	 "AR=$AR" \
 	 "RANLIB=ranlib" \
-	 "PETSC_ARCH=$d_type" \
 	 "./configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-arpack" \
@@ -46,22 +52,23 @@ pack_cmd "CC='$MPICC' CFLAGS='$CFLAGS'" \
 
 # Set the arch of the build (sets the directory...)
 # (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)
-pack_cmd "make PETSC_ARCH=$d_type SLEPC_DIR=\$(pwd)"
+pack_cmd "make SLEPC_DIR=\$(pwd)"
 
 #pack_cmd "make testexamples"
 #pack_cmd "make testfortran"
 
-pack_cmd "make PETSC_ARCH=$d_type install"
+pack_cmd "make install"
 
 # Unset architecture...
 pack_cmd "unset SLEPC_DIR"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make PETSC_ARCH=$d_type SLEPC_DIR=$(pack_get --prefix) test > tmp.test 2>&1"
-pack_set_mv_test tmp.test $d_type.test
+pack_cmd "make SLEPC_DIR=$(pack_get --prefix) test > tmp.test 2>&1"
+pack_set_mv_test tmp.test
 
-done
 pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --prefix)"
 
 # Clean up the unused module
 pack_cmd "rm -rf $(pack_get --LD)/modules"
+
+done

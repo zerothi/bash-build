@@ -1,4 +1,4 @@
-v=2.4p1
+v=2.4b
 add_package --package eigenexa --version $v \
 	    http://www.aics.riken.jp/labs/lpnctrt/assets/img/EigenExa-$v.tgz
 
@@ -25,6 +25,15 @@ else
     
 fi
 
+tmp_flags=
+if $(grep "avx" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-avx"
+fi
+if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --enable-avx2"
+fi
+
+
 flag=
 for thread in none openmp
 do
@@ -40,10 +49,27 @@ do
     # The ../src is a bug in the setup of the compilation
     pack_cmd "../configure CC='$MPICC -I../src' CFLAGS='$CFLAGS $flag' F77='$MPIFC -I../src' FFLAGS='$FFLAGS $flag' LIBS='$tmp $flag'" \
 	     "LAPACK_LIBS='$tmp $flag' --prefix=$(pack_get --prefix)"
+
+    if [[ $thread == "none" ]]; then
+	# Remove all OpenMP mentions in the makefile
+	pack_cmd "sed -i -s -e 's/$FLAG_OMP//g' **/Makefile"
+    fi
     
     pack_cmd "make $(get_make_parallel)"
     pack_cmd "make install"
-    
+
+    case $thread in
+	none)
+	    pack_cmd "pushd $(pack_get --prefix)/lib"
+	    pack_cmd 'for f in lib* ; do mv $f s_$f ; done'
+	    pack_cmd "popd"
+	    ;;
+	openmp)
+	    pack_cmd "pushd $(pack_get --prefix)/lib"
+	    pack_cmd 'for f in lib* ; do mv $f ${f//.*}_omp.${f##*.} ; mv s_$f $f ; done'
+	    pack_cmd "popd"
+	    ;;
+    esac
     pack_cmd 'rm -rf *'
 
 done
