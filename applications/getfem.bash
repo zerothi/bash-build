@@ -8,7 +8,7 @@ pack_set --module-requirement mpi
 pack_set --module-requirement mumps
 
 # Force the named alias
-pack_set --install-query $(pack_get --prefix)/bin/getfem
+pack_set --install-query $(pack_get --prefix)/lib/libgetfem.a
 
 tmp_libs="$(list --LD-rp ++mumps) $(pack_get --lib mumps) $(pack_get --lib parmetis)"
 
