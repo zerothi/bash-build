@@ -1,4 +1,4 @@
-v=5.18.12
+v=5.18.16
 add_package --build generic http://ftp.gnu.org/gnu/autogen/rel$v/autogen-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL

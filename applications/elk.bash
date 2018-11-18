@@ -6,7 +6,7 @@ pack_set --install-query $(pack_get --prefix)/bin/elk
 
 pack_set --module-requirement mpi \
     --module-requirement libxc[4.2.3] \
-    --module-requirement fftw-3
+    --module-requirement fftw
 
 # Add the lua family
 pack_set --module-opt "--lua-family elk"
@@ -32,7 +32,7 @@ F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
 LIB_libxc = $(list --LD-rp mpi libxc) -lxcf90 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
-LIB_FFT = $(list --LD-rp fftw-3) -lfftw3\n\
+LIB_FFT = $(list --LD-rp fftw) -lfftw3\n\
 SRC_FFT = zfftifc.f90\n\
 ' $file"
 

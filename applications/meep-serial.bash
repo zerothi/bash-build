@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --prefix)/bin/meep
 
 pack_set --module-requirement zlib \
     --module-requirement hdf5-serial \
-    --module-requirement fftw-3 \
+    --module-requirement fftw \
     --module-requirement libctl
 
 # Check for Intel MKL or not

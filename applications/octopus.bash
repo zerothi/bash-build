@@ -12,7 +12,7 @@ pack_set --module-requirement libxc
 pack_set --module-requirement gsl
 pack_set --module-requirement arpack-ng
 pack_set --module-requirement etsf_io
-pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement fftw-mpi
 pack_set --module-requirement bgw
 
 tmp=

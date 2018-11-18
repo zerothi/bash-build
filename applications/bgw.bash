@@ -9,7 +9,7 @@ pack_set --module-opt "--lua-family bgw"
 
 pack_set --install-query $(pack_get --prefix)/bin/epm.x
 
-pack_set $(list -p '--module-requirement ' mpi fftw-3 hdf5)
+pack_set $(list -p '--module-requirement ' mpi fftw hdf5)
 
 if [[ "x$FPP" == "x" ]]; then
     export FPP="gfortran -cpp"
@@ -34,8 +34,8 @@ C_LINK = $MPICXX $FLAG_OMP\n\
 C_OPTS = $CFLAGS $FLAG_OMP\n\
 C_DEBUGFLAG = \n\
 REMOVE = rm -f\n\
-FFTWLIB = $(list --LD-rp fftw-3) -lfftw3_omp -lfftw3\n\
-FFTWINCLUDE = $(pack_get --prefix fftw-3)/include\n\
+FFTWLIB = $(list --LD-rp fftw) -lfftw3_omp -lfftw3\n\
+FFTWINCLUDE = $(pack_get --prefix fftw)/include\n\
 HDF5LIB = $(list --LD-rp hdf5 zlib) -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lz\n\
 HDF5INCLUDE = $(pack_get --prefix hdf5)/include\n\
 TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel\n\

@@ -1,4 +1,4 @@
-add_package --build generic https://cmake.org/files/v3.9/cmake-3.9.4.tar.gz
+add_package --build generic https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 

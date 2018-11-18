@@ -10,7 +10,7 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpetsc.so
 pack_set --lib -lpetsc
 
-pack_set $(list --prefix '--mod-req ' parmetis fftw-mpi-3 hdf5)
+pack_set $(list --prefix '--mod-req ' parmetis fftw-mpi hdf5)
 
 tmp=''
 if $(is_c intel) ; then
@@ -67,7 +67,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-hdf5=1" \
 	 "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
 	 "--with-fftw=1" \
-	 "--with-fftw-dir=$(pack_get --prefix fftw-mpi-3)"
+	 "--with-fftw-dir=$(pack_get --prefix fftw-mpi)"
 
 # Just does not work
 #     "--with-superlu_dist=1" \

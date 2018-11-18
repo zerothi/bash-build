@@ -2,7 +2,7 @@ add_package http://sourceforge.net/projects/cp2k/files/cp2k-6.1.tar.bz2
 
 pack_set --host-reject ntch --host-reject zeroth
 
-pack_set $(list -p '--module-requirement ' mpi libxc fftw-3)
+pack_set $(list -p '--module-requirement ' mpi libxc fftw)
 
 pack_set --install-query $(pack_get --prefix)/bin/cp2k.psmp
 
@@ -25,8 +25,8 @@ LD = $MPIFC \n\
 AR = $AR -r \n\
 HWLOC_INC = $(list -INCDIRS hwloc) \n\
 HWLOC_LIB = $(list --LD-rp hwloc) \n\
-FFTW_INC = $(list -INCDIRS fftw-3) \n\
-FFTW_LIB = $(list --LD-rp fftw-3) \n\
+FFTW_INC = $(list -INCDIRS fftw) \n\
+FFTW_LIB = $(list --LD-rp fftw) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
 LIBXC_LIB = $(list --LD-rp libxc) \n\
 DFLAGS  = -D__FFTW3 -D__HWLOC \n\

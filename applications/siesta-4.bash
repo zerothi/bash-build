@@ -78,10 +78,10 @@ FFLAGS += -flto\n'" arch.make
 fi
 
 pack_set --module-requirement mumps
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw
 pack_cmd "sed -i '$ a\
 METIS_LIB = -lmetis\n\
-FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_PATH = $(pack_get --prefix fftw)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\

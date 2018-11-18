@@ -10,7 +10,7 @@ function tmp_func {
 }
 
 
-add_package --alias fftw-3 \
+add_package --alias fftw \
             --version 3.3.8 \
             --package fftw \
 	    http://www.fftw.org/fftw-3.3.8.tar.gz
@@ -80,8 +80,8 @@ done
 
 #### COMPLETED
 
-# Create mpi fftw-3
-add_package --alias fftw-mpi-3 --package fftw-mpi \
+# Create mpi fftw
+add_package --alias fftw-mpi --package fftw-mpi \
 	    $(pack_get --archive)
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE

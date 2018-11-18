@@ -19,11 +19,11 @@ tmp_flags="$tmp_flags --without-fltk"
 pack_set --module-requirement arpack-ng
 tmp_flags="$tmp_flags --with-arpack-libdir=$(pack_get --LD arpack-ng)"
 tmp_flags="$tmp_flags --with-arpack-includedir=$(pack_get --prefix arpack-ng)/include"
-pack_set --module-requirement fftw-3
-tmp_flags="$tmp_flags --with-fftw3-libdir=$(pack_get --LD fftw-3)"
-tmp_flags="$tmp_flags --with-fftw3-includedir=$(pack_get --prefix fftw-3)/include"
-tmp_flags="$tmp_flags --with-fftw3f-libdir=$(pack_get --LD fftw-3)"
-tmp_flags="$tmp_flags --with-fftw3f-includedir=$(pack_get --prefix fftw-3)/include"
+pack_set --module-requirement fftw
+tmp_flags="$tmp_flags --with-fftw3-libdir=$(pack_get --LD fftw)"
+tmp_flags="$tmp_flags --with-fftw3-includedir=$(pack_get --prefix fftw)/include"
+tmp_flags="$tmp_flags --with-fftw3f-libdir=$(pack_get --LD fftw)"
+tmp_flags="$tmp_flags --with-fftw3f-includedir=$(pack_get --prefix fftw)/include"
 pack_set --module-requirement hdf5-serial
 tmp_flags="$tmp_flags --with-z-libdir=$(pack_get --LD zlib)"
 tmp_flags="$tmp_flags --with-z-includedir=$(pack_get --prefix zlib)/include"

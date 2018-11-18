@@ -12,7 +12,7 @@ fi
 
 pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
-pack_set --module-requirement mpi --module-requirement fftw-3
+pack_set --module-requirement mpi --module-requirement fftw
 
 tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 tmp="$tmp -DGMX_GPU=OFF"

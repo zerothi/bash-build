@@ -43,7 +43,7 @@ for v in 5.3.0 5.4.0 6.2.1 ; do
     pack_set --module-opt "--lua-family espresso"
 
     pack_set --module-requirement mpi 
-    pack_set --module-requirement fftw-3
+    pack_set --module-requirement fftw
 
     # Fetch all the packages and pack them out
     source applications/espresso-packages.bash
@@ -53,7 +53,7 @@ for v in 5.3.0 5.4.0 6.2.1 ; do
     fi
 
     # Check for Intel MKL or not
-    tmp_lib="FFT_LIBS='$(list --LD-rp fftw-3) -lfftw3_omp'"
+    tmp_lib="FFT_LIBS='$(list --LD-rp fftw) -lfftw3_omp'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then

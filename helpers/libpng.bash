@@ -1,5 +1,5 @@
 add_package --build generic --alias gen-libpng --package gen-libpng \
-            ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz
+            ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.35.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

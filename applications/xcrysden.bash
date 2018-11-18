@@ -7,7 +7,7 @@ pack_set --install-query $(pack_get --prefix)/bin/xcrysden
 
 pack_set --module-opt "--lua-family xcrysden"
 
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw
 
 o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch
 dwn_file http://www.student.dtu.dk/~nicpa/packages/xcrysden.patch $o
@@ -34,13 +34,13 @@ TCL_LIB      = -ltcl8.5\n\
 TK_LIB       = -ltk8.5\n\
 GLU_LIB      = -lGLU\n\
 GL_LIB       = -lGL\n\
-FFTW3_LIB    = $(list --LD-rp fftw-3) -lfftw3\n\
+FFTW3_LIB    = $(list --LD-rp fftw) -lfftw3\n\
 \n\
 # Include directories\n\
 TCL_INCDIR      = \n\
 TK_INCDIR       = \n\
 GL_INCDIR       = \n\
-FFTW3_INCDIR    = $(list --INCDIRS fftw-3)' $tmp"
+FFTW3_INCDIR    = $(list --INCDIRS fftw)' $tmp"
 
 if [[ -e /usr/include/tcl8.5 ]]; then
     pack_cmd "sed -i '$ a\

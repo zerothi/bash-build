@@ -10,7 +10,7 @@ add_package \
 pack_set --host-reject zeroth
 
 pack_set --module-requirement mpi
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw
 pack_set --module-requirement wannier90
 
 pack_set --module-opt "--lua-family vasp"
@@ -67,8 +67,8 @@ DEBUG  = -O0 \n\
 OBJECTS = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \n\
 WANNIER_PATH = $(pack_get --LD wannier90)\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
-INCS += -I$(pack_get --prefix fftw-3)/include\n\
-FFTW_PATH = $(pack_get --LD fftw-3)\n\
+INCS += -I$(pack_get --prefix fftw)/include\n\
+FFTW_PATH = $(pack_get --LD fftw)\n\
 FFTW      = -L\$(FFTW_PATH) -Wl,-rpath=\$(FFTW_PATH)\n\
 ' $file"
     

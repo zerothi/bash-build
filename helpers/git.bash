@@ -1,5 +1,5 @@
 # apt-get install gettext libcurl4-openssl-dev
-for v in 2.17.0 ; do
+for v in 2.19.1 ; do
 add_package --build generic \
 	    --archive git-$v.tar.gz \
 	    https://github.com/git/git/archive/v$v.tar.gz

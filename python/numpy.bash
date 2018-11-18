@@ -33,10 +33,10 @@ include_dirs = $(pack_get --prefix fftw-2)/include\n\
 libraries = fftw_threads\n\
 runtime_library_dirs = $(pack_get --LD fftw-2)\n\
 [fftw]\n\
-library_dirs = $(pack_get --LD fftw-3)\n\
-include_dirs = $(pack_get --prefix fftw-3)/include\n\
+library_dirs = $(pack_get --LD fftw)\n\
+include_dirs = $(pack_get --prefix fftw)/include\n\
 libraries = fftw3_threads\n\
-runtime_library_dirs = $(pack_get --LD fftw-3)\n\
+runtime_library_dirs = $(pack_get --LD fftw)\n\
 [amd]\n\
 libraries = amd\n\
 include_dirs = $(pack_get --prefix amd)/include\n\

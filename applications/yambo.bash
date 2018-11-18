@@ -10,7 +10,7 @@ pack_set -s $MAKE_PARALLEL
 pack_set --install-query $(pack_get --prefix)/bin/yambo
 
 pack_set --module-requirement mpi --module-requirement netcdf \
-    --module-requirement etsf_io --module-requirement fftw-3
+    --module-requirement etsf_io --module-requirement fftw
 
 # Add the lua family
 pack_set --module-opt "--lua-family yambo"
@@ -58,7 +58,7 @@ pack_cmd "./configure PFC='$MPIFC' " \
     "--with-netcdf-include=$(pack_get --prefix netcdf)/include" \
     "--with-netcdf-lib=$(pack_get --LD netcdf)" \
     "--with-netcdf-link='$(list --INCDIRS --LD-rp +netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
-    "--with-fftw=$(pack_get --prefix fftw-3)" \
+    "--with-fftw=$(pack_get --prefix fftw)" \
     "--with-iotk=\$(pwd)/my_IOTK --with-p2y=5.0"
 
 # Fix line endings...

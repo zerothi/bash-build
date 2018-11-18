@@ -15,7 +15,7 @@ pack_cmd 'cd src'
 pack_set --install-query $(pack_get --prefix)/bin/lmp
 
 pack_set --module-requirement mpi \
-    --module-requirement fftw-3
+    --module-requirement fftw
 
 tmp=MAKE/Makefile.npa
 pack_cmd "echo '# NPA-script' > $tmp"
@@ -36,7 +36,7 @@ LMP_INC =    -DLAMMPS_GZIP\n\
 MPI_INC =      \n\
 MPI_PATH =     \n\
 MPI_LIB =      \n\
-FFT_INC =    -DFFT_FFTW3 $(list --INCDIRS fftw-3)\n\
+FFT_INC =    -DFFT_FFTW3 $(list --INCDIRS fftw)\n\
 FFT_PATH =     \n\
 FFT_LIB =    -lfftw3\n\
 JPG_INC =      \n\

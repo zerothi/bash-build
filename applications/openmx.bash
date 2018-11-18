@@ -7,7 +7,7 @@ pack_set --module-opt "--lua-family openmx"
 
 pack_set --install-query $(pack_get --prefix)/bin/openmx
 
-pack_set --module-requirement mpi --module-requirement fftw-mpi-3
+pack_set --module-requirement mpi --module-requirement fftw-mpi
 
 # Move to the source directory
 pack_cmd "cd source"

@@ -12,7 +12,7 @@ pack_set --module-requirement mpi
 pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement fftw-mpi
 
 # Correct mistakes in configure script...
 pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
@@ -113,8 +113,8 @@ with_trio_flavor=\"netcdf\"\n\
 with_netcdf_incs=\"$(list --INCDIRS netcdf)\"\n\
 with_netcdf_libs=\"$(list --LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
 with_fft_flavor=\"fftw3-mpi\"\n\
-with_fft_incs=\"$(list --INCDIRS fftw-mpi-3)\"\n\
-with_fft_libs=\"$(list --LD-rp fftw-mpi-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+with_fft_incs=\"$(list --INCDIRS fftw-mpi)\"\n\
+with_fft_libs=\"$(list --LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
 dft_flavor=atompaw+wannier90+libxc
 pack_set --module-requirement libxc
