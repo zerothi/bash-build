@@ -123,6 +123,7 @@ source_pack libs/slepc.bash
 # Libraries for DFT
 source_pack libs/xmlf90.bash
 source_pack libs/libxc.bash
+source_pack libs/psml.bash
 source_pack libs/gridxc.bash
 source_pack libs/etsf_io.bash
 source_pack libs/atompaw.bash

@@ -1,8 +1,8 @@
-add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.0.tgz
+add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.3.tgz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
-_xc_v=3.0.1
+_xc_v=4.2.3
 pack_set --module-requirement libxc[$_xc_v]
 
 pack_set --install-query $(pack_get --LD)/libGridXC.a
