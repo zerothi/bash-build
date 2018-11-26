@@ -7,7 +7,8 @@ pack_set --module-opt "--lua-family getfem"
 pack_set --module-requirement mpi
 pack_set --module-requirement mumps
 pack_set --module-requirement python
-pack_set --module-requirement numpy
+pack_set --module-requirement scipy
+pack_set --module-requirement mpi4py
 
 # Force the named alias
 pack_set --install-query $(pack_get --prefix)/bin/getfem
