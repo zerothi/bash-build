@@ -6,6 +6,8 @@ pack_set --module-opt "--lua-family getfem"
 
 pack_set --module-requirement mpi
 pack_set --module-requirement mumps
+pack_set --module-requirement python
+pack_set --module-requirement numpy
 
 # Force the named alias
 pack_set --install-query $(pack_get --prefix)/lib/libgetfem.a
@@ -26,10 +28,10 @@ pack_cmd "../configure CXX=$MPICXX CC=$MPICC FC=$MPIFC LIBS='$tmp_libs $tmp_blas
 	 "--enable-paralevel" \
 	 "--enable-metis" \
 	 "--enable-par-mumps" \
+	 "--enable-python" \
 	 "--disable-boost" \
 	 "--disable-matlab" \
 	 "--disable-scilab" \
-	 "--disable-python" \
 	 "--with-blas='$tmp_blas'" \
 	 "--prefix=$(pack_get --prefix)"
 

@@ -1,4 +1,4 @@
-for v in 5.1.4 2016.3 ; do
+for v in 5.1.4 2018.4 ; do
 add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -35,6 +35,8 @@ clib="$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req))"
 clib=${clib// /}
 clib=${clib:1}
 
+pack_cmd "module load build-tools"
+
 # configure the build...
 pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 
@@ -52,5 +54,7 @@ pack_set --module-opt "--set-ENV GMXDATA=$(pack_get --prefix)/share/gromacs"
 pack_set --module-opt "--set-ENV GMXRC_BASH=$(pack_get --prefix)/bin/GMXRC.bash"
 pack_set --module-opt "--set-ENV GMXRC_CSH=$(pack_get --prefix)/bin/GMXRC.csh"
 pack_set --module-opt "--set-ENV GMXRC_ZSH=$(pack_get --prefix)/bin/GMXRC.zsh"
+
+pack_cmd "module unload build-tools"
 
 done
