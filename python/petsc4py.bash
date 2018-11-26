@@ -3,7 +3,7 @@ add_package https://bitbucket.org/petsc/petsc4py/downloads/petsc4py-3.10.0.tar.g
 pack_set -s $IS_MODULE
 
 pack_set --module-requirement $(get_parent) \
-    --module-requirement petsc-r \
+    --module-requirement petsc-d \
     --module-requirement mpi4py --module-requirement numpy \
     --module-requirement cython
 

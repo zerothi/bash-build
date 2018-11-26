@@ -3,7 +3,7 @@ add_package https://bitbucket.org/slepc/slepc4py/downloads/slepc4py-3.10.0.tar.g
 pack_set -s $IS_MODULE
 
 pack_set --module-requirement petsc4py \
-    --module-requirement slepc-r
+    --module-requirement slepc-d
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)/__init__.py
 
