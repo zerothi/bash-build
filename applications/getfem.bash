@@ -30,6 +30,7 @@ pack_cmd "../configure CXX=$MPICXX CC=$MPICC FC=$MPIFC LIBS='$tmp_libs $tmp_blas
 	 "--enable-metis" \
 	 "--enable-par-mumps" \
 	 "--enable-python" \
+	 "--enable-shared" \
 	 "--disable-boost" \
 	 "--disable-matlab" \
 	 "--disable-scilab" \
