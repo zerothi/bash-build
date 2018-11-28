@@ -4,7 +4,7 @@ cat <<EOF > $script
 
 # This script will enable the creation of easy PBS scripts
 # This script has been created by:
-#  Nick R. Papior, 2015.
+#  Nick R. Papior, 2015 -- 2018.
 # Copyright.
 
 # First retreive the hostname

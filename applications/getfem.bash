@@ -16,12 +16,13 @@ pack_set --install-query $(pack_get --prefix)/bin/getfem
 tmp_libs="$(list --LD-rp ++mumps) $(pack_get --lib mumps) $(pack_get --lib parmetis)"
 
 if $(is_c intel) ; then
-    tmp_blas="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
+    tmp_blas="$MKL_LIB -lmkl_scalapack_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
     
 elif $(is_c gnu) ; then
+    pack_set --module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp_blas="$(list --LD-rp $la) $(pack_get --lib $la)"
+    tmp_blas="$(list --LD-rp scalapack $la) -lscalapack $(pack_get --lib $la)"
     
 fi
 
