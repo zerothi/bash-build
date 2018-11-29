@@ -77,20 +77,30 @@ FFLAGS += -flto\n'" arch.make
     fi
 fi
 
-pack_set --module-requirement mumps
-pack_set --module-requirement fftw
+pack_set --module-requirement fftw-3
 pack_cmd "sed -i '$ a\
-METIS_LIB = -lmetis\n\
-FFTW_PATH = $(pack_get --prefix fftw)\n\
+FFTW_PATH = $(pack_get --prefix fftw-3)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
-LIBS += \$(METIS_LIB)\n\
-FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
-COMP_LIBS += libncdf.a libfdict.a' $file"
+FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL -DTS_NOCHECKS\n\
+COMP_LIBS += libncdf.a libfdict.a' arch.make"
 
-pack_cmd "sed -i '$ a\
-FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
-ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' $file"
+if [[ $(pack_installed mumps) -eq 1 ]]; then
+    # Metis is implicit in MUMPS
+    pack_set --module-requirement mumps
+    pack_cmd "sed -i '$ a\
+METIS_LIB = -lmetis\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS\n\
+ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
+    
+elif [[ $(pack_installed metis) -eq 1 ]]; then
+    pack_set --module-requirement metis
+    pack_cmd "sed -i '$ a\
+METIS_LIB = -lmetis\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DSIESTA__METIS' arch.make"
+fi
 
 source applications/siesta-linalg.bash
 
@@ -100,6 +110,7 @@ function set_flag {
     case $v in
 	openmp)
 	    pack_cmd "sed -i -e 's/\(\#OMPPLACEHOLDER\)/$FLAG_OMP \1/g' $file"
+	    # This will work regardless of MUMPS is used
 	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' $file"
 	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' $file"
 	    
@@ -115,6 +126,7 @@ function set_flag {
 	    ;;
 	*)
 	    pack_cmd "sed -i -e 's/$FLAG_OMP.*/\#OMPPLACEHOLDER/g' $file"
+	    # This will work regardless of MUMPS is used
 	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' $file"
 	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' $file"
 	    
