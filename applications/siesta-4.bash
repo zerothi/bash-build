@@ -81,7 +81,7 @@ pack_set --module-requirement fftw-3
 pack_cmd "sed -i '$ a\
 FFTW_PATH = $(pack_get --prefix fftw-3)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
-FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
+FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL -DTS_NOCHECKS\n\
 COMP_LIBS += libncdf.a libfdict.a' arch.make"
 
