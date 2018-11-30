@@ -77,9 +77,9 @@ FFLAGS += -flto\n'" arch.make
     fi
 fi
 
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw
 pack_cmd "sed -i '$ a\
-FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_PATH = $(pack_get --prefix fftw)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL -DTS_NOCHECKS\n\
@@ -164,12 +164,13 @@ for omp in openmp none ; do
     
     # Ensure it is clean...
     pack_cmd "make clean"
-    
+    pack_cmd "make clean-transiesta"
+
     # This should ensure a correct handling of the version info...
     pack_cmd "make $(get_make_parallel) siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
     
-    pack_cmd "make clean"
+    pack_cmd "make clean-transiesta"
     
     pack_cmd "make $(get_make_parallel) transiesta"
     pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
@@ -277,7 +278,8 @@ if [[ $tmp -eq 1 ]]; then
 
 	set_flag $omp
 	pack_cmd "make clean"
-	
+	pack_cmd "make clean-transiesta"
+
 	pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
 	pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta${end}_3m"
 

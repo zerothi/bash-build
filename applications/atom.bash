@@ -1,15 +1,16 @@
-add_package --package atom --version 4.2.7.2 \
-	    https://departments.icmab.es/leem/siesta/Pseudopotentials/Code/atom-4.2.7_2.tgz
+add_package --package atom --version 4.2.7.100 \
+	    https://departments.icmab.es/leem/siesta/Pseudopotentials/Code/atom-4.2.7-100.tgz
 
 pack_set -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --prefix)/bin/atom
 
+pack_set --module-requirement libgridxc
+
 pack_cmd "echo '# arch.make' > arch.make"
 pack_cmd "sed -i -e '$ a\
 XMLF90_ROOT = $(pack_get --prefix xmlf90)\n\
 GRIDXC_ROOT = $(pack_get --prefix libgridxc)\n\
-LIBXC_ROOT = $(pack_get --prefix libxc[3.0.1])\n\
 include \$(XMLF90_ROOT)/share/org.siesta-project/xmlf90.mk\n\
 include \$(GRIDXC_ROOT)/gridxc.mk\n\
 FC = $FC \n\
@@ -33,5 +34,12 @@ pack_cmd "make"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/bin/"
 pack_cmd "cp atm $(pack_get --prefix)/bin/"
+
+pack_cmd "cd Util ; ln -s ../arch.make"
+pack_cmd "make vps2cdf cdf2vps"
+pack_cmd "$FC -o $(pack_get --prefix)/bin/vpsa2bin vpsa2bin.f $FFLAGS"
+pack_cmd "$FC -o $(pack_get --prefix)/bin/vpsb2asc vpsb2asc.f $FFLAGS"
+pack_cmd "cp vps2cdf cdf2vps $(pack_get --prefix)/bin/"
 pack_cmd "cd $(pack_get --prefix)/bin/ ; ln -s atm atom"
+
 

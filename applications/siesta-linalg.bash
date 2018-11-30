@@ -50,7 +50,7 @@ fi
 
 # Add the MRRR libraries (we know they always have MRRR)
 pack_cmd "sed -i '$ a\
-FPPFLAGS += -DSIESTA__MRRR\n\
+FPPFLAGS += -DSIESTA__MRRR -I$(pack_get --prefix elpa)/include/elpa \n\
 \n\
 ' arch.make"
 

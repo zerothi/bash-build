@@ -42,4 +42,7 @@ LIBXC_INCFLAGS = -I$(pack_get --prefix libxc[$_xc_v])/include\n\
 LIBXC_LIBS = $(list --LD-rp libxc[$_xc_v]) -lxcf90 -lxc\n\
 ' libxc.mk"
 
+pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' gridxc.mk.in"
+pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' top.gridxc.mk.in"
+
 pack_cmd "make WITH_LIBXC=1 $(get_make_parallel) PREFIX=$(pack_get --prefix)"
