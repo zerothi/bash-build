@@ -24,9 +24,11 @@ pack_cmd "../configure" \
 
 
 # Make commands
-hv=$(pack_get --version hdf5)
-if [[ $(vrs_cmp $hv 1.8.12) -gt 0 ]]; then
-    pack_cmd "sed -i -e 's/H5Pset_fapl_mpiposix/H5Pset_fapl_mpio/gi' ../libsrc4/nc4file.c"
+if [[ $(vrs_cmp $v 4.6.2) -lt 0 ]]; then
+    hv=$(pack_get --version hdf5)
+    if [[ $(vrs_cmp $hv 1.8.12) -gt 0 ]]; then
+	pack_cmd "sed -i -e 's/H5Pset_fapl_mpiposix/H5Pset_fapl_mpio/gi' ../libsrc4/nc4file.c"
+    fi
 fi
 
 pack_cmd "make $(get_make_parallel)"

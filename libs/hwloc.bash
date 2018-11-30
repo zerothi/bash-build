@@ -1,5 +1,5 @@
-sv=2.0
-v=$sv.2
+sv=1.11
+v=$sv.11
 add_package http://www.open-mpi.org/software/hwloc/v$sv/downloads/hwloc-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

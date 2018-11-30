@@ -1,7 +1,8 @@
 v=2.40.1
 add_package --build generic \
-        --archive graphviz-$v.tar.bz2 \
-        https://gitlab.com/graphviz/graphviz/-/archive/stable_release_$v/graphviz-stable_release_$v.tar.bz2
+	    --directory graphviz-stable_release_$v \
+            --archive graphviz-$v.tar.bz2 \
+            https://gitlab.com/graphviz/graphviz/-/archive/stable_release_$v/graphviz-stable_release_$v.tar.bz2
 
 pack_set -s $IS_MODULE
 
@@ -16,8 +17,13 @@ fi
 
 pack_set --install-query $(pack_get --prefix)/bin/dot
 
+pack_cmd "module load build-tools"
+pack_cmd "./autogen.sh"
+
 pack_cmd "$tmp ./configure --with-x" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make"
 pack_cmd "make install"
+
+pack_cmd "module unload build-tools"

@@ -1,4 +1,4 @@
-v=0.10.9
+v=0.11.0
 add_package \
     --archive xarray-$v.tar.gz \
     https://github.com/pydata/xarray/archive/v$v.tar.gz
