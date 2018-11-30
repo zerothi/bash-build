@@ -12,5 +12,5 @@ pack_set --module-requirement cython \
     --module-requirement numpy
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
+pack_cmd "CFLAGS='$pCFLAGS' $(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
