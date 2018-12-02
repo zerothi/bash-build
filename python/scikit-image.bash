@@ -10,7 +10,8 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 # Add requirments when creating the module
 pack_set --module-requirement dask \
     --module-requirement networkx \
-    --module-requirement scipy
+    --module-requirement scipy \
+    --module-requirement pywavelets
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 

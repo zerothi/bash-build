@@ -94,6 +94,7 @@ source_pack python/theano.bash
 source_pack python/dask.bash
 source_pack python/dask-distributed.bash
 source_pack python/pyamg.bash
+source_pack python/pywt.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
 source_pack python/networkx.bash
