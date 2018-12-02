@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
-pack_set $(list --prefix ' --module-requirement ' numpy scipy sympy)
+pack_set $(list --prefix ' --module-requirement ' numpy scipy sympy orthopy)
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 

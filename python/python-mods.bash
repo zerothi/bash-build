@@ -50,7 +50,7 @@ tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	       h5py numexpr theano numba seaborn networkx \
 	       kwant pybinding phonopy pythtb qutip \
-	       dask xarray yt \
+	       dask distributed xarray yt \
 	       pyamg scikit-learn scikit-nano scikit-optimize \
 	       orthopy quadpy lmfit \
 	       Inelastica-dev ipi-dev sisl-dev hotbit-dev ; do

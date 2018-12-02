@@ -69,6 +69,7 @@ source_pack python/cython.bash
 #   libs/pybind11.bash would maybe be more appropiate.
 source_pack python/pybind11.bash
 
+
 # GUI based stuff
 #source_pack python/wxwidgets.bash
 source_pack python/sip.bash
@@ -91,6 +92,7 @@ source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
 source_pack python/theano.bash
 source_pack python/dask.bash
+source_pack python/dask-distributed.bash
 source_pack python/pyamg.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
