@@ -14,6 +14,7 @@ pack_cmd "mkdir -p $(pack_get --prefix)/source"
 pack_set --module-opt "--set-ENV NPA_SOURCE=$(pack_get --prefix)/source"
 
 source scripts/npa-spbs.bash
+source scripts/npa-slsf.bash
 source scripts/npa-moduleswitch.bash
 source scripts/npa-ml.bash
 source scripts/npa-sub.bash
