@@ -117,7 +117,7 @@ create_module \
 
 # The lookup name in the list for version number etc...
 set_parent $(pack_get --alias)[$(pack_get --version)]
-set_parent_exec python3
+set_parent_exec $(pack_get --prefix)/bin/python3
 # Install all python packages
 source python-install.bash
 clear_parent

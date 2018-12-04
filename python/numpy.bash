@@ -9,7 +9,7 @@ if [[ "x${pV:0:1}" == "x3" ]]; then
 else
     pack_set --install-query $(pack_get --prefix)/bin/f2py
 fi
-pack_set $(list -p '-mod-req ' cython)
+pack_set --module-requirement cython
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
 
