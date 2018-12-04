@@ -27,6 +27,8 @@ tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
 [[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-slurm --with-pmi=/usr"
+[[ -e /usr/local/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr/local"
+[[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 else
@@ -42,6 +44,7 @@ fi
 # Install commands that it should run
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)" \
+	 "--enable-mpirun-prefix-by-default" \
 	 "--with-hwloc=$(pack_get --prefix hwloc)" \
 	 "--with-zlib=$(pack_get --prefix zlib)" \
 	 "--enable-mpi-thread-multiple" \
