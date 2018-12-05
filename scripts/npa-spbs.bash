@@ -76,7 +76,7 @@ function _s_add_line {
 
 function _s_help {
     local format="    %s :\n         %s\n"
-    echo "Usage of \$(basename \$0): Aid in the creation of PBS scripts."
+    echo "Usage of \$(basename \$0): Aid in the creation of PBS submit scripts."
     echo ""
     printf "\$format" "--name|-N" "The name of the PBS job"
     printf "\$format" "--queue|-q" "Queue the job should be submitted to, only specifying queue will clear walltime."

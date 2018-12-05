@@ -55,7 +55,7 @@ function _s_add_line {
 
 function _s_help {
     local format="    %s :\n         %s\n"
-    echo "Usage of \$(basename \$0): Aid in the creation of LSF scripts."
+    echo "Usage of \$(basename \$0): Aid in the creation of LSF submit scripts."
     echo ""
     printf "\$format" "--name|-N|-J" "The name of the LSF job"
     printf "\$format" "--queue|-q" "Queue the job should be submitted to, only specifying queue will clear walltime."
@@ -65,7 +65,7 @@ function _s_help {
     printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--procs|-n" "Total number of processors requested"
-    printf "\$format" "--nodes" "Number of nodes requested (--nodes X -ppn => --procs), do not use --procs combined with this"
+    printf "\$format" "--nodes" "Number of nodes requested (--nodes X -ppn => --procs)"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
     printf "\$format" "--mail-begin|-m-B" "Mail when the job begins"
     printf "\$format" "--mail-end|-m-N" "Mail when the job ends (regardless of success)"
