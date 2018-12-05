@@ -22,7 +22,7 @@ queue=
     
 message=""
 mail=""
-mem=""
+mem=
 show_flag=0
 # Default to not use OpenMP
 # By far the greatest majority do not even know its existence.
@@ -169,7 +169,7 @@ _s_add_option -n "\$procs" "Total number of cores, nodes = computers, ppn = core
 if [ \$ppn -gt 1 ]; then
   _s_add_option -R "\"span[block=\$ppn]\"" "Number of processers allocated per compute node, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
 fi
-if [ \$mem -gt 0 ]; then
+if [ "x\$mem" != "x" ]; then
   _s_add_option -R "\"rusage[mem=\$mem]\"" "Memory allowed per processer."
 fi
 

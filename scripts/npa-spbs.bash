@@ -181,6 +181,9 @@ _s_add_option -q "\$queue" "The queue that the script is submitted to"
 
 _s_add_option -l "nodes=\$nodes:ppn=\$ppn" "Specify total number of cores, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
 _s_add_option -l "walltime=\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
+if [ "x\$mem" != "x" ]; then
+  _s_add_option -l "pmem=\$mem" "Memory allowed per processer."
+fi
 _s_add_option -m "\$message" "Mail upon [a] = PBS abort, [e] = execution error, [b] = begin execution."
 _s_add_option -M "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."
 _s_add_option -j "\$inout" "Combines the stdout and stderr output to the stdout (thus no error file will be created)."

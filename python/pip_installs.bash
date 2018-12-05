@@ -70,6 +70,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pack_cmd "$_pip_cmd install --upgrade distribute"
     pip_append enum34
     pip_append six
+    pip_append line_profiler
     pip_append pandoc
     pip_append lxml
     pip_append Pillow
@@ -88,6 +89,7 @@ pip_append ipyvolume
 pip_append joblib
 pip_append jinja2
 pip_append jsonschema
+# Until > 2.1.1 is out, we can't use it due to missing Cython updates
 #pip_append line_profiler
 pip_append markupsafe
 pip_append Markdown
