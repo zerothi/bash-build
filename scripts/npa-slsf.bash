@@ -12,7 +12,7 @@ cat <<EOF > $script
 #_groups="\$(groups \$USER)"
 
 # Set default options (15 minutes)
-walltime=00:15
+walltime=00:00
 procs=0
 nodes=0
 ppn=0
@@ -120,6 +120,7 @@ done
 
 # Correct for default options
 [ -z "\$message" ] && message=ae
+[ "\$walltime" == "00:00" ] && walltime=00:15
 
 
 # Check options for number of nodes vs. cores

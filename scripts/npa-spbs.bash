@@ -13,7 +13,7 @@ _groups="\$(groups \$USER)"
 
 # Set default options:
 single_paffinity=0
-walltime=00:15
+walltime=00:00
 nodes=1
 ppn=1
 
@@ -153,6 +153,7 @@ done
 
 # Correct for default options
 [ -z "\$message" ] && message=ae
+[ "\$walltime" == "00:00" ] && walltime=00:15
 
 # Correct the access policy statement
 case \$access_policy in
