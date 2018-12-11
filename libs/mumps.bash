@@ -138,7 +138,7 @@ fi
 
 pack_cmd "sed -i '$ a\
 CDEFS += -DMUMPS_OPENMP\n\
-OPTF += $FLAG_OMP\n\
+OPTF += $FLAG_OMP -DBLR_MT\n\
 OPTL += $FLAG_OMP\n\
 OPTC += $FLAG_OMP\n' Makefile.inc"
 
