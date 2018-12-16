@@ -69,7 +69,7 @@ if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
 FFTW_PATH = $(pack_get --prefix fftw-3)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3\n\
-FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL -DTS_NOCHECKS\n\
+FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
 COMP_LIBS += libncdf.a $fdict' arch.make"
 
     if [[ $(pack_installed mumps) -eq 1 ]]; then
