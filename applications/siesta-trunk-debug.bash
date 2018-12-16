@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 735 ; do
+for v in 752 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --package siesta-trunk-debug \
@@ -64,27 +64,37 @@ if [[ $(vrs_cmp $v 535) -ge 0 ]]; then
 fi
 
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    pack_set --module-requirement mumps
     pack_set --module-requirement fftw
-    pack_cmd "sed -i '1 a\
-METIS_LIB = -lmetis\n\
+    pack_cmd "sed -i '$ a\
 FFTW_PATH = $(pack_get --prefix fftw)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
-FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
-LIBS += \$(METIS_LIB)\n\
+FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL\n\
 COMP_LIBS += libncdf.a $fdict' arch.make"
 
-    pack_cmd "sed -i '1 a\
-FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS -DTS_NOCHECKS\n\
+    if [[ $(pack_installed mumps) -eq 1 ]]; then
+	pack_set --module-requirement mumps
+	pack_cmd "sed -i '$ a\
+METIS_LIB = -lmetis\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS\n\
 ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
+
+    elif [[ $(pack_installed metis) -eq 1 ]]; then
+	pack_set --module-requirement metis
+	pack_cmd "sed -i '$ a\
+METIS_LIB = -lmetis\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DSIESTA__METIS' arch.make"
+    fi
 
 else 
     if [[ $(pack_installed metis) -eq 1 ]]; then
 	pack_set --module-requirement metis
 	pack_cmd "sed -i '1 a\
-FPPFLAGS += -DSIESTA__METIS\n\
-ADDLIB += -lmetis' arch.make"
+METIS_LIB = -lmetis\n\
+LIBS += \$(METIS_LIB)\n\
+FPPFLAGS += -DSIESTA__METIS' arch.make"
     fi
 fi
 
