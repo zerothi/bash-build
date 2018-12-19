@@ -33,7 +33,7 @@ AR = $AR \n\
 LIB_libxc = $(list --LD-rp mpi libxc) -lxcf90 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
 LIB_FFT = $(list --LD-rp fftw) -lfftw3\n\
-SRC_FFT = zfftifc.f90\n\
+SRC_FFT = zfftifc_fftw.f90\n\
 ' $file"
 
 tmp=
@@ -59,36 +59,6 @@ else
 
 fi
 
-# Create the correct file for the interface to FFTW
-file=src/zfftifc.f90
-pack_cmd "echo '! FFTW routine' > $file"
-pack_cmd "sed -i 'a\
-subroutine zfftifc(nd,n,sgn,z)\n\
-implicit none\n\
-integer, intent(in) :: nd, n(nd), sgn\n\
-complex(8), intent(inout) :: z(*)\n\
-integer, parameter :: FFTW_ESTIMATE=64\n\
-integer i,p\n\
-integer(8) plan\n\
-real(8) t1\n\
-!\$OMP CRITICAL\n\
-call dfftw_plan_dft(plan,nd,n,z,z,sgn,FFTW_ESTIMATE)\n\
-!\$OMP END CRITICAL\n\
-call dfftw_execute(plan)\n\
-!\$OMP CRITICAL\n\
-call dfftw_destroy_plan(plan)\n\
-!\$OMP END CRITICAL\n\
-if (sgn.eq.-1) then\n\
-  p=1\n\
-  do i=1,nd\n\
-    p=p*n(i)\n\
-  end do\n\
-  t1=1.d0/dble(p)\n\
-  call zdscal(p,t1,z,1)\n\
-end if\n\
-end subroutine\n\
-' $file"
-
 pack_cmd "make $(get_make_parallel)"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
@@ -97,6 +67,7 @@ pack_cmd "cp src/spacegroup/spacegroup $(pack_get --prefix)/bin/"
 pack_cmd "cp src/eos/eos $(pack_get --prefix)/bin/"
 pack_cmd "cp utilities/blocks2columns/blocks2columns.py $(pack_get --prefix)/bin/"
 pack_cmd "cp utilities/elk-bands/elk-bands $(pack_get --prefix)/bin/"
+pack_cmd "cp utilities/elk-optics/elk-optics.py $(pack_get --prefix)/bin/"
 pack_cmd "cp utilities/wien2k-elk/se.pl $(pack_get --prefix)/bin/"
 pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"
 
