@@ -1,4 +1,4 @@
-v=3.2.1
+v=3.3
 add_package http://www.mpich.org/static/downloads/$v/mpich-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE

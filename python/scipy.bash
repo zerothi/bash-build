@@ -1,4 +1,4 @@
-for v in 1.1.0 ; do
+for v in 1.2.0 ; do
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
