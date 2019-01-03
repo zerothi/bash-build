@@ -12,6 +12,7 @@ pack_set --install-query /directory/does/not/exist
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 pack_cmd "mkdir -p $(pack_get --prefix)/source"
 pack_set --module-opt "--set-ENV NPA_SOURCE=$(pack_get --prefix)/source"
+pack_set --module-opt "--set-ENV DCC_SS_SCRIPTS=$(pack_get --prefix)/source"
 
 source scripts/npa-spbs.bash
 source scripts/npa-slsf.bash
