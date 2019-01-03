@@ -13,7 +13,9 @@ pack_set --module-opt "--set-ENV PKG_CONFIG=$(pack_get --prefix)/bin/pkg-config"
 tmp=$(which pkg-config)
 if [[ $? -eq 0 ]]; then
     tmp=$(pkg-config --variable pc_path pkg-config)
-    pack_set --module-opt "--prepend-ENV PKG_CONFIG_PATH=$tmp"
+    if [[ -n "$tmp" ]]; then
+	pack_set --module-opt "--prepend-ENV PKG_CONFIG_PATH=$tmp"
+    fi
 fi
 
 # These packages are installed in build-tools
