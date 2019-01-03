@@ -192,7 +192,7 @@ echo ''
 
 _s_add_line 'source \$HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
 _s_add_line 'module purge' "Clear list of defaulted modules"
-_s_add_line 'module load npa-cluster-setup' "Enables NPA modules"
+_s_add_line 'module load dcc-setup' "Enables DCC modules"
 _s_add_line 'env' "For debugging purposes"
 echo ''
 _s_add_line 'ulimit -s unlimited' "Ensure an unlimited stack-size"
