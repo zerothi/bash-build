@@ -1,4 +1,4 @@
-add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.3.tgz
+add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.4.tgz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
