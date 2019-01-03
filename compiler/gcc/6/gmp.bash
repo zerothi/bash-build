@@ -5,6 +5,8 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
+pack_set --module-requirement gcc-prereq[$gcc_v]
+
 pre=$(pack_get --prefix gcc-prereq[$gcc_v])
 pack_set --prefix $pre
 pack_set --install-query $pre/lib/libgmp.a

@@ -5,6 +5,7 @@ add_package --build generic \
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
+pack_set --module-requirement gcc-prereq[$gcc_v]
 pack_set --module-requirement $gcc-gmp[$gmp_v]
 
 pre=$(pack_get --prefix gcc-prereq[$gcc_v])

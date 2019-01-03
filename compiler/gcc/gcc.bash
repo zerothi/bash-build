@@ -1,12 +1,12 @@
 gcc_v=5.5.0
 gcc=gcc_$gcc_v
-#source_pack compiler/gcc/prereq.bash
-#source_pack compiler/gcc/5/gmp.bash
-#source_pack compiler/gcc/5/mpfr.bash
-#source_pack compiler/gcc/5/mpc.bash
-#source_pack compiler/gcc/5/isl.bash
-#source_pack compiler/gcc/5/gcc.bash
-#source_pack compiler/gcc/5/gdb.bash
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/5/gmp.bash
+source_pack compiler/gcc/5/mpfr.bash
+source_pack compiler/gcc/5/mpc.bash
+source_pack compiler/gcc/5/isl.bash
+source_pack compiler/gcc/5/gcc.bash
+source_pack compiler/gcc/5/gdb.bash
 
 gcc_v=6.5.0
 gcc=gcc_$gcc_v

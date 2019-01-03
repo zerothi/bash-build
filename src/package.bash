@@ -45,7 +45,7 @@ _I_LIB=3 # an internal module only used for its library path
 _I_MOD=2 # a module supplied from outside, it does not contain paths
 _I_INSTALLED=1 # the package has been installed
 _I_TO_BE=0 # have not decided what the package should do yet...
-_I_REJECT=-1 # the package is rejected on this one...
+_I_REJECT=-1 # the package is rejected in this installation sequence...
 declare -A _installed
 # Adds this to the environment variable in the creation of the modules
 declare -A _mod_opts
@@ -566,13 +566,13 @@ function pack_get {
 		-R|-module-requirement|-mod-req)
 		    for m in ${_mod_req[$index]} ; do
 			case $(pack_get --installed $m) in
-			    $_I_MOD|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
+			    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
                         esac
 		    done ;;
 		-mod-req-path)
 		    for m in ${_mod_req[$index]} ; do
 			case $(pack_get --installed $m) in
-			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
+			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
                         esac
 		    done ;;
 		-module-requirement-all|-mod-req-all) 
@@ -721,7 +721,7 @@ function pack_choice {
     # Return choice
     if [[ $inst -eq 1 ]]; then
 	for opt in $(choice $c "$p") ; do
-	    if [[ $(pack_installed $opt) -eq 1 ]]; then
+	    if [[ $(pack_installed $opt) -eq $_I_INSTALLED ]]; then
 		_ps "$opt"
 		return 0
 	    fi
