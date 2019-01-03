@@ -7,6 +7,9 @@ add_package --build generic-no-version https://github.com/cea-hpc/modules/releas
 
 pack_set --install-query $(pack_get --prefix)/$v/bin/envml
 
+# Fix csh tests
+pack_cmd "sed -i -e 's:/bin/csh 2:/bin/csh -f 2:g' compat/configure"
+
 # Install commands that it should run
 pack_cmd "./configure" \
 	 "--without-pager" \
