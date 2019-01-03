@@ -1,9 +1,9 @@
 # Then install HDF5
-for p in 1.8.18 ; do
+for p in 1.10.4 ; do
 
 add_package \
     --package hdf5 \
-    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-$p/src/hdf5-$p.tar.bz2
+    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-$p/src/hdf5-$p.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
