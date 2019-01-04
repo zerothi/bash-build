@@ -166,8 +166,7 @@ function pack_install {
 	    module load build-tools
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		local msg="Failed loading modules (STATUS=$st): build-tools"
-		msg_install --message "$msg"
+		msg_install --message "Failed loading modules (STATUS=$st): build-tools"
 		exit $st
 	    fi
 	fi
@@ -178,8 +177,7 @@ function pack_install {
 	    module load $module_loads
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		local msg="Failed loading modules (STATUS=$st): build-tools"
-		msg_install --message "$msg"
+		msg_install --message "Failed loading modules (STATUS=$st): $module_loads"
 		exit $st
 	    fi
 	fi
@@ -197,8 +195,7 @@ function pack_install {
 	    module load $mod_name
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		local msg="Failed loading modules (STATUS=$st): build-tools"
-		msg_install --message "$msg"
+		msg_install --message "Failed loading modules (STATUS=$st): $mod_name"
 		exit $st
 	    fi
 	fi
