@@ -164,12 +164,24 @@ function pack_install {
 	# Begin loading modules before running the commands
 	if $(has_setting $BUILD_TOOLS $idx) ; then
 	    module load build-tools
+	    local st=$?
+	    if [[ $st -ne 0 ]]; then
+		local msg="Failed loading modules (STATUS=$st): build-tools"
+		msg_install --message "$msg"
+		exit $st
+	    fi
 	fi
 
         # Create the list of requirements
 	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
 	if [[ -n "${module_loads}" ]]; then
 	    module load $module_loads
+	    local st=$?
+	    if [[ $st -ne 0 ]]; then
+		local msg="Failed loading modules (STATUS=$st): build-tools"
+		msg_install --message "$msg"
+		exit $st
+	    fi
 	fi
 
 	# If the module should be preloaded (for configures which checks that the path exists)
@@ -183,6 +195,12 @@ function pack_install {
             mkdir -p $prefix
 	    # Load module for preloading
 	    module load $mod_name
+	    local st=$?
+	    if [[ $st -ne 0 ]]; then
+		local msg="Failed loading modules (STATUS=$st): build-tools"
+		msg_install --message "$msg"
+		exit $st
+	    fi
 	fi
 
 	# Append all relevant requirements to the relevant environment variables
