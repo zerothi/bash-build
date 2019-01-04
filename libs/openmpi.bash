@@ -35,7 +35,7 @@ if [[ -n $LSF_BINDIR ]]; then
     #  ../*/bin
     tmp=$(dirname $LSF_BINDIR)
     tmp_flags="$tmp_flags --with-lsf=$(dirname $tmp)"
-    tmp_flags="$tmp_flags --with-lsf-lib=$tmp/lib"
+    tmp_flags="$tmp_flags --with-lsf-libdir=$tmp/lib"
 else
     [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 fi
