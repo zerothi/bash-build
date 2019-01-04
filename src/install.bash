@@ -52,11 +52,10 @@ function pack_install {
     local run=1
 
     # Save the module requirements for later...
-    local mod_reqs="$(pack_get --mod-req $idx)"
     local tmp_idx
 
     # Make sure that every package before is installed...
-    for tmp in $mod_reqs ; do
+    for tmp in $(pack_get --mod-req $idx) ; do
 	if [[ -z "${tmp// /}" ]]; then
 	    break
 	fi
@@ -172,7 +171,7 @@ function pack_install {
 	fi
 
         # Create the list of requirements
-	local module_loads="$(list --loop-cmd 'pack_get --module-name' $mod_reqs)"
+	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --mod-req-module $idx))"
 	if [[ -n "${module_loads}" ]]; then
 	    module load $module_loads
 	    local st=$?
