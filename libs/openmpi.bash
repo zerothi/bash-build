@@ -28,7 +28,17 @@ tmp_flags=""
 [[ -e /usr/local/include/tm.h ]] && tmp_flags="$tmp_flags --with-tm=/usr/local"
 [[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-slurm --with-pmi=/usr"
 [[ -e /usr/local/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr/local"
-[[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
+# Check env vars
+if [[ -n $LSF_BINDIR ]]; then
+    # We expect the directory to be of form
+    #  ../include
+    #  ../*/bin
+    tmp=$(dirname $LSF_BINDIR)
+    tmp_flags="$tmp_flags --with-lsf=$(dirname $tmp)"
+    tmp_flags="$tmp_flags --with-lsf-lib=$tmp/lib"
+else
+    [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
+fi
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 else
