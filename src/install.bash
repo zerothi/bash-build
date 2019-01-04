@@ -296,7 +296,7 @@ function pack_install {
     if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then
             # Create the list of requirements
-	    local reqs="$(list --prefix '-R ' $mod_reqs)"
+	    local reqs="$(list --prefix '-R ' $(pack_get --mod-req-module $idx))"
             # We install the module scripts here:
 	    create_module \
 		-n "$alias" \
@@ -313,7 +313,7 @@ function pack_install {
 		-v $version \
 		-M $alias.$version/$(get_c) \
 		-P "/directory/should/not/exist" \
-		$(list --prefix '-L ' $(pack_get --mod-req $idx) $idx)
+		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx)
 	fi
     fi
 }

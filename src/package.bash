@@ -575,6 +575,12 @@ function pack_get {
 			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
                         esac
 		    done ;;
+		-mod-req-module)
+		    for m in ${_mod_req[$index]} ; do
+			case $(pack_get --installed $m) in
+			    $_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
+                        esac
+		    done ;;
 		-module-requirement-all|-mod-req-all) 
                     _ps "${_mod_req[$index]}" ;;
 		-module-name-requirement|-mod-req-name) 
