@@ -217,7 +217,6 @@ echo ''
 # Add typical setup for MPI/OpenMP
 if [ \$mpi -eq 1 ]; then
   _help "You are using MPI. Please edit the submit-script and ensure a working MPI executable"
-  _s_add_line 'exit 0 # load MPI' "Ensure that you have loaded the correct MPI command, then delete this"
   if [ \$omp -gt 0 ]; then
     _help "You are creating a hybrid MPI/OpenMP script."
     _s_add_line "mpirun --map-by ppr:1:socket:pe=\$ppn -x OMP_NUM_THREADS=\$ppn -x OMP_PROC_BIND=true <executable>" "Setup the MPI call to figure out the number of cores used, for 2 sockets machines you need \$((\$ppn/2))"
