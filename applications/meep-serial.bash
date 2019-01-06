@@ -1,6 +1,8 @@
 add_package --package meep-serial \
 	    https://github.com/stevengj/meep/releases/download/v1.6.0/meep-1.6.tar.gz
 
+pack_set -s $BUILD_TOOLS
+
 pack_set --module-opt "--lua-family meep"
 
 pack_set --install-query $(pack_get --prefix)/bin/meep
@@ -31,8 +33,6 @@ fi
 pack_set --module-requirement harminv
 tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
-pack_cmd "module load build-tools"
-
 # Install commands that it should run
 pack_cmd "autoconf configure.ac > configure"
 pack_cmd "./configure" \
@@ -44,5 +44,3 @@ pack_cmd "./configure" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-
-pack_cmd "module unload build-tools"

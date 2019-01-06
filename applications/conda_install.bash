@@ -1,3 +1,5 @@
+return 
+
 conda_V=$1
 
 # Local package for the downloading and installation

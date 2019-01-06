@@ -1,7 +1,9 @@
 v=2.4.0
-add_package -package opencoarrays https://github.com/sourceryinstitute/opencoarrays/releases/download/$v/OpenCoarrays-$v.tar.gz
+add_package -package opencoarrays \
+	    -archive OpenCoarrays-$v.tar.gz \
+	    https://github.com/sourceryinstitute/OpenCoarrays/archive/$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
 
 pack_set --mod-req mpi
 
@@ -15,8 +17,6 @@ fi
 
 pack_set --install-query $(pack_get --LD)/libcaf_mpi.a
 
-pack_cmd "module load build-tools"
-
 # Install commands that it should run
 pack_cmd "CC=$MPICC FC=$MPIFC cmake" \
 	 "-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix) .."
@@ -26,5 +26,3 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test > tmp.test 2>&1 || echo 'Forced success'"
 pack_cmd "make install"
 pack_set_mv_test tmp.test
-
-pack_cmd "module unload build-tools"

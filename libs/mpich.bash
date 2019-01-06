@@ -14,12 +14,18 @@ fi
 
 pack_cmd "unset F90"
 pack_cmd "unset F90FLAGS"
+pack_cmd "unset MPIF77"
+pack_cmd "unset MPIF90"
+pack_cmd "unset MPIFC"
+pack_cmd "unset MPICC"
+pack_cmd "unset MPICXX"
 pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \
 	 "--enable-shared --enable-smpcoll" \
-	 "--with-pm=hydra $tmp_flags"
+	 "--with-pm=hydra $tmp_flags" \
+	 "--with-hwloc-prefix=$(pack_get --prefix hwloc)"
 
 # We first need to assert the postdeps are correct
 # Sadly this comes about in certain environments.
@@ -60,6 +66,11 @@ pack_set --install-query $(pack_get --prefix)/custom.hydra
 
 pack_cmd "unset F90"
 pack_cmd "unset F90FLAGS"
+pack_cmd "unset MPIF77"
+pack_cmd "unset MPIF90"
+pack_cmd "unset MPIFC"
+pack_cmd "unset MPICC"
+pack_cmd "unset MPICXX"
 pack_cmd "../configure --prefix=$(pack_get --prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \

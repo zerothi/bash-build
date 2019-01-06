@@ -318,6 +318,10 @@ function pack_install {
 		-M "$mod_name" \
 		-p "$(pack_get --module-prefix $idx)" \
 		-P "$prefix" $reqs $(pack_get --module-opt $idx)
+	else
+	    # It means it is installed but not a module
+	    # In this case we *must* specify it as not a module
+	    pack_set --installed $_I_LIB $idx
 	fi
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \

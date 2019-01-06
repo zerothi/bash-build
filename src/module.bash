@@ -113,7 +113,7 @@ function create_module {
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -RL|-reqs+load-module) 
-		load="$load $(pack_get --mod-req $1) $1" ; shift ;; # Can be optioned several times
+		load="$load $(pack_get --mod-req-module $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
@@ -152,10 +152,41 @@ function create_module {
     esac
     [[ -z "$version" ]] && version=empty
 
+    # Filter out modules that are not actual modules
+    tmp=
+    for mod in $require ; do
+	[[ -z "${mod// /}" ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_LIB|$_I_REQ)
+		continue
+		;;
+	esac
+	tmp="$tmp $mod"
+    done
+    require="$tmp"
+
+    # Filter out modules that are not actual modules
+    tmp=
+    for mod in $load ; do
+	[[ -z "${mod// /}" ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_LIB|$_I_REQ)
+		continue
+		;;
+	esac
+	tmp="$tmp $mod"
+    done
+    load="$tmp"
+
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
 	[[ -z "${mod// /}" ]] && continue
-	[[ $(pack_get --installed $mod) -eq $_I_INSTALLED ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_INSTALLED|$_I_MOD)
+		continue
+		;;
+	esac
+	msg_install --message "Could not create module [$name/$version] because $(pack_get -p $mod)[$(pack_get -v $mod)] is not installed..."
 	return 1
     done
     

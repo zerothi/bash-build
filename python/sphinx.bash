@@ -1,4 +1,4 @@
-v=1.8.1
+v=1.8.3
 add_package --archive sphinx-$v.tar.gz \
     https://github.com/sphinx-doc/sphinx/archive/$v.tar.gz
 

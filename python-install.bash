@@ -4,7 +4,7 @@ msg_install \
 # This script will install all python packages
 #exit 0
 
-pMod="$(pack_get --mod-req $(get_parent)) $(get_parent)"
+pMod="$(pack_get --mod-req-module $(get_parent)) $(get_parent)"
 pModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
 module load $pModNames
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
