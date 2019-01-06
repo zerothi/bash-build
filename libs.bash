@@ -68,6 +68,8 @@ source_pack libs/elpa.bash
 source_pack libs/elpa-debug.bash
 source_pack libs/eigenexa.bash
 
+source_pack libs/globalarrays.bash
+
 source_pack libs/eigen.bash
 
 # Some specific libraries
