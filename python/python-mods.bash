@@ -8,17 +8,6 @@ create_module \
     $(list --prefix '-RL ' fireworks)
 
 
-for i in $(get_index -all ase) ; do
-    create_module \
-	-n python$pV.ase.$(pack_get --version $i) \
-	-W "Nick R. Papior ASE for: $(get_c)" \
-	-v $(date +'%g-%j') \
-	-M python$pV.ase.$(pack_get --version $i)/$(get_c) \
-	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $i)
-done
-
-
 for i in $(get_index -all gpaw) ; do
     create_module \
 	-n python$pV.gpaw.$(pack_get --version $i) \
@@ -49,12 +38,12 @@ rm_latest python$pV.numerics/$(get_c)
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	       h5py numexpr theano numba seaborn networkx \
-	       kwant pybinding phonopy pythtb qutip \
+	       kwant pybinding phonopy pythtb qutip ase \
 	       dask distributed xarray yt \
 	       pyamg scikit-learn scikit-nano scikit-optimize \
 	       orthopy quadpy lmfit \
 	       Inelastica-dev ipi-dev sisl-dev hotbit-dev ; do
-    if [[ $(pack_installed $i) -eq 1 ]]; then
+    if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
         tmp="$tmp $i"
     fi
 done

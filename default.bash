@@ -39,14 +39,12 @@ create_module $cm_defs \
     -echo "$(echo_modules octopus)" \
     -RL octopus
 
-if [[ $(pack_get --installed elk) -eq 1 ]]; then
-    create_module $cm_defs \
-        -n "elk.default" \
-	-W "Nick R. Papior script for loading Elk: $(get_c)" \
-	-M elk.default/$(get_c) \
-	-echo "$(echo_modules elk)" \
-	-RL elk
-fi
+create_module $cm_defs \
+    -n "elk.default" \
+    -W "Nick R. Papior script for loading Elk: $(get_c)" \
+    -M elk.default/$(get_c) \
+    -echo "$(echo_modules elk)" \
+    -RL elk
 
 create_module $cm_defs \
     -n "gulp.default" \
