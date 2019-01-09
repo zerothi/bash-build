@@ -3,8 +3,9 @@ v_paraver=4.8.1
 v_extrae=3.6.1
 v_dimemas=5.4.0
 
-
 # When compiling extrae it really needs the same MPI library
+
+
 add_package --archive extrae-$v_extrae.tar.gz \
 	    https://github.com/bsc-performance-tools/extrae/archive/$v_extrae.tar.gz
 
