@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 if [[ "x${pV:0:1}" == "x3" ]]; then
     pack_set --install-query $(pack_get --prefix)/bin/f2py3
 else
-    pack_set --install-query $(pack_get --prefix)/bin/f2py
+    pack_set --install-query $(pack_get --prefix)/bin/f2py2
 fi
 pack_set --module-requirement cython
 
