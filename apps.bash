@@ -5,11 +5,14 @@ build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
 # Ensure that we install conda
-source_pack applications/conda.bash
-source_pack applications/conda_install.bash 2
+#source_pack applications/conda.bash
+#source_pack applications/conda_install.bash 2
 #source_pack applications/conda_install.bash 3
 
-# Valgrind
+# analysis tools
+source_pack applications/papi.bash
+
+source_pack applications/bsc-perf-tools.bash
 source_pack applications/valgrind.bash
 source_pack applications/tau.bash
 
