@@ -69,9 +69,9 @@ source_pack python/cython.bash
 #   libs/pybind11.bash would maybe be more appropiate.
 source_pack python/pybind11.bash
 
+source_pack python/fypp.bash
 
 # GUI based stuff
-#source_pack python/wxwidgets.bash
 source_pack python/sip.bash
 source_pack python/pyqt5.bash
 source_pack python/pyqt3d.bash
