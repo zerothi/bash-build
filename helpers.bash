@@ -38,6 +38,9 @@ source_pack helpers/ninja.bash
 source_pack helpers/imake.bash
 source_pack helpers/makedepend.bash
 
+# Tools for performance analysis
+source_pack helpers/unwind.bash
+source_pack helpers/wxwidgets.bash
 
 source_pack helpers/zlib.bash
 source_pack helpers/libpng.bash
