@@ -75,6 +75,7 @@ source_pack python/fypp.bash
 source_pack python/sip.bash
 source_pack python/pyqt5.bash
 source_pack python/pyqt3d.bash
+source_pack python/wxpython.bash
 
 # Generic scientific libraries
 source_pack python/numpy.bash

@@ -120,4 +120,23 @@ create_module $cm_defs \
     -echo "$(echo_modules gnuplot molden grace xcrysden povray vmd matplotlib)" \
     $(list --prefix '-RL ' gnuplot molden grace xcrysden povray vmd matplotlib)
 
+
+msg_install --message "performance analysis"
+
+tmp=
+for i in papi valgrind pdt tau extrae paraver-kernel dimemas wxparaver
+do
+    if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
+        tmp="$tmp $i"
+    fi
+done
+
+#rm_latest performance-analysis.default/$(get_c)
+create_module $cm_defs \
+    -n performance-analysis.default \
+    -W "Nick R. Papior script for loading performance analysis routines: $(get_c)" \
+    -M performance-analysis.default/$(get_c) \
+    -echo "$(echo_modules $tmp)" \
+    $(list --prefix '-RL ' $tmp)
+
 unset echo_modules

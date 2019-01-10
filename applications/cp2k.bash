@@ -1,6 +1,4 @@
-add_package http://sourceforge.net/projects/cp2k/files/cp2k-6.1.tar.bz2
-
-pack_set --host-reject ntch --host-reject zeroth
+add_package https://github.com/cp2k/cp2k/releases/download/v6.1.0/cp2k-6.1.tar.bz2
 
 pack_set $(list -p '--module-requirement ' mpi libxc fftw)
 
@@ -30,8 +28,9 @@ FFTW_LIB = $(list --LD-rp fftw) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
 LIBXC_LIB = $(list --LD-rp libxc) \n\
 DFLAGS  = -D__FFTW3 -D__HWLOC \n\
-DFLAGS += -D__LIBXC2 -D__parallel -D__SCALAPACK\n\
-DFLAGS += -D__HAS_NO_MPI_MOD \n\
+DFLAGS += -D__parallel -D__SCALAPACK\n\
+DFLAGS += -D__LIBXC2\n\
+#DFLAGS  += -D__ELPA \n\
 CC = $CC \$(DFLAGS) $CFLAGS \$(HWLOC_INC) \n\
 CPPFLAGS = \$(DFLAGS) \n\
 FCFLAGS += \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\

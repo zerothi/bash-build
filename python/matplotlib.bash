@@ -14,8 +14,8 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
 pack_set --module-requirement numpy --module-requirement gen-freetype
-for m in wxwidgets pyqt ; do
-    if [[ $(pack_installed $m) -eq 1 ]]; then
+for m in wxpython pyqt ; do
+    if [[ $(pack_installed $m) -eq $_I_INSTALLED ]]; then
 	pack_set --module-requirement $m
     fi
 done

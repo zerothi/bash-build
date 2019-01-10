@@ -45,8 +45,9 @@ pack_cmd "make install"
 add_package --archive paraver-kernel-$v_paraver.tar.gz \
 	    https://github.com/bsc-performance-tools/paraver-kernel/archive/v$v_paraver.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL
 
+pack_set --module-requirement build-tools
 pack_set --module-requirement boost
 pack_set --module-requirement extrae
 
@@ -66,8 +67,9 @@ pack_cmd "make install"
 add_package --archive dimemas-$v_dimemas.tar.gz \
 	    https://github.com/bsc-performance-tools/dimemas/archive/$v_dimemas.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL
 
+pack_set --module-requirement build-tools
 pack_set --module-requirement boost
 
 pack_set --install-query $(pack_get --prefix)/bin/prv2dim
@@ -84,10 +86,11 @@ pack_cmd "make install"
 
 
 add_package --archive wxparaver-$v_wxparaver.tar.gz \
-	    https://github.com/bsc-performance-tools/wxparaver/archive/v$v_wxparaver.tar.gzo
+	    https://github.com/bsc-performance-tools/wxparaver/archive/v$v_wxparaver.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL
 
+pack_set --module-requirement build-tools
 pack_set --module-requirement wxwidgets
 pack_set --module-requirement boost
 pack_set --module-requirement extrae
@@ -97,7 +100,7 @@ pack_set --install-query $(pack_get --prefix)/bin/wxparaver
 
 pack_cmd "./bootstrap"
 pack_cmd "./configure" \
-	 "--with-wxdir=$(pack_get --prefix wxwidgets)" \
+	 "--with-wx-prefix=$(pack_get --prefix wxwidgets)" \
 	 "--with-openmp" \
 	 "--with-boost=$(pack_get --prefix boost)" \
 	 "--with-paraver=$(pack_get --prefix paraver-kernel)" \
@@ -105,9 +108,4 @@ pack_cmd "./configure" \
 	 "--prefix=$(pack_get --prefix)"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-
-
-
-
-
-
+#	 "--with-wx-config=$(pack_get --prefix wxwidgets)/bin/wx-config"
