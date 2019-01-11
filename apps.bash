@@ -11,10 +11,12 @@ build_set --default-setting $CRT_DEF_MODULE
 
 # analysis tools
 source_pack applications/papi.bash
-
 source_pack applications/bsc-perf-tools.bash
 source_pack applications/valgrind.bash
 source_pack applications/tau.bash
+
+source_pack applications/scorep.bash
+source_pack applications/scalasca.bash
 
 # Analysis tools
 source_pack applications/bader.bash

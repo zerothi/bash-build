@@ -124,7 +124,7 @@ create_module $cm_defs \
 msg_install --message "performance analysis"
 
 tmp=
-for i in papi valgrind pdt tau extrae paraver-kernel dimemas wxparaver
+for i in papi valgrind pdt tau extrae paraver dimemas scorep
 do
     if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
         tmp="$tmp $i"
