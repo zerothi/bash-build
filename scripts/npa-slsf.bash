@@ -36,13 +36,22 @@ function _s_add_option {
     # \$3 is the message for the flag (printed above the flag)
     [ -z "\$2" ] && return 0
     if [ \$show_flag -eq 1 ]; then
-        echo "## \$3"
+        if [ -n "\$3" ]; then
+            echo "## \$3"
+        fi
     fi  
     echo "#BSUB \$1 \$2"
 }
 
+function _s_add_message {
+    # Takes one arguments
+    # \$1 is the message
+    [ -z "\$1" ] && return 0
+    echo "# \$1"
+}
+
 function _s_add_line {
-    # Takes three arguments
+    # Takes two arguments
     # \$1 is the line
     # \$2 is the message for the line
     [ -z "\$1" ] && return 0
@@ -167,13 +176,22 @@ if [ "x\$queue" != "x" ]; then
 fi
 
 _s_add_option -n "\$procs" "Total number of cores, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
+
+rusage=""
 if [ \$ppn -gt 1 ]; then
-  _s_add_option -R "\"span[block=\$ppn]\"" "Number of processers allocated per compute node, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
+  _s_add_message "Number of processers allocated per compute node, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
+  rusage="\$rusage span[block=\$ppn]"
 fi
 if [ "x\$mem" != "x" ]; then
-  _s_add_option -R "\"rusage[mem=\$mem]\"" "Memory allowed per processer."
+  _s_add_message "Memory allowed per processer"
+  rusage="\$rusage rusage[mem=\$mem]"
 fi
 
+# Fix quatations
+if [ "x\$rusage" != "x" ]; then
+  rusage="\"\$rusage\""
+fi
+_s_add_option -R "\${rusage:1}" ""
 _s_add_option -W "\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 
 case \$message in
