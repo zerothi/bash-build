@@ -74,7 +74,7 @@ function _s_help {
     printf "\$format" "--hours|-hh" "The time of execution in hours. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--minutes|-mm" "The time of execution in minutes. (-W,-dd,-hh,-mm can be combined)"
     printf "\$format" "--procs|-n" "Total number of processors requested"
-    printf "\$format" "--nodes" "Number of nodes requested (--nodes X -ppn => --procs)"
+    printf "\$format" "--nodes" "Number of nodes requested (--nodes * -ppn == --procs)"
     printf "\$format" "--processors-per-node|-ppn" "Number of cores per node requested"
     printf "\$format" "--mail-begin|-m-B" "Mail when the job begins"
     printf "\$format" "--mail-end|-m-N" "Mail when the job ends (regardless of success)"
@@ -175,11 +175,11 @@ if [ "x\$queue" != "x" ]; then
   _s_add_option -q "\$queue" "The queue the script is submitted to"
 fi
 
-_s_add_option -n "\$procs" "Total number of cores, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
+_s_add_option -n "\$procs" "Total number of cores, nodes = nodes, ppn = cores used on each node => \$((nodes*ppn)) cores"
 
 rusage=""
 if [ \$ppn -gt 1 ]; then
-  _s_add_message "Number of processers allocated per compute node, nodes = computers, ppn = cores used on each computer [nodes=\$nodes:ppn=\$ppn] => \$((nodes*ppn)) cores"
+  _s_add_message "Number of processers allocated (in blocks) per compute node => \$((nodes*ppn)) cores"
   rusage="\$rusage span[block=\$ppn]"
 fi
 if [ "x\$mem" != "x" ]; then
@@ -191,7 +191,7 @@ fi
 if [ "x\$rusage" != "x" ]; then
   rusage="\"\$rusage\""
 fi
-_s_add_option -R "\${rusage:1}" ""
+_s_add_option -R "\"\${rusage:2}" ""
 _s_add_option -W "\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 
 case \$message in
