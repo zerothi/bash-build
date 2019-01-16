@@ -42,7 +42,7 @@ pack_install
 #                             #
 # Install the FORTRAN headers #
 ###############################
-vf=4.4.4
+vf=4.4.5
 add_package --archive netcdf-fortran-$vf.tar.gz \
     --package netcdf-fortran \
     https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
