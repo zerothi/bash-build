@@ -24,7 +24,11 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set --module-requirement pdt \
 	 --module-requirement mpi \
-	 --module-requirement unwind
+	 --module-requirement unwind \
+	 --module-requirement otf2 \
+	 --module-requirement opari2 \
+	 --module-requirement scorep
+
 
 tmp_flags=
 if [[ $(pack_installed papi) -eq $_I_INSTALLED ]]; then
@@ -42,7 +46,9 @@ pack_cmd "./configure -c++=$CXX -cc=$CC -fortran=$FC" \
 	 "-unwind=$(pack_get --prefix unwind)" \
 	 "-pdt=$(pack_get --prefix pdt)" \
 	 "-bfd=$(pack_get --prefix build-tools)" \
-	 "-openmp -mpi -mpit" \
+	 "-otf=$(pack_get --prefix otf2)" \
+	 "-scorep=$(pack_get --prefix scorep)" \
+	 "-openmp -opari -mpi -mpit" \
 	 "-useropt='$CFLAGS'" \
 	 "-PROFILEMEMORY" \
 	 "-prefix=$(pack_get --prefix) $tmp_flags"

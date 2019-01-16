@@ -10,12 +10,13 @@ build_set --default-setting $CRT_DEF_MODULE
 #source_pack applications/conda_install.bash 3
 
 # analysis tools
+source_pack applications/otf2.bash
+source_pack applications/opari2.bash
 source_pack applications/papi.bash
 source_pack applications/bsc-perf-tools.bash
 source_pack applications/valgrind.bash
-source_pack applications/tau.bash
-
 source_pack applications/scorep.bash
+source_pack applications/tau.bash
 source_pack applications/scalasca.bash
 
 # Analysis tools
