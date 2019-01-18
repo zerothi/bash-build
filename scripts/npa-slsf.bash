@@ -128,7 +128,7 @@ while [ \$# -ne 0 ]; do
 done
 
 # Correct for default options
-[ -z "\$message" ] && message=ae
+[ -z "\$message" ] && message=N
 [ "\$walltime" == "00:00" ] && walltime=00:15
 
 
@@ -196,12 +196,12 @@ _s_add_option -W "\$walltime" "The allowed execution time. Will quit if the exec
 
 case \$message in
   *B*|*b*)
-     _s_add_option "" -B "Mail when job begins"
+     _s_add_option "-" "B" "Mail when job begins"
      ;;
 esac
 case \$message in
   *N*|*n*)
-     _s_add_option "" "-N" "Mail when job ends"
+     _s_add_option "-" "N" "Mail when job ends"
      ;;
 esac
 _s_add_option -u "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."
