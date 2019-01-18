@@ -1,5 +1,5 @@
 # Then install H5 utils
-for p in 1.12.1 ; do
+for p in 1.13.1 ; do
 
 add_package \
     --package h5utils-serial \
