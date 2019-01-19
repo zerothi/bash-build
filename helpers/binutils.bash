@@ -7,6 +7,9 @@ pack_set --prefix $(pack_get --prefix build-tools)
 pack_set --install-query $(pack_get --prefix)/bin/gprof
 
 pack_cmd "../configure --with-sysroot=${SYSROOT-/}" \
+	 --enable-gold=yes \
+	 --enable-ld=yes \
+	 --enable-lto=yes \
 	 --enable-shared \
 	 --enable-install-libiberty \
 	 "--prefix $(pack_get --prefix)"
