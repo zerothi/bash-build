@@ -59,7 +59,7 @@ pack_cmd "popd"
 # later install the shared library (so that we both have .a and .so).
 # For now we require that builds requiring a shared build is "fixed".
 #    enable shared build with: --enable-shared and adding python[$v] to list --LD-rp
-pack_cmd "../configure --with-threads" \
+pack_cmd "../configure" \
     "--enable-unicode=ucs4" \
     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra) $tmp_lib'" \
     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
