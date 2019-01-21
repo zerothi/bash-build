@@ -1,4 +1,4 @@
-for v in 5.1.4 2018.4 ; do
+for v in 5.1.4 2018.4 2019 ; do
 add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS

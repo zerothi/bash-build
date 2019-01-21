@@ -82,6 +82,9 @@ pack_set --prefix $(pack_get --prefix paraver)
 
 pack_set --module-requirement build-tools
 pack_set --module-requirement boost
+if [[ $(pack_installed flex) -eq 1 ]]; then
+    pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/prv2dim
 
