@@ -1,14 +1,12 @@
-v=2.2.1
+v=3.0.4
 add_package --build generic \
     --archive luarocks-$v.tar.gz \
     https://github.com/keplerproject/luarocks/archive/v$v.tar.gz
 
 pack_set --module-requirement lua
+pack_set -s $BUILD_TOOLS
 
 pack_set --install-query $(pack_get --prefix lua)/bin/luarocks
-
-[ $(pack_installed build-tools) -eq 1 ] && \
-    pack_set --module-requirement build-tools
 
 # Configure the package
 pack_cmd "./configure" \
@@ -20,3 +18,5 @@ pack_cmd "./configure" \
 pack_cmd "make build"
 pack_cmd "make install"
 
+# Now add packages
+pack_cmd "luarocks install luaposix"

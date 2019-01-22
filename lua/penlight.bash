@@ -1,4 +1,4 @@
-v=1.4.1
+v=1.6.0
 add_package --build generic \
 	    --package penlight \
 	    --archive Penlight-$v.tar.gz \
