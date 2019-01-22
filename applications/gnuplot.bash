@@ -10,7 +10,8 @@ pack_set --install-query $(pack_get --prefix)/bin/gnuplot
 
 # Install commands that it should run
 pack_cmd "./configure --with-gd=$(pack_get --prefix libgd)" \
-     "--prefix $(pack_get --prefix)"
+	 "--prefix $(pack_get --prefix)" \
+	 "--with-texdir=$(pack_get --prefix)/"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
