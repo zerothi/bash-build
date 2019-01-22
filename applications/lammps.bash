@@ -2,78 +2,60 @@
 # However, a first install should be fine...
 # rm .archives/lammps.tar.gz
 add_package --package lammps \
-    http://lammps.sandia.gov/tars/lammps-stable.tar.gz
+	    --directory 'lammps-*' \
+	    --archive lammps-2019.01.4.tar.gz \
+	    https://github.com/lammps/lammps/archive/patch_4Jan2019.tar.gz
 
 pack_set_file_version
-pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS -s $BUILD_DIR
 
 pack_set --module-opt "--lua-family lammps"
-
-pack_set --directory 'lammps-*'
-pack_cmd 'cd src'
 
 pack_set --install-query $(pack_get --prefix)/bin/lmp
 
 pack_set --module-requirement mpi \
-    --module-requirement fftw
+	 --module-requirement fftw
+#	 --module-requirement netcdf
 
-tmp=MAKE/Makefile.npa
-pack_cmd "echo '# NPA-script' > $tmp"
+_tmp_flags=
+function _lammps_flags {
+    _tmp_flags="$_tmp_flags $@"
+}
 
-pack_cmd "sed -i '1 a\
-include ../MAKE/Makefile.mpi\n\
-SHELL=/bin/sh\n\
-CC =         $MPICXX\n\
-CCFLAGS =    $CFLAGS $(list --INCDIRS $(pack_get --mod-req-path))\n\
-SHFLAGS =    -fPIC\n\
-DEPFLAGS =   -M\n\
-LINK =	     \$(CC)\n\
-SIZE =	     size\n\
-ARCHIVE =    $AR\n\
-ARFLAGS =    -rc\n\
-SHLIBFLAGS = -shared\n\
-LMP_INC =    -DLAMMPS_GZIP\n\
-MPI_INC =      \n\
-MPI_PATH =     \n\
-MPI_LIB =      \n\
-FFT_INC =    -DFFT_FFTW3 $(list --INCDIRS fftw)\n\
-FFT_PATH =     \n\
-FFT_LIB =    -lfftw3\n\
-JPG_INC =      \n\
-JPG_PATH =     \n\
-JPG_LIB = ' $tmp"
+_lammps_flags -DBUILD_EXE=yes
+_lammps_flags -DBUILD_LIB=yes
+_lammps_flags -DBUILD_SHARED_LIBS=yes
+_lammps_flags -DBUILD_OMP=yes
+_lammps_flags -DBUILD_MPI=yes
 
-
-if $(is_c intel) ; then
-    pack_cmd "sed -i '$ a\
-LINKFLAGS =  $MKL_LIB -mkl=sequential $(list --LD-rp $(pack_get --mod-req-path))\n\
-LIB =        -lstdc++ -lpthread -mkl=sequential' $tmp"
-
-elif $(is_c gnu) ; then 
-    pack_cmd "sed -i '$ a\
-LINKFLAGS =  $(list --INCDIRS --LD-rp $(pack_get --mod-req-path))\n\
-LIB =        -lstdc++ -lpthread ' $tmp"
-
-else
-    doerror lammps "Could not recognize the compiler: $(get_c)"
-fi
+_lammps_flags -DLAMMPS_MACHINE=mpi
+_lammps_flags -DCMAKE_CXX_COMPILER=$CXX
+_lammps_flags -DCMAKE_C_COMPILER=$CC
+_lammps_flags -DCMAKE_Fortran_COMPILER=$FC
+_lammps_flags -DCMAKE_CXX_FLAGS="'$CFLAGS'"
+_lammps_flags -DCMAKE_C_FLAGS="'$CFLAGS'"
+_lammps_flags -DCMAKE_Fortran_FLAGS="'$FCFLAGS'"
+_lammps_flags -DFFT=FFTW3
+# force double precision
+_lammps_flags -DFFT_SINGLE=no
+_lammps_flags -DFFTW3_INCLUDE_DIRS=$(pack_get --prefix fftw-mpi)/include
+_lammps_flags -DFFTW3_LIBRARIES=$(pack_get --prefix fftw-mpi)/lib
+# Allows handling lammps as library (otherwise LAMMPS dies!)
+_lammps_flags -DLAMMPS_EXCEPTIONS=yes
 
 # Enable packages
-pack_cmd "make yes-standard"
-# Disable packages not applicable for compilation
-pack_cmd "make $(list -p 'no-' gpu kim kokkos meam poems python reax voronoi)"
+# NetCDF produces wrong linker args! :(
+#_lammps_flags -DNETCDF_INCLUDE_DIR=$(pack_get --prefix netcdf)/include
+#_lammps_flags -DNETCDF_LIBRARY=$(pack_get --prefix netcdf)/lib
+#_lammps_flags -DPKG_USER-NETCDF=yes
 
-# Make commands
-pack_cmd "make $(get_make_parallel) npa"
-pack_cmd "make mode=lib $(get_make_parallel) npa"
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
-pack_cmd "cp lmp_npa $(pack_get --prefix)/bin/lmp"
-# Copy the library over 
-pack_cmd "mkdir -p $(pack_get --LD)"
-pack_cmd "cp liblammps_npa.a $(pack_get --LD)/liblammps.a"
-# Copy headers over 
-pack_cmd "mkdir -p $(pack_get --prefix)/include"
-pack_cmd "cp library.cpp library.h $(pack_get --prefix)/include/"
+# Define install directory
+_lammps_flags -DCMAKE_INSTALL_PREFIX="$(pack_get --prefix)"
+
+pack_cmd "cmake $_tmp_flags ../cmake"
+unset _lammps_flags
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
 
 # Add potential files and env-var
 pack_set --module-opt "--set-ENV LAMMPS_POTENTIALS=$(pack_get --prefix)/potentials"

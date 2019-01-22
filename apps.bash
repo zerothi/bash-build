@@ -22,6 +22,8 @@ source_pack applications/scalasca.bash
 # Analysis tools
 source_pack applications/bader.bash
 
+source_pack applications/plumed.bash
+
 # Pseudo potential generation
 source_pack applications/atom.bash
 source_pack applications/ape.bash
