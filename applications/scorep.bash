@@ -10,6 +10,6 @@ pack_set --module-requirement opari2
 pack_cmd "./configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--with-otf2=$(pack_get --prefix otf2)" \
-	 "--with-otf2=$(pack_get --prefix opari2)"
+	 "--with-opari2=$(pack_get --prefix opari2)"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
