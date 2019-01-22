@@ -476,7 +476,7 @@ EOF
 
 # Reset in_survey
 if { \$in_survey == 2 } {
-    unset env(NPA__SURVEY_IN)
+    unsetenv NPA__SURVEY_IN
 }
 EOF
 	    fi
