@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 709 ; do
+for v in 713 ; do
 
 add_package --archive siesta-trunk-bulk-bias-$v.tar.gz \
     --directory './~nickpapior' \
