@@ -60,3 +60,7 @@ pack_cmd "make install"
 # Add potential files and env-var
 pack_set --module-opt "--set-ENV LAMMPS_POTENTIALS=$(pack_get --prefix)/potentials"
 pack_cmd "cp -rf ../potentials $(pack_get --prefix)/"
+
+pack_cmd "cd $(pack_get --prefix)/bin"
+pack_cmd "ln -s lmp_mpi lmp"
+
