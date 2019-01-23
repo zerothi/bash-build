@@ -241,12 +241,19 @@ function pack_install {
 	    err=$?
 	    if [[ $err -ne 0 ]]; then
 		# Show error about the package installed
-		msg_install \
-		    --package "Failed to install package..." \
-		    $idx
+		msg_install --package "Failed to install package..." $idx
 		exit $err
 	    fi
 	done
+
+	# If the config.log exists, we will copy it:
+	if [[ -e config.log ]]; then
+	    if [[ -d $prefix ]]; then
+		# copy the config.log to the prefix location
+		mv config.log $prefix/
+		gzip -f $prefix/config.log
+	    fi
+	fi
 
 	popd 1> /dev/null
 

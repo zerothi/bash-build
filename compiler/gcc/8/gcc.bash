@@ -27,7 +27,6 @@ pack_cmd "../configure --prefix $pre" \
 	 "--with-multilib-list=m64" \
 	 "--enable-languages=$languages"
 unset languages
-pack_set_mv_test config.log
 
 # Make commands
 pack_cmd "make BOOT_LDFLAGS='$(list --LD-rp gcc-prereq[$gcc_v])' $(get_make_parallel)"
