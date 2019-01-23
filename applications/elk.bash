@@ -5,7 +5,7 @@ pack_set --host-reject ntch --host-reject zeroth
 pack_set --install-query $(pack_get --prefix)/bin/elk
 
 pack_set --module-requirement mpi \
-    --module-requirement libxc[4.2.3] \
+    --module-requirement libxc \
     --module-requirement fftw
 
 # Add the lua family
@@ -30,7 +30,7 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list --LD-rp mpi libxc) -lxcf90 -lxc\n\
+LIB_libxc = $(list --LD-rp mpi libxc) -lxcf03 -lxc\n\
 SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90\n\
 LIB_FFT = $(list --LD-rp fftw) -lfftw3\n\
 SRC_FFT = zfftifc_fftw.f90\n\

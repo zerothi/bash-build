@@ -1,7 +1,7 @@
 # Requirements
 #  apt-get install guile-2.0-dev
-v=4.1.3
-add_package https://github.com/stevengj/libctl/releases/download/v$v/libctl-$v.tar.gz
+v=4.2.0
+add_package https://github.com/NanoComp/libctl/releases/download/v$v/libctl-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

@@ -29,7 +29,7 @@ LIBXC_INC = $(list -INCDIRS libxc) \n\
 LIBXC_LIB = $(list --LD-rp libxc) \n\
 DFLAGS  = -D__FFTW3 -D__HWLOC \n\
 DFLAGS += -D__parallel -D__SCALAPACK\n\
-DFLAGS += -D__LIBXC2\n\
+DFLAGS += -D__LIBXC\n\
 #DFLAGS  += -D__ELPA \n\
 CC = $CC \$(DFLAGS) $CFLAGS \$(HWLOC_INC) \n\
 CPPFLAGS = \$(DFLAGS) \n\
@@ -37,7 +37,7 @@ FCFLAGS += \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\
 LDFLAGS = \$(FCFLAGS) \n\
 LIBS  = \$(FFTW_LIB) -lfftw3_omp -lfftw3 \n\
 LIBS += \$(HWLOC_LIB) -lhwloc \n\
-LIBS += \$(LIBXC_LIB) -lxcf90 -lxc \n\
+LIBS += \$(LIBXC_LIB) -lxcf03 -lxc \n\
 LIBS += \$(SCALAPACK_L) \$(LAPACK_L) \n\
 ' $file"
 

@@ -1,5 +1,5 @@
-for v in 2.2.1 ; do
-add_package http://www.tddft.org/programs/APE/sites/default/files/ape-$v.tar.gz
+v=2.3.0
+add_package http://www.tddft.org/programs/octopus/download/APE/$v/ape-$v.tar.gz
 
 pack_set -s $BUILD_DIR
 
@@ -25,5 +25,3 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check 2>&1 > tmp.test ; echo FORCED"
 pack_cmd "make install"
 pack_set_mv_test tmp.test
-
-done

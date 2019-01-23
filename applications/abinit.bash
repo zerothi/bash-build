@@ -116,12 +116,14 @@ with_fft_flavor=\"fftw3-mpi\"\n\
 with_fft_incs=\"$(list --INCDIRS fftw-mpi)\"\n\
 with_fft_libs=\"$(list --LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
+
+_xc_v=3.0.1
 dft_flavor=atompaw+wannier90+libxc
-pack_set --module-requirement libxc
+pack_set --module-requirement libxc[$_xc_v]
 xclib="-lxcf90 -lxc"
 pack_cmd "$s '$ a\
-with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
-with_libxc_libs=\"$(list --LD-rp libxc) $xclib\"' $file"
+with_libxc_incs=\"$(list --INCDIRS libxc[$_xc_v])\"\n\
+with_libxc_libs=\"$(list --LD-rp libxc[$_xc_v]) $xclib\"' $file"
 
 
 if [[ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]]; then

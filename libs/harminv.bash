@@ -1,5 +1,5 @@
 # We will only install this on the super computer
-add_package http://ab-initio.mit.edu/harminv/harminv-1.4.tar.gz
+add_package https://github.com/NanoComp/harminv/releases/download/v1.4.1/harminv-1.4.1.tar.gz
 
 pack_set $(list --prefix "--host-reject " ntch zeroth)
 
@@ -22,13 +22,10 @@ else
 
 fi
 
-# Install commands that it should run
 pack_cmd "./configure" \
 	 "CPPFLAGS='$CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
 	 "--prefix $(pack_get --prefix) $tmp"
 
-
-# Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 

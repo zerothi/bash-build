@@ -1,4 +1,4 @@
-for v in 5.1.4 2018.4 2019 ; do
+for v in 5.1.4 2018.5 2019 ; do
 add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS
@@ -13,6 +13,12 @@ fi
 pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
 pack_set --module-requirement mpi --module-requirement fftw
+pack_set --module-requirement plumed
+
+# First patch for plumed
+pack_cmd "pushd ../"
+pack_cmd "plumed patch"
+
 
 tmp="-DGMX_MPI=ON -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
 tmp="$tmp -DGMX_GPU=OFF"

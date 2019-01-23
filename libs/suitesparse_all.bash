@@ -1,6 +1,6 @@
 msg_install --message "Installing the SUITE SPARSE libraries..."
 
-v=4.5.3
+v=5.4.0
 add_package \
     --alias suitesparse \
     --directory SuiteSparse \
@@ -33,51 +33,55 @@ function sse() {
     pack_cmd "echo '$@' >> $mk"
 }
 
+
 # First insert the flags that control the flow at the top
 ssb "MY_METIS_LIB = $(list --LD-rp metis) -lmetis"
 ssb "MY_METIS_INC = $(pack_get -prefix metis)/include"
-
-sse " "
-sse "# NPA make file for suitesparse"
-sse "CC = $CC"
-sse "CXX = $CXX"
-sse "CFLAGS = $CFLAGS"
-sse "CF = \$(CFLAGS) \$(CPPFLAGS) \$(TARGET_ARCH) -fexceptions -fPIC"
-sse "CFOPENMP = $FLAG_OMP"
-sse "CF += \$(CFOPENMP)"
-sse "RANLIB = ranlib"
-sse "ARCHIVE = \$(AR) \$(ARFLAGS)"
-sse "CP = cp -f"
-sse "MV = mv -f"
-sse "F77 = $FC"
-sse "F77FLAGS = $FCFLAGS"
-
+ssb "LDFLAGS += \$(CFOPENMP)"
+ssb "CF += \$(CFOPENMP)"
+ssb "INSTALL = $(pack_get -prefix)/"
+ssb "CF = \$(CFLAGS) \$(CPPFLAGS) \$(TARGET_ARCH) -fexceptions -fPIC"
+ssb "CFOPENMP = $FLAG_OMP"
+ssb "AUTOCC = no"
+ssb "CC = $CC"
+ssb "CXX = $CXX"
+ssb "CFLAGS = $CFLAGS"
+ssb "OPTIMIZATION = $CFLAGS"
+ssb "ARCHIVE = \$(AR) \$(ARFLAGS)"
+ssb "AR = $AR"
+ssb "RANLIB = $RANLIB"
+ssb "CP = cp -f"
+ssb "MV = mv -f"
+ssb "F77 = $FC"
+ssb "F77FLAGS = $FCFLAGS"
 
 # Add lapack/blas
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    sse "BLAS = $MKL_LIB $INTEL_LIB -lmkl_blas95_lp64"
-    sse "LAPACK = $MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64"
+    ssb "BLAS = $MKL_LIB $INTEL_LIB -lmkl_blas95_lp64"
+    ssb "LAPACK = $MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64"
 
 else
 
     # This ensures that the linking step using
     # the C-compiler will work.
-    sse "LBLIBS += -lgfortran"
+    sse "LDLIBS += -lgfortran"
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    sse "LAPACK = $(list --LD-rp +$la) $(pack_get -lib $la)"
-    sse "BLAS = \$(LAPACK)"
+    ssb "LAPACK = $(list --LD-rp +$la) $(pack_get -lib $la)"
+    ssb "BLAS = \$(LAPACK)"
 
 fi
 
 # No GPU support
 ssb "GPU_CONFIG = "
+ssb "CUDA = no"
+sse "LDFLAGS += -L\$(INSTALL_LIB) -Wl,-rpath=\$(INSTALL_LIB)"
+sse "LDLIBS += -L\$(INSTALL_LIB) -Wl,-rpath=\$(INSTALL_LIB)"
 
 unset ssb
 unset sse
 
 pack_cmd "make"
-# Install commands that it should run
-pack_cmd "make install INSTALL=$(pack_get --prefix)"
+pack_cmd "make install"

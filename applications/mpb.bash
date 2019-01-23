@@ -1,4 +1,5 @@
-add_package https://github.com/stevengj/mpb/releases/download/v1.6.2/mpb-1.6.2.tar.gz
+v=1.7.0
+add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -30,15 +31,14 @@ else
     doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
 
 fi
-# Add the CTL library
-tmp="$tmp --with-libctl=$(pack_get --prefix libctl)"
+tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
 # Install commands that it should run
 pack_cmd "../configure" \
      "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-     "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
-     "--with-mpi" \
+     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "--with-mpi --with-openmp" \
      "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
@@ -50,7 +50,7 @@ pack_cmd "make distclean"
 pack_cmd "../configure" \
      "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-     "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
      "--with-mpi --with-inv-symmetry" \
      "--prefix=$(pack_get --prefix) $tmp" 
 
