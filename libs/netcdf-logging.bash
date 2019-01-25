@@ -25,7 +25,7 @@ pack_cmd "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLA
 pack_cmd "../configure" \
 	 "CC=${MPICC} CXX=${MPICXX}" \
 	 "--prefix=$(pack_get --prefix)" \
-	 "--disable-dap" \
+	 "--enable-dap" \
 	 "--enable-shared" \
 	 "--enable-static" \
 	 "--enable-logging" \

@@ -15,7 +15,7 @@ pack_set --lib[fortran] -lnetcdff -lnetcdf
 # Install commands that it should run
 pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)" \
-	 "--disable-dap" \
+	 "--enable-dap" \
 	 "--enable-netcdf-4" \
 	 "--enable-shared" \
 	 "--enable-static"
