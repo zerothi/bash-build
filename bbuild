@@ -192,7 +192,7 @@ source_pack helpers/modules.bash
 # that isn't the case, error out and denote the user should
 # rerun the script..
 if [[ $_has_module_cmd -eq 0 ]]; then
-    msg_install --message "Please rerun the script and add $(pack_get --prefix modules) to your path (for correct environement variable)"
+    msg_install --message "Please rerun the script and add $(pack_get --prefix modules) to your path (for correct environment variable)"
     msg_install --message "For environment modules, add this to your .bashrc: 'source $(pack_get --prefix modules)/$(pack_get --version modules)/init/bash'"
     exit 1
 fi
@@ -207,6 +207,13 @@ for ib in `seq 0 $_N_b` ; do
 	_has_module_path=0
     fi
 done
+path=$(build_get --module-path[$_b_name_default])-apps
+if [[ $(check_modulepath $path) -eq 0 ]]; then
+    msg_install --message "Module path: '$path' is not in env(MODULEPATH)"
+    msg_install --message "Add this to your .bashrc: 'module use --append $path'"
+    
+    _has_module_path=0
+fi
 if [[ $_has_module_path -eq 0 ]]; then
     msg_install --message "Please correct your environment, the module path is not consistent with your build."
     exit 1

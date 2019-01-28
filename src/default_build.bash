@@ -11,7 +11,7 @@ module_set --survey-file $_prefix/survey
 
 new_build --name generic \
     --installation-path $_prefix/generic \
-    --module-path $_prefix/env-modules/generic \
+    --module-path $_prefix/modules/generic \
     --build-path .compile \
     --source $tmp_src \
     --build-module-path "--package --version" \
@@ -19,7 +19,7 @@ new_build --name generic \
 
 new_build --name generic-no-version \
     --installation-path $_prefix/generic \
-    --module-path $_prefix/env-modules/generic \
+    --module-path $_prefix/modules/generic \
     --build-path .compile \
     --source $tmp_src \
     --build-module-path "--package" \
@@ -27,7 +27,7 @@ new_build --name generic-no-version \
 
 new_build --name generic-empty \
     --installation-path $_prefix/generic \
-    --module-path $_prefix/env-modules/generic \
+    --module-path $_prefix/modules/generic \
     --build-path .compile \
     --source $tmp_src \
     --build-module-path "--package" \
@@ -35,7 +35,7 @@ new_build --name generic-empty \
 
 new_build --name vendor \
     --installation-path $_prefix/generic/vendor \
-    --module-path $_prefix/env-modules/generic \
+    --module-path $_prefix/modules/generic \
     --build-path .compile \
     --source $tmp_src \
     --build-module-path "--package --version" \
@@ -43,7 +43,7 @@ new_build --name vendor \
 
 new_build --name generic-host \
     --installation-path $_prefix/$(get_c -n)/$(get_c -v)/generic \
-    --module-path $_prefix/env-modules/$(get_c -n)/$(get_c -v)/generic \
+    --module-path $_prefix/modules/$(get_c -n)/$(get_c -v)/generic \
     --build-path .compile \
     --source $tmp_src \
     --build-module-path "--package --version" \
@@ -60,7 +60,7 @@ source $tmp_src
 
 new_build --name gnu \
     --installation-path $_prefix/$(get_c -n)/$(get_c -v) \
-    --module-path $_prefix/env-modules/$(get_c -n)/$(get_c -v) \
+    --module-path $_prefix/modules/$(get_c -n)/$(get_c -v) \
     --build-path .compile \
     --build-module-path "--package --version" \
     --build-installation-path "--package --version" \
@@ -80,7 +80,7 @@ tmp_src=src/source-gnu-debug.sh
 source $tmp_src
 new_build --name debug \
     --installation-path $_prefix/$(get_c -n)/$(get_c -v) \
-    --module-path $_prefix/env-modules/$(get_c -n)/$(get_c -v) \
+    --module-path $_prefix/modules/$(get_c -n)/$(get_c -v) \
     --build-path .compile \
     --build-module-path "--package --version" \
     --build-installation-path "--package --version" \
