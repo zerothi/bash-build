@@ -1,4 +1,4 @@
-for v in 1.0.2q 1.1.0j
+for v in 1.1.0j 1.1.1a
 do
     Pv=${v:0:${#v}-1}
     add_package --build generic --version $Pv --package openssl \

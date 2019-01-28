@@ -34,8 +34,8 @@ new_build --name python$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
     --installation-path $tmp \
-    --build-module-path "--package --version $IppV $(get_c)" \
-    --build-installation-path "--package --version $(get_c)"
+    --build-module-path "--package --version $IppV" \
+    --build-installation-path "--package --version"
 unset tmp
 
 # Change to the new build default
@@ -152,7 +152,7 @@ source_pack python/hotbit.bash
 source_pack python/pybinding.bash
 source_pack python/pythtb.bash
 source_pack python/phonopy.bash
-#source_pack python/phono3py.bash
+source_pack python/phono3py.bash
 
 # made for kwant
 source_pack python/tinyarray.bash

@@ -63,13 +63,20 @@ source_pack applications/mpb.bash # [gmp,libunistring,guile]
 source_pack applications/meep.bash # [gmp,libunistring,guile]
 
 # Create a module with default all plotting tools
+tmp=
+for i in gnuplot molden grace xcrysden vmd povray gdis
+do
+    if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
+        tmp="$tmp $i"
+    fi
+done
 create_module \
-    --module-path $(build_get --module-path)-npa \
-    -n "Nick R. Papior script for loading GUI: $(get_c)" \
-    -v $(pack_get --version) \
-    -M gnuplot.molden.grace.xcrysden/$(get_c) \
+    --module-path $(build_get --module-path)-apps \
+    -n "Script for loading different graphical tools: $(get_c)" \
+    -v 1.0 \
+    -M graphics \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' gnuplot molden grace xcrysden)
+    $(list --prefix '-RL ' $tmp)
 
 # DFT codes
 source_pack applications/gromacs.bash

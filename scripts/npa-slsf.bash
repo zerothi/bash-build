@@ -4,7 +4,7 @@ cat <<EOF > $script
 
 # This script will enable the creation of easy LSF scripts
 # This script has been created by:
-#  Nick R. Papior, 2015 -- 2018.
+#  Nick R. Papior, 2015 -- 2019.
 # Copyright.
 
 # First retreive information on host

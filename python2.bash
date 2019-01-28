@@ -110,11 +110,11 @@ fi
 pack_install
 
 create_module \
-    --module-path $(build_get --module-path)-npa-apps \
+    --module-path $(build_get --module-path)-apps \
     -n $(pack_get --alias).$(pack_get --version) \
-    -W "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
+    -W "Script for loading $(pack_get --package): $(get_c)" \
     -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
+    -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias) 
@@ -124,13 +124,14 @@ create_module \
 # The lookup name in the list for version number etc...
 set_parent $(pack_get --alias)[$(pack_get --version)]
 set_parent_exec $(pack_get --prefix)/bin/python2
+
 # Install all python packages
 source python-install.bash
 clear_parent
 
 # Initialize the module read path
 old_path=$(build_get --module-path)
-build_set --module-path $old_path-npa
+build_set --module-path $old_path-apps
 
 # Create common modules
 source python/python-mods.bash

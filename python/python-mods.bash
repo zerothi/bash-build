@@ -1,7 +1,7 @@
 
 create_module \
     -n python$pV.fireworks \
-    -W "Nick R. Papior basic python script for: $(get_c)" \
+    -W "Python: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.fireworks/$(get_c) \
     -P "/directory/should/not/exist" \
@@ -11,7 +11,7 @@ create_module \
 for i in $(get_index -all gpaw) ; do
     create_module \
 	-n python$pV.gpaw.$(pack_get --version $i) \
-	-W "Nick R. Papior GPAW for: $(get_c)" \
+	-W "GPAW: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M python$pV.gpaw.$(pack_get --version $i)/$(get_c) \
 	-P "/directory/should/not/exist" \
@@ -49,7 +49,7 @@ for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 done
 create_module \
     -n python$pV.numerics \
-    -W "Nick R. Papior parallel python script for: $(get_c)" \
+    -W "Parallel python script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M python$pV.numerics/$(get_c) \
     -P "/directory/should/not/exist" \

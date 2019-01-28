@@ -133,35 +133,43 @@ source_pack libs/atompaw.bash
 
 # We install the module scripts here:
 create_module \
-    --module-path $(build_get --module-path)-npa \
+    --module-path $(build_get --module-path)-apps \
     -n mpi.zlib.hdf5.netcdf \
-    -W "Nick R. Papior module script for: $(get_c)" \
+    -W "Script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M mpi.zlib.hdf5.netcdf/$(get_c) \
+    -M mpi.zlib.hdf5.netcdf \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement netcdf) netcdf)
+    -RL netcdf
 
-tmp=$(get_index nco)
-retval=$?
-if [ $retval -eq 0 ]; then
+
+# Create a module with default all plotting tools
+tmp=
+for i in nco h5utils-serial
+do
+    if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
+        tmp="$tmp $i"
+    fi
+done
+if [ ! -z "$tmp" ]; then
     create_module \
-	--module-path $(build_get --module-path)-npa \
-        -n hdf5.netcdf.utils \
-	-W "Nick R. Papior module script for: $(get_c)" \
+	--module-path $(build_get --module-path)-apps \
+	-echo "$(echo_modules $tmp)" \
+	-n file-utils \
+	-W "Script for: $(get_c)" \
 	-v $(date +'%g-%j') \
-	-M hdf5.netcdf.utils/$(get_c) \
+	-M hdf5.netcdf.utils \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement nco) $(pack_get --module-requirement h5utils-serial) nco h5utils-serial)
+	$(list --prefix '-RL ' $tmp)
 fi
 
 for bl in blas atlas openblas ; do
     create_module \
-	--module-path $(build_get --module-path)-npa \
+	--module-path $(build_get --module-path)-apps \
         -n mpi.$bl.scalapack \
-	-W "Nick R. Papior parallel math script for: $(get_c)" \
+	-W "Parallel math script for: $(get_c)" \
 	-v $(date +'%g-%j') \
-	-M mpi.$bl.scalapack/$(get_c) \
+	-M mpi.$bl.scalapack \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-L ' $(pack_get --module-requirement mpi) mpi $bl)
+	$(list --prefix '-RL ' $(pack_get --module-requirement mpi) mpi $bl)
 done
 

@@ -22,9 +22,9 @@ for p in $(get_index --all gcc) \
 do
     if [[ $(pack_get --installed $p) -eq 1 ]]; then
 	create_module \
-	    --module-path $mp-npa \
+	    --module-path $mp \
 	    -n $(pack_get --alias $p).$(pack_get --version $p) \
-	    -W "Nick R. Papior script for loading $(pack_get --alias $p): $(pack_get --version $p)." \
+	    -W "$(pack_get --alias $p): $(pack_get --version $p)." \
 	    -v $(pack_get --version $p) \
 	    -M $(pack_get --alias $p).$(pack_get --version $p) \
 	    -P "/directory/should/not/exist" -RL $p 
