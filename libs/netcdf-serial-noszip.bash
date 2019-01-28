@@ -22,9 +22,9 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
+pack_cmd "make check > netcdf.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.c
+pack_set_mv_test netcdf.test netcdf.test.c
 
 pack_install 
 
@@ -53,8 +53,8 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 ; echo FORCE"
+pack_cmd "make check > netcdf.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.f
+pack_set_mv_test netcdf.test netcdf.test.f
 
 done

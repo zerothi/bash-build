@@ -12,6 +12,6 @@ pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)" \
 	 "-DPYTHON_EXECUTABLE=$(pack_get --prefix python[$pV])/bin/$(get_parent_exec)" ..
 
 pack_cmd "make $(get_make_parallel)"
-#pack_cmd "make check > test.tmp"
-#pack_set_mv_test tmp.test
+#pack_cmd "make check > pybind11.tmp"
+#pack_set_mv_test pybind11.test
 pack_cmd "make install"

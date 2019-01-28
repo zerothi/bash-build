@@ -22,6 +22,6 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check 2>&1 > tmp.test ; echo FORCED"
+pack_cmd "make check 2>&1 > ape.test ; echo FORCED"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_set_mv_test ape.test

@@ -60,9 +60,9 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check-short > tmp.test 2>&1 || echo NVM"
+pack_cmd "make check-short > octopus.test 2>&1 || echo NVM"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.serial
+pack_set_mv_test octopus.test octopus.test.serial
 
 # prep for the MPI-compilation...
 pack_cmd "rm -rf *"
@@ -86,6 +86,6 @@ else
     pack_cmd "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 fi
 pack_cmd "make -j $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 && echo Successfull >> tmp.test || echo Failure >> tmp.test"
+pack_cmd "make check > octopus.test 2>&1 && echo Successfull >> octopus.test || echo Failure >> octopus.test"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.mpi
+pack_set_mv_test octopus.test octopus.test.mpi

@@ -20,7 +20,7 @@ pack_cmd "./configure" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
-    pack_cmd "make check > tmp.test 2>&1 ; echo force"
-    pack_set_mv_test tmp.test
+    pack_cmd "make check > hwloc.test 2>&1 ; echo force"
+    pack_set_mv_test hwloc.test
 fi
 pack_cmd "make install"

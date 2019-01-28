@@ -257,6 +257,9 @@ source libs.bash
 # These are "parent" installations...
 source python${_python_version}.bash
 
+# These are "parent" installations...
+source R.bash
+
 # We have installed all libraries needed for doing application installs
 source apps.bash
 

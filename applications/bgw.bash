@@ -75,7 +75,7 @@ fi
 
 pack_cmd "make all-flavors"
 if $(is_host zero ntch) ; then
-    pack_cmd "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > tmp.test ; echo 'Success'"
-    pack_set_mv_test tmp.test
+    pack_cmd "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > bgw.test ; echo 'Success'"
+    pack_set_mv_test bgw.test
 fi
 pack_cmd "make install INSTDIR=$(pack_get --prefix)"

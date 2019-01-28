@@ -63,8 +63,8 @@ pack_cmd "make install"
 pack_cmd "unset SLEPC_DIR"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make SLEPC_DIR=$(pack_get --prefix) test > tmp.test 2>&1"
-pack_set_mv_test tmp.test
+pack_cmd "make SLEPC_DIR=$(pack_get --prefix) test > slepc.test 2>&1"
+pack_set_mv_test slepc.test
 
 pack_set --module-opt "--set-ENV SLEPC_DIR=$(pack_get --prefix)"
 

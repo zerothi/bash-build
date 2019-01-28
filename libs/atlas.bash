@@ -65,11 +65,11 @@ pack_cmd "../configure" \
 
 pack_cmd "make"
 pack_cmd "make install"
-pack_cmd "make check > tmp.test 2>&1"
-pack_set_mv_test tmp.test tmp.test.s
+pack_cmd "make check > atlas.test 2>&1"
+pack_set_mv_test atlas.test atlas.test.s
 if ! $(is_host n-) ; then
-    pack_cmd "make ptcheck > tmp.test 2>&1"
-    pack_set_mv_test tmp.test tmp.test.t
+    pack_cmd "make ptcheck > atlas.test 2>&1"
+    pack_set_mv_test atlas.test atlas.test.t
 fi
 
 # Move so that we can install correct lapack

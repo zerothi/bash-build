@@ -46,11 +46,11 @@ LDFLAGS = \$(LDFLAGS) $FLAG_OMP\n' $file"
 
 # Make and install commands
 pack_cmd "make $(get_make_parallel) all"
-pack_cmd "make test > tmp.test 2>&1"
+pack_cmd "make test > plasma.test 2>&1"
 pack_cmd "cd testing"
 pack_cmd "make all"
-pack_cmd "python plasma_testing.py -c 2 >> ../tmp.test 2>&1"
-pack_cmd "cat testing_results.txt >> ../tmp.test"
+pack_cmd "python plasma_testing.py -c 2 >> ../plasma.test 2>&1"
+pack_cmd "cat testing_results.txt >> ../plasma.test"
 pack_cmd "cd .."
 pack_cmd "make install"
 if ! $(is_host ntch) ; then
@@ -61,5 +61,5 @@ if ! $(is_host ntch) ; then
     pack_cmd "cp time_*[^cho] $(pack_get --prefix)/bin/"
     pack_cmd "cd .."
 fi
-pack_set_mv_test tmp.test
+pack_set_mv_test plasma.test
 

@@ -25,11 +25,11 @@ fi
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_c intel) ; then
-    pack_cmd "make check > tmp.test 2>&1 ; echo Force"
+    pack_cmd "make check > gsl.test 2>&1 ; echo Force"
 fi
 pack_cmd "make install"
 if ! $(is_c intel) ; then
-    pack_set_mv_test tmp.test
+    pack_set_mv_test gsl.test
 fi
 
 

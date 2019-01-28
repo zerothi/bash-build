@@ -65,8 +65,8 @@ pack_cmd "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 ; echo 'force'"
-pack_set_mv_test tmp.test
+pack_cmd "make check > openmpi.test 2>&1 ; echo 'force'"
+pack_set_mv_test openmpi.test
 pack_cmd "make install"
 
 

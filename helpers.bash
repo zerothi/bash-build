@@ -18,6 +18,8 @@ if [[ $? -eq 0 ]]; then
     fi
 fi
 
+source_pack helpers/zlib.bash
+
 # These packages are installed in build-tools
 source_pack helpers/help2man.bash
 source_pack helpers/m4.bash
@@ -42,7 +44,6 @@ source_pack helpers/makedepend.bash
 source_pack helpers/unwind.bash
 source_pack helpers/wxwidgets.bash
 
-source_pack helpers/zlib.bash
 source_pack helpers/libpng.bash
 source_pack helpers/libgd.bash
 

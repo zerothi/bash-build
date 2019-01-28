@@ -86,13 +86,13 @@ function add_hidden_package {
 #   pack_set --module-requirement $name[$version]
 #   pack_set --install-query $(pack_get --prefix $name[$version])/test.output
 function add_test_package {
+    local name=$(pack_get --alias)
     if [[ $# -gt 0 ]]; then
 	TEST_OUT=$1
 	shift
     else
-	TEST_OUT=tmp.test
+	TEST_OUT=$name.test
     fi
-    local name=$(pack_get --alias)
     local version=$(pack_get --version)
     add_package --package $name-test \
 	--version $version fake

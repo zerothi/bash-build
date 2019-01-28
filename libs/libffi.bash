@@ -21,8 +21,8 @@ pack_cmd "make $(get_make_parallel)"
 if $(is_host slid muspel surt) ; then
     echo "Do not test" > /dev/null
 else
-    pack_cmd "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test
+    pack_cmd "make check > libffi.test 2>&1"
+    pack_set_mv_test libffi.test
 fi
 pack_cmd "make install"
 

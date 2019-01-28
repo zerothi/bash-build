@@ -1,8 +1,8 @@
 function tmp_func {
     pack_cmd "make $(get_make_parallel)"
     if ! $(is_host n-) ; then
-	pack_cmd "make check > tmp.test 2>&1 || echo 'forced'"
-	pack_set_mv_test tmp.test $1
+	pack_cmd "make check > fftw.test 2>&1 || echo 'forced'"
+	pack_set_mv_test fftw.test $1
     fi
     pack_cmd "make install"
     pack_cmd "rm -rf ./*"
@@ -62,19 +62,19 @@ for flag in --enable-single nothing ; do
     
     pack_cmd "../configure $flag CFLAGS='$CFLAGS'" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.$ext
+    tmp_func fftw.test.$ext
 
     # create the SMP version
     pack_cmd "../configure $flag CFLAGS='$CFLAGS'" \
 	     "--enable-threads" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.smp.$ext
+    tmp_func fftw.test.smp.$ext
 
     # create the OpenMP version
     pack_cmd "LIB='$FLAG_OMP' CFLAGS='$CFLAGS $FLAG_OMP' FFLAGS='$FFLAGS $FLAG_OMP' ../configure $flag" \
 	     "--enable-openmp" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.omp.$ext
+    tmp_func fftw.test.omp.$ext
 
 done
 
@@ -117,20 +117,20 @@ CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
 
     pack_cmd "../configure $flag" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.mpi.$ext
+    tmp_func fftw.test.mpi.$ext
 
     # create the SMP version
     pack_cmd "../configure $flag" \
 	     "--enable-threads" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.mpi.smp.$ext
+    tmp_func fftw.test.mpi.smp.$ext
 
     # create the OpenMP version
     flag="${flag//FLAGS='/FLAGS='$FLAG_OMP}"
     pack_cmd "LIB='$FLAG_OMP' ../configure $flag" \
 	     "--enable-openmp" \
 	     "--prefix $(pack_get --prefix)"
-    tmp_func tmp.test.mpi.omp.$ext
+    tmp_func fftw.test.mpi.omp.$ext
 
 done
 

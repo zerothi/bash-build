@@ -15,6 +15,6 @@ pack_cmd "../configure" \
 	 "LDFLAGS='$(list --LD-rp +hdf5-serial)'"
 
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > h5utils.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_set_mv_test h5utils.test
