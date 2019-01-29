@@ -8,7 +8,6 @@ pMod="$(pack_get --mod-req-module $(get_parent)) $(get_parent)"
 pModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
 module load $pModNames
 pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
-IppV=$(lc $(pack_get --alias $(get_parent)))-$(pack_get --version $(get_parent))
 IpV=$(pack_get --version $(get_parent))
 module unload $pModNames
 
@@ -29,14 +28,13 @@ def_idx=$(build_get --default-build)
 
 # Ensure get_c is defined
 source $(build_get --source)
-tmp=$(dirname $(pack_get --prefix $(get_parent)))/packages
 new_build --name python$IpV \
+    --module-path $(build_get --module-path[$def_idx])-python/$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
-    --installation-path $tmp \
-    --build-module-path "--package --version $IppV" \
-    --build-installation-path "--package --version"
-unset tmp
+    --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
+    --build-module-path "--package --version" \
+    --build-installation-path "$IpV --package --version"
 
 # Change to the new build default
 build_set --default-build python$IpV

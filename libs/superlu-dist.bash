@@ -1,4 +1,4 @@
-for v in 3.3 4.3 5.2.2 6.1.0 ; do
+for v in 4.3 5.4.0 ; do
 
 if [[ $(vrs_cmp $v 5.0) -gt 0 ]]; then
     add_package --package superlu-dist \
@@ -28,7 +28,9 @@ PLAT =\n\
 VERSION = $(pack_get --version)\n\
 SuperLUroot = ..\n\
 DSUPERLULIB = \$(SuperLUroot)/SRC/libsuperlu_dist.a\n\
+INCLUDEDIR = \$(SuperLUroot)/SRC\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
+HAVE_PARMETIS = TRUE\n\
 METISLIB = $(list --LD-rp parmetis) -lmetis\n\
 PARMETISLIB = $(list --LD-rp parmetis) -lparmetis\n\
 I_PARMETIS = $(list --INCDIRS parmetis)\n\
@@ -78,6 +80,8 @@ fi
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
 BLASLIB = $MKL_LIB -mkl=sequential\n\
+SLU_HAVE_LAPACK = TRUE\n\
+LAPACKLIB = $MKL_LIB -mkl=sequential\n\
 ' $file"
     
 else
@@ -86,6 +90,8 @@ else
     pack_set --module-requirement $la
     pack_cmd "sed -i '1 a\
 BLASLIB = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
+SLU_HAVE_LAPACK = TRUE\n\
+LAPACKLIB = $(pack_get --lib $la) \n\
 ' $file"
 
 fi

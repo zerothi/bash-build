@@ -33,7 +33,7 @@ RM = rm \n\
 RMFLAGS = -f \n\
 ##\n\
 PEXSI_LIB = \$(PEXSI_DIR)/src/libpexsi_\$(SUFFIX).a \n\
-DSUPERLU_DIR = $(pack_get --prefix superlu-dist[$sd_v])\n\
+DSUPERLU_DIR = $(pack_get --prefix superlu-dist)\n\
 METIS_DIR = $(pack_get --prefix parmetis)\n\
 SCOTCH_DIR = $(pack_get --prefix scotch)\n\
 #\n\
@@ -47,7 +47,7 @@ CCDEFS = -DRELEASE -DDEBUG=0 -DAdd_ \n\
 CPPDEFS = -std=c++11 \$(CCDEFS) \n\
 #\n\
 LIBS = \$(PEXSI_LIB) \n\
-LIBS += $(list -LD-rp superlu-dist[$sd_v] parmetis scotch)\n\
+LIBS += $(list -LD-rp superlu-dist parmetis scotch)\n\
 LIBS += -Wl,--allow-multiple-definition -lsuperlu_dist \n\
 #LIBS += -lptscotchparmetis -lptscotch -lptscotcherr \n\
 LIBS += -lscotchmetis -lscotch -lscotcherr \n\

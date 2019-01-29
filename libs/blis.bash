@@ -73,13 +73,15 @@ do
     
     pack_cmd "make $(get_make_parallel)"
     pack_cmd "make install"
-    
+
+
+    pack_cmd "make check 2>&1 > $model.test"
+
     # Run test
     pack_cmd "cd testsuite"
-    pack_cmd "make ; ./test_libblis.x > $model.test"
-    pack_set_mv_test $model.test
-    
+    pack_cmd "make ; ./test_libblis.x >> ../$model.test"
     pack_cmd "cd .."
+    pack_set_mv_test $model.test
 
     pack_cmd "make clean cleanlib"
 

@@ -176,6 +176,8 @@ while [ $tmp -lt $_N_b ]; do
 	msg_install --message "Will set it to: $(build_get --installation-path[$tmp])/modules"
 	build_set --module-path "$(build_get --installation-path[$tmp])/modules"
     fi
+    # DEBUG
+    #build_print $tmp
     let tmp++
 done
 
@@ -222,16 +224,16 @@ fi
 # Vendor libraries do not depend on anything...
 source vendor.bash
 
+# Install helper scripts
+# These should _never_ have any dependencies.
+# However, the Lmod switch requires LMOD (for usage, not for installation)
+source scripts.bash
+
 # Install the helper
 source helpers.bash
 
 # Install the lua-libraries
 source lua/install.bash
-
-# Install helper scripts
-# These should _never_ have any dependencies.
-# However, the Lmod switch requires LMOD
-source scripts.bash
 
 # Set the future correct default build as
 # requested by the user.
@@ -256,8 +258,6 @@ source libs.bash
 
 # These are "parent" installations...
 source python${_python_version}.bash
-
-# These are "parent" installations...
 source R.bash
 
 # We have installed all libraries needed for doing application installs

@@ -442,3 +442,27 @@ function new_build {
 	fi
     done
 }
+
+
+
+# Debugging function for printing out every available
+# information about a build
+function build_print {
+    # It will only take one argument...
+    local build=$_N_b
+    [[ $# -gt 0 ]] && build=$(get_index --hash-array "_b_index" $1)
+    shift
+    echo " >> >> >> >> Build information"
+    echo " NAM: $(build_get -name[$build])"
+    echo " AP : $(build_get -ap[$build])"
+    echo " IP : $(build_get -ip[$build])"
+    echo " BP : $(build_get -bp[$build])"
+    echo " BP X $(pack_list -lf "-X -p /" $(build_get -bp[$build]))"
+    echo " BIP: $(build_get -bip[$build])"
+    echo " BIPX $(pack_list -lf "-X -s /" $(build_get -bip[$build]))"
+    echo " BMP: $(build_get -bmp[$build])"
+    echo " BMPX $(pack_list -lf "-X -p /" $(build_get -bmp[$build]))"
+    echo " DM : $(build_get -default-module[$build])"
+    echo " S  : $(build_get -source[$build])"
+    echo "                                 << << << <<"
+}
