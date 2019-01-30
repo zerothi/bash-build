@@ -40,7 +40,7 @@ pack_cmd "make install"
 
 
 
-new_build --name internal-mpich \
+new_build --name _internal-mpich \
   --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
   --module-path $(build_get -mp)-mpich \
   --build-path $(build_get -bp) \

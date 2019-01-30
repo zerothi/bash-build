@@ -36,7 +36,7 @@ pack_cmd "make install"
 
 
 
-new_build --name internal-mvapich \
+new_build --name _internal-mvapich \
   --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
   --module-path $(build_get -mp)-mvapich \
   --build-path $(build_get -bp) \

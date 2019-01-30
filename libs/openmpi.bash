@@ -76,7 +76,7 @@ if [[ $(pack_installed flex) -eq 1 ]] ; then
 fi
 
 
-new_build --name internal-openmpi \
+new_build --name _internal-openmpi \
     --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
     --module-path $(build_get -mp)-openmpi \
     --build-path $(build_get -bp) \

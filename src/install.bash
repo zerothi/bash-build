@@ -360,7 +360,7 @@ function get_index {
 		;;
 	esac
     done
-    local i=$1
+    local i="$1"
     shift
 
     if [[ ${#i} -eq 0 ]]; then
@@ -384,7 +384,7 @@ function get_index {
     local version=$(var_spec -s $i)
     # do full variable (for ${!...})
     var="$var[$name]"
-    #echo "get_index: name($name) version($version)" >&2
+    #echo "get_index: $var name($name) version($version)" >&2
 
     # Do full expansion.
     local idx=${!var}

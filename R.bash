@@ -24,6 +24,7 @@ fi
 
 pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
 	 "--enable-R-shlib" \
+	 "--with-blas --with-lapack" \
 	 "--enable-lto" \
 	 "--with-readline" \
 	 "--prefix=$(pack_get --prefix)"

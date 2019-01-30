@@ -16,20 +16,20 @@ def_idx=$(build_get --default-build)
 
 # Ensure get_c is defined
 source $(build_get --source)
-new_build --name R$IrV \
-    --module-path $(build_get --module-path[$def_idx])-R/$IrV \
-    --source $(build_get --source) \
-    $(list --prefix "--default-module " $rMod) \
-    --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
-    --build-module-path "--package --version" \
-    --build-installation-path "$IrV --package --version"
+new_build --name _internal-R$IrV \
+	  --module-path $(build_get --module-path[$def_idx])-R/$IrV \
+	  --source $(build_get --source) \
+	  $(list --prefix "--default-module " $rMod) \
+	  --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
+	  --build-module-path "--package --version" \
+	  --build-installation-path "$IrV --package --version"
 
 # Change to the new build default
-build_set --default-build R$IrV
+build_set --default-build _internal-R$IrV
 
-build_set --default-choice[R$IrV] linalg openblas blis atlas blas
+build_set --default-choice[_internal-R$IrV] linalg openblas blis atlas blas
 
-source_pack R/rcpp.bash
+#source_pack R/rcpp.bash
 
 
 build_set --default-build $def_idx

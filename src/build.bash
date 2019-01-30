@@ -352,7 +352,7 @@ function new_build {
 	    # As a bonus, supplying name several time
 	    # creates aliases! :)
 	    -name) 
-		_b_index[$1]=$_N_b
+		_b_index[$(lc $1)]=$_N_b
 		_b_name[$_N_b]="$1"
 		if [[ $1 == default ]]; then
 		    doerr "build-name" "A build cannot be name 'default'!"
@@ -366,6 +366,8 @@ function new_build {
 	    -module-path) 
 		_b_mod_prefix[$_N_b]="$1" 
 		mkdir -p $1
+		module is-used $1
+		[ $? -ne 0 ] && module use -p $1
 		shift ;;
 	    -build-installation-path|-bip) 
 		_b_build_prefix[$_N_b]="$1"

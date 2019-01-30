@@ -28,7 +28,7 @@ def_idx=$(build_get --default-build)
 
 # Ensure get_c is defined
 source $(build_get --source)
-new_build --name python$IpV \
+new_build --name _internal-python$IpV \
     --module-path $(build_get --module-path[$def_idx])-python/$IpV \
     --source $(build_get --source) \
     $(list --prefix "--default-module " $pMod) \
@@ -37,9 +37,9 @@ new_build --name python$IpV \
     --build-installation-path "$IpV --package --version"
 
 # Change to the new build default
-build_set --default-build python$IpV
+build_set --default-build _internal-python$IpV
 
-build_set --default-choice[python$IpV] linalg openblas atlas blas
+build_set --default-choice[_internal-python$IpV] linalg openblas blis atlas blas
 
 # First install all pip installs
 source_pack python/pip_installs.bash
@@ -82,7 +82,6 @@ source_pack python/cftime.bash
 source_pack python/netcdf4.bash
 source_pack python/scipy.bash
 source_pack python/numexpr.bash
-source_pack python/scientificpython.bash
 source_pack python/matplotlib.bash
 source_pack python/bottleneck.bash
 source_pack python/sympy.bash

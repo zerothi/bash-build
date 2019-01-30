@@ -211,6 +211,9 @@ for ib in `seq 0 $_N_b` ; do
 done
 path=$(build_get --module-path[$_b_name_default])-apps
 if [[ $(check_modulepath $path) -eq 0 ]]; then
+    module use -p $path
+fi
+if [[ $(check_modulepath $path) -eq 0 ]]; then
     msg_install --message "Module path: '$path' is not in env(MODULEPATH)"
     msg_install --message "Add this to your .bashrc: 'module use --append $path'"
     
