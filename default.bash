@@ -20,7 +20,7 @@ function echo_modules {
 	local tmp=${tmp//\/$(get_c)/}
 	echos="$echos $tmp"
     done
-    _ps "Loading: $echos"
+    printf '%s' "Loading: $echos"
 }
 
 msg_install --message "abinit, octopus, elk, q-espresso"

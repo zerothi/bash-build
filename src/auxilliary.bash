@@ -157,21 +157,6 @@ function pop_r {
 }
     
 
-#  Function _ps
-# Prints all arguments as a string _without_ new-line characters.
-# Uses `printf` for this.
-# Using `_ps` in favor of `echo -n` is 2-fold.
-#  1. `printf` takes no options, hence you can print `_ps -n`
-#  2. `printf` is faster than `echo -n`
-#  Arguments
-#    message
-#       All message arguments are printed, _as is_.
-
-function _ps {
-    printf '%s' "$@"
-}
-
-
 #  Function trim_em
 # Takes one argument, if it has two em-dashes in front,
 # it returns the equivalent with only one em-dash.
@@ -206,7 +191,7 @@ function trim_spaces {
 	s=${s//  / } # removes double space
 	str="$str $s"
     done
-    _ps "${str:1}"
+    printf '%s' "${str:1}"
 }
 
 #  Function var_spec
@@ -242,8 +227,7 @@ function var_spec {
 	    else
 		opt=''
 	    fi
-	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
-	    _ps "${opt// /}"
+	    printf '%s' "${opt// /}"
 
 	    ;;
 	-var|-v)
@@ -252,7 +236,7 @@ function var_spec {
 	*)
 
 	    opt=${1%%\[*}
-	    _ps "${opt// /}"
+	    printf '%s' "${opt// /}"
 	    ;;
 
     esac
@@ -317,16 +301,16 @@ function str_version {
     esac
     case $opt in 
 	major|-major|-1)
-	    _ps "$Mv"
+	    printf '%s' "$Mv"
 	    ;;
 	minor|-minor|-2)
-	    _ps "$mv"
+	    printf '%s' "$mv"
 	    ;;
 	rev|-rev|-3)
-	    _ps "$rv"
+	    printf '%s' "$rv"
 	    ;;
 	bug|-bug|-4)
-	    _ps "$fourth"
+	    printf '%s' "$fourth"
 	    ;;
 	*)
 	    doerr "$opt" "Unknown print-out of version"
@@ -358,15 +342,15 @@ function vrs_cmp {
 	[[ -z "$lv" ]] && break
 	[[ -z "$rv" ]] && break
 	if (isnumber $lv) && (isnumber $rv) ; then
-	    [[ $lv -gt $rv ]] && _ps "1" && return 0
-	    [[ $lv -lt $rv ]] && _ps "-1" && return 0
+	    [[ $lv -gt $rv ]] && printf '%s' "1" && return 0
+	    [[ $lv -lt $rv ]] && printf '%s' "-1" && return 0
 	else
 	    # Currently we do not do character versioning
 	    # properly
-	    [[ "$lv" != "$rv" ]] && _ps '-1000' && return 0
+	    [[ "$lv" != "$rv" ]] && printf '%s' '-1000' && return 0
 	fi
     done
-    _ps "0"
+    printf '%s' "0"
 }
 
 
@@ -377,10 +361,10 @@ function vrs_cmp {
 #       Returns <args> as lowercase characters.
 
 function lc {
-    _ps "${1,,}"
+    printf '%s' "${1,,}"
     shift
     while [[ $# -gt 0 ]]; do
-	_ps " ${1,,}"
+	printf '%s' " ${1,,}"
 	shift
     done
 }
@@ -398,7 +382,7 @@ function get_file_time {
     local format="$1"
     local fdate=$(stat -L -c '%y' $2)
     shift 2
-    _ps "`date +"$format" --date="$fdate"`"
+    printf '%s' "`date +"$format" --date="$fdate"`"
 }
 
 
@@ -435,7 +419,7 @@ function isnumber {
 #       The order is preserved.
 
 function rem_dup {
-    # Apparently we cannot use _ps here!!!!
+    # Apparently we cannot use printf '%s' here!!!!
     # Hence the first argument must never be an option
     # for `echo`.
     echo -n "$@" | \
@@ -455,7 +439,7 @@ function rem_dup {
 #       The order is preserved.
 
 function ret_uniq {
-    # Apparently we cannot use _ps here!!!!
+    # Apparently we cannot use printf '%s' here!!!!
     echo -n "$@" | \
 	sed -e 's/[[:space:]]\+/ /g;s/ /\n/g' | \
 	awk 'BEGIN { c=0 } {
@@ -481,32 +465,32 @@ function arc_cmd {
     typeset -l ext="$1"
     case $ext in
 	bz2)
-	    _ps 'tar jxf'
+	    printf '%s' 'tar jxf'
 	    ;;
 	xz)
-	    _ps 'tar Jxf'
+	    printf '%s' 'tar Jxf'
 	    ;;
 	tar.gz|gz|tgz)
-	    _ps 'tar zxf'
+	    printf '%s' 'tar zxf'
 	    ;;
 	tar.lz|lz|tlz)
-	    _ps 'tar xf'
+	    printf '%s' 'tar xf'
 	    ;;
 	tar)
-	    _ps 'tar xf'
+	    printf '%s' 'tar xf'
 	    ;;
 	zip)
-	    _ps 'unzip'
+	    printf '%s' 'unzip'
 	    ;;
 	py|sh)
-	    _ps 'ln -fs'
+	    printf '%s' 'ln -fs'
 	    ;;
 	local|bin|fake)
-	    _ps 'echo'
+	    printf '%s' 'echo'
 	    ;;
 	git)
 	    # This of course limits to depth 5, so the url should have additional options
-	    _ps 'git clone -q'
+	    printf '%s' 'git clone -q'
 	    ;;
 	*)
 	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,git,local/bin/fake]"
@@ -611,10 +595,10 @@ function choice {
 	    local i=0
 	    for cc in "${sets[@]}" ; do
 		if [[ $i -eq 0 ]]; then
-		    _ps "$cc"
+		    printf '%s' "$cc"
 		    i=1
 		else
-		    _ps " $cc"
+		    printf '%s' " $cc"
 		fi
 	    done
 	    return 0
@@ -762,7 +746,7 @@ function list {
 	    done
 	fi
     fi
-    _ps "$retval"
+    printf '%s' "$retval"
 }
 
 #  Function noop
@@ -781,5 +765,5 @@ function noop {
 function tmp_file {
     local file=$(mktemp /tmp/bbuild.XXXXXX)
     trap 'rm -f -- "$file"' INT TERM HUP EXIT
-    _ps $file
+    printf '%s' $file
 }

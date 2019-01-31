@@ -378,7 +378,7 @@ function get_index {
 	#    [[ $name -gt $_N_b ]] && return 1
 	#fi
 	#[[ $name -lt 0 ]] && return 1
-	_ps "$i"
+	printf '%s' "$i"
 	return 0
     fi
     
@@ -400,12 +400,12 @@ function get_index {
 	    if [[ -n "$version" ]]; then
 		for v in $idx ; do
 		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
-			_ps "$v"
+			printf '%s' "$v"
 			break
 		    fi
 		done
 	    else
-		_ps "$idx"
+		printf '%s' "$idx"
 	    fi
 	    ;;
 	*)
@@ -423,7 +423,7 @@ function get_index {
 		    i="$v"
 		done
 	    fi
-	    _ps "$i"
+	    printf '%s' "$i"
 	    ;;
     esac
 }

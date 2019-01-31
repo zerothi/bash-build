@@ -34,22 +34,22 @@ function blis_parse {
     local flags=$(grep flags /proc/cpuinfo | head -1)
     # Check for avx2
     if $(blis_cpu "$flags" avx2 intel_pt) ; then
-	_ps haswell
+	printf '%s' 'haswell'
 	return
     fi
     if $(blis_cpu "$flags" avx2) ; then
-	_ps zen
+	printf '%s' 'zen'
 	return
     fi
     if $(blis_cpu "$flags" avx fma4 intel_pt) ; then
-	_ps sandybridge
+	printf '%s' 'sandybridge'
 	return
     fi
     if $(blis_cpu "$flags" avx fma4) ; then
-	_ps bulldozer
+	printf '%s' 'bulldozer'
 	return
     fi
-    _ps generic
+    printf '%s' 'generic'
 }
 
 for model in no openmp pthreads

@@ -318,19 +318,19 @@ function build_get {
     [[ -z "$b_idx" ]] && doerr "Build index" "Build not existing ($opt and $spec)"
     opt=$(var_spec $opt)
     case $opt in
-	-archive-path|-ap) _ps "$_archives" ;;
-	-name) _ps "${_b_name[$b_idx]}" ;;
-	-installation-path|-ip) _ps "${_b_prefix[$b_idx]}" ;;
-	-module-path|-mp) _ps "${_b_mod_prefix[$b_idx]}" ;;
-	-build-path|-bp) _ps "${_b_build_path[$b_idx]}" ;;
-	-build-installation-path|-bip) _ps "${_b_build_prefix[$b_idx]}" ;;
-	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
-	-default-build) _ps "$_b_def_idx" ;; 
-	-default-setting) _ps "${_b_def_settings[$b_idx]}" ;;
-	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
-	-def-module-version) _ps "$_crt_version" ;; 
-	-source) _ps "${_b_source[$b_idx]}" ;; 
-	-rejects) _ps "${_b_reject[$b_idx]}" ;; 
+	-archive-path|-ap) printf '%s' "$_archives" ;;
+	-name) printf '%s' "${_b_name[$b_idx]}" ;;
+	-installation-path|-ip) printf '%s' "${_b_prefix[$b_idx]}" ;;
+	-module-path|-mp) printf '%s' "${_b_mod_prefix[$b_idx]}" ;;
+	-build-path|-bp) printf '%s' "${_b_build_path[$b_idx]}" ;;
+	-build-installation-path|-bip) printf '%s' "${_b_build_prefix[$b_idx]}" ;;
+	-build-module-path|-bmp) printf '%s' "${_b_build_mod_prefix[$b_idx]}" ;;
+	-default-build) printf '%s' "$_b_def_idx" ;; 
+	-default-setting) printf '%s' "${_b_def_settings[$b_idx]}" ;;
+	-default-module) printf '%s' "${_b_def_mod_reqs[$b_idx]}" ;; 
+	-def-module-version) printf '%s' "$_crt_version" ;; 
+	-source) printf '%s' "${_b_source[$b_idx]}" ;; 
+	-rejects) printf '%s' "${_b_reject[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
 }

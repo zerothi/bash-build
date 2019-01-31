@@ -4,7 +4,7 @@
 # We will create a local name of the host
 _host="$(hostname -s)"
 function get_hostname {
-    _ps "$_host"
+    printf '%s' "$_host"
 }
 
 #  Function is_host
@@ -72,7 +72,7 @@ function get_Hz {
     local cpuHz=`grep "cpu MHz" /proc/cpuinfo | head -1`
     local Hz=2800
     # Now we first try the modelname
-    _ps $(($Hz*$s))
+    printf '%s' $(($Hz*$s))
 }
 
 #  Data containers for the rejection lists

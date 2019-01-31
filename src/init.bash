@@ -42,12 +42,12 @@ _parent_package=''
 # The parent package (for instance Python)
 function set_parent {       _parent_package=$1 ; }
 function clear_parent {     _parent_package='' ; }
-function get_parent { _ps "$_parent_package" ; }
+function get_parent { printf '%s' "$_parent_package" ; }
 
 _parent_exec=''
 # The parent package (for instance Python)
 function set_parent_exec {       _parent_exec=$1 ; }
-function get_parent_exec { _ps "$_parent_exec" ; }
+function get_parent_exec { printf '%s' "$_parent_exec" ; }
 
 # Create a list of packages that _only_ will
 # be installed
@@ -93,7 +93,7 @@ source src/host.bash
 _archives="$_cwd/.archives"
 # Ensure the archive directory exists
 mkdir -p $_archives
-function pwd_archives { _ps "$_archives" ; }
+function pwd_archives { printf '%s' "$_archives" ; }
 
 _install_prefix_no_path="HIDDEN"
 
@@ -120,7 +120,7 @@ function edit_env {
     esac
     local env=$1
     shift
-    [[ "$echo_env" -ne "0" ]] && _ps "${!env}" && return 0
+    [[ "$echo_env" -ne "0" ]] && printf '%s' "${!env}" && return 0
     # Process what is requested
     [[ -n "$append" ]] && export ${!env}="${!env}$append"
     [[ -n "$prepend" ]] && eval "export $env='$prepend${!env}'"
@@ -148,9 +148,9 @@ function has_setting {
 #   $1 : <index of archive>
 function get_make_parallel {
     if $(has_setting $MAKE_PARALLEL $1) ; then
-	_ps "-j $_n_procs"
+	printf '%s' "-j $_n_procs"
     else
-	_ps ""
+	printf '%s' ""
     fi
 }
 

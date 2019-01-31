@@ -19,7 +19,7 @@ export LMOD_PAGER=none
 
 # Query module format
 function module_format {
-    _ps $_mod_format
+    printf '%s' $_mod_format
 }
 
 # Assert that a given path is in the MODULEPATH.
@@ -36,7 +36,7 @@ function check_modulepath {
 	    found=1
 	fi
     done
-    _ps $found
+    printf '%s' $found
 }
 
 # Globally set whether modules should dispatch
@@ -519,20 +519,20 @@ function module_fmt_routine {
 	case "$opt" in
 	    -prepend-path)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "prepend-path $1 $2" ;;
-		    $_mod_format_LMOD) _ps "prepend_path(\"$1\",\"$2\")" ;;
+		    $_mod_format_ENVMOD) printf '%s' "prepend-path $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "prepend_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -append-path)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "append-path $1 $2" ;;
-		    $_mod_format_LMOD) _ps "append_path(\"$1\",\"$2\")" ;;
+		    $_mod_format_ENVMOD) printf '%s' "append-path $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "append_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -set-env)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "setenv $1 $2" ;;
-		    $_mod_format_LMOD) _ps "setenv(\"$1\",\"$2\",true)" ;;
+		    $_mod_format_ENVMOD) printf '%s' "setenv $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "setenv(\"$1\",\"$2\",true)" ;;
 		esac
 		shift ; shift ;;
 	esac

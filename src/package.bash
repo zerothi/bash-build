@@ -165,7 +165,7 @@ function pack_list {
 	     *) ret="$ret$(list $lf $opt)" ;;
 	esac
     done
-    _ps "$ret"
+    printf '%s' "$ret"
 }
 
 # $1 http path
@@ -450,7 +450,7 @@ function pack_set {
 	# We have used prefix-and-module
 	# we need to correct the fetching of the build path
 	# This is only because we haven't used the index thing before
-	local opt=$(pack_get --build $index)
+	opt=$(pack_get --build $index)
 	install="$(build_get --installation-path[$opt])/$mod_name"
     fi
     # We now have index to be the correct spanning
@@ -469,7 +469,7 @@ function pack_set {
 		lib='lib'
 	    fi
 	elif [[ -d "$install/lib64" ]]; then
-	    lib="lib64"
+	    lib='lib64'
 	fi
     fi
     [[ -n "$lib" ]] && _lib_prefix[$index]="$lib"
@@ -496,10 +496,10 @@ function pack_set {
 	done
 
     fi
-    [[ "$inst" -ne "-100" ]]    && _installed[$index]="$inst"
+    [[ "$inst" -ne '-100' ]]    && _installed[$index]="$inst"
     [[ -n "$query" ]]      && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
-	local tmp='' ; local v=''
+	local v=''
 	typeset -l lc_name="${_alias[$index]}"
 	for v in ${_index[$lc_name]} ; do
 	    [[ "$v" -ne "$index" ]] && tmp="$tmp $v"
@@ -540,8 +540,8 @@ function pack_cmd {
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
 function pack_get {
-    local opt
     # Save the option passed
+    local opt
     trim_em opt $1
     case $opt in
 	-*) ;;
@@ -549,160 +549,100 @@ function pack_get {
 	    doerr "$1" "Could not determine the option for pack_get" ;;	    
     esac
     shift
+    
     # We check whether a specific index is requested
-    if [[ $# -gt 0 ]]; then
-	while [[ $# -gt 0 ]]; do
-	    local index=$(get_index $1)
-	    [[ -z "$index" ]] && \
-		doerr pack_get "Could not find index of $1"
-	    #echo "pack_get: lookup($1) idx($index)" >&2
+    local index=
+    case $# in
+	1)
+	    index=$(get_index $1)
 	    shift
-            # Process what is requested
-	    case $opt in
-		-build)              _ps "${_build[$index]}" ;;
-		-C|-commands)        _ps "${_cmd[$index]}" ;;
-		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-		-module-load) 
-		    for m in ${_mod_req[$index]} ; do
-			_ps "$(pack_get --module-name $m) "
-		    done 
-		    _ps "${_mod_name[$index]}"
-		    ;;
-		-R|-module-requirement|-mod-req)
-		    for m in ${_mod_req[$index]} ; do
-			case $(pack_get --installed $m) in
-			    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
-                        esac
-		    done ;;
-		-mod-req-path)
-		    for m in ${_mod_req[$index]} ; do
-			case $(pack_get --installed $m) in
-			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
-                        esac
-		    done ;;
-		-mod-req-module)
-		    for m in ${_mod_req[$index]} ; do
-			case $(pack_get --installed $m) in
-			    $_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) _ps "$m " ;;
-                        esac
-		    done ;;
-		-module-requirement-all|-mod-req-all) 
-                    _ps "${_mod_req[$index]}" ;;
-		-module-name-requirement|-mod-req-name) 
-		    for m in ${_mod_req[$index]} ; do
-			_ps "$(pack_get --module-name $m) "
-		    done ;;
-		-L|-LD|-library-path)
-		    for p in ${_lib_prefix[$index]} ; do
-			_ps "${_install_prefix[$index]}/$p"
-			break
-		    done
-		    ;;
-		-L-all|-LD-all|-library-path-all)
-		    local i=0
-		    for p in ${_lib_prefix[$index]} ; do
-			[[ $i -ge 1 ]] && _ps ' '
-			_ps "${_install_prefix[$index]}/$p"
-			let i++
-		    done
-		    ;;
-		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
-		-MP|-module-prefix) 
-                                     _ps "${_mod_prefix[$index]}" ;;
-		-I|-install-prefix|-prefix) 
-                                     _ps "${_install_prefix[$index]}" ;;
-		-Q|-install-query)   _ps "${_install_query[$index]}" ;;
-		-a|-alias)           _ps "${_alias[$index]}" ;;
-		-A|-archive)         _ps "${_archive[$index]}" ;;
-		-v|-version)         _ps "${_version[$index]}" ;;
-		-d|-directory)       _ps "${_directory[$index]}" ;;
-		-s|-settings)        _ps "${_settings[$index]}" ;;
-		-installed)          _ps "${_installed[$index]}" ;;
-		-m|-module-name)     _ps "${_mod_name[$index]}" ;;
-		-module-opt)         _ps "${_mod_opts[$index]}" ;;
-		-p|-package)         _ps "${_package[$index]}" ;;
-		-e|-ext)             _ps "${_ext[$index]}" ;;
-		-host-reject)        _ps "${_reject_host[$index]}" ;;
-                -lib*)
-		    # First retrieve the option library
-		    local s=$(var_spec -s $opt)
-		    # If the option is use the default option
-		    [[ -z "$s" ]] && s=$_LIB_DEF
-		    # Print the libraries for the choice
-		    # Search for the library
-		    choice $s "${_libs[$index]}"
-		    ;;
-		*)
-		    doerr "$1" "No option for pack_get found for $1" ;;
-	    esac
-	    [[ $# -gt 0 ]] && _ps ' '
-	done
-    else
-	local index=$_N_archives # Default to this
-        # Process what is requested
-	case $opt in
-	    -C|-commands)        _ps "${_cmd[$index]}" ;;
-	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-	    -R|-module-requirement|-mod-req)
-		for m in ${_mod_req[$index]} ; do
-		    case $(pack_get --installed $m) in
-			$_I_INSTALLED|$_I_MOD) _ps "$m " ;;
-                    esac
-		done ;;
-	    -mod-req-path)
-		for m in ${_mod_req[$index]} ; do
-		    case $(pack_get --installed $m) in
-			$_I_INSTALLED|$_I_LIB) _ps "$m " ;;
-                    esac
-		done ;;
-	    -module-requirement-all|-mod-req-all) 
-		_ps "${_mod_req[$index]}" ;;
-	    -module-name-requirement|-mod-req-name)
-		for m in ${_mod_req[$index]} ; do
-		    _ps "$(pack_get --module-name $m) "
-		done ;;
-	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-LD|-library-path)
-		for p in ${_lib_prefix[$index]} ; do
-		    _ps "${_install_prefix[$index]}/$p"
-		    break
-		done
-		;;
-	    -L-all|-LD-all|-library-path-all)
-		local i=0
-		for p in ${_lib_prefix[$index]} ; do
-		    [[ $i -ge 1 ]] && _ps ' '
-		    _ps "${_install_prefix[$index]}/$p"
-		    let i++
-		done
-		;;
-	    -I|-install-prefix|-prefix) 
-                                 _ps "${_install_prefix[$index]}" ;;
-	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
-	    -a|-alias)           _ps "${_alias[$index]}" ;;
-	    -A|-archive)         _ps "${_archive[$index]}" ;;
-	    -v|-version)         _ps "${_version[$index]}" ;;
-	    -d|-directory)       _ps "${_directory[$index]}" ;;
-	    -s|-settings)        _ps "${_settings[$index]}" ;;
-	    -installed)          _ps "${_installed[$index]}" ;;
-	    -module-opt)         _ps "${_mod_opts[$index]}" ;;
-	    -m|-module-name)     _ps "${_mod_name[$index]}" ;;
-	    -p|-package)         _ps "${_package[$index]}" ;;
-	    -e|-ext)             _ps "${_ext[$index]}" ;;
-	    -host-reject)        _ps "${_reject_host[$index]}" ;;
-            -lib*)
-		# First retrieve the option library
-		local s=$(var_spec -s $opt)
-		# If the option is use the default option
-		[[ -z "$s" ]] && s=$_LIB_DEF
-		# Print the libraries for the choice
-		# Search for the library
-		choice $s "${_libs[$index]}"
-		;;
-	    *)
-		doerr $1 "No option for pack_get found for $1" ;;
-	esac
-    fi
+	    ;;
+	0)
+	    index=$_N_archives
+	    ;;
+    esac
+    [[ -z "$index" ]] && \
+	doerr pack_get "Could not find index!"
+    
+    #echo "pack_get: lookup($1) idx($index)" >&2
+    # Process what is requested
+    case $opt in
+	-build)              printf '%s' "${_build[$index]}" ;;
+	-C|-commands)        printf '%s' "${_cmd[$index]}" ;;
+	-h|-u|-url|-http)    printf '%s' "${_http[$index]}" ;;
+	-module-load) 
+	    for m in ${_mod_req[$index]} ; do
+		printf '%s' "$(pack_get --module-name $m) "
+	    done 
+	    printf '%s' "${_mod_name[$index]}"
+	    ;;
+	-R|-module-requirement|-mod-req)
+	    for m in ${_mod_req[$index]} ; do
+		case $(pack_get --installed $m) in
+		    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                esac
+	    done ;;
+	-mod-req-path)
+	    for m in ${_mod_req[$index]} ; do
+		case $(pack_get --installed $m) in
+		    $_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                esac
+	    done ;;
+	-mod-req-module)
+	    for m in ${_mod_req[$index]} ; do
+		case $(pack_get --installed $m) in
+		    $_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                esac
+	    done ;;
+	-module-requirement-all|-mod-req-all) 
+            printf '%s' "${_mod_req[$index]}" ;;
+	-module-name-requirement|-mod-req-name) 
+	    for m in ${_mod_req[$index]} ; do
+		printf '%s' "$(pack_get --module-name $m) "
+	    done ;;
+	-L|-LD|-library-path)
+	    for p in ${_lib_prefix[$index]} ; do
+		printf '%s' "${_install_prefix[$index]}/$p"
+		break
+	    done
+	    ;;
+	-L-all|-LD-all|-library-path-all)
+	    local i=0
+	    for p in ${_lib_prefix[$index]} ; do
+		[[ $i -ge 1 ]] && printf '%s' ' '
+		printf '%s' "${_install_prefix[$index]}/$p"
+		let i++
+	    done
+	    ;;
+	-L-suffix)    printf '%s' "${_lib_prefix[$index]}" ;;
+	-MP|-module-prefix) 
+            printf '%s' "${_mod_prefix[$index]}" ;;
+	-I|-install-prefix|-prefix) 
+            printf '%s' "${_install_prefix[$index]}" ;;
+	-Q|-install-query)   printf '%s' "${_install_query[$index]}" ;;
+	-a|-alias)           printf '%s' "${_alias[$index]}" ;;
+	-A|-archive)         printf '%s' "${_archive[$index]}" ;;
+	-v|-version)         printf '%s' "${_version[$index]}" ;;
+	-d|-directory)       printf '%s' "${_directory[$index]}" ;;
+	-s|-settings)        printf '%s' "${_settings[$index]}" ;;
+	-installed)          printf '%s' "${_installed[$index]}" ;;
+	-m|-module-name)     printf '%s' "${_mod_name[$index]}" ;;
+	-module-opt)         printf '%s' "${_mod_opts[$index]}" ;;
+	-p|-package)         printf '%s' "${_package[$index]}" ;;
+	-e|-ext)             printf '%s' "${_ext[$index]}" ;;
+	-host-reject)        printf '%s' "${_reject_host[$index]}" ;;
+        -lib*)
+	    # First retrieve the option library
+	    local s=$(var_spec -s $opt)
+	    # If the option is use the default option
+	    [[ -z "$s" ]] && s=$_LIB_DEF
+	    # Print the libraries for the choice
+	    # Search for the library
+	    choice $s "${_libs[$index]}"
+	    ;;
+	*)
+	    doerr "$1" "No option for pack_get found for $1" ;;
+    esac
 }
 
 # Returns a list of the choices for the package
@@ -734,7 +674,7 @@ function pack_choice {
     if [[ $inst -eq 1 ]]; then
 	for opt in $(choice $c "$p") ; do
 	    if [[ $(pack_installed $opt) -eq $_I_INSTALLED ]]; then
-		_ps "$opt"
+		printf '%s' "$opt"
 		return 0
 	    fi
 	done
@@ -874,5 +814,5 @@ function pack_installed {
 	    ret=$(pack_get --installed $idx)
 	fi
     fi
-    _ps $ret
+    printf '%s' $ret
 }
