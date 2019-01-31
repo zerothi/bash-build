@@ -22,13 +22,13 @@ function get_c {
 	shift
 	case $opt in
 	    -name|-n)
-		printf "%s" "$_c"
+		printf '%s' "$_c"
 		;;
 	    -version|-v)
-		printf "%s" "$_c_v"
+		printf '%s' "$_c_v"
 		;;
 	    -all|-a)
-		printf "%s" "$c"
+		printf '%s' "$c"
 		;;
 	esac
     fi

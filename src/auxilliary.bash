@@ -168,7 +168,7 @@ function pop_r {
 #       All message arguments are printed, _as is_.
 
 function _ps {
-    printf "%s" "$@"
+    printf '%s' "$@"
 }
 
 
@@ -678,7 +678,7 @@ function list {
     local cmd ; local retval=''
     local v
     # First we collect all options
-    local opts='' ; local space=" "
+    local opts='' ; local space=' '
     local opt
     while : ; do
 	trim_em opt $1

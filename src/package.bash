@@ -601,7 +601,7 @@ function pack_get {
 		-L-all|-LD-all|-library-path-all)
 		    local i=0
 		    for p in ${_lib_prefix[$index]} ; do
-			[[ $i -ge 1 ]] && _ps " "
+			[[ $i -ge 1 ]] && _ps ' '
 			_ps "${_install_prefix[$index]}/$p"
 			let i++
 		    done
@@ -635,7 +635,7 @@ function pack_get {
 		*)
 		    doerr "$1" "No option for pack_get found for $1" ;;
 	    esac
-	    [[ $# -gt 0 ]] && _ps " "
+	    [[ $# -gt 0 ]] && _ps ' '
 	done
     else
 	local index=$_N_archives # Default to this
@@ -671,7 +671,7 @@ function pack_get {
 	    -L-all|-LD-all|-library-path-all)
 		local i=0
 		for p in ${_lib_prefix[$index]} ; do
-		    [[ $i -ge 1 ]] && _ps " "
+		    [[ $i -ge 1 ]] && _ps ' '
 		    _ps "${_install_prefix[$index]}/$p"
 		    let i++
 		done
