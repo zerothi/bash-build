@@ -38,7 +38,7 @@ LIBXC_ROOT = $(pack_get --prefix libxc)\n\
 pack_cmd "echo '# Cleaned libxc.mk' > libxc.mk"
 pack_cmd "sed -i -e '$ a\
 LIBXC_INCFLAGS = -I$(pack_get --prefix libxc)/include\n\
-LIBXC_LIBS = $(list --LD-rp libxc) -lxcf03 -lxc\n\
+LIBXC_LIBS = $(list --LD-rp libxc) $(pack_get --lib libxc)\n\
 ' libxc.mk"
 
 pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' gridxc.mk.in"

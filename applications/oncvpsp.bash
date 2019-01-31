@@ -21,7 +21,7 @@ FCCPPFLAGS = -ansi -DLIBXC_VERSION=$libxcv\n\
 FFLAGS = $FFLAGS $(list -INCDIRS libxc)\n\
 CFLAGS = $CFLAGS $(list -INCDIRS libxc)\n\
 OBJS_LIBXC = functionals.o exc_libxc.o\n\
-LIBS = $(list -LD-rp libxc) -lxcf03 -lxc\n' $file"
+LIBS = $(list -LD-rp libxc) $(pack_get --lib libxc)\n' $file"
 
 if $(is_c intel) ; then    
     # Added ifcore library to complie

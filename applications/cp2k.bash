@@ -37,7 +37,7 @@ FCFLAGS += \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\
 LDFLAGS = \$(FCFLAGS) \n\
 LIBS  = \$(FFTW_LIB) -lfftw3_omp -lfftw3 \n\
 LIBS += \$(HWLOC_LIB) -lhwloc \n\
-LIBS += \$(LIBXC_LIB) -lxcf03 -lxc \n\
+LIBS += \$(LIBXC_LIB) $(pack_get -lib libxc) \n\
 LIBS += \$(SCALAPACK_L) \$(LAPACK_L) \n\
 ' $file"
 
