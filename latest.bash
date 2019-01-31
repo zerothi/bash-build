@@ -54,7 +54,7 @@ msg_install --message "siesta and its variants"
 rm_latest siesta.latest
 create_module $cm_defs \
     -n siesta.latest \
-    -W "SIESTA: $(get_c)" \
+    -W "Siesta: $(get_c)" \
     -M siesta.latest \
     -echo "$(echo_modules siesta)" \
     -RL siesta
@@ -62,7 +62,7 @@ create_module $cm_defs \
 rm_latest siesta-trunk.latest
 create_module $cm_defs \
     -n siesta-trunk.latest \
-    -W "SIESTA: $(get_c)" \
+    -W "Siesta: $(get_c)" \
     -M siesta-trunk.latest \
     -echo "$(echo_modules siesta-trunk)" \
     -RL siesta-trunk
@@ -70,7 +70,7 @@ create_module $cm_defs \
 rm_latest siesta-trunk-bulk-bias.latest
 create_module $cm_defs \
     -n siesta-trunk-bulk-bias.latest \
-    -W "SIESTA: $(get_c)" \
+    -W "Siesta: $(get_c)" \
     -M siesta-trunk-bulk-bias.latest \
     -echo "$(echo_modules siesta-trunk-bulk-bias)" \
     -RL siesta-trunk-bulk-bias

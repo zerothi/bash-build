@@ -4,21 +4,6 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
-# Ensure that we install conda
-#source_pack applications/conda.bash
-#source_pack applications/conda_install.bash 2
-#source_pack applications/conda_install.bash 3
-
-# analysis tools
-source_pack applications/otf2.bash
-source_pack applications/opari2.bash
-source_pack applications/papi.bash
-source_pack applications/bsc-perf-tools.bash
-source_pack applications/valgrind.bash
-source_pack applications/scorep.bash
-source_pack applications/tau.bash
-source_pack applications/scalasca.bash
-
 # Analysis tools
 source_pack applications/bader.bash
 
@@ -35,7 +20,6 @@ source_pack applications/siesta-dev.bash # my old ts-development
 source_pack applications/siesta-trunk.bash # siesta trunk development
 source_pack applications/siesta-trunk-debug.bash
 source_pack applications/siesta-bulk-bias.bash # siesta trunk development
-
 source_pack applications/fhiaims.bash
 
 source_pack applications/lammps.bash
@@ -55,7 +39,6 @@ source_pack applications/gdis.bash
 source_pack applications/povray.bash
 source_pack applications/getfem.bash
 
-# Octave
 source_pack applications/octave.bash
 
 # Specfial photonics applications
@@ -101,7 +84,17 @@ source_pack applications/cp2k.bash
 # Requires bgw
 source_pack applications/octopus.bash
 
-
 source_pack applications/atk.bash
+
+# analysis tools
+source_pack applications/otf2.bash
+source_pack applications/opari2.bash
+source_pack applications/papi.bash
+source_pack applications/bsc-perf-tools.bash
+source_pack applications/valgrind.bash
+source_pack applications/scorep.bash
+source_pack applications/tau.bash
+source_pack applications/scalasca.bash
+
 
 build_set --remove-default-setting module

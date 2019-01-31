@@ -153,7 +153,6 @@ done
 if [ ! -z "$tmp" ]; then
     create_module \
 	--module-path $(build_get --module-path)-apps \
-	-echo "$(echo_modules $tmp)" \
 	-n file-utils \
 	-W "Script for: $(get_c)" \
 	-v $(date +'%g-%j') \

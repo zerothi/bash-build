@@ -11,11 +11,10 @@ pack_set --module-requirement gsl \
 pack_set --module-opt "--lua-family ape"
 # APE does not allow compilation of C-flags too long,
 # we simply disable them. :(
+pack_cmd "unset FPP"
 pack_cmd "unset CPP"
-pack_cmd "unset CFLAGS"
-pack_cmd "unset FCFLAGS"
 
-pack_cmd "../configure" \
+pack_cmd "../configure FCFLAGS='$FCFLAGS -ffree-line-length-none'" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
      "--with-libxc-prefix=$(pack_get --prefix libxc)" \
      "--prefix=$(pack_get --prefix)"
