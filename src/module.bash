@@ -54,8 +54,9 @@ function check_modulepath {
 #     The file where the survey is saved in.
 #     This will automatically enable creating a survey
 function module_set {
+    local opt
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case $opt in
 	    -s|-survey)
@@ -96,14 +97,15 @@ function module_set {
 function create_module {
     local name; local version; local echos
     local path; local help; local whatis; local opt
-    local env="" ; local tmp="" ; local mod=""
-    local mod_path="" ;local cmt=
+    local env='' ; local tmp='' ; local mod=''
+    local mod_path='' ;local cmt=
     local force=0 ; local no_install=0
-    local require=""; local conflict=""; local load=""
-    local lua_family="" ; local fpath=
-    local fm_comment="#"
+    local require=''; local conflict=''; local load=''
+    local lua_family='' ; local fpath=
+    local fm_comment='#'
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)" ; shift
+	trim_em opt $1
+	shift
 	case $opt in
 	    -n|-name)  name="$1" ; shift ;;
 	    -v|-version)  version="$1" ; shift ;;
@@ -143,10 +145,10 @@ function create_module {
     [[ -n "$mod" ]] && mfile=$mfile/$mod
     case $_mod_format in
 	$_mod_format_ENVMOD) 
-	    fm_comment="#"
+	    fm_comment='#'
 	    ;;
 	$_mod_format_LMOD)
-	    fm_comment="--"
+	    fm_comment='--'
 	    mfile="$mfile.lua"
 	    ;;
     esac
@@ -389,7 +391,7 @@ EOF
 		    opt="$(module_fmt_routine --append-path $lenv $lval)"
 		    ;;
 		*)
-		    opt=""
+		    opt=''
 		    ;;
 	    esac
 	    # These options should probably always
@@ -509,9 +511,10 @@ EOF
 
 # Returns the module specific routine call
 function module_fmt_routine {
-    local lval="" ; local lenv=""
+    local lval='' ; local lenv=''
+    local opt
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case "$opt" in
 	    -prepend-path)
@@ -543,11 +546,11 @@ function module_fmt_routine {
 #   $1 module file to append to
 #   $2-? append this in one line to the file
 function add_module_if {
-    local d="";local f="" ;local F=0;
+    local d='';local f='' ;local F=0;
     local X=0
     local opt
     while [[ $# -gt 0 ]]; do
-	opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -d|-dir)
 		# The directory which should be checked for
@@ -578,7 +581,7 @@ function add_module_if {
     local mf="$1" 
     shift
     
-    local check=""
+    local check=''
     if [[ $F -eq 1 ]]; then
 	# Force check to succeed
 	check=$HOME

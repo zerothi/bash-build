@@ -74,7 +74,7 @@ function add_hidden_package {
     # Assert that the settings are not created.
     # Hence if the build-settings has been edited
     # We skip those
-    _settings[$_N_archives]=""
+    _settings[$_N_archives]=''
 }
 
 # This function takes no arguments
@@ -147,18 +147,19 @@ function source_pack {
 # pack_list --list-flags "-s /" --package dir
 # returns $(pack_get --package)/dir/
 function pack_list {
-    local opt=""
-    local lf=""
+    local opt=''
+    local lf=''
     while : ; do
-	opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -list-flags|-lf) shift ; lf="$1" ; shift ;;
 	    *) break ;;
 	esac
     done
-    local ret=""
+    local ret=''
     while [[ $# -gt 0 ]]; do
-	opt=$(trim_em $1) ; shift
+	trim_em opt $1
+	shift
 	case $opt in
 	    -*) ret="$ret$(list $lf -c "pack_get $opt" $_N_archives)" ;;
 	     *) ret="$ret$(list $lf $opt)" ;;
@@ -174,16 +175,17 @@ function add_package {
     let _N_archives++
 
     # Collect options
-    local d="" ; local v=""
-    local fn="" ; local package=""
-    local alias="" 
+    local d='' ; local v=''
+    local fn='' ; local package=''
+    local alias='' 
     # Default to default index
     local b_idx=$_b_def_idx
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp=""
+    local lp=''
+    local opt
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1) 
+	trim_em opt $1
 	shift
 	case $opt in
 	    -build) b_name="$1" ; shift ;;
@@ -285,8 +287,8 @@ function add_package {
     [[ -z "$alias" ]] && alias=$package
     _alias[$_N_archives]=$alias
     # Save the hash look-up
-    local tmp="${_index[$(lc $alias)]}"
-    local lc_name="$(lc $alias)"
+    typeset -l lc_name="$alias"
+    local tmp="${_index[$lc_name]}"
     if [[ -n "$tmp" ]]; then
 	_index[$lc_name]="$tmp $_N_archives"
     else
@@ -315,7 +317,7 @@ function add_package {
 	_lib_prefix[$_N_archives]=lib
 	if [[ -d "${_install_prefix[$_N_archives]}/lib" ]]; then
 	    if [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
-		_lib_prefix[$_N_archives]="lib lib64"
+		_lib_prefix[$_N_archives]='lib lib64'
 	    fi
 	elif [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
 	    _lib_prefix[$_N_archives]=lib64
@@ -324,10 +326,10 @@ function add_package {
 	_lib_prefix[$_N_archives]="$lp"
     fi
     # Install default values
-    _mod_req[$_N_archives]=""
+    _mod_req[$_N_archives]=''
     [[ $no_def_mod -eq 0 ]] && \
 	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
-    _reject_host[$_N_archives]=""
+    _reject_host[$_N_archives]=''
 
     msg_install --message "Added $package[$v] to the install list"
 }
@@ -335,19 +337,20 @@ function add_package {
 # This function allows for setting data related to a package
 function pack_set {
     local index=$_N_archives # Default to this
-    local alias="" ; local version="" ; local directory=""
-    local settings="" ; local install="" ; local query=""
-    local mod_name="" ; local package="" ; local opt=""
-    local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
-    local reject_h="" ; local only_h="" ; local inst=-100
-    local mod_prefix="" local m=
-    local mod_opt="" ; local lib="" ; local up_pre_mod=0
+    local alias='' ; local version='' ; local directory=''
+    local settings='' ; local install='' ; local query=''
+    local mod_name='' ; local package='' ; local opt=''
+    local cmd='' ; local cmd_flags='' ; local req='' ; local idx_alias=''
+    local reject_h='' ; local only_h='' ; local inst=-100
+    local mod_prefix='' local m=
+    local mod_opt='' ; local lib='' ; local up_pre_mod=0
     local tmp=
-    local libs_c="" ; local libs=""
+    local libs_c='' ; local libs=''
     local in_cmd=0
+    local opt
     while [[ $# -gt 0 ]]; do
 	# Process what is requested
-	local opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case $opt in
 	    -no-path)
@@ -372,7 +375,7 @@ function pack_set {
 		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
             -module-remove|-mod-rem)  
-		local tmp=""
+		local tmp=''
 		for m in ${_mod_req[$index]} ; do
 		    if [[ "$m" != "$1" ]]; then
 			tmp="$tmp $m"
@@ -461,9 +464,9 @@ function pack_set {
 	_install_prefix[$index]="${install// /}"
 	if [[ -d "$install/lib" ]]; then
 	    if [[ -d "$install/lib64" ]]; then
-		lib="lib lib64"
+		lib='lib lib64'
 	    else
-		lib="lib"
+		lib='lib'
 	    fi
 	elif [[ -d "$install/lib64" ]]; then
 	    lib="lib64"
@@ -496,8 +499,8 @@ function pack_set {
     [[ "$inst" -ne "-100" ]]    && _installed[$index]="$inst"
     [[ -n "$query" ]]      && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
-	local tmp="" ; local v=""
-	local lc_name="$(lc ${_alias[$index]})"
+	local tmp='' ; local v=''
+	typeset -l lc_name="${_alias[$index]}"
 	for v in ${_index[$lc_name]} ; do
 	    [[ "$v" -ne "$index" ]] && tmp="$tmp $v"
 	done
@@ -507,7 +510,7 @@ function pack_set {
 	    _index[$lc_name]="$tmp"
 	fi
 	_alias[$index]="$alias"
-	local lc_name="$(lc $alias)"
+	lc_name="$alias"
 	tmp="${_index[$lc_name]}"
 	if [[ -z "$tmp" ]]; then
 	    _index[$lc_name]="$index"
@@ -537,7 +540,9 @@ function pack_cmd {
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
 function pack_get {
-    local opt="$(trim_em $1)" # Save the option passed
+    local opt
+    # Save the option passed
+    trim_em opt $1
     case $opt in
 	-*) ;;
 	*)
@@ -705,9 +710,10 @@ function pack_get {
 #   $2 : package
 function pack_choice {
     local inst=0
+    local opt
     # First check options
     while : ; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -installed|-i)
 		# return first choice that is installed
@@ -720,7 +726,7 @@ function pack_choice {
 	esac
     done
     local c=$1 ; shift
-    local p=""
+    local p=''
     [[ $# -gt 0 ]] && p="$1" && shift
     # Get choice-list
     p="$(pack_get -s $p)"

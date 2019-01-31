@@ -1,6 +1,7 @@
 # Install the package
 function pack_install {
     local tmp
+    typeset -l tmp_lc
     local idx=$_N_archives
     local err=0
     if [[ $# -ne 0 ]]; then
@@ -13,9 +14,9 @@ function pack_install {
     local version=$(pack_get --version $idx)
     local mod_name=$(pack_get --module-name $idx)
 
-    tmp=$(lc $alias)
+    tmp_lc="$alias"
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
-	if [[ 0${_pack_only[$tmp]} -eq 1 ]]; then
+	if [[ 0${_pack_only[$tmp_lc]} -eq 1 ]]; then
 	    pack_only $(pack_get --mod-req-all $idx)
 	else
 	    return 
@@ -31,7 +32,7 @@ function pack_install {
 
     # Check the hash if it is a git clone, and if so check that the hash
     # is not already installed
-    local hash="UNDEFINED"
+    local hash='UNDEFINED'
     case x$ext in
 	xgit)
 	    # Check that we haven't already found this has
@@ -324,7 +325,7 @@ function pack_install {
 		-v "$version" \
 		-M "$mod_name" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$prefix" $reqs $(pack_get --module-opt $idx) &
+		-P "$prefix" $reqs $(pack_get --module-opt $idx)
 	else
 	    # It means it is installed but not a module
 	    # In this case we *must* specify it as not a module
@@ -338,7 +339,7 @@ function pack_install {
 		-v $version \
 		-M $alias.$version \
 		-P "/directory/should/not/exist" \
-		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx) &
+		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx)
 	fi
     fi
 }
@@ -348,8 +349,10 @@ function pack_install {
 function get_index {
     local var=_index
     local all=0
+    local opt
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1) ; shift
+	trim_em opt $1
+	shift
 	case $opt in
 	    -all|-a)
 		all=1
@@ -380,7 +383,7 @@ function get_index {
     fi
     
     # Save the thing that we want to process...
-    local name=$(lc $(var_spec $i))
+    typeset -l name="$(var_spec $i)"
     local version=$(var_spec -s $i)
     # do full variable (for ${!...})
     var="$var[$name]"
@@ -429,8 +432,9 @@ function get_index {
 function install_all {
     # First we collect all options
     local j=0
+    local opt
     while [[ $# -ne 0 ]]; do
-	local opt="$(trim_em $1)" # Save the option passed
+	trim_em opt $1
 	shift
 	case $opt in
 	    -from|-f)

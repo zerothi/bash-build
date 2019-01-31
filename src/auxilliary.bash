@@ -26,22 +26,22 @@
 #      <package> is used.
 
 function msg_install {
-    local n="" ; local action=0
+    local n='' ; local action=0
     local opt
     while [[ $# -gt 1 ]]; do
-	opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -start|-S)
 		action=1
-		n="Installing"
+		n='Installing'
 		;;
 	    -finish|-F)
 		action=2
-		n="Finished"
+		n='Finished'
 		;;
 	    -already-installed)
 		action=3
-		n="Already installed"
+		n='Already installed'
 		;;
 	    -message)
 		shift
@@ -55,7 +55,7 @@ function msg_install {
 		;;
 	    -modules)
 		action=6
-		n="List currently loaded modules"
+		n='List currently loaded modules'
 		;;
 	    *) break ;;
 	esac
@@ -70,7 +70,7 @@ function msg_install {
 	    ;;
     esac
 
-    echo " ================================== "
+    echo ' ================================== '
     echo "   $n"
     case $action in
 	4)
@@ -94,7 +94,7 @@ function msg_install {
 	    echo " Version : $(pack_get --version $pack)"
 	    ;;
     esac
-    echo " ================================== "
+    echo ' ================================== '
 }
 
 
@@ -117,12 +117,12 @@ function docmd {
     # Shift to prevent msg_install to be passed extra arguments
     shift $#
     local st
-    echo ""
-    echo " # ================================================================"
+    echo ''
+    echo ' # ================================================================'
     echo " # $message"
     echo " # PWD: $(pwd)"
     echo " # CMD: ${cmd[@]}"
-    echo " # ================================================================"
+    echo ' # ================================================================'
     eval ${cmd[@]}
     st=$?
     if [[ $st -ne 0 ]]; then
@@ -177,12 +177,15 @@ function _ps {
 # it returns the equivalent with only one em-dash.
 # Otherwise it returns the argument as received.
 #  Arguments
+#    var
+#       variable to store result in
 #    str
 #       Removes one em-dash if the `str` starts with two or
 #       more em-dashes.
 
 function trim_em {
-    _ps "${1/#--/-}"
+    local -n var=$1
+    var="${2/#--/-}"
 }
 
 #  Function trim_spaces
@@ -194,7 +197,7 @@ function trim_em {
 #       Truncates all spaces to a minimum of one space.
 
 function trim_spaces {
-    local str=""
+    local str=''
     local s
     while [[ $# -gt 0 ]]; do
 	s="${1# }" # removes prefix space
@@ -227,50 +230,31 @@ function trim_spaces {
 #      an empty string is returned.
 
 function var_spec {
-    local v=1
     local opt
-    opt=$(trim_em $1)
+    trim_em opt $1
     case $opt in
-	-var|-v)
-	    v=1
-	    shift
-	    ;;
 	-spec|-s)
-	    v=2
 	    shift
+
+	    if [[ "${1:${#1}-1}" == "]" ]]; then
+		opt=${1##*\[}
+		opt=${opt//\]/}
+	    else
+		opt=''
+	    fi
+	    #opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
+	    _ps "${opt// /}"
+
 	    ;;
-    esac
-    case $v in
-	1)
-	    while [[ $# -gt 0 ]]; do
-		opt=${1%%\[*}
-		_ps "${opt// /}"
-		# Get next package
-		shift
-		# Add delimiter
-		if [[ $# -gt 0 ]]; then
-		    _ps " "
-		fi
-	    done
+	-var|-v)
+	    shift
+	    ;&
+	*)
+
+	    opt=${1%%\[*}
+	    _ps "${opt// /}"
 	    ;;
-	2)
-	    while [[ $# -gt 0 ]]; do
-		if [[ "${1:${#1}-1}" == "]" ]]; then
-		    opt=${1##*\[}
-		    opt=${opt//\]/}
-		else
-		    opt=""
-		fi
-		#opt="$(_ps $1 | awk -F'[\\[\\]]' '{ print $2}')"
-		_ps "${opt// /}"
-		# Get next package
-		shift
-		# Add delimiter
-		if [[ $# -gt 0 ]]; then
-		    _ps " "
-		fi
-	    done
-	    ;;
+
     esac
 }
 
@@ -301,7 +285,7 @@ function str_version {
     local Mv='' ; local mv='' ; local rv='' ; local fourth=''
     local opt=-1
     if [[ $# -eq 2 ]]; then
-	opt=$(trim_em $1)
+	trim_em opt $1
 	shift
     fi
     local str="${1// /}"
@@ -379,7 +363,7 @@ function vrs_cmp {
 	else
 	    # Currently we do not do character versioning
 	    # properly
-	    [[ "$lv" != "$rv" ]] && _ps "-1000" && return 0
+	    [[ "$lv" != "$rv" ]] && _ps '-1000' && return 0
 	fi
     done
     _ps "0"
@@ -412,7 +396,7 @@ function lc {
 
 function get_file_time {
     local format="$1"
-    local fdate=$(stat -L -c "%y" $2)
+    local fdate=$(stat -L -c '%y' $2)
     shift 2
     _ps "`date +"$format" --date="$fdate"`"
 }
@@ -494,35 +478,35 @@ a[$0]++} END {for (i=0 ; i<c;i++) if (a[b[i]]==1) {print b[i]}}' | \
 #       that can un-compress that file.
 
 function arc_cmd {
-    local ext="$(lc $1)"
+    typeset -l ext="$1"
     case $ext in
 	bz2)
-	    _ps "tar jxf"
+	    _ps 'tar jxf'
 	    ;;
 	xz)
-	    _ps "tar Jxf"
+	    _ps 'tar Jxf'
 	    ;;
 	tar.gz|gz|tgz)
-	    _ps "tar zxf"
+	    _ps 'tar zxf'
 	    ;;
 	tar.lz|lz|tlz)
-	    _ps "tar xf"
+	    _ps 'tar xf'
 	    ;;
 	tar)
-	    _ps "tar xf"
+	    _ps 'tar xf'
 	    ;;
 	zip)
-	    _ps "unzip"
+	    _ps 'unzip'
 	    ;;
 	py|sh)
-	    _ps "ln -fs"
+	    _ps 'ln -fs'
 	    ;;
 	local|bin|fake)
-	    _ps "echo"
+	    _ps 'echo'
 	    ;;
 	git)
 	    # This of course limits to depth 5, so the url should have additional options
-	    _ps "git clone -q"
+	    _ps 'git clone -q'
 	    ;;
 	*)
 	    doerr "Unrecognized extension $ext in [bz2,xz,lz,tgz,gz,tar,zip,py,sh,git,local/bin/fake]"
@@ -566,7 +550,7 @@ function extract_archive {
 	    return 0
 	    ;;
 	git)
-	    loc=""
+	    loc=''
 	    ;;
     esac
     docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $loc$archive
@@ -574,7 +558,7 @@ function extract_archive {
 }
 
 # Denote the download function
-_dwn_exe="wget --no-proxy --no-check-certificate -O"
+_dwn_exe='wget --no-proxy --no-check-certificate -O'
 
 #  Function dwn_file
 # Downloads files using `wget`, without proxies or certificates.
@@ -598,7 +582,7 @@ function dwn_file {
     $_dwn_exe $O $url
     if [[ $? -ne 0 ]]; then
 	rm -f $O
-	doerr "$url" "Could not download file succesfully..."
+	doerr "$url" 'Could not download file succesfully...'
     fi
 }
 
@@ -690,13 +674,14 @@ function choice {
 #         -loop-cmd "pack_get --module-name"
 
 function list {
-    local suf="" ; local pre="" ; local lcmd=""
-    local cmd ; local retval=""
+    local suf='' ; local pre='' ; local lcmd=''
+    local cmd ; local retval=''
     local v
     # First we collect all options
-    local opts="" ; local space=" "
+    local opts='' ; local space=" "
+    local opt
     while : ; do
-	local opt="$(trim_em $1)"
+	trim_em opt $1
 	case $opt in
 	    -*) ;;
 	    *)  break ;;
@@ -707,12 +692,12 @@ function list {
 	    -prefix|-p)    pre="$1" ; shift ;;
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
-	    -no-space|-X)  space="" ;;
+	    -no-space|-X)  space='' ;;
 	    *)
 		opts="$opts $opt" ;;
 	esac
     done
-    local args=""
+    local args=''
     while [[ $# -gt 0 ]]; do
 	case $1 in
 	    ++*)
@@ -734,21 +719,21 @@ function list {
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
-		pre="-Wl,-rpath=" 
-		suf="" 
-		lcmd="pack_get --library-path-all " ;;
+		pre='-Wl,-rpath='
+		suf='' 
+		lcmd='pack_get --library-path-all ' ;;
 	    -LDFLAGS)   
-		pre="-L"  
-		suf="" 
-		lcmd="pack_get --library-path-all " ;;
+		pre='-L'  
+		suf='' 
+		lcmd='pack_get --library-path-all ' ;;
 	    -INCDIRS) 
-		pre="-I"
-		suf="/include"
-		lcmd="pack_get --prefix " ;;
+		pre='-I'
+		suf='/include'
+		lcmd='pack_get --prefix ' ;;
 	    -mod-names) 
-		pre=""
-		suf=""
-		lcmd="pack_get --module-name " ;;
+		pre=''
+		suf=''
+		lcmd='pack_get --module-name ' ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac

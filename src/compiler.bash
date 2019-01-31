@@ -17,7 +17,9 @@ function get_c {
     if [[ $# -eq 0 ]]; then
 	printf "%s" "$c"
     else
-	local opt=$(trim_em $1) ; shift
+	local opt
+	trim_em opt $1
+	shift
 	case $opt in
 	    -name|-n)
 		printf "%s" "$_c"
@@ -95,9 +97,10 @@ function update_flags {
 }
 
 function update_c_flags {
+    local opt
     while true ; do
 	# Process what is requested
-	local opt=$(trim_em $1)
+	trim_em opt $1
     done
     update_c_flags $@
     update_f_flags $@

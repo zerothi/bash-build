@@ -153,8 +153,10 @@ function build_set {
     # We set up default parameters for creating the 
     # default package directory
     local tmp
+    local opt
+    local spec
     while [[ $# -gt 0 ]]; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	local spec=$(var_spec -s $opt)
 	if [[ -z "$spec" ]]; then
 	    local b_idx=$_b_def_idx
@@ -300,7 +302,8 @@ function build_set {
 function build_get {
     # We set up default parameters for creating the 
     # default package directory
-    local opt=$(trim_em $1)
+    local opt
+    trim_em opt $1
     shift
     local spec=$(var_spec -s $opt)
     if [[ -z "$spec" ]]; then
@@ -345,8 +348,9 @@ function new_build {
     _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     _b_def_mod_reqs[$_N_b]=""
     # Read in options
+    local opt
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	shift
 	case $opt in 
 	    # As a bonus, supplying name several time

@@ -36,7 +36,7 @@ _mpi_version=openmpi
 _b_name_generic=generic
 _b_name_default=generic
 while [ $# -gt 0 ]; do
-    opt=$(trim_em $1)
+    trim_em opt $1
     case $opt in
 	-*)
 	    shift

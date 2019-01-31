@@ -4,6 +4,10 @@
 # Set options
 set -o hashall
 shopt -s globstar
+# disable win-resizing
+shopt -u checkwinsize
+# disable history
+shopt -u histappend
 
 # Check whether the module command is actually installed
 _has_module_cmd=1
@@ -24,7 +28,7 @@ function doerr {
 }
 
 if [[ ${BASH_VERSION%%.*} -lt 4 ]]; then
-    doerr "$BASH_VERSION" "Installation requires to use BASH >= 4.x.x"
+    doerr "$BASH_VERSION" 'Installation requires to use BASH >= 4.x.x'
 fi
 
 _DEBUG_COUNTER=0
@@ -34,13 +38,13 @@ source src/globals.bash
 
 _crt_version=0
 
-_parent_package=""
+_parent_package=''
 # The parent package (for instance Python)
 function set_parent {       _parent_package=$1 ; }
-function clear_parent {     _parent_package="" ; }
+function clear_parent {     _parent_package='' ; }
 function get_parent { _ps "$_parent_package" ; }
 
-_parent_exec=""
+_parent_exec=''
 # The parent package (for instance Python)
 function set_parent_exec {       _parent_exec=$1 ; }
 function get_parent_exec { _ps "$_parent_exec" ; }
@@ -52,8 +56,9 @@ function get_parent_exec { _ps "$_parent_exec" ; }
 declare -A _pack_only
 function pack_only {
     local tmp
+    local opt
     while [[ $# -gt 0 ]]; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -file)
 		shift
@@ -101,10 +106,11 @@ source src/module.bash
 # Function for editing environment variables
 # Mainly used for receiving and appending to variables
 function edit_env {
-    local opt=$(trim_em $1) # Save the option passed
+    local opt
+    trim_em opt $1
     shift
     local echo_env=0
-    local append="" ; local prepend=""
+    local append='' ; local prepend=''
     case $opt in
 	-g|-get)           echo_env=1 ;;
 	-p|-prepend)       prepend="$1" ; shift ;;
@@ -163,7 +169,7 @@ function pack_crt_list {
     local mr=$(pack_get --module-requirement $pack)
     if [[ -n "$mr" ]]; then
 	{
-	    echo "# Used packages"
+	    echo '# Used packages'
 	    for p in $mr ; do
 		echo "$p"
 	    done

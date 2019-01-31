@@ -48,8 +48,9 @@ fi
 # Returns in MHz
 function get_Hz {
     local s=1
+    local opt
     if [[ $# -gt 0 ]]; then
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	shift
 	case $opt in
 	    -GHz)
