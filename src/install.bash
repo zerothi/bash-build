@@ -247,14 +247,17 @@ function pack_install {
 	    fi
 	done
 
-	# If the config.log exists, we will copy it:
-	if [[ -e config.log ]]; then
-	    if [[ -d $prefix ]]; then
-		# copy the config.log to the prefix location
-		mv config.log $prefix/
-		gzip -f $prefix/config.log
+	# If configuration files exists, we will copy them
+	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log
+	do
+	    if [[ -e $tmp ]]; then
+		if [[ -d $prefix ]]; then
+		    # copy the config.log to the prefix location
+		    mv $tmp $prefix/
+		    gzip -f $prefix/$tmp
+		fi
 	    fi
-	fi
+	done
 
 	popd 1> /dev/null
 
