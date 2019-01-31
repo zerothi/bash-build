@@ -10,10 +10,6 @@ pack_set --install-query $(pack_get --prefix)/bin/epm.x
 
 pack_set $(list -p '--module-requirement ' mpi fftw hdf5)
 
-if [[ "x$FPP" == "x" ]]; then
-    export FPP="gfortran -cpp"
-fi
-
 file=arch.mk
 pack_cmd "echo '# NPA' > $file"
 
@@ -42,9 +38,10 @@ TESTSCRIPT = MPIEXEC=\"$(pack_get --prefix mpi)/bin/mpirun\" make check-parallel
 
 if $(is_c intel) ; then
 
+    # PROBABLY FCPP is the cause of problems!
     pack_cmd "sed -i '$ a\
-FCPP = $FPP\n\
 COMPFLAG = -DINTEL\n\
+FCPP = $FC -C -E -P -xc\n\
 LAPACKLIB = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACKLIB = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \$(LAPACKLIB) \n\
 F90free += -free\n\
@@ -59,7 +56,7 @@ elif $(is_c gnu) ; then
     tmp_ld="$(list --LD-rp scalapack +$la)"
     pack_cmd "sed -i '$ a\
 COMPFLAG = -DGNU\n\
-FCPP = $FPP\n\
+FCPP = cpp -P -nostdinc -C\n\
 F90free += -ffree-form -ffree-line-length-none\n\
 FOPTS   += -ffree-form -ffree-line-length-none\n\
 SCALAPACKLIB = -lscalapack \$(LAPACKLIB) \n\
@@ -73,9 +70,15 @@ else
     
 fi
 
+
 pack_cmd "make all-flavors"
 if $(is_host zero ntch) ; then
     pack_cmd "make BGW_TEST_MPI_NPROCS=$NPROCS check-jobscript 2>&1 > bgw.test ; echo 'Success'"
     pack_set_mv_test bgw.test
 fi
+# Work-around for buggy makefile
+# probably make manual isn't required, but we do it for consistency
+pack_cmd "make manual"
+pack_cmd "[ ! -e manual.html ] && cp documentation/users/manual.html ."
+
 pack_cmd "make install INSTDIR=$(pack_get --prefix)"
