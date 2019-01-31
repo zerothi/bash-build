@@ -41,14 +41,6 @@ new_build --name vendor \
     --build-module-path "--package --version" \
     --build-installation-path "--package --version"
 
-new_build --name generic-host \
-    --installation-path $_prefix/$(get_c -n)/$(get_c -v)/generic \
-    --module-path $_prefix/modules/$(get_c -n)/$(get_c -v)/generic \
-    --build-path .compile \
-    --source $tmp_src \
-    --build-module-path "--package --version" \
-    --build-installation-path "--package --version"
-
 
 # Define the gnu builds
 if [[ -z "$gnu_version" ]]; then

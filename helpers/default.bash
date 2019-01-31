@@ -22,7 +22,7 @@ for p in $(get_index --all gcc) \
 do
     if [[ $(pack_get --installed $p) -eq 1 ]]; then
 	create_module \
-	    --module-path $mp \
+	    --module-path $mp-apps \
 	    -n $(pack_get --alias $p).$(pack_get --version $p) \
 	    -W "$(pack_get --alias $p): $(pack_get --version $p)." \
 	    -v $(pack_get --version $p) \

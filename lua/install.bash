@@ -2,9 +2,9 @@
 source_pack lua/lua.bash
 
 create_module \
-    --module-path $(build_get --module-path[default])-apps \
+    --module-path $(build_get --module-path)-apps \
     -n $(pack_get --alias).$(pack_get --version) \
-    -W "$(pack_get --package)" \
+    -W "$(pack_get --package): $(pack_get --version)" \
     -v $(pack_get --version) \
     -M $(pack_get --alias).$(pack_get --version) \
     -P "/directory/should/not/exist" \

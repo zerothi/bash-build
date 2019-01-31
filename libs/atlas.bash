@@ -1,6 +1,6 @@
 # 3.11.34 (works)
 for v in 3.11.39 3.10.3 ; do
-tmp="--build generic-host"
+tmp="--build generic"
 if $(is_c gnu) ; then
     # If we use a later gnu version
     # we will prefer that
