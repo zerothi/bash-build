@@ -324,7 +324,7 @@ function pack_install {
 		-v "$version" \
 		-M "$mod_name" \
 		-p "$(pack_get --module-prefix $idx)" \
-		-P "$prefix" $reqs $(pack_get --module-opt $idx)
+		-P "$prefix" $reqs $(pack_get --module-opt $idx) &
 	else
 	    # It means it is installed but not a module
 	    # In this case we *must* specify it as not a module
@@ -333,12 +333,12 @@ function pack_install {
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \
 		--module-path $(build_get --module-path)-apps \
-		-n $alias.$version/$(get_c) \
+		-n $alias.$version \
 		-W "Loading $(pack_get --package $idx): $(get_c)" \
 		-v $version \
-		-M $alias.$version/$(get_c) \
+		-M $alias.$version \
 		-P "/directory/should/not/exist" \
-		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx)
+		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx) &
 	fi
     fi
 }
@@ -366,7 +366,7 @@ function get_index {
     if [[ ${#i} -eq 0 ]]; then
 	return 1
     fi
-    if $(isnumber $i) ; then
+    if (isnumber $i) ; then
 	# We do not check for correctness
 	# This just slows it down
 	#if [[ "$var" == "_index" ]]; then

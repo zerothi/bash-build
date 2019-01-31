@@ -183,7 +183,6 @@ function _ps {
 
 function trim_em {
     _ps "${1/#--/-}"
-    shift
 }
 
 #  Function trim_spaces
@@ -374,7 +373,7 @@ function vrs_cmp {
 	local rv=$(str_version $o $rhs)
 	[[ -z "$lv" ]] && break
 	[[ -z "$rv" ]] && break
-	if $(isnumber $lv) && $(isnumber $rv) ; then
+	if (isnumber $lv) && (isnumber $rv) ; then
 	    [[ $lv -gt $rv ]] && _ps "1" && return 0
 	    [[ $lv -lt $rv ]] && _ps "-1" && return 0
 	else

@@ -1,5 +1,4 @@
 #!/bin/bash -i
-
 # For debugging
 # set -v
 #  Print bash commands before they are executed
