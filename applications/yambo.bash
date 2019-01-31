@@ -42,7 +42,7 @@ fi
 
 # make a copy of the IOTK-library
 pack_cmd "mkdir -p my_IOTK/src"
-pack_cmd "cp $(pack_get --LD espresso)/libiotk.a my_IOTK/src/"
+pack_cmd "cp $(pack_get --LD q-espresso)/libiotk.a my_IOTK/src/"
 # make a copy of the libxc library
 pack_cmd "cp $(pack_get --LD libxc)/libxc.a lib/"
 

@@ -23,7 +23,7 @@ function echo_modules {
     _ps "Loading: $echos"
 }
 
-msg_install --message "abinit, octopus, elk, espresso"
+msg_install --message "abinit, octopus, elk, q-espresso"
 
 create_module $cm_defs \
     -n "abinit.default" \
@@ -54,11 +54,11 @@ create_module $cm_defs \
     -RL gulp
 
 create_module $cm_defs \
-    -n "espresso.default" \
+    -n "q-espresso.default" \
     -W "QuantumEspresso: $(get_c)" \
-    -M espresso.default \
-    -echo "$(echo_modules espresso)" \
-    -RL espresso
+    -M q-espresso.default \
+    -echo "$(echo_modules q-espresso)" \
+    -RL q-espresso
 
 
 msg_install --message "Inelastica"

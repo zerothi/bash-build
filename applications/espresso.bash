@@ -1,38 +1,41 @@
-for v in 5.3.0 5.4.0 6.2.1 ; do
-    tmp="-package espresso -version $v"
+for v in 5.4.0 6.3 ; do
+    tmp="-alias q-espresso -package q-espresso -version $v"
     case $v in
-	6.2.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/247/1132/qe-6.2.1.tar.gz"
+	6.3)
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.3/q-e-qe-6.3.tar.bz2"
 	    ;;
-	6.1)
-	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/240/1075/qe-6.1.tar.gz"
+	6.2.1)
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.2.1/q-e-qe-6.2.1.tar.bz2"
+	    ;;
+	6.1.0)
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.1.0/q-e-qe-6.1.0.tar.bz2"
 	    ;;
 	5.4.0)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/211/968/espresso-5.4.0.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/211/968/espresso-5.4.0.tar.gz"
 	    ;;
 	5.3.0)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-5.3.0.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/204/912/espresso-5.3.0.tar.gz"
 	    ;;
 	5.2.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/199/855/espresso-5.2.1.tar.gz"
 	    ;;
 	5.1.2)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/185/753/espresso-5.1.2.tar.gz"
 	    ;;
 	5.1.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/173/655/espresso-5.1.1.tar.gz"
 	    ;;
 	5.1)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/581/espresso-5.1.tar.gz"
 	    ;;
 	5.0.3)
 	    tmp="$tmp http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz"
 	    ;;
 	5.0.99)
-	    tmp=http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz
+	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
 	    ;;
 	*)
-	    doerr espresso "Version unknown"
+	    doerr q-espresso "Version unknown"
 	    ;;
     esac
 
@@ -40,7 +43,7 @@ for v in 5.3.0 5.4.0 6.2.1 ; do
     
     pack_set --install-query $(pack_get --prefix)/bin/pw.x
 
-    pack_set --module-opt "--lua-family espresso"
+    pack_set --module-opt "--lua-family q-espresso"
 
     pack_set --module-requirement mpi 
     pack_set --module-requirement fftw
@@ -49,7 +52,7 @@ for v in 5.3.0 5.4.0 6.2.1 ; do
     source applications/espresso-packages.bash
 
     if [ -z "$FLAG_OMP" ]; then
-	doerr espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
+	doerr q-espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
     fi
 
     # Check for Intel MKL or not
@@ -104,8 +107,12 @@ for v in 5.3.0 5.4.0 6.2.1 ; do
     pack_cmd "mkdir -p $(pack_get --prefix)/bin"
     pack_cmd "mkdir -p $(pack_get --LD)"
     pack_cmd "mkdir -p $(pack_get --prefix)/include"
+    if [[ $(vrs_cmp $v 6.0.0) -ge 0 ]]; then
+	pack_cmd "make links"
+	pack_cmd "make install"
+    fi
     pack_cmd "cp bin/* $(pack_get --prefix)/bin/"
-    # Install the iotk-library
+    # Install the iotk-library (not handled in install)
     pack_cmd "cp iotk/src/libiotk.a $(pack_get --LD)/"
     pack_cmd "cp iotk/src/*.mod $(pack_get --prefix)/include/"
 
