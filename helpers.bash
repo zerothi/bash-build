@@ -55,9 +55,6 @@ source_pack helpers/libffi.bash
 # Install parallel binary
 source_pack helpers/parallel.bash
 
-# Install all compilers
-source compiler/compilers.bash
-
 # GPP
 source_pack helpers/gpp.bash
 
@@ -70,7 +67,6 @@ source_pack helpers/swig.bash
 
 source_pack helpers/optipng.bash
 
-# Install LLVM generically
 source_pack helpers/libxml2.bash
 
 source_pack helpers/readline.bash
@@ -80,9 +76,6 @@ source_pack helpers/openssl.bash
 # This will recreate the module with AC_LOCAL etc.
 pack_set --installed $_I_TO_BE build-tools # Make sure it is "installed"
 pack_install build-tools
-
-# Install LLVM compiler
-source llvm/llvm.bash
 
 source_pack helpers/numactl.bash
 
@@ -97,5 +90,9 @@ source_pack helpers/graphviz.bash
 source_pack helpers/sqlite.bash
 
 source_pack helpers/boost.bash
+
+# Install all compilers
+source compiler/compilers.bash
+
 
 source_pack helpers/default.bash
