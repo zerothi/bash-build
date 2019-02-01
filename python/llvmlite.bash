@@ -1,12 +1,12 @@
 # As LLVM is built with gnu-compiler, we should enforce this
 # here as well (this only works with 3.6.0)
 v=0.27.0
-add_package --build generic --archive llvmlite-$v.tar.gz \
+add_package --archive llvmlite-$v.tar.gz \
     https://github.com/numba/llvmlite/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_TOOLS
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/llvm-lite
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/llvmlite
 
 pack_set --module-requirement $(get_parent)
 pack_set --module-requirement llvm
