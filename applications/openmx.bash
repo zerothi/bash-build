@@ -1,7 +1,7 @@
 v=3.8
 add_package --package openmx \
     --version $v.5 \
-    http://www.openmx-square.org/openmx$v.tar.gz
+    http://t-ozaki.issp.u-tokyo.ac.jp/openmx$v.tar.gz
 
 pack_set --module-opt "--lua-family openmx"
 

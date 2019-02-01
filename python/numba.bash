@@ -1,7 +1,10 @@
-add_package https://pypi.python.org/packages/source/n/numba/numba-0.17.0.tar.gz
+v=0.42.0
+add_package --archive numba-$v.tar.gz \
+	    https://github.com/numba/numba/archive/$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
+pack_set --module-requirement numpy
 pack_set --module-requirement cython
 pack_set --module-requirement llvmlite
 
@@ -14,6 +17,6 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
 add_test_package numba.test
-pack_cmd "nosetests --exe numba > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "$(get_parent_exec) -m numba.runtests > $TEST_OUT 2>&1 ; echo 'Success'"
 pack_set_mv_test $TEST_OUT
 

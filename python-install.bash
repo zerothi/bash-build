@@ -126,11 +126,6 @@ source_pack python/scikit-optimize.bash
 #source_pack python/scikit-nano.bash
 source_pack python/scikit-image.bash
 
-# Must be installed after numpy
-source_pack python/llvmpy.bash
-source_pack python/llvmmath.bash
-source_pack python/numba-0.15.bash
-
 # Later versions of numba
 source_pack python/llvmlite.bash
 source_pack python/numba.bash

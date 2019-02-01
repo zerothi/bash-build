@@ -26,7 +26,7 @@ fi
 # Optimization of openmpi parameters
 source_pack libs/adcl.bash
 source_pack libs/otpo.bash
-source_pack libs/netpipe.bash
+#source_pack libs/netpipe.bash
 
 source_pack libs/opencoarray.bash
 
