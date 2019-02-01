@@ -112,7 +112,8 @@ function source_pack {
     local rej
     local v
 
-    # Get current reached index
+    # Get current reached index (i.e. before adding any
+    # new packages)
     local cur_idx=$_N_archives
 
     # Source the file
@@ -131,7 +132,7 @@ function source_pack {
 	    if [[ $? -eq 0 ]]; then
 		for v in $bld ; do
 		    if [[ $v -eq $i ]]; then
-			pack_set --host-reject $(get_hostname) $i
+			pack_set $i -host-reject $(get_hostname)
 		    fi
 		done
 	    fi
@@ -337,17 +338,16 @@ function add_package {
 # This function allows for setting data related to a package
 function pack_set {
     local index=$_N_archives # Default to this
-    local alias='' ; local version='' ; local directory=''
-    local settings='' ; local install='' ; local query=''
-    local mod_name='' ; local package='' ; local opt=''
-    local cmd='' ; local cmd_flags='' ; local req='' ; local idx_alias=''
-    local reject_h='' ; local only_h='' ; local inst=-100
-    local mod_prefix='' local m=
-    local mod_opt='' ; local lib='' ; local up_pre_mod=0
-    local tmp=
-    local libs_c='' ; local libs=''
-    local in_cmd=0
     local opt
+    [[ $# -eq 0 ]] && return
+    local alias version directory settings install query
+    local mod_name package cmd cmd_flags req idx_alias
+    local reject_h only_h
+    local inst=-100
+    local mod_prefix m mod_opt lib libs libs_c
+    local up_pre_mod=0
+    local tmp
+    local in_cmd=0
     while [[ $# -gt 0 ]]; do
 	# Process what is requested
 	trim_em opt $1
@@ -441,7 +441,6 @@ function pack_set {
 		    # We do a crude check
 		    # We have an argument
 		    index=$(get_index $opt)
-		    shift $#
 		fi
 		;; 
 	esac
@@ -481,7 +480,6 @@ function pack_set {
 	# Initialize the libraries
 	_libs[$index]="$libs_c$libs"
 	# Loop and re-create the "missing" libraries
-	local tmp
 	local l_c
 	local l_l
 	for tmp in "${sets[@]}" ; do
@@ -518,9 +516,8 @@ function pack_set {
 	    _index[$lc_name]="$tmp $index"
 	fi
     fi
-    if [[ -n "$idx_alias" ]]; then  ## opted for deletion... (superseeded by explicit version comparisons...)
-	_index[$idx_alias]="$index"
-    fi
+    ## opted for deletion... (superseeded by explicit version comparisons...)
+    [[ -n "$idx_alias" ]]  && _index[$idx_alias]="$index"
     [[ -n "$mod_opt" ]]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
     [[ -n "$version" ]]    && _version[$index]="$version"
     [[ -n "$directory" ]]  && _directory[$index]="$directory"
@@ -551,7 +548,7 @@ function pack_get {
     shift
     
     # We check whether a specific index is requested
-    local index=
+    local index
     case $# in
 	1)
 	    index=$(get_index $1)

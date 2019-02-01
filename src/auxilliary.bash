@@ -26,8 +26,8 @@
 #      <package> is used.
 
 function msg_install {
-    local n='' ; local action=0
-    local opt
+    local n opt pack
+    local action=0
     while [[ $# -gt 1 ]]; do
 	trim_em opt $1
 	case $opt in
@@ -63,10 +63,10 @@ function msg_install {
     done
     case $# in
 	0)
-	    local pack=$_N_archives
+	    pack=$_N_archives
 	    ;;
 	*)
-	    local pack=$1
+	    pack=$1
 	    ;;
     esac
 
@@ -116,18 +116,18 @@ function docmd {
     local cmd=($*)
     # Shift to prevent msg_install to be passed extra arguments
     shift $#
-    local st
     echo ''
     echo ' # ================================================================'
     echo " # $message"
     echo " # PWD: $(pwd)"
     echo " # CMD: ${cmd[@]}"
     echo ' # ================================================================'
+    local st
     eval ${cmd[@]}
     st=$?
     if [[ $st -ne 0 ]]; then
-	local msg="Failed CMD (STATUS=$st): ${cmd[@]}"
-	msg_install --message "$msg"
+	message="Failed CMD (STATUS=$st): ${cmd[@]}"
+	msg_install --message "$message"
         return $st
     fi
 }
@@ -658,17 +658,15 @@ function choice {
 #         -loop-cmd "pack_get --module-name"
 
 function list {
-    local suf='' ; local pre='' ; local lcmd=''
-    local cmd ; local retval=''
-    local v
+    local suf pre lcmd cmd retval v opts opt args
     # First we collect all options
-    local opts='' ; local space=' '
-    local opt
+    local space=' '
     while : ; do
 	trim_em opt $1
 	case $opt in
 	    -*) ;;
-	    *)  break ;;
+	    *)
+		break ;;
 	esac
 	shift
 	case $opt in
@@ -681,16 +679,15 @@ function list {
 		opts="$opts $opt" ;;
 	esac
     done
-    local args=''
     while [[ $# -gt 0 ]]; do
 	case $1 in
 	    ++*)
 		# We gather all requirements to 
 		# make it easy
-		args="$args $(pack_get --mod-req ${1:2}) ${1:2}"
+		args="$args $(pack_get -mod-req ${1:2}) ${1:2}"
 		;;
 	    +*)
-		args="$args $(pack_get --mod-req ${1:1})"
+		args="$args $(pack_get -mod-req ${1:1})"
 		;;
 	    *)
 		args="$args $1"
@@ -705,19 +702,19 @@ function list {
 	    -Wlrpath)
 		pre='-Wl,-rpath='
 		suf='' 
-		lcmd='pack_get --library-path-all ' ;;
+		lcmd='pack_get -library-path-all ' ;;
 	    -LDFLAGS)   
 		pre='-L'  
 		suf='' 
-		lcmd='pack_get --library-path-all ' ;;
+		lcmd='pack_get -library-path-all ' ;;
 	    -INCDIRS) 
 		pre='-I'
 		suf='/include'
-		lcmd='pack_get --prefix ' ;;
+		lcmd='pack_get -prefix ' ;;
 	    -mod-names) 
 		pre=''
 		suf=''
-		lcmd='pack_get --module-name ' ;;
+		lcmd='pack_get -module-name ' ;;
 	    *)
 		doerr "$opt" "No option for list found for $opt" ;;
 	esac
