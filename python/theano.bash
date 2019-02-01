@@ -1,4 +1,4 @@
-v=1.0.3
+v=1.0.4
 add_package --package theano --archive Theano-rel-$v.tar.gz \
     https://github.com/Theano/Theano/archive/rel-$v.tar.gz
     

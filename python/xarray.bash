@@ -1,3 +1,4 @@
+# 0.11.3 and onwards are Py3 only!
 v=0.11.2
 add_package \
     --archive xarray-$v.tar.gz \
