@@ -30,7 +30,7 @@ _signal_default=1
 # Default python version installed
 _python_version=2
 # Default MPI version
-_mpi_version=openmpi
+declare -l _mpi_version=openmpi
 # Default name for build which builds the generic
 # packages.
 _b_name_generic=generic
@@ -76,7 +76,7 @@ while [ $# -gt 0 ]; do
 	    esac
 	    shift ;;
 	-mpi)
-	    _mpi_version=$(lc $1)
+	    _mpi_version=$1
 	    case $_mpi_version in
 		openmpi|mpich|mvapich)
 		    noop

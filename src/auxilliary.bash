@@ -66,18 +66,18 @@ function msg_install {
 	    pack=$_N_archives
 	    ;;
 	*)
-	    pack=$1
+	    pack=$(get_index $1)
 	    ;;
     esac
 
-    echo ' ================================== '
-    echo "   $n"
+    echo '=================================='
+    echo "  $n"
     case $action in
 	4)
-	;;
+	    ;;
 	6)
 	    module list 2>&1
-	;;
+	    ;;
 	1)
 	    echo " File    : $(pack_get --archive $pack)"
 	    local _e=$(pack_get --ext $pack)
@@ -94,7 +94,7 @@ function msg_install {
 	    echo " Version : $(pack_get --version $pack)"
 	    ;;
     esac
-    echo ' ================================== '
+    echo '=================================='
 }
 
 
@@ -266,7 +266,7 @@ function var_spec {
 #      Returns the bug index (0)
 
 function str_version {
-    local Mv='' ; local mv='' ; local rv='' ; local fourth=''
+    local Mv mv rv fourth
     local opt=-1
     if [[ $# -eq 2 ]]; then
 	trim_em opt $1
@@ -335,11 +335,12 @@ function str_version {
 function vrs_cmp {
     local lhs=$1
     local rhs=$2
+    local lv rv
     shift 2
     for o in -1 -2 -3 -4 ; do
-	local lv=$(str_version $o $lhs)
-	local rv=$(str_version $o $rhs)
+	lv=$(str_version $o $lhs)
 	[[ -z "$lv" ]] && break
+	rv=$(str_version $o $rhs)
 	[[ -z "$rv" ]] && break
 	if (isnumber $lv) && (isnumber $rv) ; then
 	    [[ $lv -gt $rv ]] && printf '%s' "1" && return 0
@@ -511,12 +512,11 @@ function arc_cmd {
 #       The directory that the archive is located in
 
 function extract_archive {
-    local id="$1"
+    local id=$(get_index $1)
     shift
     local loc="$1/"
     local d=$(pack_get --directory $id)
     local ext=$(pack_get --ext $id)
-    local cmd=$(arc_cmd $ext)
     local archive=$(pack_get --archive $id)
     # If a previous extraction already exists (delete it!)
     case $d in
@@ -537,7 +537,7 @@ function extract_archive {
 	    loc=''
 	    ;;
     esac
-    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $cmd $loc$archive
+    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $(arc_cmd $ext) $loc$archive
     return $?
 }
 
