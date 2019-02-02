@@ -13,6 +13,7 @@ function pack_install {
     local prefix=$(pack_get --prefix $idx)
     local version=$(pack_get --version $idx)
     local mod_name=$(pack_get --module-name $idx)
+    local installed=$(pack_get -installed $idx)
 
     tmp_lc="$alias"
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
@@ -25,8 +26,9 @@ function pack_install {
 
     # First a simple check that it hasn't already been installed...
     if [[ -e $(pack_get --install-query $idx) ]]; then
-	if [[ $(pack_get --installed $idx) -eq $_I_TO_BE ]]; then
-	    pack_set --installed $_I_INSTALLED $idx
+	if [[ $installed -eq $_I_TO_BE ]]; then
+	    pack_set $idx --installed $_I_INSTALLED
+	    installed=$_I_INSTALLED
 	fi
     fi
 
@@ -39,7 +41,10 @@ function pack_install {
 	    hash=$(git ls-remote $(pack_get --url $idx) HEAD | awk '{print $1}')
 	    if [[ -e $prefix/.bb.hash ]]; then
 		local installed_hash=$(cat $prefix/.bb.hash)
-		[[ "x$hash" == "x$installed_hash" ]] && pack_set --installed $_I_INSTALLED $idx
+		if [[ "x$hash" == "x$installed_hash" ]]; then
+		    pack_set $idx --installed $_I_INSTALLED
+		    installed=$_I_INSTALLED
+		fi
 	    fi
 	    ;;
     esac
@@ -54,6 +59,7 @@ function pack_install {
 
     # Save the module requirements for later...
     local tmp_idx
+    local tmp_inst
 
     # Make sure that every package before is installed...
     for tmp in $(pack_get --mod-req $idx) ; do
@@ -61,19 +67,23 @@ function pack_install {
 	    break
 	fi
 	tmp_idx=$(get_index $tmp)
-	if [[ $(pack_get --installed $tmp_idx) -eq $_I_TO_BE ]]; then
-	    pack_install $tmp_idx
-	fi
-	# Capture packages that has been rejected.
-	# If it depends on rejected packages, it must itself be rejected.
-	if [[ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ]]; then
-	    run=0
-	    break
-	fi
+	tmp_inst=$(pack_get --installed $tmp_idx)
+	case $tmp_inst in
+	    $_I_TO_BE)
+		pack_install $tmp_idx
+		[ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ] && run=0 && break
+		;;
+	    $_I_REJECT)
+		# Capture packages that has been rejected.
+		# If it depends on rejected packages, it must itself be rejected.
+		run=0
+		break
+		;;
+	esac
     done
-
+    
     # If it is installed...
-    if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then
+    if [[ $installed -eq $_I_INSTALLED ]]; then
 	msg_install --already-installed $idx
 	if [[ $FORCEMODULE -eq 0 ]]; then
 	    return 0
@@ -97,13 +107,14 @@ function pack_install {
 
     if [[ $run -eq 0 ]]; then
 	# Notify other required stuff that this can not be installed.
-	pack_set --installed $_I_REJECT $idx
+	pack_set $idx --installed $_I_REJECT
+	installed=$_I_REJECT
 	msg_install --message "Installation rejected for $(pack_get --package $idx)[$version]" $idx
 	return 1
     fi
 
     # Check that the package is not already installed
-    if [[ $(pack_get --installed $idx) -eq $_I_TO_BE ]]; then
+    if [[ $installed -eq $_I_TO_BE ]]; then
 
 	# Show that we will install
 	msg_install --start $idx
@@ -295,7 +306,8 @@ function pack_install {
 	#export LD_LIBRARY_PATH="$old_ld_lib_path"
 
         # For sure it is now installed...
-	pack_set --installed $_I_INSTALLED $idx
+	pack_set $idx --installed $_I_INSTALLED
+	installed=$_I_INSTALLED
 
 	# Store hash if required
 	case x$ext in
@@ -314,11 +326,10 @@ function pack_install {
 		_lib="$_lib $cmd"
 	    fi
 	done
-	[[ -n "$_lib" ]] && \
-	    pack_set --library-suffix "${_lib:1:}" $idx
+	[[ -n "$_lib" ]] && pack_set $idx --library-suffix "${_lib:1:}"
     fi
 
-    if [[ $(pack_get --installed $idx) -eq $_I_INSTALLED ]]; then
+    if [[ $installed -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then
             # Create the list of requirements
 	    local reqs="$(list --prefix '-R ' $(pack_get --mod-req-module $idx))"
@@ -332,7 +343,8 @@ function pack_install {
 	else
 	    # It means it is installed but not a module
 	    # In this case we *must* specify it as not a module
-	    pack_set --installed $_I_LIB $idx
+	    pack_set $idx --installed $_I_LIB
+	    installed=$_I_LIB
 	fi
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \

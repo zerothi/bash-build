@@ -12,8 +12,7 @@ pack_set --install-query $(pack_get --prefix build-tools)/bin/guile
 # Install commands that it should run
 pack_cmd "./configure" \
 	 "--prefix $(pack_get --prefix build-tools)" \
-	 "--with-libunistring-prefix=$(pack_get --prefix build-tools)" \
-	 "--with-libgmp-prefix=$(pack_get --prefix gmp)"
+	 "--with-libunistring-prefix=$(pack_get --prefix build-tools)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

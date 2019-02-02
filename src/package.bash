@@ -790,11 +790,11 @@ function pack_set_file_version {
     tmp=$(pack_list -lf "-X -p /" $tmp)
     tmp=${tmp%/}
     tmp=${tmp#/}
-    pack_set --module-name $tmp $idx
+    pack_set $idx --module-name $tmp
     local tmp="$(build_get --build-installation-path[$b_name])"
-    pack_set --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp) $idx
+    pack_set $idx --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
     tmp=$(pack_get --prefix $idx)
-    pack_set --prefix ${tmp%/} $idx
+    pack_set $idx --prefix ${tmp%/}
 }
 
 function pack_installed {

@@ -21,8 +21,8 @@ function doerr {
     local prefix="ERROR: "
     for ln in "$@" ; do
         echo "${prefix}${ln}" >> $_ERROR_FILE
-        echo "${prefix}${ln}"
-        prefix="       "
+        echo "${prefix}${ln}" >&2
+        prefix='       '
     done
     exit 1
 }
