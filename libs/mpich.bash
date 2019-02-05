@@ -3,11 +3,16 @@ add_package http://www.mpich.org/static/downloads/$v/mpich-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --mod-req hwloc
+# 3.3 has a shipped hwloc == 2
+# so don't require it
+tmp_flags=
+if [[ $(vrs_cmp $(pack_get --version hwloc) 2) -ge 0 ]]; then
+    pack_set --mod-req hwloc
+    tmp_flags="$tmp_flags --with-hwloc-prefix=$(pack_get --prefix hwloc)"
+fi
 
 pack_set --install-query $(pack_get --prefix)/bin/mpicc
 
-tmp_flags=
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-ibverbs=/usr/include/infiniband"
 fi
@@ -24,8 +29,7 @@ pack_cmd "../configure" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \
 	 "--enable-shared --enable-smpcoll" \
-	 "--with-pm=hydra $tmp_flags" \
-	 "--with-hwloc-prefix=$(pack_get --prefix hwloc)"
+	 "--with-pm=hydra $tmp_flags"
 
 # We first need to assert the postdeps are correct
 # Sadly this comes about in certain environments.
@@ -74,8 +78,7 @@ pack_cmd "unset MPICXX"
 pack_cmd "../configure --prefix=$(pack_get --prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \
-	 "--enable-shared $tmpflags" \
-	 "--with-hwloc-prefix=$(pack_get --prefix hwloc)"
+	 "--enable-shared $tmpflags" 
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
