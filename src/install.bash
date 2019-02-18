@@ -259,7 +259,7 @@ function pack_install {
 	done
 
 	# If configuration files exists, we will copy them
-	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log
+	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log CMakeCache.txt
 	do
 	    if [[ -e $tmp ]]; then
 		if [[ -d $prefix ]]; then
