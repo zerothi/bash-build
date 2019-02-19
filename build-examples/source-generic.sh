@@ -1,5 +1,5 @@
 # set to default gnu-compiler version
-set_c gnu-4.9.2
+set_c gnu-6.3.0
 
 AR=ar
 RANLIB=ranlib

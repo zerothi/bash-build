@@ -1,5 +1,12 @@
 set_c gnu-8.3.0
 
+# CUDA stuff
+CUDA_HOME=/opt/cuda
+NVCC=nvcc
+# Choose here the flags for the CUDA
+NVCCFLAGS= -arch=sm_20
+
+
 AR=gcc-ar
 RANLIB=gcc-ranlib
 CC=gcc
@@ -47,3 +54,6 @@ export MPICXX
 export MPIFC
 export MPIF77
 export MPIF90
+
+export NVCC
+export CUDA_HOME
