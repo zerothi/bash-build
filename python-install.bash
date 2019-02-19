@@ -133,7 +133,6 @@ source_pack python/numba.bash
 # Physics related python modules
 source_pack python/inelastica.bash
 source_pack python/inelastica-dev.bash
-source_pack python/inelastica-matt.bash
 
 source_pack python/qutip.bash # [numpy,scipy,cython,matplotlib]
 source_pack python/gpaw-setups.bash
