@@ -42,8 +42,11 @@ fi
 if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx2"
 fi
-if $(grep "avx512" /proc/cpuinfo > /dev/null) ; then
-    tmp_flags="$tmp_flags --enable-avx512"
+if [[ $(vrs_cmp $(pack_get --version $v) 3.3.8) -gt 0 ]]; then
+    # AVX512 on <= 3.3.8 is extremely slow! So don't use it!
+    if $(grep "avx512" /proc/cpuinfo > /dev/null) ; then
+	tmp_flags="$tmp_flags --enable-avx512"
+    fi
 fi
 
 for flag in --enable-single nothing ; do
