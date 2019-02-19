@@ -262,6 +262,23 @@ function build_set {
 }
 
 
+#  Function build_exist
+# Check whether a given build exists.
+#  Arguments
+#    <build-name>
+#       if <build-name> exists this function returns *true*
+#
+# Examples:
+# if $(build_exist cuda) then
+#    ...
+# fi
+
+function build_exist {
+    local b_idx=$(get_index --hash-array "_b_index" $_b_name_default)
+    [[ -z "$b_idx" ]] && return -1
+    return 0
+}
+
 #  Function build_get
 # Retrieve information from a specific build.
 #  Arguments
