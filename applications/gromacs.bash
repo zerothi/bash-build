@@ -1,16 +1,15 @@
 for par in serial mpi cuda
 do
 
-tmp_add_package=
 case $par in
     serial)
-	noop
+	tmp_add_package=""
 	;;
     mpi)
 	tmp_add_package="-package gromacs-mpi"
 	;;
     cuda)
-	tmp_add_package="-package gromacs-mpi -build cuda"
+	tmp_add_package="-package gromacs-cuda -build cuda"
 	# Check if we have build
 	if $(build_exist cuda) ; then
 	    noop
@@ -40,11 +39,10 @@ case $par in
 	tmp="$tmp -DGMX_MPI=ON"
 	;;
     cuda)
-	tmp="$tmp -DGMX_GPU=on -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
+	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
 	;;
 esac
 
-tmp="$tmp -DGMX_GPU=OFF"
 tmp="$tmp -DGMX_PREFER_STATIC_LIBS=ON"
 tmp="$tmp -DGMX_FFT_LIBRARY=fftw3"
 

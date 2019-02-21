@@ -274,8 +274,8 @@ function build_set {
 # fi
 
 function build_exist {
-    local b_idx=$(get_index --hash-array "_b_index" $_b_name_default)
-    [[ -z "$b_idx" ]] && return -1
+    local b_idx=$(get_index --hash-array "_b_index" $1)
+    [[ -z "$b_idx" ]] && return 1
     return 0
 }
 
