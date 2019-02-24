@@ -1,4 +1,4 @@
-v=0.6.0
+v=0.7.0
 add_package \
     https://github.com/zerothi/fdict/releases/download/v$v/fdict-$v.tar.gz
 
