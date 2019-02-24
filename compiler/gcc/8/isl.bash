@@ -1,4 +1,4 @@
-isl_v=0.19
+isl_v=0.20
 add_package --build generic \
 	    --package $gcc-isl \
 	    --alias isl \

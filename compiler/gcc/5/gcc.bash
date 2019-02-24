@@ -9,7 +9,7 @@ pre=$(pack_get --prefix)
 pack_set --install-query $pre/bin/gcc
 
 
-languages="c,c++,fortran,objc,obj-c++"
+languages="c,c++,lto,fortran,objc,obj-c++"
 if ! $(is_host atto) ; then
     languages="$languages,go"
 fi

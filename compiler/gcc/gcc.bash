@@ -28,8 +28,7 @@ gcc=gcc_$gcc_v
 #source_pack compiler/gcc/7/gcc.bash
 #source_pack compiler/gcc/7/gdb.bash
 
-gcc_v=8.2.0
-# when 8.3 is released, then update isl to 0.20
+gcc_v=8.3.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
 source_pack compiler/gcc/8/gmp.bash
