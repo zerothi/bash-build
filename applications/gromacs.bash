@@ -86,7 +86,7 @@ pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
-pack_cmd "make check > gromacs.test"
+pack_cmd "OMP_NUM_THREADS=$NPROCS make check > gromacs.test ; echo 'force'"
 pack_set_mv_test gromacs.test
 
 
