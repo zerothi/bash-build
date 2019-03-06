@@ -108,6 +108,9 @@ fi
 # Needed as it is not source_pack
 pack_install
 
+# We should probably run
+#  ensurepip (which ensures the correct pip and setuptools is installed)
+
 create_module \
     --module-path $(build_get --module-path)-apps \
     -n $(pack_get --alias).$(pack_get --version) \
