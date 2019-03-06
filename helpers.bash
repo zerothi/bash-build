@@ -60,6 +60,8 @@ source_pack helpers/gpp.bash
 
 # Build helpers
 source_pack helpers/guile.bash
+source_pack helpers/indent.bash
+source_pack helpers/shtool.bash
 source_pack helpers/bison.bash
 source_pack helpers/flex.bash
 source_pack helpers/pcre.bash
