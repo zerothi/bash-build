@@ -1,8 +1,8 @@
-add_package http://downloads.kwant-project.org/kwant/kwant-1.3.3.tar.gz
+add_package http://downloads.kwant-project.org/kwant/kwant-1.4.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-if [[ $(vrs_cmp $pV 3.4) -lt 0 ]]; then
+if [[ $(vrs_cmp $pV 3.5) -lt 0 ]]; then
     pack_set --host-reject $(get_hostname)
 fi
 

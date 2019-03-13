@@ -1,11 +1,11 @@
-v=7.2
+v=8.4
 add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family octopus"
 
-pack_set --install-query $(pack_get --prefix)/bin/octopus_mpi
+pack_set --install-query $(pack_get --prefix)/bin/octopus
 
 pack_set --module-requirement mpi
 pack_set --module-requirement libxc
