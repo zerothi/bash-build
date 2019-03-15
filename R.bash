@@ -33,10 +33,11 @@ pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check-all > R.test 2>&1"
 pack_cmd "make install"
+pack_cmd "make install-tests"
 pack_set_mv_test R.test
 
-pack_set --module-opt "--set-ENV R_HOME=$(pack_get --prefix)"
-
+# Install directory for intrinsic packages
+pack_cmd "mkdir -p $(pack_get -prefix)/library"
 
 # Needed as it is not source_pack
 pack_install

@@ -33,6 +33,8 @@ fi
 
 pack_set --install-query $(pack_get --prefix)/bin/python3
 
+pack_set --module-opt "--set-ENV PYTHONUSERBASE=~/.local/python-$v-$(get_c)"
+
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"

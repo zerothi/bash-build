@@ -93,6 +93,8 @@ source_pack helpers/sqlite.bash
 
 source_pack helpers/boost.bash
 
+source_pack helpers/bazel.bash
+
 # Install all compilers
 source compiler/compilers.bash
 

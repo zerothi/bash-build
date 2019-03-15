@@ -54,6 +54,7 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
      "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
      "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get --prefix)" \
      "$tmp"
@@ -75,6 +76,7 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
      "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
      "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get --prefix)" \
      "$tmp"

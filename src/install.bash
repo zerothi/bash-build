@@ -143,19 +143,23 @@ function pack_install {
 
 	# Extract the archive.
 	# For repositories this will be equivalent to git clone etc.
-	extract_archive $idx $(build_get --archive-path)
-	err=$?
-	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Failed to extract archive from package..." $idx
-	    exit $err
-	fi
+	if $(has_setting $INSTALL_FROM_ARCHIVE $idx) ; then
+	    pushd . 1> /dev/null
+	else
+	    extract_archive $idx $(build_get --archive-path)
+	    err=$?
+	    if [[ $err -ne 0 ]]; then
+		msg_install --package "Failed to extract archive from package..." $idx
+		exit $err
+	    fi
 
-	# Go into source directory
-	pushd $directory 1> /dev/null
-	err=$?
-	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Could not go to the source directory: $directory" $idx
-	    exit $err
+	    # Go into source directory
+	    pushd $directory 1> /dev/null
+	    err=$?
+	    if [[ $err -ne 0 ]]; then
+		msg_install --package "Could not go to the source directory: $directory" $idx
+		exit $err
+	    fi
 	fi
 
         # We are now in the package, check for optional build-directory
@@ -273,7 +277,7 @@ function pack_install {
 	popd 1> /dev/null
 
         # Remove compilation directory
-	if [[ "x$directory" != "x." ]] && [[ "x$directory" != "x./" ]]; then
+	if [[ "x$directory" != "x." ]] && [[ "x$directory" != "x./" ]] && [ -d $directory ]; then
 	    rm -rf $directory
 	fi
 	

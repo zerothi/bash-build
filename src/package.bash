@@ -546,11 +546,15 @@ function pack_get {
 	    doerr "$1" "Could not determine the option for pack_get" ;;	    
     esac
     shift
+
+    local tmp=
     
     # We check whether a specific index is requested
+    local name=""
     local index
     case $# in
 	1)
+	    name=$1
 	    index=$(get_index $1)
 	    shift
 	    ;;
@@ -559,7 +563,7 @@ function pack_get {
 	    ;;
     esac
     [[ -z "$index" ]] && \
-	doerr pack_get "Could not find index!"
+	doerr pack_get "Could not find index ($name)!"
     
     #echo "pack_get: lookup($1) idx($index)" >&2
     # Process what is requested
@@ -567,36 +571,50 @@ function pack_get {
 	-build)              printf '%s' "${_build[$index]}" ;;
 	-C|-commands)        printf '%s' "${_cmd[$index]}" ;;
 	-h|-u|-url|-http)    printf '%s' "${_http[$index]}" ;;
-	-module-load) 
-	    for m in ${_mod_req[$index]} ; do
-		printf '%s' "$(pack_get --module-name $m) "
-	    done 
+	-module-load)
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    printf '%s' "$(pack_get --module-name $m) "
+		done
+	    fi
 	    printf '%s' "${_mod_name[$index]}"
 	    ;;
 	-R|-module-requirement|-mod-req)
-	    for m in ${_mod_req[$index]} ; do
-		case $(pack_get --installed $m) in
-		    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
-                esac
-	    done ;;
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get --installed $m) in
+			$_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
+	    ;;
 	-mod-req-path)
-	    for m in ${_mod_req[$index]} ; do
-		case $(pack_get --installed $m) in
-		    $_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
-                esac
-	    done ;;
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get --installed $m) in
+			$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
+	    ;;
 	-mod-req-module)
-	    for m in ${_mod_req[$index]} ; do
-		case $(pack_get --installed $m) in
-		    $_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
-                esac
-	    done ;;
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get --installed $m) in
+			$_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
+	    ;;
 	-module-requirement-all|-mod-req-all) 
             printf '%s' "${_mod_req[$index]}" ;;
 	-module-name-requirement|-mod-req-name) 
-	    for m in ${_mod_req[$index]} ; do
-		printf '%s' "$(pack_get --module-name $m) "
-	    done ;;
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    printf '%s' "$(pack_get --module-name $m) "
+		done
+	    fi
+	    ;;
 	-L|-LD|-library-path)
 	    for p in ${_lib_prefix[$index]} ; do
 		printf '%s' "${_install_prefix[$index]}/$p"

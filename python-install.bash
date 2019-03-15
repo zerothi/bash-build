@@ -103,6 +103,8 @@ source_pack python/uncertainties.bash
 source_pack python/asteval.bash
 source_pack python/lmfit.bash
 
+# Tensorflow (CPU-only)
+source_pack python/tensorflow.bash
 
 # Additional plotting stuff
 source_pack python/seaborn.bash

@@ -83,6 +83,10 @@ include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_
 
 elif $(is_c gnu) ; then
 
+    # numpy/distutils/system_info.py checks for MKLROOT!
+    # We don't want that.
+    pack_cmd "unset MKLROOT"
+
     if [[ $(vrs_cmp $v 1.10.0) -lt 0 ]]; then
 	pack_cmd "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
     fi
@@ -145,12 +149,21 @@ libraries = ${tmp_l//-l/,}\n\
 extra_link_args = -lpthread -lgfortran -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
-	blas|blis)
+	blas)
 	    pack_cmd "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
 include_dirs = $(pack_get --prefix $la)/include\n\
 libraries = ${tmp_l//-l/,}\n\
+runtime_library_dirs = $tmp\n' $file"
+	    ;;
+	blis)
+	    pack_cmd "sed -i '$ a\
+[blis]\n\
+library_dirs = $tmp\n\
+include_dirs = $(pack_get --prefix $la)/include\n\
+libraries = ${tmp_l//-l/,}\n\
+extra_link_args = -lpthread -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	*)

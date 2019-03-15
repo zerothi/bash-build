@@ -11,7 +11,7 @@ pack_set --lib[pt] -lblis_pt
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 
 pack_set --install-query $(pack_get --LD)/libblis.a
 
@@ -49,7 +49,7 @@ function blis_parse {
 	printf '%s' 'bulldozer'
 	return
     fi
-    printf '%s' 'generic'
+    printf '%s' 'auto'
 }
 
 for model in no openmp pthreads
@@ -67,19 +67,15 @@ do
     esac
 
     pack_cmd "./configure -p $(pack_get --prefix) -t $model --enable-blas --enable-cblas $(blis_parse)"
-
-    # Change library name
-    pack_cmd "sed -i -e 's?^\(LIBBLIS_NAME\).*?\1 := libblis$name?' common.mk"
     
-    pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make install"
-
-
-    pack_cmd "make check 2>&1 > $model.test"
+    # versions prior to 0.5.0 used LIBBLIS_NAME
+    pack_cmd "make LIBBLIS=libblis$name $(get_make_parallel)"
+    pack_cmd "make LIBBLIS=libblis$name install"
+    pack_cmd "make LIBBLIS=libblis$name check 2>&1 > $model.test"
 
     # Run test
     pack_cmd "cd testsuite"
-    pack_cmd "make ; ./test_libblis.x >> ../$model.test"
+    pack_cmd "make LIBBLIS=libblis$name ; ./test_libblis.x >> ../$model.test"
     pack_cmd "cd .."
     pack_set_mv_test $model.test
 
@@ -101,4 +97,3 @@ pack_set --lib -llapack $(pack_get -lib blis)
 pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis)
 pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis)
 pack_set --lib[lapacke] -llapacke
-				 

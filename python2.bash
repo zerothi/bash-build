@@ -36,6 +36,7 @@ pack_set --install-query $(pack_get --prefix)/bin/python
 if ! $(is_host ntch-) ; then
     pack_set --module-opt "--set-ENV PYTHONHOME=$(pack_get --prefix)"
 fi
+pack_set --module-opt "--set-ENV PYTHONUSERBASE=~/.local/python-$v-$(get_c)"
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then

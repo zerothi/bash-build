@@ -24,6 +24,7 @@ _NS=1000000000
 BUILD_DIR=build-dir
 PRELOAD_MODULE=module-preload
 IS_MODULE=module
+INSTALL_FROM_ARCHIVE=install-from-archive
 CRT_DEF_MODULE=def-module
 MAKE_PARALLEL=parallel
 BUILD_TOOLS=build-tools
