@@ -61,5 +61,5 @@ if ! $(is_host ntch) ; then
     pack_cmd "cp time_*[^cho] $(pack_get --prefix)/bin/"
     pack_cmd "cd .."
 fi
-pack_set_mv_test plasma.test
+pack_store plasma.test
 

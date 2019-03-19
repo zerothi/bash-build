@@ -59,4 +59,4 @@ pack_cmd "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flag
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > octave.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test octave.test
+pack_store octave.test

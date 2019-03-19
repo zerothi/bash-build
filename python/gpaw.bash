@@ -120,10 +120,10 @@ pack_set --host-reject $(get_hostname)
 pack_set --mod-req gpaw-setups
 pack_cmd "unset LDFLAGS"
 pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > gpaw.serial ; echo 'Forced'"
-pack_set_mv_test gpaw.serial
+pack_store gpaw.serial
 pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.serial ; echo 'Forced'"
-pack_set_mv_test gpaw.exec.serial
+pack_store gpaw.exec.serial
 pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.parallel ; echo 'Forced'"
-pack_set_mv_test gpaw.exec.parallel
+pack_store gpaw.exec.parallel
 
 done

@@ -9,14 +9,24 @@ fi
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
-pack_set $(list --prefix ' --module-requirement ' numpy mpi4py)
+# As per github issue 14428 it seems MPI is not maintained! :(
+pack_set $(list --prefix ' --module-requirement ' numpy)
+
+if ! $(is_c gnu) ; then
+    pack_set --host-reject $(get_hostname)
+fi
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 _mods="$(pack_get -module-load bazel[0.21.0])"
 
 pack_cmd "module load $_mods"
 
-pack_cmd "PYTHON_BIN_PATH=$(get_parent_exec) \
+pack_cmd "sed -i -e 's:\(mnemonic[[:space:]]*=[[:space:]]*\"PythonSwig\"\):\1,use_default_shell_env=True:' tensorflow/tensorflow.bzl"
+
+_envs="GCC_HOST_COMPILER_PATH=$(pack_get -prefix gcc)/bin/gcc"
+_envs="$_envs CPU_COMPILER=$(pack_get -prefix gcc)/bin/gcc"
+
+pack_cmd "$_envs PYTHON_BIN_PATH=$(get_parent_exec) \
 USE_DEFAULT_PYTHON_LIB_PATH=1 \
 TF_ENABLE_XLA=0 \
 TF_NEED_OPENCL_SYCL=0 \
@@ -24,10 +34,21 @@ TF_NEED_ROCM=0 \
 TF_NEED_CUDA=0 \
 TF_DOWNLOAD_CLANG=0 \
 TF_SET_ANDROID_WORKSPACE=0 \
-TF_NEED_MPI=1 MPI_HOME=$(pack_get -prefix mpi) \
+TF_NEED_MPI=0 MPI_HOME=$(pack_get -prefix mpi) \
 PREFIX=$(pack_get -prefix) \
 CC_OPT_FLAGS='$CFLAGS' ./configure"
-pack_cmd "bazel build --jobs $NPROCS --verbose_failures --config=opt --linkopt='$(list -LD-rp $(pack_get -mod-req-path))' //tensorflow/tools/pip_package:build_pip_package"
-pack_cmd "pip install --prefix=$(pack_get -prefix) ./*.whl"
+#--cxxopt=-D_GLIBCXX_USE_CXX11_ABI=0 \
 
+# local_resources 2048 limits memory usage
+pack_cmd "$_envs bazel build --jobs $NPROCS -s --local_resources 2048,.5,1.0 \
+--verbose_failures \
+-c opt \
+--config=opt \
+--force_pic \
+$(list -prefix --copt= ' ' $CFLAGS) \
+$(list -prefix --linkopt= ' ' $(list -LD-rp $(pack_get -mod-req-path))) \
+--define=PREFIX=$(pack_get -prefix) \
+//tensorflow/tools/pip_package:build_pip_package"
+
+pack_cmd "pip install --prefix=$(pack_get -prefix) ./*.whl"
 pack_cmd "module unload $_mods"

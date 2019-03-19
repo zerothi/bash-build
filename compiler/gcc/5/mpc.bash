@@ -20,4 +20,4 @@ pack_cmd "../configure --prefix $pre" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > mpc.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test mpc.test
+pack_store mpc.test

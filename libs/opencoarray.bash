@@ -25,4 +25,4 @@ pack_cmd "CC=$MPICC FC=$MPIFC cmake" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test > opencoarray.test 2>&1 || echo 'Forced success'"
 pack_cmd "make install"
-pack_set_mv_test opencoarray.test
+pack_store opencoarray.test

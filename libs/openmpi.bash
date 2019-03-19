@@ -47,6 +47,10 @@ else
     fi
 fi
 
+if [[ $(vrs_cmp $(pack_get --version) 4) -eq 0 ]]; then
+    tmp_flags="$tmp_flags --enable-mpi-cxx --enable-mpi1-compatibility"
+fi
+
 if [[ $(pack_installed flex) -eq 1 ]]; then
     pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
 fi
@@ -66,7 +70,7 @@ pack_cmd "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > openmpi.test 2>&1 ; echo 'force'"
-pack_set_mv_test openmpi.test
+pack_store openmpi.test
 pack_cmd "make install"
 
 

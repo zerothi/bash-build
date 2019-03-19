@@ -77,7 +77,7 @@ do
     pack_cmd "cd testsuite"
     pack_cmd "make LIBBLIS=libblis$name ; ./test_libblis.x >> ../$model.test"
     pack_cmd "cd .."
-    pack_set_mv_test $model.test
+    pack_store $model.test
 
     pack_cmd "make clean cleanlib"
 

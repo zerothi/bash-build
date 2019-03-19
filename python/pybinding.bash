@@ -29,4 +29,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package pybinding.test
 pack_cmd "pytest --pyargs pybinding 2>&1 > $TEST_OUT ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

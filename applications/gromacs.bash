@@ -87,7 +87,7 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
 pack_cmd "OMP_NUM_THREADS=$NPROCS make check > gromacs.test ; echo 'force'"
-pack_set_mv_test gromacs.test
+pack_store gromacs.test
 
 
 # Add GROMACS envs

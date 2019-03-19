@@ -29,7 +29,7 @@ if ! $(is_c intel) ; then
 fi
 pack_cmd "make install"
 if ! $(is_c intel) ; then
-    pack_set_mv_test gsl.test
+    pack_store gsl.test
 fi
 
 

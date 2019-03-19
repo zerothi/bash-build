@@ -57,7 +57,7 @@ if ! $(is_c intel) ; then
     else
 	pack_cmd "OMP_NUM_THREADS=2 nosetests --exe scipy > $TEST_OUT 2>&1 ; echo Success"
     fi
-    pack_set_mv_test $TEST_OUT
+    pack_store $TEST_OUT
 fi
 
 done

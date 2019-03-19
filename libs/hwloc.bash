@@ -1,5 +1,5 @@
-sv=1.11
-v=$sv.12
+sv=2.0
+v=$sv.3
 add_package http://www.open-mpi.org/software/hwloc/v$sv/downloads/hwloc-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
@@ -21,6 +21,6 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n-) ; then
     pack_cmd "make check > hwloc.test 2>&1 ; echo force"
-    pack_set_mv_test hwloc.test
+    pack_store hwloc.test
 fi
 pack_cmd "make install"

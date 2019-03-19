@@ -16,4 +16,4 @@ pack_cmd "../configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > gmp.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test gmp.test
+pack_store gmp.test

@@ -34,7 +34,7 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check-all > R.test 2>&1"
 pack_cmd "make install"
 pack_cmd "make install-tests"
-pack_set_mv_test R.test
+pack_store R.test
 
 # Install directory for intrinsic packages
 pack_cmd "mkdir -p $(pack_get -prefix)/library"

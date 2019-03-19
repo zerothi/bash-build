@@ -2,7 +2,7 @@ function tmp_func {
     pack_cmd "make $(get_make_parallel)"
     if ! $(is_host n-) ; then
 	pack_cmd "make check > fftw.test 2>&1 || echo 'forced'"
-	pack_set_mv_test fftw.test $1
+	pack_store fftw.test $1
     fi
     pack_cmd "make install"
     pack_cmd "rm -rf ./*"

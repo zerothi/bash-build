@@ -21,8 +21,8 @@ pack_cmd "../configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > libxc.test 2>&1 ; echo 'forced'"
 pack_cmd "make install"
-pack_set_mv_test libxc.test
-pack_set_mv_test testsuite/test-suite.log libxc.test-suite.log
+pack_store libxc.test
+pack_store testsuite/test-suite.log libxc.test-suite.log
 
 done
 

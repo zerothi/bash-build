@@ -30,20 +30,20 @@ pack_cmd "sed -i '1 a\
 [fftw2]\n\
 library_dirs = $(pack_get --LD fftw-2)\n\
 include_dirs = $(pack_get --prefix fftw-2)/include\n\
-libraries = fftw_threads\n\
+fftw_libs = fftw_threads\n\
 runtime_library_dirs = $(pack_get --LD fftw-2)\n\
 [fftw]\n\
 library_dirs = $(pack_get --LD fftw)\n\
 include_dirs = $(pack_get --prefix fftw)/include\n\
-libraries = fftw3_threads\n\
+fftw_libs = fftw3_threads\n\
 runtime_library_dirs = $(pack_get --LD fftw)\n\
 [amd]\n\
-libraries = amd\n\
+amd_libs = amd\n\
 include_dirs = $(pack_get --prefix amd)/include\n\
 library_dirs = $(pack_get --LD amd)\n\
 runtime_library_dirs = $(pack_get --LD amd)\n\
 [umfpack]\n\
-libraries = umfpack\n\
+umfpack_libs = umfpack\n\
 include_dirs = $(pack_get --prefix umfpack)/include\n\
 library_dirs = $(pack_get --LD umfpack)\n\
 runtime_library_dirs = $(pack_get --LD umfpack)\n' $file"
@@ -218,7 +218,7 @@ if ! $(is_c intel) ; then
     else
 	pack_cmd "OMP_NUM_THREADS=2 nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
     fi
-    pack_set_mv_test $TEST_OUT
+    pack_store $TEST_OUT
 fi
 
 done

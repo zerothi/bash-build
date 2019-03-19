@@ -27,7 +27,7 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make test > git.test 2>&1"
 pack_cmd "make install"
-#pack_set_mv_test git.test
+#pack_store git.test
 
 # Now install the git-packages...
 o=$(pwd_archives)/$(pack_get --package)-lfs-2.4.0.tar.gz

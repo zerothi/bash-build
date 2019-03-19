@@ -13,4 +13,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package slepc4py.test
 pack_cmd "nosetests --exe slepc4py > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

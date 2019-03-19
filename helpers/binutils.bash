@@ -19,6 +19,6 @@ pack_cmd "make $(get_make_parallel)"
 
 # Be sure to test
 pack_cmd "make check > binutils.test 2>&1 ; echo succes"
-pack_set_mv_test binutils.test
+pack_store binutils.test
 
 pack_cmd "make install"

@@ -47,4 +47,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 add_test_package matplotlib.test
 pack_cmd "unset LDFLAGS"
 pack_cmd "pytest --pyargs matplotlib > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

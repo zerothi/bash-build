@@ -19,4 +19,4 @@ pack_cmd "../configure --prefix $pre" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > isl.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test isl.test
+pack_store isl.test

@@ -27,6 +27,6 @@ for v in 2.6.9 ; do
 
     add_test_package numexpr.test
     pack_cmd "nosetests --exe numexpr > $TEST_OUT 2>&1 ; echo 'Success'"
-    pack_set_mv_test $TEST_OUT
+    pack_store $TEST_OUT
     
 done

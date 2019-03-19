@@ -31,7 +31,7 @@ pack_cmd "../configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > pnetcdf.test 2>&1 || echo 'Forced...'"
 pack_cmd "make install"
-pack_set_mv_test pnetcdf.test
+pack_store pnetcdf.test
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
     pack_cmd "module unload $(list ++flex)"

@@ -13,5 +13,5 @@ pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)" \
 
 pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make check > pybind11.tmp"
-#pack_set_mv_test pybind11.test
+#pack_store pybind11.test
 pack_cmd "make install"

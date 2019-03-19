@@ -27,4 +27,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 # I have disabled it for now   
 #add_test_package tables.test
 #pack_cmd "nosetests --exe tables > $TEST_OUT 2>&1 ; echo 'Success'"
-#pack_set_mv_test $TEST_OUT
+#pack_store $TEST_OUT

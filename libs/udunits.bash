@@ -17,6 +17,6 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > udunits.test 2>&1"
 pack_cmd "make install install-pdf"
-pack_set_mv_test udunits.test
+pack_store udunits.test
 
 

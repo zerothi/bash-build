@@ -23,5 +23,5 @@ pack_cmd "../configure LIBS='$tmp_LIBS' CFLAGS='$CFLAGS $FLAG_OMP'" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > nfft.test 2>&1 || echo 'forced'"
-pack_set_mv_test nfft.test
+pack_store nfft.test
 pack_cmd "make install"

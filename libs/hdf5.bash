@@ -39,11 +39,11 @@ pack_cmd "../configure" \
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n- surt muspel slid) ; then
     pack_cmd "make check-s > hdf5.test 2>&1"
-    pack_set_mv_test hdf5.test hdf5.test.s
+    pack_store hdf5.test hdf5.test.s
 fi
 # the parallel tests cannot even complete using gnu
 #pack_cmd "NPROCS=3 make check-p > hdf5.test 2>&1"
-#pack_set_mv_test hdf5.test hdf5.test.p
+#pack_store hdf5.test hdf5.test.p
 pack_cmd "make install"
 
 done

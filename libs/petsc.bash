@@ -95,8 +95,8 @@ pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"
 
 # This tests the installation (i.e. linking)
 pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH=$tmp_arch test > petsc.test 2>&1"
-pack_set_mv_test petsc.test
-pack_set_mv_test $tmp_arch/lib/petsc/conf/configure.log $tmp_arch.configure.log
+pack_store petsc.test
+pack_store $tmp_arch/lib/petsc/conf/configure.log $tmp_arch.configure.log
 
 pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
 

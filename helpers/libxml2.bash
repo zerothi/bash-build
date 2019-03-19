@@ -17,7 +17,7 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > libxml2.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test libxml2.test
+pack_store libxml2.test
 
 pack_cmd "pushd $(pack_get --prefix)/include"
 pack_cmd "ln -s libxml2/libxml"

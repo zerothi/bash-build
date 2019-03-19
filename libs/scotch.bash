@@ -74,7 +74,7 @@ fi
 pack_cmd "make install"
 # this check waits for a key-press????
 #pack_cmd "make ptcheck > scotch.test 2>&1"
-#pack_set_mv_test scotch.test scotch.test.p
+#pack_store scotch.test scotch.test.p
 pack_cmd "make clean"
 
 # Remove threads
@@ -87,7 +87,7 @@ if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
 fi
 #pack_cmd "make check > scotch.test 2>&1"
 pack_cmd "make install"
-#pack_set_mv_test scotch.test
+#pack_store scotch.test
 
 if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
     # the esmumps libraries are not "installed"

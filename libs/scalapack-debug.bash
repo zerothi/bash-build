@@ -39,7 +39,7 @@ pack_cmd "make $(get_make_parallel)"
 
 pack_cmd "cd TESTING"
 pack_cmd 'for x in x* ; do echo "RUNNING: $x" >> scalapack.test ; mpiexec -np $NPROCS ./$x >> scalapack.test ; echo "" >> scalapack.test ; done'
-pack_set_mv_test scalapack.test
+pack_store scalapack.test
 pack_cmd "cd .."
 
 pack_cmd "mkdir -p $(pack_get --LD)/"

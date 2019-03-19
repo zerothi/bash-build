@@ -35,4 +35,4 @@ pack_cmd "../configure MPIFC='$MPIFC' CFLAGS='$CFLAGS' FCFLAGS='$FCFLAGS'" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > ga.test 2>&1 ; echo force"
 pack_cmd "make install"
-pack_set_mv_test ga.test
+pack_store ga.test

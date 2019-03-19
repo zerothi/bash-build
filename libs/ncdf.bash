@@ -34,4 +34,4 @@ pack_cmd "echo 'include ../Makefile' >> Makefile"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install PREFIX=$(pack_get --prefix)"
 pack_cmd "make test > ncdf.test 2>&1 || echo 'Fail'"
-pack_set_mv_test ncdf.test
+pack_store ncdf.test

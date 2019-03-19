@@ -26,5 +26,5 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > nco.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test nco.test
+pack_store nco.test
 

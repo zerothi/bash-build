@@ -13,7 +13,7 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > fftw.test 2>&1"
 pack_cmd "make install"
 
-pack_set_mv_test fftw.test
+pack_store fftw.test
 
 
 add_package --alias fftw-mpi-2 --package fftw-mpi \
@@ -33,5 +33,5 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > fftw.test 2>&1"
 pack_cmd "make install"
 
-pack_set_mv_test fftw.test
+pack_store fftw.test
 

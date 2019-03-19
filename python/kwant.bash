@@ -69,4 +69,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package kwant.test
 pack_cmd "pytest --pyargs kwant 2>&1 > $TEST_OUT ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

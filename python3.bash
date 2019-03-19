@@ -89,7 +89,7 @@ else
 fi
 pack_cmd "make install"
 if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
-    pack_set_mv_test python.test
+    pack_store python.test
 fi
 
 # Assert that libpython$pV.a exists

@@ -701,7 +701,7 @@ function pack_choice {
 }
 
 
-#  Function pack_set_mv_test
+#  Function pack_store
 # Automatically adds commands to the current <package>
 # which moves a test output to the installation folder
 # of the <package> and gzips it.
@@ -710,7 +710,7 @@ function pack_choice {
 #       The test file to be moved.
 #    dest-file (optional)
 #       The name of the file when moved, defaults to `file`
-function pack_set_mv_test {
+function pack_store {
     local f=$1 ; shift
     local o=$f
     [[ $# -gt 0 ]] && o=$1 ; shift

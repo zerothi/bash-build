@@ -16,4 +16,4 @@ pack_cmd "$(get_parent_exec)" \
 
 add_test_package llvm-lite.test
 pack_cmd "$(get_parent_exec) -m llvmlite.tests > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

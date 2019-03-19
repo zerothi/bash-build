@@ -45,8 +45,8 @@ if $(is_c intel) ; then
 else
     pack_cmd "make check > elpa.test 2>&1 ; echo force"
     pack_cmd "make install"
-    pack_set_mv_test elpa.test
-    pack_set_mv_test test-suite.log elpa.test.log
+    pack_store elpa.test
+    pack_store test-suite.log elpa.test.log
 fi
 
 # Correct include paths

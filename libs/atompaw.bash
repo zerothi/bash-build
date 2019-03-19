@@ -28,5 +28,5 @@ pack_cmd "./configure" \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > atompaw.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test atompaw.test
+pack_store atompaw.test
 
