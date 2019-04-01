@@ -1,4 +1,4 @@
-v=0.9.11
+v=0.9.12
 add_package --archive lmfit-$v.tar.gz --directory lmfit-py-$v \
 	    https://github.com/lmfit/lmfit-py/archive/$v.tar.gz
 

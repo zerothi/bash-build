@@ -29,7 +29,8 @@ new_build --name _internal-R$IrV \
 	  $(list --prefix "--default-module " $rMod) \
 	  --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
 	  --build-module-path "--package --version" \
-	  --build-installation-path "$IrV --package --version"
+	  --build-installation-path "$IrV --package --version" \
+	  --build-path $(build_get --build-path[$def_idx])/R-$IrV
 
 build_set --default-setting[_internal-R$IrV] $INSTALL_FROM_ARCHIVE \
 	  --default-setting[_internal-R$IrV] $PRELOAD_MODULE

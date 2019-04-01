@@ -1,5 +1,5 @@
 # apt-get libc6-dev
-v=3.1.3
+v=4.0.1
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 
@@ -48,7 +48,7 @@ else
 fi
 
 if [[ $(vrs_cmp $(pack_get --version) 4) -eq 0 ]]; then
-    tmp_flags="$tmp_flags --enable-mpi-cxx --enable-mpi1-compatibility"
+    tmp_flags="$tmp_flags --enable-mpi1-compatibility"
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then

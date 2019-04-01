@@ -1,8 +1,8 @@
-v=1.0.2.1
+v=1.0.3.4
 add_package \
     --version $v --package cftime \
-    --archive cftime-${v}.tar.gz \
-    https://github.com/Unidata/cftime/archive/v$v.tar.gz
+    --archive cftime-${v}rel.tar.gz \
+    https://github.com/Unidata/cftime/archive/v${v}rel.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

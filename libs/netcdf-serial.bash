@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.6.2 ; do
+for v in 4.6.3 ; do
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-serial \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz

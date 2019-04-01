@@ -4,9 +4,9 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpexsi_linux.a
 pack_set --lib -lpexsi_linux
 
-pack_set $(list -p '--mod-req ' mpi parmetis scotch)
-pack_set --mod-req superlu-dist
-pack_set --mod-req sympack
+pack_set $(list -p '-mod-req ' mpi parmetis scotch)
+pack_set -mod-req superlu-dist
+pack_set -mod-req sympack
 
 # Prepare the make file
 tmp="sed -i -e"

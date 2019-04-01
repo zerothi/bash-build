@@ -1,6 +1,6 @@
 for d_type in d z
 do
-v=3.10.2
+v=3.11.0
 add_package --package petsc-$d_type \
 	    --directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz
@@ -10,7 +10,12 @@ pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libpetsc.so
 pack_set --lib -lpetsc
 
-pack_set $(list --prefix '--mod-req ' parmetis fftw-mpi hdf5)
+pack_set $(list --prefix '--mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen)
+
+# Patch configuration!
+o=$(pwd_archives)/petsc-libindex.patch
+dwn_file http://www.student.dtu.dk/~nicpa/packages/petsc-libindex.patch $o
+pack_cmd "patch -p1 < $o"
 
 tmp=''
 if $(is_c intel) ; then
@@ -58,16 +63,31 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-petsc-arch=$tmp_arch" \
 	 "--with-fortran-interfaces=1" \
 	 "--with-pic=1 $tmp" \
+	 "--with-mpi=1" \
+	 "--with-gmp=1" \
+	 "--with-mpfr=1" \
+	 "--with-zlib=1" \
+	 "--with-zlib-dir=$(pack_get -prefix zlib)" \
+	 "--with-eigen=1" \
+	 "--with-eigen-include=$(pack_get -prefix eigen)/include" \
+	 "--with-boost=1" \
+	 "--with-boost-dir=$(pack_get -prefix boost)" \
+	 "--with-libpng=1" \
+	 "--with-libpng-dir=$(pack_get -prefix gen-libpng)" \
 	 "--with-parmetis=1" \
-	 "--with-parmetis-dir=$(pack_get --prefix parmetis)" \
+	 "--with-parmetis-dir=$(pack_get -prefix parmetis)" \
 	 "--with-metis=1" \
-	 "--with-metis-dir=$(pack_get --prefix parmetis)" \
+	 "--with-metis-dir=$(pack_get -prefix parmetis)" \
 	 "--with-hwloc=1" \
-	 "--with-hwloc-dir=$(pack_get --prefix hwloc)" \
+	 "--with-hwloc-dir=$(pack_get -prefix hwloc)" \
 	 "--with-hdf5=1" \
-	 "--with-hdf5-dir=$(pack_get --prefix hdf5)" \
+	 "--with-hdf5-dir=$(pack_get -prefix hdf5)" \
 	 "--with-fftw=1" \
-	 "--with-fftw-dir=$(pack_get --prefix fftw-mpi)"
+	 "--with-fftw-dir=$(pack_get -prefix fftw-mpi)" \
+	 "--with-netcdf=1" \
+	 "--with-netcdf-dir=$(pack_get -prefix netcdf)" \
+	 "--with-pnetcdf=1" \
+	 "--with-pnetcdf-dir=$(pack_get -prefix pnetcdf)" \
 
 # Just does not work
 #     "--with-superlu_dist=1" \
@@ -79,10 +99,6 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 #     "--with-mumps-dir=$(pack_get --prefix mumps)" \
 #     "--with-ptscotch=1" \
 #     "--with-ptscotch-dir=$(pack_get --prefix scotch)"
-
-#     "--with-netcdf=1" \
-#     "--with-netcdf-dir=$(pack_get --prefix netcdf)" \
-#     "--with-netcdf-libs='-lnetcdf -lpnetcdf'"
 
 #     "--with-cholmod=1" \
 #     "--with-cholmod-dir=$(pack_get --prefix cholmod)"

@@ -1,7 +1,7 @@
-v=3.13
+v=5.1
 add_package \
-    --package pyyaml --version $v \
-    http://pyyaml.org/download/pyyaml/PyYAML-$v.tar.gz
+    --archive pyyaml-$v.tar.gz \
+    https://github.com/yaml/pyyaml/archive/$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/yaml
 

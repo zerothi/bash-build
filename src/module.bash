@@ -409,6 +409,8 @@ EOF
 	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
     add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
 	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
+    add_module_if -F $force -d "$path/share/pkgconfig" $mfile \
+	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/share/pkgconfig)"
     add_module_if -F $force -d "$path/man" $mfile \
 	"$(module_fmt_routine --prepend-path MANPATH $fpath/man)"
     add_module_if -F $force -d "$path/share/man" $mfile \

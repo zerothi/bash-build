@@ -1,4 +1,4 @@
-v=0.24.1
+v=0.24.2
 add_package \
     https://github.com/pandas-dev/pandas/releases/download/v$v/pandas-$v.tar.gz
 

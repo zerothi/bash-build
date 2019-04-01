@@ -1,5 +1,9 @@
 # 0.11.3 and onwards are Py3 only!
-v=0.11.2
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=0.12.0
+else
+    v=0.11.2
+fi
 add_package \
     --archive xarray-$v.tar.gz \
     https://github.com/pydata/xarray/archive/v$v.tar.gz

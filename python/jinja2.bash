@@ -1,7 +1,8 @@
 v=2.10
 add_package \
+    --archive jinja-$v.tar.gz \
     --package jinja2 \
-    https://pypi.python.org/packages/source/J/Jinja2/Jinja2-$v.tar.gz
+    https://github.com/pallets/jinja/archive/$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/Jinja2-$v-py${pV}.egg
 

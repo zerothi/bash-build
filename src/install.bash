@@ -50,8 +50,10 @@ function pack_install {
     esac
 
     # If we request downloading of files, do so immediately
+    local bld_archive_path=$(build_get -archive-path)
+    local bld_mod_path=$(build_get -module-path)
     if [[ $DOWNLOAD -eq 1 ]]; then
-	pack_dwn $idx $(build_get --archive-path)
+	pack_dwn $idx $bld_archive_path
     fi
     
     # Check that we can install on this host
@@ -112,15 +114,23 @@ function pack_install {
 	msg_install --message "Installation rejected for $(pack_get --package $idx)[$version]" $idx
 	return 1
     fi
-
+    
     # Check that the package is not already installed
     if [[ $installed -eq $_I_TO_BE ]]; then
-
+	
+	# Check whether the module installation path is *enabled*
+	local bld_mod_path_is_used=0
+	module is-used $bld_mod_path
+	bld_mod_path_is_used=$?
+	if [[ $bld_mod_path_is_used -ne 0 ]]; then
+	    module use -a $bld_mod_path
+	fi
+	
 	# Show that we will install
 	msg_install --start $idx
 
         # Download archive
-	pack_dwn $idx $(build_get --archive-path)
+	pack_dwn $idx $bld_archive_path
 
         # Go into the build directory
 	pushd $(build_get --build-path) 1> /dev/null
@@ -146,7 +156,7 @@ function pack_install {
 	if $(has_setting $INSTALL_FROM_ARCHIVE $idx) ; then
 	    pushd . 1> /dev/null
 	else
-	    extract_archive $idx $(build_get --archive-path)
+	    extract_archive $idx $bld_archive_path
 	    err=$?
 	    if [[ $err -ne 0 ]]; then
 		msg_install --package "Failed to extract archive from package..." $idx
@@ -319,6 +329,10 @@ function pack_install {
 		echo "$hash" > $prefix/.bb.hash
 		;;
 	esac
+
+	if [[ $bld_mod_path_is_used -ne 0 ]]; then
+	    module unuse $bld_mod_path
+	fi
 
     fi
 

@@ -1,4 +1,4 @@
-v=0.19.2
+v=0.20.3
 add_package --archive scikit-learn-$v.tar.gz \
     https://github.com/scikit-learn/scikit-learn/archive/$v.tar.gz
 

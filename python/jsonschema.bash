@@ -1,4 +1,4 @@
-v=2.6.0
+v=3.0.1
 add_package \
     https://pypi.python.org/packages/source/j/jsonschema/jsonschema-$v.tar.gz
 

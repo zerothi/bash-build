@@ -10,6 +10,8 @@ source_pack libs/libxml2.bash
 source_pack libs/hwloc.bash
 
 # Basic parallel libraries
+source_pack libs/pmix.bash
+
 source_pack libs/openmpi.bash
 source_pack libs/mpich.bash
 source_pack libs/mvapich.bash
@@ -119,8 +121,8 @@ source_pack libs/slepc.bash
 
 
 # PEXSI
-#source_pack libs/sympack.bash
-#source_pack libs/pexsi.bash
+source_pack libs/sympack.bash
+source_pack libs/pexsi.bash
 
 # Libraries for DFT
 source_pack libs/xmlf90.bash

@@ -17,7 +17,6 @@ if $(is_c intel) ; then
     fi
 
 else
-    
     pack_set --module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la

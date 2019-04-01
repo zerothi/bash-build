@@ -1,4 +1,4 @@
-v=18.1
+v=19.0.3
 add_package --archive pip-$v.tar.gz \
      https://github.com/pypa/pip/archive/$v.tar.gz
 

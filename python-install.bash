@@ -34,7 +34,8 @@ new_build --name _internal-python$IpV \
     $(list --prefix "--default-module " $pMod) \
     --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
     --build-module-path "--package --version" \
-    --build-installation-path "$IpV --package --version"
+    --build-installation-path "$IpV --package --version" \
+    --build-path $(build_get --build-path[$def_idx])/py-$pV
 
 # Change to the new build default
 build_set --default-build _internal-python$IpV
@@ -55,7 +56,7 @@ source_pack python/pysqlite.bash
 
 # Jupyter framework
 #source_pack python/jupyter.bash
-source_pack python/ipython.bash
+#source_pack python/ipython.bash
 
 # Done with packages only installed in python-home! ^
 

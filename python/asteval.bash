@@ -1,4 +1,4 @@
-v=0.9.12
+v=0.9.13
 add_package --archive asteval-$v.tar.gz \
     https://github.com/newville/asteval/archive/$v.tar.gz
 

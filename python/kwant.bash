@@ -30,7 +30,7 @@ extra_link_args = $tmp_flags \n' $file"
 if $(is_c intel) ; then
     
     pack_cmd "sed -i '1 a\
-[lapack]\n\
+[kwant.linalg.lapack]\n\
 libraries = mkl_intel_lp64 mkl_sequential mkl_core mkl_def\n' $file"
     
 elif $(is_c gnu) ; then
@@ -47,7 +47,7 @@ elif $(is_c gnu) ; then
 	    ;;
     esac
     pack_cmd "sed -i '1 a\
-[lapack]\n\
+[kwant.linalg.lapack]\n\
 libraries = ${tmp//-l/}\n\
 ' $file"
 
@@ -57,7 +57,7 @@ fi
 
 
 pack_cmd "sed -i '1 a\
-[mumps]\n\
+[kwant.linalg._mumps]\n\
 libraries = zmumps_omp mumps_common_omp pord metis mpiseq\n\
 ' $file"
 

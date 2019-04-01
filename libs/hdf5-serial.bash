@@ -1,4 +1,4 @@
-for p in 1.10.4 ; do
+for p in 1.10.5 ; do
 
 add_package \
     --package hdf5-serial \

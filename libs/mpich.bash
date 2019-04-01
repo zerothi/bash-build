@@ -3,14 +3,8 @@ add_package http://www.mpich.org/static/downloads/$v/mpich-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-# 3.3 has a shipped hwloc == 2
-# so don't require it
+# 3.3 has a problem using an external hwloc! :(
 tmp_flags=
-if [[ $(vrs_cmp $(pack_get --version hwloc) 2) -ge 0 ]]; then
-    pack_set --mod-req hwloc
-    tmp_flags="$tmp_flags --with-hwloc-prefix=$(pack_get --prefix hwloc)"
-fi
-
 pack_set --install-query $(pack_get --prefix)/bin/mpicc
 
 if [[ -d /usr/include/infiniband ]]; then
@@ -53,6 +47,8 @@ new_build --name _internal-mpich \
   --source $(build_get --source) \
   $(list -p '--default-module ' $(build_get --default-module) mpich)
 
+
+return 0
 # install HYDRA
 # MPICH installs its own, minimal hydra.
 # However, here we would like to use hwloc
