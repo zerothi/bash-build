@@ -1,4 +1,19 @@
 # placeholder for modules
+case $_mod_format in
+    $_mod_format_ENVMOD)
+	function rm_latest {
+	    local latest_mod=$(build_get --module-path)
+	    rm -rf $latest_mod/$1
+	}
+	;;
+    $_mod_format_LMOD)
+	function rm_latest {
+	    local latest_mod=$(build_get --module-path)
+	    rm -rf $latest_mod/$1.lua
+	}
+	;;
+esac
+
 
 rm_latest R$rV.numerics
 tmp=
@@ -16,3 +31,4 @@ create_module \
     -P "/directory/should/not/exist" \
     $(list --prefix '-RL ' $tmp)
 
+unset rm_latest

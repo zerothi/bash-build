@@ -1,8 +1,8 @@
-add_package --package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v1.2.0.tar.gz
+add_package -package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v1.2.0.tar.gz
 
 pack_set -s $IS_MODULE
-pack_set --install-query $(pack_get --LD)/libpexsi_linux.a
-pack_set --lib -lpexsi_linux
+pack_set -install-query $(pack_get -LD)/libpexsi_linux.a
+pack_set -lib -lpexsi_linux
 
 pack_set $(list -p '-mod-req ' mpi parmetis scotch)
 pack_set -mod-req superlu-dist
@@ -33,9 +33,9 @@ RM = rm \n\
 RMFLAGS = -f \n\
 ##\n\
 PEXSI_LIB = \$(PEXSI_DIR)/src/libpexsi_\$(SUFFIX).a \n\
-DSUPERLU_DIR = $(pack_get --prefix superlu-dist)\n\
-METIS_DIR = $(pack_get --prefix parmetis)\n\
-SCOTCH_DIR = $(pack_get --prefix scotch)\n\
+DSUPERLU_DIR = $(pack_get -prefix superlu-dist)\n\
+METIS_DIR = $(pack_get -prefix parmetis)\n\
+SCOTCH_DIR = $(pack_get -prefix scotch)\n\
 #\n\
 #\n\
 INCLUDES = -I\$(DSUPERLU_DIR)/include -I\$(PEXSI_DIR)/include \n\
@@ -65,13 +65,13 @@ LIBS += -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
 elif $(is_c gnu) ; then
     
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     pack_cmd "sed -i '$ a\
 LIBS += $(list -LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
 
 else
-    doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
+    doerr "$(pack_get -package)" "Could not recognize the compiler: $(get_c)"
 
 fi
 

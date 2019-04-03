@@ -626,6 +626,11 @@ function choice {
 #       returns both library path and fixed running path flags for compiler
 #       Same as
 #         -Wlrpath -LDFLAGS
+#    -LD-rp-lib[[<name>]]
+#       returns both library path and fixed running path flags for compiler
+#       and the libraries where * will be passed to pack_get -lib[<name>]
+#       Same as
+#         -Wlrpath -LDFLAGS -lib[<name>]
 #    -prefix|-p <prefix>
 #       returns the list with <prefix> as a prefix to each entry
 #    -suffix|-s <suffix>
@@ -671,6 +676,14 @@ function list {
 	shift
 	case $opt in
 	    -LD-rp) opts="$opts -LDFLAGS -Wlrpath" ;;
+	    -LD-rp-lib*)
+		local lib=$(var_spec -s $opt)
+		if [[ -z "$lib" ]]; then
+		    opts="$opts -LDFLAGS -Wlrpath -lib"
+		else
+		    opts="$opts -LDFLAGS -Wlrpath -lib[$lib]"
+		fi
+		;;
 	    -prefix|-p)    pre="$1" ; shift ;;
 	    -suffix|-s)    suf="$1" ; shift ;;
 	    -loop-cmd|-c)  lcmd="$1" ; shift ;;
@@ -711,6 +724,10 @@ function list {
 		pre='-I'
 		suf='/include'
 		lcmd='pack_get -prefix ' ;;
+	    -lib*)
+		pre=''
+		suf=''
+		lcmd="pack_get $opt " ;;
 	    -mod-names) 
 		pre=''
 		suf=''

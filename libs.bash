@@ -104,7 +104,7 @@ source_pack libs/nco.bash
 # sorting algorithms for matrices
 source_pack libs/metis.bash
 source_pack libs/metis-par-3.bash
-source_pack libs/metis-par.bash
+source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
 # A sparse library

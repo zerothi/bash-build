@@ -48,7 +48,7 @@ function add_R_package {
     local name=$1
     local v=$2
     shift 2
-    add_package $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
+    add_package --package $name --version $v $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
     pack_set -s $IS_MODULE
     local _prefix=$(pack_get -prefix)
     pack_set --install-query $_prefix/$(pack_get --package)

@@ -109,8 +109,6 @@ function source_pack {
     local f=$1
     shift
     local i
-    local rej
-    local v
 
     # Get current reached index (i.e. before adding any
     # new packages)
@@ -123,24 +121,10 @@ function source_pack {
     i=$cur_idx
     while [[ $i -lt $_N_archives ]]; do
 	let i++
-	
-	# First set the rejects
-	local bld=$(pack_get --build $i)
-	local rejs=$(build_get --rejects[$bld])
-	for rej in $rejs ; do
-	    bld=$(get_index -a $rej)
-	    if [[ $? -eq 0 ]]; then
-		for v in $bld ; do
-		    if [[ $v -eq $i ]]; then
-			pack_set $i -host-reject $(get_hostname)
-		    fi
-		done
-	    fi
-	done
-	
 	pack_install $i
     done    
 }
+
 
 # Routine for shortcutting a list of values
 # through the pack_get 

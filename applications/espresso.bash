@@ -1,8 +1,8 @@
-for v in 6.3 ; do
-    tmp="-alias q-espresso -package q-espresso -version $v"
+for v in 6.4 ; do
+    tmp="-package q-espresso -version $v"
     case $v in
-	6.3)
-	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.3/q-e-qe-6.3.tar.bz2"
+	6.3|6.4)
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
 	    ;;
 	6.2.1)
 	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.2.1/q-e-qe-6.2.1.tar.bz2"
@@ -56,7 +56,7 @@ for v in 6.3 ; do
     fi
 
     # Check for Intel MKL or not
-    tmp_lib="FFT_LIBS='$(list --LD-rp fftw) -lfftw3_omp'"
+    tmp_lib="FFT_LIBS='$(list -LD-rp-lib[omp] fftw)'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then

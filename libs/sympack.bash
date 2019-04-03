@@ -8,18 +8,23 @@ pack_set $(list -prefix ' -mod-req ' metis parmetis scotch)
 
 tmp_flags=
 if $(is_c intel) ; then
-    tmp_flags="-DBLAS_DIR=$MKLROOT -DLAPACK_DIR=$MKLROOT"
+    tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
+    tmp_flags="$tmp_flags -DBLAS_LIBRARIES='$tmp' -DLAPACK_LIBRARIES='$tmp'"
 
 else
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp_flags="-DBLAS_LIBRARIES='$(list -LD-rp $la) $(pack_get -lib $la)' -DLAPACK_DIR=$(pack_get -prefix $la)"
+    tmp="$(list -LD-rp-lib $la)"
+    tmp_flags="$tmp_flags -DBLAS_LIBRARIES='$tmp' -DLAPACK_LIBRARIES='$tmp'"
 fi
 
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
-	 "-DMETIS_DIR=$(pack_get -prefix metis) -DENABLE_METIS=ON" \
-	 "-DPARMETIS_DIR=$(pack_get -prefix parmetis) -DENABLE_PARMETIS=ON" \
-	 "-DSCOTCH_DIR=$(pack_get -prefix scotch) -DENABLE_SCOTCH=ON" \
+	 "-DMETIS_LIBRARY='$(list -LD-rp-lib metis)' -DENABLE_METIS=ON" \
+	 "-DMETIS_INCLUDE_DIR='$(pack_get -prefix metis)/include'" \
+	 "-DPARMETIS_LIBRARY='$(list -LD-rp-lib parmetis)' -DENABLE_PARMETIS=ON" \
+	 "-DPARMETIS_INCLUDE_DIR='$(pack_get -prefix parmetis)/include'" \
+	 "-DSCOTCH_LIBRARY='$(list -LD-rp-lib scotch)' -DENABLE_SCOTCH=ON" \
+	 "-DSCOTCH_INCLUDE_DIR='$(pack_get -prefix scotch)/include'" \
 	 "-DCMAKE_BUILD_TYPE=Release $tmp_flags .."
 
 pack_cmd "make $(get_make_parallel)"

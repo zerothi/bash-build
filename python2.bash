@@ -141,3 +141,4 @@ source python/python-mods.bash
 
 build_set --module-path $old_path
 
+exit 0

@@ -28,7 +28,7 @@ _prefix=/opt
 _signal_default=1
 
 # Default python version installed
-_python_version=2
+_python_version=3
 # Default MPI version
 declare -l _mpi_version=openmpi
 # Default name for build which builds the generic

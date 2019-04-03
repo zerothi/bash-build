@@ -8,12 +8,28 @@ function pack_install {
 	idx=$(get_index $1)
 	shift
     fi
-    local ext=$(pack_get --ext $idx)
-    local alias=$(pack_get --alias $idx)
-    local prefix=$(pack_get --prefix $idx)
-    local version=$(pack_get --version $idx)
-    local mod_name=$(pack_get --module-name $idx)
+
+    local ext=$(pack_get -ext $idx)
+    local build=$(pack_get -build $idx)
+    local alias=$(pack_get -alias $idx)
+    local prefix=$(pack_get -prefix $idx)
+    local version=$(pack_get -version $idx)
+    local mod_name=$(pack_get -module-name $idx)
     local installed=$(pack_get -installed $idx)
+
+    # Ensure we have populated the rejection
+    local rejs=$(build_get --rejects[$build])
+    for rej in $rejs ; do
+	local bld=$(get_index -a $rej)
+	if [[ $? -eq 0 && -n "$bld" ]]; then
+	    case " $bld " in
+		*" $idx "*)
+		    pack_set $idx -host-reject $(get_hostname)
+		    break
+		    ;;
+	    esac
+	fi
+    done
 
     tmp_lc="$alias"
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
@@ -50,8 +66,8 @@ function pack_install {
     esac
 
     # If we request downloading of files, do so immediately
-    local bld_archive_path=$(build_get -archive-path)
-    local bld_mod_path=$(build_get -module-path)
+    local bld_archive_path=$(build_get -archive-path[$build])
+    local bld_mod_path=$(build_get -module-path[$build])
     if [[ $DOWNLOAD -eq 1 ]]; then
 	pack_dwn $idx $bld_archive_path
     fi
@@ -133,10 +149,10 @@ function pack_install {
 	pack_dwn $idx $bld_archive_path
 
         # Go into the build directory
-	pushd $(build_get --build-path) 1> /dev/null
+	pushd $(build_get -build-path[$build]) 1> /dev/null
 	err=$?
 	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Could not go to the build-path: $(build_get --build-path)" $idx
+	    msg_install --package "Could not go to the build-path: $(build_get -build-path[$build])" $idx
 	    exit $err
 	fi
 
@@ -183,8 +199,7 @@ function pack_install {
 	fi
 	
 	# Source the file for obtaining correct env-variables
-	tmp=$(pack_get --build $idx)
-	source $(build_get --source[$tmp])
+	source $(build_get --source[$build])
 
 	# Begin loading modules before running the commands
 	if $(has_setting $BUILD_TOOLS $idx) ; then
@@ -279,7 +294,9 @@ function pack_install {
 		if [[ -d $prefix ]]; then
 		    # copy the config.log to the prefix location
 		    mv $tmp $prefix/
-		    gzip -f $prefix/$tmp
+		    pushd $prefix 2>/dev/null
+		    gzip -f -9 $tmp
+		    popd 2>/dev/null
 		fi
 	    fi
 	done
@@ -366,7 +383,7 @@ function pack_install {
 	fi
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \
-		--module-path $(build_get --module-path)-apps \
+		--module-path $bld_mod_path-apps \
 		-n $alias.$version \
 		-W "Loading $(pack_get --package $idx): $(get_c)" \
 		-v $version \
@@ -384,13 +401,13 @@ function get_index {
     local all=0
     local opt
     while [[ $# -gt 1 ]]; do
-	trim_em opt $1
+	opt=$1
 	shift
 	case $opt in
-	    -all|-a)
+	    --all|-all|-a)
 		all=1
 		;;
-	    -hash-array)
+	    --hash-array|-hash-array)
 		var="$1"
 		shift
 		;;
@@ -432,7 +449,7 @@ function get_index {
 	1)
 	    if [[ -n "$version" ]]; then
 		for v in $idx ; do
-		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
+		    if [[ $(vrs_cmp $(pack_get -version $v) $version) -eq 0 ]]; then
 			printf '%s' "$v"
 			break
 		    fi
@@ -446,7 +463,7 @@ function get_index {
             # Select the latest per default..
 	    if [[ -n "$version" ]]; then
 		for v in $idx ; do
-		    if [[ $(vrs_cmp $(pack_get --version $v) $version) -eq 0 ]]; then
+		    if [[ $(vrs_cmp $(pack_get -version $v) $version) -eq 0 ]]; then
 			i="$v"
 			break
 		    fi

@@ -1,8 +1,9 @@
-add_package https://bitbucket.org/icl/plasma/downloads/plasma-18.10.0.tar.gz
+add_package https://bitbucket.org/icl/plasma/downloads/plasma-18.11.1.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 
 pack_set --install-query $(pack_get --LD)/libplasma.a
+pack_set -module-requirement lua
 
 file=make.inc
 pack_cmd "echo '# Makefile for easy installation ' > $file"
@@ -23,11 +24,10 @@ else
     
     la=$(pack_choice -i linalg)
     lla=lapack-$la
-    pack_set --module-requirement $lla
-    tmp="$(pack_get -lib $la)"
+    pack_set -module-requirement $lla
 
     pack_cmd "sed -i '1 a\
-LIBS = $(list --LD-rp $la) $tmp \n' $file"
+LIBS = $(list --LD-rp-lib[omp] $la) \n' $file"
 
 fi
 tmpfc=${FFLAGS//-fp-model /}
@@ -35,14 +35,16 @@ tmpfc=${tmpfc//precise/}
 tmpfc=${tmpfc//source/}
 pack_cmd "sed -i '1 a\
 lua_platform = linux\n\
+lua_dir
 fortran = 1\n\
 CC = $CC \n\
 FC = $FC \n\
 AR = $AR \n\
+prefix = $(pack_get -prefix)\n\
 RANLIB = $RANLIB \n\
 CFLAGS = $CFLAGS $FLAG_OMP\n\
 FCFLAGS = $FFLAGS $FLAG_OMP \n\
-LDFLAGS = \$(LDFLAGS) $FLAG_OMP\n' $file"
+LDFLAGS := \$(LDFLAGS) $FLAG_OMP\n' $file"
 
 # Make and install commands
 pack_cmd "make $(get_make_parallel) all"
