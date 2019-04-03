@@ -108,17 +108,11 @@ function add_test_package {
 function source_pack {
     local f=$1
     shift
-    local i
-
     # Get current reached index (i.e. before adding any
     # new packages)
-    local cur_idx=$_N_archives
-
-    # Source the file
+    local i=$_N_archives
     source $f
-
     # Try and install the just added packages
-    i=$cur_idx
     while [[ $i -lt $_N_archives ]]; do
 	let i++
 	pack_install $i
