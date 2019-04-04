@@ -6,8 +6,9 @@ if [[ $(vrs_cmp $v 3.0) -ge 0 ]]; then
 else
    add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
 fi
-pack_set -lib -lxcf90 -lxc
+pack_set -lib -lxcf03 -lxc
 pack_set -lib[c] -lxc
+pack_set -lib[f90] -lxcf90 -lxc
 pack_set -lib[f03] -lxcf03 -lxc
 
 pack_set -s $IS_MODULE -s $BUILD_DIR

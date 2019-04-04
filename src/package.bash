@@ -106,16 +106,18 @@ function add_test_package {
 
 # Routine for sourcing a package file
 function source_pack {
-    local f=$1
+    # We need these long names in case the file
+    # redefines variables
+    local source_pack_f=$1
     shift
     # Get current reached index (i.e. before adding any
     # new packages)
-    local i=$_N_archives
-    source $f
+    local source_pack_i=$_N_archives
+    source $source_pack_f
     # Try and install the just added packages
-    while [[ $i -lt $_N_archives ]]; do
-	let i++
-	pack_install $i
+    while [[ $source_pack_i -lt $_N_archives ]]; do
+	let source_pack_i++
+	pack_install $source_pack_i
     done    
 }
 

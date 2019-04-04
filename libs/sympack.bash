@@ -17,10 +17,11 @@ else
     tmp="$(list -LD-rp-lib $la)"
     tmp_flags="$tmp_flags -DBLAS_LIBRARIES='$tmp' -DLAPACK_LIBRARIES='$tmp'"
 fi
+#	 "-DMETIS_LIBRARY='$(list -LD-rp-lib metis)' -DENABLE_METIS=ON" \
+#	 "-DMETIS_INCLUDE_DIR='$(pack_get -prefix metis)/include'" \
 
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
-	 "-DMETIS_LIBRARY='$(list -LD-rp-lib metis)' -DENABLE_METIS=ON" \
-	 "-DMETIS_INCLUDE_DIR='$(pack_get -prefix metis)/include'" \
+	 "-DMETIS_PREFIX='$(pack_get -prefix metis)' -DENABLE_METIS=ON" \
 	 "-DPARMETIS_LIBRARY='$(list -LD-rp-lib parmetis)' -DENABLE_PARMETIS=ON" \
 	 "-DPARMETIS_INCLUDE_DIR='$(pack_get -prefix parmetis)/include'" \
 	 "-DSCOTCH_LIBRARY='$(list -LD-rp-lib scotch)' -DENABLE_SCOTCH=ON" \
