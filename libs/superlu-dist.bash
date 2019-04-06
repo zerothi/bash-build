@@ -1,4 +1,4 @@
-for v in 4.3 5.4.0 ; do
+for v in 4.3 5.4.0 6.1.1 ; do
 
 if [[ $(vrs_cmp $v 5.0) -gt 0 ]]; then
     add_package --package superlu-dist \
@@ -37,15 +37,19 @@ I_PARMETIS = $(list --INCDIRS parmetis)\n\
 LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
 ARCHFLAGS = cr\n\
-RANLIB = ranlib\n\
+RANLIB = $RANLIB\n\
+CDEFS    = -DAdd_\n\
+CXX = $MPICXX\n\
+CXXFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
+CPP = $MPICXX\n\
+CPPFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
 CC = $MPICC\n\
-CFLAGS = $CFLAGS \$(I_PARMETIS)\n\
+CFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
-LOADER   = $MPICC\n\
+LOADER   = \$(CPP)\n\
 LOADOPTS = \$(CFLAGS)\n\
-CDEFS    = -DAdd_\n\
 ' $file"
 
 else
