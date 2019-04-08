@@ -182,8 +182,7 @@ function trim_em {
 #       Truncates all spaces to a minimum of one space.
 
 function trim_spaces {
-    local str=''
-    local s
+    local s str
     while [[ $# -gt 0 ]]; do
 	s="${1# }" # removes prefix space
 	shift

@@ -399,7 +399,7 @@ function pack_install {
 function get_index {
     local var=_index
     local all=0
-    local opt
+    local opt v
     while [[ $# -gt 1 ]]; do
 	opt=$1
 	shift
@@ -444,7 +444,6 @@ function get_index {
     if [[ -z "$idx" ]]; then
 	return 1
     fi
-    local v
     case $all in
 	1)
 	    if [[ -n "$version" ]]; then

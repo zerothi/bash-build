@@ -128,8 +128,7 @@ function source_pack {
 # pack_list --list-flags "-s /" --package dir
 # returns $(pack_get --package)/dir/
 function pack_list {
-    local opt=''
-    local lf=''
+    local opt lf
     while : ; do
 	trim_em opt $1
 	case $opt in
@@ -156,15 +155,11 @@ function add_package {
     let _N_archives++
 
     # Collect options
-    local d='' ; local v=''
-    local fn='' ; local package=''
-    local alias='' 
+    local d v fn package alias lp opt
     # Default to default index
     local b_idx=$_b_def_idx
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp=''
-    local opt
     while [[ $# -gt 1 ]]; do
 	trim_em opt $1
 	shift
