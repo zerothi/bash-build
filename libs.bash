@@ -108,9 +108,9 @@ source_pack libs/metis-par-3.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
-# A sparse library
-source libs/suitesparse.bash
-source_pack libs/suitesparse_all.bash
+# A sparse matrix library
+#source libs/suitesparse_separate.bash
+source_pack libs/suitesparse.bash
 
 source_pack libs/mumps-serial.bash
 source_pack libs/mumps.bash

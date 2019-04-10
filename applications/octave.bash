@@ -30,10 +30,17 @@ tmp_flags="$tmp_flags --with-z-includedir=$(pack_get --prefix zlib)/include"
 tmp_flags="$tmp_flags --with-hdf5-libdir=$(pack_get --LD hdf5-serial)"
 tmp_flags="$tmp_flags --with-hdf5-includedir=$(pack_get --prefix hdf5-serial)/include"
 tmp_flags="$tmp_flags --without-cxsparse"
-for m in glpk amd camd colamd ccolamd cholmod umfpack ; do
+for m in glpk ; do
     pack_set --module-requirement $m
     tmp_flags="$tmp_flags --with-$m-libdir=$(pack_get --LD $m)"
     tmp_flags="$tmp_flags --with-$m-includedir=$(pack_get --prefix $m)/include"
+done
+
+pack_set -module-requirement suitesparse
+tmp=$(pack_get -prefix suitesparse)
+for m in suitesparseconfig amd camd colamd ccolamd cholmod klu umfpack ; do
+    tmp_flags="$tmp_flags --with-$m-libdir=$tmp/lib"
+    tmp_flags="$tmp_flags --with-$m-includedir=$tmp/include"
 done
 
 if $(is_c intel) ; then

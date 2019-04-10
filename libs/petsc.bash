@@ -101,10 +101,9 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 #     "--with-ptscotch-dir=$(pack_get --prefix scotch)"
 
 #     "--with-cholmod=1" \
-#     "--with-cholmod-dir=$(pack_get --prefix cholmod)"
+#     "--with-cholmod-dir=$(pack_get -prefix suitesparse)"
 #     "--with-umfpack=1" \
-#     "--with-umfpack-dir=$(pack_get --prefix umfpack) $tmp"
-#     "--with-scalar-type=complex" \ #error on hwloc
+#     "--with-umfpack-dir=$(pack_get -prefix suitesparse) $tmp"
 
 pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
 pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"

@@ -10,6 +10,7 @@ else
     pack_set --install-query $(pack_get --prefix)/bin/f2py2
 fi
 pack_set --module-requirement cython
+pack_set --module-requirement suitesparse
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
 
@@ -39,14 +40,14 @@ fftw_libs = fftw3_threads\n\
 runtime_library_dirs = $(pack_get --LD fftw)\n\
 [amd]\n\
 amd_libs = amd\n\
-include_dirs = $(pack_get --prefix amd)/include\n\
-library_dirs = $(pack_get --LD amd)\n\
-runtime_library_dirs = $(pack_get --LD amd)\n\
+include_dirs = $(pack_get -prefix suitesparse)/include\n\
+library_dirs = $(pack_get -LD suitesparse)\n\
+runtime_library_dirs = $(pack_get -LD suitesparse)\n\
 [umfpack]\n\
 umfpack_libs = umfpack\n\
-include_dirs = $(pack_get --prefix umfpack)/include\n\
-library_dirs = $(pack_get --LD umfpack)\n\
-runtime_library_dirs = $(pack_get --LD umfpack)\n' $file"
+include_dirs = $(pack_get -prefix suitesparse)/include\n\
+library_dirs = $(pack_get -LD suitesparse)\n\
+runtime_library_dirs = $(pack_get -LD suitesparse)\n' $file"
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -76,7 +77,7 @@ blas_libs = mkl_blas95_lp64' $file"
     pack_cmd "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_cmd "sed -i '1 a\
 [ALL]\n\
-libraries = umfpack,cholmod,ccolamd,camd,colamd,suitesparseconfig,iomp5,pthread\n\
+libraries = umfpack,cholmod,ccolamd,camd,colamd,amd,suitesparseconfig,iomp5,pthread\n\
 library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
 runtime_library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
@@ -173,7 +174,7 @@ runtime_library_dirs = $tmp\n' $file"
 
     pack_cmd "sed -i '1 a\
 [ALL]\n\
-libraries = umfpack,cholmod,ccolamd,camd,colamd,suitesparseconfig,pthread\n\
+libraries = umfpack,cholmod,ccolamd,camd,colamd,amd,suitesparseconfig,pthread\n\
 library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc\n\
 runtime_library_dirs = $tmp_lib\n' $file"
