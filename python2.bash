@@ -101,6 +101,24 @@ if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
 fi
 
 
+# Create a new build with this module
+new_build -name _internal-python$IpV \
+    -module-path $(build_get -module-path)-python/$IpV \
+    -source $(build_get -source) \
+    $(list -prefix "-default-module " $(pack_get -mod-req-module) python[$IpV]) \
+    -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
+    -build-module-path "-package -version" \
+    -build-installation-path "$IpV -package -version" \
+    -build-path $(build_get -build-path)/py-$pV
+
+build_set --default-choice[_internal-python$IpV] linalg openblas blis atlas blas
+
+
+# Now add options to ensure that loading this module will enable the path for the *new build*
+pack_cmd "mkdir -p $(build_get -module-path[_internal-python$IpV])-apps"
+pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])"
+pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])-apps"
+
 # Needed as it is not source_pack
 pack_install
 
@@ -117,11 +135,16 @@ create_module \
     $(list -prefix '-L ' $(pack_get -module-requirement)) \
     -L $(pack_get -alias)
 
-# Install all relevant python packages
 
 # The lookup name in the list for version number etc...
 set_parent $(pack_get -alias)[$(pack_get -version)]
 set_parent_exec $(pack_get -prefix)/bin/python2
+
+# Save the default build index
+def_idx=$(build_get -default-build)
+# Change to the new build default
+build_set --default-build _internal-python$IpV
+
 
 # Install all python packages
 source python-install.bash
@@ -130,10 +153,11 @@ clear_parent
 # Initialize the module read path
 old_path=$(build_get -module-path)
 build_set -module-path $old_path-apps
-
-# Create common modules
 source python/python-mods.bash
-
 build_set -module-path $old_path
+
+
+# Reset default build
+build_set --default-build $def_idx
 
 exit 0

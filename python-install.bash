@@ -4,13 +4,6 @@ msg_install \
 # This script will install all python packages
 #exit 0
 
-pMod="$(pack_get -mod-req-module $(get_parent)) $(get_parent)"
-pModNames="$(list -loop-cmd 'pack_get -module-name ' $pMod)"
-module load $pModNames
-pV=$($(get_parent_exec) -c 'import sys ;print("{0}.{1}".format(sys.version_info[0],sys.version_info[1]))')
-IpV=$(pack_get --version $(get_parent))
-module unload $pModNames
-
 # Create the numpy installation sequence
 if $(is_c intel) ; then
     pNumpyInstallC="--compiler=intelem"
@@ -22,25 +15,6 @@ else
     doerr "Compiler python" "Could not recognize compiler"
 fi
 pNumpyInstall="$pNumpyInstallC $pNumpyInstallF"
-
-# Save the default build index
-def_idx=$(build_get -default-build)
-
-# Ensure get_c is defined
-source $(build_get -source)
-new_build -name _internal-python$IpV \
-    -module-path $(build_get -module-path[$def_idx])-python/$IpV \
-    -source $(build_get -source) \
-    $(list -prefix "-default-module " $pMod) \
-    -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
-    -build-module-path "-package -version" \
-    -build-installation-path "$IpV -package -version" \
-    -build-path $(build_get -build-path[$def_idx])/py-$pV
-
-# Change to the new build default
-build_set --default-build _internal-python$IpV
-
-build_set --default-choice[_internal-python$IpV] linalg openblas blis atlas blas
 
 # First install all pip installs
 source_pack python/pip_installs.bash
@@ -151,5 +125,3 @@ source_pack python/phono3py.bash
 # made for kwant
 source_pack python/tinyarray.bash
 source_pack python/kwant.bash
-
-build_set --default-build $def_idx

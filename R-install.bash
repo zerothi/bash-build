@@ -4,42 +4,6 @@ msg_install \
 # This script will install all R packages
 #exit 0
 
-rMod="$(pack_get --mod-req-module $(get_parent)) $(get_parent)"
-rModNames="$(list --loop-cmd "pack_get --module-name" $pMod)"
-module load $rModNames
-IrV=$(pack_get --version $(get_parent))
-rV=${IrV:0:3}
-module unload $rModNames
-
-# Save the default build index
-def_idx=$(build_get --default-build)
-
-# Ensure get_c is defined
-# R packages are *not* installed using the typical
-#  ./configure ... things
-# Basically the packages are installed from their tar.gz files
-# using the direct command:
-#  R CMD INSTALL --library=<prefix>
-# which results in a file structure:
-#   <prefix>/<R-package>
-source $(build_get --source)
-new_build --name _internal-R$IrV \
-	  --module-path $(build_get --module-path[$def_idx])-R/$IrV \
-	  --source $(build_get --source) \
-	  $(list --prefix "--default-module " $rMod) \
-	  --installation-path $(dirname $(pack_get --prefix $(get_parent)))/packages \
-	  --build-module-path "--package --version" \
-	  --build-installation-path "$IrV --package --version" \
-	  --build-path $(build_get --build-path[$def_idx])/R-$IrV
-
-build_set --default-setting[_internal-R$IrV] $INSTALL_FROM_ARCHIVE \
-	  --default-setting[_internal-R$IrV] $PRELOAD_MODULE
-
-# Change to the new build default
-build_set --default-build _internal-R$IrV
-
-build_set --default-choice[_internal-R$IrV] linalg openblas blis atlas blas
-
 # Install packages in the base-R directory!
 source R/R-basic.bash
 
@@ -115,5 +79,3 @@ pack_set --mod-req dplyr
 pack_set --mod-req MASS
 
 unset add_R_package
-
-build_set --default-build $def_idx

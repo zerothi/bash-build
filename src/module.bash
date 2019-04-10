@@ -95,13 +95,13 @@ function module_set {
 #   -H <help message> 
 #   -W <what is message>
 function create_module {
-    local name; local version; local echos
-    local path; local help; local whatis; local opt
-    local env='' ; local tmp='' ; local mod=''
-    local mod_path='' ;local cmt=
+    local name version echos
+    local path help whatis opt
+    local env tmp mod cmt
+    local use_path mod_path
+    local require conflict load lua_family
+    local fpath
     local force=0 ; local no_install=0
-    local require=''; local conflict=''; local load=''
-    local lua_family='' ; local fpath=
     local fm_comment='#'
     while [[ $# -gt 0 ]]; do
 	trim_em opt $1
@@ -110,6 +110,7 @@ function create_module {
 	    -n|-name)  name="$1" ; shift ;;
 	    -v|-version)  version="$1" ; shift ;;
 	    -P|-path)  path="$1" ; shift ;;
+	    -use-path)  use_path="$use_path $1" ; shift ;;
 	    -p|-module-path)  mod_path="$1" ; shift ;;
 	    -M|-module-name)  mod="$1" ; shift ;;
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
@@ -486,6 +487,23 @@ EOF
 	    fi
 	    ;;
     esac
+
+    # Add path to the directory
+    if [[ -n "$use_path" ]]; then
+	echo "" >> "$mfile"
+	echo "" >> "$mfile"
+	echo "$fm_comment Enable a sub-path via this module" >> "$mfile"
+	case $_mod_format in
+	    $_mod_format_ENVMOD)
+		for tmp in $use_path ; do
+		    echo "module use --append $tmp" >> "$mfile"
+		done
+		;;
+	    $_mod_format_LMOD)
+		doerr "LMOD" "currently not supporting use-path"
+		;;
+	esac
+    fi
     
     
     if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then

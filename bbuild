@@ -260,8 +260,8 @@ source $(build_get --source)
 source libs.bash
 
 # These are "parent" installations...
-source julia.bash
 source python${_python_version}.bash
+source julia.bash
 source R.bash
 
 # We have installed all libraries needed for doing application installs

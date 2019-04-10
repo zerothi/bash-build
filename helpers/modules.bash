@@ -12,6 +12,7 @@ pack_cmd "sed -i -e 's:/bin/csh 2:/bin/csh -f 2:g' compat/configure"
 
 # Install commands that it should run
 pack_cmd "./configure" \
+     "--enable-auto-handling" \
 	 "--without-pager" \
 	 "--prefix=$(pack_get --prefix) --enable-versioning"
 

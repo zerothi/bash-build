@@ -2,13 +2,13 @@
 case $_mod_format in
     $_mod_format_ENVMOD)
 	function rm_latest {
-	    local latest_mod=$(build_get --module-path)
+	    local latest_mod=$(build_get -module-path)
 	    rm -rf $latest_mod/$1
 	}
 	;;
     $_mod_format_LMOD)
 	function rm_latest {
-	    local latest_mod=$(build_get --module-path)
+	    local latest_mod=$(build_get -module-path)
 	    rm -rf $latest_mod/$1.lua
 	}
 	;;
@@ -25,10 +25,10 @@ for i in Rcpp Matrix RcppEigen plyr bench tidyselect dplyr \
 done
 create_module \
     -n R$rV.numerics \
-    -W "R script for: $(get_c)" \
+    -W "Numerical R script for: $(get_c)" \
     -v $(date +'%g-%j') \
     -M R$rV.numerics \
     -P "/directory/should/not/exist" \
-    $(list --prefix '-RL ' $tmp)
+    $(list -prefix '-RL ' $tmp)
 
 unset rm_latest
