@@ -10,10 +10,11 @@ function tmp_func {
 }
 
 
+v=3.3.8
 add_package --alias fftw \
-            --version 3.3.8 \
+            --version $v \
             --package fftw \
-	    http://www.fftw.org/fftw-3.3.8.tar.gz
+	    http://www.fftw.org/fftw-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -29,6 +30,7 @@ pack_set --lib[fpt] -lfftw3f_threads -lfftw3f -lm
 pack_cmd "unset CFLAGS"
 
 # Create generic flags for SSE/SIMD extensions
+# These flags hosts both MPI and serial FFTW
 tmp_flags=
 if $(grep "sse2 " /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-sse2"
@@ -42,12 +44,14 @@ fi
 if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx2"
 fi
-if [[ $(vrs_cmp $(pack_get --version $v) 3.3.8) -gt 0 ]]; then
+if [[ $(vrs_cmp $(pack_get -version) 3.3.8) -gt 0 ]]; then
     # AVX512 on <= 3.3.8 is extremely slow! So don't use it!
     if $(grep "avx512" /proc/cpuinfo > /dev/null) ; then
 	tmp_flags="$tmp_flags --enable-avx512"
     fi
 fi
+
+
 
 for flag in --enable-single nothing ; do
     ext=f
