@@ -83,7 +83,7 @@ new_build -name _internal-julia$IjV \
     -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
     -build-module-path "-package -version" \
     -build-installation-path "$IjV -package -version" \
-    -build-path $(build_get -build-path)/py-$pV
+    -build-path $(build_get -build-path)/julia-$jV
 mkdir -p $(build_get -module-path[_internal-julia$IjV])-apps
 build_set -default-choice[_internal-julia$IjV] linalg openblas blis atlas blas
 
