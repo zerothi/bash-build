@@ -51,12 +51,11 @@ new_build -name _internal-R$IrV \
     -build-module-path "-package -version" \
     -build-installation-path "$IrV -package -version" \
     -build-path $(build_get -build-path)/py-$pV
-
+mkdir -p $(build_get -module-path[_internal-R$IrV])-apps
 build_set -default-choice[_internal-R$IrV] linalg openblas blis atlas blas
 
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
-pack_cmd "mkdir -p $(build_get -module-path[_internal-R$IrV])-apps"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-R$IrV])"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-R$IrV])-apps"
 

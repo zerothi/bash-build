@@ -1,5 +1,5 @@
 jV=1.1
-IjV=$pj.0
+IjV=$jV.0
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz
@@ -10,6 +10,9 @@ pack_set -module-requirement suitesparse
 
 pack_set -install-query $(pack_get -prefix)/bin/julia
 
+# User has to specify thread count
+pack_set --module-opt "--set-ENV JULIA_NUM_THREADS=1"
+
 # Create user makefile
 pack_cmd "echo '# BBUILD' > Make.user"
 pack_cmd "sed -i '1 a\
@@ -18,13 +21,14 @@ USE_SYSTEM_GMP = 1\n\
 USE_SYSTEM_MPFR = 1\n\
 USE_SYSTEM_SUITESPARSE = 1\n\
 LDFLAGS += $(list -LD-rp suitesparse)\n\
+JULIA_NUM_THREADS = 1\n\
 ' Make.user"
 
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '1 a\
-USEGCC = 0\n\
 USEICC = 1\n\
+USEIFC = 1\n\
 USE_SYSTEM_BLAS = 1\n\
 LIBBLAS = $MKL_LIB -mkl=parallel\n\
 LIBBLASNAME = libmkl_rt\n\
@@ -35,27 +39,40 @@ LIBLAPACKNAME = libmkl_rt\n\
 
 else
 
-    la=lapack-$(pack_choice -i linalg)
-    pack_set -module-requirement $la
+    la=$(pack_choice -i linalg)
+    case $la in
+	openblas|blis)
+	    noop
+	    ;;
+	*)
+	    # always prefer openblas (for now)
+	    la=openblas
+	    ;;
+    esac
+    pack_set -module-requirement lapack-$la
 
     pack_cmd "sed -i '1 a\
 USEGCC = 1\n\
-USEICC = 0\n\
 USE_SYSTEM_BLAS = 1\n\
-LIBBLAS = $(list -LD-rp-lib[omp] +$la)\n\
-LIBBLASNAME = lib$(pack_choice -i linalg)\n\
+LIBBLAS = $(list -LD-rp-lib[omp] +lapack-$la)\n\
+LIBBLASNAME = lib${la}_omp\n\
 USE_SYSTEM_LAPACK = 1\n\
-LIBLAPACK = $(list -LD-rp-lib[omp] +$la)\n\
-LIBLAPACKNAME = liblapack\n\
-LDFLAGS += $(list -LD-rp $la)\n\
+LIBLAPACK = $(list -LD-rp-lib[omp] +lapack-$la)\n\
+LIBLAPACKNAME = \$(LIBBLASNAME)\n\
+LDFLAGS += $(list -LD-rp lapack-$la)\n\
 ' Make.user"
+
+    pack_cmd "make -C deps distclean-openblas"
 fi
 
 pack_cmd "make $(get_make_parallel)"
+# Try and limit number of julia processors
+pack_cmd "export JULIA_NUM_THREADS=$NPROCS"
+pack_cmd "make test 2>&1 > julia.test"
 pack_cmd "make install"
 
 pack_store Make.user
-pack_cmd "sthaeosuaosenatouh"
+pack_store juila.test
 
 
 # Create a new build with this module
@@ -67,11 +84,10 @@ new_build -name _internal-julia$IjV \
     -build-module-path "-package -version" \
     -build-installation-path "$IjV -package -version" \
     -build-path $(build_get -build-path)/py-$pV
-
+mkdir -p $(build_get -module-path[_internal-julia$IjV])-apps
 build_set -default-choice[_internal-julia$IjV] linalg openblas blis atlas blas
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
-pack_cmd "mkdir -p $(build_get -module-path[_internal-julia$IjV])-apps"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])-apps"
 
