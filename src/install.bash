@@ -495,7 +495,7 @@ function install_all {
 		;;
 	esac
     done
-    for i in `seq $j $_N_archives` ; do
+    for i in $(seq $j $_N_archives) ; do
 	pack_install $i
     done
 }

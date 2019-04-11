@@ -94,6 +94,6 @@ pack_set -mod-req lapack
 pack_set -mod-req blis
 # Denote the default libraries
 pack_set --lib -llapack $(pack_get -lib blis)
-pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis_omp)
-pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis_pt)
+pack_set --lib[omp] -llapack $(pack_get -lib[omp] blis)
+pack_set --lib[pt] -llapack $(pack_get -lib[pt] blis)
 pack_set --lib[lapacke] -llapacke

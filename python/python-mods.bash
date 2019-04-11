@@ -1,19 +1,19 @@
 
 create_module \
-    -n python$pV.fireworks \
+    -n python.fireworks \
     -W "Python: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.fireworks \
+    -M python.fireworks \
     -P "/directory/should/not/exist" \
     -RL fireworks
 
 
 for i in $(get_index -all gpaw) ; do
     create_module \
-	-n python$pV.gpaw.$(pack_get -version $i) \
+	-n python.gpaw.$(pack_get -version $i) \
 	-W "GPAW: $(get_c)" \
 	-v $(date +'%g-%j') \
-	-M python$pV.gpaw.$(pack_get -version $i) \
+	-M python.gpaw.$(pack_get -version $i) \
 	-P "/directory/should/not/exist" \
 	$(list -prefix '-RL ' $i)
 done
@@ -34,7 +34,7 @@ case $_mod_format in
 	;;
 esac
 
-rm_latest python$pV.numerics
+rm_latest python.numerics
 tmp=
 for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
 	       h5py numexpr theano numba seaborn networkx \
@@ -48,10 +48,10 @@ for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
     fi
 done
 create_module \
-    -n python$pV.numerics \
+    -n python.numerics \
     -W "Numerical python script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M python$pV.numerics \
+    -M python.numerics \
     -P "/directory/should/not/exist" \
     $(list -prefix '-RL ' $tmp)
 

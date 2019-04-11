@@ -5,7 +5,7 @@ add_package -alias R -package R \
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list -prefix '-mod-req ' readline)
+pack_set $(list -prefix '-mod-req ' readline openssl)
 pack_set -install-query $(pack_get -prefix)/bin/R
 
 tmp=
@@ -50,7 +50,7 @@ new_build -name _internal-R$IrV \
     -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
     -build-module-path "-package -version" \
     -build-installation-path "$IrV -package -version" \
-    -build-path $(build_get -build-path)/py-$pV
+    -build-path $(build_get -build-path)/r-$rV
 mkdir -p $(build_get -module-path[_internal-R$IrV])-apps
 build_set -default-choice[_internal-R$IrV] linalg openblas blis atlas blas
 

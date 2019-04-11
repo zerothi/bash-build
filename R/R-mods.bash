@@ -24,10 +24,10 @@ for i in Rcpp Matrix RcppEigen plyr bench tidyselect dplyr \
     fi
 done
 create_module \
-    -n R$rV.numerics \
+    -n R.numerics \
     -W "Numerical R script for: $(get_c)" \
     -v $(date +'%g-%j') \
-    -M R$rV.numerics \
+    -M R.numerics \
     -P "/directory/should/not/exist" \
     $(list -prefix '-RL ' $tmp)
 
