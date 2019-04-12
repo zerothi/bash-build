@@ -5,7 +5,7 @@ add_package -alias R -package R \
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list -prefix '-mod-req ' readline openssl)
+pack_set $(list -prefix '-mod-req ' readline)
 pack_set -install-query $(pack_get -prefix)/bin/R
 
 tmp=
@@ -25,7 +25,7 @@ elif $(is_c gnu) ; then
 fi
 
 pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
-	 "--enable-R-shlib" \
+	 "--enable-R-shlib --enable-R-static-lib" \
 	 "--with-blas --with-lapack" \
 	 "--enable-lto" \
 	 "--with-readline" \

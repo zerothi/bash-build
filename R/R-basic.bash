@@ -14,7 +14,6 @@ pack_set --directory .
 
 R_append rstudioapi
 R_append fansi
-R_append asserthat
 R_append R6
 R_append crayon
 R_append cli

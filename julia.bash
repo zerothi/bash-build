@@ -12,6 +12,7 @@ pack_set -install-query $(pack_get -prefix)/bin/julia
 
 # User has to specify thread count
 pack_set --module-opt "--set-ENV JULIA_NUM_THREADS=1"
+pack_set --module-opt "--set-ENV JULIA_CPU_THREADS=1"
 
 # Create user makefile
 pack_cmd "echo '# BBUILD' > Make.user"
@@ -66,13 +67,14 @@ LDFLAGS += $(list -LD-rp lapack-$la)\n\
 fi
 
 pack_cmd "make $(get_make_parallel)"
-# Try and limit number of julia processors
+# limit number of julia processors for tests
 pack_cmd "export JULIA_NUM_THREADS=$NPROCS"
-pack_cmd "make test 2>&1 > julia.test"
+pack_cmd "export JULIA_CPU_THREADS=$NPROCS"
+pack_cmd "make test 2>&1 | tee julia.test"
 pack_cmd "make install"
 
 pack_store Make.user
-pack_store juila.test
+pack_store julia.test
 
 
 # Create a new build with this module
@@ -83,7 +85,7 @@ new_build -name _internal-julia$IjV \
     -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
     -build-module-path "-package -version" \
     -build-installation-path "$IjV -package -version" \
-    -build-path $(build_get -build-path)/julia-$jV
+    -build-path $(build_get -build-path)/jul-$jV
 mkdir -p $(build_get -module-path[_internal-julia$IjV])-apps
 build_set -default-choice[_internal-julia$IjV] linalg openblas blis atlas blas
 
