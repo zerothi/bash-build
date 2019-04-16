@@ -8,6 +8,13 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set $(list -prefix '-mod-req ' readline)
 pack_set -install-query $(pack_get -prefix)/bin/R
 
+# for openssl
+pack_set -mod-req openssl
+# for git2r
+pack_set -mod-req libgit2
+# for xml dependency
+pack_set -mod-req libxml2
+
 tmp=
 if $(is_c intel) ; then
 
@@ -33,13 +40,20 @@ pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check-all > R.test 2>&1"
+#pack_cmd "make check-all > R.test 2>&1"
 pack_cmd "make install"
 pack_cmd "make install-tests"
-pack_store R.test
+#pack_store R.test
 
 # Install directory for intrinsic packages
 pack_cmd "mkdir -p $(pack_get -prefix)/library"
+# Ensure the library path is added
+site=$(pack_get -prefix)/lib/R/etc/Rprofile.site
+pack_cmd "echo '# Custom R profile' > $site"
+pack_cmd "sed -i '$ a\
+#\n\
+# Custom location of libraries (without using env-vars)\n\
+invisible(.libPaths( c(\"$(pack_get -prefix)/library\", .libPaths()) ))\n' $site"
 
 
 # Create a new build with this module

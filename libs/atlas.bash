@@ -1,5 +1,5 @@
 # 3.11.34 (works)
-for v in 3.11.39 3.10.3 ; do
+for v in 3.11.41 3.10.3 ; do
 tmp="--build generic"
 if $(is_c gnu) ; then
     # If we use a later gnu version
@@ -14,7 +14,6 @@ fi
 
 pack_set --directory ATLAS
 
-pack_set $(list --prefix "--host-reject " n-62-17-44 n-62-26 n-62-25)
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libatlas.a

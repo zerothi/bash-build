@@ -17,8 +17,8 @@ esac
 
 rm_latest R$rV.numerics
 tmp=
-for i in Rcpp Matrix RcppEigen plyr bench tidyselect dplyr \
-	      stringr forcats purrr readr tidyr MASS ggplot2 ; do
+for i in Matrix RcppEigen plyr tibble tidyselect dplyr \
+		stringr forcats purrr readr tidyr MASS ggplot2 ; do
     if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
         tmp="$tmp $i"
     fi

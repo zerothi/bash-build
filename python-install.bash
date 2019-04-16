@@ -41,6 +41,7 @@ source_pack python/cython.bash
 # In fact pybind11 is more like a normal library
 #   libs/pybind11.bash would maybe be more appropiate.
 source_pack python/pybind11.bash
+source_pack python/mpmath.bash
 
 source_pack python/fypp.bash
 

@@ -25,11 +25,12 @@ function add_R_package {
     pack_set -s $IS_MODULE
     local _prefix=$(pack_get -prefix)
     pack_set -install-query $_prefix/$(pack_get -package)
+    pack_cmd "mkdir -p $_prefix"
     pack_cmd "$(get_parent_exec) CMD INSTALL -l $_prefix $archive_path/$(pack_get -archive)"
     pack_set -module-opt "-prepend-ENV R_LIBS_SITE=$_prefix"
 }
 
-add_R_package Matrix 1.2-16
+add_R_package Matrix 1.2-17
 
 add_R_package RcppEigen 0.3.3.5.0
 pack_set -mod-req Matrix
@@ -65,21 +66,26 @@ add_R_package stringr 1.4.0
 add_R_package forcats 0.4.0
 pack_set -mod-req tibble
 
-add_R_package purrr 0.3.1
+add_R_package purrr 0.3.2
 
 add_R_package readr 1.3.1
 pack_set -mod-req tibble
 
-add_R_package tidyr 1.3.1
+add_R_package tidyr 0.8.3
 pack_set -mod-req purrr
 pack_set -mod-req dplyr
 
-add_R_package MASS 7.3-51.1
+add_R_package MASS 7.3-51.3
 
-add_R_package ggplot2 1.3.1
+add_R_package ggplot2 3.1.1
 pack_set -mod-req plyr
 pack_set -mod-req tibble
 pack_set -mod-req dplyr
 pack_set -mod-req MASS
 
+
+install_all -from Matrix
+
 unset add_R_package
+
+

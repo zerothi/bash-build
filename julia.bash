@@ -13,6 +13,7 @@ pack_set -install-query $(pack_get -prefix)/bin/julia
 # User has to specify thread count
 pack_set --module-opt "--set-ENV JULIA_NUM_THREADS=1"
 pack_set --module-opt "--set-ENV JULIA_CPU_THREADS=1"
+pack_set --module-opt "--set-ENV JULIA_EXCLUSIVE=0"
 
 # Create user makefile
 pack_cmd "echo '# BBUILD' > Make.user"

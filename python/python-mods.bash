@@ -36,7 +36,7 @@ esac
 
 rm_latest python.numerics
 tmp=
-for i in scipy cython mpi4py netcdf4py matplotlib sympy pandas \
+for i in scipy cython mpi4py netcdf4py mpmath matplotlib sympy pandas \
 	       h5py numexpr theano numba seaborn networkx \
 	       kwant pybinding phonopy pythtb qutip ase \
 	       dask distributed xarray yt \

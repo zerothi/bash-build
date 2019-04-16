@@ -295,7 +295,7 @@ function pack_install {
 		    # copy the config.log to the prefix location
 		    mv $tmp $prefix/
 		    pushd $prefix 2>/dev/null
-		    gzip -f -9 $tmp
+		    gzip -f -9 $(basename $tmp)
 		    popd 2>/dev/null
 		fi
 	    fi
