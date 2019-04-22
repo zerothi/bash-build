@@ -71,4 +71,36 @@ pack_cmd "make check > netcdf.test 2>&1 ; echo FORCE"
 pack_cmd "make install"
 pack_store netcdf.test netcdf.test.f
 
+
+###########################
+#                         #
+# Install the C++ headers #
+###########################
+vcpp=4.3.0
+add_package --archive netcdf-cxx4-$vcpp.tar.gz \
+	    --package netcdf-cxx \
+	    https://github.com/Unidata/netcdf-cxx4/archive/v$vcpp.tar.gz
+
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
+pack_set --prefix $(pack_get --prefix netcdf[$v])
+
+# Add requirments when creating the module
+pack_set --module-requirement netcdf[$v]
+
+pack_set --install-query $(pack_get -LD)/libnetcdf_c++4.a
+
+pack_cmd "../configure" \
+     "CC=${MPICC} CXX=${MPICXX}" \
+     "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
+     "CPPFLAGS='$tmp_cppflags $CPPFLAGS $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "LIBS='$(list --LD-rp $(pack_get --mod-req-path)) -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz'" \
+     "--prefix=$(pack_get --prefix)" \
+     "--enable-cxx-4"
+
+# Make commands
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make check > netcdf.test.cxx 2>&1 ; echo FORCE"
+pack_cmd "make install"
+pack_store netcdf.test.cxx
+
 done

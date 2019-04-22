@@ -120,6 +120,7 @@ source_pack libs/superlu-dist.bash
 source_pack libs/petsc.bash
 source_pack libs/slepc.bash
 
+source_pack libs/dealii.bash
 
 # PEXSI
 source_pack libs/sympack.bash

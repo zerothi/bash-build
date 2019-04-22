@@ -182,15 +182,13 @@ function trim_em {
 #       Truncates all spaces to a minimum of one space.
 
 function trim_spaces {
-    local s str
-    while [[ $# -gt 0 ]]; do
-	s="${1# }" # removes prefix space
-	shift
-	s=${s% } # removes suffix space
-	s=${s//  / } # removes double space
-	str="$str $s"
-    done
-    printf '%s' "${str:1}"
+    local str="$@"
+    # remove leading whitespace characters
+    str="${str# }"
+    # remove trailing whitespace characters
+    str="${str% }"
+    # remove all double whitespace characters
+    printf '%s' "${str//  / }"
 }
 
 #  Function var_spec
@@ -759,7 +757,11 @@ function list {
 	    done
 	fi
     fi
-    printf '%s' "$retval"
+    if [[ "x$space" == "x " ]]; then
+	printf '%s' "${retval:1}"
+    else
+	printf '%s' "$retval"
+    fi
 }
 
 #  Function noop
