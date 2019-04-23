@@ -168,10 +168,20 @@ function pop_r {
 #       Removes one em-dash if the `str` starts with two or
 #       more em-dashes.
 
-function trim_em {
-    local -n var=$1
-    var="${2/#--/-}"
-}
+tmp=0
+[[ ${BASH_VERSINFO[0]} -gt 4 ]] && tmp=1
+[[ ${BASH_VERSINFO[0]} -eq 4 ]] && [[ ${BASH_VERSINFO[1]} -gt 3 ]] && tmp=1
+
+if [[ $tmp -eq 1 ]]; then
+    function trim_em {
+	local -n var=$1
+	var="${2/#--/-}"
+    }
+else
+    function trim_em {
+	eval "$1='${2/#--/-}'"
+    }
+fi
 
 #  Function trim_spaces
 # Removes all superfluous space. Prefix, suffix and double spaces.

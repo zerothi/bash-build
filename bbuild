@@ -5,6 +5,17 @@
 # set -x
 #  Prints entire command trace before each command
 
+# Define a trap to catch errors
+set -eE -o functrace
+function _bbuild_failure() {
+    local source="$1"
+    local lineno="$2"
+    local msg="$3"
+    echo "Failed in source: [$source] at line: $lineno with error: $msg"
+}
+#trap '_bbuild_failure "${BASH_SOURCE[@]}" "$BASH_LINENO" "$BASH_COMMAND"' ERR
+
+
 # Set the umask 022 means read and execute
 # This should be the default for our installation
 umask 022
