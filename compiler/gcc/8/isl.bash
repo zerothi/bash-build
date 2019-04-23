@@ -1,16 +1,16 @@
 isl_v=0.20
-add_package --build generic \
-	    --package $gcc-isl \
-	    --alias isl \
+add_package -build generic \
+	    -package $gcc-isl \
+	    -alias isl \
 	    http://isl.gforge.inria.fr/isl-$isl_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $BUILD_TOOLS
 
-pack_set --module-requirement gcc-prereq[$gcc_v]
+pack_set -module-requirement gcc-prereq[$gcc_v]
 
-pre=$(pack_get --prefix gcc-prereq[$gcc_v])
-pack_set --prefix $pre
-pack_set --install-query $pre/lib/libisl.a
+pre=$(pack_get -prefix gcc-prereq[$gcc_v])
+pack_set -prefix $pre
+pack_set -install-query $pre/lib/libisl.a
 
 # Install commands that it should run
 pack_cmd "../configure --prefix $pre" \

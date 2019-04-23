@@ -1,16 +1,16 @@
 mpfr_v=4.0.1
-add_package --build generic \
-	    --package $gcc-mpfr \
-	    --alias mpfr \
+add_package -build generic \
+	    -package $gcc-mpfr \
+	    -alias mpfr \
 	    http://www.mpfr.org/mpfr-$mpfr_v/mpfr-$mpfr_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $BUILD_TOOLS
 
-pack_set --module-requirement gcc-prereq[$gcc_v]
+pack_set -module-requirement gcc-prereq[$gcc_v]
 
-pre=$(pack_get --prefix gcc-prereq[$gcc_v])
-pack_set --prefix $pre
-pack_set --install-query $pre/lib/libmpfr.a
+pre=$(pack_get -prefix gcc-prereq[$gcc_v])
+pack_set -prefix $pre
+pack_set -install-query $pre/lib/libmpfr.a
 
 # Install commands that it should run
 pack_cmd "../configure --prefix $pre" \

@@ -1,16 +1,16 @@
 mpc_v=1.1.0
-add_package --build generic \
-	    --package $gcc-mpc \
-	    --alias mpc \
+add_package -build generic \
+	    -package $gcc-mpc \
+	    -alias mpc \
 	    ftp://ftp.gnu.org/gnu/mpc/mpc-$mpc_v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $BUILD_TOOLS
 
-pack_set --module-requirement gcc-prereq[$gcc_v]
+pack_set -module-requirement gcc-prereq[$gcc_v]
 
-pre=$(pack_get --prefix gcc-prereq[$gcc_v])
-pack_set --prefix $pre
-pack_set --install-query $pre/lib/libmpc.a
+pre=$(pack_get -prefix gcc-prereq[$gcc_v])
+pack_set -prefix $pre
+pack_set -install-query $pre/lib/libmpc.a
 
 # Install commands that it should run
 pack_cmd "../configure --prefix $pre" \
