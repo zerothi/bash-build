@@ -2,7 +2,7 @@ add_package https://github.com/dealii/dealii/releases/download/v9.0.1/dealii-9.0
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
 
-pack_set $(list -prefix '-mod-req ' boost mpi gsl hdf5 metis petsc-d slepc-d arpack-ng suitesparse)
+pack_set $(list -prefix '-mod-req ' boost mpi gsl hdf5 metis petsc-d slepc-d p4est arpack-ng suitesparse)
 
 pack_set -install-query $(pack_get -LD)/libdeal_II.so
 pack_set -lib -ldealii
@@ -18,10 +18,10 @@ tmp_flags="$tmp_flags -DMETIS_DIR=$(pack_get -prefix metis) -DDEAL_II_WITH_METIS
 tmp_flags="$tmp_flags -DPETSC_DIR=$(pack_get -prefix petsc-d) -DDEAL_II_WITH_PETSC=ON"
 tmp_flags="$tmp_flags -DSLEPC_DIR=$(pack_get -prefix slepc-d) -DDEAL_II_WITH_SLEPC=ON"
 tmp_flags="$tmp_flags -DBOOST_DIR=$(pack_get -prefix boost) -DDEAL_II_WITH_BOOST=ON"
+tmp_flags="$tmp_flags -DP4EST_DIR=$(pack_get -prefix p4est) -DDEAL_II_WITH_P4EST=ON"
 tmp_flags="$tmp_flags -DDEAL_II_WITH_MPI=ON"
 
 tmp_flags="$tmp_flags -DDEAL_II_WITH_TRILINOS=OFF"
-tmp_flags="$tmp_flags -DDEAL_II_WITH_P4EST=OFF"
 tmp_flags="$tmp_flags -DCMAKE_BUILD_TYPE=Release"
 tmp_flags="$tmp_flags -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON"
 
@@ -43,8 +43,8 @@ fi
 
 pack_cmd "CC=$MPICC CXX=$MPICXX FC=$MPIFC cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .. $tmp_flags"
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make install"
 pack_cmd "make test 2>&1 > dealii.test"
+pack_cmd "make install"
 pack_store dealii.test
 
 
