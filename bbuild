@@ -6,7 +6,9 @@
 #  Prints entire command trace before each command
 
 # Define a trap to catch errors
-set -eE -o functrace
+# Currently this does not work since we have *many* errors
+# This needs to be fixed
+#set -eE -o functrace
 function _bbuild_failure() {
     local source="$1"
     local lineno="$2"
