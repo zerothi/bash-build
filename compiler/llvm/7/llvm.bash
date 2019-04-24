@@ -1,16 +1,15 @@
-v=7.0.1
-add_package --build generic \
-	    --directory llvm-$v.src --package llvm --version $v \
+v=7.1.0
+add_package -directory llvm-$v.src -package llvm -version $v \
 	    http://releases.llvm.org/$v/llvm-$v.src.tar.xz \
 
-pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS -s $CRT_DEF_MODULE
 
-pack_set --install-query $(pack_get --prefix)/bin/llvm-ar
+pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
 
-pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gmp)
+pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gcc)
 
 # Fetch the c-lang to build it along side
-tmp=$(pack_get --url)
+tmp=$(pack_get -url)
 for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly clang-tools-extra  ; do
     case $name in
 	lldb|lld|clang-tools-extra)
@@ -27,7 +26,7 @@ for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly cla
 	    pack=$name
 	    ;;
     esac
-    o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-$name-$v.src.tar.xz
+    o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-$name-$v.src.tar.xz
     dwn_file ${tmp//llvm-/$name-} $o
     case $name in
 	cfe|clang-tools-extra)
@@ -51,7 +50,7 @@ for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly cla
     esac
 done
 
-opt="-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
+opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
 opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=$NPROCS"
 

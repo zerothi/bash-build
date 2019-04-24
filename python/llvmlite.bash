@@ -2,7 +2,7 @@
 # here as well (this only works with 3.6.0)
 v=0.28.0
 add_package -archive llvmlite-$v.tar.gz \
-    https://github.com/numba/llvmlite/archive/v$v.tar.gz
+	    https://github.com/numba/llvmlite/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_TOOLS
 
