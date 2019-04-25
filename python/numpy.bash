@@ -21,11 +21,10 @@ pack_cmd "echo '#' > $file"
 
 tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req-path))
 tmp_lib=${tmp_lib// /}
-tmp_lib=${tmp_lib:1}:/usr/lib64:/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
+tmp_lib=${tmp_lib}:/usr/lib64:/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
 
 tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req-path))
 tmp_inc=${tmp_inc// /}
-tmp_inc=${tmp_inc:1}
 
 pack_cmd "sed -i '1 a\
 [fftw2]\n\
@@ -122,7 +121,6 @@ runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
     esac
     tmp_l=$(pack_get -lib[omp] $la)
     tmp_l=${tmp_l//-l/,}
-    tmp_l=${tmp_l:1}
     case $la in
 	atlas)
 	    pack_cmd "sed -i '$ a\
@@ -133,7 +131,6 @@ libraries = ${tmp_l//-l/,},pthread\n\
 runtime_library_dirs = $tmp\n' $file"
 	    tmp_l=$(pack_get -lib $la)
 	    tmp_l=${tmp_l//-l/,}
-	    tmp_l=${tmp_l:1}
 	    pack_cmd "sed -i '$ a\
 [atlas]\n\
 library_dirs = $tmp\n\
@@ -184,7 +181,7 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
     p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing
-    pack_cmd "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:9}\]|g\" numpy/distutils/fcompiler/gnu.py"
+    pack_cmd "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:8}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_cmd "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
 
     # Correct the f77 designations in the blas_opt linkers
