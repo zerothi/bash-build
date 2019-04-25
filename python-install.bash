@@ -61,9 +61,11 @@ source_pack python/numexpr.bash
 source_pack python/matplotlib.bash
 source_pack python/bottleneck.bash
 source_pack python/sympy.bash
+source_pack python/patsy.bash
 source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
+source_pack python/statsmodels.bash
 source_pack python/theano.bash
 source_pack python/dask.bash
 source_pack python/dask-distributed.bash

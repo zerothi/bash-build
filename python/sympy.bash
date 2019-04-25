@@ -1,4 +1,4 @@
-v=1.3
+v=1.4
 add_package --directory sympy-$v \
     --package sympy --version $v \
     https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v.tar.gz

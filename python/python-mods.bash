@@ -41,6 +41,7 @@ for i in scipy cython mpi4py netcdf4py mpmath matplotlib sympy pandas \
 	       kwant pybinding phonopy pythtb qutip ase \
 	       dask distributed xarray yt \
 	       pyamg scikit-learn scikit-nano scikit-optimize \
+	       patsy statsmodels \
 	       orthopy quadpy lmfit tensorflow \
 	       Inelastica-dev ipi-dev sisl-dev hotbit-dev ; do
     if [[ $(pack_installed $i) -eq $_I_INSTALLED ]]; then
