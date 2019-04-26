@@ -54,6 +54,7 @@ source_pack python/wxpython.bash
 # Generic scientific libraries
 source_pack python/numpy.bash
 source_pack python/mpi4py.bash
+source_pack python/imageio.bash
 source_pack python/cftime.bash
 source_pack python/netcdf4.bash
 source_pack python/scipy.bash
@@ -67,6 +68,7 @@ source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
 source_pack python/statsmodels.bash
 source_pack python/theano.bash
+source_pack python/pymc3.bash
 source_pack python/dask.bash
 source_pack python/dask-distributed.bash
 source_pack python/pyamg.bash

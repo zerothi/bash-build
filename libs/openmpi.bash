@@ -39,16 +39,27 @@ if [[ -n $LSF_BINDIR ]]; then
 else
     [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 fi
-if [[ -d /usr/include/infiniband ]]; then
-    tmp_flags="$tmp_flags --with-verbs"
-else
-    if $(is_host thul surt muspel slid) ; then
-        pack_cmd "Cannot compile OpenMPI on this node, infiniband not present."
-    fi
-fi
+
 
 if [[ $(vrs_cmp $(pack_get --version) 4) -eq 0 ]]; then
     tmp_flags="$tmp_flags --enable-mpi1-compatibility"
+    if [[ $(pack_installed ucx) ]]; then
+	# The UCX library also has links to infiniband, so and for
+	# 4.X --with-verbs is deprecated in favor of with-ucx
+	pack_set -mod-req ucx
+	tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx)"
+    elif [[ -d /usr/include/infiniband ]]; then
+	tmp_flags="$tmp_flags --with-verbs"
+    fi
+
+else
+    if [[ -d /usr/include/infiniband ]]; then
+	tmp_flags="$tmp_flags --with-verbs"
+    else
+	if $(is_host thul surt muspel slid) ; then
+            pack_cmd "Cannot compile OpenMPI on this node, infiniband not present."
+	fi
+    fi
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
