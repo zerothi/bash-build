@@ -215,7 +215,7 @@ EOF
 		cat <<EOF >> "$mfile"
 
 # Check that we may create survey
-set cerr [catch {set in_survey \$::env(NPA__SURVEY_IN)}]
+set cerr [catch {set in_survey \$::env(DCC__SURVEY_IN)}]
 if { \$cerr != 0 } {
     set in_survey 0
 }
@@ -223,8 +223,8 @@ if { \$in_survey == 0 } {
     if { [module-info mode load] } {
         # This is the controlling sequence
         set in_survey 2
-        setenv NPA__SURVEY_IN 1
-        system echo $_mod_survey_cmd >> $_mod_survey_file
+        setenv DCC__SURVEY_IN 1
+        puts stdout "echo $_mod_survey_cmd >> $_mod_survey_file"
     } else {
         set in_survey 1
     }
@@ -481,7 +481,7 @@ EOF
 
 # Reset in_survey
 if { \$in_survey == 2 } {
-    unsetenv NPA__SURVEY_IN
+    unsetenv DCC__SURVEY_IN
 }
 EOF
 	    fi

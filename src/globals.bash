@@ -34,7 +34,7 @@ PIE=pie
 NO_PIE=no-pie
 
 # To by-pass creating survey when using the install script
-export NPA__SURVEY_IN=1
+export DCC__SURVEY_IN=1
 
 # A separator used for commands that can be given consequtively
 _LIST_SEP='ø'
