@@ -5,37 +5,28 @@ module purge
 source source-intel.sh
 
 new_build --name intel \
-    --installation-path /opt \
-    --module-path /opt/modules \
+    --installation-path /opt/$(get_c -n)/$(get_c -v) \
+    --module-path /opt/modules/$(get_c -n)/$(get_c -v) \
     --build-path .compile \
-    --build-module-path "--package --version $(get_c)" \
-    --build-installation-path "--package --version $(get_c)" \
+    --build-module-path "--package --version" \
+    --build-installation-path "--package --version" \
     --source source-intel.sh
 
 build_set --default-choice[intel] linalg openblas atlas blas
 
-mkdir -p $(build_get --module-path[intel])-npa
-mkdir -p $(build_get --module-path[intel])-npa-apps
+mkdir -p $(build_get --module-path[intel])-apps
 
 build_set --default-module-version[intel]
 FORCEMODULE=1
 
-tmp=$(get_c)
-new_build --name vendor-intel \
-    --installation-path /opt/vendor \
-    --module-path /opt/modules \
-    --source source-intel.sh \
-    --build-module-path "--package --version ${tmp//intel-/}" \
-    --build-installation-path "--package --version ${tmp//intel-/}"
-
 source source-intel-debug.sh
 
 new_build --name debug \
-    --installation-path /opt \
-    --module-path /opt/modules \
+    --installation-path /opt/$(get_c -n)/$(get_c -v) \
+    --module-path /opt/modules/$(get_c -n)/$(get_c -v) \
     --build-path .compile \
-    --build-module-path "--package --version $(get_c)" \
-    --build-installation-path "--package --version $(get_c)" \
+    --build-module-path "--package --version" \
+    --build-installation-path "--package --version" \
     --source source-intel-debug.sh
 
 build_set --default-choice[debug] linalg openblas atlas blas

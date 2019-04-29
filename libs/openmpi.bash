@@ -3,7 +3,7 @@ v=4.0.1
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 
 # What to check for when checking for installation...
 pack_set --install-query $(pack_get --prefix)/bin/mpif90
