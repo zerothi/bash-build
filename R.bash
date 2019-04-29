@@ -48,10 +48,10 @@ pack_cmd "make install-tests"
 # Install directory for intrinsic packages
 pack_cmd "mkdir -p $(pack_get -prefix)/library"
 # Ensure the library path is added
-pack_cmd "[ -e $(pack_get -prefix)/lib64 ] && echo '# Custom R profile' > $(pack_get -prefix)/lib64/etc/Rprofile.site || echo '# Custom R profile' > $(pack_get -prefix)/lib/etc/Rprofile.site"
-pack_cmd "[ -e $(pack_get -prefix)/lib64 ] && echo '#' >> $(pack_get -prefix)/lib64/etc/Rprofile.site || echo '#' >> $(pack_get -prefix)/lib/etc/Rprofile.site"
-pack_cmd "[ -e $(pack_get -prefix)/lib64 ] && echo '# Custom location of libraries (without using env-vars)' >> $(pack_get -prefix)/lib64/etc/Rprofile.site || echo '# Custom location of libraries (without using env-vars)' >> $(pack_get -prefix)/lib/etc/Rprofile.site"
-pack_cmd "[ -e $(pack_get -prefix)/lib64 ] && echo 'invisible(.libPaths( c(\"$(pack_get -prefix)/library\", .libPaths()) ))' >> $(pack_get -prefix)/lib64/etc/Rprofile.site || echo 'invisible(.libPaths( c(\"$(pack_get -prefix)/library\", .libPaths()) ))' >> $(pack_get -prefix)/lib/etc/Rprofile.site"
+pack_cmd "[ -d $(pack_get -prefix)/lib64 ] && echo '# Custom R profile' > $(pack_get -prefix)/lib64/R/etc/Rprofile.site || echo '# Custom R profile' > $(pack_get -prefix)/lib/R/etc/Rprofile.site"
+pack_cmd "[ -d $(pack_get -prefix)/lib64 ] && echo '#' >> $(pack_get -prefix)/lib64/R/etc/Rprofile.site || echo '#' >> $(pack_get -prefix)/lib/R/etc/Rprofile.site"
+pack_cmd "[ -d $(pack_get -prefix)/lib64 ] && echo '# Custom location of libraries (without using env-vars)' >> $(pack_get -prefix)/lib64/R/etc/Rprofile.site || echo '# Custom location of libraries (without using env-vars)' >> $(pack_get -prefix)/lib/R/etc/Rprofile.site"
+pack_cmd "[ -d $(pack_get -prefix)/lib64 ] && echo 'invisible(.libPaths( c(\"$(pack_get -prefix)/library\", .libPaths()) ))' >> $(pack_get -prefix)/lib64/R/etc/Rprofile.site || echo 'invisible(.libPaths( c(\"$(pack_get -prefix)/library\", .libPaths()) ))' >> $(pack_get -prefix)/lib/R/etc/Rprofile.site"
 
 
 # Create a new build with this module
