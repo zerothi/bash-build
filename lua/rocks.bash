@@ -26,4 +26,4 @@ pack_set --directory .
 pack_set --module-requirement lua
 
 # Now add packages
-pack_cmd "luarocks install luaposix"
+pack_cmd "[ ! -d $(pack_get -prefix lua)/lib/luarocks/rocks-5.3/luaposix ] && luarocks install luaposix || echo 'luaposix already installed'"
