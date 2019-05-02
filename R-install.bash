@@ -50,7 +50,7 @@ add_R_package plyr 1.8.4
 #  stringr
 #  forcats
 
-add_R_package tibble 2.0.1
+add_R_package tibble 2.1.1
 
 add_R_package bench 1.0.1
 pack_set -mod-req tibble
