@@ -52,7 +52,7 @@ add_R_package plyr 1.8.4
 
 add_R_package tibble 2.1.1
 
-add_R_package bench 1.0.1
+add_R_package bench 1.0.2
 pack_set -mod-req tibble
 
 add_R_package tidyselect 0.2.5
@@ -75,7 +75,7 @@ add_R_package tidyr 0.8.3
 pack_set -mod-req purrr
 pack_set -mod-req dplyr
 
-add_R_package MASS 7.3-51.3
+add_R_package MASS 7.3-51.4
 
 add_R_package ggplot2 3.1.1
 pack_set -mod-req plyr
