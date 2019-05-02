@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/slepc/slepc4py/downloads/slepc4py-3.10.0.tar.gz
+add_package https://bitbucket.org/slepc/slepc4py/downloads/slepc4py-3.11.0.tar.gz
 
 pack_set -s $IS_MODULE
 
