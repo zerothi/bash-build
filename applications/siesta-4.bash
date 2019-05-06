@@ -294,15 +294,6 @@ if [[ $tmp -eq 1 ]]; then
     done
 fi
 
-# Create the byte-compiled versions, to make it faster for users 
-tmp=$(pack_get --alias python).$(pack_get --version python)/$(get_c)
-pack_cmd "module load $tmp"
-pack_cmd "pushd $(pack_get --prefix)/bin/"
-pack_cmd "python -m compileall ."
-pack_cmd "popd"
-pack_cmd "module unload $tmp"
-
-
 unset set_flag
 unset make_files
 pack_cmd "chmod a+x $(pack_get --prefix)/bin/*"
