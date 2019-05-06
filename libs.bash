@@ -83,8 +83,10 @@ source_pack libs/boost.bash
 source_pack libs/ctl.bash
 source_pack libs/harminv.bash
 
-# Requires BOOST for additional libraries.
+# Requires BOOST:
 source_pack libs/blaze.bash
+source_pack libs/zeep.bash
+source_pack libs/xssp.bash
 
 # Install generic libraries
 source_pack libs/hdf5.bash
