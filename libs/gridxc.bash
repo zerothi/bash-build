@@ -2,10 +2,10 @@ add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.4.
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --module-requirement libxc
+pack_set -module-requirement libxc
 
-pack_set --install-query $(pack_get --LD)/libGridXC.a
-pack_set --lib -lGridXC
+pack_set -install-query $(pack_get -LD)/libGridXC.a
+pack_set -lib -lGridXC
 
 # Install commands that it should run
 pack_cmd "sh ../src/config.sh"
@@ -22,7 +22,7 @@ LDFLAGS = \n\
 INC_PREFIX = -I\n\
 MOD_PREFIX = -I\n\
 MOD_EXT =.mod\n\
-LIBXC_ROOT = $(pack_get --prefix libxc)\n\
+LIBXC_ROOT = $(pack_get -prefix libxc)\n\
 .F.o:\n\
 \t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
 .F90.o:\n\
@@ -37,11 +37,11 @@ LIBXC_ROOT = $(pack_get --prefix libxc)\n\
 
 pack_cmd "echo '# Cleaned libxc.mk' > libxc.mk"
 pack_cmd "sed -i -e '$ a\
-LIBXC_INCFLAGS = -I$(pack_get --prefix libxc)/include\n\
-LIBXC_LIBS = $(list --LD-rp libxc) $(pack_get --lib libxc)\n\
+LIBXC_INCFLAGS = -I$(pack_get -prefix libxc)/include\n\
+LIBXC_LIBS = $(list -LD-rp libxc) $(pack_get -lib[f90] libxc)\n\
 ' libxc.mk"
 
 pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' gridxc.mk.in"
 pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' top.gridxc.mk.in"
 
-pack_cmd "make WITH_LIBXC=1 $(get_make_parallel) PREFIX=$(pack_get --prefix)"
+pack_cmd "make WITH_LIBXC=1 $(get_make_parallel) PREFIX=$(pack_get -prefix)"
