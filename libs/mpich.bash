@@ -5,11 +5,20 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # 3.3 has a problem using an external hwloc! :(
 tmp_flags=
-pack_set --install-query $(pack_get --prefix)/bin/mpicc
+pack_set -install-query $(pack_get -prefix)/bin/mpicc
 
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-ibverbs=/usr/include/infiniband"
 fi
+pack_set -mod-req hwloc
+tmp_flags="$tmp_flags --with-hwloc=$(pack_get -prefix hwloc)"
+
+if [[ $(pack_installed ucx) ]]; then
+    pack_set -mod-req ucx
+    tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx)"
+fi
+
+[[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-slurm --with-pmi=/usr"
 
 pack_cmd "unset F90"
 pack_cmd "unset F90FLAGS"
@@ -19,7 +28,7 @@ pack_cmd "unset MPIFC"
 pack_cmd "unset MPICC"
 pack_cmd "unset MPICXX"
 pack_cmd "../configure" \
-	 "--prefix=$(pack_get --prefix)" \
+	 "--prefix=$(pack_get -prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \
 	 "--enable-shared --enable-smpcoll" \
@@ -38,14 +47,14 @@ pack_cmd "make install"
 
 
 
-new_build --name _internal-mpich \
-  --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
-  --module-path $(build_get -mp)-mpich \
-  --build-path $(build_get -bp) \
-  --build-module-path "$(build_get -bmp)" \
-  --build-installation-path "$(build_get -bip)" \
-  --source $(build_get --source) \
-  $(list -p '--default-module ' $(build_get --default-module) mpich)
+new_build -name _internal-mpich \
+  -installation-path $(build_get -ip)/$(pack_get -package)/$(pack_get -version) \
+  -module-path $(build_get -mp)-mpich \
+  -build-path $(build_get -bp) \
+  -build-module-path "$(build_get -bmp)" \
+  -build-installation-path "$(build_get -bip)" \
+  -source $(build_get -source) \
+  $(list -p '-default-module ' $(build_get -default-module) mpich)
 
 
 return 0
@@ -56,13 +65,13 @@ add_package http://www.mpich.org/static/downloads/$v/hydra-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --mod-req mpich
+pack_set -mod-req mpich
 
 # Fix hydra installation in the same directory as mpich
-tmp=$(pack_get --prefix)
-pack_set --prefix $(pack_get --prefix mpich)
+tmp=$(pack_get -prefix)
+pack_set -prefix $(pack_get -prefix mpich)
 
-pack_set --install-query $(pack_get --prefix)/custom.hydra
+pack_set -install-query $(pack_get -prefix)/custom.hydra
 
 pack_cmd "unset F90"
 pack_cmd "unset F90FLAGS"
@@ -71,11 +80,11 @@ pack_cmd "unset MPIF90"
 pack_cmd "unset MPIFC"
 pack_cmd "unset MPICC"
 pack_cmd "unset MPICXX"
-pack_cmd "../configure --prefix=$(pack_get --prefix)" \
+pack_cmd "../configure --prefix=$(pack_get -prefix)" \
 	 "--enable-fortran=all --enable-cxx" \
 	 "--enable-threads=runtime" \
 	 "--enable-shared $tmpflags" 
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-pack_cmd "touch $(pack_get --prefix)/custom.hydra"
+pack_cmd "touch $(pack_get -prefix)/custom.hydra"
