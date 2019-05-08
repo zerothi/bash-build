@@ -24,13 +24,11 @@ for m in wxpython pyqt ; do
 done
 
 
-if [ $(vrs_cmp $v 3) -ge 0 ]; then
-    o=$(pwd_archives)/jquery-1.12.1.zip
-    dwn_file https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip $o
-    pack_cmd "pushd lib/matplotlib/backends/web_backend"
-    pack_cmd "unzip -q $o"
-    pack_cmd "popd"
-fi
+o=$(pwd_archives)/jquery-1.12.1.zip
+dwn_file https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip $o
+pack_cmd "pushd lib/matplotlib/backends/web_backend"
+pack_cmd "unzip -q $o"
+pack_cmd "popd"
 
 if [ $(vrs_cmp $v 2.1.0) -ge 0 ]; then
     pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/libqhull/qhull_a.h"

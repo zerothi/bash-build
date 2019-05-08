@@ -111,11 +111,11 @@ new_build -name _internal-python$IpV \
     -build-installation-path "$IpV -package -version" \
     -build-path $(build_get -build-path)/py-$pV
 
+mkdir -p $(build_get -module-path[_internal-python$IpV])-apps
 build_set --default-choice[_internal-python$IpV] linalg openblas blis atlas blas
 
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
-pack_cmd "mkdir -p $(build_get -module-path[_internal-python$IpV])-apps"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])"
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])-apps"
 
