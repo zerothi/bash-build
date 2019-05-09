@@ -85,6 +85,7 @@ source_pack python/lmfit.bash
 
 # Tensorflow (CPU-only)
 source_pack python/tensorflow.bash
+#source_pack python/pytorch.bash
 
 # Additional plotting stuff
 source_pack python/seaborn.bash
