@@ -11,21 +11,21 @@ function tmp_func {
 
 
 v=3.3.8
-add_package --alias fftw \
-            --version $v \
-            --package fftw \
+add_package -alias fftw \
+            -version $v \
+            -package fftw \
 	    http://www.fftw.org/fftw-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --LD)/libfftw3_omp.a
+pack_set -install-query $(pack_get -LD)/libfftw3_omp.a
 
-pack_set --lib -lfftw3 -lm
-pack_set --lib[omp] -lfftw3_omp -lfftw3 -lm
-pack_set --lib[pt] -lfftw3_threads -lfftw3 -lm
-pack_set --lib[f] -lfftw3f -lm
-pack_set --lib[fomp] -lfftw3f_omp -lfftw3f -lm
-pack_set --lib[fpt] -lfftw3f_threads -lfftw3f -lm
+pack_set -lib -lfftw3 -lm
+pack_set -lib[omp] -lfftw3_omp -lfftw3 -lm
+pack_set -lib[pt] -lfftw3_threads -lfftw3 -lm
+pack_set -lib[f] -lfftw3f -lm
+pack_set -lib[fomp] -lfftw3f_omp -lfftw3f -lm
+pack_set -lib[fpt] -lfftw3f_threads -lfftw3f -lm
 
 pack_cmd "unset CFLAGS"
 
@@ -68,19 +68,19 @@ for flag in --enable-single nothing ; do
     flag="$flag $tmp_flags"
     
     pack_cmd "../configure $flag CFLAGS='$CFLAGS'" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.$ext
 
     # create the SMP version
     pack_cmd "../configure $flag CFLAGS='$CFLAGS'" \
 	     "--enable-threads" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.smp.$ext
 
     # create the OpenMP version
     pack_cmd "LIB='$FLAG_OMP' CFLAGS='$CFLAGS $FLAG_OMP' FFLAGS='$FFLAGS $FLAG_OMP' ../configure $flag" \
 	     "--enable-openmp" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.omp.$ext
 
 done
@@ -88,25 +88,25 @@ done
 #### COMPLETED
 
 # Create mpi fftw
-add_package --alias fftw-mpi --package fftw-mpi \
-	    $(pack_get --archive)
+add_package -alias fftw-mpi -package fftw-mpi \
+	    $(pack_get -archive)
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libfftw3_mpi.a
+pack_set -install-query $(pack_get -LD)/libfftw3_mpi.a
 
-pack_set --lib -lfftw3_mpi -lfftw3 -lm
-pack_set --lib[omp] -lfftw3_mpi -lfftw3_omp -lfftw3 -lm
-pack_set --lib[pt] -lfftw3_mpi -lfftw3_threads -lfftw3 -lm
-pack_set --lib[f] -lfftw3f_mpi -lfftw3f -lm
-pack_set --lib[fomp] -lfftw3f_mpi -lfftw3f_omp -lfftw3f -lm
-pack_set --lib[fpt] -lfftw3f_mpi -lfftw3f_threads -lfftw3f -lm
+pack_set -lib -lfftw3_mpi -lfftw3 -lm
+pack_set -lib[omp] -lfftw3_mpi -lfftw3_omp -lfftw3 -lm
+pack_set -lib[pt] -lfftw3_mpi -lfftw3_threads -lfftw3 -lm
+pack_set -lib[f] -lfftw3f_mpi -lfftw3f -lm
+pack_set -lib[fomp] -lfftw3f_mpi -lfftw3f_omp -lfftw3f -lm
+pack_set -lib[fpt] -lfftw3f_mpi -lfftw3f_threads -lfftw3f -lm
 
 pack_set -mod-req mpi
 
 pack_cmd "unset CFLAGS"
 
-mpi_flags="$(list --LD-rp mpi)"
+mpi_flags="$(list -LD-rp mpi)"
 for flag in --enable-single nothing ; do
     ext=f
     if [[ "$flag" == "nothing" ]]; then
@@ -123,20 +123,20 @@ for flag in --enable-single nothing ; do
 CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
 
     pack_cmd "../configure $flag" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.$ext
 
     # create the SMP version
     pack_cmd "../configure $flag" \
 	     "--enable-threads" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.smp.$ext
 
     # create the OpenMP version
     flag="${flag//FLAGS='/FLAGS='$FLAG_OMP}"
     pack_cmd "LIB='$FLAG_OMP' ../configure $flag" \
 	     "--enable-openmp" \
-	     "--prefix $(pack_get --prefix)"
+	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.omp.$ext
 
 done
