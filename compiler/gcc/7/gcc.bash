@@ -30,7 +30,7 @@ pack_cmd "make BOOT_LDFLAGS='$(list -LD-rp gcc-prereq[$gcc_v])' $(get_make_paral
 # make check requires autogen installed
 #pack_cmd "make -k check > gcc.test 2>&1 ; echo 'Succes'"
 pack_cmd "make install"
-pack_store gcc.test
+#pack_store gcc.test
 #pack_cmd 'for f in **/testsuite/*.log **/testsuite/*.sum ; do mv $f $pre/gcc.$(basename $f) ; gzip -f $pre/gcc.$(basename $f) ; done'
 
 source compiler/gcc/gcc-env.bash
