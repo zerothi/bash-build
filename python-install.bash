@@ -122,6 +122,7 @@ source_pack python/gpaw-setups.bash
 source_pack python/ase.bash
 source_pack python/gpaw.bash
 source_pack python/hotbit.bash
+source_pack python/sgdml.bash
 
 source_pack python/pybinding.bash
 source_pack python/pythtb.bash

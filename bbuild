@@ -48,6 +48,7 @@ declare -l _mpi_version=openmpi
 # packages.
 _b_name_generic=generic
 _b_name_default=generic
+_post_run=this-directory-should-never-exist
 while [ $# -gt 0 ]; do
     trim_em opt $1
     case $opt in
@@ -127,6 +128,9 @@ while [ $# -gt 0 ]; do
 	-only-file)
 	    pack_only -file $1
 	    shift ;;
+	-post-run)
+	    _post_run=$1
+	    shift ;;
 	-help|-h)
 	    help_
 	    exit 0
@@ -134,6 +138,7 @@ while [ $# -gt 0 ]; do
 	-build)
 	    opt=$1
 	    ;& # go through
+	    
 	*)
 	    # We consider empty stuff to be builds
 	    if [ ! -e $opt ]; then
@@ -297,3 +302,18 @@ msg_install -message "Finished installing all applications..."
 # and add -I<folder>
 # Per default will gcc read specs in the folder of generic libraries:
 # gcc -print-libgcc-file-name (dir)
+
+if [[ -d $_post_run ]]; then
+    msg_install -message "Running post-directory installations..."
+    pushd $_post_run 1> /dev/null
+
+    # List files and add them one-at a time
+    for never_used in $(ls -pL | grep -v '/' | sort)
+    do
+	source_pack $never_used
+    done
+    
+    popd 2>/dev/null
+    
+    msg_install -message "Done running post-directory installations!"
+fi
