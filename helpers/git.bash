@@ -33,7 +33,7 @@ pack_cmd "make install"
 o=$(pwd_archives)/$(pack_get -package)-lfs-2.7.2.tar.gz
 dwn_file https://github.com/git-lfs/git-lfs/releases/download/v2.7.2/git-lfs-linux-amd64-v2.7.2.tar.gz $o
 pack_cmd "mkdir lfs ; cd lfs"
-pack_cmd "tar xfz $o ; cd git-lfs*"
+pack_cmd "tar xfz $o"
 pack_cmd "PREFIX=$(pack_get -prefix)  ./install.sh"
 pack_cmd "cd ../../"
 

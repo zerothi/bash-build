@@ -11,7 +11,7 @@ pre=$(pack_get -prefix)
 pack_set -install-query $pre/bin/gcc
 
 
-languages="c,c++,d,lto,fortran,objc,obj-c++,java,go"
+languages="c,c++,d,lto,fortran,objc,obj-c++,go"
 
 # Install commands that it should run
 pack_cmd "../configure --prefix $pre" \
