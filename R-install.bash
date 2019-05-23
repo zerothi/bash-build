@@ -35,9 +35,6 @@ add_R_package Matrix 1.2-17
 add_R_package RcppEigen 0.3.3.5.0
 pack_set -mod-req Matrix
 
-add_R_package RcppEigen 0.3.3.5.0
-pack_set -mod-req Matrix
-
 add_R_package plyr 1.8.4
 
 # tidyverse packages

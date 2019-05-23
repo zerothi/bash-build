@@ -94,7 +94,7 @@ else
     pack_cmd "sed -i '1 a\
 LAPACKLIB = $(pack_get -lib $la)\n\
 BLASLIB   = \$(LAPACKLIB) \n\
-LDFLAGS   = $(list --LD-rp +$la)\n\
+LDFLAGS   = $(list -LD-rp +$la)\n\
 ' $file"
 
     # We need to correct for etime which has enterred as

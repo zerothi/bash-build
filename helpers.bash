@@ -47,6 +47,7 @@ source_pack helpers/wxwidgets.bash
 source_pack helpers/libpng.bash
 source_pack helpers/libgd.bash
 
+source_pack helpers/cmake-bt.bash
 source_pack helpers/cmake.bash
 source_pack helpers/freetype.bash
 source_pack helpers/libunistring.bash

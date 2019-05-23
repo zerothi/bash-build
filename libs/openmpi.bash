@@ -11,6 +11,12 @@ pack_set --install-query $(pack_get --prefix)/bin/mpif90
 pack_set --module-requirement zlib
 pack_set --module-requirement hwloc
 pack_set --module-opt "--set-ENV OMPI_HOME=$(pack_get --prefix)"
+pack_set --module-opt "--set-ENV MPICC=mpicc"
+pack_set --module-opt "--set-ENV MPICXX=mpicxx"
+pack_set --module-opt "--set-ENV MPIF77=mpif77"
+pack_set --module-opt "--set-ENV MPIF90=mpif90"
+pack_set --module-opt "--set-ENV MPIFC=mpifort"
+
 
 # Download zero size scatter/gather patch
 if [[ $(vrs_cmp $(pack_get --version) 1.10.1) -eq 0 ]]; then
@@ -83,7 +89,6 @@ pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > openmpi.test 2>&1 ; echo 'force'"
 pack_store openmpi.test
 pack_cmd "make install"
-
 
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then

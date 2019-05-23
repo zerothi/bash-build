@@ -63,8 +63,9 @@ new_build -name _internal-R$IrV \
     -build-module-path "-package -version" \
     -build-installation-path "$IrV -package -version" \
     -build-path $(build_get -build-path)/r-$rV
+
 mkdir -p $(build_get -module-path[_internal-R$IrV])-apps
-build_set -default-choice[_internal-R$IrV] linalg openblas blis atlas blas
+build_set -default-setting[_internal-R$IrV] $(build_get -default-setting)
 
 
 # Now add options to ensure that loading this module will enable the path for the *new build*

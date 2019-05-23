@@ -215,7 +215,11 @@ function build_set {
 		_b_def_mod_reqs[$b_idx]=""
 		;;
 	    -default-setting)
-		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		if [[ "${1:0:${#_LIST_SEP}}" == "$_LIST_SEP" ]]; then
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$1"
+		else
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		fi
 		shift ;;
 	    -default-choice)
 		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
@@ -487,5 +491,6 @@ function build_print {
     echo " BMPX $(pack_list -lf "-X -p /" $(build_get -bmp[$build]))"
     echo " DM : $(build_get -default-module[$build])"
     echo " S  : $(build_get -source[$build])"
+    echo " SET: $(build_get -default-setting[$build])"
     echo "                                 << << << <<"
 }

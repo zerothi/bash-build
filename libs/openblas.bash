@@ -1,14 +1,14 @@
 for v in 0.3.5 ; do
-add_package --package openblas --archive OpenBLAS-$v.tar.gz \
+add_package -package openblas -archive OpenBLAS-$v.tar.gz \
 	    https://github.com/xianyi/OpenBLAS/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libopenblas.a
+pack_set -install-query $(pack_get -LD)/libopenblas.a
 
-pack_set --lib -lopenblas
-pack_set --lib[omp] -lopenblas_omp
-pack_set --lib[pt] -lopenblasp
+pack_set -lib -lopenblas
+pack_set -lib[omp] -lopenblas_omp
+pack_set -lib[pt] -lopenblasp
 
 # Default flags for all compilations of OpenBLAS here 
 # Improve allocation for small matrices
@@ -40,12 +40,12 @@ for ver in thread none openmp ; do
     pack_cmd "make clean"
     pack_cmd "make $flag libs netlib shared"
     pack_cmd "make $flag tests 2>&1 > openblas.test || echo forced"
-    pack_cmd "make $flag PREFIX=$(pack_get --prefix) install"
+    pack_cmd "make $flag PREFIX=$(pack_get -prefix) install"
     pack_store openblas.test openblas.test.${test_end}
 done
 
 # Correct the linking of the threads library to make it easier to use
-pack_cmd "pushd $(pack_get --prefix)/lib"
+pack_cmd "pushd $(pack_get -prefix)/lib"
 pack_cmd "ln -s libopenblas_[^o][^m][^^]*p-r*.a libopenblasp.a"
 pack_cmd "ln -s libopenblas_[^o][^m][^^]*p-r*.so libopenblasp.so"
 pack_cmd "popd"
@@ -53,14 +53,24 @@ pack_cmd "popd"
 unset def_flag flag test_end
 
 add_hidden_package lapack-openblas/$v
-pack_set --prefix $(pack_get --prefix openblas)
-pack_set --installed $_I_REQ
+pack_set -prefix $(pack_get -prefix openblas)
+pack_set -installed $_I_REQ
 pack_set -mod-req openblas
 # Denote the default libraries
 # Note that this OpenBLAS compilation has lapack built-in
-pack_set --lib $(pack_get -lib openblas)
-pack_set --lib[omp] $(pack_get -lib[omp] openblas)
-pack_set --lib[pt] $(pack_get -lib[pt] openblas)
-pack_set --lib[lapacke] ""
+pack_set -lib $(pack_get -lib openblas)
+pack_set -lib[omp] $(pack_get -lib[omp] openblas)
+pack_set -lib[pt] $(pack_get -lib[pt] openblas)
+pack_set -lib[lapacke] ""
+
+
+add_hidden_package scalapack-openblas/$v
+pack_set -prefix $(pack_get -prefix openblas)
+pack_set -installed $_I_REQ
+pack_set $(list -prefix '-mod-req ' scalapack $(pack_get -mod-req lapack-openblas))
+pack_set -lib $(pack_get -lib scalapack) $(pack_get -lib lapack-openblas)
+pack_set -lib[omp] $(pack_get -lib scalapack) $(pack_get -lib[omp] lapack-openblas)
+pack_set -lib[pt] $(pack_get -lib scalapack) $(pack_get -lib[pt] lapack-openblas)
+pack_set -lib[lapacke] ""
 
 done

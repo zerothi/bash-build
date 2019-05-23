@@ -11,10 +11,7 @@ pre=$(pack_get -prefix)
 pack_set -install-query $pre/bin/gcc
 
 
-languages="c,c++,lto,fortran,objc,obj-c++"
-if ! $(is_host atto) ; then
-    languages="$languages,go"
-fi
+languages="c,c++,d,lto,fortran,objc,obj-c++,java,go"
 
 # Install commands that it should run
 pack_cmd "../configure --prefix $pre" \
@@ -36,7 +33,4 @@ pack_cmd "make install"
 #pack_store gcc.test
 #pack_cmd 'for f in **/testsuite/*.log **/testsuite/*.sum ; do mv $f $pre/gcc.$(basename $f) ; gzip -f $pre/gcc.$(basename $f) ; done'
 
-# Add to LD_LIBRARY_PATH, this ensures that at least 
-# these libraries always will be present in LD
-pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib"
-pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib64"
+source compiler/gcc/gcc-env.bash

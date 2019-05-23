@@ -60,3 +60,5 @@ pack_cmd "CC=$CC CXX=$CXX cmake -G 'Unix Makefiles' $opt .."
 # Make commands (this cmake --build removes colors)
 pack_cmd "cmake --build . -- $(get_make_parallel)"
 pack_cmd "cmake --build . --target install"
+
+source compiler/llvm/llvm-env.bash

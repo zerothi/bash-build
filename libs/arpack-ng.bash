@@ -30,7 +30,7 @@ pack_cmd "./configure" \
 	 "F77='$FC' FC='$FC'" \
 	 "FFLAGS='$FCFLAGS' FCLAGS='$FCFLAGS'" \
 	 "MPIF77='$MPIFC' MPIFC='$MPIFC'" \
-	 "--enable-mpi $tmp_flags" \
+	 "--enable-mpi --enable-icb $tmp_flags" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make"

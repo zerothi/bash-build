@@ -1,14 +1,14 @@
 add_package https://github.com/cp2k/cp2k/releases/download/v6.1.0/cp2k-6.1.tar.bz2
 
-pack_set $(list -p '--module-requirement ' mpi libxc fftw)
+pack_set $(list -p '-module-requirement ' mpi libxc fftw)
 
-pack_set --install-query $(pack_get --prefix)/bin/cp2k.psmp
+pack_set -install-query $(pack_get -prefix)/bin/cp2k.psmp
 
 # Add the lua family
-pack_set --module-opt "--lua-family $(pack_get --alias)"
+pack_set -module-opt "-lua-family $(pack_get -alias)"
 
 if [[ -z "$FLAG_OMP" ]]; then
-    doerr $(pack_get --package) "Can not find the OpenMP flag (set FLAG_OMP in source)"
+    doerr $(pack_get -package) "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
 arch=Linux-x86-64-NPA
@@ -22,11 +22,11 @@ FC = $MPIFC \n\
 LD = $MPIFC \n\
 AR = $AR -r \n\
 HWLOC_INC = $(list -INCDIRS hwloc) \n\
-HWLOC_LIB = $(list --LD-rp hwloc) \n\
+HWLOC_LIB = $(list -LD-rp hwloc) \n\
 FFTW_INC = $(list -INCDIRS fftw) \n\
-FFTW_LIB = $(list --LD-rp fftw) \n\
+FFTW_LIB = $(list -LD-rp fftw) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
-LIBXC_LIB = $(list --LD-rp libxc) \n\
+LIBXC_LIB = $(list -LD-rp libxc) \n\
 DFLAGS  = -D__FFTW3 -D__HWLOC \n\
 DFLAGS += -D__parallel -D__SCALAPACK\n\
 DFLAGS += -D__LIBXC\n\
@@ -50,22 +50,22 @@ FCFLAGS += -free\n\
 ' $file"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
 
     pack_cmd "sed -i '$ a\
 FCFLAGS += -ffree-form -ffree-line-length-none \n\
-SCALAPACK_L = $(list --LD-rp scalapack) -lscalapack \n\
+SCALAPACK_L = $(list -LD-rp scalapack) -lscalapack \n\
 ' $file"
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp +$la)"
+    pack_set -module-requirement $la
+    tmp_ld="$(list -LD-rp +$la)"
     pack_cmd "sed -i '1 a\
 LAPACK_L = $tmp_ld $(pack_get -lib[omp] $la)\n\
 ' $file"
 
 else
-    doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
+    doerr $(pack_get -package) "Could not determine compiler: $(get_c)"
     
 fi
 
@@ -73,5 +73,5 @@ pack_cmd "cd makefiles"
 
 pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=psmp"
 
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
-pack_cmd "cp ../exe/$arch/* $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get -prefix)/bin"
+pack_cmd "cp ../exe/$arch/* $(pack_get -prefix)/bin"

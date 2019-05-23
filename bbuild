@@ -125,7 +125,7 @@ while [ $# -gt 0 ]; do
 	    pack_only $1
 	    shift ;;
 	-only-file)
-	    pack_only --file $1
+	    pack_only -file $1
 	    shift ;;
 	-help|-h)
 	    help_
@@ -154,39 +154,39 @@ fi
 
 # We should now have populated all builds
 # Check if the _b_name_generic exists
-tmp=$(get_index --hash-array "_b_index" $_b_name_generic)
+tmp=$(get_index -hash-array "_b_index" $_b_name_generic)
 if [ -z "$tmp" ]; then
     doerr "option parsing" "Unrecognized build $_b_name_generic, create it first"
 else
-    build_set --default-build $_b_name_generic
-    msg_install --message "The default build for the generic packages is: $_b_name_generic"
-    source $(build_get --source)
+    build_set -default-build $_b_name_generic
+    msg_install -message "The default build for the generic packages is: $_b_name_generic"
+    source $(build_get -source)
 fi
-tmp=$(get_index --hash-array "_b_index" $_b_name_default)
+tmp=$(get_index -hash-array "_b_index" $_b_name_default)
 if [ -z "$tmp" ]; then
     doerr "option parsing" "Unrecognized build $_b_name_default, create it first"
 else
-    msg_install --message "The default build for packages is: $_b_name_default"
+    msg_install -message "The default build for packages is: $_b_name_default"
 fi
 
 # Notify the user about which module files will be generated
-msg_install --message "Will create $_mod_format compliant module files"
+msg_install -message "Will create $_mod_format compliant module files"
 
-msg_install --message "Will build with $_n_procs processors"
+msg_install -message "Will build with $_n_procs processors"
 
 tmp=0
 while [ $tmp -lt $_N_b ]; do
-    if [ -z "$(build_get --installation-path[$tmp])" ]; then
-	msg_install --message "The installation path for ${_b_name[$tmp]} has not been set."
+    if [ -z "$(build_get -installation-path[$tmp])" ]; then
+	msg_install -message "The installation path for ${_b_name[$tmp]} has not been set."
 	echo "I do not dare to guess where to place packages!"
 	echo "Please set it in your source file."
 	exit 1
     fi
 
-    if [ -z "$(build_get --module-path[$tmp])" ]; then
-	msg_install --message "The module path for ${_b_name[$tmp]} has not been set."
-	msg_install --message "Will set it to: $(build_get --installation-path[$tmp])/modules"
-	build_set --module-path "$(build_get --installation-path[$tmp])/modules"
+    if [ -z "$(build_get -module-path[$tmp])" ]; then
+	msg_install -message "The module path for ${_b_name[$tmp]} has not been set."
+	msg_install -message "Will set it to: $(build_get -installation-path[$tmp])/modules"
+	build_set -module-path "$(build_get -installation-path[$tmp])/modules"
     fi
     # DEBUG
     #build_print $tmp
@@ -207,33 +207,33 @@ source_pack helpers/modules.bash
 # that isn't the case, error out and denote the user should
 # rerun the script..
 if [[ $_has_module_cmd -eq 0 ]]; then
-    msg_install --message "Please rerun the script and add $(pack_get --prefix modules) to your path (for correct environment variable)"
-    msg_install --message "For environment modules, add this to your .bashrc: 'source $(pack_get --prefix modules)/$(pack_get --version modules)/init/bash'"
+    msg_install -message "Please rerun the script and add $(pack_get -prefix modules) to your path (for correct environment variable)"
+    msg_install -message "For environment modules, add this to your .bashrc: 'source $(pack_get -prefix modules)/$(pack_get -version modules)/init/bash'"
     exit 1
 fi
 # Now check that all module-paths are actually used
 _has_module_path=1
 for ib in `seq 0 $_N_b` ; do
-    path=$(build_get --module-path[$ib])
+    path=$(build_get -module-path[$ib])
     if [[ $(check_modulepath $path) -eq 0 ]]; then
-	msg_install --message "Module path: '$path' is not in env(MODULEPATH)"
-	msg_install --message "Add this to your .bashrc: 'module use --append $path'"
+	msg_install -message "Module path: '$path' is not in env(MODULEPATH)"
+	msg_install -message "Add this to your .bashrc: 'module use --append $path'"
 
 	_has_module_path=0
     fi
 done
-path=$(build_get --module-path[$_b_name_default])-apps
+path=$(build_get -module-path[$_b_name_default])-apps
 if [[ $(check_modulepath $path) -eq 0 ]]; then
     module use -p $path
 fi
 if [[ $(check_modulepath $path) -eq 0 ]]; then
-    msg_install --message "Module path: '$path' is not in env(MODULEPATH)"
-    msg_install --message "Add this to your .bashrc: 'module use --append $path'"
+    msg_install -message "Module path: '$path' is not in env(MODULEPATH)"
+    msg_install -message "Add this to your .bashrc: 'module use --append $path'"
     
     _has_module_path=0
 fi
 if [[ $_has_module_path -eq 0 ]]; then
-    msg_install --message "Please correct your environment, the module path is not consistent with your build."
+    msg_install -message "Please correct your environment, the module path is not consistent with your build."
     exit 1
 fi
 
@@ -253,21 +253,21 @@ source scripts.bash
 
 # Set the future correct default build as
 # requested by the user.
-build_set --default-build $_b_name_default
+build_set -default-build $_b_name_default
 
 # We need to update the module requirements for the
 # build (for instance if gnu-X.X.X has not been expanded)
-build_set --reset-module \
-	  $(list --prefix "--default-module " \
-		 $(build_get --default-module))
+build_set -reset-module \
+	  $(list -prefix "-default-module " \
+		 $(build_get -default-module))
 # Do the same for the debug build
-build_set --reset-module[debug] \
-	  $(list --prefix '--default-module[debug] ' \
-		 $(build_get --default-module))
+build_set -reset-module[debug] \
+	  $(list -prefix '-default-module[debug] ' \
+		 $(build_get -default-module))
 
 # Source the compiler specifications to ensure the correct
 # versions has been set etc.
-source $(build_get --source)
+source $(build_get -source)
 
 # Install all libraries
 source libs.bash
@@ -286,7 +286,7 @@ source default.bash
 # Add the latest modules
 source latest.bash
 
-msg_install --message "Finished installing all applications..."
+msg_install -message "Finished installing all applications..."
 
 
 # When dealing with additional sets of instructions spec files

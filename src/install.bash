@@ -18,7 +18,7 @@ function pack_install {
     local installed=$(pack_get -installed $idx)
 
     # Ensure we have populated the rejection
-    local rejs=$(build_get --rejects[$build])
+    local rejs=$(build_get -rejects[$build])
     for rej in $rejs ; do
 	local bld=$(get_index -a $rej)
 	if [[ $? -eq 0 && -n "$bld" ]]; then
@@ -34,16 +34,16 @@ function pack_install {
     tmp_lc="$alias"
     if [[ ${#_pack_only[@]} -gt 0 ]]; then
 	if [[ 0${_pack_only[$tmp_lc]} -eq 1 ]]; then
-	    pack_only $(pack_get --mod-req-all $idx)
+	    pack_only $(pack_get -mod-req-all $idx)
 	else
 	    return 
 	fi
     fi
 
     # First a simple check that it hasn't already been installed...
-    if [[ -e $(pack_get --install-query $idx) ]]; then
+    if [[ -e $(pack_get -install-query $idx) ]]; then
 	if [[ $installed -eq $_I_TO_BE ]]; then
-	    pack_set $idx --installed $_I_INSTALLED
+	    pack_set $idx -installed $_I_INSTALLED
 	    installed=$_I_INSTALLED
 	fi
     fi
@@ -54,11 +54,11 @@ function pack_install {
     case x$ext in
 	xgit)
 	    # Check that we haven't already found this has
-	    hash=$(git ls-remote $(pack_get --url $idx) HEAD | awk '{print $1}')
+	    hash=$(git ls-remote $(pack_get -url $idx) HEAD | awk '{print $1}')
 	    if [[ -e $prefix/.bb.hash ]]; then
 		local installed_hash=$(cat $prefix/.bb.hash)
 		if [[ "x$hash" == "x$installed_hash" ]]; then
-		    pack_set $idx --installed $_I_INSTALLED
+		    pack_set $idx -installed $_I_INSTALLED
 		    installed=$_I_INSTALLED
 		fi
 	    fi
@@ -80,16 +80,16 @@ function pack_install {
     local tmp_inst
 
     # Make sure that every package before is installed...
-    for tmp in $(pack_get --mod-req $idx) ; do
+    for tmp in $(pack_get -mod-req $idx) ; do
 	if [[ -z "${tmp// /}" ]]; then
 	    break
 	fi
 	tmp_idx=$(get_index $tmp)
-	tmp_inst=$(pack_get --installed $tmp_idx)
+	tmp_inst=$(pack_get -installed $tmp_idx)
 	case $tmp_inst in
 	    $_I_TO_BE)
 		pack_install $tmp_idx
-		[ $(pack_get --installed $tmp_idx) -eq $_I_REJECT ] && run=0 && break
+		[ $(pack_get -installed $tmp_idx) -eq $_I_REJECT ] && run=0 && break
 		;;
 	    $_I_REJECT)
 		# Capture packages that has been rejected.
@@ -102,15 +102,15 @@ function pack_install {
     
     # If it is installed...
     if [[ $installed -eq $_I_INSTALLED ]]; then
-	msg_install --already-installed $idx
+	msg_install -already-installed $idx
 	if [[ $FORCEMODULE -eq 0 ]]; then
 	    return 0
 	fi
     fi
 
-    local mod_reqs_paths="$(pack_get --mod-req-path $idx)"
+    local mod_reqs_paths="$(pack_get -mod-req-path $idx)"
 
-    tmp="$(pack_get --host-reject $idx)"
+    tmp="$(pack_get -host-reject $idx)"
     if [[ -n "$tmp" ]]; then
 	# Run should be 1 when we get here...
 	for host in $tmp ; do
@@ -125,9 +125,9 @@ function pack_install {
 
     if [[ $run -eq 0 ]]; then
 	# Notify other required stuff that this can not be installed.
-	pack_set $idx --installed $_I_REJECT
+	pack_set $idx -installed $_I_REJECT
 	installed=$_I_REJECT
-	msg_install --message "Installation rejected for $(pack_get --package $idx)[$version]" $idx
+	msg_install -message "Installation rejected for $(pack_get -package $idx)[$version]" $idx
 	return 1
     fi
     
@@ -143,7 +143,7 @@ function pack_install {
 	fi
 	
 	# Show that we will install
-	msg_install --start $idx
+	msg_install -start $idx
 
         # Download archive
 	pack_dwn $idx $bld_archive_path
@@ -152,12 +152,12 @@ function pack_install {
 	pushd $(build_get -build-path[$build]) 1> /dev/null
 	err=$?
 	if [[ $err -ne 0 ]]; then
-	    msg_install --package "Could not go to the build-path: $(build_get -build-path[$build])" $idx
+	    msg_install -package "Could not go to the build-path: $(build_get -build-path[$build])" $idx
 	    exit $err
 	fi
 
 	# Remove directory if already existing
-	local directory=$(pack_get --directory $idx)
+	local directory=$(pack_get -directory $idx)
 	case $directory in
 	    .|./)
 		noop
@@ -175,7 +175,7 @@ function pack_install {
 	    extract_archive $idx $bld_archive_path
 	    err=$?
 	    if [[ $err -ne 0 ]]; then
-		msg_install --package "Failed to extract archive from package..." $idx
+		msg_install -package "Failed to extract archive from package..." $idx
 		exit $err
 	    fi
 
@@ -183,7 +183,7 @@ function pack_install {
 	    pushd $directory 1> /dev/null
 	    err=$?
 	    if [[ $err -ne 0 ]]; then
-		msg_install --package "Could not go to the source directory: $directory" $idx
+		msg_install -package "Could not go to the source directory: $directory" $idx
 		exit $err
 	    fi
 	fi
@@ -199,35 +199,35 @@ function pack_install {
 	fi
 	
 	# Source the file for obtaining correct env-variables
-	source $(build_get --source[$build])
+	source $(build_get -source[$build])
 
 	# Begin loading modules before running the commands
 	if $(has_setting $BUILD_TOOLS $idx) ; then
 	    module load build-tools
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		msg_install --message "Failed loading modules (STATUS=$st): build-tools"
+		msg_install -message "Failed loading modules (STATUS=$st): build-tools"
 		exit $st
 	    fi
 	fi
 
         # Create the list of requirements
-	local module_loads="$(list --loop-cmd 'pack_get --module-name' $(pack_get --mod-req-module $idx))"
+	local module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
 	if [[ -n "${module_loads}" ]]; then
 	    module load $module_loads
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		msg_install --message "Failed loading modules (STATUS=$st): $module_loads"
+		msg_install -message "Failed loading modules (STATUS=$st): $module_loads"
 		exit $st
 	    fi
 	fi
 
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
-	    create_module --force \
+	    create_module -force \
 			  -n "$alias" -v "$version" \
 			  -M "$mod_name" \
-			  -p "$(pack_get --module-prefix $idx)" \
+			  -p "$(pack_get -module-prefix $idx)" \
 			  -P "$prefix"
             # Create the prefix directory
             mkdir -p $prefix
@@ -235,15 +235,15 @@ function pack_install {
 	    module load $mod_name
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
-		msg_install --message "Failed loading modules (STATUS=$st): $mod_name"
+		msg_install -message "Failed loading modules (STATUS=$st): $mod_name"
 		exit $st
 	    fi
 	fi
 
 	# Append all relevant requirements to the relevant environment variables
 	# Perhaps this could be generalized with options specifying the ENV_VARS
-	local tmp_ld=$(trim_spaces "$(list --LD-rp $mod_reqs_paths)")
-	local tmp_inc=$(trim_spaces "$(list --INCDIRS $mod_reqs_paths)")
+	local tmp_ld=$(trim_spaces "$(list -LD-rp $mod_reqs_paths)")
+	local tmp_inc=$(trim_spaces "$(list -INCDIRS $mod_reqs_paths)")
 	old_fcflags="$FCFLAGS"
 	old_fflags="$FFLAGS"
 	old_cflags="$CFLAGS"
@@ -268,10 +268,10 @@ function pack_install {
 	unset tmp_ld tmp_inc
 
 	# Show currently loaded modules before executing commands
-	msg_install --modules $idx
+	msg_install -modules $idx
 	
 	# Run all commands
-	tmp="$(pack_get --commands $idx)"
+	tmp="$(pack_get -commands $idx)"
 	local -a cmds=()
 	IFS="$_LIST_SEP" read -ra cmds <<< "$tmp"
 	for tmp in "${cmds[@]}" ; do
@@ -282,7 +282,7 @@ function pack_install {
 	    err=$?
 	    if [[ $err -ne 0 ]]; then
 		# Show error about the package installed
-		msg_install --package "Failed to install package..." $idx
+		msg_install -package "Failed to install package..." $idx
 		exit $err
 	    fi
 	done
@@ -309,7 +309,7 @@ function pack_install {
 	fi
 	
 	popd 1> /dev/null
-	msg_install --finish $idx
+	msg_install -finish $idx
 	
 	# Unload the requirement modules
 	if [[ -n "${module_loads}" ]]; then
@@ -321,7 +321,7 @@ function pack_install {
 	    module unload $mod_name
 	    # We need to clean up, in order to force the
 	    # module creation.
-	    rm -f $(pack_get --module-prefix $idx)/$mod_name
+	    rm -f $(pack_get -module-prefix $idx)/$mod_name
 	fi
 
 	if $(has_setting $BUILD_TOOLS $idx) ; then
@@ -337,7 +337,7 @@ function pack_install {
 	#export LD_LIBRARY_PATH="$old_ld_lib_path"
 
         # For sure it is now installed...
-	pack_set $idx --installed $_I_INSTALLED
+	pack_set $idx -installed $_I_INSTALLED
 	installed=$_I_INSTALLED
 
 	# Store hash if required
@@ -361,35 +361,35 @@ function pack_install {
 		_lib="$_lib $cmd"
 	    fi
 	done
-	[[ -n "$_lib" ]] && pack_set $idx --library-suffix "${_lib:1:}"
+	[[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
     fi
 
     if [[ $installed -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then
             # Create the list of requirements
-	    local reqs="$(list --prefix '-R ' $(pack_get --mod-req-module $idx))"
+	    local reqs="$(list -prefix '-R ' $(pack_get -mod-req-module $idx))"
             # We install the module scripts here:
 	    create_module \
 		-n "$alias" \
 		-v "$version" \
 		-M "$mod_name" \
-		-p "$(pack_get --module-prefix $idx)" \
-		-P "$prefix" $reqs $(pack_get --module-opt $idx)
+		-p "$(pack_get -module-prefix $idx)" \
+		-P "$prefix" $reqs $(pack_get -module-opt $idx)
 	else
 	    # It means it is installed but not a module
 	    # In this case we *must* specify it as not a module
-	    pack_set $idx --installed $_I_LIB
+	    pack_set $idx -installed $_I_LIB
 	    installed=$_I_LIB
 	fi
 	if $(has_setting $CRT_DEF_MODULE $idx) ; then
 	    create_module \
-		--module-path $bld_mod_path-apps \
+		-module-path $bld_mod_path-apps \
 		-n $alias.$version \
-		-W "Loading $(pack_get --package $idx): $(get_c)" \
+		-W "Loading $(pack_get -package $idx): $(get_c)" \
 		-v $version \
 		-M $alias.$version \
 		-P "/directory/should/not/exist" \
-		$(list --prefix '-L ' $(pack_get --mod-req-module $idx) $idx)
+		$(list -prefix '-L ' $(pack_get -mod-req-module $idx) $idx)
 	fi
     fi
 }
@@ -399,24 +399,23 @@ function pack_install {
 function get_index {
     local var=_index
     local all=0
-    local opt v
+    local v
     while [[ $# -gt 1 ]]; do
-	opt=$1
-	shift
-	case $opt in
+	case $1 in
 	    --all|-all|-a)
 		all=1
+		shift
 		;;
 	    --hash-array|-hash-array)
-		var="$1"
-		shift
+		var="$2"
+		shift 2
 		;;
 	esac
     done
     local i="$1"
     shift
 
-    if [[ ${#i} -eq 0 ]]; then
+    if [[ -z "$i" ]]; then
 	return 1
     fi
     if (isnumber $i) ; then

@@ -87,8 +87,9 @@ new_build -name _internal-julia$IjV \
     -build-module-path "-package -version" \
     -build-installation-path "$IjV -package -version" \
     -build-path $(build_get -build-path)/jul-$jV
+
 mkdir -p $(build_get -module-path[_internal-julia$IjV])-apps
-build_set -default-choice[_internal-julia$IjV] linalg openblas blis atlas blas
+build_set -default-setting[_internal-julia$IjV] $(build_get -default-setting)
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])"

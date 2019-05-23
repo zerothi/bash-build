@@ -35,6 +35,8 @@ fi
 pack_set -install-query $(pack_get -prefix)/bin/python3
 
 pack_set -module-opt "-set-ENV PYTHONUSERBASE=~/.local/python-$IpV-$(get_c)"
+pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
+
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
@@ -116,10 +118,9 @@ new_build -name _internal-python$IpV \
     -build-module-path "-package -version" \
     -build-installation-path "$IpV -package -version" \
     -build-path $(build_get -build-path)/py-$pV
-# Also create directory
-mkdir -p $(build_get -module-path[_internal-python$IpV])-apps
-build_set --default-choice[_internal-python$IpV] linalg openblas blis atlas blas
 
+mkdir -p $(build_get -module-path[_internal-python$IpV])-apps
+build_set -default-setting[_internal-python$IpV] $(build_get -default-setting)
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])"
@@ -151,7 +152,7 @@ set_parent_exec $(pack_get -prefix)/bin/python3
 # Save the default build index
 def_idx=$(build_get -default-build)
 # Change to the new build default
-build_set --default-build _internal-python$IpV
+build_set -default-build _internal-python$IpV
 
 
 # Install all python packages
@@ -166,4 +167,4 @@ build_set -module-path $old_path
 
 
 # Reset default build
-build_set --default-build $def_idx
+build_set -default-build $def_idx

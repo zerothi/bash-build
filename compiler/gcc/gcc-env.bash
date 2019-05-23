@@ -1,0 +1,11 @@
+# Common options for each of the GCC-compliers
+pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib"
+pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib64"
+pack_set -module-opt "-set-ENV CC=gcc"
+pack_set -module-opt "-set-ENV CXX=g++"
+pack_set -module-opt "-set-ENV FC=gfortran"
+pack_set -module-opt "-set-ENV F77=gfortran"
+pack_set -module-opt "-set-ENV F90=gfortran"
+pack_set -module-opt "-set-ENV AR=gcc-ar"
+pack_set -module-opt "-set-ENV RANLIB=gcc-ranlib"
+pack_set -module-opt "-set-ENV NM=gcc-nm"
