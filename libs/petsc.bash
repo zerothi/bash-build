@@ -1,6 +1,6 @@
 for d_type in d z
 do
-v=3.11.0
+v=3.11.2
 add_package --package petsc-$d_type \
 	    --directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz

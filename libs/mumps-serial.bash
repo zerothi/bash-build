@@ -1,5 +1,5 @@
 add_package --package mumps-serial \
-	    http://mumps.enseeiht.fr/MUMPS_5.1.2.tar.gz
+	    http://mumps.enseeiht.fr/MUMPS_5.2.0.tar.gz
 
 pack_set -s $IS_MODULE
 

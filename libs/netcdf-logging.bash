@@ -5,7 +5,7 @@ else
 fi
 
 # Now we can install NetCDF (we need the C version to be first added!)
-v=4.6.3
+v=4.7.0
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-logging \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz

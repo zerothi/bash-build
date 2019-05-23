@@ -1,4 +1,4 @@
-v=3.0.3
+v=3.0.5
 add_package -package zeep -archive libzeep-$v.tar.gz \
 	    https://github.com/mhekkel/libzeep/archive/v$v.tar.gz
 

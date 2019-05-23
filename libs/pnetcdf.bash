@@ -1,17 +1,15 @@
-# This package requires that flex and bison is installed
-
 # Install the Parallel NetCDF
-v=1.11.1
+v=1.11.2
 add_package \
-    --package pnetcdf \
+    -package pnetcdf \
     https://parallel-netcdf.github.io/Release/pnetcdf-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libpnetcdf.a
-pack_set --lib -lpnetcdf
+pack_set -install-query $(pack_get -LD)/libpnetcdf.a
+pack_set -lib -lpnetcdf
 
-pack_set --module-requirement mpi
+pack_set -module-requirement mpi
 if [[ $(pack_installed bison) -eq 1 ]]; then
     pack_cmd "module load $(list ++bison)"
 fi
@@ -23,9 +21,9 @@ fi
 pack_cmd "../configure" \
 	 "CC=${MPICC} CXX=${MPICXX}" \
 	 "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
-	 "--prefix=$(pack_get --prefix)" \
-	 "--with-mpi=$(pack_get --prefix mpi)" \
-     "--enable-netcdf4" \
+	 "--prefix=$(pack_get -prefix)" \
+	 "--with-mpi=$(pack_get -prefix mpi)" \
+	 "--enable-netcdf4" \
 	 "--enable-fortran --disable-cxx"
 
 # Make commands
