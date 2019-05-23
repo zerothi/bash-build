@@ -128,6 +128,11 @@ source_pack python/pythtb.bash
 source_pack python/phonopy.bash
 source_pack python/phono3py.bash
 
+# Some QC codes
+source_pack python/biopython.bash
+source_pack python/pyquante.bash
+source_pack python/cclib.bash
+
 # made for kwant
 source_pack python/tinyarray.bash
 source_pack python/kwant.bash

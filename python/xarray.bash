@@ -1,6 +1,6 @@
 # 0.11.3 and onwards are Py3 only!
 if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=0.12.0
+    v=0.12.1
 else
     v=0.11.2
 fi

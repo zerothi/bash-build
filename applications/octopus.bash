@@ -1,4 +1,4 @@
-v=8.4
+v=9.0
 add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

@@ -1,4 +1,9 @@
-for v in 1.2.1 ; do
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=1.3.0
+else
+    v=1.2.1
+fi
+
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -60,4 +65,3 @@ if ! $(is_c intel) ; then
     pack_store $TEST_OUT
 fi
 
-done

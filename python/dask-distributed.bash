@@ -1,4 +1,4 @@
-v=1.26.0
+v=1.28.1
 add_package \
     --archive distributed-$v.tar.gz \
     https://github.com/dask/distributed/archive/$v.tar.gz
