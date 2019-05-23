@@ -349,7 +349,7 @@ function pack_install {
 			  AR NM RANLIB \
 			  FCFLAGS FFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
 	    do
-		[ -n "${!tmp}" ] && echo "export $tmp=${!tmp}"
+		[ -n "${!tmp}" ] && echo "export $tmp='${!tmp}'"
 	    done
 	} > $prefix/bb.source.bash
 	    
