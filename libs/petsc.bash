@@ -1,16 +1,16 @@
 for d_type in d z
 do
 v=3.11.2
-add_package --package petsc-$d_type \
-	    --directory petsc-$v \
+add_package -package petsc-$d_type \
+	    -directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libpetsc.so
-pack_set --lib -lpetsc
+pack_set -install-query $(pack_get -LD)/libpetsc.so
+pack_set -lib -lpetsc
 
-pack_set $(list --prefix '--mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen)
+pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch superlu-dist)
 
 # Patch configuration!
 o=$(pwd_archives)/petsc-libindex.patch
@@ -28,11 +28,11 @@ if $(is_c intel) ; then
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
 
 else
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     tmp="--with-lapack-lib='$(pack_get -lib $la)' --with-blas-lib='$(pack_get -lib $la)'"
-    tmp="$tmp --with-scalapack-dir=$(pack_get --prefix scalapack)"
+    tmp="$tmp --with-scalapack-dir=$(pack_get -prefix scalapack)"
 fi
 
 case $d_type in
@@ -44,7 +44,7 @@ case $d_type in
 	;;
 esac
 
-tmp_ld="$(list --LD-rp $(pack_get --mod-req))"
+tmp_ld="$(list -LD-rp $(pack_get -mod-req))"
 # We need to fix d_type such that complex also works
 # Should this really be a separate package???
 pack_cmd "./configure PETSC_DIR=\$(pwd)" \
@@ -59,7 +59,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "AR=ar" \
 	 "RANLIB=ranlib" \
 	 "--with-scalar-type=$tmp_arch" \
-	 "--prefix=$(pack_get --prefix)" \
+	 "--prefix=$(pack_get -prefix)" \
 	 "--with-petsc-arch=$tmp_arch" \
 	 "--with-fortran-interfaces=1" \
 	 "--with-pic=1 $tmp" \
@@ -88,17 +88,13 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-netcdf-dir=$(pack_get -prefix netcdf)" \
 	 "--with-pnetcdf=1" \
 	 "--with-pnetcdf-dir=$(pack_get -prefix pnetcdf)" \
-
-# Just does not work
-#     "--with-superlu_dist=1" \
-#     "--with-superlu_dist-dir=$(pack_get --prefix superlu-dist)" \
-#     "--with-superlu_dist-lib='-lsuperlu_dist'"
-
-# Requires ptesmumps
-#     "--with-mumps=1" \
-#     "--with-mumps-dir=$(pack_get --prefix mumps)" \
-#     "--with-ptscotch=1" \
-#     "--with-ptscotch-dir=$(pack_get --prefix scotch)"
+	 "--with-superlu_dist=1" \
+	 "--with-superlu_dist-dir=$(pack_get -prefix superlu-dist)" \
+	 "--with-superlu_dist-lib='-lsuperlu_dist'" \
+	 "--with-ptscotch=1" \
+	 "--with-ptscotch-dir=$(pack_get -prefix scotch)" \
+	 "--with-mumps=1" \
+	 "--with-mumps-dir=$(pack_get -prefix mumps)"
 
 #     "--with-cholmod=1" \
 #     "--with-cholmod-dir=$(pack_get -prefix suitesparse)"
@@ -109,13 +105,13 @@ pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
 pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make PETSC_DIR=$(pack_get --prefix) PETSC_ARCH=$tmp_arch test > petsc.test 2>&1"
+pack_cmd "make PETSC_DIR=$(pack_get -prefix) PETSC_ARCH=$tmp_arch test > petsc.test 2>&1"
 pack_store petsc.test
 pack_store $tmp_arch/lib/petsc/conf/configure.log $tmp_arch.configure.log
 
-pack_set --module-opt "--set-ENV PETSC_DIR=$(pack_get --prefix)"
+pack_set -module-opt "-set-ENV PETSC_DIR=$(pack_get -prefix)"
 
 # Clean up the unused module
-pack_cmd "rm -rf $(pack_get --LD)/modules"
+pack_cmd "rm -rf $(pack_get -LD)/modules"
 
 done
