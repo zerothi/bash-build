@@ -86,7 +86,7 @@ elif $(is_host atto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1 ; echo force"
 
 else
-    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json imaplib)
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json imaplib httplib)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi

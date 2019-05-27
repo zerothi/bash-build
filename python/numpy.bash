@@ -5,38 +5,38 @@ add_package \
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 if [[ "x${pV:0:1}" == "x3" ]]; then
-    pack_set --install-query $(pack_get --prefix)/bin/f2py3
+    pack_set -install-query $(pack_get -prefix)/bin/f2py3
 else
-    pack_set --install-query $(pack_get --prefix)/bin/f2py2
+    pack_set -install-query $(pack_get -prefix)/bin/f2py2
 fi
-pack_set --module-requirement cython
-pack_set --module-requirement suitesparse
+pack_set -module-requirement cython
+pack_set -module-requirement suitesparse
 
-pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages/"
+pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
 
 # For future maybe this flag is important: NPY_SEPARATE_COMPILATION=0
 
 file=site.cfg
 pack_cmd "echo '#' > $file"
 
-tmp_lib=$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req-path))
+tmp_lib=$(list -prefix ':' -loop-cmd 'pack_get -LD' $(pack_get -mod-req-path))
 tmp_lib=${tmp_lib// /}
 tmp_lib=${tmp_lib}:/usr/lib64:/lib64:/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu
 
-tmp_inc=$(list --prefix ':' --suffix '/include' --loop-cmd 'pack_get --prefix' $(pack_get --mod-req-path))
+tmp_inc=$(list -prefix ':' -suffix '/include' -loop-cmd 'pack_get -prefix' $(pack_get -mod-req-path))
 tmp_inc=${tmp_inc// /}
 
 pack_cmd "sed -i '1 a\
 [fftw2]\n\
-library_dirs = $(pack_get --LD fftw-2)\n\
-include_dirs = $(pack_get --prefix fftw-2)/include\n\
+library_dirs = $(pack_get -LD fftw-2)\n\
+include_dirs = $(pack_get -prefix fftw-2)/include\n\
 fftw_libs = fftw_threads\n\
-runtime_library_dirs = $(pack_get --LD fftw-2)\n\
+runtime_library_dirs = $(pack_get -LD fftw-2)\n\
 [fftw]\n\
-library_dirs = $(pack_get --LD fftw)\n\
-include_dirs = $(pack_get --prefix fftw)/include\n\
+library_dirs = $(pack_get -LD fftw)\n\
+include_dirs = $(pack_get -prefix fftw)/include\n\
 fftw_libs = fftw3_threads\n\
-runtime_library_dirs = $(pack_get --LD fftw)\n\
+runtime_library_dirs = $(pack_get -LD fftw)\n\
 [amd]\n\
 amd_libs = amd\n\
 include_dirs = $(pack_get -prefix suitesparse)/include\n\
@@ -91,10 +91,14 @@ elif $(is_c gnu) ; then
 	pack_cmd "sed -i -e 's|\(def check_embedded_lapack.*\)|\1\n\ \ \ \ \ \ \ \ return True|g' numpy/distutils/system_info.py"
     fi
     pack_cmd "sed -i -e '/_lib_names[ ]*=/s|openblas|openblas_omp|g' numpy/distutils/system_info.py"
+    pack_cmd "sed -i -e '/_lib_names[ ]*=/s|blis|blis_omp|g' numpy/distutils/system_info.py"
 
     la=$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp="$(pack_get --LD $la)"
+    if [[ $(vrs_cmp $v 1.16.3) -le 0 ]]; then
+	la=openblas
+    fi
+    pack_set -module-requirement $la
+    tmp="$(pack_get -LD $la)"
     case $la in
 	openblas)
 	    # lapack internally
@@ -104,19 +108,20 @@ elif $(is_c gnu) ; then
 	    pack_cmd "sed -i '$ a\
 [lapack]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
 libraries = lapack_atlas\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	*)
-	    pack_set --module-requirement lapack
+	    pack_set -module-requirement lapack
 	    pack_cmd "sed -i '$ a\
-[lapack]\n\
-library_dirs = $(pack_get --LD lapack)\n\
-include_dirs = $(pack_get --prefix lapack)/include\n\
+[openblas]\n\
+library_dirs = $(pack_get -LD lapack)\n\
+include_dirs = $(pack_get -prefix lapack)/include\n\
 libraries = lapack\n\
-runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
-	    tmp="$(pack_get --LD $la)"
+extra_link_args = -lgfortran -lm\n\
+runtime_library_dirs = $(pack_get -LD lapack)\n' $file"
+	    tmp="$(pack_get -LD $la)"
 	    ;;
     esac
     tmp_l=$(pack_get -lib[omp] $la)
@@ -126,24 +131,24 @@ runtime_library_dirs = $(pack_get --LD lapack)\n' $file"
 	    pack_cmd "sed -i '$ a\
 [atlas_threads]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ${tmp_l//-l/,},pthread\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
+libraries = $tmp_l,pthread\n\
 runtime_library_dirs = $tmp\n' $file"
 	    tmp_l=$(pack_get -lib $la)
 	    tmp_l=${tmp_l//-l/,}
 	    pack_cmd "sed -i '$ a\
 [atlas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ${tmp_l//-l/,}\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
+libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file" 
 	    ;;
 	openblas)
 	    pack_cmd "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ${tmp_l//-l/,}\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
+libraries = $tmp_l\n\
 extra_link_args = -lpthread -lgfortran -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
@@ -151,16 +156,17 @@ runtime_library_dirs = $tmp\n' $file"
 	    pack_cmd "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ${tmp_l//-l/,}\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
+blas_libs = $tmp_l\n\
+libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blis)
 	    pack_cmd "sed -i '$ a\
 [blis]\n\
 library_dirs = $tmp\n\
-include_dirs = $(pack_get --prefix $la)/include\n\
-libraries = ${tmp_l//-l/,}\n\
+include_dirs = $(pack_get -prefix $la)/include\n\
+libraries = $tmp_l\n\
 extra_link_args = -lpthread -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
@@ -179,7 +185,7 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
     p_flags="DUM ${pFCFLAGS} -I$(pack_get -prefix suitesparse)/include $FLAG_OMP"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    p_flags="$(list --prefix ,\' --suffix \' ${p_flags//O3/O2} $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
+    p_flags="$(list -prefix ,\' -suffix \' ${p_flags//O3/O2} $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing
     pack_cmd "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:8}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_cmd "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"
@@ -197,24 +203,26 @@ fi
 pack_cmd "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
+#pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
+#pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
+#pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
+pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 # Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
 # loading
-pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
+pack_set -module-opt "-set-ENV OMP_NUM_THREADS=1"
 pack_cmd "unset LDSHARED"
 
 
+return
 if ! $(is_c intel) ; then
     add_test_package numpy.test
     pack_cmd "unset LDFLAGS"
     if [[ $(vrs_cmp $v 1.15.0) -ge 0 ]]; then
-	pack_cmd "OMP_NUM_THREADS=2 pytest --pyargs numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+	pack_cmd "OMP_NUM_THREADS=$NPROCS pytest --pyargs numpy > $TEST_OUT 2>&1 ; echo 'Success'"
     else
-	pack_cmd "OMP_NUM_THREADS=2 nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+	pack_cmd "OMP_NUM_THREADS=$NPROCS nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
     fi
     pack_store $TEST_OUT
 fi

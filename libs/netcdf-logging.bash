@@ -5,7 +5,7 @@ else
 fi
 
 # Now we can install NetCDF (we need the C version to be first added!)
-v=4.7.0
+v=$(pack_get -version netcdf)
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-logging \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
@@ -22,7 +22,7 @@ pack_set $(list --prefix ' --module-requirement ' hdf5 pnetcdf)
 pack_cmd "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"
 
 # Install commands that it should run
-pack_cmd "../configure" \
+pack_cmd "../configure CFLAGS='$CFLAGS -DHAVE_STRDUP'" \
 	 "CC=${MPICC} CXX=${MPICXX}" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--enable-dap" \
@@ -49,7 +49,7 @@ pack_cmd "make install"
 pack_install
 
 # Install the FORTRAN headers
-vf=4.4.5
+vf=$(pack_get -version netcdf-fortran)
 add_package --archive netcdf-fortran-$vf.tar.gz \
 	    --package netcdf-fortran-logging \
 	    https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz

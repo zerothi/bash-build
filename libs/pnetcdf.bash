@@ -23,7 +23,6 @@ pack_cmd "../configure" \
 	 "F77=${MPIF77} F90=${MPIF90} FC=${MPIF90}" \
 	 "--prefix=$(pack_get -prefix)" \
 	 "--with-mpi=$(pack_get -prefix mpi)" \
-	 "--enable-netcdf4" \
 	 "--enable-fortran --disable-cxx"
 
 # Make commands

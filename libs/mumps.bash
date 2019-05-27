@@ -130,9 +130,11 @@ if $(is_c intel) ; then
 
 else
 
-    if [[ "x$la" == "xopenblas" ]]; then
-	pack_cmd "sed -i -e 's:$(pack_get -lib $la):$(pack_get -lib[omp] $la):g' Makefile.inc"
-    fi
+    case $la in
+	openblas|blis)
+	    pack_cmd "sed -i -e 's:$(pack_get -lib $la):$(pack_get -lib[omp] $la):g' Makefile.inc"
+	    ;;
+    esac
     
 fi
 

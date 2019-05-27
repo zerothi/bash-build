@@ -10,12 +10,14 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpetsc.so
 pack_set -lib -lpetsc
 
-pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch superlu-dist)
+pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse)
 
-# Patch configuration!
-o=$(pwd_archives)/petsc-libindex.patch
-dwn_file http://www.student.dtu.dk/~nicpa/packages/petsc-libindex.patch $o
-pack_cmd "patch -p1 < $o"
+if [[ $(vrs_cmp $v 3.11.2) -lt 0 ]]; then
+    # Patch configuration!
+    o=$(pwd_archives)/petsc-libindex.patch
+    dwn_file http://www.student.dtu.dk/~nicpa/packages/petsc-libindex.patch $o
+    pack_cmd "patch -p1 < $o"
+fi
 
 tmp=''
 if $(is_c intel) ; then
@@ -63,6 +65,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-petsc-arch=$tmp_arch" \
 	 "--with-fortran-interfaces=1" \
 	 "--with-pic=1 $tmp" \
+	 "--with-openmp=1" \
 	 "--with-mpi=1" \
 	 "--with-gmp=1" \
 	 "--with-mpfr=1" \
@@ -88,18 +91,16 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-netcdf-dir=$(pack_get -prefix netcdf)" \
 	 "--with-pnetcdf=1" \
 	 "--with-pnetcdf-dir=$(pack_get -prefix pnetcdf)" \
-	 "--with-superlu_dist=1" \
-	 "--with-superlu_dist-dir=$(pack_get -prefix superlu-dist)" \
-	 "--with-superlu_dist-lib='-lsuperlu_dist'" \
 	 "--with-ptscotch=1" \
 	 "--with-ptscotch-dir=$(pack_get -prefix scotch)" \
 	 "--with-mumps=1" \
-	 "--with-mumps-dir=$(pack_get -prefix mumps)"
+	 "--with-mumps-dir=$(pack_get -prefix mumps)" \
+	 "--with-suitesparse=1" \
+	 "--with-suitesparse-dir=$(pack_get -prefix suitesparse)"
 
-#     "--with-cholmod=1" \
-#     "--with-cholmod-dir=$(pack_get -prefix suitesparse)"
-#     "--with-umfpack=1" \
-#     "--with-umfpack-dir=$(pack_get -prefix suitesparse) $tmp"
+#	 "--with-superlu_dist=1" \
+#	 "--with-superlu_dist-dir=$(pack_get -prefix superlu-dist)" \
+#	 "--with-cxx-dialect=C++11" \
 
 pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
 pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"

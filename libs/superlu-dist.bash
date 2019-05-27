@@ -96,6 +96,7 @@ else
 BLASLIB = $(list -LD-rp +$la) $(pack_get -lib $la)\n\
 SLU_HAVE_LAPACK = TRUE\n\
 LAPACKLIB = $(pack_get -lib $la) \n\
+FLIBS = -lgfortran\n\
 ' $file"
 
 fi

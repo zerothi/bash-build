@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.7.0 ; do
+for v in $(pack_get -version netcdf) ; do
 add_package --archive netcdf-c-$v.tar.gz \
     --package netcdf-serial-noszip \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
@@ -13,7 +13,7 @@ pack_set --install-query $(pack_get --LD)/libnetcdf.a
 pack_set --lib[fortran] -lnetcdff -lnetcdf
 
 # Install commands that it should run
-pack_cmd "../configure" \
+pack_cmd "../configure CFLAGS='$CFLAGS -DHAVE_STRDUP'" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--enable-dap" \
 	 "--enable-netcdf-4" \
@@ -29,7 +29,7 @@ pack_store netcdf.test netcdf.test.c
 pack_install 
 
 # Install the FORTRAN headers
-vf=4.4.5
+vf=$(pack_get -version netcdf-fortran)
 add_package --archive netcdf-fortran-$vf.tar.gz \
 	    --package netcdf-fortran-serial-noszip \
 	    https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
