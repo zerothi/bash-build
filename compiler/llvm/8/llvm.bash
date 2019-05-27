@@ -53,6 +53,7 @@ done
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
 opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=$NPROCS"
+opt="$opt -DLLVM_BINUTILS_INCDIR=$(pack_get -prefix build-tools)/include"
 
 # Prepare Cmake setup
 pack_cmd "CC=$CC CXX=$CXX cmake -G 'Unix Makefiles' $opt .."

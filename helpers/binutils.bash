@@ -1,18 +1,19 @@
-add_package --build generic http://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.xz
+add_package -build generic http://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $NO_PIC -s $BUILD_TOOLS
 
-pack_set --prefix $(pack_get --prefix build-tools)
+pack_set -prefix $(pack_get -prefix build-tools)
 
-pack_set --install-query $(pack_get --prefix)/bin/gprof
+pack_set -install-query $(pack_get -prefix)/bin/gprof
 
 pack_cmd "../configure --with-sysroot=${SYSROOT-/}" \
 	 --enable-gold=yes \
 	 --enable-ld=yes \
 	 --enable-lto=yes \
 	 --enable-shared \
+	 --enable-plugins \
 	 --enable-install-libiberty \
-	 "--prefix $(pack_get --prefix)"
+	 "--prefix $(pack_get -prefix)"
 
 # Make commands (no tests available)
 pack_cmd "make $(get_make_parallel)"
