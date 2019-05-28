@@ -118,6 +118,7 @@ function create_module {
 	    -RL|-reqs+load-module) 
 		load="$load $(pack_get --mod-req-module $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
+	    -undefined-ENV)      env="$env u$1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
 	    -append-ENV)      env="$env a$1" ; shift ;; # Can be optioned several times
@@ -382,14 +383,17 @@ EOF
 	    # We add explicit quotations as certain env-vars
 	    # might not adhere to simple text 
 	    case $opt in
+		u)
+		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
+		    ;;
 		s)
-		    opt="$(module_fmt_routine --set-env $lenv $lval)"
+		    opt="$(module_fmt_routine -set-env $lenv $lval)"
 		    ;;
 		p)
-		    opt="$(module_fmt_routine --prepend-path $lenv $lval)"
+		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
 		    ;;
 		a)
-		    opt="$(module_fmt_routine --append-path $lenv $lval)"
+		    opt="$(module_fmt_routine -append-path $lenv $lval)"
 		    ;;
 		*)
 		    opt=''
@@ -547,6 +551,20 @@ function module_fmt_routine {
 		case $_mod_format in
 		    $_mod_format_ENVMOD) printf '%s' "append-path $1 $2" ;;
 		    $_mod_format_LMOD) printf '%s' "append_path(\"$1\",\"$2\")" ;;
+		esac
+		shift ; shift ;;
+	    -undefined-env)
+		case $_mod_format in
+		    $_mod_format_ENVMOD)
+			printf '%s' "if { ![info exists ::env($1)] } {"
+			printf '%s' " setenv $1 $2"
+			printf '%s' "}"
+			;;
+		    $_mod_format_LMOD)
+			printf '%s\n' "if not os.getenv(\"$1\") then"
+			printf '%s\n' "setenv(\"$1\",\"$2\",true)"
+			printf '%s' "end"
+			;;
 		esac
 		shift ; shift ;;
 	    -set-env)
