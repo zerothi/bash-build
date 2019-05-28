@@ -29,8 +29,8 @@ if $(is_c intel) ; then
     LIBS += -mkl' $file"
     
 else
-    la=$(pack_choice -i linalg)
-    pack_set -module-requirement lapack-$la
+    la=lapack-$(pack_choice -i linalg)
+    pack_set -module-requirement $la
     pack_cmd "sed -i '$ a\
 LIBS += $(list -LD-rp ++$la) $(pack_get -lib $la)' $file"
 

@@ -1,6 +1,5 @@
 v=1.73
-add_package \
-    http://biopython.org/DIST/biopython-$v.tar.gz
+add_package http://biopython.org/DIST/biopython-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

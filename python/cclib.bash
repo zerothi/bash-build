@@ -4,7 +4,7 @@ add_package \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -module-requirement biopython -mod-req PyQuante
+pack_set -module-requirement biopython -mod-req pyquante
 
 pack_set -install-query $(pack_get -prefix)/lib/python$pV/site-packages/
 

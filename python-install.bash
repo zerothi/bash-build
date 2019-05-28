@@ -132,6 +132,7 @@ source_pack python/phono3py.bash
 # Some QC codes
 source_pack python/biopython.bash
 source_pack python/pyquante.bash
+source_pack python/pyquante2.bash
 source_pack python/cclib.bash
 
 # made for kwant
