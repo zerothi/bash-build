@@ -42,8 +42,8 @@ if $(is_c intel) ; then
 else
     pack_set --module-requirement scalapack
 
-    la=$(pack_choice -i linalg)
-    pack_set --module-requirement lapack-$la
+    la=lapack-$(pack_choice -i linalg)
+    pack_set -module-requirement $la
     pack_cmd "sed -i '1 a\
 LIB += $(list --LD-rp scalapack +$la) -lscalapack $(pack_get -lib[omp] $la)' $file"
 

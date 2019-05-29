@@ -10,7 +10,7 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpetsc.so
 pack_set -lib -lpetsc
 
-pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse)
+pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse hypre)
 
 if [[ $(vrs_cmp $v 3.11.2) -lt 0 ]]; then
     # Patch configuration!
@@ -77,6 +77,8 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-boost-dir=$(pack_get -prefix boost)" \
 	 "--with-libpng=1" \
 	 "--with-libpng-dir=$(pack_get -prefix gen-libpng)" \
+	 "--with-hypre=1" \
+	 "--with-hypre-dir=$(pack_get -prefix hypre)" \
 	 "--with-parmetis=1" \
 	 "--with-parmetis-dir=$(pack_get -prefix parmetis)" \
 	 "--with-metis=1" \

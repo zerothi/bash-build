@@ -1,4 +1,4 @@
-msg_install --message "Installing all libraries..."
+msg_install -message "Installing all libraries..."
 
 # Basic libraries
 source_pack libs/zlib.bash
@@ -22,9 +22,9 @@ source_pack libs/mvapich.bash
 if $(is_c intel) ; then
     # The current implementation does not abstract the
     # mpi differences
-    pack_set --alias mpi openmpi
+    pack_set -alias mpi openmpi
 else
-    pack_set --alias mpi $_mpi_version
+    pack_set -alias mpi $_mpi_version
 fi
 
 # Optimization of openmpi parameters
@@ -119,10 +119,13 @@ source_pack libs/mumps-serial.bash
 source_pack libs/mumps.bash
 source_pack libs/superlu.bash
 source_pack libs/superlu-dist.bash
+source_pack libs/hypre.bash
 
 source_pack libs/petsc.bash
 source_pack libs/slepc.bash
 
+source_pack libs/proj.bash
+source_pack libs/gdal.bash
 source_pack libs/p4est.bash
 
 source_pack libs/dealii.bash
@@ -142,7 +145,7 @@ source_pack libs/atompaw.bash
 
 # We install the module scripts here:
 create_module \
-    --module-path $(build_get --module-path)-apps \
+    -module-path $(build_get -module-path)-apps \
     -n mpi.zlib.hdf5.netcdf \
     -W "Script for: $(get_c)" \
     -v $(date +'%g-%j') \
@@ -161,23 +164,23 @@ do
 done
 if [ ! -z "$tmp" ]; then
     create_module \
-	--module-path $(build_get --module-path)-apps \
+	-module-path $(build_get -module-path)-apps \
 	-n file-utils \
 	-W "Script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M hdf5.netcdf.utils \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $tmp)
+	$(list -prefix '-RL ' $tmp)
 fi
 
-for bl in blas atlas openblas ; do
+for bl in blas atlas openblas blis ; do
     create_module \
-	--module-path $(build_get --module-path)-apps \
+	-module-path $(build_get -module-path)-apps \
         -n mpi.$bl.scalapack \
 	-W "Parallel math script for: $(get_c)" \
 	-v $(date +'%g-%j') \
 	-M mpi.$bl.scalapack \
 	-P "/directory/should/not/exist" \
-	$(list --prefix '-RL ' $(pack_get --module-requirement mpi) mpi $bl)
+	$(list -prefix '-RL ' $(pack_get -module-requirement mpi) mpi $bl)
 done
 
