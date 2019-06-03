@@ -1,4 +1,4 @@
-for v in 1.16.3 ; do
+for v in 1.16.4 ; do
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
