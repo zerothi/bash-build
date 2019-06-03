@@ -1,5 +1,5 @@
 add_package --build generic --alias gen-libpng --package gen-libpng \
-            ftp://ftp-osl.osuosl.org/pub/libpng/src/libpng16/libpng-1.6.34.tar.xz
+	    https://download.sourceforge.net/libpng/libpng-1.6.36.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -14,6 +14,6 @@ pack_cmd "./configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > libpng.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_store libpng.test

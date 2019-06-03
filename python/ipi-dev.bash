@@ -1,7 +1,7 @@
 [ "x${pV:0:1}" == "x3" ] && return 0
 
 add_package --package ipi-dev --version 0 \
-	    https://github.com/cosmo-epfl/i-pi-dev.git
+	    https://github.com/i-pi/i-pi.git
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

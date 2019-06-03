@@ -153,8 +153,10 @@ function build_set {
     # We set up default parameters for creating the 
     # default package directory
     local tmp
+    local opt
+    local spec
     while [[ $# -gt 0 ]]; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	local spec=$(var_spec -s $opt)
 	if [[ -z "$spec" ]]; then
 	    local b_idx=$_b_def_idx
@@ -170,6 +172,7 @@ function build_set {
 	case $opt in
 	    -archive-path|-ap)
 		_archives="$1"
+		mkdir -p $1
 		shift ;;
 	    -installation-path|-ip)
 		[[ $b_idx -eq 0 ]] && _prefix="$1"
@@ -189,10 +192,12 @@ function build_set {
 	    -build-installation-path|-bip) 
 		[[ $b_idx -eq 0 ]] && _build_install_path="$1"
 		_b_build_prefix[$b_idx]="$1"
+		mkdir -p $1
 		shift ;;
 	    -build-module-path|-bmp) 
 		[[ $b_idx -eq 0 ]] && _build_module_path="$1"
 		_b_build_mod_prefix[$b_idx]="$1"
+		mkdir -p $1
 		shift ;;
 	    -default-module-hidden) 
 		local tmp=$(get_index $1)
@@ -213,7 +218,11 @@ function build_set {
 		_b_def_mod_reqs[$b_idx]=""
 		;;
 	    -default-setting)
-		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		if [[ "${1:0:${#_LIST_SEP}}" == "$_LIST_SEP" ]]; then
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$1"
+		else
+		    _b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
+		fi
 		shift ;;
 	    -default-choice)
 		_b_def_settings[$b_idx]="${_b_def_settings[$b_idx]}$_LIST_SEP$1"
@@ -260,6 +269,23 @@ function build_set {
 }
 
 
+#  Function build_exist
+# Check whether a given build exists.
+#  Arguments
+#    <build-name>
+#       if <build-name> exists this function returns *true*
+#
+# Examples:
+# if $(build_exist cuda) then
+#    ...
+# fi
+
+function build_exist {
+    local b_idx=$(get_index --hash-array "_b_index" $1)
+    [[ -z "$b_idx" ]] && return 1
+    return 0
+}
+
 #  Function build_get
 # Retrieve information from a specific build.
 #  Arguments
@@ -300,7 +326,8 @@ function build_set {
 function build_get {
     # We set up default parameters for creating the 
     # default package directory
-    local opt=$(trim_em $1)
+    local opt
+    trim_em opt $1
     shift
     local spec=$(var_spec -s $opt)
     if [[ -z "$spec" ]]; then
@@ -315,19 +342,19 @@ function build_get {
     [[ -z "$b_idx" ]] && doerr "Build index" "Build not existing ($opt and $spec)"
     opt=$(var_spec $opt)
     case $opt in
-	-archive-path|-ap) _ps "$_archives" ;;
-	-name) _ps "${_b_name[$b_idx]}" ;;
-	-installation-path|-ip) _ps "${_b_prefix[$b_idx]}" ;;
-	-module-path|-mp) _ps "${_b_mod_prefix[$b_idx]}" ;;
-	-build-path|-bp) _ps "${_b_build_path[$b_idx]}" ;;
-	-build-installation-path|-bip) _ps "${_b_build_prefix[$b_idx]}" ;;
-	-build-module-path|-bmp) _ps "${_b_build_mod_prefix[$b_idx]}" ;;
-	-default-build) _ps "$_b_def_idx" ;; 
-	-default-setting) _ps "${_b_def_settings[$b_idx]}" ;;
-	-default-module) _ps "${_b_def_mod_reqs[$b_idx]}" ;; 
-	-def-module-version) _ps "$_crt_version" ;; 
-	-source) _ps "${_b_source[$b_idx]}" ;; 
-	-rejects) _ps "${_b_reject[$b_idx]}" ;; 
+	-archive-path|-ap) printf '%s' "$_archives" ;;
+	-name) printf '%s' "${_b_name[$b_idx]}" ;;
+	-installation-path|-ip) printf '%s' "${_b_prefix[$b_idx]}" ;;
+	-module-path|-mp) printf '%s' "${_b_mod_prefix[$b_idx]}" ;;
+	-build-path|-bp) printf '%s' "${_b_build_path[$b_idx]}" ;;
+	-build-installation-path|-bip) printf '%s' "${_b_build_prefix[$b_idx]}" ;;
+	-build-module-path|-bmp) printf '%s' "${_b_build_mod_prefix[$b_idx]}" ;;
+	-default-build) printf '%s' "$_b_def_idx" ;; 
+	-default-setting) printf '%s' "${_b_def_settings[$b_idx]}" ;;
+	-default-module) printf '%s' "${_b_def_mod_reqs[$b_idx]}" ;; 
+	-def-module-version) printf '%s' "$_crt_version" ;; 
+	-source) printf '%s' "${_b_source[$b_idx]}" ;; 
+	-rejects) printf '%s' "${_b_reject[$b_idx]}" ;; 
 	*) doerr "$opt" "Not a recognized option for build_get ($opt and $spec)" ;;
     esac
 }
@@ -345,14 +372,15 @@ function new_build {
     _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     _b_def_mod_reqs[$_N_b]=""
     # Read in options
+    local opt
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	shift
 	case $opt in 
 	    # As a bonus, supplying name several time
 	    # creates aliases! :)
 	    -name) 
-		_b_index[$1]=$_N_b
+		_b_index[$(lc $1)]=$_N_b
 		_b_name[$_N_b]="$1"
 		if [[ $1 == default ]]; then
 		    doerr "build-name" "A build cannot be name 'default'!"
@@ -366,6 +394,8 @@ function new_build {
 	    -module-path) 
 		_b_mod_prefix[$_N_b]="$1" 
 		mkdir -p $1
+		module is-used $1
+		[ $? -ne 0 ] && module use -p $1
 		shift ;;
 	    -build-installation-path|-bip) 
 		_b_build_prefix[$_N_b]="$1"
@@ -441,4 +471,29 @@ function new_build {
 	    done
 	fi
     done
+}
+
+
+
+# Debugging function for printing out every available
+# information about a build
+function build_print {
+    # It will only take one argument...
+    local build=$_N_b
+    [[ $# -gt 0 ]] && build=$(get_index --hash-array "_b_index" $1)
+    shift
+    echo " >> >> >> >> Build information"
+    echo " NAM: $(build_get -name[$build])"
+    echo " AP : $(build_get -ap[$build])"
+    echo " IP : $(build_get -ip[$build])"
+    echo " BP : $(build_get -bp[$build])"
+    echo " BP X $(pack_list -lf "-X -p /" $(build_get -bp[$build]))"
+    echo " BIP: $(build_get -bip[$build])"
+    echo " BIPX $(pack_list -lf "-X -s /" $(build_get -bip[$build]))"
+    echo " BMP: $(build_get -bmp[$build])"
+    echo " BMPX $(pack_list -lf "-X -p /" $(build_get -bmp[$build]))"
+    echo " DM : $(build_get -default-module[$build])"
+    echo " S  : $(build_get -source[$build])"
+    echo " SET: $(build_get -default-setting[$build])"
+    echo "                                 << << << <<"
 }

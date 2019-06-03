@@ -1,4 +1,4 @@
-for v in 5.1.2 ; do
+for v in 5.2.0 ; do
 add_package --package mumps \
 	    http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
 
@@ -130,15 +130,17 @@ if $(is_c intel) ; then
 
 else
 
-    if [[ "x$la" == "xopenblas" ]]; then
-	pack_cmd "sed -i -e 's:$(pack_get -lib $la):$(pack_get -lib[omp] $la):g' Makefile.inc"
-    fi
+    case $la in
+	openblas|blis)
+	    pack_cmd "sed -i -e 's:$(pack_get -lib $la):$(pack_get -lib[omp] $la):g' Makefile.inc"
+	    ;;
+    esac
     
 fi
 
 pack_cmd "sed -i '$ a\
 CDEFS += -DMUMPS_OPENMP\n\
-OPTF += $FLAG_OMP\n\
+OPTF += $FLAG_OMP -DBLR_MT\n\
 OPTL += $FLAG_OMP\n\
 OPTC += $FLAG_OMP\n' Makefile.inc"
 

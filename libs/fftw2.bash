@@ -10,10 +10,10 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > fftw.test 2>&1"
 pack_cmd "make install"
 
-pack_set_mv_test tmp.test
+pack_store fftw.test
 
 
 add_package --alias fftw-mpi-2 --package fftw-mpi \
@@ -30,8 +30,8 @@ pack_cmd "../configure --enable-mpi" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > fftw.test 2>&1"
 pack_cmd "make install"
 
-pack_set_mv_test tmp.test
+pack_store fftw.test
 

@@ -1,53 +1,50 @@
 # Install Python 3 versions
 # apt-get libbz2-dev libncurses5-dev zip
-v=3.6.4
-add_package --alias python --package python \
-    http://www.python.org/ftp/python/$v/Python-$v.tar.xz
+pV=3.7
+IpV=$pV.3
+add_package -alias python -package python \
+    http://www.python.org/ftp/python/$IpV/Python-$IpV.tar.xz
 if $(is_host n-) ; then
-    pack_set --package Python
+    pack_set -package Python
 fi
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list --prefix '--mod-req ' zlib expat libffi)
+pack_set $(list -prefix '-mod-req ' zlib expat libffi)
 lib_extra=
 tmp_lib=
-if [[ $(pack_get --installed sqlite) -eq 1 ]]; then
+tmp=
+if [[ $(pack_get -installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
-if [[ $(pack_get --installed openssl) -eq 1 ]]; then
+if [[ $(pack_get -installed openssl) -eq 1 ]]; then
     lib_extra="$lib_extra openssl"
+    tmp="--with-openssl=$(pack_get -prefix openssl)"
 fi
-if [[ $(pack_get --installed termcap) -eq 1 ]]; then
+if [[ $(pack_get -installed termcap) -eq 1 ]]; then
     lib_extra="$lib_extra termcap"
 fi
-if [[ $(pack_get --installed readline) -eq 1 ]]; then
+if [[ $(pack_get -installed readline) -eq 1 ]]; then
     lib_extra="$lib_extra readline"
     if $(is_host nano pico femto) ; then
         tmp_lib="$tmp_lib -ltinfo"
     fi
 fi
 
-pack_set --install-query $(pack_get --prefix)/bin/python3
+pack_set -install-query $(pack_get -prefix)/bin/python3
+
+pack_set -module-opt "-set-ENV PYTHONUSERBASE=~/.local/python-$IpV-$(get_c)"
+pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
+
 
 pCFLAGS="$CFLAGS"
-tmp=
 if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
-    tmp="--without-gcc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
 elif ! $(is_c gnu) ; then
-    tmp="--without-gcc"
-fi
-
-if [[ $(vrs_cmp 3.5.2 $v) -ge 0 ]]; then
-    # We have to patch Python for openssl >= 1.1.0
-    o=$(pwd_archives)/$(pack_get --package)-3.5-SSL-1.1.0.patch
-    dwn_file https://bugs.python.org/file44360/Port-Python-s-SSL-module-to-OpenSSL-1.1.0-5.patch $o
-    pack_cmd "pushd ../"
-    pack_cmd "patch -p1 < $o ; echo FORCE"
-    pack_cmd "popd"
+    tmp="$tmp --without-gcc"
 fi
 
 # Correct the UNIX C-compiler to GCC
@@ -61,19 +58,19 @@ pack_cmd "popd"
 # We could later build python with static linking and then
 # later install the shared library (so that we both have .a and .so).
 # For now we require that builds requiring a shared build is "fixed".
-#    enable shared build with: --enable-shared and adding python[$v] to list --LD-rp
-pack_cmd "../configure --with-threads" \
-    "LDFLAGS='$(list --LD-rp $(pack_get --mod-req) $lib_extra) $tmp_lib'" \
-    "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req) $lib_extra)' $tmp" \
+#    enable shared build with: --enable-shared and adding python[$IpV] to list -LD-rp
+pack_cmd "../configure" \
+    "LDFLAGS='$(list -LD-rp $(pack_get -mod-req) $lib_extra) $tmp_lib'" \
+    "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req) $lib_extra)' $tmp" \
     "--with-system-ffi --with-system-expat" \
-    "--prefix=$(pack_get --prefix)"
+    "--prefix=$(pack_get -prefix)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 
-# Common tests
+
 if $(is_host n- sylg thul fjorm surt muspel slid) ; then
-    msg_install --message "Skipping python tests..."
+    msg_install -message "Skipping python tests..."
     #pack_cmd "make EXTRATESTOPTS='-x test_pathlib' test > python.test 2>&1"
     
 elif $(is_host nano pico femto) ; then
@@ -89,13 +86,13 @@ elif $(is_host atto) ; then
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1 ; echo force"
 
 else
-    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json ssl imaplib)
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net json imaplib httplib)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
     
 fi
 pack_cmd "make install"
 if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
-    pack_set_mv_test python.test
+    pack_store python.test
 fi
 
 # Assert that libpython$pV.a exists
@@ -107,35 +104,67 @@ tmp=libpython${v:0:3}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 unset tmp
 
+# Also ensure that Python is the "default" executable in a Py3 environment
+pack_cmd "cd $(pack_get -prefix)/bin"
+pack_cmd "[ -e python ] || ln -s python3 python"
+
+
+# Create a new build with this module
+new_build -name _internal-python$IpV \
+    -module-path $(build_get -module-path)-python/$IpV \
+    -source $(build_get -source) \
+    $(list -prefix "-default-module " $(pack_get -mod-req-module) python[$IpV]) \
+    -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
+    -build-module-path "-package -version" \
+    -build-installation-path "$IpV -package -version" \
+    -build-path $(build_get -build-path)/py-$pV
+
+mkdir -p $(build_get -module-path[_internal-python$IpV])-apps
+build_set -default-setting[_internal-python$IpV] $(build_get -default-setting)
+
+# Now add options to ensure that loading this module will enable the path for the *new build*
+pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])"
+pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])-apps"
+
 
 # Needed as it is not source_pack
 pack_install
 
-create_module \
-    --module-path $(build_get --module-path)-npa-apps \
-    -n $(pack_get --alias).$(pack_get --version) \
-    -W "Nick R. Papior script for loading $(pack_get --package): $(get_c)" \
-    -v $(pack_get --version) \
-    -M $(pack_get --alias).$(pack_get --version)/$(get_c) \
-    -P "/directory/should/not/exist" \
-    $(list --prefix '-L ' $(pack_get --module-requirement)) \
-    -L $(pack_get --alias) 
 
-# Install all relevant python packages
+# We should probably run
+#  ensurepip (which ensures the correct pip and setuptools is installed)
+
+create_module \
+    -module-path $(build_get -module-path)-apps \
+    -n $(pack_get -alias).$(pack_get -version) \
+    -W "Script for loading $(pack_get -package): $(get_c)" \
+    -v $(pack_get -version) \
+    -M $(pack_get -alias).$(pack_get -version) \
+    -P "/directory/should/not/exist" \
+    $(list -prefix '-L ' $(pack_get -module-requirement)) \
+    -L $(pack_get -alias)
+
 
 # The lookup name in the list for version number etc...
-set_parent $(pack_get --alias)[$(pack_get --version)]
-set_parent_exec python3
+set_parent $(pack_get -alias)[$IpV]
+set_parent_exec $(pack_get -prefix)/bin/python3
+
+# Save the default build index
+def_idx=$(build_get -default-build)
+# Change to the new build default
+build_set -default-build _internal-python$IpV
+
+
 # Install all python packages
 source python-install.bash
 clear_parent
 
 # Initialize the module read path
-old_path=$(build_get --module-path)
-build_set --module-path $old_path-npa
-
+old_path=$(build_get -module-path)
+build_set -module-path $old_path-apps
 source python/python-mods.bash
+build_set -module-path $old_path
 
-build_set --module-path $old_path
 
-exit 0
+# Reset default build
+build_set -default-build $def_idx

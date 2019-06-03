@@ -1,4 +1,4 @@
-for v in 4.3 5.0 ; do
+for v in 5.1 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
 if ! $(is_c intel) ; then
@@ -19,14 +19,14 @@ pack_cmd "mkdir -p $(pack_get --LD)/"
 file=Makefile
 
 if [[ $(vrs_cmp $v 5.0) -ge 0 ]]; then
-    pack_set --module-requirement fftw-mpi-3
+    pack_set --module-requirement fftw-mpi
 
     pack_cmd "mkdir build-tmp ; cd build-tmp"
     pack_cmd "echo '# Gulp Makefile' > $file"
 
     pack_cmd "sed -i '$ a\
 UDEFS = -DFLUSH\n\
-INC = -I.. $(list -INCDIRS fftw-mpi-3) \n\
+INC = -I.. $(list -INCDIRS fftw-mpi) \n\
 OPT = $FCFLAGS \n\
 OPT1 = ${FCFLAGS//-O3/-O1}\n\
 OPT2 = ${FCFLAGS//-O3/-O2}\n\
@@ -35,7 +35,7 @@ RUNF90 = $MPIF90\n\
 RUNCC = $MPICC\n\
 MDEFS = -DMPI\n\
 FDEFS = -DFFTW3\n\
-FLIBS = $(list -LD-rp fftw-mpi-3) -lfftw3_mpi -lfftw3\n\
+FLIBS = $(list -LD-rp fftw-mpi) -lfftw3_mpi -lfftw3\n\
 ARCHIVE = $AR rcv\n\
 RANLIB = $RANLIB\n\
 CDABS = cdabs.o\n\

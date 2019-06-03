@@ -1,4 +1,4 @@
-v=0.4.0
+v=0.5.0
 add_package \
     --archive ncdf-$v.tar.gz \
     https://github.com/zerothi/ncdf/releases/download/v$v/ncdf-$v.tar.gz
@@ -33,5 +33,5 @@ pack_cmd "echo 'include ../Makefile' >> Makefile"
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install PREFIX=$(pack_get --prefix)"
-pack_cmd "make test > tmp.test 2>&1 || echo 'Fail'"
-pack_set_mv_test tmp.test
+pack_cmd "make test > ncdf.test 2>&1 || echo 'Fail'"
+pack_store ncdf.test

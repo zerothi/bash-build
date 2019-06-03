@@ -24,6 +24,7 @@ _NS=1000000000
 BUILD_DIR=build-dir
 PRELOAD_MODULE=module-preload
 IS_MODULE=module
+INSTALL_FROM_ARCHIVE=install-from-archive
 CRT_DEF_MODULE=def-module
 MAKE_PARALLEL=parallel
 BUILD_TOOLS=build-tools
@@ -33,7 +34,7 @@ PIE=pie
 NO_PIE=no-pie
 
 # To by-pass creating survey when using the install script
-export NPA__SURVEY_IN=1
+export DCC__SURVEY_IN=1
 
 # A separator used for commands that can be given consequtively
 _LIST_SEP='ø'

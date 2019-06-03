@@ -1,5 +1,5 @@
 # old_v 
-for v in 2.6.4 ; do
+for v in 2.6.9 ; do
     [ "x${pV:0:1}" == "x3" ] && [ "x$v" == "x1.4.2" ] && continue
     fv=$v
     if [[ $(vrs_cmp $v 2.3.1 ) -ge 0 ]]; then
@@ -27,6 +27,6 @@ for v in 2.6.4 ; do
 
     add_test_package numexpr.test
     pack_cmd "nosetests --exe numexpr > $TEST_OUT 2>&1 ; echo 'Success'"
-    pack_set_mv_test $TEST_OUT
+    pack_store $TEST_OUT
     
 done

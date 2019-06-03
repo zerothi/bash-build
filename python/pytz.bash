@@ -1,4 +1,4 @@
-add_package https://pypi.python.org/packages/source/p/pytz/pytz-2017.2.tar.bz2
+add_package https://pypi.python.org/packages/source/p/pytz/pytz-2018.9.tar.bz2
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/pytz-$(pack_get --version)-py$pV.egg
 

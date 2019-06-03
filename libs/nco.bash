@@ -1,4 +1,4 @@
-v=4.7.1
+v=4.7.8
 add_package http://nco.sourceforge.net/src/nco-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
@@ -17,12 +17,14 @@ pack_cmd "./configure" \
 	 "CPPFLAGS=' $(list --INCDIRS $(pack_get --mod-req-path)) '" \
 	 "--prefix $(pack_get --prefix)" \
 	 "--enable-netcdf-4" \
+	 "--enable-openmp" \
+	 "--enable-dap" \
 	 "--enable-udunits2" \
 	 "--enable-gsl"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > nco.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_store nco.test
 

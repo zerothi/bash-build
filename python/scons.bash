@@ -1,4 +1,3 @@
-
 add_package http://prdownloads.sourceforge.net/scons/scons-2.3.2.tar.gz
 
 pack_set -s $IS_MODULE

@@ -1,4 +1,4 @@
-for v in 3.15.0 ; do
+for v in 3.17.0 ; do
 
 add_package --archive ase-$v.tar.gz \
     https://gitlab.com/ase/ase/repository/archive.tar.gz?ref=$v

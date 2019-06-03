@@ -1,4 +1,4 @@
-v=2.7.1
+v=2.9.0
 add_package --archive h5py-$v.tar.gz \
 	    https://github.com/h5py/h5py/archive/$v.tar.gz
 
@@ -23,4 +23,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 add_test_package h5py.test
 pack_cmd "nosetests --exe h5py > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

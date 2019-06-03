@@ -13,6 +13,6 @@ pack_cmd "./configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > zlib.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_store zlib.test

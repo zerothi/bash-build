@@ -1,7 +1,7 @@
 # 507 pre SOC
 # 508 SOC
 # 510 Transiesta
-for v in 507 508 514 527 660 756 ; do
+for v in 764 ; do
 
 add_package --archive siesta-trunk-$v.tar.gz \
     --directory './~siesta-maint' \
@@ -73,9 +73,9 @@ if [[ $(vrs_cmp $v 535) -ge 0 ]]; then
 fi
 
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
-    pack_set --module-requirement fftw-3
+    pack_set --module-requirement fftw
     pack_cmd "sed -i '$ a\
-FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_PATH = $(pack_get --prefix fftw)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3\n\
 FPPFLAGS += -DNCDF -DNCDF_4 -DNCDF_PARALLEL -DTS_NOCHECKS\n\

@@ -1,4 +1,4 @@
-v=3.0.2
+v=3.0.3
 add_package --archive uncertainties-$v.tar.gz \
     https://github.com/lebigot/uncertainties/archive/$v.tar.gz
 

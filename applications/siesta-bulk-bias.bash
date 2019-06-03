@@ -1,7 +1,4 @@
-# 507 pre SOC
-# 508 SOC
-# 510 Transiesta
-for v in 709 ; do
+for v in 716 ; do
 
 add_package --archive siesta-trunk-bulk-bias-$v.tar.gz \
     --directory './~nickpapior' \
@@ -74,10 +71,10 @@ fi
 
 if [[ $(vrs_cmp $v 510) -ge 0 ]]; then
     pack_set --module-requirement mumps
-    pack_set --module-requirement fftw-3
+    pack_set --module-requirement fftw
     pack_cmd "sed -i '1 a\
 METIS_LIB = -lmetis\n\
-FFTW_PATH = $(pack_get --prefix fftw-3)\n\
+FFTW_PATH = $(pack_get --prefix fftw)\n\
 FFTW_INCFLAGS = -I\$(FFTW_PATH)/include\n\
 FFTW_LIBS = -L\$(FFTW_PATH)/lib -lfftw3 \$(METIS_LIB)\n\
 LIBS += \$(METIS_LIB)\n\

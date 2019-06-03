@@ -1,4 +1,4 @@
-v=2017.05.003
+v=2018.11.001
 add_package --build debug --package elpa-debug \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
@@ -37,4 +37,9 @@ pack_cmd "sed -i 's/_COMPILED@) \\\\//g;s/@//g' elpa/elpa_constants.h"
 pack_cmd "make clean"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+
+pack_cmd "cd $(pack_get --prefix)/include"
+pack_cmd 'cd */'
+pack_cmd "mv elpa ../"
+pack_cmd "cp modules/* ../elpa/"
 

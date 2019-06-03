@@ -202,7 +202,10 @@ done
 
 ;; # done 5.4.0
 
-    6.1)
+    *)
+
+	# These are the core-packages in QE
+	libs="pw ph pwcond neb pp cp tddfpt gwl ld1 upf xspectra couple epw gui"
 
 	# Nothing should be done, everything is released with QE
 	noop

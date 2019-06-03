@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/texinfo/texinfo-6.4.tar.xz
+add_package --build generic http://ftp.gnu.org/gnu/texinfo/texinfo-6.6.tar.xz
 
 pack_set -s $MAKE_PARALLEL
 

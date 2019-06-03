@@ -1,4 +1,4 @@
-v=3.3
+v=4.6
 add_package --archive pexpect-$v.tar.gz \
     https://github.com/pexpect/pexpect/archive/$v.tar.gz
 

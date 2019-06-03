@@ -19,7 +19,7 @@ export LMOD_PAGER=none
 
 # Query module format
 function module_format {
-    _ps $_mod_format
+    printf '%s' $_mod_format
 }
 
 # Assert that a given path is in the MODULEPATH.
@@ -36,7 +36,7 @@ function check_modulepath {
 	    found=1
 	fi
     done
-    _ps $found
+    printf '%s' $found
 }
 
 # Globally set whether modules should dispatch
@@ -54,8 +54,9 @@ function check_modulepath {
 #     The file where the survey is saved in.
 #     This will automatically enable creating a survey
 function module_set {
+    local opt
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case $opt in
 	    -s|-survey)
@@ -94,27 +95,30 @@ function module_set {
 #   -H <help message> 
 #   -W <what is message>
 function create_module {
-    local name; local version; local echos
-    local path; local help; local whatis; local opt
-    local env="" ; local tmp="" ; local mod=""
-    local mod_path="" ;local cmt=
+    local name version echos
+    local path help whatis opt
+    local env tmp mod cmt
+    local use_path mod_path
+    local require conflict load lua_family
+    local fpath
     local force=0 ; local no_install=0
-    local require=""; local conflict=""; local load=""
-    local lua_family="" ; local fpath=
-    local fm_comment="#"
+    local fm_comment='#'
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)" ; shift
+	trim_em opt $1
+	shift
 	case $opt in
 	    -n|-name)  name="$1" ; shift ;;
 	    -v|-version)  version="$1" ; shift ;;
 	    -P|-path)  path="$1" ; shift ;;
+	    -use-path)  use_path="$use_path $1" ; shift ;;
 	    -p|-module-path)  mod_path="$1" ; shift ;;
 	    -M|-module-name)  mod="$1" ; shift ;;
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -RL|-reqs+load-module) 
-		load="$load $(pack_get --mod-req $1) $1" ; shift ;; # Can be optioned several times
+		load="$load $(pack_get --mod-req-module $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
+	    -undefined-ENV)      env="$env u$1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
 	    -prepend-ENV)      env="$env p$1" ; shift ;; # Can be optioned several times
 	    -append-ENV)      env="$env a$1" ; shift ;; # Can be optioned several times
@@ -143,19 +147,50 @@ function create_module {
     [[ -n "$mod" ]] && mfile=$mfile/$mod
     case $_mod_format in
 	$_mod_format_ENVMOD) 
-	    fm_comment="#"
+	    fm_comment='#'
 	    ;;
 	$_mod_format_LMOD)
-	    fm_comment="--"
+	    fm_comment='--'
 	    mfile="$mfile.lua"
 	    ;;
     esac
     [[ -z "$version" ]] && version=empty
 
+    # Filter out modules that are not actual modules
+    tmp=
+    for mod in $require ; do
+	[[ -z "${mod// /}" ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_LIB|$_I_REQ)
+		continue
+		;;
+	esac
+	tmp="$tmp $mod"
+    done
+    require="$tmp"
+
+    # Filter out modules that are not actual modules
+    tmp=
+    for mod in $load ; do
+	[[ -z "${mod// /}" ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_LIB|$_I_REQ)
+		continue
+		;;
+	esac
+	tmp="$tmp $mod"
+    done
+    load="$tmp"
+
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
 	[[ -z "${mod// /}" ]] && continue
-	[[ $(pack_get --installed $mod) -eq $_I_INSTALLED ]] && continue
+	case $(pack_get --installed $mod) in
+	    $_I_INSTALLED|$_I_MOD)
+		continue
+		;;
+	esac
+	msg_install --message "Could not create module [$name/$version] because $(pack_get -p $mod)[$(pack_get -v $mod)] is not installed..."
 	return 1
     done
     
@@ -181,7 +216,7 @@ EOF
 		cat <<EOF >> "$mfile"
 
 # Check that we may create survey
-set cerr [catch {set in_survey \$::env(NPA__SURVEY_IN)}]
+set cerr [catch {set in_survey \$::env(DCC__SURVEY_IN)}]
 if { \$cerr != 0 } {
     set in_survey 0
 }
@@ -189,8 +224,8 @@ if { \$in_survey == 0 } {
     if { [module-info mode load] } {
         # This is the controlling sequence
         set in_survey 2
-        setenv NPA__SURVEY_IN 1
-        system echo $_mod_survey_cmd >> $_mod_survey_file
+        setenv DCC__SURVEY_IN 1
+        puts stdout "echo $_mod_survey_cmd >> $_mod_survey_file"
     } else {
         set in_survey 1
     }
@@ -348,24 +383,27 @@ EOF
 	    # We add explicit quotations as certain env-vars
 	    # might not adhere to simple text 
 	    case $opt in
+		u)
+		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
+		    ;;
 		s)
-		    opt="$(module_fmt_routine --set-env $lenv $lval)"
+		    opt="$(module_fmt_routine -set-env $lenv $lval)"
 		    ;;
 		p)
-		    opt="$(module_fmt_routine --prepend-path $lenv $lval)"
+		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
 		    ;;
 		a)
-		    opt="$(module_fmt_routine --append-path $lenv $lval)"
+		    opt="$(module_fmt_routine -append-path $lenv $lval)"
 		    ;;
 		*)
-		    opt=""
+		    opt=''
 		    ;;
 	    esac
 	    # These options should probably always
 	    # be "on" , they are specified by the options by the user
 	    # and not, per-see "optional"
 	    [[ -n "$opt" ]] && \
-		add_module_if -F 1 -d "$lval" "$mfile" "$opt" 
+		add_module_if -F 1 "$mfile" "$opt"
 	done
 	echo "" >> $mfile
     fi
@@ -376,6 +414,8 @@ EOF
 	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
     add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
 	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
+    add_module_if -F $force -d "$path/share/pkgconfig" $mfile \
+	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/share/pkgconfig)"
     add_module_if -F $force -d "$path/man" $mfile \
 	"$(module_fmt_routine --prepend-path MANPATH $fpath/man)"
     add_module_if -F $force -d "$path/share/man" $mfile \
@@ -445,12 +485,29 @@ EOF
 
 # Reset in_survey
 if { \$in_survey == 2 } {
-    unset env(NPA__SURVEY_IN)
+    unsetenv DCC__SURVEY_IN
 }
 EOF
 	    fi
 	    ;;
     esac
+
+    # Add path to the directory
+    if [[ -n "$use_path" ]]; then
+	echo "" >> "$mfile"
+	echo "" >> "$mfile"
+	echo "$fm_comment Enable a sub-path via this module" >> "$mfile"
+	case $_mod_format in
+	    $_mod_format_ENVMOD)
+		for tmp in $use_path ; do
+		    echo "module use --append $tmp" >> "$mfile"
+		done
+		;;
+	    $_mod_format_LMOD)
+		doerr "LMOD" "currently not supporting use-path"
+		;;
+	esac
+    fi
     
     
     if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then
@@ -478,27 +535,42 @@ EOF
 
 # Returns the module specific routine call
 function module_fmt_routine {
-    local lval="" ; local lenv=""
+    local lval='' ; local lenv=''
+    local opt
     while [[ $# -gt 0 ]]; do
-	opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case "$opt" in
 	    -prepend-path)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "prepend-path $1 $2" ;;
-		    $_mod_format_LMOD) _ps "prepend_path(\"$1\",\"$2\")" ;;
+		    $_mod_format_ENVMOD) printf '%s' "prepend-path $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "prepend_path(\"$1\",\"$2\")" ;;
 		esac
 		shift ; shift ;;
 	    -append-path)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "append-path $1 $2" ;;
-		    $_mod_format_LMOD) _ps "append_path(\"$1\",\"$2\")" ;;
+		    $_mod_format_ENVMOD) printf '%s' "append-path $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "append_path(\"$1\",\"$2\")" ;;
+		esac
+		shift ; shift ;;
+	    -undefined-env)
+		case $_mod_format in
+		    $_mod_format_ENVMOD)
+			printf '%s' "if { ![info exists ::env($1)] } {"
+			printf '%s' " setenv $1 $2"
+			printf '%s' "}"
+			;;
+		    $_mod_format_LMOD)
+			printf '%s\n' "if not os.getenv(\"$1\") then"
+			printf '%s\n' "setenv(\"$1\",\"$2\",true)"
+			printf '%s' "end"
+			;;
 		esac
 		shift ; shift ;;
 	    -set-env)
 		case $_mod_format in
-		    $_mod_format_ENVMOD) _ps "setenv $1 $2" ;;
-		    $_mod_format_LMOD) _ps "setenv(\"$1\",\"$2\",true)" ;;
+		    $_mod_format_ENVMOD) printf '%s' "setenv $1 $2" ;;
+		    $_mod_format_LMOD) printf '%s' "setenv(\"$1\",\"$2\",true)" ;;
 		esac
 		shift ; shift ;;
 	esac
@@ -512,11 +584,11 @@ function module_fmt_routine {
 #   $1 module file to append to
 #   $2-? append this in one line to the file
 function add_module_if {
-    local d="";local f="" ;local F=0;
+    local d='';local f='' ;local F=0;
     local X=0
     local opt
     while [[ $# -gt 0 ]]; do
-	opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -d|-dir)
 		# The directory which should be checked for
@@ -547,7 +619,7 @@ function add_module_if {
     local mf="$1" 
     shift
     
-    local check=""
+    local check=''
     if [[ $F -eq 1 ]]; then
 	# Force check to succeed
 	check=$HOME

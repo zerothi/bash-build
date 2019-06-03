@@ -1,4 +1,4 @@
-v=0.23
+v=1.1.1
 add_package \
     --package markupsafe \
     https://pypi.python.org/packages/source/M/MarkupSafe/MarkupSafe-$v.tar.gz

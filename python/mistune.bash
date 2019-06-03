@@ -1,5 +1,5 @@
 add_package \
-    https://pypi.python.org/packages/source/m/mistune/mistune-0.5.1.tar.gz
+    https://pypi.python.org/packages/source/m/mistune/mistune-0.8.4.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/$(pack_get --package)-$(pack_get --version)-py$pV.egg
 

@@ -1,13 +1,13 @@
 v=3.8
 add_package --package openmx \
     --version $v.5 \
-    http://www.openmx-square.org/openmx$v.tar.gz
+    http://t-ozaki.issp.u-tokyo.ac.jp/openmx$v.tar.gz
 
 pack_set --module-opt "--lua-family openmx"
 
 pack_set --install-query $(pack_get --prefix)/bin/openmx
 
-pack_set --module-requirement mpi --module-requirement fftw-mpi-3
+pack_set --module-requirement mpi --module-requirement fftw-mpi
 
 # Move to the source directory
 pack_cmd "cd source"
@@ -42,8 +42,8 @@ if $(is_c intel) ; then
 else
     pack_set --module-requirement scalapack
 
-    la=$(pack_choice -i linalg)
-    pack_set --module-requirement lapack-$la
+    la=lapack-$(pack_choice -i linalg)
+    pack_set -module-requirement $la
     pack_cmd "sed -i '1 a\
 LIB += $(list --LD-rp scalapack +$la) -lscalapack $(pack_get -lib[omp] $la)' $file"
 

@@ -1,9 +1,9 @@
-# Install
-add_package http://ab-initio.mit.edu/meep/meep-1.3.tar.gz
+v=1.7.0
+add_package https://github.com/NanoComp/meep/releases/download/v$v/meep-$v.tar.gz
 
-pack_set --host-reject ntch --host-reject zeroth
+pack_set -s $BUILD_TOOLS
 
-pack_set --install-query $(pack_get --prefix)/bin/meep-mpi
+pack_set --install-query $(pack_get --prefix)/bin/meep
 
 pack_set --module-opt "--lua-family meep"
 
@@ -11,7 +11,8 @@ pack_set --module-requirement mpi \
     --module-requirement zlib \
     --module-requirement hdf5 \
     --module-requirement libctl \
-    --module-requirement fftw-mpi-3
+    --module-requirement fftw-mpi \
+    --module-requirement mpb
 
 # Check for Intel MKL or not
 tmp=
@@ -32,21 +33,19 @@ else
 
 fi
 pack_set --module-requirement harminv
-tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
-pack_cmd "module load build-tools"
+tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
 
 # Install commands that it should run
 pack_cmd "autoconf configure.ac > configure"
 pack_cmd "./configure" \
      "CC='$MPICC' CXX='$MPICXX'" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-     "CPPFLAGS='-DH5_USE_16_API=1 $(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
      "--with-mpi" \
+     "--without-python" \
      "--prefix=$(pack_get --prefix) $tmp" 
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-
-pack_cmd "module unload build-tools"

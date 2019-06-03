@@ -6,6 +6,12 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/mpicc
 
+pack_set --module-opt "--set-ENV MPICC=mpicc"
+pack_set --module-opt "--set-ENV MPICXX=mpicxx"
+pack_set --module-opt "--set-ENV MPIF77=mpif77"
+pack_set --module-opt "--set-ENV MPIF90=mpif90"
+pack_set --module-opt "--set-ENV MPIFC=mpifort"
+
 tmp_flags=
 if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-ibverbs=/usr/include/infiniband"
@@ -36,7 +42,7 @@ pack_cmd "make install"
 
 
 
-new_build --name internal-mvapich \
+new_build --name _internal-mvapich \
   --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
   --module-path $(build_get -mp)-mvapich \
   --build-path $(build_get -bp) \

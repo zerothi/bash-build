@@ -16,15 +16,14 @@ source $(build_get --source[$tmp])
 unset tmp
 
 for p in $(get_index --all gcc) \
-	     $(get_index --all llvm) \
 	     $(get_index --all git) \
-	     doxygen graphviz 
+	     doxygen graphviz
 do
     if [[ $(pack_get --installed $p) -eq 1 ]]; then
 	create_module \
-	    --module-path $mp-npa \
+	    --module-path $mp-apps \
 	    -n $(pack_get --alias $p).$(pack_get --version $p) \
-	    -W "Nick R. Papior script for loading $(pack_get --alias $p): $(pack_get --version $p)." \
+	    -W "$(pack_get --alias $p): $(pack_get --version $p)." \
 	    -v $(pack_get --version $p) \
 	    -M $(pack_get --alias $p).$(pack_get --version $p) \
 	    -P "/directory/should/not/exist" -RL $p 

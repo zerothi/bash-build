@@ -1,4 +1,4 @@
-for v in 8.6.3
+for v in 8.10.2
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 
@@ -12,7 +12,7 @@ pack_set --module-requirement mpi
 pack_set --module-requirement gsl
 pack_set --module-requirement atompaw
 pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement fftw-mpi
 
 # Correct mistakes in configure script...
 pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
@@ -113,15 +113,16 @@ with_trio_flavor=\"netcdf\"\n\
 with_netcdf_incs=\"$(list --INCDIRS netcdf)\"\n\
 with_netcdf_libs=\"$(list --LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
 with_fft_flavor=\"fftw3-mpi\"\n\
-with_fft_incs=\"$(list --INCDIRS fftw-mpi-3)\"\n\
-with_fft_libs=\"$(list --LD-rp fftw-mpi-3) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+with_fft_incs=\"$(list --INCDIRS fftw-mpi)\"\n\
+with_fft_libs=\"$(list --LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
+
+_xc_v=3.0.1
 dft_flavor=atompaw+wannier90+libxc
-pack_set --module-requirement libxc
-xclib="-lxcf90 -lxc"
+pack_set --module-requirement libxc[$_xc_v]
 pack_cmd "$s '$ a\
-with_libxc_incs=\"$(list --INCDIRS libxc)\"\n\
-with_libxc_libs=\"$(list --LD-rp libxc) $xclib\"' $file"
+with_libxc_incs=\"$(list --INCDIRS libxc[$_xc_v])\"\n\
+with_libxc_libs=\"$(list --LD-rp libxc[$_xc_v]) $(pack_get --lib libxc[$_xc_v])\"' $file"
 
 
 if [[ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]]; then
@@ -164,14 +165,14 @@ pack_cmd "make multi multi_nprocs=${tmp//-j /}"
 tmp="--loglevel=INFO -v -v -n $NPROCS --pedantic"
 pack_cmd "pushd tests"
 pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test ; echo succes"
-pack_set_mv_test $mpila.fast.test
+pack_store $mpila.fast.test
 
 if ! $(is_c intel) ; then
     pack_cmd "../../tests/runtests.py $tmp atompaw libxc wannier90 2>&1 > $mpila.in.test ; echo succes"
-    pack_set_mv_test $mpila.in.test
+    pack_store $mpila.in.test
 
     pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test ; echo succes"
-    pack_set_mv_test $mpila.v1.test
+    pack_store $mpila.v1.test
 fi
 pack_cmd "popd"
 

@@ -25,9 +25,9 @@ pack_cmd "$tmp 's;\(CBLIB[[:space:]]*=\).*;\1 $(pack_get --LD)/libcblas.a;g' Mak
 
 # Make commands
 pack_cmd "make alllib"
-pack_cmd "make alltst > tmp.test 2>&1"
-pack_cmd "make runtst >> tmp.test 2>&1"
-pack_set_mv_test tmp.test
+pack_cmd "make alltst > cblas.test 2>&1"
+pack_cmd "make runtst >> cblas.test 2>&1"
+pack_store cblas.test
 
 # Copy over the header files
 pack_cmd "cp include/*.h $(pack_get --prefix)/include/"

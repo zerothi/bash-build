@@ -15,10 +15,9 @@ pack_cmd "CC='$MPICC' FC='$MPIFC' LIBS='-lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fo
 pack_cmd "sed -i -e 's:len = 256:len = dims(1):g' tests/group_level/tests_module.f90"
 
 pack_cmd "make $(get_make_parallel)"
-#pack_cmd "make check > tmp.test 2>&1"
+#pack_cmd "make check > etsf_io.test 2>&1"
 pack_cmd "make install"
-#pack_set_mv_test tmp.test
-
+#pack_store etsf_io.test
 
 # Correct the very strange partition of the module locations
 pack_cmd "mv $(pack_get --prefix)/include/*/* $(pack_get --prefix)/include/" 

@@ -1,4 +1,4 @@
-v=4.0.1.0
+v=4.1.0.5
 add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
@@ -26,7 +26,7 @@ pack_cmd "./configure" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1"
+pack_cmd "make check > atompaw.test 2>&1"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
+pack_store atompaw.test
 

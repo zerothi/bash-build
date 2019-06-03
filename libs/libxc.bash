@@ -1,11 +1,15 @@
 # abinit has specific link to 2.2.3
-for v in 2.2.3 4.2.1 3.0.1
+for v in 2.2.3 3.0.1 4.3.4
 do
 if [[ $(vrs_cmp $v 3.0) -ge 0 ]]; then
    add_package http://www.tddft.org/programs/octopus/download/libxc/$v/libxc-$v.tar.gz
 else
    add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
 fi
+pack_set -lib -lxcf03 -lxc
+pack_set -lib[c] -lxc
+pack_set -lib[f90] -lxcf90 -lxc
+pack_set -lib[f03] -lxcf03 -lxc
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
@@ -16,10 +20,10 @@ pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 ; echo 'forced'"
+pack_cmd "make check > libxc.test 2>&1 ; echo 'forced'"
 pack_cmd "make install"
-pack_set_mv_test tmp.test
-pack_set_mv_test testsuite/test-suite.log test-suite.log
+pack_store libxc.test
+pack_store testsuite/test-suite.log libxc.test-suite.log
 
 done
 

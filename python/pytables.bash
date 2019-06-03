@@ -1,4 +1,4 @@
-v=3.4.2
+v=3.5.1
 add_package \
     --package pytables \
     --archive PyTables-$v.tar.gz \
@@ -17,14 +17,14 @@ if [[ $(vrs_cmp 3.1.1 $v) -le 0 ]]; then
 fi
 
 pack_cmd "$(get_parent_exec) setup.py build" \
-    "--hdf5=$(pack_get --prefix hdf5-serial)" \
-    "--cflags='${pCFLAGS//-march=native/}'"
+	 "--hdf5=$(pack_get --prefix hdf5-serial)" \
+	 "--cflags='${pCFLAGS//-march=native/}'"
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix)" \
+	 "--prefix=$(pack_get --prefix)"
     
 # The tables test is extremely extensive, and many are minor errors.
 # I have disabled it for now   
 #add_test_package tables.test
 #pack_cmd "nosetests --exe tables > $TEST_OUT 2>&1 ; echo 'Success'"
-#pack_set_mv_test $TEST_OUT
+#pack_store $TEST_OUT

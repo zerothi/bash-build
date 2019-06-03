@@ -45,7 +45,7 @@ _I_LIB=3 # an internal module only used for its library path
 _I_MOD=2 # a module supplied from outside, it does not contain paths
 _I_INSTALLED=1 # the package has been installed
 _I_TO_BE=0 # have not decided what the package should do yet...
-_I_REJECT=-1 # the package is rejected on this one...
+_I_REJECT=-1 # the package is rejected in this installation sequence...
 declare -A _installed
 # Adds this to the environment variable in the creation of the modules
 declare -A _mod_opts
@@ -65,106 +65,87 @@ function add_hidden_package {
     local mod="$1" ; shift
     local package="${mod%/*}"
     local version="${mod#*/}"
-    add_package --package $package \
-	--version $version \
+    add_package -package $package \
+	-version $version \
 	path_to_module/$package-$version.local
-    pack_set --index-alias $mod
-    pack_set --installed $_I_INSTALLED # Make sure it is "installed"
-    pack_set --module-name $mod
+    pack_set -index-alias $mod
+    pack_set -installed $_I_INSTALLED # Make sure it is "installed"
+    pack_set -module-name $mod
     # Assert that the settings are not created.
     # Hence if the build-settings has been edited
     # We skip those
-    _settings[$_N_archives]=""
+    _settings[$_N_archives]=''
 }
 
 # This function takes no arguments
 # It is the name/index of the module that is to be tested
 # It is equivalent to calling:
-#   name=$(pack_get --alias)
-#   version=$(pack_get --version)
-#   add_package --package $name-test --version $version fake
-#   pack_set --module-requirement $name[$version]
-#   pack_set --install-query $(pack_get --prefix $name[$version])/test.output
+#   name=$(pack_get -alias)
+#   version=$(pack_get -version)
+#   add_package -package $name-test -version $version fake
+#   pack_set -module-requirement $name[$version]
+#   pack_set -install-query $(pack_get -prefix $name[$version])/test.output
 function add_test_package {
+    local name=$(pack_get -alias)
     if [[ $# -gt 0 ]]; then
 	TEST_OUT=$1
 	shift
     else
-	TEST_OUT=tmp.test
+	TEST_OUT=$name.test
     fi
-    local name=$(pack_get --alias)
-    local version=$(pack_get --version)
-    add_package --package $name-test \
-	--version $version fake
+    local version=$(pack_get -version)
+    add_package -package $name-test \
+	-version $version fake
     # Update install-prefix
-    local top_prefix=$(pack_get --prefix $name[$version])
-    pack_set --prefix $top_prefix
-    pack_set --module-requirement $name[$version]
-    pack_set --remove-setting module
-    pack_set --install-query $top_prefix/${TEST_OUT}*
+    local top_prefix=$(pack_get -prefix $name[$version])
+    pack_set -prefix $top_prefix
+    pack_set -module-requirement $name[$version]
+    pack_set -remove-setting module
+    pack_set -install-query $top_prefix/${TEST_OUT}*
 }
 
 # Routine for sourcing a package file
 function source_pack {
-    local f=$1
+    # We need these long names in case the file
+    # redefines variables
+    local source_pack_f=$1
     shift
-    local i
-    local rej
-    local v
-
-    # Get current reached index
-    local cur_idx=$_N_archives
-
-    # Source the file
-    source $f
-
+    # Get current reached index (i.e. before adding any
+    # new packages)
+    local source_pack_i=$_N_archives
+    source $source_pack_f
     # Try and install the just added packages
-    i=$cur_idx
-    while [[ $i -lt $_N_archives ]]; do
-	let i++
-	
-	# First set the rejects
-	local bld=$(pack_get --build $i)
-	local rejs=$(build_get --rejects[$bld])
-	for rej in $rejs ; do
-	    bld=$(get_index -a $rej)
-	    if [[ $? -eq 0 ]]; then
-		for v in $bld ; do
-		    if [[ $v -eq $i ]]; then
-			pack_set --host-reject $(get_hostname) $i
-		    fi
-		done
-	    fi
-	done
-	
-	pack_install $i
+    while [[ $source_pack_i -lt $_N_archives ]]; do
+	let source_pack_i++
+	pack_install $source_pack_i
     done    
 }
+
 
 # Routine for shortcutting a list of values
 # through the pack_get 
 # i.e.
-# pack_list --list-flags "-s /" --package dir
-# returns $(pack_get --package)/dir/
+# pack_list -list-flags "-s /" --package dir
+# returns $(pack_get -package)/dir/
 function pack_list {
-    local opt=""
-    local lf=""
+    local opt lf
     while : ; do
-	opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -list-flags|-lf) shift ; lf="$1" ; shift ;;
 	    *) break ;;
 	esac
     done
-    local ret=""
+    local ret=''
     while [[ $# -gt 0 ]]; do
-	opt=$(trim_em $1) ; shift
+	trim_em opt $1
+	shift
 	case $opt in
 	    -*) ret="$ret$(list $lf -c "pack_get $opt" $_N_archives)" ;;
 	     *) ret="$ret$(list $lf $opt)" ;;
 	esac
     done
-    _ps "$ret"
+    printf '%s' "$ret"
 }
 
 # $1 http path
@@ -174,16 +155,13 @@ function add_package {
     let _N_archives++
 
     # Collect options
-    local d="" ; local v=""
-    local fn="" ; local package=""
-    local alias="" 
+    local d v fn package alias lp opt
     # Default to default index
     local b_idx=$_b_def_idx
     local b_name="${_b_name[$_b_def_idx]}"
     local no_def_mod=0
-    local lp=""
     while [[ $# -gt 1 ]]; do
-	local opt=$(trim_em $1) 
+	trim_em opt $1
 	shift
 	case $opt in
 	    -build) b_name="$1" ; shift ;;
@@ -229,12 +207,12 @@ function add_package {
     # assignment will set the return status of local =
     # and not the assignment operator.
     if [[ -n "$b_name" ]]; then
-	b_idx=$(get_index --hash-array "_b_index" $b_name)
+	b_idx=$(get_index -hash-array "_b_index" $b_name)
     fi
     if [[ $? -ne 0 ]]; then
 	doerr "$1" "Could not find associated build ($b_name), please create build before commensing compilation"
     fi
-    source $(build_get --source[$b_idx])
+    source $(build_get -source[$b_idx])
 
     # Always force the installation
     _install_query[$_N_archives]=/directory/does/not/exist
@@ -273,7 +251,7 @@ function add_package {
     fi
     _version[$_N_archives]=$v
     # Save the settings
-    _settings[$_N_archives]="$(build_get --default-setting[$b_idx])"
+    _settings[$_N_archives]="$(build_get -default-setting[$b_idx])"
     # Save the package name...
     [[ -z "$package" ]] && package=${archive_d%$v}
     local len=${#package}
@@ -285,8 +263,8 @@ function add_package {
     [[ -z "$alias" ]] && alias=$package
     _alias[$_N_archives]=$alias
     # Save the hash look-up
-    local tmp="${_index[$(lc $alias)]}"
-    local lc_name="$(lc $alias)"
+    typeset -l lc_name="$alias"
+    local tmp="${_index[$lc_name]}"
     if [[ -n "$tmp" ]]; then
 	_index[$lc_name]="$tmp $_N_archives"
     else
@@ -298,14 +276,14 @@ function add_package {
     # Default the module name to this:
     _installed[$_N_archives]=$_I_TO_BE
     # Module prefix and the name of the module
-    _mod_prefix[$_N_archives]="$(build_get --module-path[$b_idx])"
-    tmp="$(build_get --build-module-path[$b_idx])"
+    _mod_prefix[$_N_archives]="$(build_get -module-path[$b_idx])"
+    tmp="$(build_get -build-module-path[$b_idx])"
     _mod_name[$_N_archives]=$(pack_list -lf "-X -p /" $tmp)
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]%/}
     _mod_name[$_N_archives]=${_mod_name[$_N_archives]#/}
     # Install prefix and the installation path
-    tmp="$(build_get --build-installation-path[$b_idx])"
-    _install_prefix[$_N_archives]=$(build_get --installation-path[$b_idx])/$(pack_list -lf "-X -s /" $tmp)
+    tmp="$(build_get -build-installation-path[$b_idx])"
+    _install_prefix[$_N_archives]=$(build_get -installation-path[$b_idx])/$(pack_list -lf "-X -s /" $tmp)
     _install_prefix[$_N_archives]="${_install_prefix[$_N_archives]%/}"
     # Do not allow any white-space, what so ever
     _install_prefix[$_N_archives]="${_install_prefix[$_N_archives]// /}"
@@ -315,7 +293,7 @@ function add_package {
 	_lib_prefix[$_N_archives]=lib
 	if [[ -d "${_install_prefix[$_N_archives]}/lib" ]]; then
 	    if [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
-		_lib_prefix[$_N_archives]="lib lib64"
+		_lib_prefix[$_N_archives]='lib lib64'
 	    fi
 	elif [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
 	    _lib_prefix[$_N_archives]=lib64
@@ -324,30 +302,30 @@ function add_package {
 	_lib_prefix[$_N_archives]="$lp"
     fi
     # Install default values
-    _mod_req[$_N_archives]=""
+    _mod_req[$_N_archives]=''
     [[ $no_def_mod -eq 0 ]] && \
-	_mod_req[$_N_archives]="$(build_get --default-module[$b_idx])"
-    _reject_host[$_N_archives]=""
+	_mod_req[$_N_archives]="$(build_get -default-module[$b_idx])"
+    _reject_host[$_N_archives]=''
 
-    msg_install --message "Added $package[$v] to the install list"
+    msg_install -message "Added $package[$v] to the install list"
 }
 
 # This function allows for setting data related to a package
 function pack_set {
     local index=$_N_archives # Default to this
-    local alias="" ; local version="" ; local directory=""
-    local settings="" ; local install="" ; local query=""
-    local mod_name="" ; local package="" ; local opt=""
-    local cmd="" ; local cmd_flags="" ; local req="" ; local idx_alias=""
-    local reject_h="" ; local only_h="" ; local inst=-100
-    local mod_prefix="" local m=
-    local mod_opt="" ; local lib="" ; local up_pre_mod=0
-    local tmp=
-    local libs_c="" ; local libs=""
+    local opt
+    [[ $# -eq 0 ]] && return
+    local alias version directory settings install query
+    local mod_name package cmd cmd_flags req idx_alias
+    local reject_h only_h
+    local inst=-100
+    local mod_prefix m mod_opt lib libs libs_c
+    local up_pre_mod=0
+    local tmp
     local in_cmd=0
     while [[ $# -gt 0 ]]; do
 	# Process what is requested
-	local opt="$(trim_em $1)"
+	trim_em opt $1
 	shift
 	case $opt in
 	    -no-path)
@@ -372,7 +350,7 @@ function pack_set {
 		esac ;;
             -MP|-module-prefix)  mod_prefix="$1" ; shift ;;
             -module-remove|-mod-rem)  
-		local tmp=""
+		local tmp=''
 		for m in ${_mod_req[$index]} ; do
 		    if [[ "$m" != "$1" ]]; then
 			tmp="$tmp $m"
@@ -380,11 +358,20 @@ function pack_set {
 		done
 		_mod_req[$index]="$tmp"
 		shift ;;
-            -R|-module-requirement|-mod-req)  
-		tmp="$(pack_get --mod-req-all $1)"
+            -prepend-module-requirement|-prepend-mod-req)
+		tmp="$(pack_get -mod-req-all $1) ${_mod_req[$index]}"
+		# reset to really prepend
+		_mod_req[$index]=
 		[[ -n "$tmp" ]] && req="$req $tmp"
 		# We add the host-rejects for this requirement
-		tmp="$(pack_get --host-reject $1)"
+		tmp="$(pack_get -host-reject $1)"
+		[[ -n "$tmp" ]] && reject_h="$reject_h $tmp"
+		req="$req $1" ; shift ;; # called several times
+            -R|-module-requirement|-mod-req)
+		tmp="$(pack_get -mod-req-all $1)"
+		[[ -n "$tmp" ]] && req="$req $tmp"
+		# We add the host-rejects for this requirement
+		tmp="$(pack_get -host-reject $1)"
 		[[ -n "$tmp" ]] && reject_h="$reject_h $tmp"
 		req="$req $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
@@ -438,7 +425,6 @@ function pack_set {
 		    # We do a crude check
 		    # We have an argument
 		    index=$(get_index $opt)
-		    shift $#
 		fi
 		;; 
 	esac
@@ -447,8 +433,8 @@ function pack_set {
 	# We have used prefix-and-module
 	# we need to correct the fetching of the build path
 	# This is only because we haven't used the index thing before
-	local opt=$(pack_get --build $index)
-	install="$(build_get --installation-path[$opt])/$mod_name"
+	opt=$(pack_get -build $index)
+	install="$(build_get -installation-path[$opt])/$mod_name"
     fi
     # We now have index to be the correct spanning
     [[ -n "$cmd" ]] && _cmd[$index]="${_cmd[$index]}$cmd $cmd_flags${_LIST_SEP}"
@@ -461,12 +447,12 @@ function pack_set {
 	_install_prefix[$index]="${install// /}"
 	if [[ -d "$install/lib" ]]; then
 	    if [[ -d "$install/lib64" ]]; then
-		lib="lib lib64"
+		lib='lib lib64'
 	    else
-		lib="lib"
+		lib='lib'
 	    fi
 	elif [[ -d "$install/lib64" ]]; then
-	    lib="lib64"
+	    lib='lib64'
 	fi
     fi
     [[ -n "$lib" ]] && _lib_prefix[$index]="$lib"
@@ -478,7 +464,6 @@ function pack_set {
 	# Initialize the libraries
 	_libs[$index]="$libs_c$libs"
 	# Loop and re-create the "missing" libraries
-	local tmp
 	local l_c
 	local l_l
 	for tmp in "${sets[@]}" ; do
@@ -493,11 +478,11 @@ function pack_set {
 	done
 
     fi
-    [[ "$inst" -ne "-100" ]]    && _installed[$index]="$inst"
+    [[ "$inst" -ne '-100' ]]    && _installed[$index]="$inst"
     [[ -n "$query" ]]      && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
-	local tmp="" ; local v=""
-	local lc_name="$(lc ${_alias[$index]})"
+	local v=''
+	typeset -l lc_name="${_alias[$index]}"
 	for v in ${_index[$lc_name]} ; do
 	    [[ "$v" -ne "$index" ]] && tmp="$tmp $v"
 	done
@@ -507,7 +492,7 @@ function pack_set {
 	    _index[$lc_name]="$tmp"
 	fi
 	_alias[$index]="$alias"
-	local lc_name="$(lc $alias)"
+	lc_name="$alias"
 	tmp="${_index[$lc_name]}"
 	if [[ -z "$tmp" ]]; then
 	    _index[$lc_name]="$index"
@@ -515,9 +500,8 @@ function pack_set {
 	    _index[$lc_name]="$tmp $index"
 	fi
     fi
-    if [[ -n "$idx_alias" ]]; then  ## opted for deletion... (superseeded by explicit version comparisons...)
-	_index[$idx_alias]="$index"
-    fi
+    ## opted for deletion... (superseeded by explicit version comparisons...)
+    [[ -n "$idx_alias" ]]  && _index[$idx_alias]="$index"
     [[ -n "$mod_opt" ]]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
     [[ -n "$version" ]]    && _version[$index]="$version"
     [[ -n "$directory" ]]  && _directory[$index]="$directory"
@@ -537,161 +521,127 @@ function pack_cmd {
 # This function allows for setting data related to a package
 # Should take at least one parameter (-a|-I...)
 function pack_get {
-    local opt="$(trim_em $1)" # Save the option passed
+    # Save the option passed
+    local opt
+    trim_em opt $1
     case $opt in
 	-*) ;;
 	*)
 	    doerr "$1" "Could not determine the option for pack_get" ;;	    
     esac
     shift
+
+    local tmp=
+    
     # We check whether a specific index is requested
-    if [[ $# -gt 0 ]]; then
-	while [[ $# -gt 0 ]]; do
-	    local index=$(get_index $1)
-	    [[ -z "$index" ]] && \
-		doerr pack_get "Could not find index of $1"
-	    #echo "pack_get: lookup($1) idx($index)" >&2
+    local name=""
+    local index
+    case $# in
+	1)
+	    name=$1
+	    index=$(get_index $1)
 	    shift
-            # Process what is requested
-	    case $opt in
-		-build)              _ps "${_build[$index]}" ;;
-		-C|-commands)        _ps "${_cmd[$index]}" ;;
-		-h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-		-module-load) 
-		    for m in ${_mod_req[$index]} ; do
-			_ps "$(pack_get --module-name $m) "
-		    done 
-		    _ps "${_mod_name[$index]}"
-		    ;;
-		-R|-module-requirement|-mod-req)
-		    for m in ${_mod_req[$index]} ; do
-			case $(pack_get --installed $m) in
-			    $_I_MOD|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
-                        esac
-		    done ;;
-		-mod-req-path)
-		    for m in ${_mod_req[$index]} ; do
-			case $(pack_get --installed $m) in
-			    $_I_LIB|$_I_INSTALLED|$_I_TO_BE) _ps "$m " ;;
-                        esac
-		    done ;;
-		-module-requirement-all|-mod-req-all) 
-                    _ps "${_mod_req[$index]}" ;;
-		-module-name-requirement|-mod-req-name) 
-		    for m in ${_mod_req[$index]} ; do
-			_ps "$(pack_get --module-name $m) "
-		    done ;;
-		-L|-LD|-library-path)
-		    for p in ${_lib_prefix[$index]} ; do
-			_ps "${_install_prefix[$index]}/$p"
-			break
-		    done
-		    ;;
-		-L-all|-LD-all|-library-path-all)
-		    local i=0
-		    for p in ${_lib_prefix[$index]} ; do
-			[[ $i -ge 1 ]] && _ps " "
-			_ps "${_install_prefix[$index]}/$p"
-			let i++
-		    done
-		    ;;
-		-L-suffix)    _ps "${_lib_prefix[$index]}" ;;
-		-MP|-module-prefix) 
-                                     _ps "${_mod_prefix[$index]}" ;;
-		-I|-install-prefix|-prefix) 
-                                     _ps "${_install_prefix[$index]}" ;;
-		-Q|-install-query)   _ps "${_install_query[$index]}" ;;
-		-a|-alias)           _ps "${_alias[$index]}" ;;
-		-A|-archive)         _ps "${_archive[$index]}" ;;
-		-v|-version)         _ps "${_version[$index]}" ;;
-		-d|-directory)       _ps "${_directory[$index]}" ;;
-		-s|-settings)        _ps "${_settings[$index]}" ;;
-		-installed)          _ps "${_installed[$index]}" ;;
-		-m|-module-name)     _ps "${_mod_name[$index]}" ;;
-		-module-opt)         _ps "${_mod_opts[$index]}" ;;
-		-p|-package)         _ps "${_package[$index]}" ;;
-		-e|-ext)             _ps "${_ext[$index]}" ;;
-		-host-reject)        _ps "${_reject_host[$index]}" ;;
-                -lib*)
-		    # First retrieve the option library
-		    local s=$(var_spec -s $opt)
-		    # If the option is use the default option
-		    [[ -z "$s" ]] && s=$_LIB_DEF
-		    # Print the libraries for the choice
-		    # Search for the library
-		    choice $s "${_libs[$index]}"
-		    ;;
-		*)
-		    doerr "$1" "No option for pack_get found for $1" ;;
-	    esac
-	    [[ $# -gt 0 ]] && _ps " "
-	done
-    else
-	local index=$_N_archives # Default to this
-        # Process what is requested
-	case $opt in
-	    -C|-commands)        _ps "${_cmd[$index]}" ;;
-	    -h|-u|-url|-http)    _ps "${_http[$index]}" ;;
-	    -R|-module-requirement|-mod-req)
+	    ;;
+	0)
+	    index=$_N_archives
+	    ;;
+    esac
+    [[ -z "$index" ]] && \
+	doerr pack_get "Could not find index ($name)!"
+    
+    #echo "pack_get: lookup($1) idx($index)" >&2
+    # Process what is requested
+    case $opt in
+	-build)              printf '%s' "${_build[$index]}" ;;
+	-C|-commands)        printf '%s' "${_cmd[$index]}" ;;
+	-h|-u|-url|-http)    printf '%s' "${_http[$index]}" ;;
+	-module-load)
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
 		for m in ${_mod_req[$index]} ; do
-		    case $(pack_get --installed $m) in
-			$_I_INSTALLED|$_I_MOD) _ps "$m " ;;
-                    esac
-		done ;;
-	    -mod-req-path)
-		for m in ${_mod_req[$index]} ; do
-		    case $(pack_get --installed $m) in
-			$_I_INSTALLED|$_I_LIB) _ps "$m " ;;
-                    esac
-		done ;;
-	    -module-requirement-all|-mod-req-all) 
-		_ps "${_mod_req[$index]}" ;;
-	    -module-name-requirement|-mod-req-name)
-		for m in ${_mod_req[$index]} ; do
-		    _ps "$(pack_get --module-name $m) "
-		done ;;
-	    -MI|-module-prefix)  _ps "${_mod_prefix[$index]}" ;;
-	    -L|-LD|-library-path)
-		for p in ${_lib_prefix[$index]} ; do
-		    _ps "${_install_prefix[$index]}/$p"
-		    break
+		    printf '%s' "$(pack_get -module-name $m) "
 		done
-		;;
-	    -L-all|-LD-all|-library-path-all)
-		local i=0
-		for p in ${_lib_prefix[$index]} ; do
-		    [[ $i -ge 1 ]] && _ps " "
-		    _ps "${_install_prefix[$index]}/$p"
-		    let i++
+	    fi
+	    printf '%s' "${_mod_name[$index]}"
+	    ;;
+	-R|-module-requirement|-mod-req)
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get -installed $m) in
+			$_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
 		done
-		;;
-	    -I|-install-prefix|-prefix) 
-                                 _ps "${_install_prefix[$index]}" ;;
-	    -Q|-install-query)   _ps "${_install_query[$index]}" ;;
-	    -a|-alias)           _ps "${_alias[$index]}" ;;
-	    -A|-archive)         _ps "${_archive[$index]}" ;;
-	    -v|-version)         _ps "${_version[$index]}" ;;
-	    -d|-directory)       _ps "${_directory[$index]}" ;;
-	    -s|-settings)        _ps "${_settings[$index]}" ;;
-	    -installed)          _ps "${_installed[$index]}" ;;
-	    -module-opt)         _ps "${_mod_opts[$index]}" ;;
-	    -m|-module-name)     _ps "${_mod_name[$index]}" ;;
-	    -p|-package)         _ps "${_package[$index]}" ;;
-	    -e|-ext)             _ps "${_ext[$index]}" ;;
-	    -host-reject)        _ps "${_reject_host[$index]}" ;;
-            -lib*)
-		# First retrieve the option library
-		local s=$(var_spec -s $opt)
-		# If the option is use the default option
-		[[ -z "$s" ]] && s=$_LIB_DEF
-		# Print the libraries for the choice
-		# Search for the library
-		choice $s "${_libs[$index]}"
-		;;
-	    *)
-		doerr $1 "No option for pack_get found for $1" ;;
-	esac
-    fi
+	    fi
+	    ;;
+	-mod-req-path)
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get -installed $m) in
+			$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
+	    ;;
+	-mod-req-module)
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    case $(pack_get -installed $m) in
+			$_I_MOD|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
+	    ;;
+	-module-requirement-all|-mod-req-all) 
+            printf '%s' "${_mod_req[$index]}" ;;
+	-module-name-requirement|-mod-req-name) 
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		for m in ${_mod_req[$index]} ; do
+		    printf '%s' "$(pack_get -module-name $m) "
+		done
+	    fi
+	    ;;
+	-L|-LD|-library-path)
+	    for p in ${_lib_prefix[$index]} ; do
+		printf '%s' "${_install_prefix[$index]}/$p"
+		break
+	    done
+	    ;;
+	-L-all|-LD-all|-library-path-all)
+	    local i=0
+	    for p in ${_lib_prefix[$index]} ; do
+		[[ $i -ge 1 ]] && printf '%s' ' '
+		printf '%s' "${_install_prefix[$index]}/$p"
+		let i++
+	    done
+	    ;;
+	-L-suffix)    printf '%s' "${_lib_prefix[$index]}" ;;
+	-MP|-module-prefix) 
+            printf '%s' "${_mod_prefix[$index]}" ;;
+	-I|-install-prefix|-prefix) 
+            printf '%s' "${_install_prefix[$index]}" ;;
+	-Q|-install-query)   printf '%s' "${_install_query[$index]}" ;;
+	-a|-alias)           printf '%s' "${_alias[$index]}" ;;
+	-A|-archive)         printf '%s' "${_archive[$index]}" ;;
+	-v|-version)         printf '%s' "${_version[$index]}" ;;
+	-d|-directory)       printf '%s' "${_directory[$index]}" ;;
+	-s|-settings)        printf '%s' "${_settings[$index]}" ;;
+	-installed)          printf '%s' "${_installed[$index]}" ;;
+	-m|-module-name)     printf '%s' "${_mod_name[$index]}" ;;
+	-module-opt)         printf '%s' "${_mod_opts[$index]}" ;;
+	-p|-package)         printf '%s' "${_package[$index]}" ;;
+	-e|-ext)             printf '%s' "${_ext[$index]}" ;;
+	-host-reject)        printf '%s' "${_reject_host[$index]}" ;;
+        -lib*)
+	    # First retrieve the option library
+	    local s=$(var_spec -s $opt)
+	    # If the option is use the default option
+	    [[ -z "$s" ]] && s=$_LIB_DEF
+	    # Print the libraries for the choice
+	    # Search for the library
+	    choice $s "${_libs[$index]}"
+	    ;;
+	*)
+	    doerr "$1" "No option for pack_get found for $1" ;;
+    esac
 }
 
 # Returns a list of the choices for the package
@@ -699,9 +649,10 @@ function pack_get {
 #   $2 : package
 function pack_choice {
     local inst=0
+    local opt
     # First check options
     while : ; do
-	local opt=$(trim_em $1)
+	trim_em opt $1
 	case $opt in
 	    -installed|-i)
 		# return first choice that is installed
@@ -714,15 +665,15 @@ function pack_choice {
 	esac
     done
     local c=$1 ; shift
-    local p=""
+    local p=''
     [[ $# -gt 0 ]] && p="$1" && shift
     # Get choice-list
     p="$(pack_get -s $p)"
     # Return choice
     if [[ $inst -eq 1 ]]; then
 	for opt in $(choice $c "$p") ; do
-	    if [[ $(pack_installed $opt) -eq 1 ]]; then
-		_ps "$opt"
+	    if [[ $(pack_installed $opt) -eq $_I_INSTALLED ]]; then
+		printf '%s' "$opt"
 		return 0
 	    fi
 	done
@@ -734,7 +685,7 @@ function pack_choice {
 }
 
 
-#  Function pack_set_mv_test
+#  Function pack_store
 # Automatically adds commands to the current <package>
 # which moves a test output to the installation folder
 # of the <package> and gzips it.
@@ -743,14 +694,14 @@ function pack_choice {
 #       The test file to be moved.
 #    dest-file (optional)
 #       The name of the file when moved, defaults to `file`
-function pack_set_mv_test {
+function pack_store {
     local f=$1 ; shift
     local o=$f
     [[ $# -gt 0 ]] && o=$1 ; shift
     # move and gzip
-    pack_cmd "mkdir -p $(pack_get --prefix)"
-    pack_cmd "mv $f $(pack_get --prefix)/$o"
-    pack_cmd "gzip -f $(pack_get --prefix)/$o"
+    pack_cmd "mkdir -p $(pack_get -prefix)"
+    pack_cmd "mv $f $(pack_get -prefix)/$o"
+    pack_cmd "gzip -f $(pack_get -prefix)/$o"
 }
 
 # Debugging function for printing out every available
@@ -811,7 +762,7 @@ function pack_print {
 function pack_dwn {
     local idx=$(get_index $1)
     shift
-    local ext=$(pack_get --ext $idx)
+    local ext=$(pack_get -ext $idx)
     case "x$ext" in
 	xlocal|xgit|xsvn)
 	    return 0
@@ -822,8 +773,8 @@ function pack_dwn {
 	subdir="$1"
 	shift
     fi
-    local archive=$(pack_get --archive $idx)
-    local url=$(pack_get --url $idx)
+    local archive=$(pack_get -archive $idx)
+    local url=$(pack_get -url $idx)
     dwn_file $url $subdir/$archive
 }
 
@@ -832,20 +783,20 @@ function pack_set_file_version {
     local idx=$_N_archives
     [[ $# -gt 0 ]] && idx=$(get_index $1)
     # Download the archive
-    pack_dwn $idx $(build_get --archive-path)
-    local v="$(get_file_time %g-%j $(build_get --archive-path)/$(pack_get --archive $idx))"
-    pack_set --version "$v"
+    pack_dwn $idx $(build_get -archive-path)
+    local v="$(get_file_time %g-%j $(build_get -archive-path)/$(pack_get -archive $idx))"
+    pack_set -version "$v"
      # Default the module name to this:
-    local b_name="$(pack_get --build $idx)"
-    local tmp="$(build_get --build-module-path[$b_name])"
+    local b_name="$(pack_get -build $idx)"
+    local tmp="$(build_get -build-module-path[$b_name])"
     tmp=$(pack_list -lf "-X -p /" $tmp)
     tmp=${tmp%/}
     tmp=${tmp#/}
-    pack_set --module-name $tmp $idx
-    local tmp="$(build_get --build-installation-path[$b_name])"
-    pack_set --prefix $(build_get --installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp) $idx
-    tmp=$(pack_get --prefix $idx)
-    pack_set --prefix ${tmp%/} $idx
+    pack_set $idx -module-name $tmp
+    local tmp="$(build_get -build-installation-path[$b_name])"
+    pack_set $idx -prefix $(build_get -installation-path[$b_name])/$(pack_list -lf "-X -s /" $tmp)
+    tmp=$(pack_get -prefix $idx)
+    pack_set $idx -prefix ${tmp%/}
 }
 
 function pack_installed {
@@ -855,12 +806,12 @@ function pack_installed {
     if [[ $? -ne 0 ]]; then
 	ret=$_I_REJECT
     else
-	ret=$(pack_get --installed $idx)
+	ret=$(pack_get -installed $idx)
 	[[ -z "$ret" ]] && ret=0
 	if [[ $ret -eq $_I_TO_BE ]]; then
 	    pack_install $1 > /dev/null
-	    ret=$(pack_get --installed $idx)
+	    ret=$(pack_get -installed $idx)
 	fi
     fi
-    _ps $ret
+    printf '%s' $ret
 }

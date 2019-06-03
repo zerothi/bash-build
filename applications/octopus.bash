@@ -1,18 +1,18 @@
-v=7.2
+v=9.0
 add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family octopus"
 
-pack_set --install-query $(pack_get --prefix)/bin/octopus_mpi
+pack_set --install-query $(pack_get --prefix)/bin/octopus
 
 pack_set --module-requirement mpi
 pack_set --module-requirement libxc
 pack_set --module-requirement gsl
 pack_set --module-requirement arpack-ng
 pack_set --module-requirement etsf_io
-pack_set --module-requirement fftw-mpi-3
+pack_set --module-requirement fftw-mpi
 pack_set --module-requirement bgw
 
 tmp=
@@ -54,15 +54,16 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
      "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
      "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get --prefix)" \
      "$tmp"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check-short > tmp.test 2>&1 || echo NVM"
+pack_cmd "make check-short > octopus.test 2>&1 || echo NVM"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.serial
+pack_store octopus.test octopus.test.serial
 
 # prep for the MPI-compilation...
 pack_cmd "rm -rf *"
@@ -75,6 +76,7 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
      "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
      "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get --prefix)" \
      "$tmp"
@@ -86,6 +88,6 @@ else
     pack_cmd "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 fi
 pack_cmd "make -j $(get_make_parallel)"
-pack_cmd "make check > tmp.test 2>&1 && echo Successfull >> tmp.test || echo Failure >> tmp.test"
+pack_cmd "make check > octopus.test 2>&1 && echo Successfull >> octopus.test || echo Failure >> octopus.test"
 pack_cmd "make install"
-pack_set_mv_test tmp.test tmp.test.mpi
+pack_store octopus.test octopus.test.mpi

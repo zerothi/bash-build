@@ -1,7 +1,7 @@
-v=3.12
+v=5.1
 add_package \
-    --package pyyaml --version $v \
-    http://pyyaml.org/download/pyyaml/PyYAML-$v.tar.gz
+    --archive pyyaml-$v.tar.gz \
+    https://github.com/yaml/pyyaml/archive/$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/lib/python$pV/site-packages/yaml
 
@@ -13,4 +13,4 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 return
 add_test_package pyyaml.test
 pack_cmd "nosetests --exe pyyaml > $TEST_OUT 2>&1 ; echo 'Success'"
-pack_set_mv_test $TEST_OUT
+pack_store $TEST_OUT

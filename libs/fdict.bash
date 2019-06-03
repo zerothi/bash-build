@@ -1,10 +1,10 @@
-v=0.5.0
+v=0.7.1
 add_package \
     https://github.com/zerothi/fdict/releases/download/v$v/fdict-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
-pack_set --install-query $(pack_get --prefix)/lib/libfdict.a
+pack_set -install-query $(pack_get -prefix)/lib/libfdict.a
 
 # Create the arch-make file
 file=setup.make
@@ -22,7 +22,6 @@ pack_cmd "echo 'include ../Makefile' >> Makefile"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make test > tmp.test 2>&1 ; echo 'Fake success'"
-pack_set_mv_test tmp.test
-pack_cmd "make PREFIX=$(pack_get --prefix) install"
-
+pack_cmd "make test > fdict.test 2>&1 ; echo 'Fake success'"
+pack_store fdict.test
+pack_cmd "make PREFIX=$(pack_get -prefix) install"

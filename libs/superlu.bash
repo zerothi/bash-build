@@ -1,10 +1,11 @@
 v=5.2.1
-add_package --archive superlu-$v.tar.gz \
+add_package -archive superlu-$v.tar.gz \
 	    https://github.com/xiaoyeli/superlu/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libsuperlu.a
+pack_set -install-query $(pack_get -LD)/libsuperlu.a
+pack_set -lib -lsuperlu_dist
 
 # Prepare the make file
 file=make.inc
@@ -37,9 +38,9 @@ BLASLIB = -mkl=sequential\n\
 else
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     pack_cmd "sed -i '1 a\
-BLASLIB = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
+BLASLIB = $(list -LD-rp +$la) $(pack_get -lib $la)\n\
 ' $file"
 
 fi
@@ -47,8 +48,8 @@ fi
 # Make commands
 pack_cmd "make superlulib"
 
-pack_cmd "mkdir -p $(pack_get --LD)/"
-pack_cmd "cp lib/libsuperlu.a $(pack_get --LD)/"
-pack_cmd "mkdir -p $(pack_get --prefix)/include"
-pack_cmd "cp SRC/*.h $(pack_get --prefix)/include"
+pack_cmd "mkdir -p $(pack_get -LD)/"
+pack_cmd "cp lib/libsuperlu.a $(pack_get -LD)/"
+pack_cmd "mkdir -p $(pack_get -prefix)/include"
+pack_cmd "cp SRC/*.h $(pack_get -prefix)/include"
 

@@ -1,4 +1,4 @@
-v=1.3.1
+v=1.5.1.2
 add_package \
     --version $v --package netcdf4py \
     --archive netcdf4-python-${v}rel.tar.gz \
@@ -10,6 +10,7 @@ pack_set --install-query $(pack_get --prefix)/bin/nc3tonc4
 
 pack_set --module-requirement cython \
     --module-requirement netcdf-serial \
+    --module-requirement cftime \
     --module-requirement numpy
 
 tmp_flags="$(list --LD-rp netcdf-serial hdf5-serial)"
@@ -26,9 +27,7 @@ netCDF4_dir = $(pack_get --prefix netcdf-serial)\n\
 HDF5_dir = $(pack_get --prefix hdf5-serial)\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
-
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
-
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build"
 pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"

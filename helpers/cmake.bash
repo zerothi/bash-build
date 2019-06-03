@@ -1,23 +1,18 @@
-add_package --build generic https://cmake.org/files/v3.9/cmake-3.9.4.tar.gz
+for v in 2.8.12.2 3.6.3 3.9.6 3.13.5 3.14.4
+do
 
-pack_set -s $MAKE_PARALLEL
+    if [[ $(vrs_cmp $(get_c -version) 4.5.0) -lt 0 ]]; then
+	if [[ $(vrs_cmp $v 3.9.6) -gt 0 ]]; then
+	    continue
+	fi
+    fi
+    add_package -build generic https://cmake.org/files/v$(str_version -1 $v).$(str_version -2 $v)/cmake-$v.tar.gz
+    pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+    
+    pack_set -install-query $(pack_get -prefix)/bin/cmake
+    
+    pack_cmd "./bootstrap --prefix=$(pack_get -prefix)"
+    pack_cmd "make $(get_make_parallel)"
+    pack_cmd "make install"
 
-pack_set --module-requirement build-tools
-pack_set --prefix $(pack_get --prefix build-tools)
-
-p_V=$(pack_get --version)
-c_V=`cmake --version 2> /dev/null | head -1 | awk '{print $3}'`
-[[ -z "${c_V// /}" ]] && c_V=1.1.1
-if [[ $(vrs_cmp $c_V $p_V) -eq 1 ]]; then
-    pack_set --host-reject "$(get_hostname)"
-fi
-
-pack_set --install-query $(pack_get --prefix)/bin/cmake
-
-# Install commands that it should run
-pack_cmd "./bootstrap" \
-	 "--prefix=$(pack_get --prefix)"
-
-# Make commands
-pack_cmd "make $(get_make_parallel)"
-pack_cmd "make install"
+done

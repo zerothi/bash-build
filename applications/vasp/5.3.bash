@@ -10,15 +10,15 @@ else
 	--version $v \
 	http://www.student.dtu.dk/~nicpa/packages/VASP-$v.zip
 fi
-pack_set --module-requirement fftw-3
+pack_set --module-requirement fftw
 
 source applications/vasp/common-init.bash
 
 # Install the correct FFT routine
 pack_cmd "sed -i '$ a\
 FFT3D   = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \\\\\n\
-      $(pack_get --LD fftw-3)/libfftw3.a\n\
-INCS    = -I$(pack_get --prefix fftw-3)/include' $file"
+      $(pack_get --LD fftw)/libfftw3.a\n\
+INCS    = -I$(pack_get --prefix fftw)/include' $file"
 
 source applications/vasp/common-end.bash
 

@@ -1,4 +1,4 @@
-for v in 1.0.2q 1.1.0j
+for v in 1.1.0j 1.1.1b
 do
     Pv=${v:0:${#v}-1}
     add_package --build generic --version $Pv --package openssl \
@@ -6,6 +6,7 @@ do
     
     pack_set -s $IS_MODULE
     
+    pack_set -lib -lssl -lcrypto
     pack_set --mod-req gen-zlib
     
     pack_set --install-query $(pack_get --prefix)/lib/libssl.a

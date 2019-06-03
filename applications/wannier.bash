@@ -1,5 +1,6 @@
-for v in 2.1.0 ; do
-add_package http://www.wannier.org/code/wannier90-$v.tar.gz
+for v in 3.0.0 2.1 ; do
+add_package --archive wannier90-$v.tar.gz \
+	    https://github.com/wannier-developers/wannier90/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
@@ -54,8 +55,8 @@ if [[ $(vrs_cmp $v 2.0) -ge 0 ]]; then
     pack_cmd "cp utility/kmesh.pl $(pack_get --prefix)/bin/"
 fi
 pack_cmd "make lib"
-pack_cmd "make test 2>&1 > tmp.test ; echo 'succes'"
-pack_set_mv_test tmp.test
+pack_cmd "make test 2>&1 > wannier.test ; echo 'succes'"
+pack_store wannier.test
 pack_cmd "cp wannier90.x $(pack_get --prefix)/bin/"
 pack_cmd "cp libwannier.a $(pack_get --LD)/"
 if [ $(vrs_cmp $v 2.0) -ge 0 ]; then

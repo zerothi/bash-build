@@ -43,9 +43,9 @@ if $(is_c intel) ; then
 else
     pack_cmd "make lapack_testing 2>&1 > lapack.test"
 fi
-pack_set_mv_test blas.test
-pack_set_mv_test cblas.test
-pack_set_mv_test lapack.test
+pack_store blas.test
+pack_store cblas.test
+pack_store lapack.test
 
 # Installation commands
 pack_cmd "mkdir -p $(pack_get --LD)"

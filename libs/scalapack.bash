@@ -7,6 +7,8 @@ add_package http://www.student.dtu.dk/~nicpa/packages/scalapack-204.tar.bz2
 pack_set -s $IS_MODULE
 pack_set --install-query $(pack_get --LD)/libscalapack.a
 pack_set -lib -lscalapack
+pack_set -lib[omp] -lscalapack
+pack_set -lib[pt] -lscalapack
 
 pack_set --module-requirement mpi
 
@@ -33,7 +35,7 @@ pack_cmd "make $(get_make_parallel)"
 
 pack_cmd "cd TESTING"
 pack_cmd 'for x in x* ; do echo "RUNNING: $x" >> scalapack.test ; mpiexec -np $NPROCS ./$x >> scalapack.test ; echo "" >> scalapack.test ; done'
-pack_set_mv_test scalapack.test
+pack_store scalapack.test
 pack_cmd "cd .."
 
 pack_cmd "mkdir -p $(pack_get --LD)/"

@@ -1,4 +1,4 @@
-v=4.0.1
+v=6.0.2
 add_package --archive tornado-$v.tar.gz https://github.com/tornadoweb/tornado/archive/v$v.tar.gz
 
 pack_set --module-requirement $(get_parent)

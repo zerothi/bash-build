@@ -1,8 +1,8 @@
-for p in 1.8.18 ; do
+for p in $(pack_get -version hdf5) ; do
 
 add_package \
     --package hdf5-serial \
-    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/hdf5-$p/src/hdf5-$p.tar.bz2
+    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-$p/src/hdf5-$p.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -32,8 +32,8 @@ pack_cmd "../configure" \
 # Make commands
 pack_cmd "make $(get_make_parallel)"
 if ! $(is_host n- surt muspel slid) ; then
-    pack_cmd "make check > tmp.test 2>&1"
-    pack_set_mv_test tmp.test
+    pack_cmd "make check > hdf5.test 2>&1"
+    pack_store hdf5.test
 fi
 pack_cmd "make install"
 

@@ -1,4 +1,4 @@
-v=2017.05.003
+v=2018.11.001
 add_package --package elpa \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
@@ -17,7 +17,6 @@ if $(is_c intel) ; then
     fi
 
 else
-    
     pack_set --module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
@@ -43,10 +42,10 @@ pack_cmd "make $(get_make_parallel)"
 if $(is_c intel) ; then
     pack_cmd "make install"
 else
-    pack_cmd "make check > tmp.test 2>&1 ; echo force"
+    pack_cmd "make check > elpa.test 2>&1 ; echo force"
     pack_cmd "make install"
-    pack_set_mv_test tmp.test
-    pack_set_mv_test test-suite.log test.log
+    pack_store elpa.test
+    pack_store test-suite.log elpa.test.log
 fi
 
 # Correct include paths

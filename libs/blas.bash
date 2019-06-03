@@ -10,7 +10,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set --lib[omp] -lblas
 pack_set --lib[pt] -lblas
 
-pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)/$(get_c)
+pack_set --prefix-and-module $(pack_get --alias)/$(pack_get --version)
 
 # Required as the version has just been set
 pack_set --install-query $(pack_get --LD)/libblas.a
