@@ -172,6 +172,7 @@ function build_set {
 	case $opt in
 	    -archive-path|-ap)
 		_archives="$1"
+		mkdir -p $1
 		shift ;;
 	    -installation-path|-ip)
 		[[ $b_idx -eq 0 ]] && _prefix="$1"
@@ -191,10 +192,12 @@ function build_set {
 	    -build-installation-path|-bip) 
 		[[ $b_idx -eq 0 ]] && _build_install_path="$1"
 		_b_build_prefix[$b_idx]="$1"
+		mkdir -p $1
 		shift ;;
 	    -build-module-path|-bmp) 
 		[[ $b_idx -eq 0 ]] && _build_module_path="$1"
 		_b_build_mod_prefix[$b_idx]="$1"
+		mkdir -p $1
 		shift ;;
 	    -default-module-hidden) 
 		local tmp=$(get_index $1)
