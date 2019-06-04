@@ -82,7 +82,6 @@ function _s_help {
     printf "\$format" "--[no-]mpi" "Is the job parallel with MPI."
     printf "\$format" "--[no-]omp" "Is the job threaded (can be supplied together with MPI-flag) [default=omp]."
     printf "\$format" "--mail-address|-mail|-u" "Redirect the mails to given mail address."
-    printf "\$format" "--mix-in-out" "The stderr and stdout will be directed to stdout."
     printf "\$format" "--flag-explanations|-fe" "Add flag explanations in the LSF script."
 }
 
@@ -208,7 +207,6 @@ _s_add_option -u "\$mail" "Mail address to send job information (defaulted to th
 
 echo ''
 
-_s_add_line 'source \$HOME/.bashrc' "Source the home .bashrc to edit ENV variables"
 _s_add_line 'module purge' "Clear list of defaulted modules"
 _s_add_line 'module load dcc-setup' "Enables DCC modules"
 _s_add_line 'env' "For debugging purposes"
@@ -235,5 +233,5 @@ fi
 _help "Submit jobs my using (remember to pipe script into bsub): bsub < <>"
 EOF
 
-pack_cmd "mv $script $(pack_get --prefix)/bin/slsf"
+pack_cmd "mv $script $(pack_get -prefix)/bin/slsf"
 unset script
