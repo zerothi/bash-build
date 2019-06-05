@@ -94,7 +94,7 @@ elif $(is_c gnu) ; then
     pack_cmd "sed -i -e '/_lib_names[ ]*=/s|blis|blis_omp|g' numpy/distutils/system_info.py"
 
     la=$(pack_choice -i linalg)
-    if [[ $(vrs_cmp $v 1.16.3) -le 0 ]]; then
+    if [[ $(vrs_cmp $v 1.16) -le 0 ]]; then
 	la=openblas
     fi
     pack_set -module-requirement $la
