@@ -6,9 +6,9 @@ pack_set -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libopenblas.a
 
-pack_set -lib -lopenblas
-pack_set -lib[omp] -lopenblas_omp
-pack_set -lib[pt] -lopenblasp
+pack_set -lib -lopenblas -lm
+pack_set -lib[omp] -lopenblas_omp -lm
+pack_set -lib[pt] -lopenblasp -lm
 
 # Default flags for all compilations of OpenBLAS here 
 # Improve allocation for small matrices
