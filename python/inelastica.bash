@@ -2,7 +2,7 @@
 # Since v1.3.5 Inelastica supports Py3
 #[ "x${pV:0:1}" == "x3" ] && return 0
 
-v=1.3.5
+v=1.3.6
 add_package --package Inelastica \
 	    --archive inelastica-$v.tar.gz \
 	    https://github.com/tfrederiksen/inelastica/archive/v$v.tar.gz
