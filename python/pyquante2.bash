@@ -3,6 +3,7 @@ add_package --archive pyquante2-$v.tar.gz \
 	    https://github.com/rpmuller/pyquante2/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
+[ "x${pV:0:1}" == "x3" ] && pack_set -host-reject $(get_hostname)
 
 pack_set -module-requirement numpy
 
