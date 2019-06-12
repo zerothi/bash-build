@@ -1,22 +1,22 @@
 v=1.13.1
-add_package --archive tensorflow-$v.tar.gz \
+add_package -archive tensorflow-$v.tar.gz \
 	    https://github.com/tensorflow/tensorflow/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 if [[ $(pack_installed bazel[0.21.0]) -ne $_I_INSTALLED ]]; then
-    pack_set --host-reject $(get_hostname)
+    pack_set -host-reject $(get_hostname)
 fi
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
 # As per github issue 14428 it seems MPI is not maintained! :(
-pack_set $(list --prefix ' --module-requirement ' numpy)
+pack_set $(list -prefix ' -module-requirement ' numpy)
 
 if ! $(is_c gnu) ; then
-    pack_set --host-reject $(get_hostname)
+    pack_set -host-reject $(get_hostname)
 fi
 
-pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
+pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages"
 _mods="$(pack_get -module-load bazel[0.21.0])"
 
 pack_cmd "module load $_mods"
@@ -37,18 +37,19 @@ TF_SET_ANDROID_WORKSPACE=0 \
 TF_NEED_MPI=0 MPI_HOME=$(pack_get -prefix mpi) \
 PREFIX=$(pack_get -prefix) \
 CC_OPT_FLAGS='$CFLAGS' ./configure"
-#--cxxopt=-D_GLIBCXX_USE_CXX11_ABI=0 \
 
 # local_resources 2048 limits memory usage
 pack_cmd "$_envs bazel build --jobs $NPROCS -s --local_resources 2048,.5,1.0 \
---verbose_failures \
+-k --verbose_failures \
 -c opt \
 --config=opt \
 --force_pic \
-$(list -prefix --copt= ' ' $CFLAGS) \
-$(list -prefix --linkopt= ' ' $(list -LD-rp $(pack_get -mod-req-path))) \
+--cxxopt=-D_GLIBCXX_USE_CXX11_ABI=0 \
 --define=PREFIX=$(pack_get -prefix) \
 //tensorflow/tools/pip_package:build_pip_package"
 
-pack_cmd "pip install --prefix=$(pack_get -prefix) ./*.whl"
+pack_cmd "mkdir my-tensorflow-directory-for-pip"
+pack_cmd "./bazel-bin/tensorflow/tools/pip_package/build_pip_package my-tensorflow-directory-for-pip"
+
+pack_cmd "pip install --prefix=$(pack_get -prefix) ./my-tensorflow-directory-for-pip./*.whl"
 pack_cmd "module unload $_mods"

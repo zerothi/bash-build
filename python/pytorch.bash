@@ -14,10 +14,8 @@ tmp_flags="$tmp_flags MAX_JOBS=$NPROCS"
 tmp_flags="$tmp_flags USE_NUMPY=1"
 tmp_flags="$tmp_flags USE_CUDA=0"
 tmp_flags="$tmp_flags USE_DISTRIBUTED=1"
+tmp_flags="$tmp_flags CMAKE_PREFIX_PATH=$(pack_get -prefix)"
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
-pack_cmd "$(get_parent_exec) setup.py build"
-
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get -prefix)"
+pack_cmd "$tmp_flags $(get_parent_exec) setup.py install"
