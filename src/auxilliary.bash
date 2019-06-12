@@ -79,19 +79,19 @@ function msg_install {
 	    module list 2>&1
 	    ;;
 	1)
-	    echo " File    : $(pack_get --archive $pack)"
-	    local _e=$(pack_get --ext $pack)
+	    echo " File    : $(pack_get -archive $pack)"
+	    local _e=$(pack_get -ext $pack)
 	    echo " Ext     : $_e"
 	    echo " Ext CMD : $(arc_cmd $_e)"
 	    ;;
 	*)
-	    local _p=$(pack_get --package $pack)
-	    local _a=$(pack_get --alias $pack)
+	    local _p=$(pack_get -package $pack)
+	    local _a=$(pack_get -alias $pack)
 	    echo " Package : $_p"
 	    if [[ "$_p" != "$_a" ]]; then
 		echo " Alias   : $_a"
 	    fi	
-	    echo " Version : $(pack_get --version $pack)"
+	    echo " Version : $(pack_get -version $pack)"
 	    ;;
     esac
     echo '=================================='
@@ -127,7 +127,7 @@ function docmd {
     st=$?
     if [[ $st -ne 0 ]]; then
 	message="Failed CMD (STATUS=$st): ${cmd[@]}"
-	msg_install --message "$message"
+	msg_install -message "$message"
         return $st
     fi
 }
@@ -522,9 +522,9 @@ function extract_archive {
     local id=$(get_index $1)
     shift
     local loc="$1/"
-    local d=$(pack_get --directory $id)
-    local ext=$(pack_get --ext $id)
-    local archive=$(pack_get --archive $id)
+    local d=$(pack_get -directory $id)
+    local ext=$(pack_get -ext $id)
+    local archive=$(pack_get -archive $id)
     # If a previous extraction already exists (delete it!)
     case $d in
 	.|./)
@@ -541,10 +541,17 @@ function extract_archive {
 	    return 0
 	    ;;
 	git)
+	    
 	    loc=''
+	    d=${archive%@*}
+	    if [[ -n "$d" ]]; then
+		# Remember extra space!
+		loc="-b $d "
+		archive=${archive#*@}
+	    fi
 	    ;;
     esac
-    docmd "Archive $(pack_get --alias $id) ($(pack_get --version $id))" $(arc_cmd $ext) $loc$archive
+    docmd "Archive $(pack_get -alias $id) ($(pack_get -version $id))" $(arc_cmd $ext) $loc$archive
     return $?
 }
 
@@ -569,7 +576,7 @@ function dwn_file {
     # If the url is fake
     [[ "x$url" == "xfake" ]] && return 0
     # Better circumvent the proxies...
-    msg_install --message "Downloading $url to $O"
+    msg_install -message "Downloading $url to $O"
     $_dwn_exe $O $url
     if [[ $? -ne 0 ]]; then
 	rm -f $O

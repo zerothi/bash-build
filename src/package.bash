@@ -218,12 +218,12 @@ function add_package {
     _install_query[$_N_archives]=/directory/does/not/exist
 
     # Save the url 
-    local url=$1
+    local url="$1"
     # A fake does not have a directory
     [[ "x$url" == "xfake" ]] && d=./
-    _http[$_N_archives]=$url
+    _http[$_N_archives]="$url"
     # Save the archive name
-    [[ -z "$fn" ]] && fn=$(basename $url)
+    [[ -z "$fn" ]] && fn=$(basename "$url")
     _archive[$_N_archives]=$fn
     # Save the type of archive
     local ext=${fn##*.}
@@ -236,7 +236,7 @@ function add_package {
 	xgit)
 	    # Since the archive cannot be downloaded we
 	    # use the direct archive directory
-	    _archive[$_N_archives]=$url
+	    _archive[$_N_archives]="$url"
 	    ;;
     esac
     # Infer what the directory is

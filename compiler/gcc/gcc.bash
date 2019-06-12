@@ -1,4 +1,4 @@
-for gcc_v in 4.8.5 4.9.4
+for gcc_v in 4.9.4
 do
     gcc=gcc_$gcc_v
     source_pack compiler/gcc/prereq.bash

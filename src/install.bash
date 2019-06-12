@@ -54,7 +54,11 @@ function pack_install {
     case x$ext in
 	xgit)
 	    # Check that we haven't already found this has
-	    hash=$(git ls-remote $(pack_get -url $idx) HEAD | awk '{print $1}')
+	    tmp=$(pack_get -url $idx)
+	    hash=${tmp#*@}
+	    if [[ "x$tmp" == "x$hash" ]]; then
+		hash=$(git ls-remote $tmp HEAD | awk '{print $1}')
+	    fi
 	    if [[ -e $prefix/.bb.hash ]]; then
 		local installed_hash=$(cat $prefix/.bb.hash)
 		if [[ "x$hash" == "x$installed_hash" ]]; then
