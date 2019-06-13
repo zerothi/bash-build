@@ -1,22 +1,22 @@
 v=171221_1
-add_package --package fhi-aims \
-	    --directory fhi-aims.$v \
-	    --version $v \
+add_package -package fhi-aims \
+	    -directory fhi-aims.$v \
+	    -version $v \
 	    http://www.student.dtu.dk/~nicpa/packages/fhi-aims.$v.tgz
 
 pack_set -s $MAKE_PARALLEL
 
-pack_set --module-opt "--lua-family fhi-aims"
-pack_set --module-opt "--set-ENV FHIAIMS_VERSION=$v"
+pack_set -module-opt "-lua-family fhi-aims"
+pack_set -module-opt "-set-ENV FHIAIMS_VERSION=$v"
 # FHI-aims complains about omp-num-threads even if it isn't used
-pack_set --module-opt "--set-ENV OMP_NUM_THREADS=1"
+pack_set -module-opt "-set-ENV OMP_NUM_THREADS=1"
 
-pack_set --install-query $(pack_get --prefix)/bin/aims.$v.scalapack.mpi.x
+pack_set -install-query $(pack_get -prefix)/bin/aims.$v.scalapack.mpi.x
 
-pack_set --module-requirement mpi
+pack_set -module-requirement mpi
 
 # Create installation directory
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get -prefix)/bin"
 
 # Go into src directory
 pack_cmd "cd src"
@@ -55,7 +55,7 @@ MPICC = $MPICC\n\
 USE_C_FILES = yes\n\
 USE_MPI = yes\n\
 USE_LIBXC = yes\n\
-BINDIR = $(pack_get --prefix)/bin\n\
+BINDIR = $(pack_get -prefix)/bin\n\
 AUTODEPEND = yes\n\
 ARCHITECTURE = $tmp_arch\n\
 LDFLAGS = $tmp_ld\n\
@@ -70,13 +70,13 @@ F90FLAGS += -extend-source 132\n\
 ' $file"
 
 else
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     pack_cmd "sed -i '$ a\
-LAPACKBLAS = $(list --LD-rp $la) $(pack_get -lib $la)\n\
-SCALAPACK = $(list --LD-rp scalapack) -lscalapack\n\
+LAPACKBLAS = $(list -LD-rp +$la) $(pack_get -lib $la)\n\
+SCALAPACK = $(list -LD-rp scalapack) -lscalapack\n\
 FFLAGS += -ffree-line-length-none\n\
 F90FLAGS += -ffree-line-length-none\n\
 ' $file"
@@ -91,7 +91,7 @@ do
     pack_cmd "make $(get_make_parallel) $target"
 done
 
-pack_cmd "cd $(pack_get --prefix)/bin"
+pack_cmd "cd $(pack_get -prefix)/bin"
 pack_cmd 'chmod o-rwx *'
 pack_cmd "ln -fs aims.$v.scalapack.mpi.x aims.x"
 pack_cmd "ln -fs aims.$v.scalapack.mpi.x aims"

@@ -215,7 +215,6 @@ pack_set -module-opt "-set-ENV OMP_NUM_THREADS=1"
 pack_cmd "unset LDSHARED"
 
 
-return
 if ! $(is_c intel) ; then
     add_test_package numpy.test
     pack_cmd "unset LDFLAGS"
