@@ -36,6 +36,8 @@ declare -A _directory
 declare -A _cmd
 # A module sequence which is the requirements for the package
 declare -A _mod_req
+# A module sequence which is build requirements for the package
+declare -A _mod_build_req
 # Variable for holding information about "non-installation" hosts
 declare -A _reject_host
 # Logical variable determines whether the package has been installed
@@ -271,7 +273,11 @@ function add_package {
 	_index[$lc_name]="$_N_archives"
     fi
     # The default library is setup
-    _libs[$_N_archives]=$_LIB_DEF$_CHOICE_SEP-l$package
+    _libs[$_N_archives]=""
+    # We will not specify a default library since this requires packages
+    # not having libraries to *disable* it.
+    # Better to be explicit for the packages.
+    #$_LIB_DEF$_CHOICE_SEP-l$package
     
     # Default the module name to this:
     _installed[$_N_archives]=$_I_TO_BE
@@ -316,7 +322,7 @@ function pack_set {
     local opt
     [[ $# -eq 0 ]] && return
     local alias version directory settings install query
-    local mod_name package cmd cmd_flags req idx_alias
+    local mod_name package cmd cmd_flags req breq idx_alias
     local reject_h only_h
     local inst=-100
     local mod_prefix m mod_opt lib libs libs_c
@@ -374,6 +380,13 @@ function pack_set {
 		tmp="$(pack_get -host-reject $1)"
 		[[ -n "$tmp" ]] && reject_h="$reject_h $tmp"
 		req="$req $1" ; shift ;; # called several times
+            -BR|-build-mod-requirement|-build-mod-req)
+		tmp="$(pack_get -build-mod-req-all $1)"
+		[[ -n "$tmp" ]] && breq="$breq $tmp"
+		# We add the host-rejects for this requirement
+		tmp="$(pack_get -host-reject $1)"
+		[[ -n "$tmp" ]] && reject_h="$reject_h $tmp"
+		breq="$breq $1" ; shift ;; # called several times
             -Q|-install-query)  query="$1" ; shift ;;
 	    -a|-alias)  alias="$1" ; shift ;;
 	    -index-alias)  idx_alias="$1" ; shift ;; ## opted for deletion...
@@ -442,6 +455,11 @@ function pack_set {
 	req="${_mod_req[$index]} $req"
 	# Remove dublicates:
 	_mod_req[$index]="$(rem_dup $req)"
+    fi
+    if [[ -n "$breq" ]]; then
+	breq="${_mod_build_req[$index]} $breq"
+	# Remove dublicates:
+	_mod_build_req[$index]="$(rem_dup $breq)"
     fi
     if [[ -n "$install" ]]; then
 	_install_prefix[$index]="${install// /}"
@@ -590,6 +608,8 @@ function pack_get {
 		done
 	    fi
 	    ;;
+	-build-mod-req-all)
+            printf '%s' "${_mod_build_req[$index]}" ;;
 	-module-requirement-all|-mod-req-all) 
             printf '%s' "${_mod_req[$index]}" ;;
 	-module-name-requirement|-mod-req-name) 

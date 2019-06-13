@@ -4,6 +4,9 @@ add_package --version $v --archive lapack-$v.tar.gz https://github.com/Reference
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/liblapack.a
+pack_set -lib -llapack
+pack_set -lib[omp] -llapack
+pack_set -lib[pt] -llapack
 
 # Prepare the make file
 file=make.inc

@@ -16,8 +16,8 @@ if $(is_c intel) ; then
 else
     la=lapack-$(pack_choice -i linalg)
     pack_set -module-requirement $la
-    tmp_flags="$tmp_flags --with-blas='$(list -LD-rp-lib $la)'"
-    tmp_flags="$tmp_flags --with-lapack='$(list -LD-rp-lib $la)'"
+    tmp_flags="$tmp_flags --with-blas='$(list -LD-rp-lib +$la)'"
+    tmp_flags="$tmp_flags --with-lapack='$(list -LD-rp-lib +$la)'"
 
 fi
 

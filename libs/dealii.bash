@@ -35,8 +35,9 @@ else
     pack_set -module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
     pack_set -module-requirement $la
-    tmp_flags="$tmp_flags -DLAPACK_FOUND=true -DLAPACK_LIBRARIES='$(list -LD-rp-lib $la)'"
-    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$(list -LD-rp-lib $la)'"
+    # We are using C compilers and thus require gfortran library
+    tmp_flags="$tmp_flags -DLAPACK_FOUND=true -DLAPACK_LIBRARIES='$(list -LD-rp-lib +$la) -lgfortran'"
+    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$(list -LD-rp-lib +$la) -lgfortran'"
     tmp_flags="$tmp_flags -DSCALAPACK_FOUND=true -DSCALAPACK_LIBRARIES='$(list -LD-rp-lib scalapack)'"
 
 fi

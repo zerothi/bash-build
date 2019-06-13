@@ -216,7 +216,9 @@ function pack_install {
 	fi
 
         # Create the list of requirements
-	local module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
+	local module_loads
+	module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -build-req-mod-all $idx))"
+	module_loads="$module_loads $(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
 	if [[ -n "${module_loads}" ]]; then
 	    module load $module_loads
 	    local st=$?
