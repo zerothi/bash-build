@@ -11,7 +11,7 @@ pack_cmd "git submodule init"
 pack_cmd "git submodule update --init --recursive"
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
-pack_cmd "unset LDFLAGS"
+#pack_cmd "unset LDFLAGS"
 
 tmp_flags=
 tmp_flags="$tmp_flags MAX_JOBS=$NPROCS"

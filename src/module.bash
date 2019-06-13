@@ -116,7 +116,7 @@ function create_module {
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
 	    -L|-load-module)  load="$load $1" ; shift ;; # Can be optioned several times
 	    -RL|-reqs+load-module) 
-		load="$load $(pack_get --mod-req-module $1) $1" ; shift ;; # Can be optioned several times
+		load="$load $(pack_get -mod-req-module $1) $1" ; shift ;; # Can be optioned several times
 	    -C|-conflict-module)  conflict="$conflict $1" ; shift ;; # Can be optioned several times
 	    -undefined-ENV)      env="$env u$1" ; shift ;; # Can be optioned several times
 	    -set-ENV)      env="$env s$1" ; shift ;; # Can be optioned several times
@@ -140,7 +140,7 @@ function create_module {
 
     # Create the file to which we need to install the module script
     if [[ -z "$mod_path" ]]; then
-	local mfile=$(build_get --module-path)
+	local mfile=$(build_get -module-path)
     else
 	local mfile=$mod_path
     fi
@@ -160,7 +160,7 @@ function create_module {
     tmp=
     for mod in $require ; do
 	[[ -z "${mod// /}" ]] && continue
-	case $(pack_get --installed $mod) in
+	case $(pack_get -installed $mod) in
 	    $_I_LIB|$_I_REQ)
 		continue
 		;;
@@ -173,7 +173,7 @@ function create_module {
     tmp=
     for mod in $load ; do
 	[[ -z "${mod// /}" ]] && continue
-	case $(pack_get --installed $mod) in
+	case $(pack_get -installed $mod) in
 	    $_I_LIB|$_I_REQ)
 		continue
 		;;
@@ -185,12 +185,12 @@ function create_module {
     # Check that all that is required and needs to be loaded is installed
     for mod in $require $load ; do
 	[[ -z "${mod// /}" ]] && continue
-	case $(pack_get --installed $mod) in
+	case $(pack_get -installed $mod) in
 	    $_I_INSTALLED|$_I_MOD)
 		continue
 		;;
 	esac
-	msg_install --message "Could not create module [$name/$version] because $(pack_get -p $mod)[$(pack_get -v $mod)] is not installed..."
+	msg_install -message "Could not create module [$name/$version] because $(pack_get -p $mod)[$(pack_get -v $mod)] is not installed..."
 	return 1
     done
     
@@ -305,10 +305,10 @@ EOF
 $fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
-	    local inst=$(pack_get --installed $tmp)
+	    local inst=$(pack_get -installed $tmp)
 	    case $inst in
 		$_I_INSTALLED|$_I_MOD)
-		    local tmp_load=$(pack_get --module-name $tmp)
+		    local tmp_load=$(pack_get -module-name $tmp)
 		    case $_mod_format in 
 			$_mod_format_ENVMOD) echo "module load $tmp_load" >> "$mfile" ;;
 			$_mod_format_LMOD) echo "load(\"$tmp_load\")" >> "$mfile" ;;
@@ -328,10 +328,10 @@ EOF
 $fm_comment Requirements for the module:
 EOF
 	for tmp in $require ; do
-	    local inst=$(pack_get --installed $tmp)
+	    local inst=$(pack_get -installed $tmp)
 	    case $inst in
 		$_I_INSTALLED|$_I_MOD)
-		    local tmp_load=$(pack_get --module-name $tmp)
+		    local tmp_load=$(pack_get -module-name $tmp)
 		    case $_mod_format in 
 			$_mod_format_ENVMOD) echo "prereq $tmp_load" >> "$mfile" ;;
 			$_mod_format_LMOD) echo "prereq(\"$tmp_load\")" >> "$mfile" ;;
@@ -350,10 +350,10 @@ EOF
 $fm_comment Modules which is in conflict with this module:
 EOF
 	for tmp in $conflict ; do
-	    local inst=$(pack_get --installed $tmp)
+	    local inst=$(pack_get -installed $tmp)
 	    case $inst in
 		$_I_INSTALLED|$_I_MOD)
-		    local tmp_load=$(pack_get --module-name $tmp)
+		    local tmp_load=$(pack_get -module-name $tmp)
 		    case $_mod_format in 
 			$_mod_format_ENVMOD) echo "conflict $tmp_load" >> "$mfile" ;;
 			$_mod_format_LMOD) echo "conflict(\"$tmp_load\")" >> "$mfile" ;;
@@ -409,40 +409,40 @@ EOF
     fi
     # Add paths if they are available
     add_module_if -F $force -d "$path/bin" $mfile \
-	"$(module_fmt_routine --prepend-path PATH $fpath/bin)"
+	"$(module_fmt_routine -prepend-path PATH $fpath/bin)"
     add_module_if -F $force -d "$path/lib/pkgconfig" $mfile \
-	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
+	"$(module_fmt_routine -prepend-path PKG_CONFIG_PATH $fpath/lib/pkgconfig)"
     add_module_if -F $force -d "$path/lib64/pkgconfig" $mfile \
-	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
+	"$(module_fmt_routine -prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
     add_module_if -F $force -d "$path/share/pkgconfig" $mfile \
-	"$(module_fmt_routine --prepend-path PKG_CONFIG_PATH $fpath/share/pkgconfig)"
+	"$(module_fmt_routine -prepend-path PKG_CONFIG_PATH $fpath/share/pkgconfig)"
     add_module_if -F $force -d "$path/man" $mfile \
-	"$(module_fmt_routine --prepend-path MANPATH $fpath/man)"
+	"$(module_fmt_routine -prepend-path MANPATH $fpath/man)"
     add_module_if -F $force -d "$path/share/man" $mfile \
-	"$(module_fmt_routine --prepend-path MANPATH $fpath/share/man)"
+	"$(module_fmt_routine -prepend-path MANPATH $fpath/share/man)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
-	"$(module_fmt_routine --prepend-path M4PATH $fpath/share/aclocal)"
+	"$(module_fmt_routine -prepend-path M4PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
-	"$(module_fmt_routine --prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
+	"$(module_fmt_routine -prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/cmake" $mfile \
-	"$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
+	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
     tmp=$(ls -d $path/share/$name* 2>/dev/null)
     if [[ -n "$tmp" ]]; then
 	add_module_if -F $force -d "$tmp" $mfile \
-	    "$(module_fmt_routine --prepend-path CMAKE_PREFIX_PATH $tmp)"
+	    "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $tmp)"
     fi
     # The LD_LIBRARY_PATH is DANGEROUS!
     #add_module_if -F $force -d "$path/lib" $mfile \
-#	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib)"
+#	"$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib)"
  #   add_module_if -F $force -d "$path/lib64" $mfile \
-#	"$(module_fmt_routine --prepend-path LD_LIBRARY_PATH $fpath/lib64)"
+#	"$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     add_module_if -F $force -d "$path/lib/python" $mfile \
-	"$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python)"
+	"$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
     for PV in 2.6 2.7 3.4 3.5 3.6 3.7 ; do
 	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
+	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
-	    "$(module_fmt_routine --prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
+	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
     done
     if [[ -n "$lua_family" ]]; then
 	case $_mod_format in

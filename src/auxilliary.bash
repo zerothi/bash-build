@@ -544,7 +544,7 @@ function extract_archive {
 	    
 	    loc=''
 	    d=${archive%@*}
-	    if [[ -n "$d" ]]; then
+	    if [[ "x$d" != "x$archive" ]]; then
 		# Remember extra space!
 		loc="-b $d "
 		archive=${archive#*@}
