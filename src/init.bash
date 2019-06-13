@@ -9,6 +9,7 @@ shopt -u checkwinsize
 # disable history
 shopt -u histappend
 
+
 # Check whether the module command is actually installed
 _has_module_cmd=1
 type module 2>&1 > /dev/null
@@ -16,14 +17,37 @@ if [[ $? -eq 1 ]]; then
     _has_module_cmd=0
 fi
 
+
+# Create proper error handling
+# First we establish what the PID of the current process is
+_bb_PID=$$
+# Now instantiate a trap which catches TERM signals
+trap '_bb_exit' TERM
+
+function _bb_exit {
+    # This function will list the lines where it went wrong
+    local deptn=${#FUNCNAME[@]}
+    local i j
+    local func src line
+    echo ''
+
+    for ((i=1; i<$deptn; i++)) ; do
+        func="${FUNCNAME[$i]}"
+	j=$((i-1))
+        src="${BASH_SOURCE[$j]}"
+        line="${BASH_LINENO[$j]}"
+        printf '%*s %s in %s at line: %s\n' $i '' "$func()" "$src" "$line"
+    done
+
+    exit 1
+}
+
 # Make an error and exit
 function doerr {
     local prefix="ERROR: "
-    for ln in "$@" ; do
-        echo "${prefix}${ln}" >> $_ERROR_FILE
-        echo "${prefix}${ln}" >&2
-        prefix='       '
-    done
+    echo "${prefix}$@" >> $_ERROR_FILE
+    echo "${prefix}$@" >&2
+    kill -s TERM $_bb_PID
     exit 1
 }
 
