@@ -48,12 +48,12 @@ F90free += -free\n\
 ' $file"
 
 elif $(is_c gnu) ; then
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
 
     # We use a c-linker (which does not add gfortran library)
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp scalapack +$la)"
+    pack_set -module-requirement $la
+    tmp_ld="$(list -LD-rp scalapack +$la)"
     pack_cmd "sed -i '$ a\
 COMPFLAG = -DGNU\n\
 FCPP = cpp -P -nostdinc -C\n\
@@ -81,4 +81,4 @@ fi
 pack_cmd "make manual"
 pack_cmd "[ ! -e manual.html ] && cp documentation/users/manual.html ."
 
-pack_cmd "make install INSTDIR=$(pack_get --prefix)"
+pack_cmd "make install INSTDIR=$(pack_get -prefix)"

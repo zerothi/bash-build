@@ -217,13 +217,8 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads
-	module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -build-mod-req-all $idx))"
-	if [[ -n "${module_loads}" ]]; then
-	    module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
-	else
-	    module_loads="$module_loads $(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
-	fi
-	if [[ -n "${module_loads}" ]]; then
+	module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -build-mod-req-all $idx)) $(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
+	if [[ -n "${module_loads// /}" ]]; then
 	    module load $module_loads
 	    local st=$?
 	    if [[ $st -ne 0 ]]; then
@@ -322,7 +317,7 @@ function pack_install {
 	msg_install -finish $idx
 	
 	# Unload the requirement modules
-	if [[ -n "${module_loads}" ]]; then
+	if [[ -n "${module_loads// /}" ]]; then
 	    module unload $module_loads
 	fi
 
@@ -351,7 +346,7 @@ function pack_install {
 	    if $(has_setting $BUILD_TOOLS $idx) ; then
 		echo "module load build-tools"
 	    fi
-	    if [[ -n "${module_loads}" ]]; then
+	    if [[ -n "${module_loads// /}" ]]; then
 		echo "module load $module_loads"
 	    fi
 	    for tmp in CC FC F77 F90 \
