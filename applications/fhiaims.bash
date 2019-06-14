@@ -48,7 +48,7 @@ pack_cmd "sed -i '$ a\
 FC = $FC\n\
 CC = $CC\n\
 CFLAGS = $CFLAGS\n\
-FFLAGS = $FFLAGS\n\
+FFLAGS = $FFLAGS $FLAG_OMP\n\
 F90FLAGS = $FCLAGS\n\
 MPIFC = $MPIFC\n\
 MPICC = $MPICC\n\
@@ -75,7 +75,7 @@ else
     la=lapack-$(pack_choice -i linalg)
     pack_set -module-requirement $la
     pack_cmd "sed -i '$ a\
-LAPACKBLAS = $(list -LD-rp +$la) $(pack_get -lib $la)\n\
+LAPACKBLAS = $(list -LD-rp +$la) $(pack_get -lib[omp] $la)\n\
 SCALAPACK = $(list -LD-rp scalapack) -lscalapack\n\
 FFLAGS += -ffree-line-length-none\n\
 F90FLAGS += -ffree-line-length-none\n\

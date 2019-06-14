@@ -54,10 +54,11 @@ CPP_OPTIONS  += -DVASP2WANNIER90\n\
 CPP_OPTIONS  += -DMPI -DHOST=\\\\\"$(get_c)-$(pack_get --package mpi)\\\\\"\n\
 CPP_OPTIONS  += -DIFC\n\
 CPP_OPTIONS  += -DCACHE_SIZE=6000 -DMPI_BLOCK=60000\n\
+CPP_OPTIONS  += -DDGEGV=DDGGEV\n\
 CPP_OPTIONS  += -DscaLAPACK -Duse_collective\n\
 CPP_OPTIONS  += -DnoAugXCmeta -Duse_bse_te\n\
 CPP_OPTIONS  += -Duse_shmem -Dtbdyn\n\
-FC   = $MPIFC \n\
+FC   = $MPIFC $FLAG_OMP\n\
 FCL  = \$(FC) \n\
 #PLACEHOLDER#\n\
 FFLAGS = $FCFLAGS \n\
@@ -95,8 +96,8 @@ elif $(is_c gnu) ; then
     pack_set --module-requirement $la
     pack_cmd "sed -i '$ a\
 FREE = -ffree-form -ffree-line-length-none\n\
-SCA = $(list --LD-rp scalapack) -lscalapack\n\
-LAPACK = $(list --LD-rp +$la) $(pack_get -lib $la)\n\
+SCA = $(list -LD-rp scalapack) -lscalapack\n\
+LAPACK = $(list -LD-rp +$la) $(pack_get -lib[omp] $la)\n\
 BLAS = \$(LAPACK)\n\
 LLIBS = \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
 
