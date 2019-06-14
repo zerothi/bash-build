@@ -1,5 +1,5 @@
 v=1.1.0
-add_package --directory pytorch v$v@https://github.com/pytorch/pytorch.git
+add_package -version $v -directory pytorch v$v@https://github.com/pytorch/pytorch.git
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_TOOLS
 
