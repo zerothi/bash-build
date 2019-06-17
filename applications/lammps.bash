@@ -17,6 +17,13 @@ pack_set -module-requirement mpi \
 	 -module-requirement fftw
 #	 -module-requirement netcdf
 
+# Fix OpenMP shared declarations (OpenMP 5 forced declaration of all variables)
+pack_cmd "pushd ../src/"
+pack_cmd "sh USER-OMP/hack_openmp_for_pgi_gcc9.sh"
+pack_cmd "cd USER-OMP"
+pack_cmd "sh ./hack_openmp_for_pgi_gcc9.sh"
+pack_cmd "popd"
+
 _tmp_flags=
 function _lammps_flags {
     _tmp_flags="$_tmp_flags $@"
