@@ -13,8 +13,14 @@ if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 fi
 
-tmp_flags="$tmp_flags --with-rc --with-ud --with-dc --with-cm --with-mlx5-dv"
-tmp_flags="$tmp_flags --with-ib-hw-tm --with-dm"
+if ! $(is_host nicpa) ; then
+    tmp_flags="$tmp_flags --with-cm"
+    tmp_flags="$tmp_flags --with-mlx5-dv"
+    tmp_flags="$tmp_flags --ib-hw-tm"
+fi
+
+tmp_flags="$tmp_flags --with-rc --with-ud --with-dc"
+tmp_flags="$tmp_flags --with-dm"
 tmp_flags="$tmp_flags --with-mcpu --with-march"
 
 # Install commands that it should run
