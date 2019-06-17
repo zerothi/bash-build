@@ -12,6 +12,7 @@ pack_set --module-requirement netcdf
 
 # Create the arch-make file
 file=setup.make
+pack_cmd "unset BIN_DIR"
 pack_cmd "echo '# Hello' > $file"
 pack_cmd "sed -i '$ a\
 FC = $MPIFC\n\

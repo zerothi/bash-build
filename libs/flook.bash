@@ -7,6 +7,7 @@ pack_set -s $IS_MODULE -s $BUILD_DIR
 pack_set --install-query $(pack_get --LD)/libflookall.a
 
 # Compile
+pack_cmd "unset BIN_DIR"
 pack_cmd "echo '# NRP setup.make' > setup.make"
 pack_cmd "sed -i '$ a\
 CC = $CC\n\

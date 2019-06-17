@@ -8,6 +8,7 @@ pack_set -install-query $(pack_get -prefix)/lib/libfdict.a
 
 # Create the arch-make file
 file=setup.make
+pack_cmd "unset BIN_DIR"
 pack_cmd "echo '# Hello' > $file"
 pack_cmd "sed -i '1 a\
 FC = $FC\n\
