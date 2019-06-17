@@ -22,6 +22,14 @@ _b_def_idx=0
 _b_name_default=generic
 _b_name_generic=generic
 
+# List of env-names that is required to be set by the sourcing file
+_b_env_vars="AR RANLIB \
+		  CC CXX FC F77 F90 \
+		  CFLAGS CXXFLAGS \
+		  FCFLAGS FFLAGS \
+		  MPICC MPICXX MPIFC MPIF77 MPIF90 \
+		  FLAG_OMP"
+
 # A build has a name for usage reference
 declare -A _b_name
 # A source file which contains compiler information.
@@ -459,7 +467,20 @@ function new_build {
     # Add the local source rejects
     # First source the current build, to retrieve the
     # compiler information
+    for tmp in $_b_env_vars ; do
+	unset $tmp
+    done
     source ${_b_source[$_N_b]}
+
+    # Check that all required variables are defined
+    local names=
+    for tmp in $_b_env_vars ; do
+	[[ -z ${!tmp+x} ]] && \
+	    names="$names $tmp"
+    done
+    if [[ -n "$names" ]]; then
+	doerr "${_b_name[$_N_b]}" "missing names in ${_b_source[$_N_b]}:$names"
+    fi
 
     local -a lines
     local f
