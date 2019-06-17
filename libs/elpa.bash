@@ -34,6 +34,8 @@ if ! $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --disable-avx2"
 fi
 
+# Fix remove_xcompiler
+pack_cmd "sed -i -e 's/filter(\(.*\))/list(filter(\1))/' ../remove_xcompiler"
 
 pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
 	 "$tmp_flags --prefix=$(pack_get --prefix)"

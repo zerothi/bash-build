@@ -30,6 +30,9 @@ pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLA
 	 "--prefix=$(pack_get --prefix)" \
 	 "$(list --prefix ' --disable-' sse sse-assembly avx avx2)"
 
+# Fix remove_xcompiler
+pack_cmd "sed -i -e 's/filter(\(.*\))/list(filter(\1))/' ../remove_xcompiler"
+
 # This will fail, we have to circumvent it
 pack_cmd "make $(get_make_parallel) ; echo force"
 # Fix
