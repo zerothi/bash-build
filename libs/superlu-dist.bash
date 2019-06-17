@@ -25,9 +25,12 @@ if [[ $(vrs_cmp $(pack_get -version) 5) -ge 0 ]]; then
 
 pack_cmd "sed -i '1 a\
 PLAT =\n\
-DSuperLUroot = ..\n\
-DSUPERLULIB = \$(DSuperLUroot)/SRC/libsuperlu_dist.a\n\
+VERSION = $(pack_get -version)\n\
+SuperLUroot = ..\n\
+DSUPERLULIB = \$(SuperLUroot)/SRC/libsuperlu_dist.a\n\
+INCLUDEDIR = \$(SuperLUroot)/SRC\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
+HAVE_PARMETIS = TRUE\n\
 METISLIB = $(list -LD-rp parmetis) -lmetis\n\
 PARMETISLIB = $(list -LD-rp parmetis) -lparmetis\n\
 I_PARMETIS = $(list -INCDIRS parmetis)\n\
@@ -36,16 +39,17 @@ ARCH = $AR\n\
 ARCHFLAGS = cr\n\
 RANLIB = $RANLIB\n\
 CDEFS    = -DAdd_\n\
-CC = $MPICC\n\
-CFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
 CXX = $MPICXX\n\
 CXXFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
+CPP = $MPICXX\n\
+CPPFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
+CC = $MPICC\n\
+CFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
-LOADER   = \$(CC)\n\
+LOADER   = \$(CPP)\n\
 LOADOPTS = \$(CFLAGS)\n\
-CFLAGS += -std=c99\n\
 ' $file"
 
 else
@@ -62,17 +66,15 @@ I_PARMETIS = $(list -INCDIRS parmetis)\n\
 LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
 ARCH = $AR\n\
 ARCHFLAGS = cr\n\
-RANLIB = $RANLIB\n\
-CDEFS = -DAdd_\n\
+RANLIB = ranlib\n\
 CC = $MPICC\n\
 CFLAGS = $CFLAGS \$(I_PARMETIS)\n\
-CXX = $MPICXX\n\
-CXXFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
 NOOPTS = ${CFLAGS//-O./}\n\
 FORTRAN = $MPIF90\n\
 F90FLAGS = $FCFLAGS\n\
-LOADER   = \$(CC)\n\
+LOADER   = $MPICC\n\
 LOADOPTS = \$(CFLAGS)\n\
+CDEFS    = -DAdd_\n\
 CFLAGS += -std=c99\n\
 ' $file"
 
@@ -80,7 +82,7 @@ fi
 
 # These are standard options
 if $(is_c intel) ; then
-    pack_cmd "sed -i '1 a\
+    pack_cmd "sed -i '$ a\
 BLASLIB = $MKL_LIB -mkl=sequential\n\
 SLU_HAVE_LAPACK = TRUE\n\
 LAPACKLIB = $MKL_LIB -mkl=sequential\n\
