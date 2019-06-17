@@ -41,7 +41,7 @@ do
 	# Add new flags
 	flag="$FLAG_OMP"
 	if $(is_c intel) ; then
-	    tmp="${tmp//sequential/thread} -lpthread"
+	    tmp="${tmp//sequential/intel_thread} -lpthread"
 	else
 	    tmp="$(list -LD-rp scalapack $la) -lscalapack $(pack_get -lib[omp] $la)"
 	fi
