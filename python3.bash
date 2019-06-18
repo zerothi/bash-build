@@ -40,9 +40,10 @@ pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
-    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
-    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
-    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
+    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS' CXXFLAGS='$pCFLAGS'"
+    tmp="$tmp --with-libm=-limf --with-cxx-main=$CXX"
 elif ! $(is_c gnu) ; then
     tmp="$tmp --without-gcc"
 fi

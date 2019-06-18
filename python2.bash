@@ -43,6 +43,7 @@ if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS'"
+    tmp="$tmp --with-libm=-limf --with-cxx-main=$CXX"
 elif ! $(is_c gnu) ; then
     tmp="$tmp --without-gcc"
 fi
