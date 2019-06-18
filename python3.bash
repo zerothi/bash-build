@@ -107,7 +107,10 @@ unset tmp
 
 # Also ensure that Python is the "default" executable in a Py3 environment
 pack_cmd "cd $(pack_get -prefix)/bin"
-pack_cmd "[ -e python ] || ln -s python3 python"
+for tmp in python pip ipython idle
+do
+    pack_cmd "[ -e $tmp ] || ln -s ${tmp}3 $tmp"
+done
 
 
 # Create a new build with this module
