@@ -16,7 +16,7 @@ fi
 if ! $(is_host nicpa) ; then
     tmp_flags="$tmp_flags --with-cm"
     tmp_flags="$tmp_flags --with-mlx5-dv"
-    tmp_flags="$tmp_flags --ib-hw-tm"
+    tmp_flags="$tmp_flags --with-ib-hw-tm"
 fi
 
 tmp_flags="$tmp_flags --with-rc --with-ud --with-dc"
