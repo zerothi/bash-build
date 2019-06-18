@@ -9,6 +9,8 @@ pack_set --module-requirement gsl
 
 pack_set --lib -lpspiof -lpspio
 
+# bug-fix for Py3 and above
+pack_cmd "sed -i -e 's/file(/open(/g' ../fortran/scripts/make-fortran-constants.py"
 pack_cmd "pushd .. ; ./autogen.sh ; popd"
 pack_cmd "../configure" \
 	 "--enable-fortran" \
