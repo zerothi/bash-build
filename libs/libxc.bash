@@ -24,6 +24,7 @@ pack_cmd "make check > libxc.test 2>&1 ; echo 'forced'"
 pack_cmd "make install"
 pack_store libxc.test
 pack_store testsuite/test-suite.log libxc.test-suite.log
+pack_store testsuite/xc-run_testsuite.log libxc-run.testsuite.log
 
 done
 
