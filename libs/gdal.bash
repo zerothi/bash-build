@@ -5,10 +5,17 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libgdal.a
 pack_set -lib -lgdal
+
 pack_set -mod-req proj
+pack_set $(list -prefix ' -module-requirement ' expat libxml2 netcdf-serial)
 
 pack_cmd "./configure" \
 	 "--with-proj=$(pack_get -prefix proj)" \
+	 "--with-expat=$(pack_get -prefix expat)" \
+	 "--with-xml2=$(pack_get -prefix libxml2)" \
+	 "--with-libz=$(pack_get -prefix zlib)" \
+	 "--with-hdf5=$(pack_get -prefix hdf5-serial)" \
+	 "--with-netcdf=$(pack_get -prefix netcdf-serial)" \
 	 "--prefix $(pack_get -prefix)"
 
 pack_cmd "make $(get_make_parallel)"
