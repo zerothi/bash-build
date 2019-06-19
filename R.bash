@@ -5,7 +5,7 @@ add_package -alias R -package R \
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list -prefix '-mod-req ' readline)
+pack_set $(list -prefix '-mod-req ' readline curl)
 pack_set -install-query $(pack_get -prefix)/bin/R
 
 # for openssl

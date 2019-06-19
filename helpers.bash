@@ -79,6 +79,8 @@ source_pack helpers/openssl.bash
 source_pack helpers/libssh2.bash
 source_pack helpers/libgit2.bash
 
+source_pack helpers/curl.bash
+
 # This will recreate the module with AC_LOCAL etc.
 pack_set --installed $_I_TO_BE build-tools # Make sure it is "installed"
 pack_install build-tools
