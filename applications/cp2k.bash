@@ -43,10 +43,11 @@ LIBS += \$(SCALAPACK_L) \$(LAPACK_L) \n\
 
 if $(is_c intel) ; then
 
-    pack_cmd "sed -i '1 a\
+    pack_cmd "sed -i '$ a\
 LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
 FCFLAGS += -free\n\
+LDFLAGS += -nofor_main\n\
 ' $file"
 
 elif $(is_c gnu) ; then
