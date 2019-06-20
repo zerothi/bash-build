@@ -92,6 +92,7 @@ fi
 
 # Add an ENV-flag for the pseudos to be accesible
 pack_cmd "cd ../DFT_DATA13"
-pack_cmd "cp -r PAO VPS $(pack_get --prefix)/"
-pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get --prefix)/PAO"
-pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get --prefix)/VPS"
+pack_cmd "cp -r PAO VPS $(pack_get -prefix)/"
+pack_set --module-opt "--set-ENV OPENMX_PAO=$(pack_get -prefix)/PAO"
+pack_set --module-opt "--set-ENV OPENMX_VPS=$(pack_get -prefix)/VPS"
+pack_set --module-opt "--set-ENV OPENMX_DATA_PATH=$(pack_get -prefix)"
