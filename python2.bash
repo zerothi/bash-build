@@ -11,7 +11,12 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list -prefix '-mod-req ' zlib expat libffi)
+pack_set $(list -prefix '-mod-req ' zlib expat)
+if [[ $(pack_get -installed libffi) -eq 1 ]]; then
+    pack_set -mod-req libffi
+else
+    pack_set -mod-req gen-libffi
+fi
 lib_extra=
 tmp_lib=
 tmp=
