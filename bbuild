@@ -1,4 +1,8 @@
 #!/bin/bash -i
+
+# Force correct shell
+export SHELL=/bin/bash
+
 # For debugging
 # set -v
 #  Print bash commands before they are executed

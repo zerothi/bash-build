@@ -300,26 +300,32 @@ function pack_install {
 	# Show currently loaded modules before executing commands
 	msg_install -modules $idx
 
-    env > .bb.current.env
+	env > .bb.current.env
 
-    (
-	# Run all commands
-	tmp="$(pack_get -commands $idx)"
-	local -a cmds=()
-	IFS="$_LIST_SEP" read -ra cmds <<< "$tmp"
-	for tmp in "${cmds[@]}" ; do
-	    if [[ -z "${tmp// /}" ]]; then
-		continue # Skip the empty commands...
-	    fi
-	    docmd "Archive: $alias ($version)" "$tmp"
-	    err=$?
-	    if [[ $err -ne 0 ]]; then
-		# Show error about the package installed
-		msg_install -package "Failed to install package..." $idx
-		exit $err
-	    fi
-	done
-    )
+	(
+	    # Run all commands
+	    tmp="$(pack_get -commands $idx)"
+	    local -a cmds=()
+	    IFS="$_LIST_SEP" read -ra cmds <<< "$tmp"
+	    for tmp in "${cmds[@]}" ; do
+		if [[ -z "${tmp// /}" ]]; then
+		    continue # Skip the empty commands...
+		fi
+		docmd "Archive: $alias ($version)" "$tmp"
+		err=$?
+		if [[ $err -ne 0 ]]; then
+		    # Show error about the package installed
+		    msg_install -package "Failed to install package..." $idx
+		    exit $err
+		fi
+	    done
+	)
+	err=$?
+	if [[ $err -ne 0 ]]; then
+	    # Show error about the package installed
+	    msg_install -package "Quitting script to install package..." $idx
+	    exit $err
+	fi
 
 	# If configuration files exists, we will copy them
 	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log CMakeCache.txt
