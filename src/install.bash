@@ -295,11 +295,14 @@ function pack_install {
 	    do
 		[ -n "${!tmp}" ] && echo "export $tmp='${!tmp}'"
 	    done
-	} > current.bb.source.bash
+	} > .bb.current.source.bash
 
 	# Show currently loaded modules before executing commands
 	msg_install -modules $idx
-	
+
+    env > .bb.current.env
+
+    (
 	# Run all commands
 	tmp="$(pack_get -commands $idx)"
 	local -a cmds=()
@@ -316,6 +319,7 @@ function pack_install {
 		exit $err
 	    fi
 	done
+    )
 
 	# If configuration files exists, we will copy them
 	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log CMakeCache.txt
