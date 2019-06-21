@@ -3,7 +3,7 @@ add_package --package cgal https://github.com/CGAL/cgal/releases/download/releas
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
 
-pack_set -install-query $(pack_get -LD)/libcgal.a
+pack_set -install-query $(pack_get -prefix)/bin/cgal_create_cmake_script
 pack_set -lib -lcgal
 
 pack_set $(list -prefix '-mod-req ' zlib boost eigen metis)

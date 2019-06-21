@@ -272,6 +272,31 @@ function pack_install {
 	fi
 	unset tmp_ld tmp_inc
 
+	# Generate the file that contains sourced information
+	# to reproduce the environment at build-time
+	{
+	    echo "#!/bin/bash"
+	    echo "# bash-build variable file for ensuring the correct environment"
+	    echo "# as when this package was built."
+	    echo "# NOTE:"
+	    echo "# It is not necessarily *exactly* the same environment since command-line"
+	    echo "# flags may have overridden some of them and/or others have been specified."
+	    echo ""
+	    if $(has_setting $BUILD_TOOLS $idx) ; then
+		echo "module load build-tools"
+	    fi
+	    if [[ -n "${module_loads// /}" ]]; then
+		echo "module load $module_loads"
+	    fi
+	    for tmp in CC FC F77 F90 \
+			  MPICC MPICXX MPIFC MPIF77 MPIF90 \
+			  AR NM RANLIB \
+			  FCFLAGS FFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
+	    do
+		[ -n "${!tmp}" ] && echo "export $tmp='${!tmp}'"
+	    done
+	} > current.bb.source.bash
+
 	# Show currently loaded modules before executing commands
 	msg_install -modules $idx
 	
