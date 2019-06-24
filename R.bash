@@ -21,7 +21,7 @@ if $(is_c intel) ; then
     tmp="$tmp BLAS_LIBS='$MKL_LIB -mkl=parallel -fp-model precise $FLAG_OMP'"
     tmp="$tmp LAPACK_LIBS='$MKL_LIB -mkl=parallel -fp-model precise $FLAG_OMP'"
 
-elif $(is_c gnu) ; then
+else
     
     la=$(pack_choice -i linalg)
     pack_set -module-requirement $la

@@ -51,6 +51,8 @@ if $(is_c intel) ; then
     tmp="$tmp --with-libm=-limf --with-cxx-main=$CXX"
     # The clck library path has libutil.so which fucks up things!
     pack_cmd "unset LIBRARY_PATH"
+elif $(is_c pgi) ; then
+    pack_set -host-reject $(get_hostname)
 elif ! $(is_c gnu) ; then
     tmp="$tmp --without-gcc"
 fi
