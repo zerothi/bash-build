@@ -1,5 +1,5 @@
-v=1.5.1
-add_package https://github.com/openucx/ucx/releases/download/v$v/ucx-$v.tar.gz
+v=1.6.0-rc3
+add_package https://github.com/openucx/ucx/releases/download/v$v/ucx-${v//-rc*/}.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
 
