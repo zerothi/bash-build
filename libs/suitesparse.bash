@@ -1,14 +1,14 @@
-msg_install --message "Installing the SUITE SPARSE libraries..."
+msg_install -message "Installing the SUITE SPARSE libraries..."
 
 v=5.4.0
 add_package \
-    --alias suitesparse \
-    --directory SuiteSparse \
+    -alias suitesparse \
+    -directory SuiteSparse \
     http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.so
+pack_set -install-query $(pack_get -LD)/libsuitesparseconfig.so
 
 # We do not use the build-in metis library
 # According to SuiteSparse the only changes are:
@@ -16,11 +16,7 @@ pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.so
 #  removal of comments (for some compiler types)
 #  removal of compiler warnings
 # Basically nothing has changed.
-pack_set --mod-req metis
-
-if $(is_c intel) ; then
-    pack_set --host-reject $(get_hostname)
-fi
+pack_set -mod-req metis
 
 mk=SuiteSparse_config/SuiteSparse_config.mk
 
@@ -59,8 +55,8 @@ ssb "F77FLAGS = $FCFLAGS"
 # Add lapack/blas
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    ssb "BLAS = $MKL_LIB $INTEL_LIB -lmkl_blas95_lp64 -lmkl_intel_thread"
-    ssb "LAPACK = $MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64 -lmkl_intel_thread"
+    ssb "BLAS = $MKL_LIB $INTEL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread"
+    ssb "LAPACK = $MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread"
 
 else
     ssb "MKLROOT := "
@@ -70,8 +66,8 @@ else
     sse "LDLIBS += -lgfortran"
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    ssb "LAPACK = $(list --LD-rp +$la) $(pack_get -lib[omp] $la)"
+    pack_set -module-requirement $la
+    ssb "LAPACK = $(list -LD-rp +$la) $(pack_get -lib[omp] $la)"
     ssb "BLAS = \$(LAPACK)"
 
 fi
@@ -85,10 +81,10 @@ sse "LDLIBS += -L\$(INSTALL_LIB) -Wl,-rpath=\$(INSTALL_LIB)"
 unset ssb
 unset sse
 
-pack_cmd "make config"
-pack_cmd "make library"
-pack_cmd "make static"
-pack_cmd "make install"
+pack_cmd "JOBS=$NPROCS make config"
+pack_cmd "JOBS=$NPROCS make library"
+pack_cmd "JOBS=$NPROCS make static"
+pack_cmd "JOBS=$NPROCS make install"
 
 # In 5.4.0 the lib*.a are not installed, we need to do this manually
 pack_cmd 'find ./ -name "lib*.a" -exec cp "{}" $(pack_get -prefix)/lib/ \;'

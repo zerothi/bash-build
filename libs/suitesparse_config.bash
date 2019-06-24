@@ -1,12 +1,12 @@
 v=4.2.1
 add_package \
-    --alias SS_config \
-    --directory SuiteSparse_config \
+    -alias SS_config \
+    -directory SuiteSparse_config \
     http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libsuitesparseconfig.a
+pack_set -install-query $(pack_get -LD)/libsuitesparseconfig.a
 
 mk=SuiteSparse_config.mk
 pack_cmd "sed -i -e 's|^[[:space:]]*\(F77\)[[:space:]]*=.*|\1 = $F77|' $mk"
@@ -18,10 +18,10 @@ pack_cmd "echo 'FFLAGS = $FFLAGS' >> $mk"
 
 pack_cmd "make $(get_make_parallel)"
 # Install commands that it should run
-pack_cmd "mkdir -p $(pack_get --LD)/"
-pack_cmd "mkdir -p $(pack_get --prefix)/include/"
-pack_cmd "make INSTALL_LIB='$(pack_get --LD)/'" \
-	 "INSTALL_INCLUDE='$(pack_get --prefix)/include/'" \
+pack_cmd "mkdir -p $(pack_get -LD)/"
+pack_cmd "mkdir -p $(pack_get -prefix)/include/"
+pack_cmd "make INSTALL_LIB='$(pack_get -LD)/'" \
+	 "INSTALL_INCLUDE='$(pack_get -prefix)/include/'" \
 	 "install"
 
 
@@ -29,11 +29,11 @@ pack_cmd "make INSTALL_LIB='$(pack_get --LD)/'" \
 # We create the suitesparse_config makefile for all related packages!
 # This needs to be runned every time, and thus we create a new package!
 add_package \
-    --package SS_config_make \
+    -package SS_config_make \
     http://www.cise.ufl.edu/research/sparse/SuiteSparse_config/SuiteSparse_config-$v.tar.gz
 
-pack_set --directory SuiteSparse_config
-pack_set --install-query /directory/does/not/exist
+pack_set -directory SuiteSparse_config
+pack_set -install-query /directory/does/not/exist
 
 # Edit the mk file to comply with the standards
 mk=SuiteSparse_config.mk
@@ -42,7 +42,7 @@ pack_cmd "echo 'CFLAGS = $CFLAGS' >> $mk"
 pack_cmd "echo 'FFLAGS = $FFLAGS' >> $mk"
 pack_cmd "sed -i -e 's|^[[:space:]]*\(F77\)[[:space:]]*=.*|\1 = $F77|' $mk"
 pack_cmd "sed -i -e 's|^[[:space:]]*\(F77FLAGS\)[[:space:]]*=.*|\1 = $FFLAGS|' $mk"
-pack_cmd "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get --prefix ss_config)/include/ \1|' $mk"
+pack_cmd "sed -i -e 's|^[[:space:]]*CF[[:space:]]*=\(.*\)|CF = -I$(pack_get -prefix ss_config)/include/ \1|' $mk"
 pack_cmd "sed -i -e 's|^\(INSTALL_LIB\)[[:space:]]*=.*|\1 = /supply \1 on the make line|' $mk"
 pack_cmd "sed -i -e 's|^\(INSTALL_INCLUDE\)[[:space:]]*=.*|\1 = /supply \1 on the make line|' $mk"
 
@@ -59,7 +59,7 @@ else
 
     # Get the first choice of linalg that is installed
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     tmp="$(list -LD-rp +$la) $(pack_get -lib $la)"
 
     pack_cmd "sed -i -e 's|^\(LAPACK\)[[:space:]]*=.*|\1 = $tmp|' $mk"

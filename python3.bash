@@ -47,8 +47,8 @@ pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
     pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
-    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS' CXXFLAGS='$pCFLAGS'"
-    tmp="$tmp --with-libm=-limf --with-cxx-main=$CXX"
+    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS -std=c11'"
+    tmp="$tmp --with-libm=-limf"
     # The clck library path has libutil.so which fucks up things!
     pack_cmd "unset LIBRARY_PATH"
 elif ! $(is_c gnu) ; then
