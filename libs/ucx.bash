@@ -1,11 +1,12 @@
 v=1.6.0-rc3
 add_package https://github.com/openucx/ucx/releases/download/v$v/ucx-${v//-rc*/}.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # What to check for when checking for installation...
 pack_set -install-query $(pack_get -prefix)/bin/ucx_info
 
+pack_set -build-mod-req build-tools
 pack_set -mod-req numactl
 
 tmp_flags=

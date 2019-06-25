@@ -3,7 +3,7 @@ add_package -build generic \
     -archive luarocks-$v.tar.gz \
     https://github.com/keplerproject/luarocks/archive/v$v.tar.gz
 
-pack_set -s $BUILD_TOOLS
+pack_set -build-mod-req build-tools
 pack_set -module-requirement lua
 
 pack_set -install-query $(pack_get -prefix lua)/bin/luarocks

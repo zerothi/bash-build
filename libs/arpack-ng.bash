@@ -3,13 +3,14 @@ add_package \
     --archive arpack-ng-$v.tar.gz \
     https://github.com/opencollab/arpack-ng/archive/$v.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $IS_MODULE
 
 # Required as the version has just been set
 pack_set --install-query $(pack_get --LD)/libparpack.a
 pack_set --lib -larpack
 pack_set --lib[mpi] -lparpack -larpack
 
+pack_set -build-mod-req build-tools
 pack_set --module-requirement mpi
 
 tmp_flags=""

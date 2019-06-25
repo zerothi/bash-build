@@ -23,12 +23,13 @@ esac
 for v in 2018.6 2019.2 ; do
 add_package $tmp_add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --module-opt "--lua-family gromacs"
 
 pack_set --install-query $(pack_get --prefix)/bin/GMXRC
 
+pack_set -build-mod-req build-tools
 pack_set --module-requirement fftw
 
 tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"

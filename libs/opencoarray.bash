@@ -3,8 +3,9 @@ add_package -package opencoarrays \
 	    -archive OpenCoarrays-$v.tar.gz \
 	    https://github.com/sourceryinstitute/OpenCoarrays/archive/$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
+pack_set -build-mod-req build-tools
 pack_set -mod-req mpi
 
 if $(is_c intel) ; then

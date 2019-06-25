@@ -1,7 +1,8 @@
 add_package https://github.com/dealii/dealii/releases/download/v9.1.0/dealii-9.1.0.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
+pack_set -build-mod-req build-tools
 pack_set $(list -prefix '-mod-req ' boost mpi gsl hdf5 metis petsc-d slepc-d p4est arpack-ng suitesparse)
 
 pack_set -install-query $(pack_get -LD)/libdeal_II.so

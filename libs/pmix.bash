@@ -2,11 +2,12 @@ v=3.1.2
 add_package -package pmix \
 	    https://github.com/pmix/pmix/releases/download/v$v/pmix-$v.tar.bz2
 
-pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # What to check for when checking for installation...
 pack_set -install-query $(pack_get -prefix)/bin/mpif90
 
+pack_set -build-mod-req build-tools
 pack_set -module-requirement zlib
 pack_set -module-requirement hwloc
 

@@ -2,9 +2,10 @@ v=2.16.0
 add_package -archive hypre-$v.tar.gz \
 	    https://github.com/hypre-space/hypre/archive/v$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libHYPRE.a
+pack_set -build-mod-req build-tools
 pack_set $(list -prefix ' -mod-req ' mpi superlu)
 
 tmp_flags="--with-openmp --with-superlu-include=$(pack_get -prefix superlu)/include"

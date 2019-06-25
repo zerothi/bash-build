@@ -1,11 +1,11 @@
-add_package --build debug http://pstl.cs.uh.edu/projects/adcl-2.0.tar.gz
+add_package -build debug http://pstl.cs.uh.edu/projects/adcl-2.0.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-# What to check for when checking for installation...
-pack_set --install-query $(pack_get --LD)/libadcl.a
+pack_set -install-query $(pack_get -LD)/libadcl.a
 
-pack_set --module-requirement mpi
+pack_set -build-mod-req build-tools
+pack_set -module-requirement mpi
 
 # Install commands that it should run
 pack_cmd "./configure CC=$CC MPICC=$MPICC --prefix=$(pack_get --prefix)" \

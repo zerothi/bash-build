@@ -1,7 +1,8 @@
 add_package --build debug http://www.open-mpi.org/software/otpo/v1.0/downloads/otpo-1.0.tar.bz2
 
-pack_set -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $IS_MODULE
 
+pack_set -build-mod-req build-tools
 pack_set --module-requirement adcl
 
 if [[ $_mpi_version != "openmpi" ]]; then

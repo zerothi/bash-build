@@ -205,16 +205,6 @@ function pack_install {
 	# Source the file for obtaining correct env-variables
 	source $(build_get -source[$build])
 
-	# Begin loading modules before running the commands
-	if $(has_setting $BUILD_TOOLS $idx) ; then
-	    module load build-tools
-	    local st=$?
-	    if [[ $st -ne 0 ]]; then
-		msg_install -message "Failed loading modules (STATUS=$st): build-tools"
-		exit $st
-	    fi
-	fi
-
         # Create the list of requirements
 	local module_loads
 	module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -build-mod-req-all $idx)) $(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
@@ -282,9 +272,6 @@ function pack_install {
 	    echo "# It is not necessarily *exactly* the same environment since command-line"
 	    echo "# flags may have overridden some of them and/or others have been specified."
 	    echo ""
-	    if $(has_setting $BUILD_TOOLS $idx) ; then
-		echo "module load build-tools"
-	    fi
 	    if [[ -n "${module_loads// /}" ]]; then
 		echo "module load $module_loads"
 	    fi
@@ -364,10 +351,6 @@ function pack_install {
 	    rm -f $(pack_get -module-prefix $idx)/$mod_name
 	fi
 
-	if $(has_setting $BUILD_TOOLS $idx) ; then
-	    module unload build-tools
-	fi
-
 	# Generate the file that contains sourced information
 	# to reproduce the environment at build-time
 	{
@@ -378,9 +361,6 @@ function pack_install {
 	    echo "# It is not necessarily *exactly* the same environment since command-line"
 	    echo "# flags may have overridden some of them and/or others have been specified."
 	    echo ""
-	    if $(has_setting $BUILD_TOOLS $idx) ; then
-		echo "module load build-tools"
-	    fi
 	    if [[ -n "${module_loads// /}" ]]; then
 		echo "module load $module_loads"
 	    fi

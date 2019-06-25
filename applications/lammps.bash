@@ -7,12 +7,13 @@ add_package -package lammps \
 	    https://github.com/lammps/lammps/archive/patch_15May2019.tar.gz
 
 pack_set_file_version
-pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set -module-opt "-lua-family lammps"
 
 pack_set -install-query $(pack_get -prefix)/bin/lmp
 
+pack_set -build-mod-req build-tools
 pack_set -module-requirement mpi \
 	 -module-requirement fftw
 #	 -module-requirement netcdf

@@ -1,9 +1,10 @@
 add_package --package sympack \
 	    https://github.com/symPACK/symPACK/releases/download/v1.1/symPACK-1.1.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set -install-query $(pack_get -LD)/libsymPACK.a
+pack_set -build-mod-req build-tools
 pack_set $(list -prefix ' -mod-req ' metis parmetis scotch)
 
 tmp_flags=

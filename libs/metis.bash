@@ -1,7 +1,8 @@
 add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set -build-mod-req build-tools
 pack_set -install-query $(pack_get -LD)/libmetis.a
 
 pack_set -lib -lmetis

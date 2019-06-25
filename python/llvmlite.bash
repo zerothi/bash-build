@@ -4,10 +4,11 @@ v=0.28.0
 add_package -archive llvmlite-$v.tar.gz \
 	    https://github.com/numba/llvmlite/archive/v$v.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/llvmlite
 
+pack_set -build-mod-req build-tools
 pack_set -mod-req llvm[7]
 pack_set -module-requirement $(get_parent)
 

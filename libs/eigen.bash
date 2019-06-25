@@ -5,7 +5,8 @@ add_package -package eigen \
 
 pack_set --directory 'eigen-*'
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -build-mod-req build-tools
 
 pack_set --install-query $(pack_get --prefix)/include/Eigen/Dense
 

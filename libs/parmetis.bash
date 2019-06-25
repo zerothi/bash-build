@@ -1,10 +1,11 @@
 add_package http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libparmetis.a
 pack_set -lib -lparmetis -lmetis
 
+pack_set -build-mod-req build-tools
 pack_set -module-requirement mpi
 
 # Make commands 

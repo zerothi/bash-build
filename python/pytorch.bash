@@ -1,10 +1,11 @@
 v=1.1.0
 add_package -version $v -directory pytorch v$v@https://github.com/pytorch/pytorch.git
 
-pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_TOOLS
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
+pack_set -build-mod-req build-tools
 pack_set $(list -prefix ' -module-requirement ' numactl numpy mpi eigen llvm[7])
 
 pack_cmd "git submodule init"

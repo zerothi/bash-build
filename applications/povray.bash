@@ -13,12 +13,13 @@ add_package --build $build --archive povray-3.7.0.7.tar.gz \
 	    https://github.com/POV-Ray/povray/archive/v3.7.0.7.tar.gz
 #    http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
 
-pack_set -s $IS_MODULE -s $CRT_DEF_MODULE -s $BUILD_TOOLS
+pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/povray
 
 pack_set --module-opt "--lua-family povray"
 
+pack_set -build-mod-req build-tools
 pack_set --mod-req gen-libpng
 if [[ "$build" == "generic" ]]; then
     pack_set --mod-req gen-zlib

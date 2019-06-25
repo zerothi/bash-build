@@ -1,12 +1,11 @@
 v=1.7.0
 add_package https://github.com/NanoComp/meep/releases/download/v$v/meep-$v.tar.gz
 
-pack_set -s $BUILD_TOOLS
-
 pack_set --install-query $(pack_get --prefix)/bin/meep
 
 pack_set --module-opt "--lua-family meep"
 
+pack_set -build-mod-req build-tools
 pack_set --module-requirement mpi \
     --module-requirement zlib \
     --module-requirement hdf5 \
