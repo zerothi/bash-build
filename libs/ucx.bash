@@ -15,7 +15,6 @@ if [[ -d /usr/include/infiniband ]]; then
 fi
 
 if ! $(is_host nicpa) ; then
-    tmp_flags="$tmp_flags --with-cm"
     tmp_flags="$tmp_flags --with-mlx5-dv"
     tmp_flags="$tmp_flags --with-ib-hw-tm"
 fi

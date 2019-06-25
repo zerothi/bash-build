@@ -21,6 +21,7 @@ pack_cmd "$(get_parent_exec) setup.py build" \
 	 "--cflags='${pCFLAGS//-march=native/}'"
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
 pack_cmd "$(get_parent_exec) setup.py install" \
+	 "--hdf5=$(pack_get --prefix hdf5-serial)" \
 	 "--prefix=$(pack_get --prefix)"
     
 # The tables test is extremely extensive, and many are minor errors.
