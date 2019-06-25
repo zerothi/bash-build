@@ -5,7 +5,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -module-requirement numpy
 
-pack_set -install-query $(pack_get -prefix)/lib/python$pV/site-packages/
+pack_set -install-query $(pack_get -prefix)/lib/python$pV/site-packages/Bio
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
 
