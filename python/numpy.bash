@@ -59,7 +59,7 @@ if $(is_c intel) ; then
 [mkl]\n\
 library_dirs = $MKL_PATH/lib/intel64/:$INTEL_PATH/lib/intel64\n\
 include_dirs = $MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n\
-mkl_libs = mkl_rt,mkl_intel_lp64,mkl_intel_thread,mkl_core,mkl_def\n\
+mkl_libs = mkl_lapack95_lp64,mkl_blas95_lp64,mkl_rt,mkl_intel_lp64,mkl_intel_thread,mkl_core,mkl_def\n\
 lapack_libs = mkl_lapack95_lp64\n\
 blas_libs = mkl_blas95_lp64' $file"
 
