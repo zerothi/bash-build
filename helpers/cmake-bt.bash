@@ -4,9 +4,10 @@ if [[ $(vrs_cmp $(get_c -version) 4.5.0) -lt 0 ]]; then
 else
     add_package -build generic https://cmake.org/files/v3.14/cmake-3.14.4.tar.gz
 fi
-pack_set -s $MAKE_PARALLEL -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL
 
 pack_set -prefix $(pack_get -prefix build-tools)
+pack_set -build-mod-req build-tools
 
 p_V=$(pack_get -version)
 c_V=`cmake --version 2> /dev/null | head -1 | awk '{print $3}'`

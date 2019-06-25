@@ -2,7 +2,8 @@ v=0.28.1
 add_package -build generic -archive libgit2-$v.tar.gz \
 	    https://github.com/libgit2/libgit2/archive/v$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -build-mod-req build-tools
 pack_set -mod-req openssl
 pack_set -mod-req libssh2
 

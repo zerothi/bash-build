@@ -1,7 +1,8 @@
 add_package -build generic https://curl.haxx.se/download/curl-7.65.1.tar.xz
 
-pack_set -s $BUILD_DIR -s $BUILD_TOOLS -s $IS_MODULE
+pack_set -s $BUILD_DIR -s $IS_MODULE
 
+pack_set -build-mod-req build-tools
 pack_set $(list -prefix '-mod-req ' libssh2 openssl)
 
 pack_set -install-query $(pack_get -prefix)/lib/libcurl.so

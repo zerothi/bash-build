@@ -7,8 +7,9 @@ do
 	fi
     fi
     add_package -build generic https://cmake.org/files/v$(str_version -1 $v).$(str_version -2 $v)/cmake-$v.tar.gz
-    pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_TOOLS
+    pack_set -s $MAKE_PARALLEL -s $IS_MODULE
     
+    pack_set -build-mod-req build-tools
     pack_set -install-query $(pack_get -prefix)/bin/cmake
     
     pack_cmd "./bootstrap --prefix=$(pack_get -prefix)"

@@ -1,8 +1,9 @@
 add_package -build generic http://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.xz
 
-pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $NO_PIC -s $BUILD_TOOLS
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $NO_PIC
 
 pack_set -prefix $(pack_get -prefix build-tools)
+pack_set -build-mod-req build-tools
 
 pack_set -install-query $(pack_get -prefix)/bin/gprof
 

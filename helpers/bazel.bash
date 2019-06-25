@@ -5,8 +5,9 @@ do
 		--version $v \
 		https://github.com/bazelbuild/bazel/releases/download/$v/bazel-$v-installer-linux-x86_64.sh
     
-    pack_set -s $IS_MODULE -s $INSTALL_FROM_ARCHIVE -s $BUILD_TOOLS
+    pack_set -s $IS_MODULE -s $INSTALL_FROM_ARCHIVE
     
+    pack_set -build-mod-req build-tools
     pack_set --module-opt "--lua-family bazel"
     pack_set --install-query $(pack_get --prefix)/bin/bazel
     
