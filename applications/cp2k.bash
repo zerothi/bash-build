@@ -12,9 +12,7 @@ if [[ -z "$FLAG_OMP" ]]; then
 fi
 
 # Find hwloc library
-tmp_hwloc=$(pack_get -mod-req)
-tmp_hwloc=hwloc${tmp_hwloc##*hwloc}
-tmp_hwloc=${tmp_hwloc%% *}
+tmp_hwloc=$(pack_get -mod-req[hwloc])
 
 arch=Linux-x86-64-NPA
 file=arch/$arch.psmp

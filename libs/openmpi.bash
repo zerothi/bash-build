@@ -9,7 +9,11 @@ pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 pack_set -install-query $(pack_get -prefix)/bin/mpif90
 
 pack_set -module-requirement zlib
-pack_set -module-requirement hwloc
+if [[ $(vrs_cmp $(pack_get -version) 3) -eq 0 ]]; then
+    pack_set -module-requirement hwloc[1]
+else
+    pack_set -module-requirement hwloc
+fi
 pack_set -module-opt "-set-ENV OMPI_HOME=$(pack_get -prefix)"
 pack_set -module-opt "-set-ENV MPICC=mpicc"
 pack_set -module-opt "-set-ENV MPICXX=mpicxx"
@@ -27,7 +31,6 @@ if [[ $(vrs_cmp $(pack_get -version) 1.10.1) -eq 0 ]]; then
     pack_cmd "patch -p1 < $o"
     pack_cmd "popd"
 fi
-
 
 tmp_flags=""
 [[ -d /opt/torque ]] && tmp_flags="$tmp_flags --with-tm=/opt/torque"
@@ -76,7 +79,7 @@ fi
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get -prefix)" \
 	 "--enable-mpirun-prefix-by-default" \
-	 "--with-hwloc=$(pack_get -prefix hwloc)" \
+	 "--with-hwloc=$(pack_get -prefix $(pack_get -mod-req[hwloc]))" \
 	 "--with-zlib=$(pack_get -prefix zlib)" \
 	 "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"

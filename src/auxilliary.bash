@@ -229,8 +229,8 @@ function var_spec {
 	    shift
 
 	    if [[ "${1:${#1}-1}" == "]" ]]; then
-		opt=${1##*\[}
-		opt=${opt//\]/}
+		opt=${1#*\[}
+		opt=${opt:0:${#opt}-1}
 	    else
 		opt=''
 	    fi

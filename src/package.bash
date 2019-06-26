@@ -581,15 +581,6 @@ function pack_get {
 	    fi
 	    printf '%s' "${_mod_name[$index]}"
 	    ;;
-	-R|-module-requirement|-mod-req)
-	    if [[ ! -z "${_mod_req[$index]}" ]]; then
-		for m in ${_mod_req[$index]} ; do
-		    case $(pack_get -installed $m) in
-			$_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
-                    esac
-		done
-	    fi
-	    ;;
 	-mod-req-path)
 	    if [[ ! -z "${_mod_req[$index]}" ]]; then
 		for m in ${_mod_req[$index]} ; do
@@ -610,9 +601,9 @@ function pack_get {
 	    ;;
 	-build-mod-req-all)
             printf '%s' "${_mod_build_req[$index]}" ;;
-	-module-requirement-all|-mod-req-all) 
+	-module-requirement-all|-mod-req-all)
             printf '%s' "${_mod_req[$index]}" ;;
-	-module-name-requirement|-mod-req-name) 
+	-module-name-requirement|-mod-req-name)
 	    if [[ ! -z "${_mod_req[$index]}" ]]; then
 		for m in ${_mod_req[$index]} ; do
 		    printf '%s' "$(pack_get -module-name $m) "
@@ -650,6 +641,30 @@ function pack_get {
 	-p|-package)         printf '%s' "${_package[$index]}" ;;
 	-e|-ext)             printf '%s' "${_ext[$index]}" ;;
 	-host-reject)        printf '%s' "${_reject_host[$index]}" ;;
+	-R*|-module-requirement*|-mod-req*) # needs to be in the end since mod-req-name|all
+	    if [[ ! -z "${_mod_req[$index]}" ]]; then
+		local lib=$(var_spec -s $opt)
+		if [[ -z "${lib// /}" ]]; then
+		    for m in ${_mod_req[$index]} ; do
+			case $(pack_get -installed $m) in
+			    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+			esac
+		    done
+		else
+		    for m in ${_mod_req[$index]} ; do
+			case $(pack_get -installed $m) in
+			    $_I_MOD|$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT)
+				case $(pack_get -alias $m) in
+				    $lib*)
+					printf '%s' "$m"
+					break
+					;;
+				esac
+			esac
+		    done
+		fi
+	    fi
+	    ;;
         -lib*)
 	    # First retrieve the option library
 	    local s=$(var_spec -s $opt)

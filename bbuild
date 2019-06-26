@@ -40,6 +40,7 @@ cd $_top_dir
 # We have here the installation of all the stuff for gray....
 source src/init.bash
 
+
 # Default prefix installation
 _prefix=/opt
 _signal_default=1

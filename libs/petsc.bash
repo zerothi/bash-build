@@ -13,9 +13,7 @@ pack_set -lib -lpetsc
 pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse)
 
 # Find hwloc library
-tmp_hwloc=$(pack_get -mod-req)
-tmp_hwloc=hwloc${tmp_hwloc##*hwloc}
-tmp_hwloc=${tmp_hwloc%% *}
+tmp_hwloc=$(pack_get -mod-req[hwloc])
 
 if [[ $(vrs_cmp $v 3.11.2) -lt 0 ]]; then
     # Patch configuration!

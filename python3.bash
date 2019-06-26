@@ -114,14 +114,6 @@ tmp=libpython${v:0:3}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 unset tmp
 
-# Also ensure that Python is the "default" executable in a Py3 environment
-pack_cmd "pushd $(pack_get -prefix)/bin"
-for tmp in python pip ipython idle
-do
-    pack_cmd "[ -e $tmp ] || ln -s ${tmp}3 $tmp"
-done
-pack_cmd "popd"
-
 
 # Create a new build with this module
 new_build -name _internal-python$IpV \
