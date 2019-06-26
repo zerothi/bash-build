@@ -12,6 +12,11 @@ pack_set -lib -lpetsc
 
 pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse)
 
+# Find hwloc library
+tmp_hwloc=$(pack_get -mod-req)
+tmp_hwloc=hwloc${tmp_hwloc##*hwloc}
+tmp_hwloc=${tmp_hwloc%% *}
+
 if [[ $(vrs_cmp $v 3.11.2) -lt 0 ]]; then
     # Patch configuration!
     o=$(pwd_archives)/petsc-libindex.patch
@@ -85,7 +90,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-metis=1" \
 	 "--with-metis-dir=$(pack_get -prefix parmetis)" \
 	 "--with-hwloc=1" \
-	 "--with-hwloc-dir=$(pack_get -prefix hwloc)" \
+	 "--with-hwloc-dir=$(pack_get -prefix $tmp_hwloc)" \
 	 "--with-hdf5=1" \
 	 "--with-hdf5-dir=$(pack_get -prefix hdf5)" \
 	 "--with-fftw=1" \

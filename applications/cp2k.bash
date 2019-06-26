@@ -11,6 +11,11 @@ if [[ -z "$FLAG_OMP" ]]; then
     doerr $(pack_get -package) "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
+# Find hwloc library
+tmp_hwloc=$(pack_get -mod-req)
+tmp_hwloc=hwloc${tmp_hwloc##*hwloc}
+tmp_hwloc=${tmp_hwloc%% *}
+
 arch=Linux-x86-64-NPA
 file=arch/$arch.psmp
 pack_cmd "echo '# NPA' > $file"
@@ -21,8 +26,8 @@ CPP = \n\
 FC = $MPIFC \n\
 LD = $MPIFC \n\
 AR = $AR -r \n\
-HWLOC_INC = $(list -INCDIRS hwloc) \n\
-HWLOC_LIB = $(list -LD-rp hwloc) \n\
+HWLOC_INC = $(list -INCDIRS $tmp_hwloc) \n\
+HWLOC_LIB = $(list -LD-rp $tmp_hwloc) \n\
 FFTW_INC = $(list -INCDIRS fftw) \n\
 FFTW_LIB = $(list -LD-rp fftw) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
