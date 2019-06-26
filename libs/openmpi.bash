@@ -1,25 +1,25 @@
 # apt-get libc6-dev
-v=4.0.1
+v=3.1.4
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 
 # What to check for when checking for installation...
-pack_set --install-query $(pack_get --prefix)/bin/mpif90
+pack_set -install-query $(pack_get -prefix)/bin/mpif90
 
-pack_set --module-requirement zlib
-pack_set --module-requirement hwloc
-pack_set --module-opt "--set-ENV OMPI_HOME=$(pack_get --prefix)"
-pack_set --module-opt "--set-ENV MPICC=mpicc"
-pack_set --module-opt "--set-ENV MPICXX=mpicxx"
-pack_set --module-opt "--set-ENV MPIF77=mpif77"
-pack_set --module-opt "--set-ENV MPIF90=mpif90"
-pack_set --module-opt "--set-ENV MPIFC=mpifort"
+pack_set -module-requirement zlib
+pack_set -module-requirement hwloc
+pack_set -module-opt "-set-ENV OMPI_HOME=$(pack_get -prefix)"
+pack_set -module-opt "-set-ENV MPICC=mpicc"
+pack_set -module-opt "-set-ENV MPICXX=mpicxx"
+pack_set -module-opt "-set-ENV MPIF77=mpif77"
+pack_set -module-opt "-set-ENV MPIF90=mpif90"
+pack_set -module-opt "-set-ENV MPIFC=mpifort"
 
 
 # Download zero size scatter/gather patch
-if [[ $(vrs_cmp $(pack_get --version) 1.10.1) -eq 0 ]]; then
+if [[ $(vrs_cmp $(pack_get -version) 1.10.1) -eq 0 ]]; then
     o=$(pwd_archives)/openmpi-1.10.1.nbc_copy.patch
     [ ! -e $o ] && \
 	dwn_file http://www.student.dtu.dk/~nicpa/packages/openmpi-1.10.1.nbc_copy.patch $o
@@ -47,13 +47,13 @@ else
 fi
 
 
-if [[ $(vrs_cmp $(pack_get --version) 4) -eq 0 ]]; then
+if [[ $(vrs_cmp $(pack_get -version) 4) -eq 0 ]]; then
     tmp_flags="$tmp_flags --enable-mpi1-compatibility"
     if [[ $(pack_installed ucx) ]]; then
 	# The UCX library also has links to infiniband, so and for
 	# 4.X --with-verbs is deprecated in favor of with-ucx
 	pack_set -mod-req ucx
-	tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx)"
+	tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx) --without-verbs"
     elif [[ -d /usr/include/infiniband ]]; then
 	tmp_flags="$tmp_flags --with-verbs"
     fi
@@ -69,15 +69,15 @@ else
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
+    pack_cmd "module load $(pack_get -module-name-requirement flex) $(pack_get -module-name flex)"
 fi
 
 # Install commands that it should run
 pack_cmd "../configure $tmp_flags" \
-	 "--prefix=$(pack_get --prefix)" \
+	 "--prefix=$(pack_get -prefix)" \
 	 "--enable-mpirun-prefix-by-default" \
-	 "--with-hwloc=$(pack_get --prefix hwloc)" \
-	 "--with-zlib=$(pack_get --prefix zlib)" \
+	 "--with-hwloc=$(pack_get -prefix hwloc)" \
+	 "--with-zlib=$(pack_get -prefix zlib)" \
 	 "--enable-mpi-thread-multiple" \
 	 "--enable-mpi-cxx"
 
@@ -92,15 +92,15 @@ pack_cmd "make install"
 
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
-    pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
+    pack_cmd "module unload $(pack_get -module-name flex) $(pack_get -module-name-requirement flex)"
 fi
 
 
-new_build --name _internal-openmpi \
-    --installation-path $(build_get --ip)/$(pack_get --package)/$(pack_get --version) \
-    --module-path $(build_get -mp)-openmpi \
-    --build-path $(build_get -bp) \
-    --build-module-path "$(build_get -bmp)" \
-    --build-installation-path "$(build_get -bip)" \
-    --source $(build_get --source) \
-    $(list -p '--default-module ' $(build_get --default-module) openmpi)
+new_build -name _internal-openmpi \
+    -installation-path $(build_get -ip)/$(pack_get -package)/$(pack_get -version) \
+    -module-path $(build_get -mp)-openmpi \
+    -build-path $(build_get -bp) \
+    -build-module-path "$(build_get -bmp)" \
+    -build-installation-path "$(build_get -bip)" \
+    -source $(build_get -source) \
+    $(list -p '-default-module ' $(build_get -default-module) openmpi)

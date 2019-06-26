@@ -7,6 +7,7 @@ build_set --default-setting $CRT_DEF_MODULE
 source_pack applications/openfoam.bash
 
 # Analysis tools
+source_pack applications/bedtools.bash
 source_pack applications/bader.bash
 
 source_pack applications/plumed.bash
