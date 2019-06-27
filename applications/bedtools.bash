@@ -9,7 +9,9 @@ pack_set -install-query $(pack_get -prefix)/bin/bedtools
 pack_set -module-opt "-lua-family bedtools"
 
 # Install commands that it should run
-pack_cmd "make CXX=$CXX CXXFLAGS='$CXXFLAGS -D_FILE_OFFSET_BITS=64 -DWITH_HTS_CB_API \$(INCLUDES)' $(get_make_parallel)"
-pack_cmd "make CXX=$CXX CXXFLAGS='$CXXFLAGS -D_FILE_OFFSET_BITS=64 -DWITH_HTS_CB_API \$(INCLUDES)' test 2>&1 > bedtools.test"
+# Clean weird files!
+pack_cmd "rm gcc g++"
+pack_cmd "make VERBOSE=1 CXX=$CXX CXXFLAGS='$CXXFLAGS -D_FILE_OFFSET_BITS=64 -DWITH_HTS_CB_API \$(INCLUDES)' $(get_make_parallel)"
+pack_cmd "make VERBOSE=1 CXX=$CXX CXXFLAGS='$CXXFLAGS -D_FILE_OFFSET_BITS=64 -DWITH_HTS_CB_API \$(INCLUDES)' test 2>&1 > bedtools.test"
 pack_store bedtools.test
 pack_cmd "make prefix=$(pack_get -prefix) install"
