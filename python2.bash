@@ -24,8 +24,8 @@ if [[ $(pack_get -installed sqlite) -eq 1 ]]; then
     lib_extra=sqlite
 fi
 if [[ $(pack_get -installed openssl) -eq 1 ]]; then
-    pack_set -mod-req openssl
     lib_extra="$lib_extra openssl"
+    pack_set -mod-req openssl
 fi
 if [[ $(pack_get -installed termcap) -eq 1 ]]; then
     lib_extra="$lib_extra termcap"
@@ -47,8 +47,8 @@ pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
     pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
     pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model precise -fp-model source"
-    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS -std=c11' CPPFLAGS='$pCFLAGS -std=c11'"
-    tmp="$tmp --with-libm=-limf --with-cxx-main=$CXX"
+    tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS -std=c11'"
+    tmp="$tmp --with-libm=-limf"
     # The clck library path has libutil.so which fucks up things!
     pack_cmd "unset LIBRARY_PATH"
 elif $(is_c pgi) ; then
