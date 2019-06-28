@@ -82,12 +82,17 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mo
      "$tmp"
 
 # Make commands
+pack_cmd "export OMP_NUM_THREADS=1"
 if [[ $NPROCS -gt 4 ]]; then
     pack_cmd "export OCT_TEST_MPI_NPROCS=4"
 else
     pack_cmd "export OCT_TEST_MPI_NPROCS=\$NPROCS"
 fi
 pack_cmd "make -j $(get_make_parallel)"
-pack_cmd "make check > octopus.test 2>&1 && echo Successfull >> octopus.test || echo Failure >> octopus.test"
-pack_cmd "make install"
-pack_store octopus.test octopus.test.mpi
+if ! $(is_host n-) ; then
+   pack_cmd "make check > octopus.test 2>&1 && echo Successfull >> octopus.test || echo Failure >> octopus.test"
+   pack_cmd "make install"
+   pack_store octopus.test octopus.test.mpi
+else
+   pack_cmd "make install"
+fi
