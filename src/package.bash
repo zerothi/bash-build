@@ -116,6 +116,11 @@ function source_pack {
     # new packages)
     local source_pack_i=$_N_archives
     source $source_pack_f
+    local err=$?
+    if [[ $err -ne 0 ]]; then
+	msg_install -message "Problems sourcing $source_pack_f ($err)"
+	exit $err
+    fi
     # Try and install the just added packages
     while [[ $source_pack_i -lt $_N_archives ]]; do
 	let source_pack_i++
@@ -528,6 +533,9 @@ function pack_set {
     [[ -n "$mod_name" ]]   && _mod_name[$index]="$mod_name"
     [[ -n "$package" ]]    && _package[$index]="$package"
     [[ -n "$reject_h" ]]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
+
+    # Successful execution, return 0 (otherwise we will return status for above if-statement
+    return 0
 }
 
 # This directly inserts the command in the list
@@ -675,8 +683,13 @@ function pack_get {
 	    choice $s "${_libs[$index]}"
 	    ;;
 	*)
-	    doerr "$1" "No option for pack_get found for $1" ;;
+	    doerr "$1" "No option for pack_get found for $1"
+	    return 1
+	    ;;
     esac
+
+    # Ensure we return with correct status
+    return 0
 }
 
 # Returns a list of the choices for the package
