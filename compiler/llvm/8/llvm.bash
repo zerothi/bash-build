@@ -2,10 +2,11 @@ v=8.0.0
 add_package -directory llvm-$v.src -package llvm -version $v \
 	    http://releases.llvm.org/$v/llvm-$v.src.tar.xz \
 
-pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $BUILD_TOOLS -s $CRT_DEF_MODULE
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $CRT_DEF_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
 
+pack_set $(list -p '-build-mod-req ' build-tools gcc)
 pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gcc)
 
 # Fetch the c-lang to build it along side
