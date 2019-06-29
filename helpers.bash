@@ -35,6 +35,7 @@ source_pack helpers/binutils.bash
 source_pack helpers/dejagnu.bash
 source_pack helpers/ninja.bash
 
+source_pack helpers/stow.bash
 
 # xdev (utilities)
 source_pack helpers/imake.bash
