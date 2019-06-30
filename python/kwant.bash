@@ -43,7 +43,7 @@ elif $(is_c gnu) ; then
     pack_set -module-requirement $la
     tmp=$(pack_get -lib[omp] $la)
     case $la in
-	lapack-openblas|lapack-acml)
+	lapack-openblas|lapack-acml) # packages with LAPACK build-in
 	    tmp="${tmp//-l/}"
 	    ;;
 	*)

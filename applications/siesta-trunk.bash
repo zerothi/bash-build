@@ -175,11 +175,11 @@ function set_flag {
 	    
 	    end=_omp
 	    case $siesta_la in
-		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib openblas):$(pack_get -lib[omp] openblas) :g' arch.make"
-		    ;;
 		mkl)
 		    pack_cmd "sed -i -e 's:-lmkl_sequential:-lmkl_intel_thread:g' arch.make"
+		    ;;
+		*)
+		    pack_cmd "sed -i -e 's:$(pack_get -lib $siesta_la):$(pack_get -lib[omp] $siesta_la) :g' $file"
 		    ;;
 	    esac
 	    ;;
@@ -191,11 +191,11 @@ function set_flag {
 	    
 	    end=
 	    case $siesta_la in
-		openblas)
-		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] openblas):$(pack_get -lib openblas):g' arch.make"
-		    ;;
 		mkl)
 		    pack_cmd "sed -i -e 's:-lmkl_intel_thread:-lmkl_sequential:g' arch.make"
+		    ;;
+		*)
+		    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] $siesta_la):$(pack_get -lib $siesta_la):g' arch.make"
 		    ;;
 	    esac
 	    ;;
