@@ -23,7 +23,7 @@ else
     tmp="$(list -LD-rp scalapack $la) -lscalapack $(pack_get -lib[omp] $la)"
     
 fi
-tmp_flags=
+tmp_flags="--enable-openmp"
 if ! $(grep "sse" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --disable-sse"
 fi
