@@ -1,4 +1,5 @@
-v=18.2
+for v in 18.2 19.1
+do
 add_package http://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/$v/dftbplus-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL
@@ -75,3 +76,5 @@ pack_cmd "make $(get_make_parallel)"
 
 # Make commands
 pack_cmd "make install"
+
+done
