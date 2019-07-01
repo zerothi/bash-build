@@ -8,8 +8,6 @@ pack_set -s $MAKE_PARALLEL
 
 pack_set -module-opt "-lua-family fhi-aims"
 pack_set -module-opt "-set-ENV FHIAIMS_VERSION=$v"
-# FHI-aims complains about omp-num-threads even if it isn't used
-pack_set -module-opt "-set-ENV OMP_NUM_THREADS=1"
 
 pack_set -install-query $(pack_get -prefix)/bin/aims.$v.scalapack.mpi.x
 

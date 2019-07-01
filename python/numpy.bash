@@ -209,9 +209,6 @@ pack_cmd "unset LDFLAGS"
 pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
 pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
-# Override the OMP_NUM_THREADS to 1, the user must only set the env' var after
-# loading
-pack_set -module-opt "-set-ENV OMP_NUM_THREADS=1"
 pack_cmd "unset LDSHARED"
 
 
