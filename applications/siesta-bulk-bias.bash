@@ -1,4 +1,4 @@
-for v in 716 ; do
+for v in 717 ; do
 
 add_package --archive siesta-trunk-bulk-bias-$v.tar.gz \
     --directory './~nickpapior' \
