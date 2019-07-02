@@ -597,6 +597,13 @@ function pack_get {
                     esac
 		done
 	    fi
+	    if [[ ! -z "${_mod_build_req[$index]}" ]]; then
+		for m in ${_mod_build_req[$index]} ; do
+		    case $(pack_get -installed $m) in
+			$_I_LIB|$_I_INSTALLED|$_I_TO_BE|$_I_REJECT) printf '%s' "$m " ;;
+                    esac
+		done
+	    fi
 	    ;;
 	-mod-req-module)
 	    if [[ ! -z "${_mod_req[$index]}" ]]; then

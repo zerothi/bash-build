@@ -153,6 +153,7 @@ if [ \$procs -eq 0 ]; then
   ppn=1
 fi
 if [ \$procs -ne \$((nodes*ppn)) ]; then
+  _help "The number of processors requested is not consistent: procs=\$procs != (nodes=\$nodes * \$ppn=ppn)"
   if [ \$procs -gt 0 -a \$nodes -gt 0 -a \$ppn -gt 0 ]; then
     _help "Do not mix all options --procs, --nodes and -ppn, only use 2 at a time!"
     exit 1
@@ -176,31 +177,24 @@ fi
 
 _s_add_option -n "\$procs" "Total number of cores, nodes = nodes, ppn = cores used on each node => \$((nodes*ppn)) cores"
 
-rusage=""
 if [ \$ppn -gt 1 ]; then
   _s_add_message "Number of processers allocated (in blocks) per compute node => \$((nodes*ppn)) cores"
-  rusage="\$rusage span[block=\$ppn]"
+  _s_add_option -R "\"span[block=\$ppn]\"" "Assign processors in chunks and allow multiple chunks on the same node"
 fi
 if [ "x\$mem" != "x" ]; then
   _s_add_message "Memory allowed per processer"
-  rusage="\$rusage rusage[mem=\$mem]"
+  _s_add_option -R "\"rusage[mem=\$mem]\"" "Amount of memory used per core"
 fi
-
-# Fix quatations
-if [ "x\$rusage" != "x" ]; then
-  rusage="\"\$rusage\""
-fi
-_s_add_option -R "\"\${rusage:2}" ""
 _s_add_option -W "\$walltime" "The allowed execution time. Will quit if the execution time exceeds this limit."
 
 case \$message in
   *B*|*b*)
-     _s_add_option "-" "B" "Mail when job begins"
+     _s_add_option "-B" " " "Mail when job begins"
      ;;
 esac
 case \$message in
   *N*|*n*)
-     _s_add_option "-" "N" "Mail when job ends"
+     _s_add_option "-N" " " "Mail when job ends"
      ;;
 esac
 _s_add_option -u "\$mail" "Mail address to send job information (defaulted to the mail assigned the login user)."
@@ -220,6 +214,7 @@ if [ \$mpi -eq 1 ]; then
   _help "You are using MPI. Please edit the submit-script and ensure a working MPI executable"
   if [ \$omp -gt 0 ]; then
     _help "You are creating a hybrid MPI/OpenMP script."
+    _s_add_line "#unset LSB_AFFINITY_HOSTFILE" "Required for disabling OpenMPI hooks into LSF affinity settings (if it does not work, uncomment this line)"
     _s_add_line "mpirun --map-by ppr:1:socket:pe=\$ppn -x OMP_NUM_THREADS=\$ppn -x OMP_PROC_BIND=true <executable>" "Setup the MPI call to figure out the number of cores used, for 2 sockets machines you need \$((\$ppn/2))"
   else
     _help "You are creating an MPI script."

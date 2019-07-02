@@ -93,8 +93,13 @@ build_set -default-setting[_internal-julia$IjV] $(build_get -default-setting)
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])"
-pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])-apps"
-
+case $_mod_format in
+    $_mod_format_ENVMOD)
+	;;
+    *)
+	pack_set -module-opt "-use-path $(build_get -module-path[_internal-julia$IjV])-apps"
+	;;
+esac
 
 pack_install
 

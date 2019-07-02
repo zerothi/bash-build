@@ -344,6 +344,7 @@ EOF
 	done
 	echo "" >> $mfile
     fi
+
     # Add conflict if needed
     if [[ -n "${conflict// /}" ]]; then
 	cat <<EOF >> $mfile

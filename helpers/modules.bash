@@ -11,8 +11,7 @@ pack_set -install-query $(pack_get -prefix)/$v/bin/envml
 pack_cmd "sed -i -e 's:/bin/csh 2:/bin/csh -f 2:g' compat/configure"
 
 # Install commands that it should run
-pack_cmd "./configure" \
-	 "--enable-auto-handling --enable-color" \
+pack_cmd "./configure --enable-auto-handling --enable-color" \
 	 "--without-pager --disable-example-modulefiles" \
 	 "--prefix=$(pack_get -prefix) --enable-versioning"
 

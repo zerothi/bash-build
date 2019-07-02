@@ -130,8 +130,13 @@ build_set -default-setting[_internal-python$IpV] $(build_get -default-setting)
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])"
-pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])-apps"
-
+case $_mod_format in
+    $_mod_format_ENVMOD)
+	;;
+    *)
+	pack_set -module-opt "-use-path $(build_get -module-path[_internal-python$IpV])-apps"
+	;;
+esac
 
 # Needed as it is not source_pack
 pack_install

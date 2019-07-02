@@ -70,7 +70,13 @@ build_set -default-setting[_internal-R$IrV] $(build_get -default-setting)
 
 # Now add options to ensure that loading this module will enable the path for the *new build*
 pack_set -module-opt "-use-path $(build_get -module-path[_internal-R$IrV])"
-pack_set -module-opt "-use-path $(build_get -module-path[_internal-R$IrV])-apps"
+case $_mod_format in
+    $_mod_format_ENVMOD)
+	;;
+    *)
+	pack_set -module-opt "-use-path $(build_get -module-path[_internal-R$IrV])-apps"
+	;;
+esac
 
 
 # Needed as it is not source_pack
