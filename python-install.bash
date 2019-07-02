@@ -78,6 +78,7 @@ source_pack python/slepc4py.bash
 source_pack python/networkx.bash
 
 #source_pack python/pyccel-dev.bash
+source_pack python/pyfftw.bash
 
 source_pack python/uncertainties.bash
 source_pack python/asteval.bash
