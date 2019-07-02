@@ -44,7 +44,7 @@ pack_cmd "make $(get_make_parallel)"
 if $(is_c intel) ; then
     pack_cmd "make install"
 else
-    pack_cmd "make check > elpa.test 2>&1 ; echo force"
+    pack_cmd "make check > elpa.test 2>&1 || echo forced"
     pack_cmd "make install"
     pack_store elpa.test
     pack_store test-suite.log elpa.test.log

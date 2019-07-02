@@ -10,5 +10,5 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/mpmath
 pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
 
 add_test_package mpmath.test
-pack_cmd "nosetests --exe mpmath > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe mpmath > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT

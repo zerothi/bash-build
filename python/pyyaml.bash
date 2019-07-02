@@ -12,5 +12,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 return
 add_test_package pyyaml.test
-pack_cmd "nosetests --exe pyyaml > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe pyyaml > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT

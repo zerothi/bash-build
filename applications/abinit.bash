@@ -164,14 +164,14 @@ pack_cmd "make multi multi_nprocs=${tmp//-j /}"
 # We should do some python calls...
 tmp="--loglevel=INFO -v -v -n $NPROCS --pedantic"
 pack_cmd "pushd tests"
-pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test ; echo succes"
+pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test || echo forced"
 pack_store $mpila.fast.test
 
 if ! $(is_c intel) ; then
-    pack_cmd "../../tests/runtests.py $tmp atompaw libxc wannier90 2>&1 > $mpila.in.test ; echo succes"
+    pack_cmd "../../tests/runtests.py $tmp atompaw libxc wannier90 2>&1 > $mpila.in.test || echo forced"
     pack_store $mpila.in.test
 
-    pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test ; echo succes"
+    pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test || echo forced"
     pack_store $mpila.v1.test
 fi
 pack_cmd "popd"

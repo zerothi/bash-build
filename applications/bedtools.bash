@@ -18,6 +18,6 @@ else
     tmp_flags="$tmp_flags CXXFLAGS='$CXXFLAGS'"
 fi
 pack_cmd "make $tmp_flags $(get_make_parallel)"
-pack_cmd "make $tmp_flags test 2>&1 > bedtools.test ; echo forced"
+pack_cmd "make $tmp_flags test 2>&1 > bedtools.test || echo forced"
 pack_store bedtools.test
 pack_cmd "make $tmp_flags prefix=$(pack_get -prefix) install"

@@ -22,7 +22,7 @@ pack_cmd "../configure CFLAGS='$CFLAGS -DHAVE_STRDUP'" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > netcdf.test 2>&1 ; echo FORCE"
+pack_cmd "make check > netcdf.test 2>&1 || echo forced"
 pack_cmd "make install"
 pack_store netcdf.test netcdf.test.c
 
@@ -53,7 +53,7 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > netcdf.test 2>&1 ; echo FORCE"
+pack_cmd "make check > netcdf.test 2>&1 || echo forced"
 pack_cmd "make install"
 pack_store netcdf.test netcdf.test.f
 

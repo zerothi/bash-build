@@ -30,6 +30,6 @@ pack_cmd "../contrib/configure-release  $tmp_flags" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > ucx.test 2>&1 ; echo 'force'"
+pack_cmd "make check > ucx.test 2>&1 || echo forced"
 pack_store ucx.test
 pack_cmd "make install"

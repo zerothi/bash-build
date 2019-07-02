@@ -28,5 +28,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
       "--prefix=$(pack_get --prefix)"
 
 add_test_package pybinding.test
-pack_cmd "pytest --pyargs pybinding 2>&1 > $TEST_OUT ; echo 'Success'"
+pack_cmd "pytest --pyargs pybinding 2>&1 > $TEST_OUT || echo forced"
 pack_store $TEST_OUT

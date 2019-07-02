@@ -18,5 +18,5 @@ pack_cmd "OMP_NUM_THREADS=$NPROCS $(get_parent_exec) setup.py install --prefix=$
 
 add_test_package sklearn.test
 pack_set -module-requirement pandas
-pack_cmd "pytest --exe sklearn > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "pytest --exe sklearn > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT

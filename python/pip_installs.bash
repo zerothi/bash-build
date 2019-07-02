@@ -39,13 +39,13 @@ function pip_append {
 function pip_install {
     if [[ -n "$_pip" ]]; then
 	# First try and download, always finish with a yes
-	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $_pip ; echo 'yes'"
+	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $_pip || echo forced"
 	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $_pip"
 	# Empty again
 	_pip=""
     fi
     while [[ $# -gt 0 ]]; do
-	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $1 ; echo 'yes'"
+	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $1 || echo forced"
 	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $1"
 	shift
     done

@@ -119,11 +119,11 @@ pack_set -host-reject $(get_hostname)
 # We need the setups for the tests
 pack_set -mod-req gpaw-setups
 pack_cmd "unset LDFLAGS"
-pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > gpaw.serial ; echo 'Forced'"
+pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > gpaw.serial || echo forced"
 pack_store gpaw.serial
-pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.serial ; echo 'Forced'"
+pack_cmd "gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.serial || echo forced"
 pack_store gpaw.exec.serial
-pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.parallel ; echo 'Forced'"
+pack_cmd "mpirun -np 2 gpaw-python \$(which gpaw-test) 2>&1 > gpaw.exec.parallel || echo forced"
 pack_store gpaw.exec.parallel
 
 done

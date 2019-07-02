@@ -20,7 +20,7 @@ pack_cmd "../configure --with-sysroot=${SYSROOT-/}" \
 pack_cmd "make $(get_make_parallel)"
 
 # Be sure to test
-pack_cmd "make check > binutils.test 2>&1 ; echo succes"
+pack_cmd "make check > binutils.test 2>&1 || echo forced"
 pack_store binutils.test
 
 pack_cmd "make install"

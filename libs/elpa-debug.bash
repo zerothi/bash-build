@@ -34,7 +34,7 @@ pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLA
 pack_cmd "sed -i -e 's/filter(\(.*\))/list(filter(\1))/' ../remove_xcompiler"
 
 # This will fail, we have to circumvent it
-pack_cmd "make $(get_make_parallel) ; echo force"
+pack_cmd "make $(get_make_parallel) || echo forced"
 # Fix
 pack_cmd "sed -i 's/_COMPILED@) \\\\//g;s/@//g' elpa/elpa_constants.h"
 pack_cmd "make clean"
