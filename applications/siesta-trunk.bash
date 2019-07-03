@@ -155,7 +155,7 @@ if [[ $(vrs_cmp $v 626) -ge 0 ]]; then
     pack_set --module-requirement elpa
     pack_cmd "sed -i '$ a\
 FPPFLAGS += -DSIESTA__ELPA \n\
-ELPA_LIB = $(list -LD-rp elpa) -lelpa\n\
+ELPA_LIB = $(list -LD-rp elpa) $(pack_get -lib elpa)\n\
 INCFLAGS += $(list -INCDIRS elpa)/elpa\n\
 LIBS += \$(ELPA_LIB) \n' arch.make"
 fi
@@ -172,7 +172,8 @@ function set_flag {
 	    # This will work regardless of MUMPS is used
 	    pack_cmd "sed -i -e 's:-lzmumps :-lzmumps_omp :g' arch.make"
 	    pack_cmd "sed -i -e 's:-lmumps_common :-lmumps_common_omp :g' arch.make"
-	    
+	    pack_cmd "sed -i -e 's:$(pack_get -lib elpa):$(pack_get -lib[omp] elpa) :g' $file"
+
 	    end=_omp
 	    case $siesta_la in
 		mkl)
@@ -188,7 +189,8 @@ function set_flag {
 	    # This will work regardless of MUMPS is used
 	    pack_cmd "sed -i -e 's:-l\(zmumps\)[^ ]* :-l\1 :g' arch.make"
 	    pack_cmd "sed -i -e 's:-l\(mumps_common\)[^ ]* :-l\1 :g' arch.make"
-	    
+	    pack_cmd "sed -i -e 's:$(pack_get -lib[omp] elpa):$(pack_get -lib elpa) :g' $file"
+
 	    end=
 	    case $siesta_la in
 		mkl)

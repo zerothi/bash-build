@@ -42,3 +42,13 @@ pack_cmd "mkdir -p $(pack_get --LD)/"
 pack_cmd "cp libscalapack.a $(pack_get --LD)/"
 # simply to force it to exist
 pack_cmd "mkdir -p $(pack_get --prefix)/include"
+
+
+add_hidden_package scalapack-blas/$v
+pack_set -prefix $(pack_get -prefix lapack)
+pack_set -installed $_I_REQ
+pack_set $(list -prefix '-mod-req ' scalapack $(pack_get -mod-req lapack))
+pack_set -lib $(pack_get -lib scalapack) $(pack_get -lib lapack)
+pack_set -lib[omp] $(pack_get -lib scalapack) $(pack_get -lib[omp] lapack)
+pack_set -lib[pt] $(pack_get -lib scalapack) $(pack_get -lib[pt] lapack)
+pack_set -lib[lapacke] -llapacke
