@@ -64,6 +64,6 @@ pack_cmd "LDFLAGS='$(list --LD-rp $(pack_get --mod-req))' ../configure $tmp_flag
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > octave.test 2>&1 ; echo force"
+pack_cmd "make check > octave.test 2>&1 || echo forced"
 pack_cmd "make install"
 pack_store octave.test

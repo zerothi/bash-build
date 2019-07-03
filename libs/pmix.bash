@@ -24,6 +24,6 @@ pack_cmd "../configure" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > pmix.test 2>&1 ; echo 'force'"
+pack_cmd "make check > pmix.test 2>&1 || echo forced"
 pack_store pmix.test
 pack_cmd "make install"

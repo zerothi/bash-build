@@ -26,7 +26,7 @@ for v in 2.6.9 ; do
 	  "--prefix=$(pack_get --prefix)"
 
     add_test_package numexpr.test
-    pack_cmd "nosetests --exe numexpr > $TEST_OUT 2>&1 ; echo 'Success'"
+    pack_cmd "nosetests --exe numexpr > $TEST_OUT 2>&1 || echo forced"
     pack_store $TEST_OUT
     
 done

@@ -216,9 +216,9 @@ if ! $(is_c intel) ; then
     add_test_package numpy.test
     pack_cmd "unset LDFLAGS"
     if [[ $(vrs_cmp $v 1.15.0) -ge 0 ]]; then
-	pack_cmd "OMP_NUM_THREADS=$NPROCS pytest --pyargs numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+	pack_cmd "OMP_NUM_THREADS=$NPROCS pytest --pyargs numpy > $TEST_OUT 2>&1 || echo forced"
     else
-	pack_cmd "OMP_NUM_THREADS=$NPROCS nosetests --exe numpy > $TEST_OUT 2>&1 ; echo 'Success'"
+	pack_cmd "OMP_NUM_THREADS=$NPROCS nosetests --exe numpy > $TEST_OUT 2>&1 || echo forced"
     fi
     pack_store $TEST_OUT
 fi

@@ -23,6 +23,6 @@ pack_cmd "echo 'include ../Makefile' >> Makefile"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make test > fdict.test 2>&1 ; echo 'Fake success'"
+pack_cmd "make test > fdict.test 2>&1 || echo forced"
 pack_store fdict.test
 pack_cmd "make PREFIX=$(pack_get -prefix) install"

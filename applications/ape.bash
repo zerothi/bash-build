@@ -21,6 +21,6 @@ pack_cmd "../configure FCFLAGS='$FCFLAGS -ffree-line-length-none'" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check 2>&1 > ape.test ; echo FORCED"
+pack_cmd "make check 2>&1 > ape.test || echo forced"
 pack_cmd "make install"
 pack_store ape.test

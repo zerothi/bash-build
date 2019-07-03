@@ -17,6 +17,6 @@ pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 
 add_test_package numba.test
-pack_cmd "$(get_parent_exec) -m numba.runtests --exclude-tags='long_running' > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "$(get_parent_exec) -m numba.runtests --exclude-tags='long_running' > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT
 

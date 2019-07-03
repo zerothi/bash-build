@@ -55,7 +55,7 @@ if [[ $(vrs_cmp $v 2.0) -ge 0 ]]; then
     pack_cmd "cp utility/kmesh.pl $(pack_get --prefix)/bin/"
 fi
 pack_cmd "make lib"
-pack_cmd "make test 2>&1 > wannier.test ; echo 'succes'"
+pack_cmd "make test 2>&1 > wannier.test || echo forced"
 pack_store wannier.test
 pack_cmd "cp wannier90.x $(pack_get --prefix)/bin/"
 pack_cmd "cp libwannier.a $(pack_get --LD)/"

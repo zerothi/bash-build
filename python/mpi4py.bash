@@ -13,10 +13,10 @@ pack_cmd "$(get_parent_exec) setup.py install" \
 
 tmp="-v -f --exclude test_rma --exclude test_spawn"
 for i in 1 2 ; do
-    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy 2>&1 >> mpi4py_$i.test ; echo force"
-    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp 2>&1 >> mpi4py_$i.test ; echo force"
+    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy 2>&1 >> mpi4py_$i.test || echo forced"
+    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp 2>&1 >> mpi4py_$i.test || echo forced"
     pack_store mpi4py_$i.test
-    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy --thread-level funneled 2>&1 >> mpi4py_thread_$i.test ; echo force"
-    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --thread-level funneled 2>&1 >> mpi4py_thread_$i.test ; echo force"
+    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --no-numpy --thread-level funneled 2>&1 >> mpi4py_thread_$i.test || echo forced"
+    pack_cmd "mpirun -np $i $(get_parent_exec) test/runtests.py $tmp --thread-level funneled 2>&1 >> mpi4py_thread_$i.test || echo forced"
     pack_store mpi4py_thread_$i.test
 done

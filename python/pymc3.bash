@@ -16,5 +16,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get -prefix)"
 
 add_test_package pymc3.test
-pack_cmd "pytest --pyargs pymc3 > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "pytest --pyargs pymc3 > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT

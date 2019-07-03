@@ -20,7 +20,7 @@ pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)"
 
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > libxc.test 2>&1 ; echo 'forced'"
+pack_cmd "make check > libxc.test 2>&1 || echo forced"
 pack_cmd "make install"
 pack_store libxc.test
 pack_store testsuite/test-suite.log libxc.test-suite.log

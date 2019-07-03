@@ -15,5 +15,5 @@ pack_cmd "./configure" \
 	 "--prefix $(pack_get --prefix)"
 
 # Make commands
-pack_cmd "make $(get_make_parallel) ; echo ''"
-pack_cmd "make install ; echo ''"
+pack_cmd "make $(get_make_parallel) || echo forced"
+pack_cmd "make install || echo forced"

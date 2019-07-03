@@ -12,6 +12,6 @@ pack_cmd "../configure" \
 	 "--with-libz-prefix=$(pack_get -prefix gen-zlib)" \
 	 "--prefix=$(pack_get -prefix)"
 pack_cmd "make"
-pack_cmd "make check > libssh2.test ; echo FORCE"
+pack_cmd "make check > libssh2.test || echo forced"
 pack_cmd "make install"
 pack_store libssh2.test

@@ -22,5 +22,5 @@ pack_cmd "$(get_parent_exec) setup.py install" \
     "--prefix=$(pack_get --prefix)"
 
 add_test_package h5py.test
-pack_cmd "nosetests --exe h5py > $TEST_OUT 2>&1 ; echo 'Success'"
+pack_cmd "nosetests --exe h5py > $TEST_OUT 2>&1 || echo forced"
 pack_store $TEST_OUT
