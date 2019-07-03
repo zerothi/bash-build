@@ -72,10 +72,10 @@ for omp in openmp serial ; do
     if $(is_c intel) ; then
 	pack_cmd "make install"
     else
-	#pack_cmd "make check > elpa.$omp.test 2>&1 || echo forced"
+	pack_cmd "make check > elpa.$omp.test 2>&1 || echo forced"
 	pack_cmd "make install"
-	#pack_store elpa.$omp.test
-	#pack_store test-suite.log elpa.$omp.test.log
+	pack_store elpa.$omp.test
+	pack_store test-suite.log elpa.$omp.test.log
     fi
 
 done
