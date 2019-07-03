@@ -134,7 +134,8 @@ function docmd {
 
 # Array containing the stack of the routines currently in
 declare -a _r_stack
-_N_r=0
+declare -i _N_r
+let _N_r=0
 
 #  Function push_r
 # Pushes a routine name to the top of the stack such that

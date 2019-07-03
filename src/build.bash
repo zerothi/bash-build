@@ -69,7 +69,8 @@ declare -A _b_reject
 declare -A _b_index
 
 # Counter to keep track of number of builds.
-_N_b=-1
+declare -i _N_b
+let _N_b=-1
 
 #  Function build_set
 # Constructing a build is necessary using this
