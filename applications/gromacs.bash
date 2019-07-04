@@ -51,11 +51,11 @@ pack_set -module-requirement fftw
 tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DGMX_BUILD_OWN_FFTW=OFF"
 
 case $par in
-    mpi)
+    mpi*)
 	pack_set -module-requirement mpi
-	tmp="$tmp -DGMX_MPI=ON"
+	tmp="$tmp -DGMX_MPI=ON -DNUMPROC=$((NPROCS/2))"
 	;;
-    cuda)
+    cuda*)
 	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
 	;;
 esac
@@ -120,7 +120,15 @@ pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
-pack_cmd "OMP_NUM_THREADS=$NPROCS make check > gromacs.test || echo forced"
+case $par in
+    serial*|cuda*)
+	pack_cmd "OMP_NUM_THREADS=$NPROCS make check > gromacs.test || echo forced"
+	;;
+    mpi*)
+	pack_cmd "OMP_NUM_THREADS=$((NPROCS/2)) make check > gromacs.test || echo forced"
+	;;
+esac
+    
 pack_store gromacs.test
 
 
