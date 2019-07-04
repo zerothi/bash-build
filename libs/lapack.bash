@@ -41,14 +41,16 @@ pack_cmd "make $(get_make_parallel) lapacklib lapackelib tmglib"
 # Make test commands
 pack_cmd "make blas_testing 2>&1 > blas.test"
 pack_cmd "make cblas_testing 2>&1 > cblas.test"
-if $(is_c intel) ; then
-    pack_cmd "make lapack_testing 2>&1 > lapack.test || echo forced"
-else
-    pack_cmd "make lapack_testing 2>&1 > lapack.test"
+if [[ $FCFLAGS != *-Ofast* ]]; then
+    if $(is_c intel) ; then
+	pack_cmd "make lapack_testing 2>&1 > lapack.test || echo forced"
+    else
+	pack_cmd "make lapack_testing 2>&1 > lapack.test"
+    fi
+    pack_store lapack.test
 fi
 pack_store blas.test
 pack_store cblas.test
-pack_store lapack.test
 
 # Installation commands
 pack_cmd "mkdir -p $(pack_get --LD)"

@@ -1,12 +1,18 @@
-for par in serial mpi cuda
+for par in serial mpi cuda serial-plumed mpi-plumed cuda-plumed
 do
 
 case $par in
     serial)
 	tmp_add_package=""
 	;;
+    serial-plumed)
+	tmp_add_package="-package gromacs-plumed"
+	;;
     mpi)
 	tmp_add_package="-package gromacs-mpi"
+	;;
+    mpi-plumed)
+	tmp_add_package="-package gromacs-plumed-mpi"
 	;;
     cuda)
 	tmp_add_package="-package gromacs-cuda -build cuda"
@@ -14,33 +20,59 @@ case $par in
 	if $(build_exist cuda) ; then
 	    noop
 	else
-	    msg_install --message "Skipping CUDA build for gromacs!"
+	    msg_install -message "Skipping CUDA build for gromacs!"
+	    continue
+	fi
+	;;
+    cuda-plumed)
+	tmp_add_package="-package gromacs-plumed-cuda -build cuda"
+	# Check if we have build
+	if $(build_exist cuda) ; then
+	    noop
+	else
+	    msg_install -message "Skipping CUDA build for gromacs-plumed!"
 	    continue
 	fi
 	;;
 esac
 
-for v in 2018.6 2019.3 ; do
+for v in 2018.7 2019.3 ; do
 add_package $tmp_add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --module-opt "--lua-family gromacs"
+pack_set -module-opt "-lua-family gromacs"
 
-pack_set --install-query $(pack_get --prefix)/bin/GMXRC
+pack_set -install-query $(pack_get -prefix)/bin/GMXRC
 
 pack_set -build-mod-req build-tools
-pack_set --module-requirement fftw
+pack_set -module-requirement fftw
 
-tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get --prefix)"
+tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DGMX_BUILD_OWN_FFTW=OFF"
 
 case $par in
     mpi)
-	pack_set --module-requirement mpi
+	pack_set -module-requirement mpi
 	tmp="$tmp -DGMX_MPI=ON"
 	;;
     cuda)
 	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
+	;;
+esac
+
+case $par in
+    *-plumed)
+	pack_set -mod-req plumed
+	tmp="$tmp -DBUILD_SHARED_LIBS=OFF -DGMX_PREFER_STATIC_LIBS=ON"
+	# Run the patch
+	if [[ $(vrs_cmp $(pack_get -version plumed) 2.5.1) -eq 0 ]]; then
+	    if [[ $(vrs_cmp $v 2018) -eq 0 ]]; then
+		pack_set -host-reject $(get_hostname)
+	    fi
+	    pack_cmd "pushd .. ; echo 2 | plumed patch -p ; popd"
+	else
+	    doerr $(pack_get -package) "Failed to get the correct version of plumed for GROMACS"
+	fi
 	;;
 esac
 
@@ -58,13 +90,13 @@ if $(is_c intel) ; then
     
 elif $(is_c gnu) ; then
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp +$la)"
-    tmp="$tmp -DGMX_LAPACK_USER='$(trim_spaces $tmp_ld) $(pack_get -lib $la)'"
-    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) $(pack_get -lib $la) -lgfortran'"
+    pack_set -module-requirement $la
+    tmp_ld="$(list -LD-rp +$la)"
+    tmp="$tmp -DGMX_LAPACK_USER='$(trim_spaces $tmp_ld) $(pack_get -lib[omp] $la)'"
+    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) $(pack_get -lib[omp] $la) -lgfortran'"
 
 else
-    doerr $(pack_get --package) "Could not determine compiler: $(get_c)"
+    doerr $(pack_get -package) "Could not determine compiler: $(get_c)"
     
 fi
 
@@ -78,7 +110,7 @@ elif $(grep "sse" /proc/cpuinfo > /dev/null) ; then
     tmp="$tmp -DGMX_SIMD=SSE2"
 fi
 
-clib="$(list --prefix ':' --loop-cmd 'pack_get --LD' $(pack_get --mod-req))"
+clib="$(list -prefix ':' -loop-cmd 'pack_get -LD' $(pack_get -mod-req))"
 clib=${clib// /}
 clib=${clib:1}
 
@@ -92,15 +124,15 @@ pack_store gromacs.test
 
 
 # Add GROMACS envs
-pack_set --module-opt "--set-ENV GMXBIN=$(pack_get --prefix)/bin"
-pack_set --module-opt "--set-ENV GMXLDLIB=$(pack_get --LD)"
-pack_set --module-opt "--set-ENV GMXMAN=$(pack_get --prefix)/man"
-pack_set --module-opt "--set-ENV GMXDATA=$(pack_get --prefix)/share/gromacs"
+pack_set -module-opt "-set-ENV GMXBIN=$(pack_get -prefix)/bin"
+pack_set -module-opt "-set-ENV GMXLDLIB=$(pack_get -LD)"
+pack_set -module-opt "-set-ENV GMXMAN=$(pack_get -prefix)/man"
+pack_set -module-opt "-set-ENV GMXDATA=$(pack_get -prefix)/share/gromacs"
 
 # Add auto source scripts (if users wishes to use these)
-pack_set --module-opt "--set-ENV GMXRC_BASH=$(pack_get --prefix)/bin/GMXRC.bash"
-pack_set --module-opt "--set-ENV GMXRC_CSH=$(pack_get --prefix)/bin/GMXRC.csh"
-pack_set --module-opt "--set-ENV GMXRC_ZSH=$(pack_get --prefix)/bin/GMXRC.zsh"
+pack_set -module-opt "-set-ENV GMXRC_BASH=$(pack_get -prefix)/bin/GMXRC.bash"
+pack_set -module-opt "-set-ENV GMXRC_CSH=$(pack_get -prefix)/bin/GMXRC.csh"
+pack_set -module-opt "-set-ENV GMXRC_ZSH=$(pack_get -prefix)/bin/GMXRC.zsh"
 
 done
 
