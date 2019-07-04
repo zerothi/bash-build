@@ -177,7 +177,9 @@ fi
 
 _s_add_option -n "\$procs" "Total number of cores, nodes = nodes, ppn = cores used on each node => \$((nodes*ppn)) cores"
 
-if [ \$ppn -gt 1 ]; then
+if [ \$ppn -eq \$procs ]; then
+  _s_add_option -R "\"span[hosts=1]\"" "Force all processors to be on a single node"
+elif [ \$ppn -gt 1 ]; then
   _s_add_message "Number of processers allocated (in blocks) per compute node => \$((nodes*ppn)) cores"
   _s_add_option -R "\"span[block=\$ppn]\"" "Assign processors in chunks and allow multiple chunks on the same node"
 fi
