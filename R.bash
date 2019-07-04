@@ -40,7 +40,7 @@ pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check-all > R.test 2>&1"
+pack_cmd "make check-all > R.test 2>&1 || echo forced"
 pack_cmd "make install"
 pack_cmd "make install-tests"
 pack_store R.test
