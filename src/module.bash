@@ -101,6 +101,7 @@ function create_module {
     local use_path mod_path
     local require conflict load lua_family
     local fpath
+    local ld_path=0 # signal use of ld_library_path
     local force=0 ; local no_install=0
     local fm_comment='#'
     while [[ $# -gt 0 ]]; do
@@ -111,6 +112,7 @@ function create_module {
 	    -v|-version)  version="$1" ; shift ;;
 	    -P|-path)  path="$1" ; shift ;;
 	    -use-path)  use_path="$use_path $1" ; shift ;;
+	    -ld-library-path)  ld_path=1 ;;
 	    -p|-module-path)  mod_path="$1" ; shift ;;
 	    -M|-module-name)  mod="$1" ; shift ;;
 	    -R|-require)  require="$require $1" ; shift ;; # Can be optioned several times
@@ -433,10 +435,12 @@ EOF
 	    "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $tmp)"
     fi
     # The LD_LIBRARY_PATH is DANGEROUS!
-    #add_module_if -F $force -d "$path/lib" $mfile \
-#	"$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib)"
- #   add_module_if -F $force -d "$path/lib64" $mfile \
-#	"$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib64)"
+    if [[ $ld_path -eq 1 ]]; then
+	add_module_if -F $force -d "$path/lib" $mfile \
+		      "$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib)"
+	add_module_if -F $force -d "$path/lib64" $mfile \
+		      "$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib64)"
+    fi
     add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
     for PV in 2.6 2.7 3.4 3.5 3.6 3.7 ; do
