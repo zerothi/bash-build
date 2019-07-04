@@ -17,9 +17,9 @@ fi
 
 pack_set -install-query $(pack_get -prefix)/bin/gpaw-python
 
-pack_set -module-requirement mpi \
-    -module-requirement matplotlib \
-    -module-requirement libxc
+pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw-mpi elpa)
+
+pack_set -module-opt "-set-ENV GPAW_FFTWSO=$(pack_get -prefix fftw-mpi)/lib/libfftw3.a"
 
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
     pack_set -module-requirement ase
@@ -80,10 +80,12 @@ extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
 mpi_runtime_library_dirs += [\"$(pack_get -LD mpi)\"]\n\
 mpi_runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
 scalapack = True\n\
-\n\
-if scalapack:\n\
-    define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
-    define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
+define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
+define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
+elpa = True\n\
+library_dirs += [\"$(pack_get -LD elpa)\"]\n\
+runtime_library_dirs += [\"$(pack_get -LD elpa)\"]\n\
+libraries += [\"elpa\"]\n\
 \n\
 hdf5 = $hdf\n\
 library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
