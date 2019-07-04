@@ -15,6 +15,6 @@ pack_cmd "make install"
 
 # Sadly some installations does not check the correct
 # place for the ft2build.h header
-pack_cmd "pushd $(pack_get -prefix)/include ; ln -s freetype2/ft2build.h ; ln -s freetype2 freetype ; popd"
+pack_cmd "pushd $(pack_get -prefix)/include ; ln -s freetype2/ft2build.h ; ln -s freetype2/freetype freetype ; popd"
 
 
