@@ -67,9 +67,10 @@ case $par in
 	# Run the patch
 	if [[ $(vrs_cmp $(pack_get -version plumed) 2.5.1) -eq 0 ]]; then
 	    if [[ $(vrs_cmp $v 2018) -eq 0 ]]; then
+	    pack_cmd "pushd .. ; echo 2 | plumed patch -p ; popd"
+        else
 		pack_set -host-reject $(get_hostname)
 	    fi
-	    pack_cmd "pushd .. ; echo 2 | plumed patch -p ; popd"
 	else
 	    doerr $(pack_get -package) "Failed to get the correct version of plumed for GROMACS"
 	fi
