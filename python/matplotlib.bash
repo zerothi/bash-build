@@ -36,8 +36,6 @@ else
     pack_cmd "sed -i -e '/__INTEL_COMPILER/s:INTEL_COMPILER:INTEL_COMPILER_DUMMY:' extern/qhull/qhull_a.h"
 fi
 
-#pack_cmd "unset LDFLAGS"
-
 pack_cmd "echo '# setup.cfg' > setup.cfg"
 # These directories are the directories used for searching for include
 # files.
@@ -47,6 +45,7 @@ pack_cmd "echo 'basedirlist = $(pack_get -prefix gen-freetype)' >> setup.cfg"
 pack_cmd "echo '[test]' >> setup.cfg"
 pack_cmd "echo 'local_freetype = False' >> setup.cfg"
 
+#pack_cmd "unset LDFLAGS"
 pack_cmd "$(get_parent_exec) setup.py config"
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
 pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
