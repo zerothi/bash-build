@@ -7,7 +7,7 @@ _c_v=""
 # Set compiler name
 function set_c { 
     _c="${1%-*}"
-    _c_v="${1#*-}"
+    _c_v="${1##*-}"
     shift
 }
 

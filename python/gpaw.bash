@@ -17,7 +17,8 @@ fi
 
 pack_set -install-query $(pack_get -prefix)/bin/gpaw-python
 
-pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw-mpi elpa)
+# should work with ELPA, but they are not using the correct version
+pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw-mpi)
 
 pack_set -module-opt "-set-ENV GPAW_FFTWSO=$(pack_get -prefix fftw-mpi)/lib/libfftw3.a"
 
@@ -38,6 +39,9 @@ pack_cmd "echo '#' > $file"
 
 
 if $(is_c intel) ; then
+    # The clck library path has libutil.so which fucks up things!
+    pack_cmd "unset LIBRARY_PATH"
+
     pack_cmd "sed -i '1 a\
 compiler = \"$CC $pCFLAGS $MKL_LIB -mkl=sequential\"\n\
 mpicompiler = \"$MPICC $pCFLAGS $MKL_LIB\"\n\
@@ -82,7 +86,7 @@ mpi_runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
 scalapack = True\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
-elpa = True\n\
+elpa = False\n\
 library_dirs += [\"$(pack_get -LD elpa)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD elpa)\"]\n\
 libraries += [\"elpa\"]\n\

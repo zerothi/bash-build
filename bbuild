@@ -29,7 +29,7 @@ umask 022
 _top_dir=`pwd`
 
 source ~/.bashrc
-module purge
+module purge 1>/dev/null 2>/dev/null
 
 # Ensure that there is not multiple threads running
 export OMP_NUM_THREADS=1
