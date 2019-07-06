@@ -63,14 +63,14 @@ mkl_libs = mkl_lapack95_lp64,mkl_blas95_lp64,mkl_rt,mkl_intel_lp64,mkl_intel_thr
 lapack_libs = mkl_lapack95_lp64\n\
 blas_libs = mkl_blas95_lp64' $file"
 
-    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel -fp-model precise -fp-model source $FLAG_OMP -I$(pack_get -prefix suitesparse)/include"
-    pack_cmd "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc ${pCFLAGS//-O3/-O2} $p_flags:g\" numpy/distutils/intelccompiler.py"
+    p_flags="$INTEL_LIB $MKL_LIB -mkl=parallel $FLAG_OMP -I$(pack_get -prefix suitesparse)/include"
+    pack_cmd "sed -i -e \"s:cc_exe = 'icc:cc_exe = 'icc $pCFLAGS $p_flags:g\" numpy/distutils/intelccompiler.py"
     pack_cmd "sed -i -e \"s/linker_exe=compiler,/linker_exe=compiler,archiver = ['$AR', '-cr'],/g\" numpy/distutils/intelccompiler.py"
     pack_cmd "sed -i -e 's|\(-shared\)|\1 -L${tmp_lib//:/ -L} -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=} $p_flags|g' numpy/distutils/intelccompiler.py"
     pack_cmd "sed -i -e 's/\"ar\",/\"$AR\",/g' numpy/distutils/fcompiler/intel.py"
-    pack_cmd "sed -i -e 's:opt = \[\]:opt = \[\"${pFCFLAGS//-O3/-O2} $p_flags\"\]:g' numpy/distutils/fcompiler/intel.py"
+    pack_cmd "sed -i -e 's:opt = \[\]:opt = \[\"$pFCFLAGS $p_flags\"\]:g' numpy/distutils/fcompiler/intel.py"
     pack_cmd "sed -i -e 's:F90:F77:g' numpy/distutils/fcompiler/intel.py"
-    pack_cmd "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"${pFCFLAGS//-O3/-O2} $p_flags\"\]|g' numpy/distutils/fcompiler/intel.py"
+    pack_cmd "sed -i -e 's|^\([[:space:]]*\)\(def get_flags_arch(self):.*\)|\1\2\n\1\1return \[\"$pFCFLAGS $p_flags\"\]|g' numpy/distutils/fcompiler/intel.py"
     pack_cmd "sed -i -e \"/'linker_so'/s|\(.-shared.\)|\1,'-L${tmp_lib//:/ -L}','-Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=}','$p_flags'|g\" numpy/distutils/fcompiler/intel.py"
 
     pack_cmd "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
@@ -185,7 +185,7 @@ runtime_library_dirs = $tmp_lib\n' $file"
     # Add the flags to the EXTRAFLAGS for the GNU compiler
     p_flags="DUM ${pFCFLAGS} -I$(pack_get -prefix suitesparse)/include $FLAG_OMP"
     # Create the list of flags in format ",'-<flag1>','-<flag2>',...,'-<flagN>'"
-    p_flags="$(list -prefix ,\' -suffix \' ${p_flags//O3/O2} $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
+    p_flags="$(list -prefix ,\' -suffix \' $p_flags $FLAG_OMP -L${tmp_lib//:/ -L} -L$tmp -Wl,-rpath=$tmp -Wl,-rpath=${tmp_lib//:/ -Wl,-rpath=})"
     # The DUM variable is to terminate (list) argument grabbing
     pack_cmd "sed -i -e \"s|_EXTRAFLAGS = \[\]|_EXTRAFLAGS = \[${p_flags:8}\]|g\" numpy/distutils/fcompiler/gnu.py"
     pack_cmd "sed -i -e 's|\(-Wall\)\(.\)|\1\2,\2-fPIC\2|g' numpy/distutils/fcompiler/gnu.py"

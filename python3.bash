@@ -45,8 +45,8 @@ pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
-    pCFLAGS="$CFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
-    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fp-model strict -fp-model source"
+    pCFLAGS="$CFLAGS -fomit-frame-pointer"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer"
     tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS -std=c11'"
     tmp="$tmp --with-libm=-limf"
     # The clck library path has libutil.so which fucks up things!

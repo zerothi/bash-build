@@ -18,8 +18,8 @@ pack_set -mod-req libxml2
 tmp=
 if $(is_c intel) ; then
 
-    tmp="$tmp BLAS_LIBS='$MKL_LIB -mkl=parallel -fp-model precise $FLAG_OMP'"
-    tmp="$tmp LAPACK_LIBS='$MKL_LIB -mkl=parallel -fp-model precise $FLAG_OMP'"
+    tmp="$tmp BLAS_LIBS='$MKL_LIB -mkl=parallel $FLAG_OMP'"
+    tmp="$tmp LAPACK_LIBS='$MKL_LIB -mkl=parallel $FLAG_OMP'"
 
 else
     
