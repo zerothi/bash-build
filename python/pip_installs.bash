@@ -26,7 +26,7 @@ pack_set --directory .
 _pip_dwn=$(pwd_archives)/pip${pV:0:1}
 mkdir -p $_pip_dwn
 
-_pip_cmd=$(pack_get --prefix python)/bin/pip
+_pip_cmd=$(pack_get -prefix python)/bin/pip
 
 _pip=
 function pip_append {
