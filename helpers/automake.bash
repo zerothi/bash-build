@@ -1,6 +1,6 @@
 add_package --build generic http://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.xz
 
-pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set --module-requirement build-tools
 pack_set --prefix $(pack_get --prefix build-tools)
@@ -14,8 +14,8 @@ fi
 
 pack_set --install-query $(pack_get --prefix)/bin/automake
 
-# Install commands that it should run
-pack_cmd "./configure" \
+
+pack_cmd "../configure" \
 	 "--prefix $(pack_get --prefix)"
 
 # Make commands

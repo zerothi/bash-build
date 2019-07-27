@@ -5,9 +5,9 @@ if ! $(is_c gnu) ; then
     pack_set -host-reject $(get_hostname)
 fi
 
-pack_set -lib -lblis -lm
-pack_set -lib[omp] -lblis_omp -lm
-pack_set -lib[pt] -lblis_pt -lm
+pack_set -lib -lblis
+pack_set -lib[omp] -lblis_omp
+pack_set -lib[pt] -lblis_pt
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

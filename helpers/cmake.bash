@@ -6,6 +6,11 @@ do
 	    continue
 	fi
     fi
+
+    if $(is_host nicpa) ; then
+	pack_set -host-reject $(get_hostname)
+    fi
+    
     add_package -build generic https://cmake.org/files/v$(str_version -1 $v).$(str_version -2 $v)/cmake-$v.tar.gz
     pack_set -s $MAKE_PARALLEL -s $IS_MODULE
     
