@@ -43,7 +43,7 @@ else
 
     la=$(pack_choice -i linalg)
     case $la in
-	openblas|blis)
+	openblas)
 	    noop
 	    ;;
 	*)
