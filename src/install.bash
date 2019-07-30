@@ -416,6 +416,7 @@ function pack_install {
             # We install the module scripts here:
 	    create_module \
 		-n "$alias" \
+		-C "$alias" \
 		-v "$version" \
 		-M "$mod_name" \
 		-p "$(pack_get -module-prefix $idx)" \

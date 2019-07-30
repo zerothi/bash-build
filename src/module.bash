@@ -211,8 +211,8 @@ function create_module {
 #%Module1.0
 #####################################################################
 
-set modulename  "$name"
-set version	$version
+set modulename "$name"
+set version $version
 EOF
 	    if [[ $_mod_survey -ne 0 ]]; then
 		cat <<EOF >> "$mfile"
@@ -240,8 +240,8 @@ EOF
 	    cat <<EOF > "$mfile"
 $fm_comment LUA file for Lmod
 
-local modulename    = "$name"
-local version       = "$version"
+local modulename = "$name"
+local version = "$version"
 EOF
 	    ;;
 	*)
@@ -254,11 +254,11 @@ EOF
 	    $_mod_format_ENVMOD)
 		cmt=", (\$compiler)"
 		cat <<EOF >> "$mfile"
-set compiler	$(get_c)
+set compiler $(get_c)
 EOF
 		;;
 	    $_mod_format_LMOD) cat <<EOF >> "$mfile"
-local compiler      = "$(get_c)"
+local compiler = "$(get_c)"
 EOF
 		;;
 	esac
@@ -271,12 +271,12 @@ EOF
 		tmp="${tmp//\/$(get_c)\//\/\$compiler\/}"
 	    fi
 	    cat <<EOF >> "$mfile"
-set basepath	$tmp
+set basepath $tmp
 EOF
 	    fpath="\$basepath"
 	    ;;
 	$_mod_format_LMOD) cat <<EOF >> "$mfile"
-local basepath      = "${path%$version*}" .. version .. "${path#*$version}"
+local basepath = "${path%$version*}" .. version .. "${path#*$version}"
 EOF
 	    ;;
     esac
