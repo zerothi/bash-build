@@ -1,4 +1,4 @@
-add_package --build generic https://ftp.gnu.org/gnu/stow/stow-2.3.0.tar.bz2
+add_package --build generic https://ftp.gnu.org/gnu/stow/stow-2.3.1.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

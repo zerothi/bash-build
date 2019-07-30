@@ -203,7 +203,7 @@ function create_module {
 
     # First create directory if it does not exist:
     mkdir -p $(dirname $mfile)
-    
+
     # Create the module file
     case $_mod_format in
 	$_mod_format_ENVMOD)
@@ -363,7 +363,10 @@ EOF
 		    esac
 		    ;;
 		*)
-		    [[ $force -eq 0 ]] && no_install=1
+		    # Only force a no-install if the conflict is not it-self
+		    if [[ $tmp != $name ]]; then
+			[[ $force -eq 0 ]] && no_install=1
+		    fi
 		    ;;
 	    esac
 	done
@@ -513,7 +516,6 @@ EOF
 		;;
 	esac
     fi
-    
     
     if [[ $no_install -eq 1 ]] && [[ $force -eq 0 ]]; then
 	rm -f $mfile

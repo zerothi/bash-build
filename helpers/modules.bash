@@ -2,6 +2,7 @@
 #add_package -build generic-no-version http://downloads.sourceforge.net/project/modules/Modules/modules-3.2.10/modules-3.2.10.tar.gz
 # 4.1.4 has errors in configure
 v=4.2.4
+v=4.3.0
 #v=4.1.2
 add_package -build generic-no-version https://github.com/cea-hpc/modules/releases/download/v$v/modules-$v.tar.bz2
 
@@ -13,6 +14,7 @@ pack_cmd "sed -i -e 's:/bin/csh 2:/bin/csh -f 2:g' compat/configure"
 # Install commands that it should run
 pack_cmd "./configure --enable-auto-handling --enable-color" \
 	 "--without-pager --disable-example-modulefiles" \
+     "--with-verbosity=concise" \
 	 "--prefix=$(pack_get -prefix) --enable-versioning"
 
 pack_cmd "make all $(get_make_parallel)"
