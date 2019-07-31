@@ -87,6 +87,9 @@ source_pack libs/blaze.bash
 source_pack libs/zeep.bash
 source_pack libs/xssp.bash
 
+# For symbolic stuff
+source_pack libs/symengine.bash
+
 # Install generic libraries
 source_pack libs/hdf5.bash
 source_pack libs/hdf5-serial.bash
