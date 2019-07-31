@@ -104,6 +104,8 @@ source_pack python/ipi-dev.bash
 source_pack python/orthopy.bash
 source_pack python/quadpy.bash
 
+source_pack python/symengine.bash
+
 # Other scikit-programs
 source_pack python/scikit-learn.bash
 source_pack python/scikit-optimize.bash
