@@ -12,27 +12,26 @@ pack_set -lib[pt] -llapack
 file=make.inc
 tmp="sed -i -e"
 pack_cmd "cp $file.example $file"
-pack_cmd "$tmp 's;FORTRAN[[:space:]]*=.*;FORTRAN = $FC;g' $file"
+pack_cmd "$tmp 's;FC[[:space:]]*=.*;FC = $FC;g' $file"
 pack_cmd "$tmp 's;CC[[:space:]]*=.*;CC = $CC;g' $file"
-pack_cmd "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"
+pack_cmd "$tmp 's;AR[[:space:]]*=.*;AR = $AR;g' $file"
+pack_cmd "$tmp 's;RANLIB[[:space:]]*=.*;RANLIB = $RANLIB;g' $file"
 if $(is_c gnu) ; then
-    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = $FCFLAGS -frecursive;g' $file"
+    pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS -frecursive;g' $file"
 else
-    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = $FCFLAGS;g' $file"
+    pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS;g' $file"
 fi 
 pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = $CFLAGS;g' $file"
 if $(is_c gnu) ; then
-    pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC -frecursive;g' $file"
+    pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLGAS_NOOPT = -fPIC -frecursive;g' $file"
 else
-    pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC;g' $file"
+    pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLAGS_NOOPT = -fPIC;g' $file"
 fi
-pack_cmd "$tmp 's;LOADER[[:space:]]*=.*;LOADER = $FC;g' $file"
-pack_cmd "$tmp 's;LOADOPTS[[:space:]]*=.*;LOADOPTS = $FCFLAGS;g' $file"
-pack_cmd "$tmp 's;TIMER[[:space:]]*=.*;TIMER = INT_CPU_TIME;g' $file"
-pack_cmd "$tmp 's;_LINUX;;g' $file"
-pack_cmd "$tmp 's;_SUN4;;g' $file"
 pack_cmd "echo '' >> $file"
+pack_cmd "echo 'BUILD_DEPRECATED = Yes' >> $file"
 pack_cmd "echo 'LAPACKE_WITH_TMG = Yes' >> $file"
+pack_cmd "echo 'LDFLAGS += $FCFLAGS' >> $file"
+pack_cmd "echo 'TIMER = INT_CPU_TIME' >> $file"
 
 # Make commands
 pack_cmd "make $(get_make_parallel) blaslib cblaslib"
@@ -51,6 +50,9 @@ if [[ $FCFLAGS != *-Ofast* ]]; then
 fi
 pack_store blas.test
 pack_store cblas.test
+pack_cmd "pushd TESTING"
+pack_cmd "for f in *.out ; do mv \$f $(pack_get -prefix)/ ; done"
+pack_cmd "popd"
 
 # Installation commands
 pack_cmd "mkdir -p $(pack_get --LD)"
@@ -60,8 +62,12 @@ pack_cmd "cp librefblas.a $(pack_get --LD)/libblas.a"
 pack_cmd "cp liblapack.a liblapacke.a $(pack_get --LD)/"
 pack_cmd "cp libtmglib.a $(pack_get --LD)/libtmg.a"
 # Install header-files
-pack_cmd "cp CBLAS/include/*.h $(pack_get --prefix)/include/"
-pack_cmd "cp LAPACKE/include/*.h $(pack_get --prefix)/include/"
+pack_cmd "cp CBLAS/include/*.h $(pack_get -prefix)/include/"
+pack_cmd "cp LAPACKE/include/*.h $(pack_get -prefix)/include/"
+pack_cmd "cd $(pack_get -prefix)"
+pack_cmd 'for f in *.out ; do gzip $f ; done'
+
+
 
 add_hidden_package blas/$v
 pack_set --prefix $(pack_get --prefix lapack)
