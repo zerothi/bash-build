@@ -422,10 +422,10 @@ EOF
 	"$(module_fmt_routine -prepend-path PKG_CONFIG_PATH $fpath/lib64/pkgconfig)"
     add_module_if -F $force -d "$path/share/pkgconfig" $mfile \
 	"$(module_fmt_routine -prepend-path PKG_CONFIG_PATH $fpath/share/pkgconfig)"
-    add_module_if -F $force -d "$path/man" $mfile \
-	"$(module_fmt_routine -prepend-path MANPATH $fpath/man)"
-    add_module_if -F $force -d "$path/share/man" $mfile \
-	"$(module_fmt_routine -prepend-path MANPATH $fpath/share/man)"
+    #add_module_if -F $force -d "$path/man" $mfile \
+	#"$(module_fmt_routine -prepend-path MANPATH $fpath/man)"
+    #add_module_if -F $force -d "$path/share/man" $mfile \
+	#"$(module_fmt_routine -prepend-path MANPATH $fpath/share/man)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
 	"$(module_fmt_routine -prepend-path M4PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
