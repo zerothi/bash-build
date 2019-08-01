@@ -8,13 +8,13 @@ add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
-pack_set --module-requirement numpy
-pack_set --module-requirement cython
+pack_set -module-requirement numpy
+pack_set -module-requirement cython
 
 # Ensure directory exists (for writing)
-pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages/"
+pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
 
 # The later LAPACK versions have gegv routines deprecated and replaced by ggev
 # However, ggev routines are already existing.
@@ -47,7 +47,7 @@ pack_cmd "sed -i 's/\([[:space:]]*\)\(.*extra_link_args.*\)/\1ext.extra_link_arg
 pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
 pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
 pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get --prefix)"
+pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
