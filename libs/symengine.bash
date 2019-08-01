@@ -5,7 +5,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set -build-mod-req build-tools
 
-pack_set -install-query $(pack_get -LD)/libsymengine.so
+pack_set -install-query $(pack_get -prefix)/include/symengine/symengine_config.h
 pack_set -lib -lsymengine
 
 _tmp_flags=
