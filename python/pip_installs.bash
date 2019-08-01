@@ -140,7 +140,8 @@ pip_append wheel
 if ! $(is_host atto) ; then
     # Only install jupyter on this machine
     pip_append pyzmq
-    pip_append jupyter nbconvert
+    pip_append jupyter nbconvert jupyterlab
+    pip_append spyder
 fi
 
 pip_install
