@@ -53,8 +53,10 @@ function pip_install {
 
 # First install its own usage (and update it)
 pip_install pip
-pack_cmd "$_pip_cmd install -U pip"
 
+# Ensure we don't check together with locally installed stuff
+pack_cmd "unset PYTHONUSERBASE"
+pack_cmd "$_pip_cmd install -U pip"
 
 # Nose needs to be installed first
 pip_install nose
@@ -146,8 +148,7 @@ fi
 
 pip_install
 
-# Finally we need to remove the packages that are to be installed
-# separately.
+# Finally we need to remove the packages that are to be installed separately.
 # This is because otherwise the "wrong" library will be used
 pack_cmd "$_pip_cmd uninstall -y numpy ; echo 'yes'"
 
