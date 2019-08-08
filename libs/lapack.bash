@@ -12,18 +12,26 @@ pack_set -lib[pt] -llapack
 file=make.inc
 tmp="sed -i -e"
 pack_cmd "cp $file.example $file"
+# In 3.8.0 we still use the older names
+
 pack_cmd "$tmp 's;FC[[:space:]]*=.*;FC = $FC;g' $file"
+pack_cmd "$tmp 's;FORTRAN[[:space:]]*=.*;FORTRAN = $FC;g' $file"
 pack_cmd "$tmp 's;CC[[:space:]]*=.*;CC = $CC;g' $file"
 pack_cmd "$tmp 's;AR[[:space:]]*=.*;AR = $AR;g' $file"
+pack_cmd "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"
 pack_cmd "$tmp 's;RANLIB[[:space:]]*=.*;RANLIB = $RANLIB;g' $file"
 if $(is_c gnu-unsafe) ; then
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = ${FFLAGS//-Ofast/-O3} -frecursive;g' $file"
+    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = ${FFLAGS//-Ofast/-O3} -frecursive;g' $file"
 elif $(is_c gnu) ; then
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS -frecursive;g' $file"
+    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = $FFLAGS -frecursive;g' $file"
 elif $(is_c intel-unsafe) ; then
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = ${FFLAGS//-Ofast/-O3};g' $file"
+    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = ${FFLAGS//-Ofast/-O3};g' $file"
 else
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS;g' $file"
+    pack_cmd "$tmp 's;OPTS[[:space:]]*=.*;OPTS = $FFLAGS;g' $file"
 fi 
 if $(is_c gnu-unsafe) ; then
     pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = ${CFLAGS//-Ofast/-O3};g' $file"
@@ -34,13 +42,16 @@ else
 fi
 if $(is_c gnu) ; then
     pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLAGS_NOOPT = -fPIC -frecursive;g' $file"
+    pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC -frecursive;g' $file"
 else
     pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLAGS_NOOPT = -fPIC;g' $file"
+    pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC;g' $file"
 fi
 pack_cmd "echo '' >> $file"
 pack_cmd "echo 'BUILD_DEPRECATED = Yes' >> $file"
 pack_cmd "echo 'LAPACKE_WITH_TMG = Yes' >> $file"
-pack_cmd "echo 'LDFLAGS += $FCFLAGS' >> $file"
+pack_cmd "echo 'LDFLAGS += \$(FFLAGS) \$(OPTS)' >> $file"
+pack_cmd "echo 'LOADOPTS += \$(FFLAGS) \$(OPTS)' >> $file"
 pack_cmd "echo 'TIMER = INT_CPU_TIME' >> $file"
 
 # Make commands
