@@ -14,9 +14,19 @@ pack_set -lib[pt] -lopenblasp
 # Improve allocation for small matrices
 # Allow up to 128 threads, regardless of scheme
 def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=256"
-def_flag="$def_flag LAPACK_FFLAGS='$FCFLAGS' LAPACK_CFLAGS='$CFLAGS'"
-def_flag="$def_flag FCFLAGS='${FCFLAGS//-funroll-loops/}' CFLAGS='${CFLAGS//-funroll-loops/}'"
-def_flag="$def_flag FCOMMON_OPT='${FCFLAGS//-funroll-loops/}' COMMON_OPT='${CFLAGS//-funroll-loops/}'"
+tmp_FFLAGS=${FFLAGS//-funroll-loops/}
+tmp_CFLAGS=${CFLAGS//-funroll-loops/}
+if $(is_c gnu-unsafe) ; then
+    tmp_FFLAGS=${tmp_FFLAGS//-Ofast/-O3}
+    tmp_CFLAGS=${tmp_CFLAGS//-Ofast/-O3}
+elif $(is_c intel-unsafe) ; then
+    tmp_FFLAGS=${tmp_FFLAGS//-Ofast/-O3}
+    tmp_CFLAGS=${tmp_CFLAGS//-Ofast/-O3}
+fi
+def_flag="$def_flag LAPACK_FFLAGS='$tmp_FFLAGS' LAPACK_CFLAGS='$tmp_CFLAGS'"
+def_flag="$def_flag FCFLAGS='$tmp_FFLAGS' CFLAGS='$tmp_CFLAGS'"
+def_flag="$def_flag FCOMMON_OPT='$tmp_FCFLAGS' COMMON_OPT='$tmp_CFLAGS'"
+
 # NO_LAPACK=1 means that we do not need -lgfortran
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 

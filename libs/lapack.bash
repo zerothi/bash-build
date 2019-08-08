@@ -16,14 +16,24 @@ pack_cmd "$tmp 's;FC[[:space:]]*=.*;FC = $FC;g' $file"
 pack_cmd "$tmp 's;CC[[:space:]]*=.*;CC = $CC;g' $file"
 pack_cmd "$tmp 's;AR[[:space:]]*=.*;AR = $AR;g' $file"
 pack_cmd "$tmp 's;RANLIB[[:space:]]*=.*;RANLIB = $RANLIB;g' $file"
-if $(is_c gnu) ; then
+if $(is_c gnu-unsafe) ; then
+    pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = ${FFLAGS//-Ofast/-O3} -frecursive;g' $file"
+elif $(is_c gnu) ; then
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS -frecursive;g' $file"
+elif $(is_c intel-unsafe) ; then
+    pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = ${FFLAGS//-Ofast/-O3};g' $file"
 else
     pack_cmd "$tmp 's;FFLAGS[[:space:]]*=.*;FFLAGS = $FFLAGS;g' $file"
 fi 
-pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = $CFLAGS;g' $file"
+if $(is_c gnu-unsafe) ; then
+    pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = ${CFLAGS//-Ofast/-O3};g' $file"
+elif $(is_c intel-unsafe) ; then
+    pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = ${CFLAGS//-Ofast/-O3};g' $file"
+else
+    pack_cmd "$tmp 's;CFLAGS[[:space:]]*=.*;CFLAGS = $CFLAGS;g' $file"
+fi
 if $(is_c gnu) ; then
-    pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLGAS_NOOPT = -fPIC -frecursive;g' $file"
+    pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLAGS_NOOPT = -fPIC -frecursive;g' $file"
 else
     pack_cmd "$tmp 's;FFLAGS_NOOPT[[:space:]]*=.*;FFLAGS_NOOPT = -fPIC;g' $file"
 fi
@@ -40,14 +50,12 @@ pack_cmd "make $(get_make_parallel) lapacklib lapackelib tmglib"
 # Make test commands
 pack_cmd "make blas_testing 2>&1 > blas.test"
 pack_cmd "make cblas_testing 2>&1 > cblas.test"
-if [[ $FCFLAGS != *-Ofast* ]]; then
-    if $(is_c intel) ; then
-	pack_cmd "make lapack_testing 2>&1 > lapack.test || echo forced"
-    else
-	pack_cmd "make lapack_testing 2>&1 > lapack.test"
-    fi
-    pack_store lapack.test
+if $(is_c intel) ; then
+    pack_cmd "make lapack_testing 2>&1 > lapack.test || echo forced"
+else
+    pack_cmd "make lapack_testing 2>&1 > lapack.test"
 fi
+pack_store lapack.test
 pack_store blas.test
 pack_store cblas.test
 pack_cmd "pushd TESTING"
