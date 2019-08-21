@@ -327,7 +327,7 @@ pack_cmd "cd ../Vibra/Src"
 make_files fcbuild vibra
 
 pack_cmd "cd ../../WFS"
-make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
+make_files readwf readwfx wfs2wfsx wfsx2wfs
 
 
 # Compile the 3m equivalent versions, if applicable
