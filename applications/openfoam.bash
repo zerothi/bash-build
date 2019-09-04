@@ -3,7 +3,7 @@ do
 add_package -package openfoam \
 	    https://sourceforge.net/projects/openfoamplus/files/v$v/OpenFOAM-v$v.tgz
 
-#pack_set -host-reject $(get_hostname)
+pack_set -host-reject $(get_hostname)
 pack_set -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get --prefix)/bin/OpenFOAM
