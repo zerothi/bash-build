@@ -1,4 +1,4 @@
-v=3.0.8
+v=3.0.10
 add_package https://github.com/cmbi/xssp/releases/download/$v/xssp-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
