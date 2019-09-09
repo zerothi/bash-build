@@ -27,6 +27,8 @@ else
     pack_set -alias mpi $_mpi_version
 fi
 
+source_pack libs/osu-benchmarks.bash
+
 # Optimization of openmpi parameters
 source_pack libs/adcl.bash
 source_pack libs/otpo.bash
