@@ -30,6 +30,7 @@ source_pack applications/lammps.bash
 source_pack applications/gnuplot.bash
 source_pack applications/molden.bash
 source_pack applications/xmgrace.bash
+#source_pack applications/gracegtk.bash
 source_pack applications/xcrysden.bash
 source_pack applications/vesta.bash
 source_pack applications/vmd.bash

@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/icl/plasma/downloads/plasma-18.11.1.tar.gz
+add_package https://bitbucket.org/icl/plasma/downloads/plasma-19.8.1.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 

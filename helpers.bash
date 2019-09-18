@@ -77,6 +77,7 @@ source_pack helpers/libxml2.bash
 source_pack helpers/readline.bash
 source_pack helpers/termcap.bash
 source_pack helpers/openssl.bash
+source_pack helpers/datamash.bash
 
 source_pack helpers/libssh2.bash
 source_pack helpers/libgit2.bash
