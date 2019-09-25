@@ -106,6 +106,7 @@ pip_append numpydoc
 pip_append nose nose2
 pip_append pep8
 pip_append pexpect
+pip_append pipenv
 #pip_append pint
 pip_append pkgconfig
 pip_append ply
@@ -125,6 +126,7 @@ pip_append pygments
 pip_append python-dateutil
 #pip_append pytz
 pip_append pyyaml
+pip_append requests
 pip_append setuptools_scm
 pip_append simplegeneric
 pip_append sphinx sphinx_rtd_theme
