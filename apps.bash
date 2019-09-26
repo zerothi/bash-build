@@ -4,7 +4,9 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+
 source_pack applications/openfoam.bash
+source_pack applications/dftd4.bash
 
 # Analysis tools
 source_pack applications/bedtools.bash
