@@ -36,6 +36,7 @@ source_pack helpers/dejagnu.bash
 source_pack helpers/ninja.bash
 
 source_pack helpers/stow.bash
+source_pack helpers/screen.bash
 source_pack helpers/global.bash
 
 # xdev (utilities)
