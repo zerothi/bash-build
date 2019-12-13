@@ -28,7 +28,7 @@ source_pack compiler/gcc/6/isl.bash
 source_pack compiler/gcc/6/gcc.bash
 source_pack compiler/gcc/6/gdb.bash
 
-gcc_v=7.4.0
+gcc_v=7.5.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
 source_pack compiler/gcc/7/gmp.bash

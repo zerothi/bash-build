@@ -7,6 +7,8 @@ source_pack libs/expat.bash
 source_pack libs/libffi.bash
 source_pack libs/libxml2.bash
 source_pack libs/openlibm.bash
+source_pack libs/flint.bash
+source_pack libs/arb.bash
 
 source_pack libs/hwloc.bash
 
