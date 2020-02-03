@@ -59,21 +59,21 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta)" \
     -RL siesta
 
-rm_latest siesta-trunk.latest
+rm_latest siesta-dev.latest
 create_module $cm_defs \
-    -n siesta-trunk.latest \
+    -n siesta-dev.latest \
     -W "Siesta: $(get_c)" \
-    -M siesta-trunk.latest \
-    -echo "$(echo_modules siesta-trunk)" \
-    -RL siesta-trunk
+    -M siesta-dev.latest \
+    -echo "$(echo_modules siesta-dev)" \
+    -RL siesta-dev
 
-rm_latest siesta-trunk-bulk-bias.latest
+rm_latest siesta-bulk-bias.latest
 create_module $cm_defs \
-    -n siesta-trunk-bulk-bias.latest \
+    -n siesta-bulk-bias.latest \
     -W "Siesta: $(get_c)" \
-    -M siesta-trunk-bulk-bias.latest \
-    -echo "$(echo_modules siesta-trunk-bulk-bias)" \
-    -RL siesta-trunk-bulk-bias
+    -M siesta-bulk-bias.latest \
+    -echo "$(echo_modules siesta-bulk-bias)" \
+    -RL siesta-bulk-bias
 
 
 msg_install --message "lammps"
