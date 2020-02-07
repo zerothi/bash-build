@@ -125,6 +125,7 @@ pip_append pytest pytest-cov
 pip_append pygments
 pip_append python-dateutil
 #pip_append pytz
+pip_append pyupgrade
 pip_append pyyaml
 pip_append requests
 pip_append setuptools_scm
