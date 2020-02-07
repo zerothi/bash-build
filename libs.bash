@@ -111,6 +111,8 @@ source_pack libs/ncdf.bash
 source_pack libs/udunits.bash
 source_pack libs/nco.bash
 
+source_pack libs/spglib.bash
+
 # sorting algorithms for matrices
 source_pack libs/metis.bash
 source_pack libs/metis-par-3.bash
