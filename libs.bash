@@ -64,6 +64,8 @@ source_pack libs/blis.bash
 source_pack libs/atlas.bash
 source_pack libs/openblas.bash
 
+source_pack libs/libxsmm.bash
+
 source_pack libs/flame.bash
 
 source_pack libs/plasma.bash
