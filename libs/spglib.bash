@@ -4,10 +4,11 @@ add_package -package spglib \
 	    https://github.com/atztogo/spglib/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -lib -lsymspg
 
 pack_set -build-mod-req build-tools
 
-pack_set -install-query $(pack_get -LD)/libspglib.a
+pack_set -install-query $(pack_get -LD)/libsymspg.a
 
 # Install commands that it should run
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .."

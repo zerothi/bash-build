@@ -6,6 +6,8 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libxsmm.a
 pack_set -lib -lxsmm
+pack_set -lib[f] -lxsmmf -lxsmm
+pack_set -lib[omp] -lxsmmf -lxsmm -lxsmmext
 
 tmp=
 if $(is_c intel) ; then
