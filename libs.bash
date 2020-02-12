@@ -92,6 +92,7 @@ source_pack libs/harminv.bash
 source_pack libs/blaze.bash
 source_pack libs/zeep.bash
 source_pack libs/xssp.bash
+source_pack libs/libint.bash
 
 # For symbolic stuff
 source_pack libs/symengine.bash
@@ -122,6 +123,7 @@ source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
 source_pack libs/cgal.bash
+source_pack libs/amgcl.bash
 
 # A sparse matrix library
 #source libs/suitesparse_separate.bash
