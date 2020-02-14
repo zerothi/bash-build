@@ -11,7 +11,7 @@ pack_set -lib[c] -lxc
 pack_set -lib[f90] -lxcf90 -lxc
 pack_set -lib[f03] -lxcf03 -lxc
 
-pack_set -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
 pack_set --install-query $(pack_get --LD)/libxc.a
 
