@@ -138,6 +138,9 @@ source_pack python/pyquante.bash
 source_pack python/pyquante2.bash
 source_pack python/cclib.bash
 
+source_pack python/vtk.bash
+source_pack python/mfix.bash
+
 # made for kwant
 source_pack python/tinyarray.bash
 source_pack python/kwant.bash

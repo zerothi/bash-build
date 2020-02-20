@@ -130,6 +130,7 @@ pip_append pyyaml
 pip_append requests
 pip_append setuptools_scm
 pip_append simplegeneric
+pip_append simplejson
 pip_append sphinx sphinx_rtd_theme
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
