@@ -35,8 +35,7 @@ source_pack applications/xmgrace.bash
 source_pack applications/xcrysden.bash
 source_pack applications/vesta.bash
 source_pack applications/vmd.bash
-# Currently VTK is an API not used anywhere, hence we do not install it
-#source_pack applications/vtk.bash
+# VTK is used through Python
 # Installed by source to get python support
 source_pack applications/vmd-python.bash
 source_pack applications/gdis.bash
