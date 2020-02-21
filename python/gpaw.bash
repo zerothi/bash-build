@@ -2,7 +2,7 @@ for v in 19.8.1 20.1.0 ; do
 add_package -archive gpaw-$v.tar.gz \
     https://gitlab.com/gpaw/gpaw/repository/archive.tar.gz?ref=$v
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -directory gpaw-$v-*
 
