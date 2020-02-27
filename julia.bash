@@ -1,4 +1,4 @@
-jV=1.1
+jV=1.3
 IjV=$jV.1
 add_package -package julia \
 	    -directory julia-$IjV \
