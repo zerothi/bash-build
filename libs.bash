@@ -122,8 +122,10 @@ source_pack libs/metis-par-3.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
+source_pack libs/geos.bash
 source_pack libs/cgal.bash
 source_pack libs/amgcl.bash
+source_pack libs/sfcgal.bash
 
 # A sparse matrix library
 #source libs/suitesparse_separate.bash
