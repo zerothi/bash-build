@@ -7,13 +7,15 @@ pack_set -install-query $(pack_get -LD)/libgdal.a
 pack_set -lib -lgdal
 
 pack_set -mod-req proj
-pack_set $(list -prefix ' -module-requirement ' expat libxml2 netcdf-serial)
+pack_set $(list -prefix ' -module-requirement ' expat libxml2 netcdf-serial sfcgal geos)
 
 pack_cmd "./configure" \
 	 "--with-proj=$(pack_get -prefix proj)" \
 	 "--with-expat=$(pack_get -prefix expat)" \
 	 "--with-xml2=$(pack_get -prefix libxml2)" \
 	 "--with-libz=$(pack_get -prefix zlib)" \
+	 "--with-sfcgal=$(pack_get -prefix sfcgal)" \
+	 "--with-geos=$(pack_get -prefix geos)" \
 	 "--with-hdf5=$(pack_get -prefix hdf5-serial)" \
 	 "--with-netcdf=$(pack_get -prefix netcdf-serial)" \
 	 "--prefix $(pack_get -prefix)"
