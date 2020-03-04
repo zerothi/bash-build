@@ -38,7 +38,7 @@ source_pack compiler/gcc/7/isl.bash
 source_pack compiler/gcc/7/gcc.bash
 source_pack compiler/gcc/7/gdb.bash
 
-gcc_v=8.3.0
+gcc_v=8.4.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
 source_pack compiler/gcc/8/gmp.bash

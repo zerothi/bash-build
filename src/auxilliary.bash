@@ -83,6 +83,7 @@ function msg_install {
 	    local _e=$(pack_get -ext $pack)
 	    echo " Ext     : $_e"
 	    echo " Ext CMD : $(arc_cmd $_e)"
+	    echo " Installation directory: $(pack_get -prefix $pack)"
 	    ;;
 	*)
 	    local _p=$(pack_get -package $pack)
