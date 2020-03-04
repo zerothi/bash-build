@@ -37,6 +37,9 @@ PKG_CFLAGS += $(list -INCDIRS $mod_reqs)\n\
 PKG_LIBS += $(list -LD-rp $mod_reqs)\n\
 ' $makevars"
 
+R_append devtools
+R_install
+
 R_append Rcpp
 R_install
 R_append openssl
@@ -53,7 +56,6 @@ R_append R6
 R_append crayon
 R_append cli
 R_append rlang
-R_append devtools
 R_append utf8
 R_append pillar
 R_append digest
@@ -79,6 +81,8 @@ R_append profmem
 R_append BH
 R_append plogr
 R_append reshape2
+R_append classInt
+R_append DBI
 
 
 R_install

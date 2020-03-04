@@ -83,6 +83,43 @@ pack_set -mod-req MASS
 
 install_all -from Matrix
 
+
+
+function add_R_package {
+    local name=$1
+    local v=$2
+    shift 2
+    local opt=
+    case $@ in
+	*-directory*)
+	    noop
+	    ;;
+	*)
+	    opt="-directory $name"
+	    ;;
+    esac
+    add_package -alias R-$name -version $v $opt $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
+    pack_set -s $IS_MODULE
+    local _prefix=$(pack_get -prefix)
+    pack_set -install-query $_prefix/$(pack_get -package)
+    pack_cmd "mkdir -p $_prefix"
+    pack_set -module-opt "-prepend-ENV R_LIBS_SITE=$_prefix"
+}
+
+archive_path=$(build_get -archive-path)
+
+# Now we install R packages
+# Note that all packages installed like this will have an "R-" prefix.
+# This is to ensure no nameclashes with parent libraries
+source R/udunits2.bash
+source R/units.bash
+source R/sp.bash
+source R/rgeos.bash
+source R/sf.bash
+source R/rgdal.bash
+
+install_all -from R-udunits2
+
+
+unset archive_path
 unset add_R_package
-
-
