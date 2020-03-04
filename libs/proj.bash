@@ -8,8 +8,7 @@ pack_set -lib -lproj
 
 pack_set -mod-req sqlite
 
-pack_cmd "../configure" \
-	 "--prefix $(pack_get -prefix)"
+pack_cmd "../configure --prefix $(pack_get -prefix)"
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test > proj.test 2>&1"
