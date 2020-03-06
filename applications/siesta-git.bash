@@ -290,16 +290,9 @@ if [[ $tmp -eq 1 ]]; then
     for omp in openmp none ; do
 
 	set_flag $omp
-	if [ $(vrs_cmp $v 655) -ge 0 ]; then
-	    pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta${end}_3m"
-	    pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta${end}_3m"
-	    pack_cmd "chmod a+x $prefix/bin/transiesta${end}_3m"
-	else
-	    pack_cmd "make clean"
-	    
-	    pack_cmd "make $(get_make_parallel) transiesta ; make transiesta"
-	    pack_cmd "cp transiesta $prefix/bin/transiesta${end}_3m"
-	fi
+	pack_cmd "echo '#!/bin/sh' > $prefix/bin/transiesta${end}_3m"
+	pack_cmd "echo '$prefix/bin/siesta$end --electrode \$@' >> $prefix/bin/transiesta${end}_3m"
+	pack_cmd "chmod a+x $prefix/bin/transiesta${end}_3m"
 	
 	pack_cmd "pushd ../Util/TS/TBtrans ; make clean"
 	pack_cmd "make $(get_make_parallel) ; make"
