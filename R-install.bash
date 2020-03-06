@@ -101,7 +101,7 @@ function add_R_package {
     add_package -package R.$name -version $v $opt $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
     pack_set -s $IS_MODULE
     local _prefix=$(pack_get -prefix)
-    pack_set -install-query $_prefix/$(pack_get -package)
+    pack_set -install-query $_prefix/$name
     pack_cmd "mkdir -p $_prefix"
     pack_set -module-opt "-prepend-ENV R_LIBS_SITE=$_prefix"
 }
@@ -117,6 +117,7 @@ source R/sp.bash
 source R/rgeos.bash
 source R/sf.bash
 source R/rgdal.bash
+source R/lwgeom.bash
 
 install_all -from R-udunits2
 
