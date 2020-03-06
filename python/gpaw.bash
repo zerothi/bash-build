@@ -15,7 +15,7 @@ else
     pack_set -module-requirement hdf5
 fi
 
-pack_set -install-query $(pack_get -prefix)/bin/gpaw-python
+pack_set -install-query $(pack_get -prefix)/bin/gpaw
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version

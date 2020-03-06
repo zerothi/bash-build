@@ -20,8 +20,8 @@ source_pack applications/ape.bash
 source_pack applications/oncvpsp.bash
 
 source_pack applications/siesta.bash
-source_pack applications/siesta-dev.bash # GitLab siesta
-source_pack applications/siesta-trunk-debug.bash
+source_pack applications/siesta-master.bash # GitLab siesta
+source_pack applications/siesta-master-debug.bash
 source_pack applications/siesta-bulk-bias.bash # siesta trunk development
 source_pack applications/fhiaims.bash
 

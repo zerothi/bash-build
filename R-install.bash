@@ -98,7 +98,7 @@ function add_R_package {
 	    opt="-directory $name"
 	    ;;
     esac
-    add_package -alias R-$name -version $v $opt $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
+    add_package -package R.$name -version $v $opt $@ https://cran.r-project.org/src/contrib/${name}_$v.tar.gz
     pack_set -s $IS_MODULE
     local _prefix=$(pack_get -prefix)
     pack_set -install-query $_prefix/$(pack_get -package)
