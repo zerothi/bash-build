@@ -59,13 +59,13 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta)" \
     -RL siesta
 
-rm_latest siesta-dev.latest
+rm_latest siesta-master.latest
 create_module $cm_defs \
-    -n siesta-dev.latest \
+    -n siesta-master.latest \
     -W "Siesta: $(get_c)" \
-    -M siesta-dev.latest \
-    -echo "$(echo_modules siesta-dev)" \
-    -RL siesta-dev
+    -M siesta-master.latest \
+    -echo "$(echo_modules siesta-master)" \
+    -RL siesta-master
 
 rm_latest siesta-bulk-bias.latest
 create_module $cm_defs \

@@ -81,11 +81,11 @@ create_module $cm_defs \
     -RL siesta[4.0.2]
 
 create_module $cm_defs \
-    -n siesta-dev.default \
+    -n siesta-master.default \
     -W "SIESTA: $(get_c)" \
-    -M siesta-dev.default \
-    -echo "$(echo_modules siesta-dev)" \
-    -RL siesta-dev
+    -M siesta-master.default \
+    -echo "$(echo_modules siesta-master)" \
+    -RL siesta-master
 
 
 msg_install --message "openmx, vasp, dftb"
