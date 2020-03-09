@@ -5,6 +5,7 @@ build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
 
+source_pack applications/radiance.bash
 source_pack applications/openfoam.bash
 source_pack applications/dftd4.bash
 
