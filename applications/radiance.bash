@@ -29,7 +29,7 @@ do
     # Linux == IBMPC, MacOS X == Intel
     pack_cmd "pushd src/$d"
     pack_cmd "make ARCH=IBMPC MACH='-Dlinux -D_FILE_OFFSET_BITS=64 -DNOSTEREO' COMPAT='strlcpy.o'" \
-	     "OPT='$CFLAGS' CC=$CC INSTDIR=$_prefix/bin LIBDIR=$_prefix/lib -f Rmakefile install"
+	     "OPT='$CFLAGS' CC=$CC CXX=$CXX INSTDIR=$_prefix/bin LIBDIR=$_prefix/lib -f Rmakefile install"
     pack_cmd "popd"
 done
 
