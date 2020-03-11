@@ -23,7 +23,7 @@ pack_set --directory .
 
 # Create folder for pip-downloads
 # Note this is version dependent
-_pip_dwn=$(pwd_archives)/pip${pV:0:1}
+_pip_dwn=$(pwd_archives)/pip
 mkdir -p $_pip_dwn
 
 _pip_cmd=$(pack_get -prefix python)/bin/pip

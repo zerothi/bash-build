@@ -110,7 +110,7 @@ fi
 # is created and we want to symlink the two
 # as many libraries does not distinguish between the
 # two.
-tmp=libpython${v:0:3}
+tmp=libpython${pV}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 unset tmp
 

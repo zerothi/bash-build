@@ -16,6 +16,10 @@ else
 fi
 pNumpyInstall="$pNumpyInstallC $pNumpyInstallF"
 
+# Also add this python Boost version
+source_pack python/boost_amend.bash
+
+
 # First install all pip installs
 source_pack python/pip_installs.bash
 
@@ -140,6 +144,8 @@ source_pack python/cclib.bash
 
 source_pack python/vtk.bash
 source_pack python/mfix.bash
+source_pack python/rdkit.bash
+
 
 # made for kwant
 source_pack python/tinyarray.bash
