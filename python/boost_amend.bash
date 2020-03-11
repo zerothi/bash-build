@@ -15,7 +15,8 @@ pack_cmd "./bootstrap.sh" \
 
 # Install commands that it should run
 _p=$(pack_get -prefix $(get_parent))
-pack_cmd "sed -i -e 's?using python.*?using python : $pV : $(get_parent_exec) : $_p/include/python${pV}m : $_p/lib ;?' project-config.jam"
+[ -e $_p/include/python${pV}m ] && v=${pV}m || v=${pV}
+pack_cmd "sed -i -e 's?using python.*?using python : $pV : $(get_parent_exec) : $_p/include/python$v : $_p/lib ;?' project-config.jam"
 
 # Make commands
 pack_cmd "./b2 --build-dir=build-tmp stage"
