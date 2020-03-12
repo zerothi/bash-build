@@ -3,7 +3,7 @@ add_package -package sfcgal -archive SFCGAL-$v.tar.gz https://github.com/Oslandi
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -LD)/libSFCGAL.so
+pack_set -install-query $(pack_get -prefix)/bin/sfcgal-config
 pack_set -lib -lSFCGAL
 
 pack_set -build-mod-req build-tools
