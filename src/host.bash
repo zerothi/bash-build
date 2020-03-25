@@ -33,7 +33,12 @@ function is_host {
 }
 
 # Figure out the number of cores on the machine
-_n_procs=2
+which nproc 2>/dev/null > dev/null
+if [ $? -eq 0 ]; then
+   _n_procs=$(nproc)
+else
+    _n_procs=2
+fi
 function set_procs {
     _n_procs=$1
     export NPROCS=$_n_procs
@@ -41,7 +46,7 @@ function set_procs {
 if [[ -n "$NPROCS" ]]; then
     set_procs $NPROCS
 else
-    set_procs $(grep "cpu cores" /proc/cpuinfo | awk '{print $NF ; exit 0 ;}')
+    set_procs $_n_procs
 fi
 
 # Try and decipher the frequency of the host
