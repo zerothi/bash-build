@@ -5,7 +5,7 @@ add_package -build generic -version 2016 -directory . \
 
 pack_set -s $IS_MODULE
 
-pack_set -install-query $(pack_get -prefix)/bin/openmopac
+pack_set -install-query $(pack_get -prefix)/bin/mopac
 
 p=$(pack_get -prefix)
 pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$p/lib"
