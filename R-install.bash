@@ -119,7 +119,7 @@ source R/sf.bash
 source R/rgdal.bash
 source R/lwgeom.bash
 
-install_all -from R-udunits2
+install_all -from R.udunits2
 
 
 unset archive_path
