@@ -4,7 +4,7 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
-source_pack applications/openmopac.bash
+source_pack applications/mopac.bash
 
 source_pack applications/radiance.bash
 source_pack applications/openfoam.bash
