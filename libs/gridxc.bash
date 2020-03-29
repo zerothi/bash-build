@@ -1,47 +1,19 @@
-add_package https://launchpad.net/libgridxc/trunk/0.8/+download/libgridxc-0.8.4.tgz
+add_package https://gitlab.com/siesta-project/libraries/libgridxc/uploads/e38a2a6d74b802065a1f7acb0f69e662/libgridxc-0.9.5.tar.gz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $IS_MODULE
 
 pack_set -module-requirement libxc
+pack_set -module-requirement mpi
 
-pack_set -install-query $(pack_get -LD)/libGridXC.a
-pack_set -lib -lGridXC
+pack_set -install-query $(pack_get -LD)/libgridxc_dp_mpi.a
+pack_set -lib -lgridxc_dp
+pack_set -lib[mpi] -lgridxc_dp_mpi
+pack_set -lib[sp] -lgridxc_sp
+pack_set -lib[sp-mpi] -lgridxc_sp_mpi
 
 # Install commands that it should run
-pack_cmd "sh ../src/config.sh"
-
-pack_cmd "echo '# fortran.mko' > fortran.mk"
-
-pack_cmd "sed -i -e '$ a\
-FC_SERIAL = $FC\n\
-FC = $FC\n\
-FFLAGS = $FFLAGS\n\
-AR = $AR\n\
-RANLIB = $RANLIB\n\
-LDFLAGS = \n\
-INC_PREFIX = -I\n\
-MOD_PREFIX = -I\n\
-MOD_EXT =.mod\n\
-LIBXC_ROOT = $(pack_get -prefix libxc)\n\
-.F.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.F90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
-.f.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
-.c.o:\n\
-\t\$(CC) -c \$(CFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$<\n\
-.f90.o:\n\
-\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
-\n' fortran.mk"
-
-pack_cmd "echo '# Cleaned libxc.mk' > libxc.mk"
-pack_cmd "sed -i -e '$ a\
-LIBXC_INCFLAGS = -I$(pack_get -prefix libxc)/include\n\
-LIBXC_LIBS = $(list -LD-rp libxc) $(pack_get -lib[f90] libxc)\n\
-' libxc.mk"
-
-pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' gridxc.mk.in"
-pack_cmd "sed -i -e '/LIBXC_ROOT/,+3d' top.gridxc.mk.in"
-
-pack_cmd "make WITH_LIBXC=1 $(get_make_parallel) PREFIX=$(pack_get -prefix)"
+# A bug in multiconfig-build.sh does not allow
+# compiling with F77 F90 env-vars set
+pack_cmd "unset F77"
+pack_cmd "unset F90"
+pack_cmd "GRIDXC_PREFIX=$(pack_get -prefix) LIBXC_ROOT=$(pack_get -prefix libxc) MPI_ROOT=$(pack_get -prefix mpi) bash ./multiconfig-build.sh"
