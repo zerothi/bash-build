@@ -140,6 +140,7 @@ pip_append tornado
 pip_append tqdm
 pip_append traitlets
 pip_append twine
+pip_append versioneer
 pip_append virtualenv
 pip_append wheel
 
