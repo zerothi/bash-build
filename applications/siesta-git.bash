@@ -3,7 +3,7 @@ pack_set -s $MAKE_PARALLEL
 # Add the lua family
 pack_set -module-opt "--lua-family siesta"
 
-pack_set -install-query $(pack_get -prefix)/bin/hsx2hs
+pack_set -install-query /always/install/this/module
 
 pack_set -module-requirement mpi -module-requirement netcdf
 
