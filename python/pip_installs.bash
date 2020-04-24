@@ -51,11 +51,12 @@ function pip_install {
     done
 }
 
+# Ensure we don't check together with locally installed stuff
+pack_cmd "unset PYTHONUSERBASE"
+
 # First install its own usage (and update it)
 pip_install pip
 
-# Ensure we don't check together with locally installed stuff
-pack_cmd "unset PYTHONUSERBASE"
 pack_cmd "$_pip_cmd install -U pip"
 
 # Nose needs to be installed first
@@ -70,6 +71,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     # the distribute package is horrendeous!!!
     # Therefore we need to install it without downloading it first.
     # Since 2020 Jan 1 we can't do this anymore... :(
+    pack_cmd "$_pip_cmd install -U setuptools==44.1.0"
     #pack_cmd "$_pip_cmd install --upgrade distribute"
     pip_append enum34
     pip_append six
