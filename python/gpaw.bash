@@ -21,8 +21,6 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 # should work with ELPA, but they are not using the correct version
 pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw)
 
-pack_set -module-opt "-set-ENV GPAW_FFTWSO=$(pack_get -prefix fftw)/lib/libfftw3.a"
-
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
     pack_set -module-requirement ase
 else

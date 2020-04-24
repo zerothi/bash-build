@@ -10,6 +10,7 @@ pack_set -install-query $(pack_get -prefix)/bin/mopac
 p=$(pack_get -prefix)
 pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$p/lib"
 pack_set -module-opt "-set-ENV MOPAC_LICENSE=$p/bin"
+pack_set -module-opt "-echo 'Please read the Academic MOPAC license, it is your responsibility to uphold it.'"
 
 pack_cmd "rm Example\ data\ set.mop Installation\ instructions.txt mopac.csh"
 
@@ -27,5 +28,6 @@ pack_cmd "echo '' > .tmp_exec"
 pack_cmd "echo 'yes' >> .tmp_exec"
 pack_cmd "MOPAC_LICENSE=$p/bin LD_LIBRARY_PATH=$p/lib ./mopac 7357613a66970542 < .tmp_exec"
 pack_cmd "rm .tmp_exec"
+
 
 pack_cmd "popd"
