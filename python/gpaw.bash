@@ -19,9 +19,9 @@ pack_set -install-query $(pack_get -prefix)/bin/gpaw
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version
-pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw-mpi)
+pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw)
 
-pack_set -module-opt "-set-ENV GPAW_FFTWSO=$(pack_get -prefix fftw-mpi)/lib/libfftw3.a"
+pack_set -module-opt "-set-ENV GPAW_FFTWSO=$(pack_get -prefix fftw)/lib/libfftw3.a"
 
 if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
     pack_set -module-requirement ase
@@ -30,15 +30,13 @@ else
 fi
 
 # First we need to fix gpaw compilation
-pack_cmd "sed -i 's/-Wl,-R/-Wl,-rpath=/g' config.py"
-pack_cmd "sed -i 's/-R/-Wl,-rpath=/g' config.py"
-pack_cmd "sed -i \"s:cfgDict.get('BLDLIBRARY:cfgDict.get('LIBDIR')+os.sep+cfgDict.get('BLDLIBRARY:\" config.py"
+pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
+pack_cmd "sed -i -e \"s:cfgDict.get('BLDLIBRARY:cfgDict.get('LIBDIR')+os.sep+cfgDict.get('BLDLIBRARY:\" config.py"
 
-# Check for Intel MKL or not
-file=customize.py
+file=$(pack_get -prefix)/siteconfig.py
 pack_cmd "echo '#' > $file"
 
-
+# Check for Intel MKL or not
 if $(is_c intel) ; then
     # The clck library path has libutil.so which fucks up things!
     pack_cmd "unset LIBRARY_PATH"
@@ -76,6 +74,8 @@ fi
 tmp="$(list -prefix ,\" -suffix /include\" -loop-cmd 'pack_get -prefix' $(pack_get -mod-req-path))"
 
 pack_cmd "sed -i '$ a\
+library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
+runtime_library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
 library_dirs += [\"$(pack_get -LD libxc)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD libxc)\"]\n\
 include_dirs += [\"$(pack_get -prefix libxc)/include\"]\n\
@@ -95,30 +95,32 @@ libraries += [\"elpa\"]\n\
 hdf5 = $hdf\n\
 library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
-libraries += [\"hdf5_hl\",\"hdf5\"]\n\
+libraries += \"hdf5_hl hdf5\".split()\n\
 library_dirs += [\"$(pack_get -LD zlib)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD zlib)\"]\n\
 libraries += [\"z\"]\n\
+fftw = True\n\
+library_dirs += [\"$(pack_get -LD fftw)\"]\n\
+runtime_library_dirs += [\"$(pack_get -LD fftw)\"]\n\
+libraries += [\"fftw3\"]\n\
 extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
-\n\
+# distutils seems to break -R since it can not recognise GCC\n\
+runtime_library_dirs = []\n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:1}]' $file"
 unset hdf
 
-# Add python directory
-pack_cmd "sed -i '$ a\
-library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
-runtime_library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
-' $file"
-
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "$(get_parent_exec) setup.py build"
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get -prefix)"
+if [[ $(vrs_cmp $v 20) -lt 0 ]]; then
+    tmp="--customize=$file"
+else
+    tmp=""
+fi
 
-# Copy the customize.py file with
-pack_cmd "cp customize.py $(pack_get -prefix)/"
+
+pack_cmd "GPAW_CONFIG='$file' $(get_parent_exec) setup.py $tmp build"
+pack_cmd "GPAW_CONFIG='$file' $(get_parent_exec) setup.py $tmp install --prefix=$(pack_get -prefix)"
 
 add_test_package gpaw.exec.parallel
 
