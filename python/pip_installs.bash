@@ -69,7 +69,8 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     #pip_append bzr-fastimport
     # the distribute package is horrendeous!!!
     # Therefore we need to install it without downloading it first.
-    pack_cmd "$_pip_cmd install --upgrade distribute"
+    # Since 2020 Jan 1 we can't do this anymore... :(
+    #pack_cmd "$_pip_cmd install --upgrade distribute"
     pip_append enum34
     pip_append six
     pip_append line_profiler
