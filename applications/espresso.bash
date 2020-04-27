@@ -1,7 +1,7 @@
-for v in 6.4 ; do
+for v in 6.4 6.5 ; do
     tmp="-package q-espresso -version $v"
     case $v in
-	6.3|6.4)
+	6.3|6.4*|6.5*)
 	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
 	    ;;
 	6.2.1)

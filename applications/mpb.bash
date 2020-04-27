@@ -3,15 +3,15 @@ add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --install-query $(pack_get --prefix)/bin/mpbi-mpi
+pack_set -install-query $(pack_get -prefix)/bin/mpbi-mpi
 
-pack_set --module-opt "--lua-family mpb"
+pack_set -module-opt "--lua-family mpb"
 
-pack_set --module-requirement mpi \
-    --module-requirement libctl \
-    --module-requirement zlib \
-    --module-requirement hdf5 \
-    --module-requirement fftw-mpi
+pack_set -module-requirement mpi \
+	 -module-requirement libctl \
+	 -module-requirement zlib \
+	 -module-requirement hdf5 \
+	 -module-requirement fftw-mpi
 
 # Check for Intel MKL or not
 tmp=
@@ -38,10 +38,8 @@ pack_cmd "../configure" \
      "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
      "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
      "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
-     "--with-mpi --with-openmp" \
+     "--with-mpi" \
      "--prefix=$(pack_get --prefix) $tmp" 
-
-# Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
@@ -53,7 +51,5 @@ pack_cmd "../configure" \
      "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
      "--with-mpi --with-inv-symmetry" \
      "--prefix=$(pack_get --prefix) $tmp" 
-
-# Make commands
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
