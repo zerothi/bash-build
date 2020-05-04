@@ -124,6 +124,7 @@ pip_append pyparsing
 pip_append pycparser
 pip_append pyflakes
 pip_append pylint
+pip_append pympler
 pip_append pytest pytest-cov
 pip_append pygments
 pip_append python-dateutil
