@@ -18,7 +18,7 @@ pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\
 pack_cmd 'sed -i -e "s:__FILE__:Fstack.T90:g" Src/Fstack.T90'
 
 # override version.info
-pack_cmd "git describe > version.info"
+pack_cmd "git describe --always > version.info"
 
 # Change to directory:
 pack_cmd "cd Obj"
