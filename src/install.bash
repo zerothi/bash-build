@@ -57,7 +57,11 @@ function pack_install {
 	    tmp=$(pack_get -url $idx)
 	    hash=${tmp#*@}
 	    if [[ "x$tmp" == "x$hash" ]]; then
+		# there is no branch specification
 		hash=$(git ls-remote $tmp HEAD | awk '{print $1}')
+	    else
+		# requested branch
+		hash=$(git ls-remote $hash ${tmp%@*} | awk '{print $1}')
 	    fi
 	    if [[ -e $prefix/.bb.hash ]]; then
 		local installed_hash=$(cat $prefix/.bb.hash)
