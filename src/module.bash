@@ -432,6 +432,10 @@ EOF
 	"$(module_fmt_routine -prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/cmake" $mfile \
 	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
+    add_module_if -F $force -d "$path/lib/cmake" $mfile \
+	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/lib/cmake)"
+    add_module_if -F $force -d "$path/lib64/cmake" $mfile \
+	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/lib64/cmake)"
     tmp=$(ls -d $path/share/$name* 2>/dev/null)
     if [[ -n "$tmp" ]]; then
 	add_module_if -F $force -d "$tmp" $mfile \
