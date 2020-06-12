@@ -107,6 +107,7 @@ pip_append mock
 pip_append nbsphinx
 pip_append numpydoc
 pip_append nose nose2
+pip_append pathos
 pip_append pep8
 pip_append pexpect
 pip_append pipenv
