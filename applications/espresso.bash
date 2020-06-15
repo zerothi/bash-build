@@ -41,12 +41,12 @@ for v in 6.4 6.5 ; do
 
     add_package $tmp
     
-    pack_set --install-query $(pack_get --prefix)/bin/pw.x
+    pack_set -install-query $(pack_get -prefix)/bin/pw.x
 
-    pack_set --module-opt "--lua-family q-espresso"
+    pack_set -module-opt "-lua-family q-espresso"
 
-    pack_set --module-requirement mpi 
-    pack_set --module-requirement fftw
+    pack_set -module-requirement mpi 
+    pack_set -module-requirement fftw
 
     # Fetch all the packages and pack them out
     source applications/espresso-packages.bash
@@ -68,13 +68,13 @@ for v in 6.4 6.5 ; do
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else
-	pack_set --module-requirement scalapack
+	pack_set -module-requirement scalapack
 
 	la=lapack-$(pack_choice -i linalg)
-	pack_set --module-requirement $la
-	tmp_ld="$(list --LD-rp +$la)"
+	pack_set -module-requirement $la
+	tmp_ld="$(list -LD-rp +$la)"
 	tmp_lib="$tmp_lib LAPACK_LIBS='$tmp_ld $(pack_get -lib[omp] $la)'"
-	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list --LD-rp scalapack) -lscalapack'"
+	tmp_lib="$tmp_lib SCALAPACK_LIBS='$(list -LD-rp scalapack) -lscalapack'"
 	tmp_lib="$tmp_lib BLAS_LIBS='$tmp_ld $(pack_get -lib[omp] $la)'"
 
     fi
@@ -88,15 +88,15 @@ for v in 6.4 6.5 ; do
     tmp="${FFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
     tmp="${tmp//-opt-prefetch/}"
-    tmp_inc="$(list --INCDIRS $(pack_get --mod-req-path))"
+    tmp_inc="$(list -INCDIRS $(pack_get -mod-req-path))"
     pack_cmd "./configure" \
 	 "$tmp_lib" \
 	 "FFLAGS='$tmp $tmp_inc $FLAG_OMP'" \
 	 "FFLAGS_NOOPT='-fPIC'" \
-	 "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path)) $FLAG_OMP'" \
-	 "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
+	 "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $FLAG_OMP'" \
+	 "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
 	 "--enable-parallel --enable-openmp" \
-	 "--prefix=$(pack_get --prefix)"
+	 "--prefix=$(pack_get -prefix)"
 
     # Make commands
     for EXE in $libs ; do
@@ -104,17 +104,18 @@ for v in 6.4 6.5 ; do
     done
 
     # Prepare installation directories...
-    pack_cmd "mkdir -p $(pack_get --prefix)/bin"
-    pack_cmd "mkdir -p $(pack_get --LD)"
-    pack_cmd "mkdir -p $(pack_get --prefix)/include"
+    pack_cmd "mkdir -p $(pack_get -prefix)/bin"
+    pack_cmd "mkdir -p $(pack_get -LD)"
+    pack_cmd "mkdir -p $(pack_get -prefix)/include"
     if [[ $(vrs_cmp $v 6.0.0) -ge 0 ]]; then
 	pack_cmd "make links"
 	pack_cmd "make install"
     fi
-    pack_cmd "cp bin/* $(pack_get --prefix)/bin/"
+    pack_cmd "cp bin/* $(pack_get -prefix)/bin/"
+    pack_cmd "cp make.inc $(pack_get -prefix)/"
     # Install the iotk-library (not handled in install)
-    pack_cmd "cp iotk/src/libiotk.a $(pack_get --LD)/"
-    pack_cmd "cp iotk/src/*.mod $(pack_get --prefix)/include/"
+    pack_cmd "cp iotk/src/libiotk.a $(pack_get -LD)/"
+    pack_cmd "cp iotk/src/*.mod $(pack_get -prefix)/include/"
 
 done
 
