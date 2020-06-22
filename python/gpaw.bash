@@ -21,12 +21,6 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 # should work with ELPA, but they are not using the correct version
 pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw)
 
-if [[ $(vrs_cmp $v 0.11) -ge 0 ]]; then
-    pack_set -module-requirement ase
-else
-    doerr "$(pack_get -package)" "Could not determine needed ASE interface"
-fi
-
 # First we need to fix gpaw compilation
 pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
 pack_cmd "sed -i -e \"s:cfgDict.get('BLDLIBRARY:cfgDict.get('LIBDIR')+os.sep+cfgDict.get('BLDLIBRARY:\" config.py"
@@ -125,6 +119,7 @@ add_test_package gpaw.exec.parallel
 pack_set -host-reject $(get_hostname)
 # We need the setups for the tests
 pack_set -mod-req gpaw-setups
+pack_set -mod-req ase
 pack_cmd "unset LDFLAGS"
 pack_cmd "$(get_parent_exec) \$(which gpaw-test) 2>&1 > gpaw.serial || echo forced"
 pack_store gpaw.serial
