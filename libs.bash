@@ -93,6 +93,7 @@ source_pack libs/blaze.bash
 source_pack libs/zeep.bash
 source_pack libs/xssp.bash
 source_pack libs/libint.bash
+source_pack libs/openexr.bash
 
 # For symbolic stuff
 source_pack libs/symengine.bash
@@ -107,6 +108,8 @@ source_pack libs/netcdf.bash
 source_pack libs/netcdf-logging.bash
 source_pack libs/netcdf-serial.bash
 source_pack libs/netcdf-serial-noszip.bash
+
+source_pack libs/openimageio.bash
 
 # Install my ncdf library
 source_pack libs/ncdf.bash
