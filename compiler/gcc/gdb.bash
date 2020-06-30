@@ -1,15 +1,15 @@
-add_package --build generic https://ftp.gnu.org/gnu/gdb/gdb-8.3.tar.xz
+add_package -build generic https://ftp.gnu.org/gnu/gdb/gdb-9.2.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 
-pack_set --install-query $(pack_get --prefix)/bin/gdb
+pack_set -install-query $(pack_get -prefix)/bin/gdb
 
 # Install commands that it should run
-pack_cmd "../configure --prefix $(pack_get --prefix)" \
-	 "--with-gmp=$(pack_get --prefix gmp)" \
-	 "--with-mpfr=$(pack_get --prefix mpfr)" \
-	 "--with-mpc=$(pack_get --prefix mpc)" \
-	 "--with-isl=$(pack_get --prefix isl)" \
+pack_cmd "../configure --prefix $(pack_get -prefix)" \
+	 "--with-gmp=$(pack_get -prefix gmp)" \
+	 "--with-mpfr=$(pack_get -prefix mpfr)" \
+	 "--with-mpc=$(pack_get -prefix mpc)" \
+	 "--with-isl=$(pack_get -prefix isl)" \
 	 "--enable-lto"
 
 # Make commands

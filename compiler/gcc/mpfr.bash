@@ -1,4 +1,4 @@
-mpfr_v=4.0.1
+mpfr_v=4.0.2
 add_package --build generic \
 	    http://www.mpfr.org/mpfr-$mpfr_v/mpfr-$mpfr_v.tar.xz
 
