@@ -72,6 +72,7 @@ source_pack helpers/pcre.bash
 source_pack helpers/swig.bash
 
 source_pack helpers/optipng.bash
+source_pack helpers/openjpeg.bash
 
 source_pack helpers/libxml2.bash
 
