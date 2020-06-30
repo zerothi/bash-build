@@ -4,6 +4,7 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+source_pack applications/blender.bash
 source_pack applications/mopac.bash
 
 source_pack applications/radiance.bash
@@ -21,12 +22,6 @@ source_pack applications/atom.bash
 source_pack applications/ape.bash
 source_pack applications/oncvpsp.bash
 
-source_pack applications/siesta.bash
-source_pack applications/siesta-master.bash # GitLab siesta
-source_pack applications/siesta-master-debug.bash
-source_pack applications/siesta-bulk-bias.bash # siesta trunk development
-source_pack applications/fhiaims.bash
-
 source_pack applications/lammps.bash
 
 # Graphics applications
@@ -43,6 +38,13 @@ source_pack applications/vmd-python.bash
 source_pack applications/gdis.bash
 source_pack applications/povray.bash
 source_pack applications/getfem.bash
+
+source_pack applications/siesta.bash
+source_pack applications/siesta-master.bash # GitLab siesta
+source_pack applications/siesta-master-debug.bash
+source_pack applications/siesta-bulk-bias.bash # siesta trunk development
+source_pack applications/fhiaims.bash
+
 
 source_pack applications/octave.bash
 
