@@ -44,7 +44,7 @@ CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
 FC_LDFLAGS_EXTRA=\"$(list -LD-rp $(pack_get -mod-req))\"\n\
 enable_fc_wrapper=\"no\"\n\
-enable_lotf=\"yes\"\n\
+enable_lotf=\"no\"\n\
 enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
@@ -54,6 +54,8 @@ with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
 with_math_incs=\"$(list -INCDIRS gsl)\"\n\
 with_math_libs=\"$(list -LD-rp gsl) -lgsl\"\n' $file"
+
+# on https://github.com/abinit/abinit/issues/32 it is suggested to not use lotf
 
 # Create LINALG libraries
 if [[ $mpila == elpa ]]; then
