@@ -4,6 +4,7 @@ add_package -version $v -package blender \
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 pack_set -build-mod-req build-tools
+pack_set -build-mod-req cmake
 
 pack_set -module-opt "--lua-family blender"
 
@@ -16,7 +17,7 @@ pack_set -mod-req openjpeg
 pack_set -mod-req python
 pack_set -mod-req numpy
 
-pack_set -install-query $(pack_get -prefix)/bin/blender
+pack_set -install-query $(pack_get -prefix)/lib/bpy.so
 
 pack_cmd "unset LDFLAGS"
 pack_cmd "unset CFLAGS"
@@ -62,3 +63,5 @@ pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+
+pack_cmd "tsaeohusoa"
