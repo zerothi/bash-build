@@ -1,18 +1,18 @@
-for v in 8.10.2
+for v in 8.10.3
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --module-opt "--lua-family abinit"
+pack_set -module-opt "-lua-family abinit"
 
-pack_set --install-query $(pack_get --prefix)/bin/abinit
+pack_set -install-query $(pack_get -prefix)/bin/abinit
 
-pack_set --module-requirement mpi
-pack_set --module-requirement gsl
-pack_set --module-requirement atompaw
-pack_set --module-requirement wannier90
-pack_set --module-requirement fftw-mpi
+pack_set -module-requirement mpi
+pack_set -module-requirement gsl
+pack_set -module-requirement atompaw
+pack_set -module-requirement wannier90
+pack_set -module-requirement fftw-mpi
 
 # Correct mistakes in configure script...
 pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
@@ -34,42 +34,37 @@ tmpf="${FCFLAGS//-O3/-O2}"
 tmpc="${CFLAGS//-O3/-O2}"
 tmpcx="${CXXFLAGS//-O3/-O2}"
 pack_cmd "$s '$ a\
-prefix=\"$(pack_get --prefix)\"\n\
+prefix=\"$(pack_get -prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
-FCFLAGS_EXTRA=\"${tmpf//-floop-block/} $FLAG_OMP -I$(pack_get --prefix mpi)/include\"\n\
+FCFLAGS_EXTRA=\"${tmpf//-floop-block/} $FLAG_OMP -I$(pack_get -prefix mpi)/include\"\n\
 CFLAGS_EXTRA=\"${tmpc//-floop-block/} $FLAG_OMP\"\n\
 CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
-FC_LDFLAGS_EXTRA=\"$(list --LD-rp $(pack_get --mod-req))\"\n\
+FC_LDFLAGS_EXTRA=\"$(list -LD-rp $(pack_get -mod-req))\"\n\
 enable_fc_wrapper=\"no\"\n\
-enable_64bit_flags=\"yes\"\n\
 enable_lotf=\"yes\"\n\
 enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
 enable_mpi_io=\"yes\"\n\
 enable_mpi=\"yes\"\n\
-with_mpi_prefix=\"$(pack_get --prefix mpi)\"\n\
+with_mpi_prefix=\"$(pack_get -prefix mpi)\"\n\
 with_math_flavor=\"gsl\"\n\
 with_linalg_flavor=\"custom\"\n\
-with_math_incs=\"$(list --INCDIRS gsl)\"\n\
-with_math_libs=\"$(list --LD-rp gsl) -lgsl\"\n' $file"
+with_math_incs=\"$(list -INCDIRS gsl)\"\n\
+with_math_libs=\"$(list -LD-rp gsl) -lgsl\"\n' $file"
 
 # Create LINALG libraries
 if [[ $mpila == elpa ]]; then
-    pack_set --module-requirement elpa
-    tmp="$(list --LD-rp elpa)"
+    pack_set -module-requirement elpa
+    tmp="$(list -LD-rp elpa)"
     tmp="$tmp -lelpa"
-    tmp_inc="$(list --INCDIRS elpa)"
+    tmp_inc="$(list -INCDIRS elpa)"
 else
     tmp_inc=
     tmp=
 fi
-pack_set --module-requirement plasma
-tmp="$tmp $(list --LD-rp plasma)"
-tmp="$tmp -lplasma -lcoreblasqw -lcoreblas -lquark"
-tmp_inc="$tmp_inc $(list --INCDIRS plasma)"
     
 if $(is_c intel) ; then
     # We need to correct the configure script
@@ -91,16 +86,16 @@ with_linalg_libs=\"$tmp\"\n' $file"
 
 else
     if [[ $mpila == scalapack ]]; then
-	pack_set --module-requirement scalapack
-	tmp="$tmp $(list --LD-rp scalapack) -lscalapack"
+	pack_set -module-requirement scalapack
+	tmp="$tmp $(list -LD-rp scalapack) -lscalapack"
     fi
     
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_inc="$tmp_inc $(list --INCDIRS ++$la)"
+    pack_set -module-requirement $la
+    tmp_inc="$tmp_inc $(list -INCDIRS ++$la)"
     tmp="$tmp $(pack_get -lib[lapacke] $la) $(pack_get -lib[omp] $la)"
     pack_cmd "$s '$ a\
-with_linalg_libs=\"$(list --LD-rp ++$la) $tmp\"\n' $file"
+with_linalg_libs=\"$(list -LD-rp ++$la) $tmp\"\n' $file"
 
 fi
 
@@ -110,50 +105,60 @@ with_linalg_incs=\"$tmp_inc\"\n' $file"
 # Add default libraries
 pack_cmd "$s '$ a\
 with_trio_flavor=\"netcdf\"\n\
-with_netcdf_incs=\"$(list --INCDIRS netcdf)\"\n\
-with_netcdf_libs=\"$(list --LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
+with_netcdf_incs=\"$(list -INCDIRS netcdf)\"\n\
+with_netcdf_libs=\"$(list -LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
 with_fft_flavor=\"fftw3-mpi\"\n\
-with_fft_incs=\"$(list --INCDIRS fftw-mpi)\"\n\
-with_fft_libs=\"$(list --LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+with_fft_incs=\"$(list -INCDIRS fftw-mpi)\"\n\
+with_fft_libs=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
 
-_xc_v=3.0.1
+# Please see the following dependencies to ensure no duplicate
+# libxc versions are being used!
+#   atompaw
+#   bigdft
 dft_flavor=atompaw+wannier90+libxc
-pack_set --module-requirement libxc[$_xc_v]
+libxc_v=4.2.3
+pack_set -module-requirement libxc[$libxc_v]
 pack_cmd "$s '$ a\
-with_libxc_incs=\"$(list --INCDIRS libxc[$_xc_v])\"\n\
-with_libxc_libs=\"$(list --LD-rp libxc[$_xc_v]) $(pack_get --lib libxc[$_xc_v])\"' $file"
+with_libxc_incs=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
+with_libxc_libs=\"$(list -LD-rp libxc[$libxc_v]) $(pack_get -lib[f90] libxc[$libxc_v])\"' $file"
 
 
-if [[ $(vrs_cmp $(pack_get --version bigdft) 1.7) -lt 0 ]]; then
+if [[ $(vrs_cmp $(pack_get -version bigdft) 1.7) -lt 0 ]]; then
     # The interface for the later versions
     # has changed, hence we require the old-version
-    pack_set --module-requirement bigdft
+    pack_set -module-requirement bigdft
     dft_flavor="$dft_flavor+bigdft"
     pack_cmd "$s '$ a\
-with_bigdft_incs=\"$(list --INCDIRS bigdft)\"\n\
-with_bigdft_libs=\"$(list --LD-rp bigdft) -lbigdft-1\"' $file"
+with_bigdft_incs=\"$(list -INCDIRS bigdft)\"\n\
+with_bigdft_libs=\"$(list -LD-rp bigdft) -lbigdft-1\"' $file"
     
 fi
 
 pack_cmd "$s '$ a\
 with_dft_flavor=\"$dft_flavor\"\n\
-with_atompaw_bins=\"$(pack_get --prefix atompaw)/bin\"\n\
-with_atompaw_incs=\"$(list --INCDIRS atompaw)\"\n\
-with_atompaw_libs=\"$(list --LD-rp atompaw) -latompaw\"\n\
-with_wannier90_bins=\"$(pack_get --prefix wannier90)/bin\"\n\
-with_wannier90_incs=\"$(list --INCDIRS wannier90)\"\n\
-with_wannier90_libs=\"$(list --LD-rp wannier90) -lwannier\"' $file"
+with_atompaw_bins=\"$(pack_get -prefix atompaw)/bin\"\n\
+with_atompaw_incs=\"$(list -INCDIRS atompaw)\"\n\
+with_atompaw_libs=\"$(list -LD-rp atompaw) -latompaw\"\n\
+with_wannier90_bins=\"$(pack_get -prefix wannier90)/bin\"\n\
+with_wannier90_incs=\"$(list -INCDIRS wannier90)\"\n\
+with_wannier90_libs=\"$(list -LD-rp wannier90) -lwannier\"' $file"
 
 
 # Configure the package...
 # We must not override the flags on the command line, it will
 # disturb the automatically added flags...
-pack_cmd "unset FCFLAGS && unset CFLAGS && ../configure --with-config-file=./$file"
+pack_cmd "unset FCFLAGS ; unset CFLAGS ; unset CPPFLAGS ; unset LDFLAGS"
+pack_cmd "../configure --with-config-file=./$file"
 
 if $(is_c intel) ; then
     # Correct the compilation for the intel compiler
     pack_cmd "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile src/98_main/Makefile"
+fi
+
+if [[ $(vrs_cmp $v 8.10.3) -eq 0 ]]; then
+    # patch bug for 8.10.3
+    pack_cmd "sed -i -e 's|\(use defs_basis\)|\1;use m_abicore,only:wrtout|' ../src/68_lotf/m_eval_lotf.F90"
 fi
 
 # Make commands
@@ -177,15 +182,15 @@ fi
 pack_cmd "popd"
 
 pack_cmd "make install"
-pack_cmd "pushd $(pack_get --prefix)/bin"
+pack_cmd "pushd $(pack_get -prefix)/bin"
 pack_cmd "mv abinit abinit_$mpila"
 pack_cmd "popd"
 
-pack_cmd "cp $file $(pack_get --prefix)/${mpila}_${file}"
+pack_cmd "cp $file $(pack_get -prefix)/${mpila}_${file}"
 
 done
 
-pack_cmd "pushd $(pack_get --prefix)/bin"
+pack_cmd "pushd $(pack_get -prefix)/bin"
 pack_cmd "ln -s abinit_elpa abinit"
 pack_cmd "popd"
 
