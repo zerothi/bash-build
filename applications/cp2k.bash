@@ -1,47 +1,54 @@
-add_package https://github.com/cp2k/cp2k/releases/download/v6.1.0/cp2k-6.1.tar.bz2
+add_package https://github.com/cp2k/cp2k/releases/download/v7.1.0/cp2k-7.1.tar.bz2
 
-pack_set $(list -p '-module-requirement ' mpi libxc fftw)
+pack_set -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/cp2k.psmp
+pack_set $(list -p '-module-requirement ' mpi libxc fftw libint spglib libxsmm)
+
+pack_set -install-query $(pack_get -prefix)/bin/cp2k.popt
 
 # Add the lua family
 pack_set -module-opt "-lua-family $(pack_get -alias)"
 
-if [[ -z "$FLAG_OMP" ]]; then
-    doerr $(pack_get -package) "Can not find the OpenMP flag (set FLAG_OMP in source)"
-fi
-
 # Find hwloc library
 tmp_hwloc=$(pack_get -mod-req[hwloc])
 
+# cp2k recommends using non-threaded BLAS for OPENMP compilation
+
 arch=Linux-x86-64-NPA
-file=arch/$arch.psmp
+file=arch/$arch.popt
 pack_cmd "echo '# NPA' > $file"
 
 # Only one of HWLOC/LIBNUMA
 pack_cmd "sed -i '1 a\
+DATA_DIR = $(pack_get -prefix)/data\n\
 CPP = \n\
 FC = $MPIFC \n\
 LD = $MPIFC \n\
 AR = $AR -r \n\
 HWLOC_INC = $(list -INCDIRS $tmp_hwloc) \n\
 HWLOC_LIB = $(list -LD-rp $tmp_hwloc) \n\
-FFTW_INC = $(list -INCDIRS fftw) \n\
-FFTW_LIB = $(list -LD-rp fftw) \n\
+FFTW_INC = $(list -INCDIRS fftw-mpi) \n\
+FFTW_LIB = $(list -LD-rp fftw-mpi) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
 LIBXC_LIB = $(list -LD-rp libxc) \n\
-DFLAGS  = -D__FFTW3 -D__HWLOC \n\
+DFLAGS  = -D__F2008 -D__FFTW3 -D__HWLOC -D__SPGLIB \n\
 DFLAGS += -D__parallel -D__SCALAPACK\n\
 DFLAGS += -D__LIBXC\n\
-#DFLAGS  += -D__ELPA \n\
-CC = $CC \$(DFLAGS) $CFLAGS \$(HWLOC_INC) \n\
+DFLAGS += -D__LIBXSMM\n\
+DFLAGS += -D__LIBINT -D__MAX_CONTR=4\n\
+#DFLAGS += -D__ELPA \n\
+CC = $CC \$(DFLAGS) \$(HWLOC_INC) \n\
 CPPFLAGS = \$(DFLAGS) \n\
-FCFLAGS += \$(DFLAGS) $FCFLAGS $FLAG_OMP \$(FFTW_INC) \$(LIBXC_INC) \n\
+FCFLAGS += $FLAG_OMP \$(DFLAGS) \$(FFTW_INC) \$(LIBXC_INC) -I$(pack_get -prefix libxsmm)/include -I$(pack_get -prefix libint)/include\n\
 LDFLAGS = \$(FCFLAGS) \n\
-LIBS  = \$(FFTW_LIB) -lfftw3_omp -lfftw3 \n\
+LIBS  = \$(FFTW_LIB) $(pack_get -lib[omp] fftw-mpi) \n\
 LIBS += \$(HWLOC_LIB) -lhwloc \n\
 LIBS += \$(LIBXC_LIB) $(pack_get -lib libxc) \n\
+LIBS += $(list -LD-rp libint) $(pack_get -lib libint) \n\
+LIBS += $(list -LD-rp spglib) $(pack_get -lib spglib) \n\
+LIBS += $(list -LD-rp libxsmm) $(pack_get -lib[f] libxsmm) \n\
 LIBS += \$(SCALAPACK_L) \$(LAPACK_L) \n\
+LIBS += -ldl \n\
 ' $file"
 
 if $(is_c intel) ; then
@@ -51,6 +58,7 @@ LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
 SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
 FCFLAGS += -free\n\
 LDFLAGS += -nofor_main\n\
+DFLAGS += -D__MKL -D__INTEL_COMPILER \n\
 ' $file"
 
 elif $(is_c gnu) ; then
@@ -65,7 +73,7 @@ SCALAPACK_L = $(list -LD-rp scalapack) -lscalapack \n\
     pack_set -module-requirement $la
     tmp_ld="$(list -LD-rp +$la)"
     pack_cmd "sed -i '1 a\
-LAPACK_L = $tmp_ld $(pack_get -lib[omp] $la)\n\
+LAPACK_L = $tmp_ld $(pack_get -lib $la)\n\
 ' $file"
 
 else
@@ -73,9 +81,11 @@ else
     
 fi
 
-pack_cmd "cd makefiles"
+pack_cmd "unset FCFLAGS ; unset FFLAGS ; unset CFLAGS ; unset LDFLAGS"
 
-pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=psmp"
-
+pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=popt"
+pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=popt TESTOPTS='-ompthreads 1 -mpiranks $NPROCS -maxtasks $NPROCS' test > cp2k.test 2>&1"
 pack_cmd "mkdir -p $(pack_get -prefix)/bin"
+pack_cmd "cp -rf data $(pack_get -prefix)/"
+pack_store cp2k.test
 pack_cmd "cp ../exe/$arch/* $(pack_get -prefix)/bin"
