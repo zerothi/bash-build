@@ -6,6 +6,8 @@ pack_set $(list -p '-module-requirement ' mpi libxc fftw libint spglib libxsmm)
 
 pack_set -install-query $(pack_get -prefix)/bin/cp2k.popt
 
+pack_set -host-reject $(get_hostname)
+
 # Add the lua family
 pack_set -module-opt "-lua-family $(pack_get -alias)"
 
@@ -13,6 +15,9 @@ pack_set -module-opt "-lua-family $(pack_get -alias)"
 tmp_hwloc=$(pack_get -mod-req[hwloc])
 
 # cp2k recommends using non-threaded BLAS for OPENMP compilation
+
+pack_cmd "mkdir -p $(pack_get -prefix)/bin"
+pack_cmd "cp -rf data $(pack_get -prefix)/"
 
 arch=Linux-x86-64-NPA
 file=arch/$arch.popt
@@ -22,26 +27,29 @@ pack_cmd "echo '# NPA' > $file"
 pack_cmd "sed -i '1 a\
 DATA_DIR = $(pack_get -prefix)/data\n\
 CPP = \n\
+CC = $MPICC \n\
 FC = $MPIFC \n\
 LD = $MPIFC \n\
 AR = $AR -r \n\
+FCFLAGS = $FCFLAGS \n\
 HWLOC_INC = $(list -INCDIRS $tmp_hwloc) \n\
 HWLOC_LIB = $(list -LD-rp $tmp_hwloc) \n\
-FFTW_INC = $(list -INCDIRS fftw-mpi) \n\
-FFTW_LIB = $(list -LD-rp fftw-mpi) \n\
+FFTW_INC = $(list -INCDIRS fftw) \n\
+FFTW_LIB = $(list -LD-rp fftw) \n\
 LIBXC_INC = $(list -INCDIRS libxc) \n\
 LIBXC_LIB = $(list -LD-rp libxc) \n\
 DFLAGS  = -D__F2008 -D__FFTW3 -D__HWLOC -D__SPGLIB \n\
-DFLAGS += -D__parallel -D__SCALAPACK\n\
+DFLAGS += -D__MPI_VERSION=3 \n\
+DFLAGS += -D__parallel -D__SCALAPACK \n\
 DFLAGS += -D__LIBXC\n\
 DFLAGS += -D__LIBXSMM\n\
 DFLAGS += -D__LIBINT -D__MAX_CONTR=4\n\
 #DFLAGS += -D__ELPA \n\
-CC = $CC \$(DFLAGS) \$(HWLOC_INC) \n\
+CFLAGS = $CFLAGS \n\
 CPPFLAGS = \$(DFLAGS) \n\
-FCFLAGS += $FLAG_OMP \$(DFLAGS) \$(FFTW_INC) \$(LIBXC_INC) -I$(pack_get -prefix libxsmm)/include -I$(pack_get -prefix libint)/include\n\
+FCFLAGS += \$(DFLAGS) \$(FFTW_INC) \$(LIBXC_INC) -I$(pack_get -prefix libxsmm)/include -I$(pack_get -prefix libint)/include\n\
 LDFLAGS = \$(FCFLAGS) \n\
-LIBS  = \$(FFTW_LIB) $(pack_get -lib[omp] fftw-mpi) \n\
+LIBS  = \$(FFTW_LIB) $(pack_get -lib fftw) \n\
 LIBS += \$(HWLOC_LIB) -lhwloc \n\
 LIBS += \$(LIBXC_LIB) $(pack_get -lib libxc) \n\
 LIBS += $(list -LD-rp libint) $(pack_get -lib libint) \n\
@@ -84,8 +92,6 @@ fi
 pack_cmd "unset FCFLAGS ; unset FFLAGS ; unset CFLAGS ; unset LDFLAGS"
 
 pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=popt"
-pack_cmd "make $(get_make_parallel) ARCH=$arch VERSION=popt TESTOPTS='-ompthreads 1 -mpiranks $NPROCS -maxtasks $NPROCS' test > cp2k.test 2>&1"
-pack_cmd "mkdir -p $(pack_get -prefix)/bin"
-pack_cmd "cp -rf data $(pack_get -prefix)/"
+pack_cmd "make ARCH=$arch VERSION=popt TESTOPTS='-ompthreads 1 -mpiranks $NPROCS -maxtasks $NPROCS' test > cp2k.test 2>&1"
 pack_store cp2k.test
 pack_cmd "cp ../exe/$arch/* $(pack_get -prefix)/bin"
