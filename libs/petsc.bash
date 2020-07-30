@@ -1,6 +1,6 @@
 for d_type in d z
 do
-v=3.11.2
+v=3.13.3
 add_package -package petsc-$d_type \
 	    -directory petsc-$v \
 	    http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-$v.tar.gz
@@ -20,6 +20,10 @@ if [[ $(vrs_cmp $v 3.11.2) -lt 0 ]]; then
     o=$(pwd_archives)/petsc-libindex.patch
     dwn_file http://www.student.dtu.dk/~nicpa/packages/petsc-libindex.patch $o
     pack_cmd "patch -p1 < $o"
+fi
+
+if [[ $(vrs_cmp $v 3.13.3) -eq 0 ]]; then
+    pack_cmd "sed -i -e 's/LargeDiag_AWPM/LargeDiag_HWPM/g' src/mat/impls/aij/mpi/superlu_dist/superlu_dist.c"
 fi
 
 tmp=''
@@ -46,6 +50,7 @@ case $d_type in
 	pack_set -mod-req hypre
 	tmp="$tmp --with-hypre=1"
 	tmp="$tmp --with-hypre-dir=$(pack_get -prefix hypre)"
+	pack_cmd "sed -i -e 's/\(self.maxversion\).*/\1=\\\"$(pack_get -version hypre)\\\"/' config/BuildSystem/config/packages/hypre.py"
 	;;
     z)
 	tmp_arch='complex'
@@ -55,6 +60,7 @@ esac
 tmp_ld="$(list -LD-rp $(pack_get -mod-req))"
 # We need to fix d_type such that complex also works
 # Should this really be a separate package???
+pack_cmd "unset F77 F90 CPPFLAGS"
 pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "PETSC_ARCH=$tmp_arch" \
 	 "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
@@ -62,14 +68,14 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
 	 "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
 	 "F90='$MPIF90'" \
-	 "LDFLAGS='$tmp_ld'" \
-	 "LIBS='$tmp_ld'" \
-	 "AR=ar" \
-	 "RANLIB=ranlib" \
+	 "LDFLAGS='$tmp_ld -lmpi_cxx'" \
+	 "LIBS='$tmp_ld -lmpi_cxx'" \
+	 "AR=$AR" \
+	 "RANLIB=$RANLIB" \
 	 "--with-scalar-type=$tmp_arch" \
 	 "--prefix=$(pack_get -prefix)" \
 	 "--with-petsc-arch=$tmp_arch" \
-	 "--with-fortran-interfaces=1" \
+	 "--with-fortran-bindings=1" \
 	 "--with-pic=1 $tmp" \
 	 "--with-openmp=1" \
 	 "--with-mpi=1" \
@@ -86,7 +92,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-parmetis=1" \
 	 "--with-parmetis-dir=$(pack_get -prefix parmetis)" \
 	 "--with-metis=1" \
-	 "--with-metis-dir=$(pack_get -prefix parmetis)" \
+	 "--with-metis-dir=$(pack_get -prefix metis)" \
 	 "--with-hwloc=1" \
 	 "--with-hwloc-dir=$(pack_get -prefix $tmp_hwloc)" \
 	 "--with-hdf5=1" \
@@ -102,17 +108,17 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-mumps=1" \
 	 "--with-mumps-dir=$(pack_get -prefix mumps)" \
 	 "--with-suitesparse=1" \
-	 "--with-suitesparse-dir=$(pack_get -prefix suitesparse)"
+	 "--with-suitesparse-dir=$(pack_get -prefix suitesparse)" \
+	 "--with-superlu_dist=1" \
+	 "--with-superlu_dist-dir=$(pack_get -prefix superlu-dist)"
 
-#	 "--with-superlu_dist=1" \
-#	 "--with-superlu_dist-dir=$(pack_get -prefix superlu-dist)" \
 #	 "--with-cxx-dialect=C++11" \
 
-pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
-pack_cmd "make PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"
+pack_cmd "make V=1 PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch all"
+pack_cmd "make V=1 PETSC_DIR=\$(pwd) PETSC_ARCH=$tmp_arch install"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make PETSC_DIR=$(pack_get -prefix) PETSC_ARCH=$tmp_arch test > petsc.test 2>&1"
+pack_cmd "make PETSC_DIR=$(pack_get -prefix) PETSC_ARCH= check > petsc.test 2>&1"
 pack_store petsc.test
 pack_store $tmp_arch/lib/petsc/conf/configure.log $tmp_arch.configure.log
 

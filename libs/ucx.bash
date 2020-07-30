@@ -1,4 +1,4 @@
-v=1.6.0-rc3
+v=1.8.0
 add_package https://github.com/openucx/ucx/releases/download/v$v/ucx-${v//-rc*/}.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
@@ -22,6 +22,9 @@ fi
 tmp_flags="$tmp_flags --with-rc --with-ud --with-dc"
 tmp_flags="$tmp_flags --with-dm"
 tmp_flags="$tmp_flags --with-mcpu --with-march"
+tmp_flags="$tmp_flags --disable-backtrace-detail"
+tmp_flags="$tmp_flags --enable-devel-headers"
+tmp_flags="$tmp_flags --enable-optimizations"
 
 # Install commands that it should run
 pack_cmd "unset MPICC ; unset MPICXX ; unset MPIFC"

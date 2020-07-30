@@ -1,4 +1,4 @@
-v=2018.11.001
+v=2020.05.001
 add_package -package elpa \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
@@ -24,6 +24,9 @@ if ! $(grep "avx" /proc/cpuinfo > /dev/null) ; then
 fi
 if ! $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --disable-avx2"
+fi
+if ! $(grep "avx512" /proc/cpuinfo > /dev/null) ; then
+    tmp_flags="$tmp_flags --disable-avx512"
 fi
 
 if ! $(is_c intel) ; then

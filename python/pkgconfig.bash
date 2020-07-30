@@ -1,4 +1,4 @@
-v=1.4.0
+v=1.5.1
 add_package --archive pkgconfig-$v.tar.gz \
     https://github.com/matze/pkgconfig/archive/v$v.tar.gz
 

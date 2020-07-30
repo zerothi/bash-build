@@ -1,4 +1,4 @@
-v=2018.11.001
+v=2020.05.001
 add_package --build debug --package elpa-debug \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 
@@ -28,7 +28,7 @@ fi
 # We cannot use OpenMP threading as it requires sequential BLAS
 pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
 	 "--prefix=$(pack_get --prefix)" \
-	 "$(list --prefix ' --disable-' sse sse-assembly avx avx2)"
+	 "$(list --prefix ' --disable-' sse sse-assembly avx avx2 avx512)"
 
 # Fix remove_xcompiler
 pack_cmd "sed -i -e 's/filter(\(.*\))/list(filter(\1))/' ../remove_xcompiler"

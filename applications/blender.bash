@@ -1,6 +1,6 @@
-v=2.83.1
-add_package -version $v -package blender \
-	    https://mirrors.dotsrc.org/blender/blender-release/Blender${v}/blender-${v}.tar.xz
+v=2.83.2
+add_package -version $v -package blender -archive blender-$v.tar.gz \
+        https://github.com/blender/blender/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 pack_set -build-mod-req build-tools
@@ -41,7 +41,7 @@ pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 	 -DWITH_PYTHON=on \
 	 -DWITH_PYTHON_MODULE=on \
 	 -DPYTHON_NUMPY_PATH=$(python3 -c "import numpy as np ; print(np.__file__.split('site-packages')[0] + '/site-packages')") \
-	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python3.7m \
+	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python${pV}m \
 	 -DPYTHON_SITE_PACKAGES=$(pack_get -prefix)/lib/python \
 	 -DWITH_X11=on -DWITH_OPENMP=on \
 	 -DWITH_OPENCOLLADA=off -DWITH_SDL=off -DWITH_OPENAL=off \

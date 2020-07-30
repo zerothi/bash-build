@@ -14,7 +14,7 @@ pack_cmd "sed -i -e '$ a\
 XMLF90_ROOT = $(pack_get -prefix xmlf90)\n\
 GRIDXC_ROOT = $(pack_get -prefix libgridxc)\n\
 include \$(XMLF90_ROOT)/share/org.siesta-project/xmlf90.mk\n\
-include \$(GRIDXC_ROOT)/gridxc.mk\n\
+include \$(GRIDXC_ROOT)/share/org.siesta-project/gridxc_dp.mk\n\
 FC = $FC \n\
 FFLAGS = $FFLAGS \n\
 LDFLAGS = \n\

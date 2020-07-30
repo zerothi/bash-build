@@ -1,4 +1,4 @@
-v=0.4.1
+v=0.6.0
 add_package https://github.com/symengine/symengine/releases/download/v$v/symengine-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

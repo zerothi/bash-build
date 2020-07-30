@@ -1,4 +1,4 @@
-v=3.6
+v=3.9.2
 add_package -archive pymc3-$v.tar.gz \
 	    https://github.com/pymc-devs/pymc3/archive/v$v.tar.gz
 
@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
-pack_set $(list -prefix ' -module-requirement ' numpy scipy pandas patsy h5py theano)
+pack_set $(list -prefix ' -module-requirement ' numpy scipy pandas h5py theano)
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 

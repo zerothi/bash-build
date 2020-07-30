@@ -1,4 +1,4 @@
-v=8.0.1
+v=10.0.0
 add_package -directory llvm-$v.src -package llvm -version $v \
 	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-$v.src.tar.xz
 
@@ -11,14 +11,11 @@ pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gcc)
 
 # Fetch the c-lang to build it along side
 tmp=$(pack_get -url)
-for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly clang-tools-extra  ; do
+for name in clang compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly clang-tools-extra  ; do
     case $name in
 	lldb|lld|clang-tools-extra)
 	    # Skipped packages
 	    continue
-	    ;;
-	cfe)
-	    pack=clang
 	    ;;
 	clang-tools-extra)
 	    pack=extra
@@ -28,9 +25,9 @@ for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly cla
 	    ;;
     esac
     o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-$name-$v.src.tar.xz
-    dwn_file ${tmp//llvm-/$name-} $o
+    dwn_file ${tmp//$v\/llvm-/$v\/$name-} $o
     case $name in
-	cfe|clang-tools-extra)
+	clang|clang-tools-extra)
 	    pack_cmd "tar xfJ $o -C ../tools/"
 	    pack_cmd "pushd ../tools"
 	    pack_cmd "mv $name* $pack"

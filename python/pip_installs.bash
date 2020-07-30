@@ -63,6 +63,7 @@ pack_cmd "$_pip_cmd install -U pip"
 pip_install nose
 
 pip_append autopep8
+pip_append asteval
 pip_append anaconda-client
 pip_append backports.ssl_match_hostname
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
@@ -91,6 +92,7 @@ pip_append docutils
 pip_append fastimport
 pip_append FORD
 pip_append flake8
+pip_append fypp
 pip_append ipyvolume
 pip_append joblib
 pip_append jinja2
@@ -108,7 +110,8 @@ pip_append nbsphinx
 pip_append numpydoc
 pip_append nose nose2
 pip_append pathos
-pip_append pep8
+pip_append patsy
+pip_append pep8 pep517
 pip_append pexpect
 pip_append pipenv
 #pip_append pint
@@ -136,15 +139,18 @@ pip_append requests
 pip_append setuptools_scm
 pip_append simplegeneric
 pip_append simplejson
+pip_append six
 pip_append sphinx sphinx_rtd_theme
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
+pip_append toml
 pip_append toolz
 pip_append tornado
 pip_append tqdm
 pip_append traitlets
 pip_append twine
+pip_append uncertainties
 pip_append versioneer
 pip_append virtualenv
 pip_append wheel

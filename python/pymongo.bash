@@ -1,4 +1,4 @@
-v=2.7.1
+v=3.10.1
 add_package --package pymongo \
     --archive mongo-python-driver-$v.tar.gz \
     https://github.com/mongodb/mongo-python-driver/archive/$v.tar.gz

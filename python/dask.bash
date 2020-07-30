@@ -1,4 +1,4 @@
-v=1.2.2
+v=2.20.0
 add_package \
     --archive dask-$v.tar.gz \
     https://github.com/dask/dask/archive/$v.tar.gz

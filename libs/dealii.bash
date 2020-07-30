@@ -1,4 +1,4 @@
-add_package https://github.com/dealii/dealii/releases/download/v9.1.0/dealii-9.1.0.tar.gz
+add_package https://github.com/dealii/dealii/releases/download/v9.2.0/dealii-9.2.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

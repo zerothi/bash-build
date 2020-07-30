@@ -1,6 +1,6 @@
-v=0.85
+v=1.9.5
 add_package --archive fireworks-$v.tar.gz \
-    https://github.com/materialsproject/fireworks/archive/v$v.tar.gz
+	    https://github.com/materialsproject/fireworks/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

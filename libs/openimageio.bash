@@ -19,8 +19,7 @@ pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 	 -DUSE_PYTHON=0 \
 	 ..
 
-
-pack_cmd "make VERBOSE=1 $(get_make_parallel)"
+pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
 

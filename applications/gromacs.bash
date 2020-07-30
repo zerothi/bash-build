@@ -36,7 +36,7 @@ case $par in
 	;;
 esac
 
-for v in 2019.6 2020.1 ; do
+for v in 2019.6 2020.2 ; do
 add_package $tmp_add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -65,7 +65,7 @@ case $par in
 	pack_set -mod-req plumed
 	tmp="$tmp -DBUILD_SHARED_LIBS=OFF -DGMX_PREFER_STATIC_LIBS=ON"
 	# Run the patch
-	if [[ $(vrs_cmp $(pack_get -version plumed) 2.5.1) -eq 0 ]]; then
+	if [[ $(vrs_cmp $(pack_get -version plumed) 2.5.1) -ge 0 ]]; then
 	    if [[ $(vrs_cmp $v 2018) -eq 0 ]]; then
 	    pack_cmd "pushd .. ; echo 2 | plumed patch -p ; popd"
         else

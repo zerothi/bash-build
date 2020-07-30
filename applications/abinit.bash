@@ -15,8 +15,8 @@ pack_set -module-requirement wannier90
 pack_set -module-requirement fftw-mpi
 
 # Correct mistakes in configure script...
-pack_cmd "sed -i -e 's:= call nf90:= nf90:g' ../configure"
 s="sed -i"
+pack_cmd "$s -e 's:= call nf90:= nf90:g;s:100[*]4[+]2:100*4+3:' ../configure"
 file=build.ac
 
 for mpila in elpa scalapack
@@ -119,7 +119,7 @@ with_fft_libs=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfft
 #   atompaw
 #   bigdft
 dft_flavor=atompaw+wannier90+libxc
-libxc_v=4.2.3
+libxc_v=4.3.4
 pack_set -module-requirement libxc[$libxc_v]
 pack_cmd "$s '$ a\
 with_libxc_incs=\"$(list -INCDIRS libxc[$libxc_v])\"\n\

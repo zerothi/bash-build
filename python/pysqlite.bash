@@ -1,4 +1,4 @@
-add_package https://pypi.python.org/packages/source/p/pysqlite/pysqlite-2.6.3.tar.gz
+add_package https://pypi.python.org/packages/source/p/pysqlite/pysqlite-2.8.3.tar.gz
 
 [ "x${pV:0:1}" == "x3" ] && pack_set --host-reject $(get_hostname)
 

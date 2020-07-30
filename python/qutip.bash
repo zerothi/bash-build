@@ -1,4 +1,4 @@
-for v in 4.3.1 ; do
+for v in 4.5.0 ; do
     
 add_package http://qutip.org/downloads/$v/qutip-$v.tar.gz
 

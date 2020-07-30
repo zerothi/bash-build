@@ -19,7 +19,8 @@ pack_set -install-query $(pack_get -prefix)/bin/gpaw
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version
-pack_set $(list -p '-mod-req ' mpi matplotlib libxc fftw)
+libxc_v=4.3.4
+pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc[$libxc_v] fftw)
 
 # First we need to fix gpaw compilation
 pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
@@ -68,9 +69,9 @@ tmp="$(list -prefix ,\" -suffix /include\" -loop-cmd 'pack_get -prefix' $(pack_g
 pack_cmd "sed -i '$ a\
 library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
-library_dirs += [\"$(pack_get -LD libxc)\"]\n\
-runtime_library_dirs += [\"$(pack_get -LD libxc)\"]\n\
-include_dirs += [\"$(pack_get -prefix libxc)/include\"]\n\
+library_dirs += [\"$(pack_get -LD libxc[$libxc_v])\"]\n\
+runtime_library_dirs += [\"$(pack_get -LD libxc[$libxc_v])\"]\n\
+include_dirs += [\"$(pack_get -prefix libxc[$libxc_v])/include\"]\n\
 libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get -prefix mpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\

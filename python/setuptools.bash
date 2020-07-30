@@ -1,4 +1,4 @@
-v=40.5.0
+v=49.1.0
 add_package --archive setuptools-$v.tar.gz \
 	    https://github.com/pypa/setuptools/archive/v$v.tar.gz
 

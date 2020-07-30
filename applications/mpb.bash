@@ -1,4 +1,4 @@
-v=1.7.0
+v=1.10.0
 add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -28,18 +28,18 @@ elif $(is_c gnu) ; then
     tmp="$tmp --with-blas='$tmp_ld $(pack_get -lib $la)'"
 
 else
-    doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
+    doerr "$(pack_get -package)" "Could not recognize the compiler: $(get_c)"
 
 fi
-tmp="$tmp --with-libctl=$(pack_get --prefix libctl)/share/libctl"
+tmp="$tmp --with-libctl=$(pack_get -prefix libctl)"
 
 # Install commands that it should run
 pack_cmd "../configure" \
-     "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
-     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
-     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
+     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
+     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
      "--with-mpi" \
-     "--prefix=$(pack_get --prefix) $tmp" 
+     "--prefix=$(pack_get -prefix) $tmp" 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 

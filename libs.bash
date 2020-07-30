@@ -39,9 +39,8 @@ source_pack libs/otpo.bash
 source_pack libs/opencoarray.bash
 
 # Default fftw libs
-source_pack libs/fftw2-intel.bash
-source_pack libs/fftw-intel.bash
 source_pack libs/fftw2.bash
+source_pack libs/fftw-intel.bash
 source_pack libs/fftw.bash
 source_pack libs/nfft.bash
 
@@ -72,6 +71,8 @@ source_pack libs/plasma.bash
 source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash
+
+source_pack libs/qhull.bash
 
 source_pack libs/elpa.bash
 source_pack libs/elpa-debug.bash
@@ -140,12 +141,14 @@ source_pack libs/superlu.bash
 source_pack libs/superlu-dist.bash
 source_pack libs/hypre.bash
 
+source_pack libs/proj.bash
+source_pack libs/gdal.bash
 source_pack libs/petsc.bash
 source_pack libs/slepc.bash
 
-source_pack libs/proj.bash
-source_pack libs/gdal.bash
+
 source_pack libs/p4est.bash
+
 
 source_pack libs/dealii.bash
 

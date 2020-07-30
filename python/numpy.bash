@@ -1,4 +1,8 @@
-for v in 1.16.4 ; do
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=1.19.1
+else
+    v=1.16.6
+fi
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
@@ -27,11 +31,6 @@ tmp_inc=$(list -prefix ':' -suffix '/include' -loop-cmd 'pack_get -prefix' $(pac
 tmp_inc=${tmp_inc// /}
 
 pack_cmd "sed -i '1 a\
-[fftw2]\n\
-library_dirs = $(pack_get -LD fftw-2)\n\
-include_dirs = $(pack_get -prefix fftw-2)/include\n\
-fftw_libs = fftw_threads\n\
-runtime_library_dirs = $(pack_get -LD fftw-2)\n\
 [fftw]\n\
 library_dirs = $(pack_get -LD fftw)\n\
 include_dirs = $(pack_get -prefix fftw)/include\n\
@@ -115,7 +114,7 @@ runtime_library_dirs = $tmp\n' $file"
 	*)
 	    pack_set -module-requirement lapack
 	    pack_cmd "sed -i '$ a\
-[openblas]\n\
+[lapack]\n\
 library_dirs = $(pack_get -LD lapack)\n\
 include_dirs = $(pack_get -prefix lapack)/include\n\
 libraries = lapack\n\
@@ -222,5 +221,3 @@ if ! $(is_c intel) ; then
     fi
     pack_store $TEST_OUT
 fi
-
-done

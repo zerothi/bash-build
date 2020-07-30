@@ -1,4 +1,5 @@
-v=1.70.0
+# always use the generic boost version (only one update)
+v=$(pack_get -version gen-boost)
 add_package \
     -package boost \
     -version $v \

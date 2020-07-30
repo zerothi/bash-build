@@ -1,6 +1,5 @@
-v=4.19.3
-add_package https://sourceforge.net/projects/pyqt/files/sip/sip-$v/sip-$v.tar.gz
-
+v=4.19.23
+add_package https://www.riverbankcomputing.com/static/Downloads/sip/$v/sip-$v.tar.gz
 pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --prefix)/bin/sip

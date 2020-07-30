@@ -1,7 +1,7 @@
 for d_type in d z
 do
 add_package -package slepc-$d_type \
-        http://slepc.upv.es/download/distrib/slepc-3.11.1.tar.gz
+        http://slepc.upv.es/download/distrib/slepc-3.13.3.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -43,12 +43,11 @@ pack_cmd "CC='$MPICC' CFLAGS='$CFLAGS'" \
 	 "LDFLAGS='$tmp_ld'" \
 	 "LIBS='$tmp_ld $tmp_lib'" \
 	 "AR=$AR" \
-	 "RANLIB=ranlib" \
+	 "RANLIB=$RANLIB" \
 	 "./configure" \
 	 "--prefix=$(pack_get -prefix)" \
 	 "--with-arpack" \
-	 "--with-arpack-dir=$(pack_get -LD parpack)" \
-	 "--with-arpack-flags='-lparpack -larpack'"
+	 "--with-arpack-dir=$(pack_get -LD parpack)"
 
 # Set the arch of the build (sets the directory...)
 # (pre 3.5 PETSC_ARCH=arch-installed-petsc is needed)

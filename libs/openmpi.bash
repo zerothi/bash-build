@@ -1,5 +1,5 @@
 # apt-get libc6-dev
-v=3.1.4
+v=4.0.4
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 

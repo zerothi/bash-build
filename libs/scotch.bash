@@ -1,7 +1,7 @@
 # MUMPS 4.10.0 only works with 5.1.12b, MUMPS 5 works with >=6.0.1
-for v in 6.0.4 ; do
-add_package --package scotch --alias scotch --version $v --directory scotch_6.0.3 \
-    http://gforge.inria.fr/frs/download.php/file/34099/scotch_$v.tar.gz
+for v in 6.0.9 ; do
+add_package --package scotch --alias scotch --version $v \
+    http://gforge.inria.fr/frs/download.php/file/38187/scotch_$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -38,6 +38,12 @@ CFLAGS = -Drestrict=__restrict\n' $file"
     
 fi
 
+# We have
+#CFLAGS += -DSCOTCH_METIS_PREFIX
+# above will prefix with SCOTCH_*
+#CFLAGS += -DSCOTCH_METIS_VERSION=5
+# make compatibility with APIv5 of METIS.
+
 pack_cmd "sed -i '$ a\
 EXE = \n\
 LIB = .a \n\
@@ -51,6 +57,8 @@ CCP = $MPICC \n\
 CCD = $CC $(list --INCDIRS mpi) \n\
 CFLAGS += $CFLAGS -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DIDXSIZE64 \n\
 CFLAGS += -DCOMMON_PTHREAD -DSCOTCH_PTHREAD\n\
+CFLAGS += -DSCOTCH_METIS_PREFIX\n\
+CFLAGS += -DSCOTCH_METIS_VERSION=5\n\
 CLIBFLAGS = \n\
 LDFLAGS = $(list --LD-rp +mpi) -lz -lm -lrt -lpthread \n\
 CP = cp \n\
@@ -92,9 +100,11 @@ pack_cmd "make install"
 if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
     # the esmumps libraries are not "installed"
     pack_cmd "cd ../lib"
-    pack_cmd "cp libesmumps.a libptesmumps.a $(pack_get --LD)/"
+    pack_cmd "cp libesmumps.a libptesmumps.a $(pack_get -LD)/"
     pack_cmd "cd ../include"
-    pack_cmd "cp metis.h parmetis.h esmumps.h $(pack_get --prefix)/include/"
+    pack_cmd "cp esmumps.h $(pack_get -prefix)/include/"
+    pack_cmd "cp metis.h $(pack_get -prefix)/include/scotch_metis.h"
+    pack_cmd "cp parmetis.h $(pack_get -prefix)/include/scotch_parmetis.h"
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then

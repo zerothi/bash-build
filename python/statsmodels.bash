@@ -1,4 +1,4 @@
-v=0.9.0
+v=0.11.1
 add_package -archive statsmodels-$v.tar.gz \
     https://github.com/statsmodels/statsmodels/archive/v$v.tar.gz
 
@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
-pack_set $(list -prefix ' -module-requirement ' cython numpy scipy pandas patsy)
+pack_set $(list -prefix ' -module-requirement ' cython numpy scipy pandas)
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 

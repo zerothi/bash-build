@@ -1,6 +1,6 @@
-v=0.7.1
-add_package \
-    https://github.com/zerothi/fdict/releases/download/v$v/fdict-$v.tar.gz
+v=0.8.0
+add_package -archive fdict-$v.tar.gz \
+	    https://github.com/zerothi/fdict/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

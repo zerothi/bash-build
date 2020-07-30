@@ -1,4 +1,4 @@
-v=3.5.1
+v=3.6.1
 add_package \
     --package pytables \
     --archive PyTables-$v.tar.gz \

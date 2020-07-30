@@ -9,6 +9,7 @@ pack_set -s $BUILD_DIR -s $IS_MODULE
 
 # Add requirments when creating the module
 pack_set --module-requirement hdf5-serial
+pack_set --module-requirement curl
 
 pack_set --install-query $(pack_get --LD)/libnetcdf.a
 pack_set --lib[fortran] -lnetcdff -lnetcdf
