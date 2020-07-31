@@ -109,6 +109,7 @@ source_pack libs/netcdf.bash
 source_pack libs/netcdf-logging.bash
 source_pack libs/netcdf-serial.bash
 source_pack libs/netcdf-serial-noszip.bash
+source_pack libs/pio.bash
 
 source_pack libs/openimageio.bash
 
