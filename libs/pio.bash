@@ -3,8 +3,9 @@ add_package https://github.com/NCAR/ParallelIO/releases/download/pio_${v//./_}/p
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set -install-query $(pack_get -LD)/libpio.so
-pack_set -lib -lpio
+pack_set -install-query $(pack_get -LD)/libpiof.so
+pack_set -lib -lpioc
+pack_set -lib[f90] -lpiof -lpioc
 
 pack_set -mod-req netcdf
 
