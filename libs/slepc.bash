@@ -56,14 +56,11 @@ pack_cmd "make SLEPC_DIR=\$(pwd)"
 #pack_cmd "make testexamples"
 #pack_cmd "make testfortran"
 
-pack_cmd "make install"
-
-# Unset architecture...
-pack_cmd "unset SLEPC_DIR"
+pack_cmd "make SLEPC_DIR=\$(pwd) install"
 
 # This tests the installation (i.e. linking)
-pack_cmd "make SLEPC_DIR=$(pack_get -prefix) test > slepc.test 2>&1"
-pack_store slepc.test
+pack_cmd "make SLEPC_DIR=$(pack_get -prefix) check > slepc.check 2>&1"
+pack_store slepc.check
 
 pack_set -module-opt "-set-ENV SLEPC_DIR=$(pack_get -prefix)"
 

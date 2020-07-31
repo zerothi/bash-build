@@ -1,4 +1,5 @@
-add_package https://bitbucket.org/slepc/slepc4py/downloads/slepc4py-3.13.0.tar.gz
+v=3.12.0
+add_package https://gitlab.com/slepc/slepc4py/-/archive/$v/slepc4py-$v.tar.bz2
 
 pack_set -s $IS_MODULE
 
