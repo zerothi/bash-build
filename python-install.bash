@@ -91,6 +91,8 @@ source_pack python/seaborn.bash
 
 source_pack python/xarray.bash
 
+source_pack python/plotly.bash
+
 source_pack python/yt.bash
 source_pack python/krypy.bash
 source_pack python/pygsl.bash

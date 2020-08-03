@@ -82,20 +82,21 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append Pillow
 fi
 pip_append certifi
+pip_append cffi
 pip_append Click
 pip_append cloudpickle
 pip_append codecov
 pip_append cycler # for matplotlib
-pip_append cffi
 pip_append decorator
 pip_append docutils
 pip_append fastimport
-pip_append FORD
 pip_append flake8
+pip_append flask $(list -prefix 'flask-' restx socketio cors login session)
+pip_append FORD
 pip_append fypp
 pip_append ipyvolume
-pip_append joblib
 pip_append jinja2
+pip_append joblib
 pip_append jsonschema
 # Until > 2.1.1 is out, we can't use it due to missing Cython updates
 #pip_append line_profiler
@@ -103,16 +104,17 @@ pip_append markupsafe
 pip_append Markdown
 pip_append memory_profiler
 pip_append mistune
-pip_append mpmath # for sympy
 pip_append mock
+pip_append mpmath # for sympy
 #pip_append monty
 pip_append nbsphinx
-pip_append numpydoc
 pip_append nose nose2
+pip_append numpydoc
 pip_append pathos
 pip_append patsy
 pip_append pep8 pep517
 pip_append pexpect
+pip_append pillow
 pip_append pipenv
 #pip_append pint
 pip_append pkgconfig
@@ -136,6 +138,7 @@ pip_append python-dateutil
 pip_append pyupgrade
 pip_append pyyaml
 pip_append requests
+pip_append retrying
 pip_append setuptools_scm
 pip_append simplegeneric
 pip_append simplejson
@@ -154,7 +157,6 @@ pip_append uncertainties
 pip_append versioneer
 pip_append virtualenv
 pip_append wheel
-
 
 if ! $(is_host atto) ; then
     # Only install jupyter on this machine
