@@ -1,8 +1,9 @@
-v=2.83.2
+v=2.83.3
 add_package -version $v -package blender -archive blender-$v.tar.gz \
         https://github.com/blender/blender/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
+
 pack_set -build-mod-req build-tools
 pack_set -build-mod-req cmake
 
@@ -17,32 +18,39 @@ pack_set -mod-req openjpeg
 pack_set -mod-req python
 pack_set -mod-req numpy
 
-pack_set -install-query $(pack_get -prefix)/lib/bpy.so
+pack_set -install-query $(pack_get -prefix)/bin/blender
 
 pack_cmd "unset LDFLAGS"
 pack_cmd "unset CFLAGS"
 pack_cmd "unset CPPFLAGS"
+
+for python_a in on off
+do
+if [ $python_a == "on" ]; then
+   python_b=off
+else
+python_b=on
+fi
+
 pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
-	 -DWITH_BLENDER=on \
 	 -DWITH_INSTALL_PORTABLE=off \
+	 -DWITH_PYTHON_INSTALL=$python_b \
+	 -DWITH_PYTHON_MODULE=$python_a \
+	 -DPYTHON_NUMPY_PATH=$(python3 -c "import numpy as np ; print(np.__file__.split('site-packages')[0] + '/site-packages')") \
+	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python${pV} \
+	 -DPYTHON_SITE_PACKAGES=$(pack_get -prefix)/lib/python \
+	 -DWITH_INTERNATIONAL=off \
+	 -DWITH_BLENDER=on \
 	 -DCMAKE_BUILD_TYPE="Release" \
 	 -DWITH_CODEC_FFMPEG=on \
-	 -DWITH_FFMPEG=on \
 	 -DFFMPEG=$(pack_get -prefix ffmpeg) \
 	 -DFFMPEG_INCLUDE_DIRS=$(pack_get -prefix ffmpeg)/include \
 	 -DFFMPEG_LIBPATH=$(pack_get -prefix ffmpeg)/lib \
 	 -DWITH_FFTW3=on \
-	 -DFFTW3_LIBRARY=$(pack_get -prefix fftw) \
-	 -DFFTW3_INCLUDE_DIR=$(pack_get -prefix fftw)/include \
+	 -DFFTW3_ROOT_DIR=$(pack_get -prefix fftw) \
 	 -DWITH_BOOST=on \
 	 -DBOOST_INCLUDE_DIR=$(pack_get -prefix boost)/include \
 	 -DWITH_IMAGE_OPENJPEG=on \
-	 -DWITH_PYTHON_INSTALL=off \
-	 -DWITH_PYTHON=on \
-	 -DWITH_PYTHON_MODULE=on \
-	 -DPYTHON_NUMPY_PATH=$(python3 -c "import numpy as np ; print(np.__file__.split('site-packages')[0] + '/site-packages')") \
-	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python${pV}m \
-	 -DPYTHON_SITE_PACKAGES=$(pack_get -prefix)/lib/python \
 	 -DWITH_X11=on -DWITH_OPENMP=on \
 	 -DWITH_OPENCOLLADA=off -DWITH_SDL=off -DWITH_OPENAL=off \
 	 -DWITH_CYCLES=on \
@@ -64,4 +72,7 @@ pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
-pack_cmd "tsaeohusoa"
+# Clean everything, to do rebuild
+pack_cmd 'rm -rf ./*'
+
+done

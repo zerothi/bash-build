@@ -69,6 +69,7 @@ source_pack helpers/shtool.bash
 source_pack helpers/bison.bash
 source_pack helpers/flex.bash
 source_pack helpers/pcre.bash
+source_pack helpers/pcre2.bash
 source_pack helpers/swig.bash
 
 source_pack helpers/optipng.bash

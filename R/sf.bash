@@ -1,4 +1,4 @@
-add_R_package sf 0.8-1
+add_R_package sf 0.9-5
 pack_set -mod-req R.rgeos -mod-req R.units -mod-req gdal -mod-req geos
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"

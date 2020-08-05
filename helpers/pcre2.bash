@@ -1,10 +1,10 @@
-add_package --build generic ftp://ftp.pcre.org/pub/pcre/pcre-8.44.tar.bz2
+add_package --build generic ftp://ftp.pcre.org/pub/pcre/pcre2-10.35.tar.bz2
 
 pack_set --host-reject ntch-2857
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --prefix)/bin/pcregrep
+pack_set --install-query $(pack_get --prefix)/bin/pcre2grep
 
 # Install commands that it should run
 pack_cmd "./configure" \

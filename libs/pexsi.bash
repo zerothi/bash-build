@@ -1,12 +1,10 @@
-add_package -package pexsi https://math.berkeley.edu/~linlin/pexsi/download/pexsi_v1.2.0.tar.gz
+add_package -package pexsi https://bitbucket.org/berkeleylab/pexsi/downloads/pexsi_v1.2.0.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpexsi_linux.a
 pack_set -lib -lpexsi_linux
 
-pack_set $(list -p '-mod-req ' mpi parmetis scotch)
-pack_set -mod-req superlu-dist
-pack_set -mod-req sympack
+pack_set $(list -p '-mod-req ' mpi parmetis scotch superlu-dist sympack)
 
 # Prepare the make file
 tmp="sed -i -e"
@@ -27,7 +25,7 @@ FC = $MPIFC \n\
 LOADER = \\\$(CXX) \n\
 AR = $AR \n\
 ARFLAGS = rvcu \n\
-RANLIB = ranlib \n\
+RANLIB = $RANLIB \n\
 CP = cp \n\
 RM = rm \n\
 RMFLAGS = -f \n\
@@ -47,11 +45,11 @@ CCDEFS = -DRELEASE -DDEBUG=0 -DAdd_ \n\
 CPPDEFS = -std=c++11 \$(CCDEFS) \n\
 #\n\
 LIBS = \$(PEXSI_LIB) \n\
-LIBS += $(list -LD-rp superlu-dist parmetis scotch)\n\
+LIBS += $(list -LD-rp superlu-dist parmetis scotch sympack)\n\
 LIBS += -Wl,--allow-multiple-definition -lsuperlu_dist \n\
 #LIBS += -lptscotchparmetis -lptscotch -lptscotcherr \n\
 LIBS += -lscotchmetis -lscotch -lscotcherr \n\
-LIBS += -lparmetis -lmetis \n\
+LIBS += -lparmetis -lmetis -lsympack\n\
 ' $file"
 
 # Add LAPACK and BLAS libraries

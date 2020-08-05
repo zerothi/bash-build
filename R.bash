@@ -1,7 +1,7 @@
 rV=4.0
 IrV=$rV.2
 add_package -alias R -package R \
-	    https://cran.r-project.org/src/base/R-3/R-$IrV.tar.gz
+	    https://cran.r-project.org/src/base/R-${rV:0:1}/R-$IrV.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -14,6 +14,7 @@ pack_set -mod-req openssl
 pack_set -mod-req libgit2
 # for xml dependency
 pack_set -mod-req libxml2
+pack_set -mod-req pcre2
 
 tmp=
 if $(is_c intel) ; then

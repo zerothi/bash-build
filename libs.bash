@@ -36,6 +36,7 @@ source_pack libs/adcl.bash
 source_pack libs/otpo.bash
 #source_pack libs/netpipe.bash
 
+source_pack libs/upcxx.bash
 source_pack libs/opencoarray.bash
 
 # Default fftw libs

@@ -5,9 +5,9 @@ add_package --package sympack \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
-pack_set -install-query $(pack_get -LD)/libsymPACK.a
+pack_set -install-query $(pack_get -LD)/libsympack.a
 pack_set -build-mod-req build-tools
-pack_set $(list -prefix ' -mod-req ' metis parmetis scotch)
+pack_set $(list -prefix ' -mod-req ' metis parmetis scotch upcxx)
 
 tmp_flags=
 if $(is_c intel) ; then
@@ -20,15 +20,11 @@ else
     tmp="$(list -LD-rp-lib $la)"
     tmp_flags="$tmp_flags -DBLAS_LIBRARIES='$tmp' -DLAPACK_LIBRARIES='$tmp'"
 fi
-#	 "-DMETIS_LIBRARY='$(list -LD-rp-lib metis)' -DENABLE_METIS=ON" \
-#	 "-DMETIS_INCLUDE_DIR='$(pack_get -prefix metis)/include'" \
 
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
-	 "-DMETIS_PREFIX='$(pack_get -prefix metis)' -DENABLE_METIS=ON" \
-	 "-DPARMETIS_LIBRARY='$(list -LD-rp-lib parmetis)' -DENABLE_PARMETIS=ON" \
-	 "-DPARMETIS_INCLUDE_DIR='$(pack_get -prefix parmetis)/include'" \
-	 "-DSCOTCH_LIBRARY='$(list -LD-rp-lib scotch)' -DENABLE_SCOTCH=ON" \
-	 "-DSCOTCH_INCLUDE_DIR='$(pack_get -prefix scotch)/include'" \
+	 "-Dmetis_PREFIX='$(pack_get -prefix metis)' -DENABLE_METIS=ON" \
+	 "-Dparmetis_PREFIX='$(pack_get -prefix parmetis)' -DENABLE_PARMETIS=ON" \
+	 "-Dscotch_PREFIX='$(pack_get -prefix scotch)' -DENABLE_SCOTCH=ON" \
 	 "-DCMAKE_BUILD_TYPE=Release $tmp_flags .."
 
 pack_cmd "make $(get_make_parallel)"

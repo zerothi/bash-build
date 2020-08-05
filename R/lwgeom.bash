@@ -1,4 +1,4 @@
-add_R_package lwgeom 0.2-1
+add_R_package lwgeom 0.2-5
 pack_set -mod-req R.udunits2 -mod-req geos -mod-req R.sf
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
