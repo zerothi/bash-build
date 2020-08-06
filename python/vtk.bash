@@ -1,5 +1,9 @@
 add_package -package vtk https://www.vtk.org/files/release/8.2/VTK-8.2.0.tar.gz
 
+if [[ $(vrs_cmp $pV 3.5) -lt 0 ]]; then
+    pack_set -host-reject $(get_hostname)
+fi
+
 pack_set -install-query $(pack_get -prefix)/bin/vtkpython
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $PRELOAD_MODULE
