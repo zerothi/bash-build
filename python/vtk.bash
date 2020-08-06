@@ -7,6 +7,10 @@ pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $PRELOAD_MODULE
 pack_set -module-opt "-lua-family vtk"
 pack_set -module-opt "-ld-library-path"
 
+if [[ $(vrs_cmp $pV 3.5) -lt 0 ]]; then
+    pack_set -host-reject $(get_hostname)
+fi
+
 pack_set $(list -p '-mod-req ' numpy mpi4py)
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
