@@ -17,13 +17,13 @@ if [[ $(vrs_cmp $v 3.9) -eq 0 ]]; then
     dwn_file http://www.openmx-square.org/bugfixed/20Feb11/patch3.9.2.tar.gz $o
     pack_cmd "tar xfz $o"
     pack_cmd "mv kpoint.in ../work"
+    pack_cmd "sed -i -e 's:gcube2oned::g' makefile"
 fi
     
 if [[ $(vrs_cmp $v 3.8) -eq 0 ]]; then
     o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch3.8.5.tar.gz
     dwn_file http://www.openmx-square.org/bugfixed/18June12/patch3.8.5.tar.gz $o
     pack_cmd "tar xfz $o"
-    pack_cmd "sed -i -e 's/gcube2oned//g' makefile"
 fi
 
 if [[ $(vrs_cmp $v 3.7) -eq 0 ]]; then
@@ -99,7 +99,11 @@ else
 fi
 
 # Add an ENV-flag for the pseudos to be accesible
-pack_cmd "cd ../DFT_DATA13"
+if [[ $(vrs_cmp $v 3.9) -ge 0 ]]; then
+    pack_cmd "cd ../DFT_DATA19"
+else
+    pack_cmd "cd ../DFT_DATA13"
+fi
 pack_cmd "cp -r PAO VPS $(pack_get -prefix)/"
 pack_set -module-opt "-set-ENV OPENMX_PAO=$(pack_get -prefix)/PAO"
 pack_set -module-opt "-set-ENV OPENMX_VPS=$(pack_get -prefix)/VPS"
