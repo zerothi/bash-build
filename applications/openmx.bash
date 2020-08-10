@@ -5,7 +5,7 @@ add_package -package openmx \
 
 pack_set -module-opt "-lua-family openmx"
 
-pack_set -install-query $(pack_get -prefix)/bin/openmx
+pack_set -install-query $(pack_get -prefix)/PAO
 
 pack_set -module-requirement mpi -module-requirement fftw-mpi
 
@@ -23,6 +23,7 @@ if [[ $(vrs_cmp $v 3.8) -eq 0 ]]; then
     o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch3.8.5.tar.gz
     dwn_file http://www.openmx-square.org/bugfixed/18June12/patch3.8.5.tar.gz $o
     pack_cmd "tar xfz $o"
+    pack_cmd "sed -i -e 's/gcube2oned//g' makefile"
 fi
 
 if [[ $(vrs_cmp $v 3.7) -eq 0 ]]; then
@@ -56,7 +57,7 @@ LIB += $(list -LD-rp scalapack +$la) -lscalapack $(pack_get -lib[omp] $la)' $fil
 
     # Add the gfortran library
     pack_cmd "sed -i '1 a\
-LIB += -lgfortran' $file"
+LIB += -lgfortran -lm' $file"
 
     pack_cmd "sed -i '1 a\
 CC += $FLAG_OMP\nFC += $FLAG_OMP' $file"
