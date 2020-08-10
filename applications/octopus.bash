@@ -1,19 +1,19 @@
-v=9.0
-add_package http://www.tddft.org/programs/octopus/download/$v/octopus-$v.tar.gz
-
+v=10.0
+add_package https://octopus-code.org/download/$v/octopus-$v.tar.gz
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --module-opt "--lua-family octopus"
+pack_set -module-opt "--lua-family octopus"
 
-pack_set --install-query $(pack_get --prefix)/bin/octopus
+pack_set -install-query $(pack_get -prefix)/bin/octopus
 
-pack_set --module-requirement mpi
-pack_set --module-requirement libxc
-pack_set --module-requirement gsl
-pack_set --module-requirement arpack-ng
-pack_set --module-requirement etsf_io
-pack_set --module-requirement fftw-mpi
-pack_set --module-requirement bgw
+pack_set -module-requirement mpi
+libxc_v=4.3.4
+pack_set -module-requirement libxc[$libxc_v]
+pack_set -module-requirement gsl
+pack_set -module-requirement arpack-ng
+pack_set -module-requirement etsf_io
+pack_set -module-requirement fftw-mpi
+pack_set -module-requirement bgw
 
 tmp=
 if $(is_c intel) ; then
@@ -23,11 +23,11 @@ if $(is_c intel) ; then
     tmp="$tmp --with-blas='-lmkl_blas95_lp64 -mkl=parallel'"
 
 else
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp scalapack $la)"
+    pack_set -module-requirement $la
+    tmp_ld="$(list -LD-rp scalapack $la)"
     tmp="$tmp --with-scalapack='$tmp_ld -lscalapack'"
     tmp="$tmp --with-blacs='$tmp_ld -lscalapack'"
     tmp="$tmp --with-lapack='$tmp_ld $(pack_get -lib $la)'"
@@ -36,27 +36,27 @@ else
 fi
 
 # The old versions had one library, the newer ones have Fortran and C divided.
-tmp_xc="$(pack_get --LD libxc)/libxc.a"
-if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
-    tmp_xc="$(pack_get --LD libxc)/libxcf90.a $(pack_get --LD libxc)/libxc.a"
+tmp_xc="$(pack_get -LD libxc[$libxc_v])/libxc.a"
+if [[ $(vrs_cmp $libxc_v 2.2.0) -ge 0 ]]; then
+    tmp_xc="$(pack_get -LD libxc[$libxc_v])/libxcf90.a $(pack_get -LD libxc[$libxc_v])/libxc.a"
 fi
-tmp="$tmp --with-berkeleygw-prefix=$(pack_get --prefix bgw)"
+tmp="$tmp --with-berkeleygw-prefix=$(pack_get -prefix bgw)"
 
 # Correct berkeleyGW linking
 pack_cmd "sed -i -e 's:/library -l:/lib -l:g;s:/library:/include:g' ../configure"
 
 # Do not install the serial version
 if [[ 0 -eq 1 ]]; then
-pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
+pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
      "--enable-openmp" \
      "--enable-utils" \
-     "--with-libxc-include=$(pack_get --prefix libxc)/include" \
-     "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
-     "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-     "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
-     "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
-     "--prefix=$(pack_get --prefix)" \
+     "--with-libxc-include=$(pack_get -prefix libxc[$libxc_v])/include" \
+     "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
+     "--with-gsl-prefix=$(pack_get -prefix gsl)" \
+     "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get -prefix fftw-mpi)" \
+     "--with-arpack='$(list -LD-rp arpack-ng) -lparpack -larpack'" \
+     "--prefix=$(pack_get -prefix)" \
      "$tmp"
 
 # Make commands
@@ -69,16 +69,16 @@ pack_store octopus.test octopus.test.serial
 pack_cmd "rm -rf *"
 fi
 
-pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list --LD-rp $(pack_get --mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
      "--enable-mpi" \
      "--enable-openmp" \
-     "--with-libxc-include=$(pack_get --prefix libxc)/include" \
-     "--with-etsf-io-prefix=$(pack_get --prefix etsf_io)" \
-     "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-     "--with-netcdf-prefix=$(pack_get --prefix netcdf)" \
-     "--with-fftw-prefix=$(pack_get --prefix fftw-mpi)" \
-     "--with-arpack='$(list --LD-rp arpack-ng) -lparpack -larpack'" \
-     "--prefix=$(pack_get --prefix)" \
+     "--with-libxc-include=$(pack_get -prefix libxc)/include" \
+     "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
+     "--with-gsl-prefix=$(pack_get -prefix gsl)" \
+     "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \
+     "--with-fftw-prefix=$(pack_get -prefix fftw-mpi)" \
+     "--with-arpack='$(list -LD-rp arpack-ng) -lparpack -larpack'" \
+     "--prefix=$(pack_get -prefix)" \
      "$tmp"
 
 # Make commands
