@@ -1,4 +1,4 @@
-v=10.0
+v=9.0
 add_package https://octopus-code.org/download/$v/octopus-$v.tar.gz
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -14,6 +14,7 @@ pack_set -module-requirement arpack-ng
 pack_set -module-requirement etsf_io
 pack_set -module-requirement fftw-mpi
 pack_set -module-requirement bgw
+pack_set -module-requirement elpa
 
 tmp=
 if $(is_c intel) ; then
@@ -52,6 +53,7 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-
      "--enable-utils" \
      "--with-libxc-include=$(pack_get -prefix libxc[$libxc_v])/include" \
      "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
+     "--with-elpa-prefix=$(pack_get -prefix elpa)" \
      "--with-gsl-prefix=$(pack_get -prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \
      "--with-fftw-prefix=$(pack_get -prefix fftw-mpi)" \
@@ -77,6 +79,7 @@ pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-
      "--with-gsl-prefix=$(pack_get -prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \
      "--with-fftw-prefix=$(pack_get -prefix fftw-mpi)" \
+     "--with-elpa-prefix=$(pack_get -prefix elpa)" \
      "--with-arpack='$(list -LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get -prefix)" \
      "$tmp"

@@ -9,7 +9,7 @@ pack_set -lib -lgdal
 pack_set $(list -prefix ' -mod-req ' curl expat libxml2 sqlite openexr netcdf-serial proj sfcgal geos qhull)
 
 # Sadly, the proj linker test does not add libcurl and its dependencies
-pack_cmd "./configure" \
+pack_cmd "LIBS='$(list -LD-rp proj sfcgal)' ./configure" \
 	 "--with-curl=$(pack_get -prefix curl)" \
 	 "--with-expat=$(pack_get -prefix expat)" \
 	 "--with-xml2=yes" \
