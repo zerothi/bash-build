@@ -30,6 +30,7 @@ else
 fi
 
 source_pack libs/osu-benchmarks.bash
+source_pack libs/mpi-benchmarks.bash
 
 # Optimization of openmpi parameters
 source_pack libs/adcl.bash
