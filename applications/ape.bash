@@ -1,5 +1,5 @@
-v=2.3.0
-add_package http://www.tddft.org/programs/octopus/download/APE/$v/ape-$v.tar.gz
+v=2.3.2
+add_package http://www.tddft.org/programs/APE/down.php?file=$v/ape-$v.tar.gz
 
 pack_set -s $BUILD_DIR
 

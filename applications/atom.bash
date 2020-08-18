@@ -1,5 +1,5 @@
 add_package -package atom -version 4.2.7.100 \
-	    https://departments.icmab.es/leem/siesta/Pseudopotentials/Code/atom-4.2.7-100.tgz
+        https://departments.icmab.es/leem/SIESTA_MATERIAL/Pseudos/Code/atom-4.2.7-100.tgz
 
 pack_set -s $MAKE_PARALLEL
 
