@@ -4,7 +4,7 @@ add_package https://gitlab.inria.fr/knem/knem/uploads//4a43e3eb860cda2bbd5bf5c7c
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 # What to check for when checking for installation...
-pack_set -install-query $(pack_get -prefix)/bin/knem
+pack_set -install-query $(pack_get -prefix)/bin/knem_cost
 
 pack_set -build-mod-req build-tools
 pack_set -mod-req hwloc
