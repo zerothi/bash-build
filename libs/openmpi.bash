@@ -45,6 +45,8 @@ if [[ -n $LSF_BINDIR ]]; then
     tmp=$(dirname $LSF_BINDIR)
     tmp_flags="$tmp_flags --with-lsf=$(dirname $tmp)"
     tmp_flags="$tmp_flags --with-lsf-libdir=$tmp/lib"
+    tmp_flags="$tmp_flags --without-tm"
+
 else
     [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 fi
@@ -78,6 +80,7 @@ fi
 # Install commands that it should run
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get -prefix)" \
+	 "--enable-orterun-prefix-by-default" \
 	 "--enable-mpirun-prefix-by-default" \
 	 "--with-hwloc=$(pack_get -prefix $(pack_get -mod-req[hwloc]))" \
 	 "--with-zlib=$(pack_get -prefix zlib)" \
