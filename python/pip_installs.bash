@@ -152,6 +152,7 @@ pip_append toolz
 pip_append tornado
 pip_append tqdm
 pip_append traitlets
+pip_append tuna
 pip_append twine
 pip_append uncertainties
 pip_append versioneer
