@@ -1,5 +1,5 @@
 # apt-get libc6-dev
-v=4.0.3
+v=4.0.4
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 
@@ -30,6 +30,8 @@ if [[ $(vrs_cmp $(pack_get -version) 1.10.1) -eq 0 ]]; then
     pack_cmd "pushd ../"
     pack_cmd "patch -p1 < $o"
     pack_cmd "popd"
+elif [[ $(vrs_cmp $(pack_get -version) 4.0.4) -eq 0 ]]; then
+    pack_cmd "sed -i -e 's:\(name.vpid = vpid\);:\1++;:' ../orte/mca/rmaps/base/rmaps_base_ranking.c"
 fi
 
 tmp_flags=""
