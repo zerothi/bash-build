@@ -86,6 +86,9 @@ source_pack libs/globalarrays.bash
 
 source_pack libs/eigen.bash
 
+# nearest neighbour search
+source_pack libs/nanoflann.bash
+
 # Some specific libraries
 source_pack libs/glpk.bash
 source_pack libs/gsl.bash
@@ -130,6 +133,8 @@ source_pack libs/metis.bash
 source_pack libs/metis-par-3.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
+
+source_pack libs/seacas.bash
 
 source_pack libs/geos.bash
 source_pack libs/cgal.bash

@@ -13,3 +13,5 @@ pack_set -install-query $(pack_get -prefix)/include/Eigen/Dense
 pack_cmd "cmake ../ -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
 	 "-DEIGEN_INCLUDE_INSTALL_DIR=$(pack_get -prefix)/include"
 pack_cmd "make install"
+pack_cmd "sed -i -e 's:\\${PACKAGE_PREFIX_DIR}/\\${PACKAGE_PREFIX_DIR}:\\${PACKAGE_PREFIX_DIR}:g' $(pack_get -prefix)/share/eigen3/cmake/Eigen3Config.cmake"
+

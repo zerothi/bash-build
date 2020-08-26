@@ -10,7 +10,9 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpetsc.so
 pack_set -lib -lpetsc
 
-pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse)
+pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse seacas)
+
+# seacas has zoltan, exodus
 
 # Find hwloc library
 tmp_hwloc=$(pack_get -mod-req[hwloc])
@@ -107,6 +109,10 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "--with-ptscotch-dir=$(pack_get -prefix scotch)" \
 	 "--with-mumps=1" \
 	 "--with-mumps-dir=$(pack_get -prefix mumps)" \
+	 "--with-zoltan=1" \
+	 "--with-zoltan-dir=$(pack_get -prefix seacas)" \
+	 "--with-exodusii=1" \
+	 "--with-exodusii-dir=$(pack_get -prefix seacas)" \
 	 "--with-suitesparse=1" \
 	 "--with-suitesparse-dir=$(pack_get -prefix suitesparse)" \
 	 "--with-superlu_dist=1" \
