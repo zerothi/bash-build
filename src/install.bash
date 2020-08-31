@@ -403,15 +403,13 @@ function pack_install {
     fi
 
     # Fix the library path...
-    if [[ ! -d $(pack_get -LD $idx) ]]; then
-	local _lib=""
-	for cmd in lib lib64 ; do
-	    if [[ -d $prefix/$cmd ]]; then
-		_lib="$_lib $cmd"
-	    fi
-	done
-	[[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
-    fi
+    local _lib=""
+    for cmd in lib lib64 ; do
+	if [[ -d $prefix/$cmd ]]; then
+	    _lib="$_lib $cmd"
+	fi
+    done
+    [[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
 
     if [[ $installed -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then
