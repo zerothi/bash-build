@@ -81,6 +81,10 @@ sse "LDLIBS += -L\$(INSTALL_LIB) -Wl,-rpath=\$(INSTALL_LIB)"
 unset ssb
 unset sse
 
+if [[ $(vrs_cmp $v 5.8.0) -eq 0 ]]; then
+    pack_cmd "sed -i -e 's:^CFLAGS +=:#CFLAGS +=:' SLIP_LU/Lib/Makefile"
+fi
+
 pack_cmd "JOBS=$NPROCS make config"
 pack_cmd "JOBS=$NPROCS make library"
 pack_cmd "JOBS=$NPROCS make static"
