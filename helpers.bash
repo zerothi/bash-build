@@ -43,6 +43,8 @@ source_pack helpers/global.bash
 source_pack helpers/imake.bash
 source_pack helpers/makedepend.bash
 
+source_pack helpers/ccache.bash
+
 # Tools for performance analysis
 source_pack helpers/unwind.bash
 source_pack helpers/wxwidgets.bash
