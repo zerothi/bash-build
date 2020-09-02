@@ -7,7 +7,7 @@ add_package -archive seacas-$v.tar.gz \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set $(list -p '-mod-req ' mpi netcdf parmetis)
-pack_set -install-query $(pack_get -LD)/libexodusii.a
+pack_set -install-query $(pack_get -LD)/libexodus.a
 pack_set -lib -lseacas
 pack_set -lib[exodus] -lexodusii
 
