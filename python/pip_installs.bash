@@ -26,7 +26,8 @@ pack_set --directory .
 _pip_dwn=$(pwd_archives)/pip
 mkdir -p $_pip_dwn
 
-_pip_cmd=$(pack_get -prefix python)/bin/pip
+# -s disable userbase
+_pip_cmd="$(get_parent_exec) -s -m pip"
 
 _pip=
 function pip_append {
@@ -52,6 +53,7 @@ function pip_install {
 }
 
 # Ensure we don't check together with locally installed stuff
+# is probably double with python -s
 pack_cmd "unset PYTHONUSERBASE"
 
 # First install its own usage (and update it)
