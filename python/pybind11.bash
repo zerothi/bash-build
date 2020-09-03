@@ -6,12 +6,13 @@ pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set -build-mod-req build-tools
 pack_set -module-requirement eigen
-pack_set -module-requirement boost
+# boost only required for tests
+pack_set -build-mod-req boost
 
 pack_set -install-query $(pack_get -prefix)/include/pybind11/pybind11.h
 
 pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
-	 "-DPYTHON_EXECUTABLE=$(get_parent_exec) .."
+    "-DPYTHON_EXECUTABLE=$(get_parent_exec) .."
 
 pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make check > pybind11.tmp"

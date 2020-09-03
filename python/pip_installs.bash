@@ -65,6 +65,7 @@ pip_install nose
 pip_append autopep8
 pip_append asteval
 pip_append anaconda-client
+pip_append attrs
 pip_append backports.ssl_match_hostname
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
