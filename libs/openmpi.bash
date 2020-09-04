@@ -76,7 +76,7 @@ else
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get -module-name-requirement flex) $(pack_get -module-name flex)"
+    pack_cmd "module load $(list -mod-names ++flex)"
 fi
 
 # Install commands that it should run
@@ -100,7 +100,7 @@ pack_cmd "make install"
 
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
-    pack_cmd "module unload $(pack_get -module-name flex) $(pack_get -module-name-requirement flex)"
+    pack_cmd "module unload $(list -mod-names ++flex)"
 fi
 
 

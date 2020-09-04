@@ -77,6 +77,7 @@ function add_hidden_package {
     # Hence if the build-settings has been edited
     # We skip those
     _settings[$_N_archives]=''
+    pack_set -module-name ""
 }
 
 # This function takes no arguments
@@ -102,7 +103,8 @@ function add_test_package {
     local top_prefix=$(pack_get -prefix $name[$version])
     pack_set -prefix $top_prefix
     pack_set -module-requirement $name[$version]
-    pack_set -remove-setting module
+    pack_set -module-name ""
+    pack_set -remove-setting $IS_MODULE
     pack_set -install-query $top_prefix/${TEST_OUT}*
 }
 
@@ -501,7 +503,18 @@ function pack_set {
 	done
 
     fi
-    [[ "$inst" -ne '-100' ]]    && _installed[$index]="$inst"
+    if [[ "$inst" -ne '-100' ]]; then
+	_installed[$index]="$inst"
+	if [[ $inst -ne $_I_MOD ]]; then
+	    if $(has_setting $IS_MODULE $index) ; then
+		noop
+	    else
+		# Ensure that modules that are not modules
+		# do not provide any modules names when queried!
+		_mod_name[$index]=""
+	    fi
+	fi
+    fi
     [[ -n "$query" ]]      && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
 	local v=''

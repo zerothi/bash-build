@@ -36,7 +36,7 @@ if [[ $(vrs_cmp $v 0.16.0) -eq 0 ]]; then
 fi
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module load $(list ++swig)"
+    pack_cmd "module load $(list -mod-names ++swig)"
 fi
 
 pack_cmd "unset LDFLAGS"
@@ -53,7 +53,7 @@ pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module unload $(list ++swig)"
+    pack_cmd "module unload $(list -mod-names ++swig)"
 fi
 
 if ! $(is_c intel) ; then

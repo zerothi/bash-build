@@ -14,10 +14,10 @@ pack_set --lib[pt] "-lptscotch -lptscotcherr -lptscotcherrexit"
 
 
 if [[ $(pack_installed bison) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement bison) $(pack_get --module-name bison)"
+    pack_cmd "module load $(list -mod-names ++bison)"
 fi
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get --module-name-requirement flex) $(pack_get --module-name flex)"
+    pack_cmd "module load $(list -mod-names ++flex)"
 fi
 
 # Move to source
@@ -108,10 +108,10 @@ if [[ $(vrs_cmp $v 6.0.0) -gt 0 ]]; then
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
-    pack_cmd "module unload $(pack_get --module-name flex) $(pack_get --module-name-requirement flex)"
+    pack_cmd "module unload $(list -mod-names ++flex)"
 fi
 if [[ $(pack_installed bison) -eq 1 ]] ; then
-    pack_cmd "module unload $(pack_get --module-name bison) $(pack_get --module-name-requirement bison)"
+    pack_cmd "module unload $(list -mod-names ++bison)"
 fi
 
 done
