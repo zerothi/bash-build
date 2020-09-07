@@ -13,4 +13,5 @@ pack_set -install-query $(pack_get -prefix)/include/Eigen/Dense
 pack_cmd "cmake ../ -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 
 pack_cmd "make install"
+pack_cmd "cd $(pack_get -prefix)/include ; ln -s eigen3/Eigen ."
 
