@@ -53,7 +53,7 @@ tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DGMX_BUILD_OWN_FFTW=OFF"
 case $par in
     mpi*)
 	pack_set -module-requirement mpi
-	tmp="$tmp -DGMX_MPI=ON -DNUMPROC=$((NPROCS/2))"
+	tmp="$tmp -DGMX_MPI=ON -DNUMPROC=$((NPROCS/2)) -DHWLOC_INCLUDE_DIRS=$(pack_get -prefix hwloc)/include"
 	;;
     cuda*)
 	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
