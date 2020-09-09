@@ -37,13 +37,14 @@ if $(is_c intel) ; then
     #tmp="$tmp --with-scalapack-dir=$MKL_PATH/lib/intel64" 
     tmp="$tmp --with-scalapack-lib='-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
+    pack_cmd "unset AR RANLIB"
 
 else
     pack_set -module-requirement scalapack
     la=lapack-$(pack_choice -i linalg)
     pack_set -module-requirement $la
     tmp="--with-lapack-lib='$(pack_get -lib $la)' --with-blas-lib='$(pack_get -lib $la)'"
-    tmp="$tmp --with-scalapack-dir=$(pack_get -prefix scalapack)"
+    tmp="$tmp --with-scalapack-dir=$(pack_get -prefix scalapack) AR=$AR RANLIB=$RANLIB"
 fi
 
 case $d_type in
@@ -72,8 +73,6 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "F90='$MPIF90'" \
 	 "LDFLAGS='$tmp_ld -lmpi_cxx'" \
 	 "LIBS='$tmp_ld -lmpi_cxx'" \
-	 "AR=$AR" \
-	 "RANLIB=$RANLIB" \
 	 "--with-scalar-type=$tmp_arch" \
 	 "--prefix=$(pack_get -prefix)" \
 	 "--with-petsc-arch=$tmp_arch" \
