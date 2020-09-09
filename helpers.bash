@@ -1,20 +1,20 @@
-msg_install --message "Installing all helper modules if needed..."
+msg_install -message "Installing all helper modules if needed..."
 
 
 # Add a module which contains the default build tools
-add_package --build generic --version 1.0 \
-    --package build-tools fake
+add_package -build generic -version 1.0 \
+    -package build-tools fake
 pack_set -s $IS_MODULE
-pack_set --module-name build-tools/1.0
-pack_set --prefix $(build_get --installation-path[generic])/build-tools/1.0
-pack_set --install-query $(pack_get --prefix)/bin
-pack_set --command "mkdir -p $(pack_get --prefix)/bin/"
-pack_set --module-opt "--set-ENV PKG_CONFIG=$(pack_get --prefix)/bin/pkg-config"
+pack_set -module-name build-tools/1.0
+pack_set -prefix $(build_get -installation-path[generic])/build-tools/1.0
+pack_set -install-query $(pack_get -prefix)/bin
+pack_set -command "mkdir -p $(pack_get -prefix)/bin/"
+pack_set -module-opt "-set-ENV PKG_CONFIG=$(pack_get -prefix)/bin/pkg-config"
 tmp=$(which pkg-config)
 if [[ $? -eq 0 ]]; then
     tmp=$(pkg-config --variable pc_path pkg-config)
     if [[ -n "$tmp" ]]; then
-	pack_set --module-opt "--prepend-ENV PKG_CONFIG_PATH=$tmp"
+	pack_set -module-opt "-prepend-ENV PKG_CONFIG_PATH=$tmp"
     fi
 fi
 
@@ -90,7 +90,7 @@ source_pack helpers/libgit2.bash
 source_pack helpers/curl.bash
 
 # This will recreate the module with AC_LOCAL etc.
-pack_set --installed $_I_TO_BE build-tools # Make sure it is "installed"
+pack_set -installed $_I_TO_BE build-tools # Make sure it is "installed"
 pack_install build-tools
 
 source_pack helpers/numactl.bash
