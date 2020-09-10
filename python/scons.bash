@@ -13,6 +13,10 @@ pack_set --install-query $(pack_get --prefix)/bin/scons
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
 # Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py build"
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix)"
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    pack_cmd "$(get_parent_exec) setup.py build install" \
+	     "--prefix=$(pack_get -prefix)"
+else
+    pack_cmd "cd src ; $(get_parent_exec) setup.py build install" \
+	     "--prefix=$(pack_get -prefix)"
+fi
