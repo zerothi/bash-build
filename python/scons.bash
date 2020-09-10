@@ -1,4 +1,8 @@
-v=4.0.0
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=4.0.0
+else
+    v=3.1.2
+fi
 add_package -archive scons-$v.tar.gz \
 	    https://github.com/SCons/scons/archive/$v.tar.gz
 
