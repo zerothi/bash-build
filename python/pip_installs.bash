@@ -147,7 +147,7 @@ pip_append setuptools_scm
 pip_append simplegeneric
 pip_append simplejson
 pip_append six
-pip_append sphinx sphinx_rtd_theme
+pip_append sphinx sphinx_rtd_theme sphinx-autoapi
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
