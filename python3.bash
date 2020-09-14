@@ -123,6 +123,7 @@ fi
 tmp=libpython${pV}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 unset tmp
+pack_cmd "if [ ! -e $(pack_get -prefix)/bin/python ]; then pushd $(pack_get -prefix)/bin ; ln -s python python3 ; popd ; fi"
 
 
 # Create a new build with this module
