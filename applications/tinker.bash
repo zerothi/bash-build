@@ -4,7 +4,7 @@ add_package -directory tinker \
 
 pack_set -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/tinker
+pack_set -install-query $(pack_get -prefix)/bin/sniffer
 
 pack_set -mod-req fftw
 
