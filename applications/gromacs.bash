@@ -53,7 +53,12 @@ tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DGMX_BUILD_OWN_FFTW=OFF"
 case $par in
     mpi*)
 	pack_set -module-requirement mpi
-	tmp="$tmp -DGMX_MPI=ON -DNUMPROC=$((NPROCS/2)) -DHWLOC_INCLUDE_DIRS=$(pack_get -prefix hwloc)/include"
+	tmp="$tmp -DGMX_MPI=ON -DNUMPROC=$((NPROCS/2))"
+	# for 2019
+	tmp="$tmp -DHWLOC_INCLUDE_DIRS=$(pack_get -prefix hwloc)/include"
+	tmp="$tmp -DHWLOC_LIBRARIES=$(pack_get -LD hwloc)/libhwloc.a"
+	# for 2020
+	tmp="$tmp -DHWLOC_DIR=$(pack_get -prefix hwloc)"
 	;;
     cuda*)
 	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
@@ -80,9 +85,9 @@ esac
 tmp="$tmp -DGMX_PREFER_STATIC_LIBS=ON"
 tmp="$tmp -DGMX_FFT_LIBRARY=fftw3"
 
-# Allow 128 threads (default 32)
+# Allow 256 threads (default 32)
 tmp="$tmp -DGMX_OPENMP=ON"
-tmp="$tmp -DGMX_OPENMP_MAX_THREADS=128"
+tmp="$tmp -DGMX_OPENMP_MAX_THREADS=256"
 
 if $(is_c intel) ; then
     # hopefully this should be enough
@@ -94,7 +99,7 @@ elif $(is_c gnu) ; then
     pack_set -module-requirement $la
     tmp_ld="$(list -LD-rp +$la)"
     tmp="$tmp -DGMX_LAPACK_USER='$(trim_spaces $tmp_ld) $(pack_get -lib[omp] $la)'"
-    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) $(pack_get -lib[omp] $la) -lgfortran'"
+    tmp="$tmp -DGMX_BLAS_USER='$(trim_spaces $tmp_ld) $(pack_get -lib[omp] $la) -lgfortran -lm'"
 
 else
     doerr $(pack_get -package) "Could not determine compiler: $(get_c)"

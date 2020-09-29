@@ -2,7 +2,7 @@ v=2.5.1
 add_package https://github.com/NCAR/ParallelIO/releases/download/pio_${v//./_}/pio-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
-pack_set -install-query $(pack_get -LD)/libpiof.so
+pack_set -install-query $(pack_get -LD)/libpiof.a
 pack_set -lib -lpioc
 pack_set -lib[f90] -lpiof -lpioc
 

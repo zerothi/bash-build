@@ -23,7 +23,7 @@ pack_set --directory .
 
 # Create folder for pip-downloads
 # Note this is version dependent
-_pip_dwn=$(pwd_archives)/pip
+_pip_dwn=$(pwd_archives)/pip$pV
 mkdir -p $_pip_dwn
 
 # -s disable userbase
@@ -167,7 +167,9 @@ if ! $(is_host atto) ; then
     # Only install jupyter on this machine
     pip_append pyzmq
     pip_append jupyter nbconvert jupyterlab
-    pip_append jupyterhub
+    if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
+       pip_append jupyterhub
+    fi
     pip_append spyder
 fi
 

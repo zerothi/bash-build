@@ -20,12 +20,12 @@ pack_cmd "mkdir -p $(pack_get -LD)"
 
 # Install the C wrappers (in both precisions)
 pack_cmd "cd $MKL_PATH/interfaces/fftw3xc"
-pack_cmd "make compiler=intel INSTALL_DIR=$(pack_get -LD) INSTALL_LIBNAME=libfftw3xc libintel64"
+pack_cmd "make compiler=intel INSTALL_DIR=$(pack_get -LD) INSTALL_LIBNAME=libfftw3xc.a libintel64"
 
 # Install the fortran wrappers
 # This will be 4 bytes integers
 pack_cmd "cd $MKL_PATH/interfaces/fftw3xf"
-pack_cmd "make compiler=intel INSTALL_DIR=$(pack_get -LD) INSTALL_LIBNAME=libfftw3xf libintel64"
+pack_cmd "make compiler=intel INSTALL_DIR=$(pack_get -LD) INSTALL_LIBNAME=libfftw3xf.a libintel64"
 
 if [ -d $MKL_PATH/interfaces/fftw3x_cdft ]; then
     pack_cmd "cd $MKL_PATH/interfaces/fftw3x_cdft"

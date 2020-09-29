@@ -8,6 +8,12 @@ pack_set -lib -lgeos
 
 pack_set -build-mod-req build-tools
 
-pack_cmd "../configure --prefix=$(pack_get -prefix)"
+tmp=
+if $(is_c intel) ; then
+    tmp="$tmp CXXFLAGS='$CXXFLAGS -std=c++11'"
+fi
+
+pack_cmd "unset LDFLAGS"
+pack_cmd "../configure $tmp --prefix=$(pack_get -prefix)"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
