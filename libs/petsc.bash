@@ -131,5 +131,6 @@ pack_set -module-opt "-set-ENV PETSC_DIR=$(pack_get -prefix)"
 
 # Clean up the unused module
 pack_cmd "rm -rf $(pack_get -LD)/modules"
+pack_cmd "cd $(pack_get -prefix) ; ln -s $(pack_get -LD)/petsc/bin bin"
 
 done
