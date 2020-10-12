@@ -10,8 +10,9 @@ mk_R_install_script "config_pkglibs = 'PKG_LIBS=\'$(list -LD-rp proj geos gdal)\
 # Now create full script
 mk_R_install_script "install.packages('$archive_path/$(pack_get -archive)',"
 mk_R_install_script "'$(pack_get -prefix)', repos=NULL, type='source',"
-mk_R_install_script "configure.args=paste(config_gdal,config_proj,sep=' '),"
-mk_R_install_script "configure.vars=paste(config_ldflags,config_libs,config_pkglibs,sep=' '))"
+mk_R_install_script "configure.args=c(config_gdal,config_proj),"
+mk_R_install_script "configure.vars=c(config_ldflags,config_libs,config_pkglibs))"
+mk_R_install_script "configure.vars=c(config_libs))"
 file=$(pwd)/$(mk_R_install_script get)
 
 pack_cmd "Rscript $file"

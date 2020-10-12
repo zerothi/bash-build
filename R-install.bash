@@ -12,6 +12,7 @@ function mk_R_install_script {
     case $1 in
 	new)
 	    shift 1
+        rm -f $file
 	    [ $# -gt 0 ] && echo "$@" > $file
 	    ;;
 	get)
