@@ -414,11 +414,11 @@ EOF
 	echo "" >> $mfile
     fi
     # Always create an environment variable named:
-    #   ${name}_INSTALL_DIR to have the installation
+    #   ${name}_PREFIX to have the installation
     #   directory accessible at all times.
     # This is nice for header only projects etc.
     add_module_if -F $force -d "$path" $mfile \
-        "$(module_fmt_routine -set-env ${name}_INSTALL_DIR $fpath)"
+        "$(module_fmt_routine -set-env ${name}_PREFIX $fpath)"
     # Add paths if they are available
     add_module_if -F $force -d "$path/bin" $mfile \
 	"$(module_fmt_routine -prepend-path PATH $fpath/bin)"
