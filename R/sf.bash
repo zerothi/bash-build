@@ -1,14 +1,16 @@
 add_R_package sf 0.9-5
 pack_set -mod-req R.rgeos -mod-req R.units -mod-req gdal -mod-req geos
 
-tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
-tmp="$tmp, repos=NULL, type='source'"
-tmp_f="--with-geos-config=$(pack_get -prefix geos)/bin/geos-config"
-tmp_f="$tmp_f --with-gdal-config=$(pack_get -prefix gdal)/bin/gdal-config"
-tmp_f="$tmp_f --with-proj-include=$(pack_get -prefix proj)/include"
-tmp_f="$tmp_f --with-proj-lib=$(pack_get -prefix proj)/lib"
-tmp="$tmp, configure.args='$tmp_f'"
-tmp="$tmp, configure.vars='LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj geos gdal)\' PKG_LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj geos gdal)\''"
-#tmp="$tmp, configure.vars='LDFLAGS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj gdal)\' LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj gdal)\' PKG_LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj gdal)\''"
+mk_R_install_script new "config_geos = '--with-geos-config=$(pack_get -prefix geos)/bin/geos-config'"
+mk_R_install_script "config_gdal = '--with-gdal-config=$(pack_get -prefix gdal)/bin/gdal-config'"
+mk_R_install_script "config_proj = '--with-proj-include=$(pack_get -prefix proj)/include --with-proj-lib=$(pack_get -prefix proj)/lib'"
+mk_R_install_script "config_libs = 'LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj geos gdal)\''"
+mk_R_install_script "config_pkglibs = 'PKG_LIBS=\'$(list -LD-rp hdf5-serial netcdf-serial sqlite proj geos gdal)\''"
+# Now create full script
+mk_R_install_script "install.packages('$archive_path/$(pack_get -archive)',"
+mk_R_install_script "'$(pack_get -prefix)', repos=NULL, type='source',"
+mk_R_install_script "configure.args=paste(config_geos,config_gdal,config_proj,sep=' '),"
+mk_R_install_script "configure.vars=paste(config_libs,config_pkglibs,sep=' '))"
+file=$(pwd)/$(mk_R_install_script get)
 
-pack_cmd "Rscript -e \"install.packages($tmp)\""
+pack_cmd "Rscript $file && rm $file"

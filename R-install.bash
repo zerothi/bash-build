@@ -7,6 +7,23 @@ msg_install \
 # Install packages in the base-R directory!
 source R/R-basic.bash
 
+function mk_R_install_script {
+    local file=.R.$(pack_get -package).$(pack_get -version)
+    case $1 in
+	new)
+	    shift 1
+	    echo "$@" > $file
+	    ;;
+	get)
+	    printf '%s' "$file"
+	    ;;
+	*)
+	    echo "$@" >> $file
+	    ;;
+    esac
+}
+
+
 archive_path=$(build_get -archive-path)
 function add_R_package {
     local name=$1
@@ -124,3 +141,4 @@ install_all -from R.udunits2
 
 unset archive_path
 unset add_R_package
+unset mk_R_install_script
