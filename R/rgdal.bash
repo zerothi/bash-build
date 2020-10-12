@@ -1,10 +1,17 @@
 add_R_package rgdal 1.5-16
 pack_set -mod-req R.udunits2 -mod-req gdal -mod-req R.sp
 
-tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
-tmp="$tmp, repos=NULL, type='source'"
-tmp_f="-with-gdal-config=$(pack_get -prefix gdal)/bin/gdal-config"
-tmp="$tmp, configure.args='$tmp_f'"
-tmp="$tmp, configure.vars='LDFLAGS=\'$(list -LD-rp proj geos gdal)\' LIBS=\'$(list -LD-rp proj geos gdal)\' PKG_LIBS=\'$(list -LD-rp proj geos gdal)\''"
+mk_R_install_script new
+mk_R_install_script "config_gdal = '--with-gdal-config=$(pack_get -prefix gdal)/bin/gdal-config'"
+mk_R_install_script "config_proj = '--with-proj-include=$(pack_get -prefix proj)/include --with-proj-lib=$(pack_get -prefix proj)/lib'"
+mk_R_install_script "config_ldflags = 'LDFLAGS=\'$(list -LD-rp proj geos gdal)\''"
+mk_R_install_script "config_libs = 'LIBS=\'$(list -LD-rp proj geos gdal)\''"
+mk_R_install_script "config_pkglibs = 'PKG_LIBS=\'$(list -LD-rp proj geos gdal)\''"
+# Now create full script
+mk_R_install_script "install.packages('$archive_path/$(pack_get -archive)',"
+mk_R_install_script "'$(pack_get -prefix)', repos=NULL, type='source',"
+mk_R_install_script "configure.args=paste(config_gdal,config_proj,sep=' '),"
+mk_R_install_script "configure.vars=paste(config_ldflags,config_libs,config_pkglibs,sep=' '))"
+file=$(pwd)/$(mk_R_install_script get)
 
-pack_cmd "Rscript -e \"install.packages($tmp)\""
+pack_cmd "Rscript $file"

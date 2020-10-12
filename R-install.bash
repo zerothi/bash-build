@@ -8,13 +8,14 @@ msg_install \
 source R/R-basic.bash
 
 function mk_R_install_script {
-    local file=.R.$(pack_get -package).$(pack_get -version)
+    local file=$(build_get -build-path)/.R.$(pack_get -package).$(pack_get -version)
     case $1 in
 	new)
 	    shift 1
-	    echo "$@" > $file
+	    [ $# -gt 0 ] && echo "$@" > $file
 	    ;;
 	get)
+	    shift 1
 	    printf '%s' "$file"
 	    ;;
 	*)
