@@ -3,7 +3,7 @@ for p in 1.12.0 ; do
 
 add_package \
     --package hdf5 \
-    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-$p/src/hdf5-$p.tar.bz2
+    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${p%.*}/hdf5-$p/src/hdf5-$p.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
