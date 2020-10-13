@@ -11,7 +11,7 @@ pack_set -s $IS_MODULE
 
 pack_set -module-opt "-lua-family inelastica"
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/Inelastica
+pack_set -install-query $(pack_get -prefix)/bin/Phonons
 
 pack_set -module-requirement scipy \
 	 -module-requirement netcdf4py

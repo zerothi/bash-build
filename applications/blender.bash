@@ -15,7 +15,6 @@ fi
 
 pack_set -mod-req ffmpeg -mod-req openimageio
 pack_set -mod-req openjpeg
-pack_set -mod-req python
 pack_set -mod-req numpy
 
 pack_set -install-query $(pack_get -prefix)/bin/blender
