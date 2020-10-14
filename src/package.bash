@@ -127,7 +127,7 @@ function source_pack {
     while [[ $source_pack_i -lt $_N_archives ]]; do
 	let source_pack_i++
 	pack_install $source_pack_i
-    done    
+    done
 }
 
 
@@ -777,7 +777,10 @@ function pack_store {
 function pack_print {
     # It will only take one argument...
     local pack=$_N_archives
-    [[ $# -gt 0 ]] && pack=$(get_index $1)
+    if [[ $# -gt 0 ]]; then
+	pack=$(get_index $1)
+	shift
+    fi
     echo " >> >> >> >> Package information"
     echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
     echo " V  : $(pack_get -v $pack)"
@@ -798,6 +801,7 @@ function pack_print {
     # Print out all the libraries associated
     # with this package
     local -a sets=()
+
     # Get all different libraries
     IFS="$_LIST_SEP" read -ra sets <<< "${_libs[$pack]}"
     local libc

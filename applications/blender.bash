@@ -26,9 +26,9 @@ pack_cmd "unset CPPFLAGS"
 for python_a in on off
 do
 if [ $python_a == "on" ]; then
-   python_b=off
+    python_b=off
 else
-python_b=on
+    python_b=on
 fi
 
 pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \

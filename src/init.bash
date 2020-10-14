@@ -26,15 +26,15 @@ trap '_bb_exit' TERM
 
 function _bb_exit {
     # This function will list the lines where it went wrong
-    local deptn=${#FUNCNAME[@]}
+    local depthn=${#FUNCNAME[@]}
     local i j
     local func src line
     echo ''
 
-    for ((i=1; i<$deptn; i++)) ; do
-        func="${FUNCNAME[$i]}"
+    for ((i=1; i<$depthn; i++)) ; do
 	j=$((i-1))
-        src="${BASH_SOURCE[$j]}"
+        func="${FUNCNAME[$j]}"
+        src="${BASH_SOURCE[$i]}"
         line="${BASH_LINENO[$j]}"
         printf '%*s %s in %s at line: %s\n' $i '' "$func()" "$src" "$line"
     done
