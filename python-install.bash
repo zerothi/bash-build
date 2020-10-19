@@ -143,6 +143,8 @@ source_pack python/mfix.bash
 source_pack python/rdkit.bash
 
 
+source_pack python/openmm.bash
+
 # made for kwant
 source_pack python/tinyarray.bash
 source_pack python/kwant.bash

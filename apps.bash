@@ -7,7 +7,6 @@ build_set --default-setting $CRT_DEF_MODULE
 source_pack applications/blender.bash
 source_pack applications/mopac.bash
 source_pack applications/tinker.bash
-source_pack applications/openmm.bash
 
 source_pack applications/radiance.bash
 source_pack applications/openfoam.bash

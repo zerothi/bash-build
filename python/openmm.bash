@@ -17,7 +17,6 @@ else
     pack_set -host-reject $(get_hostname)
 fi
 pack_set -mod-req fftw
-pack_set -mod-req python
 pack_set -mod-req numpy
 # only for Amber netcdf files
 pack_set -mod-req scipy
