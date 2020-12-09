@@ -14,8 +14,9 @@ pack_set -install-query $(pack_get -prefix)/bin/nim
 # Create building nim
 pack_cmd "sh build.sh"
 pack_cmd "bin/nim c koch"
+pack_cmd "./koch docs -d:release"
 pack_cmd "./koch boot -d:release"
-pack_cmd "./koch tools"
+pack_cmd "./koch tools -d:release"
 pack_cmd "./koch install $(pack_get -prefix)"
 
 # Create a new build with this module
