@@ -2,20 +2,20 @@ vv=5.4.1.24Jun15
 vv=5.4.1.05Feb16
 v=${vv%.*}
 add_package \
-    --package vasp \
-    --directory vasp.$v \
-    --version $v \
+    -package vasp \
+    -directory vasp.$v \
+    -version $v \
     http://www.student.dtu.dk/~nicpa/packages/vasp.$vv.tar.gz
 
-pack_set --host-reject zeroth
+pack_set -host-reject zeroth
 
-pack_set --module-requirement mpi
-pack_set --module-requirement fftw
-pack_set --module-requirement wannier90
+pack_set -module-requirement mpi
+pack_set -module-requirement fftw
+pack_set -module-requirement wannier90
 
-pack_set --module-opt "--lua-family vasp"
+pack_set -module-opt "-lua-family vasp"
 
-pack_set --install-query "$(pack_get --prefix)/bin/vasp_tst_ncl_is2"
+pack_set -install-query "$(pack_get -prefix)/bin/vasp_tst_ncl_is2"
 
 file=makefile.include
 pack_cmd "echo '# NPA' > $file"
@@ -23,24 +23,24 @@ pack_cmd "echo '# NPA' > $file"
 # Start by downloading patches...
 #### THESE APPLY TO 5.4.1.24Jun15
 #p=5.4.1.08072015
-#o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+#o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 #dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 #pack_cmd "gunzip -c $o | patch -p0"
 #p=5.4.1.27082015
-#o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+#o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 #dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 #pack_cmd "gunzip -c $o | patch -p1"
 #p=5.4.1.06112015
-#o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+#o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 #dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 #pack_cmd "gunzip -c $o | patch -p0"
 #### THESE APPLY TO 5.4.1.05Feb16
 p=5.4.1.14032016
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 pack_cmd "gunzip -c $o | patch -p0"
 p=5.4.1.03082016
-o=$(pwd_archives)/$(pack_get --package)-$(pack_get --version)-patch.$p.gz
+o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 pack_cmd "gunzip -c $o | patch -p0"
 
@@ -51,7 +51,7 @@ pack_cmd "gunzip -c $o | patch -p0"
 pack_cmd "sed -i '1 a\
 CPP = cpp -E -P -C -nostdinc -traditional \$*\$(FUFFIX) >\$*\$(SUFFIX) \$(CPP_OPTIONS) \n\
 CPP_OPTIONS  += -DVASP2WANNIER90\n\
-CPP_OPTIONS  += -DMPI -DHOST=\\\\\"$(get_c)-$(pack_get --package mpi)\\\\\"\n\
+CPP_OPTIONS  += -DMPI -DHOST=\\\\\"$(get_c)-$(pack_get -package mpi)\\\\\"\n\
 CPP_OPTIONS  += -DIFC\n\
 CPP_OPTIONS  += -DCACHE_SIZE=6000 -DMPI_BLOCK=60000\n\
 CPP_OPTIONS  += -DDGEGV=DGGEV\n\
@@ -66,10 +66,10 @@ OFLAG  = \$(FFLAGS) \n\
 OFLAG_IN  = \$(OFLAG) \n\
 DEBUG  = -O0 \n\
 OBJECTS = fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \n\
-WANNIER_PATH = $(pack_get --LD wannier90)\n\
+WANNIER_PATH = $(pack_get -LD wannier90)\n\
 WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
-INCS += -I$(pack_get --prefix fftw)/include\n\
-FFTW_PATH = $(pack_get --LD fftw)\n\
+INCS += -I$(pack_get -prefix fftw)/include\n\
+FFTW_PATH = $(pack_get -LD fftw)\n\
 FFTW      = -L\$(FFTW_PATH) -Wl,-rpath=\$(FFTW_PATH)\n\
 LLIBS = \$(WANNIER) -lwannier \$(FFTW) -lfftw3 \n\
 ' $file"
@@ -87,14 +87,14 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LLIBS += -mkl=parallel $(list --LD-rp mpi) \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
+LLIBS += -mkl=parallel $(list -LD-rp mpi) \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
 
 elif $(is_c gnu) ; then
 
-    pack_set --module-requirement scalapack
+    pack_set -module-requirement scalapack
 
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
+    pack_set -module-requirement $la
     pack_cmd "sed -i '$ a\
 FREE = -ffree-form -ffree-line-length-none\n\
 SCA = $(list -LD-rp scalapack) -lscalapack\n\
@@ -131,15 +131,15 @@ function compile_ispin {
     # std has to be the final one
     for e in gam ncl std
     do
-	pack_cmd "cp bin/vasp_$e $(pack_get --prefix)/bin/${exe}_${e}_is$i"
+	pack_cmd "cp bin/vasp_$e $(pack_get -prefix)/bin/${exe}_${e}_is$i"
 	if [[ $i -eq 0 ]]; then
-	    pack_cmd "pushd $(pack_get --prefix)/bin"
+	    pack_cmd "pushd $(pack_get -prefix)/bin"
 	    pack_cmd "ln -fs ${exe}_${e}_is0 ${exe}_${e}"
 	    pack_cmd "popd"
 	fi
     done
     if [[ $i -eq 0 ]]; then
-	pack_cmd "pushd $(pack_get --prefix)/bin"
+	pack_cmd "pushd $(pack_get -prefix)/bin"
 	pack_cmd "ln -fs ${exe}_std_is0 ${exe}"
 	pack_cmd "popd"
     fi
@@ -147,7 +147,7 @@ function compile_ispin {
 }
 
 # Prepare the installation directory
-pack_cmd "mkdir -p $(pack_get --prefix)/bin"
+pack_cmd "mkdir -p $(pack_get -prefix)/bin"
 
 # Make commands
 for i in 0 1 2 ; do
@@ -158,8 +158,8 @@ done
 ###################### Prepare the TST code ##########################
 
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstcode.tar.gz"
-pack_cmd "wget http://theory.cm.utexas.edu/code/vtstcode.tgz"
-pack_cmd "tar xfz vtstcode.tgz"
+pack_cmd "wget http://theory.cm.utexas.edu/code/vtstcode-180.tgz"
+pack_cmd "tar xfz vtstcode-180.tgz"
 pack_cmd "cp -r vtstcode-*/* ./src/"
 
 pack_cmd "pushd src"
@@ -178,7 +178,7 @@ pack_cmd "popd"
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
 pack_cmd "wget http://theory.cm.utexas.edu/code/vtstscripts.tgz"
 pack_cmd "tar xfz vtstscripts.tgz"
-pack_cmd "cp -r vtstscripts-*/* $(pack_get --prefix)/bin/"
+pack_cmd "cp -r vtstscripts-*/* $(pack_get -prefix)/bin/"
 
 ######################   end the TST code   ##########################
 
@@ -190,7 +190,7 @@ done
 unset compile_ispin
 
 # Ensure that the group is correctly set
-tmp="$(pack_get --prefix)/bin"
+tmp="$(pack_get -prefix)/bin"
 if $(is_host n-) ; then
     pack_cmd "chmod o-rwx $tmp/vasp*"
     pack_cmd "chgrp nanotech $tmp/vasp*"
