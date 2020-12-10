@@ -54,7 +54,7 @@ CPP_OPTIONS  += -DVASP2WANNIER90\n\
 CPP_OPTIONS  += -DMPI -DHOST=\\\\\"$(get_c)-$(pack_get --package mpi)\\\\\"\n\
 CPP_OPTIONS  += -DIFC\n\
 CPP_OPTIONS  += -DCACHE_SIZE=6000 -DMPI_BLOCK=60000\n\
-CPP_OPTIONS  += -DDGEGV=DDGGEV\n\
+CPP_OPTIONS  += -DDGEGV=DGGEV\n\
 CPP_OPTIONS  += -DscaLAPACK -Duse_collective\n\
 CPP_OPTIONS  += -DnoAugXCmeta -Duse_bse_te\n\
 CPP_OPTIONS  += -Duse_shmem -Dtbdyn\n\
@@ -71,6 +71,7 @@ WANNIER      = -L\$(WANNIER_PATH) -Wl,-rpath=\$(WANNIER_PATH)\n\
 INCS += -I$(pack_get --prefix fftw)/include\n\
 FFTW_PATH = $(pack_get --LD fftw)\n\
 FFTW      = -L\$(FFTW_PATH) -Wl,-rpath=\$(FFTW_PATH)\n\
+LLIBS = \$(WANNIER) -lwannier \$(FFTW) -lfftw3 \n\
 ' $file"
     
 # Check for Intel MKL or not
@@ -86,7 +87,7 @@ MKL_LD =  -L\$(MKL_PATH)/lib/intel64 -Wl,-rpath=\$(MKL_PATH)/lib/intel64 \n\
 BLAS = \$(MKL_LD) -lmkl_blas95_lp64 \n\
 LAPACK = \$(MKL_LD) -lmkl_lapack95_lp64 \n\
 SCA = \$(MKL_LD) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
-LLIBS = -mkl=parallel $(list --LD-rp mpi) \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
+LLIBS += -mkl=parallel $(list --LD-rp mpi) \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
 
 elif $(is_c gnu) ; then
 
@@ -99,7 +100,7 @@ FREE = -ffree-form -ffree-line-length-none\n\
 SCA = $(list -LD-rp scalapack) -lscalapack\n\
 LAPACK = $(list -LD-rp +$la) $(pack_get -lib[omp] $la)\n\
 BLAS = \$(LAPACK)\n\
-LLIBS = \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
+LLIBS += \$(SCA) \$(LAPACK) \$(BLAS)\n' $file"
 
 else
     do_err "VASP" "Unknown compiler: $(get_c)"
@@ -107,7 +108,6 @@ fi
 
 
 pack_cmd "sed -i '$ a\
-LLIBS += \$(WANNIER) -lwannier \$(FFTW) -lfftw3 \n\
 OBJECTS_O1 += fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \n\
 CPP_LIB = \$(CPP)\n\
 FC_LIB = \$(FC)\n\
