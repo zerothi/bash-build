@@ -1,7 +1,6 @@
 nV=1.4
 InV=$nV.2
 add_package -package nim \
-	    -directory nim-$InV \
 	    https://nim-lang.org/download/nim-$InV.tar.xz
 
 # The settings
@@ -17,6 +16,7 @@ pack_cmd "bin/nim c koch"
 pack_cmd "./koch docs -d:release"
 pack_cmd "./koch boot -d:release"
 pack_cmd "./koch tools -d:release"
+pack_cmd "sed -i -e '/case/,/esac/{s:/nim::g}' install.sh"
 pack_cmd "./koch install $(pack_get -prefix)"
 
 # Create a new build with this module
