@@ -1,5 +1,6 @@
 vv=5.4.1.24Jun15
 vv=5.4.1.05Feb16
+#vv=5.4.4.16May18
 v=${vv%.*}
 add_package \
     -package vasp \
@@ -43,7 +44,10 @@ p=5.4.1.03082016
 o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
 dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
 pack_cmd "gunzip -c $o | patch -p0"
-
+#p=5.4.4.16052018
+#o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch.$p.gz
+#dwn_file http://cms.mpi.univie.ac.at/patches/patch.$p.gz $o
+#pack_cmd "gunzip -c $o | patch -p0"
 # Start with creating a template makefile.
 # The cache size is determined from the L1 cache (E5-2650 have ~64KB
 # However, it has been investigated that a CACHE_SIZE of ~ 5000 is good for this

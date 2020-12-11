@@ -1,7 +1,3 @@
-if ! $(is_c intel) ; then
-    return
-fi
-
 if [[ $(pack_get --installed vasp) -eq 0 ]]; then
     return
 fi
