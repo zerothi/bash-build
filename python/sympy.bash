@@ -4,6 +4,8 @@ add_package --directory sympy-$v \
     https://github.com/sympy/sympy/releases/download/sympy-$v/sympy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
+# Not working on py2
+[[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/site.py
 
