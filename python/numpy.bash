@@ -47,12 +47,17 @@ include_dirs = $(pack_get -prefix suitesparse)/include\n\
 library_dirs = $(pack_get -LD suitesparse)\n\
 runtime_library_dirs = $(pack_get -LD suitesparse)\n' $file"
 
+lapack_order=
+blas_order=
+
 # Check for Intel MKL or not
 if $(is_c intel) ; then
 
     if [[ -z "$MKL_PATH" ]]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
+    lapack_order='mkl'
+    blas_order='mkl'
     pack_cmd "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_cmd "sed -i '$ a\
 [mkl]\n\
@@ -101,9 +106,11 @@ elif $(is_c gnu) ; then
     case $la in
 	openblas)
 	    # lapack internally
-	    noop
+	    lapack_order='openblas'
 	    ;;
 	atlas)
+	    # lapack internally
+	    lapack_order='atlas'
 	    pack_cmd "sed -i '$ a\
 [lapack]\n\
 library_dirs = $tmp\n\
@@ -112,6 +119,8 @@ libraries = lapack_atlas\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	*)
+	    # lapack internally
+	    lapack_order='lapack'
 	    pack_set -module-requirement lapack
 	    pack_cmd "sed -i '$ a\
 [lapack]\n\
@@ -127,6 +136,7 @@ runtime_library_dirs = $(pack_get -LD lapack)\n' $file"
     tmp_l=${tmp_l//-l/,}
     case $la in
 	atlas)
+	    blas_order='atlas'
 	    pack_cmd "sed -i '$ a\
 [atlas_threads]\n\
 library_dirs = $tmp\n\
@@ -143,6 +153,7 @@ libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file" 
 	    ;;
 	openblas)
+	    blas_order='openblas'
 	    pack_cmd "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
@@ -152,6 +163,7 @@ extra_link_args = -lpthread -lgfortran -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blas)
+	    blas_order='blas'
 	    pack_cmd "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
@@ -161,6 +173,7 @@ libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blis)
+	    blas_order='blis'
 	    pack_cmd "sed -i '$ a\
 [blis]\n\
 library_dirs = $tmp\n\
@@ -205,8 +218,8 @@ pack_cmd "unset LDFLAGS"
 #pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
 #pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
 #pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$lapack_order NPY_BLAS_ORDER=$blas_order $(get_parent_exec) setup.py build $pNumpyInstall"
+pack_cmd "NPY_LAPACK_ORDER=$lapack_order NPY_BLAS_ORDER=$blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 pack_cmd "unset LDSHARED"
 
