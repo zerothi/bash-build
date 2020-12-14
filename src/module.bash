@@ -419,7 +419,7 @@ EOF
     # This is nice for header only projects etc.
     # Change name to a usable env-var
     add_module_if -F $force -d "$path" $mfile \
-        "$(module_fmt_routine -set-env ${name//[-.]/_}_PREFIX $fpath)"
+        "$(module_fmt_routine -set-env ${name//[-.\/]/_}_PREFIX $fpath)"
     # Add paths if they are available
     add_module_if -F $force -d "$path/bin" $mfile \
 	"$(module_fmt_routine -prepend-path PATH $fpath/bin)"
