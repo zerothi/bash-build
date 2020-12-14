@@ -46,10 +46,7 @@ if [[ $(vrs_cmp $v 1.2.0) -lt 0 ]]; then
     pack_cmd "sed -i 's/\([[:space:]]*\)\(.*extra_link_args.*\)/\1ext.extra_link_args = \[arg for arg in ext.extra_link_args if not \"version-script\" in arg\]\n\1\2/' setup.py"
 fi
 
-pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
