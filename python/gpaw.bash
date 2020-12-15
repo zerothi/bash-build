@@ -5,6 +5,8 @@ add_package -archive gpaw-$v.tar.gz \
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -directory gpaw-$v-*
+# Not working on py2
+[[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
 
 pack_set -module-opt "-lua-family gpaw"
 

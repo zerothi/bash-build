@@ -8,6 +8,8 @@ pack_set -directory ase-$v-*
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -module-opt "-lua-family ase"
+# Not working on py2
+[[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
 
 pack_set -install-query $(pack_get -prefix)/bin/ase
 
