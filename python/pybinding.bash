@@ -1,4 +1,4 @@
-v=0.9.4
+v=0.9.5
 add_package --archive pybinding-$v.tar.gz https://github.com/dean0x7d/pybinding/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
