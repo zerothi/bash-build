@@ -40,6 +40,16 @@ pack_cmd "cp atm $(pack_get -prefix)/bin/"
 pack_cmd "cd Util ; ln -s ../arch.make"
 pack_cmd "$FC -o $(pack_get -prefix)/bin/vpsa2bin vpsa2bin.f $FFLAGS"
 pack_cmd "$FC -o $(pack_get -prefix)/bin/vpsb2asc vpsb2asc.f $FFLAGS"
-pack_cmd "cd $(pack_get -prefix)/bin/ ; ln -s atm atom"
 
+pack_cmd "cd Ps2Inp ; make FC=$FC ps2inp semicore_info"
+pack_cmd "cp ps2inp semicore_info $(pack_get -prefix)/bin"
+
+# Copy shell-scripts for creating plots
+pack_cmd "cd ../../Tutorial/Utils"
+pack_cmd "cp *.* $(pack_get -prefix)/bin/"
+
+pack_cmd "cd $(pack_get -prefix)/bin/ ; ln -s atm atom ; chmod a+x *.sh"
+
+pack_set -module-opt "-set-ENV ATOM_PROGRAM=$(pack_get -prefix)/bin/atm"
+pack_set -module-opt "-set-ENV ATOM_UTILS_DIR=$(pack_get -prefix)/utils"
 
