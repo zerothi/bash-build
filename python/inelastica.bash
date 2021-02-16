@@ -7,7 +7,7 @@ add_package -package Inelastica \
 	    -archive inelastica-$v.tar.gz \
 	    https://github.com/tfrederiksen/inelastica/archive/v$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -module-opt "-lua-family inelastica"
 
