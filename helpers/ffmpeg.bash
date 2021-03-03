@@ -4,6 +4,9 @@ add_package -build generic \
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+# ensure this module also gets ld-library path added to the modules
+pack_set -module-opt -ld-library-path
+
 pack_set -install-query $(pack_get -prefix)/bin/ffmpeg
 
 pack_set -mod-req openjpeg
