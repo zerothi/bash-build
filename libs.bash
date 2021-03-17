@@ -100,6 +100,7 @@ source_pack libs/harminv.bash
 source_pack libs/blaze.bash
 source_pack libs/zeep.bash
 source_pack libs/xssp.bash
+source_pack libs/libint1.bash
 source_pack libs/libint.bash
 source_pack libs/openexr.bash
 
