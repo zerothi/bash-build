@@ -1,4 +1,3 @@
-[ "x${pV:0:1}" == "x2" ] && return 0
 v=1.77
 add_package -version $v \
         -package biopython \
@@ -6,6 +5,8 @@ add_package -version $v \
 	    https://github.com/biopython/biopython/archive/biopython-${v//./}.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
+
+[ "x${pV:0:1}" == "x2" ] && pack_set --host-reject $(get_hostname)
 
 pack_set -module-requirement numpy
 
