@@ -98,7 +98,7 @@ pip_append flask $(list -prefix 'flask-' restx socketio cors login session)
 pip_append FORD
 pip_append fypp
 pip_append ipyvolume
-pip_append gitpython
+[[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append gitpython
 pip_append hypothesis
 pip_append jinja2
 pip_append joblib
@@ -134,7 +134,7 @@ pip_append pyparser
 pip_append pyparsing
 pip_append pycparser
 pip_append pyflakes
-pip_append pygithub
+[[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append pygithub
 pip_append pylint
 pip_append pympler
 pip_append pytest pytest-cov
