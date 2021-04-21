@@ -1,3 +1,4 @@
+[ "x${pV:0:1}" == "x2" ] && return 0
 v=1.77
 add_package -version $v \
         -package biopython \
