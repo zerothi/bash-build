@@ -1,5 +1,5 @@
 if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=1.6.0
+    v=1.5.2
 else
     v=1.2.3
 fi
@@ -11,7 +11,6 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
 pack_set -module-requirement numpy
-pack_set -module-requirement pybind11
 pack_set -build-mod-req cython
 
 # Ensure directory exists (for writing)

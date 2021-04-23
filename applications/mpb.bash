@@ -3,7 +3,7 @@ add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/mpbi
+pack_set -install-query $(pack_get -prefix)/bin/mpbi-mpi
 
 pack_set -module-opt "--lua-family mpb"
 
@@ -33,25 +33,23 @@ else
 fi
 tmp="$tmp --with-libctl=$(pack_get -prefix libctl)"
 
-for flag in "" "--with-inv-symmetry"
-do
-    # Install the parallel version
-    pack_cmd "../configure" \
-	     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
-	     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
-	     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
-	     "--with-mpi --prefix=$(pack_get -prefix) $tmp $flag" 
-    pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make install"
-    pack_cmd "make distclean"
-    
-    # Install the serial version
-    pack_cmd "../configure" \
-	     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$CC' CXX='$CXX'" \
-	     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
-	     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
-	     "--with-openmp --prefix=$(pack_get --prefix) $tmp $flag" 
-    pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make install"
-    pack_cmd "make distclean"
-done
+# Install commands that it should run
+pack_cmd "../configure" \
+     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
+     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
+     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
+     "--with-mpi" \
+     "--prefix=$(pack_get -prefix) $tmp" 
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"
+
+# Install the inversion symmetric part
+pack_cmd "make distclean"
+pack_cmd "../configure" \
+     "GEN_CTL_IO=$(pack_get --prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
+     "LDFLAGS='$(list --LD-rp $(pack_get --mod-req-path))'" \
+     "CPPFLAGS='$(list --INCDIRS $(pack_get --mod-req-path))'" \
+     "--with-mpi --with-inv-symmetry" \
+     "--prefix=$(pack_get --prefix) $tmp" 
+pack_cmd "make $(get_make_parallel)"
+pack_cmd "make install"

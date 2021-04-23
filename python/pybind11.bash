@@ -1,4 +1,4 @@
-v=2.6.1
+v=2.5.0
 add_package -archive pybind11-$v.tar.gz \
 	    https://github.com/pybind/pybind11/archive/v$v.tar.gz
 
@@ -18,5 +18,3 @@ pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make check > pybind11.tmp"
 #pack_store pybind11.test
 pack_cmd "make install"
-
-pack_cmd "cd .. ; pip install --no-deps --prefix=$(pack_get -prefix) ."
