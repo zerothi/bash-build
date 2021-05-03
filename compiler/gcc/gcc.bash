@@ -58,6 +58,16 @@ source_pack compiler/gcc/10/isl.bash
 source_pack compiler/gcc/10/gcc.bash
 source_pack compiler/gcc/10/gdb.bash
 
+gcc_v=11.1.0
+gcc=gcc_$gcc_v
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/11/gmp.bash
+source_pack compiler/gcc/11/mpfr.bash
+source_pack compiler/gcc/11/mpc.bash
+source_pack compiler/gcc/11/isl.bash
+source_pack compiler/gcc/11/gcc.bash
+source_pack compiler/gcc/11/gdb.bash
+
 gcc_v=9.3.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
