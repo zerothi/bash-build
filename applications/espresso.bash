@@ -1,9 +1,6 @@
-for v in 6.4 6.5 ; do
+for v in 6.5 6.6 6.8 ; do
     tmp="-package q-espresso -version $v"
     case $v in
-	6.3|6.4*|6.5*)
-	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
-	    ;;
 	6.2.1)
 	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-6.2.1/q-e-qe-6.2.1.tar.bz2"
 	    ;;
@@ -34,6 +31,9 @@ for v in 6.4 6.5 ; do
 	5.0.99)
 	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
 	    ;;
+	6.*)
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
+	    ;;
 	*)
 	    doerr q-espresso "Version unknown"
 	    ;;
@@ -54,13 +54,14 @@ for v in 6.4 6.5 ; do
     if [ -z "$FLAG_OMP" ]; then
 	doerr q-espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
     fi
+    tmp=
 
     # Check for Intel MKL or not
     tmp_lib="FFT_LIBS='$(list -LD-rp-lib[omp] fftw)'"
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
-        tmp="-L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
+        tmp="$tmp -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
 	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=parallel'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
@@ -82,10 +83,15 @@ for v in 6.4 6.5 ; do
     # If we are in 6.0 we should fix CPV/src/forces.f90
     if [[ $(vrs_cmp $v 6.0.0) -le 0 ]]; then
 	pack_cmd "sed -i -e '99,102s: \&:, \&:g' CPV/src/forces.f90"
+    else
+	pack_set -module-requirement libxc
+	pack_set -module-requirement hdf5
+	tmp_lib="$tmp_lib --with-libxc=yes --with-libxc-prefix=$(pack_get -prefix libxc)"
+	tmp_lib="$tmp_lib --with-hdf5=yes --with-hdf5-libs='$(list -LD-rp hdf5) $(pack_get -lib[fortran] hdf5)'"
     fi
 
     # Install commands that it should run
-    tmp="${FFLAGS//-floop-block/}"
+    tmp="$tmp -D__FFTW3 ${FFLAGS//-floop-block/}"
     tmp="${tmp//-qopt-prefetch/}"
     tmp="${tmp//-opt-prefetch/}"
     tmp_inc="$(list -INCDIRS $(pack_get -mod-req-path))"
@@ -93,6 +99,8 @@ for v in 6.4 6.5 ; do
 	 "$tmp_lib" \
 	 "FFLAGS='$tmp $tmp_inc $FLAG_OMP'" \
 	 "FFLAGS_NOOPT='-fPIC'" \
+	 "FCFLAGS='$tmp $tmp_inc $FLAG_OMP'" \
+	 "FCFLAGS_NOOPT='-fPIC'" \
 	 "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $FLAG_OMP'" \
 	 "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
 	 "--enable-parallel --enable-openmp" \
@@ -114,8 +122,8 @@ for v in 6.4 6.5 ; do
     pack_cmd "cp bin/* $(pack_get -prefix)/bin/"
     pack_cmd "cp make.inc $(pack_get -prefix)/"
     # Install the iotk-library (not handled in install)
-    pack_cmd "cp iotk/src/libiotk.a $(pack_get -LD)/"
-    pack_cmd "cp iotk/src/*.mod $(pack_get -prefix)/include/"
+    pack_cmd "[ -d iotk ] && cp iotk/src/libiotk.a $(pack_get -LD)/ || true"
+    pack_cmd "[ -d iotk ] && cp iotk/src/*.mod $(pack_get -prefix)/include/ || true"
 
 done
 
