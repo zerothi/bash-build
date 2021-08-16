@@ -1,4 +1,6 @@
-for v in 8.10.3
+# 8.10.3 is broken
+# The current format only conforms to 9.X
+for v in 9.2.2 9.4.2
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 
@@ -8,16 +10,23 @@ pack_set -module-opt "-lua-family abinit"
 
 pack_set -install-query $(pack_get -prefix)/bin/abinit
 
+pack_set -module-requirement libxml2
 pack_set -module-requirement mpi
 pack_set -module-requirement gsl
-pack_set -module-requirement atompaw
-pack_set -module-requirement wannier90
+w90_v=3.0
+pack_set -module-requirement wannier90[$w90_v]
 pack_set -module-requirement fftw-mpi
+pack_set -module-requirement netcdf
+pack_set -module-requirement xmlf90
+# configure fails due to missing psml_die code
+#pack_set -module-requirement libpsml
+libxc_v=4.3.4
+pack_set -module-requirement libxc[$libxc_v]
 
 # Correct mistakes in configure script...
 s="sed -i"
 pack_cmd "$s -e 's:= call nf90:= nf90:g;s:100[*]4[+]2:100*4+3:' ../configure"
-file=build.ac
+file=$(hostname -s).ac9
 
 for mpila in elpa scalapack
 do
@@ -43,17 +52,21 @@ CFLAGS_EXTRA=\"${tmpc//-floop-block/} $FLAG_OMP\"\n\
 CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/} $FLAG_OMP\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
 FC_LDFLAGS_EXTRA=\"$(list -LD-rp $(pack_get -mod-req))\"\n\
+with_libxml2=\"$(pack_get -prefix libxml2)\"\n\
+LIBXML2_CPPFLAGS=\"$(list -INCDIRS gsl)\"\n\
+LIBXML2_LIBS=\"$(list -LD-rp libxml2) -lxml2\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_lotf=\"no\"\n\
 enable_openmp=\"yes\"\n\
 enable_mpi_inplace=\"yes\"\n\
-enable_mpi_io=\"yes\"\n\
-enable_mpi=\"yes\"\n\
-with_mpi_prefix=\"$(pack_get -prefix mpi)\"\n\
-with_math_flavor=\"gsl\"\n\
-with_linalg_flavor=\"custom\"\n\
-with_math_incs=\"$(list -INCDIRS gsl)\"\n\
-with_math_libs=\"$(list -LD-rp gsl) -lgsl\"\n' $file"
+with_mpi_inplace=\"yes\"\n\
+# The code does not implement level=3\n\
+with_mpi_level=\"2\"\n\
+with_mpi_io=\"yes\"\n\
+with_mpi=\"$(pack_get -prefix mpi)\"\n\
+#with_linalg_flavor=\"custom\"\n\
+#with_math_incs=\"$(list -INCDIRS gsl)\"\n\
+#with_math_libs=\"$(list -LD-rp gsl) -lgsl\"\n' $file"
 
 # on https://github.com/abinit/abinit/issues/32 it is suggested to not use lotf
 
@@ -62,10 +75,10 @@ if [[ $mpila == elpa ]]; then
     pack_set -module-requirement elpa
     tmp="$(list -LD-rp elpa)"
     tmp="$tmp -lelpa"
-    tmp_inc="$(list -INCDIRS elpa)"
+    tmp_inc="$(list -INCDIRS elpa)/elpa"
 else
-    tmp_inc=
     tmp=
+    tmp_inc=
 fi
     
 if $(is_c intel) ; then
@@ -82,7 +95,8 @@ if $(is_c intel) ; then
     pack_cmd "$s '$ a\
 FCLIBS=\"$tmp\"\n\
 LIBS=\"$tmp\"\n\
-with_linalg_libs=\"$tmp\"\n' $file"
+LINALG_LDFLAGS=\"$tmp\"\n\
+LINALG_LIBS=\"$tmp\"\n' $file"
     # Ensures that the build will search for the correct MPI libraries
     pack_cmd "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
@@ -97,54 +111,51 @@ else
     tmp_inc="$tmp_inc $(list -INCDIRS ++$la)"
     tmp="$tmp $(pack_get -lib[lapacke] $la) $(pack_get -lib[omp] $la)"
     pack_cmd "$s '$ a\
-with_linalg_libs=\"$(list -LD-rp ++$la) $tmp\"\n' $file"
+LINALG_LDFLAGS=\"$(list -LD-rp ++$la) $tmp\"\n\
+LINALG_LIBS=\"$(list -LD-rp ++$la) $tmp\"\n' $file"
 
 fi
 
 pack_cmd "$s '$ a\
-with_linalg_incs=\"$tmp_inc\"\n' $file"
+LINALG_CPPFLAGS=\"$tmp_inc\"\n\
+LINALG_FCFLAGS=\"$tmp_inc\"\n' $file"
 
 # Add default libraries
 pack_cmd "$s '$ a\
-with_trio_flavor=\"netcdf\"\n\
-with_netcdf_incs=\"$(list -INCDIRS netcdf)\"\n\
-with_netcdf_libs=\"$(list -LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
-with_fft_flavor=\"fftw3-mpi\"\n\
-with_fft_incs=\"$(list -INCDIRS fftw-mpi)\"\n\
-with_fft_libs=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+HDF5_CPPFLAGS=\"$(list -INCDIRS hdf5)\"\n\
+HDF5_LIBS=\"$(list -LD-rp ++hdf5) -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
+NETCDF_CPPFLAGS=\"$(list -INCDIRS netcdf)\"\n\
+NETCDF_LIBS=\"$(list -LD-rp ++netcdf) -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lz\"\n\
+NETCDF_FORTRAN_CPPFLAGS=\"$(list -INCDIRS netcdf)\"\n\
+NETCDF_FORTRAN_FCFLAGS=\"$(list -INCDIRS netcdf)\"\n\
+NETCDF_FORTRAN_LIBS=\"$(list -LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
+FFTW3_CPPFLAGS=\"$(list -INCDIRS fftw-mpi)\"\n\
+FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
 
 
 # Please see the following dependencies to ensure no duplicate
 # libxc versions are being used!
 #   atompaw
 #   bigdft
-dft_flavor=atompaw+wannier90+libxc
-libxc_v=4.3.4
-pack_set -module-requirement libxc[$libxc_v]
 pack_cmd "$s '$ a\
-with_libxc_incs=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
-with_libxc_libs=\"$(list -LD-rp libxc[$libxc_v]) $(pack_get -lib[f90] libxc[$libxc_v])\"' $file"
-
-
-if [[ $(vrs_cmp $(pack_get -version bigdft) 1.7) -lt 0 ]]; then
-    # The interface for the later versions
-    # has changed, hence we require the old-version
-    pack_set -module-requirement bigdft
-    dft_flavor="$dft_flavor+bigdft"
-    pack_cmd "$s '$ a\
-with_bigdft_incs=\"$(list -INCDIRS bigdft)\"\n\
-with_bigdft_libs=\"$(list -LD-rp bigdft) -lbigdft-1\"' $file"
-    
-fi
+LIBXC_CPPFLAGS=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
+LIBXC_FCFLAGS=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
+LIBXC_LIBS=\"$(list -LD-rp libxc[$libxc_v]) $(pack_get -lib[f90] libxc[$libxc_v])\"' $file"
 
 pack_cmd "$s '$ a\
-with_dft_flavor=\"$dft_flavor\"\n\
-with_atompaw_bins=\"$(pack_get -prefix atompaw)/bin\"\n\
-with_atompaw_incs=\"$(list -INCDIRS atompaw)\"\n\
-with_atompaw_libs=\"$(list -LD-rp atompaw) -latompaw\"\n\
-with_wannier90_bins=\"$(pack_get -prefix wannier90)/bin\"\n\
-with_wannier90_incs=\"$(list -INCDIRS wannier90)\"\n\
-with_wannier90_libs=\"$(list -LD-rp wannier90) -lwannier\"' $file"
+XMLF90_CPPFLAGS=\"$(list -INCDIRS xmlf90)\"\n\
+XMLF90_FCFLAGS=\"$(list -INCDIRS xmlf90)\"\n\
+XMLF90_LIBS=\"$(list -LD-rp xmlf90) $(pack_get -lib xmlf90)\"' $file"
+
+#pack_cmd "$s '$ a\
+#LIBPSML_CPPFLAGS=\"$(list -INCDIRS libpsml)\"\n\
+#LIBPSML_FCFLAGS=\"$(list -INCDIRS libpsml)\"\n\
+#LIBPSML_LIBS=\"$(list -LD-rp libpsml) $(pack_get -lib libpsml)\"' $file"
+
+pack_cmd "$s '$ a\
+WANNIER90_CPPFLAGS=\"$(list -INCDIRS wannier90[$w90_v])\"\n\
+WANNIER90_FCFLAGS=\"$(list -INCDIRS wannier90[$w90_v])\"\n\
+WANNIER90_LIBS=\"$(list -LD-rp wannier90[$w90_v]) -lwannier\"' $file"
 
 
 # Configure the package...
@@ -158,30 +169,30 @@ if $(is_c intel) ; then
     pack_cmd "sed -i -e 's:-O[23]:-O1:g' src/66_wfs/Makefile src/98_main/Makefile"
 fi
 
-if [[ $(vrs_cmp $v 8.10.3) -eq 0 ]]; then
-    # patch bug for 8.10.3
-    pack_cmd "sed -i -e 's|\(use defs_basis\)|\1;use m_abicore,only:wrtout|' ../src/68_lotf/m_eval_lotf.F90"
-fi
-
 # Make commands
-tmp=$(get_make_parallel)
-pack_cmd "make multi multi_nprocs=${tmp//-j /}"
+pack_cmd "make $(get_make_parallel)"
 
 # With 7.8+ the testing system has changed.
 # We should do some python calls...
 tmp="--loglevel=INFO -v -v -n $NPROCS --pedantic"
 pack_cmd "pushd tests"
+# create a small virtual environment
+pack_cmd "python -m pip install --user -U virtualenv"
+pack_cmd "python -m virtualenv abinit_venv"
+pack_cmd "source abinit_venv/bin/activate"
+pack_cmd "pip install pandas"
+
 pack_cmd "../../tests/runtests.py $tmp fast 2>&1 > $mpila.fast.test || echo forced"
 pack_store $mpila.fast.test
 
 if ! $(is_c intel) ; then
-    pack_cmd "../../tests/runtests.py $tmp atompaw libxc wannier90 2>&1 > $mpila.in.test || echo forced"
+    pack_cmd "../../tests/runtests.py $tmp libxc wannier90 2>&1 > $mpila.in.test || echo forced"
     pack_store $mpila.in.test
 
     pack_cmd "../../tests/runtests.py $tmp v1 2>&1 > $mpila.v1.test || echo forced"
     pack_store $mpila.v1.test
 fi
-pack_cmd "popd"
+pack_cmd "deactivate ; popd"
 
 pack_cmd "make install"
 pack_cmd "pushd $(pack_get -prefix)/bin"
