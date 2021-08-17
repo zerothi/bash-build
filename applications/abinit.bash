@@ -28,6 +28,8 @@ s="sed -i"
 pack_cmd "$s -e 's:= call nf90:= nf90:g;s:100[*]4[+]2:100*4+3:' ../configure"
 file=$(hostname -s).ac9
 
+pack_cmd "module load python"
+
 for mpila in elpa scalapack
 do
 
@@ -202,6 +204,8 @@ pack_cmd "popd"
 pack_cmd "cp $file $(pack_get -prefix)/${mpila}_${file}"
 
 done
+
+pack_cmd "module unload python"
 
 pack_cmd "pushd $(pack_get -prefix)/bin"
 pack_cmd "ln -s abinit_elpa abinit"
