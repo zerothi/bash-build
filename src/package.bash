@@ -118,7 +118,8 @@ function source_pack {
     # new packages)
     local source_pack_i=$_N_archives
     source $source_pack_f
-    local err=$?
+    local err
+    err=$?
     if [[ $err -ne 0 ]]; then
 	msg_install -message "Problems sourcing $source_pack_f ($err)"
 	exit $err
