@@ -1,4 +1,4 @@
-[ "x${pV:0:1}" == "x3" ] && return 0
+[ "x${pV:0:1}" == "x2" ] && return 0
 
 add_package --package ipi-dev --version 0 \
 	    https://github.com/i-pi/i-pi.git
@@ -19,5 +19,5 @@ pack_cmd "cp env.sh $(pack_get --prefix)/"
 pack_set --module-opt "--set-ENV IPI_ENV=$(pack_get --prefix)/env.sh"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/source"
-pack_cmd "cd drivers"
+pack_cmd "cd drivers/f90"
 pack_cmd "cp Makefile driver.f90 fsockets.f90 fsockets_pure.f90 sockets.c $(pack_get --prefix)/source/"

@@ -1,4 +1,4 @@
-v=5.1.0
+v=5.2.0
 add_package --package flame --archive libflame-$v.tar.gz \
 	    https://github.com/flame/libflame/archive/$v.tar.gz
 

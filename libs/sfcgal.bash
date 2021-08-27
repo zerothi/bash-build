@@ -1,5 +1,6 @@
-v=1.3.7
-add_package -package sfcgal -archive SFCGAL-$v.tar.gz https://github.com/Oslandia/SFCGAL/archive/v$v.tar.gz
+v=1.3.8
+add_package -package sfcgal -archive SFCGAL-$v.tar.gz \
+	    https://github.com/Oslandia/SFCGAL/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
@@ -19,10 +20,10 @@ if $(is_c gnu) ; then
     # We have stuff locally installed
     tmp_flags="$tmp_flags MPFR_DIR='$(pack_get -prefix gcc[$(get_c -v)])'"
     tmp_flags="$tmp_flags -DMPFR_LIBRARIES='$(list -LD-rp gcc[$(get_c -v)]) -lmpfr'"
-    tmp_flags="$tmp_flags MPFR_INCLUDE_DIRS='$(pack_get -prefix gcc[$(get_c -v)])/include'"
+    tmp_flags="$tmp_flags -DMPFR_INCLUDE_DIR='$(pack_get -prefix gcc[$(get_c -v)])/include'"
     tmp_flags="$tmp_flags GMP_DIR='$(pack_get -prefix gcc[$(get_c -v)])'"
     tmp_flags="$tmp_flags -DGMP_LIBRARIES='$(list -LD-rp gcc[$(get_c -v)]) -lgmp'"
-    tmp_flags="$tmp_flags GMP_INCLUDE_DIRS='$(pack_get -prefix gcc[$(get_c -v)])/include'"
+    tmp_flags="$tmp_flags -DGMP_INCLUDE_DIR='$(pack_get -prefix gcc[$(get_c -v)])/include'"
 fi
 
 pack_cmd "cmake $tmp_flags -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) ."

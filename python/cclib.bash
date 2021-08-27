@@ -1,4 +1,4 @@
-v=1.6.1
+v=1.6.3
 add_package \
     https://github.com/cclib/cclib/releases/download/v$v/cclib-$v.tar.gz
 

@@ -10,7 +10,7 @@ pack_set --host-reject $(get_hostname)
 
 pack_set --install-query $(pack_get --prefix)/bin/mongo
 
-pack_cmd "module load $(pack_get --module-load scons)"
+pack_cmd "module load $(list -mod-names ++scons)"
 
 # Install commands that it should run
 pack_cmd "scons $(get_make_parallel) all"
@@ -18,4 +18,4 @@ pack_cmd "scons" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "install"
 
-pack_cmd "module unload $(pack_get --module-load scons)"
+pack_cmd "module unload $(list -mod-names ++scons)"

@@ -1,4 +1,8 @@
-for v in 1.16.4 ; do
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    v=1.19.1
+else
+    v=1.16.6
+fi
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
@@ -27,11 +31,6 @@ tmp_inc=$(list -prefix ':' -suffix '/include' -loop-cmd 'pack_get -prefix' $(pac
 tmp_inc=${tmp_inc// /}
 
 pack_cmd "sed -i '1 a\
-[fftw2]\n\
-library_dirs = $(pack_get -LD fftw-2)\n\
-include_dirs = $(pack_get -prefix fftw-2)/include\n\
-fftw_libs = fftw_threads\n\
-runtime_library_dirs = $(pack_get -LD fftw-2)\n\
 [fftw]\n\
 library_dirs = $(pack_get -LD fftw)\n\
 include_dirs = $(pack_get -prefix fftw)/include\n\
@@ -48,12 +47,17 @@ include_dirs = $(pack_get -prefix suitesparse)/include\n\
 library_dirs = $(pack_get -LD suitesparse)\n\
 runtime_library_dirs = $(pack_get -LD suitesparse)\n' $file"
 
+npy_lapack_order=
+npy_blas_order=
+
 # Check for Intel MKL or not
 if $(is_c intel) ; then
 
     if [[ -z "$MKL_PATH" ]]; then
 	doerr "numpy" "MKL_PATH is not defined in your source file (export)"
     fi
+    npy_lapack_order='mkl'
+    npy_blas_order='mkl'
     pack_cmd "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_cmd "sed -i '$ a\
 [mkl]\n\
@@ -102,9 +106,11 @@ elif $(is_c gnu) ; then
     case $la in
 	openblas)
 	    # lapack internally
-	    noop
+	    npy_lapack_order='openblas'
 	    ;;
 	atlas)
+	    # lapack internally
+	    npy_lapack_order='atlas'
 	    pack_cmd "sed -i '$ a\
 [lapack]\n\
 library_dirs = $tmp\n\
@@ -113,9 +119,11 @@ libraries = lapack_atlas\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	*)
+	    # lapack internally
+	    npy_lapack_order='lapack'
 	    pack_set -module-requirement lapack
 	    pack_cmd "sed -i '$ a\
-[openblas]\n\
+[lapack]\n\
 library_dirs = $(pack_get -LD lapack)\n\
 include_dirs = $(pack_get -prefix lapack)/include\n\
 libraries = lapack\n\
@@ -128,6 +136,7 @@ runtime_library_dirs = $(pack_get -LD lapack)\n' $file"
     tmp_l=${tmp_l//-l/,}
     case $la in
 	atlas)
+	    npy_blas_order='atlas'
 	    pack_cmd "sed -i '$ a\
 [atlas_threads]\n\
 library_dirs = $tmp\n\
@@ -144,6 +153,7 @@ libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file" 
 	    ;;
 	openblas)
+	    npy_blas_order='openblas'
 	    pack_cmd "sed -i '$ a\
 [openblas]\n\
 library_dirs = $tmp\n\
@@ -153,6 +163,7 @@ extra_link_args = -lpthread -lgfortran -lm $FLAG_OMP\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blas)
+	    npy_blas_order='blas'
 	    pack_cmd "sed -i '$ a\
 [blas]\n\
 library_dirs = $tmp\n\
@@ -162,6 +173,7 @@ libraries = $tmp_l\n\
 runtime_library_dirs = $tmp\n' $file"
 	    ;;
 	blis)
+	    npy_blas_order='blis'
 	    pack_cmd "sed -i '$ a\
 [blis]\n\
 library_dirs = $tmp\n\
@@ -206,8 +218,8 @@ pack_cmd "unset LDFLAGS"
 #pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
 #pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
 #pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py build $pNumpyInstall"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 pack_cmd "unset LDSHARED"
 
@@ -222,5 +234,3 @@ if ! $(is_c intel) ; then
     fi
     pack_store $TEST_OUT
 fi
-
-done

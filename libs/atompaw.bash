@@ -1,9 +1,9 @@
-v=4.1.0.5
+v=4.1.0.6
 add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-libxc_v=4.2.3
+libxc_v=4.3.4
 pack_set -module-requirement libxc[$libxc_v]
 
 pack_set -install-query $(pack_get -LD)/libatompaw.a

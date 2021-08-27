@@ -59,6 +59,7 @@ R_append rlang
 R_append utf8
 R_append pillar
 R_append digest
+R_append isoband
 R_append praise
 R_append withr
 R_append magrittr
@@ -69,6 +70,7 @@ R_append covr
 R_append stringi
 R_append ellipsis
 R_append clipr
+R_append cpp11
 R_append evaluate
 R_append yaml
 R_append knitr
@@ -83,6 +85,7 @@ R_append plogr
 R_append reshape2
 R_append classInt
 R_append DBI
+R_append generics
 
 
 R_install

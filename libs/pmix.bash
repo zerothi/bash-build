@@ -1,4 +1,4 @@
-v=3.1.2
+v=3.1.5
 add_package -package pmix \
 	    https://github.com/pmix/pmix/releases/download/v$v/pmix-$v.tar.bz2
 

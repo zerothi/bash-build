@@ -1,4 +1,5 @@
-add_package -build debug http://pstl.cs.uh.edu/projects/adcl-2.0.tar.gz
+add_package -package adcl -version 0 \
+	    https://github.com/PSTL-UH/ADCL.git
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -8,22 +9,16 @@ pack_set -build-mod-req build-tools
 pack_set -module-requirement mpi
 
 # Install commands that it should run
-pack_cmd "./configure CC=$CC MPICC=$MPICC --prefix=$(pack_get --prefix)" \
+pack_cmd "CC=$CC MPICC=$MPICC ./configure --prefix=$(pack_get -prefix)" \
 	 "--enable-printf-tofile" \
-	 "--enable-userlevel-timings" \
 	 "--with-num-tests=1" \
+	 "--enable-userlevel-timings" \
 	 "--enable-dummy-mpi" \
 	 "--disable-fortran" \
-	 "--with-mpi-dir=$(pack_get --prefix mpi)" \
+	 "--with-mpi-dir=$(pack_get -prefix mpi)" \
 	 "--with-mpi-f90='$MPIFC'" \
 	 "--with-mpi-cc='$MPICC'" \
 	 "--with-mpi-cxx='$MPICXX'"
 
-# Fix MPI_BYTE
-pack_cmd "sed -i -e 's/\(#define MPI_INT \)/#define MPI_BYTE (MPI_Datatype)30\n\1/' include/ADCL_dummy_mpi.h"
-
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
-
-# Copy over the dummy MPI header
-pack_cmd "cp include/ADCL_dummy_mpi.h $(pack_get --prefix)/include/"

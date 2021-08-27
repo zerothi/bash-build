@@ -1,7 +1,7 @@
 # Install Python 2 versions
 # apt-get libbz2-dev libncurses5-dev zip libssl-dev
 pV=2.7
-IpV=$pV.16
+IpV=$pV.18
 add_package -alias python -package python \
     http://www.python.org/ftp/python/$IpV/Python-$IpV.tar.xz
 if $(is_host n-) ; then
@@ -10,6 +10,14 @@ fi
 
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
+
+# --no-cache-dir: no wheels are saved in the $HOME/.cache directory
+# --no-deps: do not download any dependencies
+# --no-index: do not search the web for dependencies when building
+# --no-build-isolation: required with --no-index since now the full environment will be used
+#                       if not added, then the build will happen in an isolated environment
+# --compile: compile py files
+pip_install_opts="-vvv --no-cache-dir --no-deps --no-index --no-build-isolation --compile"
 
 pack_set $(list -prefix '-mod-req ' zlib expat)
 if [[ $(pack_get -installed libffi) -eq 1 ]]; then
@@ -45,8 +53,8 @@ pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
-    pCFLAGS="$CFLAGS -fomit-frame-pointer"
-    pFCFLAGS="$FCFLAGS -fomit-frame-pointer"
+    pCFLAGS="$CFLAGS -fomit-frame-pointer -fwrapv"
+    pFCFLAGS="$FCFLAGS -fomit-frame-pointer -fwrapv"
     tmp="$tmp --without-gcc --with-icc LANG=C AR=$AR CFLAGS='$pCFLAGS -std=c11'"
     tmp="$tmp --with-libm=-limf"
     # The clck library path has libutil.so which fucks up things!

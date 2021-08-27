@@ -20,7 +20,8 @@ function pack_install {
     # Ensure we have populated the rejection
     local rejs=$(build_get -rejects[$build])
     for rej in $rejs ; do
-	local bld=$(get_index -a $rej)
+	local bld
+	bld=$(get_index -a $rej)
 	if [[ $? -eq 0 && -n "$bld" ]]; then
 	    case " $bld " in
 		*" $idx "*)
@@ -211,15 +212,18 @@ function pack_install {
 
         # Create the list of requirements
 	local module_loads
-	module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -build-mod-req-all $idx)) $(list -loop-cmd 'pack_get -module-name' $(pack_get -mod-req-module $idx))"
-	if [[ -n "${module_loads// /}" ]]; then
-	    module load $module_loads
-	    local st=$?
-	    if [[ $st -ne 0 ]]; then
-		msg_install -message "Failed loading modules (STATUS=$st): $module_loads"
-		exit $st
+	for tmp in build-mod-req-all mod-req-module
+	do
+	    module_loads="$(list -loop-cmd 'pack_get -module-name' $(pack_get -$tmp $idx))"
+	    if [[ -n "${module_loads// /}" ]]; then
+		module load $module_loads
+		err=$?
+		if [[ $err -ne 0 ]]; then
+		    msg_install -message "Failed loading [$tmp] modules (STATUS=$err): $module_loads"
+		    exit $err
+		fi
 	    fi
-	fi
+	done
 
 	# If the module should be preloaded (for configures which checks that the path exists)
 	if $(has_setting $PRELOAD_MODULE $idx) ; then
@@ -232,10 +236,10 @@ function pack_install {
             mkdir -p $prefix
 	    # Load module for preloading
 	    module load $mod_name
-	    local st=$?
-	    if [[ $st -ne 0 ]]; then
-		msg_install -message "Failed loading modules (STATUS=$st): $mod_name"
-		exit $st
+	    err=$?
+	    if [[ $err -ne 0 ]]; then
+		msg_install -message "Failed loading modules (STATUS=$err): $mod_name"
+		exit $err
 	    fi
 	fi
 
@@ -403,15 +407,13 @@ function pack_install {
     fi
 
     # Fix the library path...
-    if [[ ! -d $(pack_get -LD $idx) ]]; then
-	local _lib=""
-	for cmd in lib lib64 ; do
-	    if [[ -d $prefix/$cmd ]]; then
-		_lib="$_lib $cmd"
-	    fi
-	done
-	[[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
-    fi
+    local _lib=""
+    for cmd in lib lib64 ; do
+	if [[ -d $prefix/$cmd ]]; then
+	    _lib="$_lib $cmd"
+	fi
+    done
+    [[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
 
     if [[ $installed -eq $_I_INSTALLED ]]; then
 	if $(has_setting $IS_MODULE $idx) ; then

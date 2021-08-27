@@ -1,8 +1,7 @@
-v=2.40.1
+v=2.44.1
 add_package -build generic \
-	    -directory graphviz-stable_release_$v \
             -archive graphviz-$v.tar.bz2 \
-            https://gitlab.com/graphviz/graphviz/-/archive/stable_release_$v/graphviz-stable_release_$v.tar.bz2
+            https://gitlab.com/graphviz/graphviz/-/archive/$v/graphviz-$v.tar.bz2
 
 pack_set -s $IS_MODULE
 

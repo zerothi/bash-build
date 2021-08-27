@@ -1,4 +1,4 @@
-v=0.6.0
+v=0.7.0
 add_package -archive blis-$v.tar.gz https://github.com/flame/blis/archive/$v.tar.gz
 
 if ! $(is_c gnu) ; then
@@ -18,7 +18,7 @@ pack_set -install-query $(pack_get -LD)/libblis.a
 function blis_cpu {
     local flags="$1"
     shift
-    declare -A check_hash
+    local -A check_hash
     for f in $flags ; do
 	check_hash[$f]='x'
     done

@@ -1,4 +1,4 @@
-jV=1.4
+jV=1.5
 IjV=$jV.0
 add_package -package julia \
 	    -directory julia-$IjV \
@@ -68,14 +68,15 @@ LDFLAGS += $(list -LD-rp lapack-$la)\n\
 fi
 
 pack_cmd "make $(get_make_parallel)"
-# limit number of julia processors for tests
-pack_cmd "export JULIA_NUM_THREADS=$NPROCS"
-pack_cmd "export JULIA_CPU_THREADS=$NPROCS"
-pack_cmd "make test 2>&1 | tee julia.test"
 pack_cmd "make install"
-
+if ! $(is_host nicpa) ; then
+    # limit number of julia processors for tests
+    pack_cmd "export JULIA_NUM_THREADS=$NPROCS"
+    pack_cmd "export JULIA_CPU_THREADS=$NPROCS"
+    pack_cmd "make test 2>&1 | tee julia.test"
+    pack_store julia.test
+fi
 pack_store Make.user
-pack_store julia.test
 
 
 # Create a new build with this module

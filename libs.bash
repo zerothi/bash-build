@@ -14,6 +14,7 @@ source_pack libs/hwloc.bash
 
 # Basic parallel libraries
 #source_pack libs/pmix.bash
+source_pack libs/knem.bash
 source_pack libs/ucx.bash
 
 source_pack libs/openmpi.bash
@@ -30,18 +31,20 @@ else
 fi
 
 source_pack libs/osu-benchmarks.bash
+source_pack libs/mpi-benchmarks.bash
 
 # Optimization of openmpi parameters
 source_pack libs/adcl.bash
 source_pack libs/otpo.bash
 #source_pack libs/netpipe.bash
 
+source_pack libs/upcxx.bash
 source_pack libs/opencoarray.bash
 
 # Default fftw libs
+source_pack libs/fftw2.bash
 source_pack libs/fftw2-intel.bash
 source_pack libs/fftw-intel.bash
-source_pack libs/fftw2.bash
 source_pack libs/fftw.bash
 source_pack libs/nfft.bash
 
@@ -73,6 +76,8 @@ source_pack libs/arpack.bash
 source_pack libs/arpack-ng.bash
 source_pack libs/parpack.bash
 
+source_pack libs/qhull.bash
+
 source_pack libs/elpa.bash
 source_pack libs/elpa-debug.bash
 source_pack libs/eigenexa.bash
@@ -80,6 +85,9 @@ source_pack libs/eigenexa.bash
 source_pack libs/globalarrays.bash
 
 source_pack libs/eigen.bash
+
+# nearest neighbour search
+source_pack libs/nanoflann.bash
 
 # Some specific libraries
 source_pack libs/glpk.bash
@@ -92,6 +100,7 @@ source_pack libs/harminv.bash
 source_pack libs/blaze.bash
 source_pack libs/zeep.bash
 source_pack libs/xssp.bash
+source_pack libs/libint1.bash
 source_pack libs/libint.bash
 source_pack libs/openexr.bash
 
@@ -108,6 +117,7 @@ source_pack libs/netcdf.bash
 source_pack libs/netcdf-logging.bash
 source_pack libs/netcdf-serial.bash
 source_pack libs/netcdf-serial-noszip.bash
+source_pack libs/pio.bash
 
 source_pack libs/openimageio.bash
 
@@ -125,6 +135,8 @@ source_pack libs/metis-par-3.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
+source_pack libs/seacas.bash
+
 source_pack libs/geos.bash
 source_pack libs/cgal.bash
 source_pack libs/amgcl.bash
@@ -140,12 +152,14 @@ source_pack libs/superlu.bash
 source_pack libs/superlu-dist.bash
 source_pack libs/hypre.bash
 
+source_pack libs/proj.bash
+source_pack libs/gdal.bash
 source_pack libs/petsc.bash
 source_pack libs/slepc.bash
 
-source_pack libs/proj.bash
-source_pack libs/gdal.bash
+
 source_pack libs/p4est.bash
+
 
 source_pack libs/dealii.bash
 

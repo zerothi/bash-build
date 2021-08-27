@@ -1,7 +1,7 @@
 if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=1.3.0
+    v=1.5.2
 else
-    v=1.2.2
+    v=1.2.3
 fi
 
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
@@ -11,7 +11,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
 pack_set -module-requirement numpy
-pack_set -module-requirement cython
+pack_set -build-mod-req cython
 
 # Ensure directory exists (for writing)
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
@@ -36,22 +36,21 @@ if [[ $(vrs_cmp $v 0.16.0) -eq 0 ]]; then
 fi
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module load $(list ++swig)"
+    pack_cmd "module load $(list -mod-names ++swig)"
 fi
 
 pack_cmd "unset LDFLAGS"
 # Fix for GNU compilers
 # See github issue #8680
-pack_cmd "sed -i 's/\([[:space:]]*\)\(.*extra_link_args.*\)/\1ext.extra_link_args = \[arg for arg in ext.extra_link_args if not \"version-script\" in arg\]\n\1\2/' setup.py"
+if [[ $(vrs_cmp $v 1.2.0) -lt 0 ]]; then
+    pack_cmd "sed -i 's/\([[:space:]]*\)\(.*extra_link_args.*\)/\1ext.extra_link_args = \[arg for arg in ext.extra_link_args if not \"version-script\" in arg\]\n\1\2/' setup.py"
+fi
 
-pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
 
 
 if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module unload $(list ++swig)"
+    pack_cmd "module unload $(list -mod-names ++swig)"
 fi
 
 if ! $(is_c intel) ; then

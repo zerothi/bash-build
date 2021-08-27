@@ -1,5 +1,5 @@
 # Now we can install NetCDF (we need the C version to be first added!)
-for v in 4.7.0 ; do
+for v in 4.7.4 ; do
 add_package -archive netcdf-c-$v.tar.gz \
     -package netcdf \
     https://github.com/Unidata/netcdf-c/archive/v$v.tar.gz
@@ -10,7 +10,7 @@ pack_set -install-query $(pack_get -LD)/libnetcdf.a
 pack_set -lib[fortran] -lnetcdff -lnetcdf
 
 # Add requirments when creating the module
-pack_set $(list -prefix ' -module-requirement ' hdf5 pnetcdf)
+pack_set $(list -prefix ' -module-requirement ' hdf5 pnetcdf curl)
 
 # bugfix for the iter test!
 pack_cmd "sed -i -e 's|CC ./iter.c -o.*|CC ./iter.c -o iter.exe \$CFLAGS \$LDFLAGS|g' ../ncdump/tst_iter.sh"
@@ -43,7 +43,7 @@ pack_install
 #                             #
 # Install the FORTRAN headers #
 ###############################
-vf=4.4.5
+vf=4.5.3
 add_package -archive netcdf-fortran-$vf.tar.gz \
     -package netcdf-fortran \
     https://github.com/Unidata/netcdf-fortran/archive/v$vf.tar.gz
@@ -78,7 +78,7 @@ pack_store netcdf.test netcdf.test.f
 #                         #
 # Install the C++ headers #
 ###########################
-vcpp=4.3.0
+vcpp=4.3.1
 add_package -archive netcdf-cxx4-$vcpp.tar.gz \
 	    -package netcdf-cxx \
 	    https://github.com/Unidata/netcdf-cxx4/archive/v$vcpp.tar.gz

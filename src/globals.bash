@@ -6,7 +6,7 @@ _cwd=$(pwd)
 if [[ -z "$LC_ALL" ]]; then
     # Set this for doing ANSI comparisons versus
     # unicode comparisons, much faster
-    export LC_ALL=C
+    export LC_ALL=en_GB.utf8
 fi
 
 # The error file

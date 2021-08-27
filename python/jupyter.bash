@@ -1,7 +1,7 @@
-v=4.0.5
+v=5.7.9
 add_package --archive jupyter-$v.tar.gz \
 	    --directory notebook-$v \
-	    https://github.com/jupyter/notebook/archive/4.0.5.tar.gz
+	    https://github.com/jupyter/notebook/archive/$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/jupyter
 

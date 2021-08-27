@@ -1,7 +1,7 @@
 # apt-get libgtk-3-dev libgstreamer1.0-0 libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 add_package \
     --package wxpython \
-    https://github.com/wxWidgets/Phoenix/releases/download/wxPython-4.0.1/wxPython-4.0.1.tar.gz
+    https://github.com/wxWidgets/Phoenix/releases/download/wxPython-4.1.0/wxPython-4.1.0.tar.gz
 
 pack_set --host-reject $(get_hostname)
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

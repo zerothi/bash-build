@@ -45,9 +45,6 @@ source_pack python/cython.bash
 # In fact pybind11 is more like a normal library
 #   libs/pybind11.bash would maybe be more appropiate.
 source_pack python/pybind11.bash
-source_pack python/mpmath.bash
-
-source_pack python/fypp.bash
 
 # GUI based stuff
 source_pack python/sip.bash
@@ -66,7 +63,6 @@ source_pack python/numexpr.bash
 source_pack python/matplotlib.bash
 source_pack python/bottleneck.bash
 source_pack python/sympy.bash
-source_pack python/patsy.bash
 source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
@@ -84,8 +80,6 @@ source_pack python/networkx.bash
 #source_pack python/pyccel-dev.bash
 source_pack python/pyfftw.bash
 
-source_pack python/uncertainties.bash
-source_pack python/asteval.bash
 source_pack python/lmfit.bash
 
 # Tensorflow (CPU-only)
@@ -96,6 +90,8 @@ source_pack python/pytorch.bash
 source_pack python/seaborn.bash
 
 source_pack python/xarray.bash
+
+source_pack python/plotly.bash
 
 source_pack python/yt.bash
 source_pack python/krypy.bash
@@ -146,6 +142,8 @@ source_pack python/vtk.bash
 source_pack python/mfix.bash
 source_pack python/rdkit.bash
 
+
+source_pack python/openmm.bash
 
 # made for kwant
 source_pack python/tinyarray.bash

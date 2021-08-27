@@ -1,6 +1,6 @@
-v=5.9
+v=5.13.2
 add_package --version $v --package pyqt \
-	    https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-$v/PyQt5_gpl-$v.tar.gz
+	    https://www.riverbankcomputing.com/static/Downloads/PyQt5/$v/PyQt5-$v.tar.gz
 
 pack_set -s $IS_MODULE
 

@@ -1,4 +1,4 @@
-v=2.28.0
+v=2.29.2
 add_package -directory bedtools2 \
 	    https://github.com/arq5x/bedtools2/releases/download/v$v/bedtools-$v.tar.gz
 

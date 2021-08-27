@@ -1,4 +1,4 @@
-v=2.10
+v=2.11.2
 add_package \
     --archive jinja-$v.tar.gz \
     --package jinja2 \

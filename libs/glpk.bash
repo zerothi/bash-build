@@ -1,12 +1,10 @@
-add_package http://ftp.gnu.org/gnu/glpk/glpk-4.63.tar.gz
+add_package http://ftp.gnu.org/gnu/glpk/glpk-4.65.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libglpk.a
+pack_set -install-query $(pack_get -LD)/libglpk.a
 
-pack_cmd "../configure" \
-	 "--prefix $(pack_get --prefix)" \
-	 "--enable-shared --with-cxx"
+pack_cmd "../configure --prefix $(pack_get -prefix) --enable-shared --with-cxx"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

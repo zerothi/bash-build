@@ -1,5 +1,5 @@
 # apt-get libc6-dev
-v=3.1.4
+v=4.0.4
 add_package -package openmpi \
     http://www.open-mpi.org/software/ompi/v${v:0:3}/downloads/openmpi-$v.tar.bz2
 
@@ -30,6 +30,8 @@ if [[ $(vrs_cmp $(pack_get -version) 1.10.1) -eq 0 ]]; then
     pack_cmd "pushd ../"
     pack_cmd "patch -p1 < $o"
     pack_cmd "popd"
+elif [[ $(vrs_cmp $(pack_get -version) 4.0.4) -eq 0 ]]; then
+    pack_cmd "sed -i -e 's:\(name.vpid = vpid\);:\1++;:' ../orte/mca/rmaps/base/rmaps_base_ranking.c"
 fi
 
 tmp_flags=""
@@ -45,6 +47,8 @@ if [[ -n $LSF_BINDIR ]]; then
     tmp=$(dirname $LSF_BINDIR)
     tmp_flags="$tmp_flags --with-lsf=$(dirname $tmp)"
     tmp_flags="$tmp_flags --with-lsf-libdir=$tmp/lib"
+    tmp_flags="$tmp_flags --without-tm"
+
 else
     [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 fi
@@ -72,12 +76,13 @@ else
 fi
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(pack_get -module-name-requirement flex) $(pack_get -module-name flex)"
+    pack_cmd "module load $(list -mod-names ++flex)"
 fi
 
 # Install commands that it should run
 pack_cmd "../configure $tmp_flags" \
 	 "--prefix=$(pack_get -prefix)" \
+	 "--enable-orterun-prefix-by-default" \
 	 "--enable-mpirun-prefix-by-default" \
 	 "--with-hwloc=$(pack_get -prefix $(pack_get -mod-req[hwloc]))" \
 	 "--with-zlib=$(pack_get -prefix zlib)" \
@@ -95,7 +100,7 @@ pack_cmd "make install"
 
 
 if [[ $(pack_installed flex) -eq 1 ]] ; then
-    pack_cmd "module unload $(pack_get -module-name flex) $(pack_get -module-name-requirement flex)"
+    pack_cmd "module unload $(list -mod-names ++flex)"
 fi
 
 

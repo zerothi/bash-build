@@ -23,10 +23,11 @@ pack_set --directory .
 
 # Create folder for pip-downloads
 # Note this is version dependent
-_pip_dwn=$(pwd_archives)/pip
+_pip_dwn=$(pwd_archives)/pip$pV
 mkdir -p $_pip_dwn
 
-_pip_cmd=$(pack_get -prefix python)/bin/pip
+# -s disable userbase
+_pip_cmd="$(get_parent_exec) -s -m pip"
 
 _pip=
 function pip_append {
@@ -52,6 +53,7 @@ function pip_install {
 }
 
 # Ensure we don't check together with locally installed stuff
+# is probably double with python -s
 pack_cmd "unset PYTHONUSERBASE"
 
 # First install its own usage (and update it)
@@ -63,7 +65,9 @@ pack_cmd "$_pip_cmd install -U pip"
 pip_install nose
 
 pip_append autopep8
+pip_append asteval
 pip_append anaconda-client
+pip_append attrs
 pip_append backports.ssl_match_hostname
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
@@ -81,19 +85,23 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append Pillow
 fi
 pip_append certifi
+pip_append cffi
 pip_append Click
 pip_append cloudpickle
 pip_append codecov
 pip_append cycler # for matplotlib
-pip_append cffi
 pip_append decorator
 pip_append docutils
 pip_append fastimport
-pip_append FORD
 pip_append flake8
+pip_append flask $(list -prefix 'flask-' restx socketio cors login session)
+pip_append FORD
+pip_append fypp
 pip_append ipyvolume
-pip_append joblib
+[[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append gitpython
+pip_append hypothesis
 pip_append jinja2
+pip_append joblib
 pip_append jsonschema
 # Until > 2.1.1 is out, we can't use it due to missing Cython updates
 #pip_append line_profiler
@@ -101,15 +109,17 @@ pip_append markupsafe
 pip_append Markdown
 pip_append memory_profiler
 pip_append mistune
-pip_append mpmath # for sympy
 pip_append mock
+pip_append mpmath # for sympy
 #pip_append monty
 pip_append nbsphinx
-pip_append numpydoc
 pip_append nose nose2
+pip_append numpydoc
 pip_append pathos
-pip_append pep8
+pip_append patsy
+pip_append pep8 pep517
 pip_append pexpect
+pip_append pillow
 pip_append pipenv
 #pip_append pint
 pip_append pkgconfig
@@ -124,6 +134,7 @@ pip_append pyparser
 pip_append pyparsing
 pip_append pycparser
 pip_append pyflakes
+[[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append pygithub
 pip_append pylint
 pip_append pympler
 pip_append pytest pytest-cov
@@ -133,27 +144,34 @@ pip_append python-dateutil
 pip_append pyupgrade
 pip_append pyyaml
 pip_append requests
+pip_append retrying
 pip_append setuptools_scm
 pip_append simplegeneric
 pip_append simplejson
-pip_append sphinx sphinx_rtd_theme
+pip_append six
+pip_append sphinx sphinx_rtd_theme sphinx-autoapi
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
+pip_append toml
 pip_append toolz
 pip_append tornado
 pip_append tqdm
 pip_append traitlets
+pip_append tuna
 pip_append twine
+pip_append uncertainties
 pip_append versioneer
 pip_append virtualenv
 pip_append wheel
-
 
 if ! $(is_host atto) ; then
     # Only install jupyter on this machine
     pip_append pyzmq
     pip_append jupyter nbconvert jupyterlab
+    if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
+       pip_append jupyterhub
+    fi
     pip_append spyder
 fi
 

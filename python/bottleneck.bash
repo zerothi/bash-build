@@ -1,7 +1,7 @@
 # 1.0.0 requires numpy >= 1.9.1
-v=1.2.1
-add_package --archive bottleneck-$v.tar.gz \
-	    https://github.com/kwgoodman/bottleneck/archive/v$v.tar.gz
+v=1.3.2
+add_package -archive bottleneck-$v.tar.gz \
+	    https://github.com/pydata/bottleneck/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

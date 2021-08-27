@@ -77,6 +77,7 @@ function add_hidden_package {
     # Hence if the build-settings has been edited
     # We skip those
     _settings[$_N_archives]=''
+    pack_set -module-name ""
 }
 
 # This function takes no arguments
@@ -102,7 +103,8 @@ function add_test_package {
     local top_prefix=$(pack_get -prefix $name[$version])
     pack_set -prefix $top_prefix
     pack_set -module-requirement $name[$version]
-    pack_set -remove-setting module
+    pack_set -module-name ""
+    pack_set -remove-setting $IS_MODULE
     pack_set -install-query $top_prefix/${TEST_OUT}*
 }
 
@@ -116,7 +118,8 @@ function source_pack {
     # new packages)
     local source_pack_i=$_N_archives
     source $source_pack_f
-    local err=$?
+    local err
+    err=$?
     if [[ $err -ne 0 ]]; then
 	msg_install -message "Problems sourcing $source_pack_f ($err)"
 	exit $err
@@ -125,7 +128,7 @@ function source_pack {
     while [[ $source_pack_i -lt $_N_archives ]]; do
 	let source_pack_i++
 	pack_install $source_pack_i
-    done    
+    done
 }
 
 
@@ -501,8 +504,19 @@ function pack_set {
 	done
 
     fi
-    [[ "$inst" -ne '-100' ]]    && _installed[$index]="$inst"
-    [[ -n "$query" ]]      && _install_query[$index]="$query"
+    if [[ "$inst" -ne '-100' ]]; then
+	_installed[$index]="$inst"
+	if [[ $inst -ne $_I_MOD ]]; then
+	    if $(has_setting $IS_MODULE $index) ; then
+		noop
+	    else
+		# Ensure that modules that are not modules
+		# do not provide any modules names when queried!
+		_mod_name[$index]=""
+	    fi
+	fi
+    fi
+    [[ -n "$query" ]] && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
 	local v=''
 	typeset -l lc_name="${_alias[$index]}"
@@ -524,15 +538,15 @@ function pack_set {
 	fi
     fi
     ## opted for deletion... (superseeded by explicit version comparisons...)
-    [[ -n "$idx_alias" ]]  && _index[$idx_alias]="$index"
-    [[ -n "$mod_opt" ]]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
-    [[ -n "$version" ]]    && _version[$index]="$version"
-    [[ -n "$directory" ]]  && _directory[$index]="$directory"
-    [[ -n "$settings" ]]   && _settings[$index]="${settings:1}$_LIST_SEP${_settings[$index]}"
+    [[ -n "$idx_alias" ]] && _index[$idx_alias]="$index"
+    [[ -n "$mod_opt" ]] && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
+    [[ -n "$version" ]] && _version[$index]="$version"
+    [[ -n "$directory" ]] && _directory[$index]="$directory"
+    [[ -n "$settings" ]] && _settings[$index]="${settings:1}$_LIST_SEP${_settings[$index]}"
     [[ -n "$mod_prefix" ]] && _mod_prefix[$index]="$mod_prefix"
-    [[ -n "$mod_name" ]]   && _mod_name[$index]="$mod_name"
-    [[ -n "$package" ]]    && _package[$index]="$package"
-    [[ -n "$reject_h" ]]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
+    [[ -n "$mod_name" ]] && _mod_name[$index]="$mod_name"
+    [[ -n "$package" ]] && _package[$index]="$package"
+    [[ -n "$reject_h" ]] && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 
     # Successful execution, return 0 (otherwise we will return status for above if-statement
     return 0
@@ -764,7 +778,10 @@ function pack_store {
 function pack_print {
     # It will only take one argument...
     local pack=$_N_archives
-    [[ $# -gt 0 ]] && pack=$(get_index $1)
+    if [[ $# -gt 0 ]]; then
+	pack=$(get_index $1)
+	shift
+    fi
     echo " >> >> >> >> Package information"
     echo " P/A: $(pack_get -p $pack) / $(pack_get -a $pack)"
     echo " V  : $(pack_get -v $pack)"
@@ -785,6 +802,7 @@ function pack_print {
     # Print out all the libraries associated
     # with this package
     local -a sets=()
+
     # Get all different libraries
     IFS="$_LIST_SEP" read -ra sets <<< "${_libs[$pack]}"
     local libc

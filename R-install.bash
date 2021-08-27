@@ -7,6 +7,25 @@ msg_install \
 # Install packages in the base-R directory!
 source R/R-basic.bash
 
+function mk_R_install_script {
+    local file=$(build_get -build-path)/.R.$(pack_get -package).$(pack_get -version)
+    case $1 in
+	new)
+	    shift 1
+        rm -f $file
+	    [ $# -gt 0 ] && echo "$@" > $file
+	    ;;
+	get)
+	    shift 1
+	    printf '%s' "$file"
+	    ;;
+	*)
+	    echo "$@" >> $file
+	    ;;
+    esac
+}
+
+
 archive_path=$(build_get -archive-path)
 function add_R_package {
     local name=$1
@@ -30,12 +49,12 @@ function add_R_package {
     pack_set -module-opt "-prepend-ENV R_LIBS_SITE=$_prefix"
 }
 
-add_R_package Matrix 1.2-17
+add_R_package Matrix 1.2-18
 
-add_R_package RcppEigen 0.3.3.5.0
+add_R_package RcppEigen 0.3.3.7.0
 pack_set -mod-req Matrix
 
-add_R_package plyr 1.8.4
+add_R_package plyr 1.8.6
 
 # tidyverse packages
 #  ggplot2
@@ -47,34 +66,34 @@ add_R_package plyr 1.8.4
 #  stringr
 #  forcats
 
-add_R_package tibble 2.1.1
+add_R_package tibble 3.0.3
 
-add_R_package bench 1.0.2
+add_R_package bench 1.1.1
 pack_set -mod-req tibble
 
-add_R_package tidyselect 0.2.5
+add_R_package tidyselect 1.1.0
 
-add_R_package dplyr 0.8.0.1
+add_R_package dplyr 1.0.1
 pack_set -mod-req tibble
 pack_set -mod-req tidyselect
 
 add_R_package stringr 1.4.0
 
-add_R_package forcats 0.4.0
+add_R_package forcats 0.5.0
 pack_set -mod-req tibble
 
-add_R_package purrr 0.3.2
+add_R_package purrr 0.3.4
 
 add_R_package readr 1.3.1
 pack_set -mod-req tibble
 
-add_R_package tidyr 0.8.3
+add_R_package tidyr 1.1.1
 pack_set -mod-req purrr
 pack_set -mod-req dplyr
 
-add_R_package MASS 7.3-51.4
+add_R_package MASS 7.3-51.6
 
-add_R_package ggplot2 3.1.1
+add_R_package ggplot2 3.3.2
 pack_set -mod-req plyr
 pack_set -mod-req tibble
 pack_set -mod-req dplyr
@@ -124,3 +143,4 @@ install_all -from R.udunits2
 
 unset archive_path
 unset add_R_package
+unset mk_R_install_script

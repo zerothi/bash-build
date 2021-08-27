@@ -1,5 +1,5 @@
 
-v=5.9
+v=5.15.0
 add_package --version $v --package pyqt3d \
 	    https://sourceforge.net/projects/pyqt/files/PyQt3D/PyQt3D-$v/PyQt3D_gpl-$v.tar.gz
 

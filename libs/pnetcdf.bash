@@ -1,5 +1,5 @@
 # Install the Parallel NetCDF
-v=1.11.2
+v=1.12.1
 add_package \
     -package pnetcdf \
     https://parallel-netcdf.github.io/Release/pnetcdf-$v.tar.gz
@@ -11,10 +11,10 @@ pack_set -lib -lpnetcdf
 
 pack_set -module-requirement mpi
 if [[ $(pack_installed bison) -eq 1 ]]; then
-    pack_cmd "module load $(list ++bison)"
+    pack_cmd "module load $(list -mod-names ++bison)"
 fi
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module load $(list ++flex)"
+    pack_cmd "module load $(list -mod-names ++flex)"
 fi
 
 # Install commands that it should run
@@ -32,8 +32,8 @@ pack_cmd "make install"
 pack_store pnetcdf.test
 
 if [[ $(pack_installed flex) -eq 1 ]]; then
-    pack_cmd "module unload $(list ++flex)"
+    pack_cmd "module unload $(list -mod-names ++flex)"
 fi
 if [[ $(pack_installed bison) -eq 1 ]]; then
-    pack_cmd "module unload $(list ++bison)"
+    pack_cmd "module unload $(list -mod-names ++bison)"
 fi

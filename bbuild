@@ -286,6 +286,7 @@ source libs.bash
 source python${_python_version}.bash
 source R.bash
 source julia.bash
+source nim.bash
 
 # We have installed all libraries needed for doing application installs
 source apps.bash

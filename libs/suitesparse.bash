@@ -1,10 +1,10 @@
 msg_install -message "Installing the SUITE SPARSE libraries..."
 
-v=5.4.0
+v=5.8.0
 add_package \
     -alias suitesparse \
-    -directory SuiteSparse \
-    http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-$v.tar.gz
+    -archive SuiteSparse-$v.tar.gz \
+    https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 
@@ -80,6 +80,10 @@ sse "LDLIBS += -L\$(INSTALL_LIB) -Wl,-rpath=\$(INSTALL_LIB)"
 
 unset ssb
 unset sse
+
+if [[ $(vrs_cmp $v 5.8.0) -eq 0 ]]; then
+    pack_cmd "sed -i -e 's:^CFLAGS +=:#CFLAGS +=:' SLIP_LU/Lib/Makefile"
+fi
 
 pack_cmd "JOBS=$NPROCS make config"
 pack_cmd "JOBS=$NPROCS make library"

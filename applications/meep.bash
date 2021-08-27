@@ -1,4 +1,4 @@
-v=1.7.0
+v=1.15.0
 add_package https://github.com/NanoComp/meep/releases/download/v$v/meep-$v.tar.gz
 
 pack_set --install-query $(pack_get --prefix)/bin/meep

@@ -1,7 +1,6 @@
-v=8.0.0
+v=8.0.1
 add_package -directory llvm-$v.src -package llvm -version $v \
-	    http://releases.llvm.org/$v/llvm-$v.src.tar.xz \
-
+	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-$v.src.tar.xz
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL -s $CRT_DEF_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
@@ -28,7 +27,7 @@ for name in cfe compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly cla
 	    ;;
     esac
     o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-$name-$v.src.tar.xz
-    dwn_file ${tmp//llvm-/$name-} $o
+    dwn_file ${tmp//llvm-$v/$name-$v} $o
     case $name in
 	cfe|clang-tools-extra)
 	    pack_cmd "tar xfJ $o -C ../tools/"

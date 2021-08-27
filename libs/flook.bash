@@ -1,6 +1,6 @@
-v=0.7.0
-add_package \
-    https://github.com/ElectronicStructureLibrary/flook/releases/download/v$v/flook-$v.tar.gz
+v=0.8.1
+add_package -archive flook-$v.tar.gz \
+   https://github.com/ElectronicStructureLibrary/flook/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
@@ -10,6 +10,7 @@ pack_set --install-query $(pack_get --LD)/libflookall.a
 pack_cmd "unset BIN_DIR"
 pack_cmd "echo '# NRP setup.make' > setup.make"
 pack_cmd "sed -i '$ a\
+PLATFORM = linux\n\
 CC = $CC\n\
 FC = $FC\n\
 CFLAGS = $CFLAGS\n\

@@ -1,11 +1,8 @@
 # abinit has specific link to 2.2.3
-for v in 2.2.3 3.0.1 4.2.3 4.3.4
+# 5.0.0 is broken, do not use 
+for v in 5.0.0 3.0.1 4.3.4
 do
-if [[ $(vrs_cmp $v 3.0) -ge 0 ]]; then
-   add_package http://www.tddft.org/programs/octopus/download/libxc/$v/libxc-$v.tar.gz
-else
-   add_package http://www.tddft.org/programs/octopus/download/libxc/libxc-$v.tar.gz
-fi
+add_package http://www.tddft.org/programs/libxc/down/$v/libxc-$v.tar.gz
 pack_set -lib -lxcf03 -lxc
 pack_set -lib[c] -lxc
 pack_set -lib[f90] -lxcf90 -lxc

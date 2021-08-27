@@ -413,6 +413,13 @@ EOF
 	done
 	echo "" >> $mfile
     fi
+    # Always create an environment variable named:
+    #   ${name}_PREFIX to have the installation
+    #   directory accessible at all times.
+    # This is nice for header only projects etc.
+    # Change name to a usable env-var
+    add_module_if -F $force -d "$path" $mfile \
+        "$(module_fmt_routine -set-env ${name//[-.\/]/_}_PREFIX $fpath)"
     # Add paths if they are available
     add_module_if -F $force -d "$path/bin" $mfile \
 	"$(module_fmt_routine -prepend-path PATH $fpath/bin)"
@@ -450,7 +457,7 @@ EOF
     fi
     add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.7 3.6 3.7 3.8 3.9 ; do
+    for PV in 2.7 3.6 3.7 3.8 3.9 3.10 ; do
 	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \

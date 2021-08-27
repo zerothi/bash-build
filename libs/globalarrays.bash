@@ -1,4 +1,4 @@
-v=5.7
+v=5.7.2
 add_package --package globalarrays \
 	    https://github.com/GlobalArrays/ga/releases/download/v$v/ga-$v.tar.gz
 

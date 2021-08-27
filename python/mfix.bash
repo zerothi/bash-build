@@ -1,5 +1,4 @@
-v=19.3.1
-add_package https://mfix.netl.doe.gov/s3/abb8f49f/070644b51eccad5bf9a05eb6647238cd//source/mfix/mfix-19.3.1.tar.gz
+add_package https://mfix.netl.doe.gov/s3/abb8f49f/f1599988c43836514926e200d9da5020//source/mfix/mfix-20.2.0.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_DIR
 

@@ -1,7 +1,6 @@
-v=2.4b
+v=2.6
 add_package --package eigenexa --version $v \
-	    http://www.aics.riken.jp/labs/lpnctrt/assets/img/EigenExa-$v.tgz
-
+    https://www.r-ccs.riken.jp/labs/lpnctrt/assets/img/EigenExa-$v.tgz
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --LD)/libEigenExa.a

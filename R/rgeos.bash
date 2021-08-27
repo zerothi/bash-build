@@ -1,4 +1,4 @@
-add_R_package rgeos 0.5-2
+add_R_package rgeos 0.5-3
 pack_set -mod-req R.udunits2 -mod-req geos -mod-req R.sp
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"

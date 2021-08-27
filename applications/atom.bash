@@ -1,5 +1,5 @@
 add_package -package atom -version 4.2.7.100 \
-	    https://departments.icmab.es/leem/siesta/Pseudopotentials/Code/atom-4.2.7-100.tgz
+        https://departments.icmab.es/leem/SIESTA_MATERIAL/Pseudos/Code/atom-4.2.7-100.tgz
 
 pack_set -s $MAKE_PARALLEL
 
@@ -14,10 +14,10 @@ pack_cmd "sed -i -e '$ a\
 XMLF90_ROOT = $(pack_get -prefix xmlf90)\n\
 GRIDXC_ROOT = $(pack_get -prefix libgridxc)\n\
 include \$(XMLF90_ROOT)/share/org.siesta-project/xmlf90.mk\n\
-include \$(GRIDXC_ROOT)/gridxc.mk\n\
+include \$(GRIDXC_ROOT)/share/org.siesta-project/gridxc_dp.mk\n\
 FC = $FC \n\
 FFLAGS = $FFLAGS \n\
-LDFLAGS = \n\
+LDFLAGS = $(list -LD-rp ++libgridxc) \n\
 AR = $AR\n\
 RANLIB = $RANLIB \n\
 .F.o:\n\
@@ -40,6 +40,16 @@ pack_cmd "cp atm $(pack_get -prefix)/bin/"
 pack_cmd "cd Util ; ln -s ../arch.make"
 pack_cmd "$FC -o $(pack_get -prefix)/bin/vpsa2bin vpsa2bin.f $FFLAGS"
 pack_cmd "$FC -o $(pack_get -prefix)/bin/vpsb2asc vpsb2asc.f $FFLAGS"
-pack_cmd "cd $(pack_get -prefix)/bin/ ; ln -s atm atom"
 
+pack_cmd "cd Ps2Inp ; make FC=$FC ps2inp semicore_info"
+pack_cmd "cp ps2inp semicore_info $(pack_get -prefix)/bin"
+
+# Copy shell-scripts for creating plots
+pack_cmd "cd ../../Tutorial/Utils"
+pack_cmd "cp *.* $(pack_get -prefix)/bin/"
+
+pack_cmd "cd $(pack_get -prefix)/bin/ ; ln -s atm atom ; chmod a+x *.sh"
+
+pack_set -module-opt "-set-ENV ATOM_PROGRAM=$(pack_get -prefix)/bin/atm"
+pack_set -module-opt "-set-ENV ATOM_UTILS_DIR=$(pack_get -prefix)/utils"
 

@@ -1,6 +1,6 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
 
-v=0.9.0
+v=0.10.1
 add_package \
     --archive seaborn-$v.tar.gz \
     https://github.com/mwaskom/seaborn/archive/v$v.tar.gz

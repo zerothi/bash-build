@@ -1,4 +1,4 @@
-add_package https://github.com/dealii/dealii/releases/download/v9.1.0/dealii-9.1.0.tar.gz
+add_package https://github.com/dealii/dealii/releases/download/v9.2.0/dealii-9.2.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -28,7 +28,7 @@ tmp_flags="$tmp_flags -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON"
 
 if $(is_c intel) ; then
     tmp_flags="$tmp_flags -DLAPACK_FOUND=true -DLAPACK_LIBRARIES='$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential'"
-    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$MKL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential'"
+#    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$MKL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential'"
     tmp_flags="$tmp_flags -DSCALAPACK_FOUND=true -DSCALAPACK_LIBRARIES='$MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
 
 else
@@ -38,7 +38,7 @@ else
     pack_set -module-requirement $la
     # We are using C compilers and thus require gfortran library
     tmp_flags="$tmp_flags -DLAPACK_FOUND=true -DLAPACK_LIBRARIES='$(list -LD-rp-lib +$la) -lgfortran -lm'"
-    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$(list -LD-rp-lib +$la) -lgfortran -lm'"
+#    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$(list -LD-rp-lib +$la) -lgfortran -lm'"
     tmp_flags="$tmp_flags -DSCALAPACK_FOUND=true -DSCALAPACK_LIBRARIES='$(list -LD-rp-lib scalapack)'"
 
 fi

@@ -1,4 +1,4 @@
-for v in 2.1.3 ; do
+for v in 2.6.1 ; do
     add_package --archive phonopy-$v.tar.gz \
         https://github.com/atztogo/phonopy/archive/v$v.tar.gz
     

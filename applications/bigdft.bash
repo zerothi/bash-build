@@ -35,7 +35,7 @@ fi
 
 
 # There are also bindings for python
-pack_cmd "module load $(pack_get --module-name-requirement python) $(pack_get --module-name python)"
+pack_cmd "module load $(list -mod-names ++python)"
 
 if [[ $(vrs_cmp $(pack_get --version libxc) 2.2.0) -ge 0 ]]; then
     xclib="-lxcf90 -lxc"
@@ -65,4 +65,4 @@ pack_cmd "make $(get_make_parallel)"
 #pack_cmd "make check"
 pack_cmd "make install prefix=$(pack_get --prefix)"
 
-pack_cmd "module unload $(pack_get --module-name python) $(pack_get --module-name-requirement python)"
+pack_cmd "module unload $(list -mod-names ++python)"

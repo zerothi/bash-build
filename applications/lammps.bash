@@ -1,15 +1,18 @@
 # For completion of the version string...
 # However, a first install should be fine...
 # rm .archives/lammps.tar.gz
+v=29Oct2020
 add_package -package lammps \
 	    -directory 'lammps-*' \
-	    -archive lammps-2019.05.15.tar.gz \
-	    https://github.com/lammps/lammps/archive/patch_15May2019.tar.gz
+	    -archive lammps-$v.tar.gz \
+	    https://github.com/lammps/lammps/archive/refs/tags/stable_$v.tar.gz
 
 pack_set_file_version
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set -module-opt "-lua-family lammps"
+pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib64"
+pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib"
 
 pack_set -install-query $(pack_get -prefix)/bin/lmp
 
@@ -19,11 +22,11 @@ pack_set -module-requirement mpi \
 #	 -module-requirement netcdf
 
 # Fix OpenMP shared declarations (OpenMP 5 forced declaration of all variables)
-pack_cmd "pushd ../src/"
-pack_cmd "sh USER-OMP/hack_openmp_for_pgi_gcc9.sh"
-pack_cmd "cd USER-OMP"
-pack_cmd "sh ./hack_openmp_for_pgi_gcc9.sh"
-pack_cmd "popd"
+#pack_cmd "pushd ../src/"
+#pack_cmd "sh USER-OMP/hack_openmp_for_pgi_gcc9.sh"
+#pack_cmd "cd USER-OMP"
+#pack_cmd "sh ./hack_openmp_for_pgi_gcc9.sh"
+#pack_cmd "popd"
 
 _tmp_flags=
 function _lammps_flags {
