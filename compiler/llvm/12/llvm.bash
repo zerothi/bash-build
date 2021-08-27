@@ -1,4 +1,4 @@
-v=10.0.1
+v=12.0.1
 add_package -directory llvm-$v.src -package llvm -version $v \
 	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-$v.src.tar.xz
 
@@ -11,7 +11,7 @@ pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi gcc)
 
 # Fetch the c-lang to build it along side
 tmp=$(pack_get -url)
-for name in clang compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly clang-tools-extra  ; do
+for name in clang compiler-rt libcxx libcxxabi libunwind lld lldb openmp polly flang clang-tools-extra ; do
     case $name in
 	lldb|lld|clang-tools-extra)
 	    # Skipped packages

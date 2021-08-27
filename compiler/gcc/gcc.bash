@@ -38,7 +38,7 @@ source_pack compiler/gcc/7/isl.bash
 source_pack compiler/gcc/7/gcc.bash
 source_pack compiler/gcc/7/gdb.bash
 
-gcc_v=8.4.0
+gcc_v=8.5.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
 source_pack compiler/gcc/8/gmp.bash
@@ -48,27 +48,7 @@ source_pack compiler/gcc/8/isl.bash
 source_pack compiler/gcc/8/gcc.bash
 source_pack compiler/gcc/8/gdb.bash
 
-gcc_v=10.2.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/10/gmp.bash
-source_pack compiler/gcc/10/mpfr.bash
-source_pack compiler/gcc/10/mpc.bash
-source_pack compiler/gcc/10/isl.bash
-source_pack compiler/gcc/10/gcc.bash
-source_pack compiler/gcc/10/gdb.bash
-
-gcc_v=11.1.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/11/gmp.bash
-source_pack compiler/gcc/11/mpfr.bash
-source_pack compiler/gcc/11/mpc.bash
-source_pack compiler/gcc/11/isl.bash
-source_pack compiler/gcc/11/gcc.bash
-source_pack compiler/gcc/11/gdb.bash
-
-gcc_v=9.3.0
+gcc_v=9.4.0
 gcc=gcc_$gcc_v
 source_pack compiler/gcc/prereq.bash
 source_pack compiler/gcc/9/gmp.bash
@@ -78,6 +58,25 @@ source_pack compiler/gcc/9/isl.bash
 source_pack compiler/gcc/9/gcc.bash
 source_pack compiler/gcc/9/gdb.bash
 
+gcc_v=10.3.0
+gcc=gcc_$gcc_v
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/10/gmp.bash
+source_pack compiler/gcc/10/mpfr.bash
+source_pack compiler/gcc/10/mpc.bash
+source_pack compiler/gcc/10/isl.bash
+source_pack compiler/gcc/10/gcc.bash
+source_pack compiler/gcc/10/gdb.bash
+
+gcc_v=11.2.0
+gcc=gcc_$gcc_v
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/11/gmp.bash
+source_pack compiler/gcc/11/mpfr.bash
+source_pack compiler/gcc/11/mpc.bash
+source_pack compiler/gcc/11/isl.bash
+source_pack compiler/gcc/11/gcc.bash
+source_pack compiler/gcc/11/gdb.bash
 
 
 # Local variables which should only be visible here...
