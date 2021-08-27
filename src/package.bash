@@ -516,7 +516,7 @@ function pack_set {
 	    fi
 	fi
     fi
-    [[ -n "$query" ]]      && _install_query[$index]="$query"
+    [[ -n "$query" ]] && _install_query[$index]="$query"
     if [[ -n "$alias" ]]; then
 	local v=''
 	typeset -l lc_name="${_alias[$index]}"
@@ -538,15 +538,15 @@ function pack_set {
 	fi
     fi
     ## opted for deletion... (superseeded by explicit version comparisons...)
-    [[ -n "$idx_alias" ]]  && _index[$idx_alias]="$index"
-    [[ -n "$mod_opt" ]]    && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
-    [[ -n "$version" ]]    && _version[$index]="$version"
-    [[ -n "$directory" ]]  && _directory[$index]="$directory"
-    [[ -n "$settings" ]]   && _settings[$index]="${settings:1}$_LIST_SEP${_settings[$index]}"
+    [[ -n "$idx_alias" ]] && _index[$idx_alias]="$index"
+    [[ -n "$mod_opt" ]] && _mod_opts[$index]="${_mod_opts[$index]}$mod_opt"
+    [[ -n "$version" ]] && _version[$index]="$version"
+    [[ -n "$directory" ]] && _directory[$index]="$directory"
+    [[ -n "$settings" ]] && _settings[$index]="${settings:1}$_LIST_SEP${_settings[$index]}"
     [[ -n "$mod_prefix" ]] && _mod_prefix[$index]="$mod_prefix"
-    [[ -n "$mod_name" ]]   && _mod_name[$index]="$mod_name"
-    [[ -n "$package" ]]    && _package[$index]="$package"
-    [[ -n "$reject_h" ]]   && _reject_host[$index]="${_reject_host[$index]}$reject_h"
+    [[ -n "$mod_name" ]] && _mod_name[$index]="$mod_name"
+    [[ -n "$package" ]] && _package[$index]="$package"
+    [[ -n "$reject_h" ]] && _reject_host[$index]="${_reject_host[$index]}$reject_h"
 
     # Successful execution, return 0 (otherwise we will return status for above if-statement
     return 0
