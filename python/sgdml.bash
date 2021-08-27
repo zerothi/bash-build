@@ -1,4 +1,4 @@
-v=0.4.3
+v=0.4.10
 add_package --archive sgdml-$v.tar.gz \
         --directory sGDML-$v \
 	    https://github.com/stefanch/sGDML/archive/$v.tar.gz

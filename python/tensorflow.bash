@@ -51,5 +51,5 @@ pack_cmd "$_envs bazel build --jobs $NPROCS -s --local_resources 2048,.5,1.0 \
 pack_cmd "mkdir my-tensorflow-directory-for-pip"
 pack_cmd "./bazel-bin/tensorflow/tools/pip_package/build_pip_package my-tensorflow-directory-for-pip"
 
-pack_cmd "pip install --prefix=$(pack_get -prefix) ./my-tensorflow-directory-for-pip./*.whl"
+pack_cmd "$(get_parent_exec) -m pip install --prefix=$(pack_get -prefix) ./my-tensorflow-directory-for-pip./*.whl"
 pack_cmd "module unload $_mods"

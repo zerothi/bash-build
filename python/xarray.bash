@@ -24,7 +24,7 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 pack_cmd "echo 'Version: $v' > PKG-INFO"
 pack_cmd "sed -i -e 's/packages = xarray/packages = find:/' setup.cfg"
-pack_cmd "pip install $pip_install_opts --prefix=$(pack_get -prefix) ."
+pack_cmd "$(get_parent_exec) -m pip install $pip_install_opts --prefix=$(pack_get -prefix) ."
 
 add_test_package xarray.test
 pack_cmd "pytest --pyargs xarray > $TEST_OUT 2>&1 || echo forced"

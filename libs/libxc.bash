@@ -1,6 +1,6 @@
 # abinit has specific link to 2.2.3
 # 5.0.0 is broken, do not use 
-for v in 5.0.0 3.0.1 4.3.4
+for v in 5.1.4 3.0.1 4.3.4
 do
 add_package http://www.tddft.org/programs/libxc/down/$v/libxc-$v.tar.gz
 pack_set -lib -lxcf03 -lxc

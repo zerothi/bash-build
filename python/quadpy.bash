@@ -9,7 +9,7 @@ pack_set -install-query $(pack_get -LD)/python$pV/site-packages/quadpy
 
 pack_set $(list -prefix ' -module-requirement ' numpy scipy sympy orthopy)
 
-pack_cmd "pip install $pip_install_opts --prefix=$(pack_get -prefix) ."
+pack_cmd "$(get_parent_exec) -m pip install $pip_install_opts --prefix=$(pack_get -prefix) ."
 
 add_test_package quadpy.test
 pack_cmd "pytest --pyargs quadpy > $TEST_OUT 2>&1 || echo forced"

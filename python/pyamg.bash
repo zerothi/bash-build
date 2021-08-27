@@ -10,7 +10,7 @@ pack_set -directory pyamg-$v
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
 
 pack_set -module-requirement scipy
-pack_set -module-requirement pybind11
+pack_set -build-mod-req pybind11
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages"
 
