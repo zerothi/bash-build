@@ -13,9 +13,11 @@ if [[ $(vrs_cmp $pV 3.7) -lt 0 ]]; then
     pack_set -host-reject $(get_hostname)
 fi
 
+# boost and openexr in openimageio
 pack_set -mod-req ffmpeg -mod-req openimageio
 pack_set -mod-req openjpeg
 pack_set -mod-req numpy
+pack_set -mod-req fftw
 
 pack_set -install-query $(pack_get -prefix)/bin/blender
 
@@ -31,12 +33,13 @@ else
     python_b=on
 fi
 
+#-DPYTHON_NUMPY_PATH=$(pack_get -prefix numpy)/lib/python${pV}/site-packages \
+
 pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 	 -DWITH_INSTALL_PORTABLE=off \
 	 -DWITH_PYTHON_INSTALL=$python_b \
 	 -DWITH_PYTHON_MODULE=$python_a \
 	 -DPYTHON_ROOT=$(pack_get -prefix python) \
-	 -DPYTHON_NUMPY_PATH=$(python3 -c "import numpy as np ; print(np.__file__.split('site-packages')[0] + '/site-packages')") \
 	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python${pV} \
 	 -DPYTHON_SITE_PACKAGES=$(pack_get -prefix)/lib/python \
 	 -DWITH_INTERNATIONAL=off \
