@@ -1,4 +1,4 @@
-mpc_v=1.2.0
+mpc_v=1.2.1
 add_package -build generic \
 	    -package $gcc-mpc \
 	    -alias mpc \

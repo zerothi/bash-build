@@ -12,7 +12,11 @@ pre=$(pack_get -prefix gcc-prereq[$gcc_v])
 pack_set -prefix $pre
 pack_set -install-query $pre/lib/libmpfr.a
 
+o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-mpfr-4.1.0.patch
+dwn_file https://gforge.inria.fr/scm/viewvc.php/mpfr/misc/www/mpfr-4.1.0/allpatches?view=co $o
+
 # Install commands that it should run
+pack_cmd "pushd ../ ; patch -N -Z -p1 < $o ; popd"
 pack_cmd "../configure --prefix $pre" \
          "--with-gmp=$pre"
 

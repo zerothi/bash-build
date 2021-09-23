@@ -1,4 +1,4 @@
-gmp_v=6.2.0
+gmp_v=6.2.1
 add_package --build generic \
 	    --package gmp --version $gmp_v --directory gmp-${gmp_v//[a-z]/} \
             https://gmplib.org/download/gmp/gmp-$gmp_v.tar.xz

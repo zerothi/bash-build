@@ -1,4 +1,4 @@
-isl_v=0.22.1
+isl_v=0.24
 add_package --build generic \
 	    http://isl.gforge.inria.fr/isl-$isl_v.tar.xz
 

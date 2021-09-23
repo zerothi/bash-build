@@ -1,4 +1,4 @@
-gmp_v=6.2.0
+gmp_v=6.2.1
 add_package -build generic \
 	    -directory gmp-${gmp_v//[a-z]/} \
 	    -version $gmp_v \
