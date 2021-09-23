@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+add_package --build generic http://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 

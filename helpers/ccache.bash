@@ -1,4 +1,4 @@
-v=3.7.11
+v=4.4.1
 add_package -build generic \
 	    https://github.com/ccache/ccache/releases/download/v$v/ccache-$v.tar.xz
 

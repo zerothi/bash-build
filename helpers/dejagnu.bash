@@ -1,5 +1,5 @@
 # apt-get tcl-dev tk-dev expect
-add_package --build generic http://mirrors.dotsrc.org/gnu/dejagnu/dejagnu-1.6.tar.gz
+add_package --build generic http://mirrors.dotsrc.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 

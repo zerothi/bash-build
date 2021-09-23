@@ -1,4 +1,4 @@
-add_package -build generic https://curl.haxx.se/download/curl-7.65.1.tar.xz
+add_package -build generic https://curl.se/download/curl-7.79.1.tar.xz
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
