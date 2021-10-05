@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/automake/automake-1.16.4.tar.xz
+add_package --build generic http://ftp.gnu.org/gnu/automake/automake-1.16.5.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
