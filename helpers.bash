@@ -19,6 +19,7 @@ if [[ $? -eq 0 ]]; then
 fi
 
 source_pack helpers/zlib.bash
+source_pack helpers/sysstat.bash
 
 # These packages are installed in build-tools
 source_pack helpers/help2man.bash
