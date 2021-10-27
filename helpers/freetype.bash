@@ -1,5 +1,5 @@
 add_package -build generic -alias gen-freetype -package gen-freetype \
-    http://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.xz
+    https://sourceforge.net/projects/freetype/files/freetype2/2.11.0/freetype-2.11.0.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

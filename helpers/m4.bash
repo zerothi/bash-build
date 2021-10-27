@@ -1,14 +1,16 @@
-add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.xz
+add_package --build generic http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set --module-requirement build-tools
 pack_set --prefix $(pack_get --prefix build-tools)
 
-if $(is_host nicpa) ; then
-    o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
-    dwn_file https://raw.githubusercontent.com/openembedded/openembedded-core/master/meta/recipes-devtools/m4/m4/m4-1.4.18-glibc-change-work-around.patch $o
-    pack_cmd "pushd .. ; patch -p1 < $o ; popd"
+if [ $(vrs_cmp $(pack_get -version) 1.4.18) -eq 0 ]; then
+    if $(is_host nicpa) ; then
+	o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
+	dwn_file https://raw.githubusercontent.com/openembedded/openembedded-core/master/meta/recipes-devtools/m4/m4/m4-1.4.18-glibc-change-work-around.patch $o
+	pack_cmd "pushd .. ; patch -p1 < $o ; popd"
+    fi
 fi
 
 p_V=$(pack_get --version)

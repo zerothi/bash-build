@@ -1,7 +1,7 @@
-v=3.28.0
-dv=3280000
+v=3.36.0
+dv=3360000
 add_package -package sqlite -build generic -version $v \
-	    http://www.sqlite.org/2019/sqlite-autoconf-$dv.tar.gz
+	    http://www.sqlite.org/2021/sqlite-autoconf-$dv.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

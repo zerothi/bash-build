@@ -1,4 +1,4 @@
-v=1.8.2
+v=1.10.2
 add_package -directory . \
 	    -archive ninja-$v.zip \
 	    https://github.com/ninja-build/ninja/releases/download/v$v/ninja-linux.zip

@@ -1,6 +1,6 @@
 add_package --build generic \
-    --version 5.3 \
-    http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/ar/lxml-101.tar.gz
+    --version $lua_V \
+    http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/ar/lxml-106.tar.gz
 
 pack_set --module-requirement lua
 

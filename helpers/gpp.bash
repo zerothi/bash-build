@@ -1,4 +1,4 @@
-v=2.25
+v=2.27
 add_package --archive gpp-$v.tar.gz \
 	    https://github.com/logological/gpp/archive/$v.tar.gz
 

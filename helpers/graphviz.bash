@@ -1,4 +1,4 @@
-v=2.44.1
+v=2.49.3
 add_package -build generic \
             -archive graphviz-$v.tar.bz2 \
             https://gitlab.com/graphviz/graphviz/-/archive/$v/graphviz-$v.tar.bz2

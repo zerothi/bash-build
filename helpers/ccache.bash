@@ -5,8 +5,9 @@ add_package -build generic \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set -build-mod-req build-tools
+pack_set -build-mod-req cmake
 pack_set -install-query $(pack_get -prefix)/bin/ccache
 
-pack_cmd "../configure --prefix=$(pack_get -prefix)"
+pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .."
 pack_cmd "make"
 pack_cmd "make install"

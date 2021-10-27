@@ -1,7 +1,7 @@
-v=3.0.4
+v=3.7.0
 add_package -build generic \
-    -archive luarocks-$v.tar.gz \
-    https://github.com/keplerproject/luarocks/archive/v$v.tar.gz
+	    -archive luarocks-$v.tar.gz \
+	    https://github.com/luarocks/luarocks/archive/refs/tags/v$v.tar.gz
 
 pack_set -build-mod-req build-tools
 pack_set -module-requirement lua

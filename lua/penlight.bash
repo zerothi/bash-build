@@ -1,8 +1,8 @@
-v=1.6.0
+v=1.11.0
 add_package --build generic \
 	    --package penlight \
 	    --archive Penlight-$v.tar.gz \
-	    https://github.com/stevedonovan/Penlight/archive/$v.tar.gz
+	    https://github.com/lunarmodules/Penlight/archive/$v.tar.gz
 
 pack_set --module-requirement lua
 

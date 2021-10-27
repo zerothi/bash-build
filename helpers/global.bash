@@ -1,4 +1,4 @@
-add_package --build generic http://tamacom.com/global/global-6.6.3.tar.gz
+add_package --build generic http://tamacom.com/global/global-6.6.7.tar.gz
 
 pack_set -s $IS_MODULE
 

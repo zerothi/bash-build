@@ -1,4 +1,4 @@
-v=2.3.1
+v=2.4.0
 add_package -build generic -archive openjpeg-$v.tar.gz \
 	    https://github.com/uclouvain/openjpeg/archive/v$v.tar.gz
 

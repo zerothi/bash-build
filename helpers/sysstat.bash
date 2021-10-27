@@ -3,7 +3,7 @@ add_package --build generic \
 	    --archive sysstat-$v.tar.gz \
 	    https://github.com/sysstat/sysstat/archive/refs/tags/v$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
+pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/pidstat
 

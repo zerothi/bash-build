@@ -1,4 +1,4 @@
-v=3.1.2
+v=3.1.5
 add_package --build generic --package wxwidgets \
 	    --archive wxWidgets-$v.tar.bz2 \
 	    https://github.com/wxWidgets/wxWidgets/releases/download/v$v/wxWidgets-$v.tar.bz2

@@ -1,4 +1,4 @@
-v=0.28.1
+v=1.3.0
 add_package -build generic -archive libgit2-$v.tar.gz \
 	    https://github.com/libgit2/libgit2/archive/v$v.tar.gz
 

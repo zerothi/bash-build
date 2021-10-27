@@ -1,4 +1,4 @@
-v=1_7_0_2
+v=1_8_0
 add_package --build generic \
 	    --package luafilesystem \
 	    -archive luafilesystem-$v.tar.gz \

@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.gnu.org/gnu/make/make-4.2.1.tar.bz2
+add_package --build generic ftp://ftp.gnu.org/gnu/make/make-4.3.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
@@ -13,10 +13,12 @@ if [[ $(vrs_cmp $c_V $p_V) -ge 0 ]]; then
     pack_set -host-reject "$(get_hostname)"
 fi
 
-if $(is_host nicpa) ; then
-    o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
-    dwn_file https://raw.githubusercontent.com/osresearch/heads/make-4.2.1/patches/make-4.2.1.patch $o
-#    pack_cmd "pushd .. ; patch -p1 < $o ; popd"
+if [[ $(vrs_cmp $p_V 4.2.1) -eq 0 ]]; then
+    if $(is_host nicpa) ; then
+	o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
+	dwn_file https://raw.githubusercontent.com/osresearch/heads/make-4.2.1/patches/make-4.2.1.patch $o
+	#    pack_cmd "pushd .. ; patch -p1 < $o ; popd"
+    fi
 fi
 
 pack_cmd "sed -s -i -e 's:_GNU_GLOB_INTERFACE_VERSION ==:_GNU_GLOB_INTERFACE_VERSION >=:g' ../configure ../glob/glob.c"

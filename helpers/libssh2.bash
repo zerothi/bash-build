@@ -1,5 +1,5 @@
 add_package -build generic \
-	    https://www.libssh2.org/download/libssh2-1.8.2.tar.gz
+	    https://www.libssh2.org/download/libssh2-1.10.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set -build-mod-req build-tools

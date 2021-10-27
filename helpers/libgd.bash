@@ -1,4 +1,4 @@
-v=2.2.5
+v=2.3.3
 add_package --build generic \
 	    https://github.com/libgd/libgd/releases/download/gd-$v/libgd-$v.tar.xz
 

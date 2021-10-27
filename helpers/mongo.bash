@@ -1,4 +1,4 @@
-v=2.7.3
+v=4.4.10
 add_package --build generic \
 	    --package mongo \
 	    --archive mongo-r$v.tar.gz \

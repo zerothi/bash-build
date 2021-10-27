@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.pcre.org/pub/pcre/pcre-8.44.tar.bz2
+add_package --build generic ftp://ftp.pcre.org/pub/pcre/pcre-8.45.tar.bz2
 
 pack_set --host-reject ntch-2857
 

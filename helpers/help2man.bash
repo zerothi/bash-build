@@ -1,5 +1,5 @@
 # Retrieve version of autoconf
-add_package --build generic http://ftp.gnu.org/gnu/help2man/help2man-1.47.5.tar.xz
+add_package --build generic http://ftp.gnu.org/gnu/help2man/help2man-1.48.5.tar.xz
 
 pack_set -s $MAKE_PARALLEL
 
