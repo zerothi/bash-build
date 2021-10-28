@@ -143,11 +143,10 @@ source_pack libs/amgcl.bash
 source_pack libs/sfcgal.bash
 
 # A sparse matrix library
-#source libs/suitesparse_separate.bash
 source_pack libs/suitesparse.bash
 
-source_pack libs/mumps-serial.bash
 source_pack libs/mumps.bash
+source_pack libs/mumps-serial.bash
 source_pack libs/superlu.bash
 source_pack libs/superlu-dist.bash
 source_pack libs/hypre.bash
