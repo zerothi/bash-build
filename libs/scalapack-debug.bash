@@ -24,7 +24,7 @@ file=SLmake.inc
 pack_cmd "cp $file.example $file"
 pack_cmd "$tmp 's;FC[[:space:]]*=.*;FC = $MPIF90;g' $file"
 pack_cmd "$tmp 's;CC[[:space:]]*=.*;CC = $MPICC;g' $file"
-pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC;g' $file"
+pack_cmd "$tmp 's;NOOPT[[:space:]]*=.*;NOOPT = -fPIC -fallow-argument-mismatch;g' $file"
 pack_cmd "$tmp 's;FCFLAGS[[:space:]]*=.*;FCFLAGS = $_fcflags;g' $file"
 pack_cmd "$tmp 's;CCFLAGS[[:space:]]*=.*;CCFLAGS = $_cflags;g' $file"
 pack_cmd "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"

@@ -1,5 +1,5 @@
 v=5.3
-add_package --package cgal https://github.com/CGAL/cgal/releases/download/releases/CGAL-$v/CGAL-$v.tar.xz
+add_package --package cgal https://github.com/CGAL/cgal/releases/download/v$v/CGAL-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

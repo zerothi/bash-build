@@ -1,6 +1,6 @@
 v=2.3.8.0
-add_package -package openimageio -archive oiio-Release-$v.tar.gz \
-	    https://github.com/OpenImageIO/oiio/archive/Release-$v.tar.gz
+add_package -package openimageio -archive oiio-$v.tar.gz \
+	    https://github.com/OpenImageIO/oiio/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set -build-mod-req build-tools

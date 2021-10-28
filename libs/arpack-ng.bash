@@ -6,7 +6,7 @@ add_package \
 pack_set -s $IS_MODULE
 
 # Required as the version has just been set
-pack_set --install-query $(pack_get --LD)/libparpack.a
+pack_set --install-query $(pack_get --LD)/libparpack.so
 pack_set --lib -larpack
 pack_set --lib[mpi] -lparpack -larpack
 
