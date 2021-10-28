@@ -1,6 +1,6 @@
-v=3.1.5
+v=4.1.0
 add_package -package pmix \
-	    https://github.com/pmix/pmix/releases/download/v$v/pmix-$v.tar.bz2
+	    https://github.com/openpmix/openpmix/releases/download/v$v/pmix-$v.tar.bz2
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

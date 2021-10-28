@@ -1,7 +1,7 @@
 v=2.0.1
 add_package --package sympack \
         --directory symPACK-$v \
-	    https://github.com/symPACK/symPACK/archive/v$v.tar.gz
+	https://github.com/symPACK/symPACK/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

@@ -1,4 +1,4 @@
-v=1.3.1
+v=1.3.2
 add_package -archive nanoflann-$v.tar.gz https://github.com/jlblancoc/nanoflann/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

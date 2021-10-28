@@ -1,4 +1,4 @@
-v=2.6.0
+v=2.7.1
 add_package -directory libint-$v -package libint-prepare -archive libint-$v.tar.gz https://github.com/evaleev/libint/archive/v$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

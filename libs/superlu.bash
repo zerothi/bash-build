@@ -1,4 +1,4 @@
-v=5.2.1
+v=5.3.0
 add_package -archive superlu-$v.tar.gz \
 	    https://github.com/xiaoyeli/superlu/archive/v$v.tar.gz
 

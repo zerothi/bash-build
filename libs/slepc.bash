@@ -1,7 +1,7 @@
 for d_type in d z
 do
 add_package -package slepc-$d_type \
-        http://slepc.upv.es/download/distrib/slepc-3.13.3.tar.gz
+        http://slepc.upv.es/download/distrib/slepc-3.16.0.tar.gz
 
 pack_set -s $IS_MODULE
 

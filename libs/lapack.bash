@@ -1,4 +1,4 @@
-v=3.9.0
+v=3.10.0
 add_package --version $v --archive lapack-$v.tar.gz https://github.com/Reference-LAPACK/lapack/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

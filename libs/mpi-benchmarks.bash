@@ -1,4 +1,4 @@
-v=2019.6
+v=2021.3
 add_package -package imb -version $v \
 	    -directory mpi-benchmarks-IMB-v$v \
 	    https://github.com/intel/mpi-benchmarks/archive/IMB-v$v.tar.gz

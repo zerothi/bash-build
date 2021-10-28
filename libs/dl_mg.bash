@@ -1,5 +1,5 @@
 add_package --package dlmg \
-	    https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/609/8974/dl_mg_2.0.2.tar
+	    https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/609/8974/dl_mg_3.0.0.tar
 
 pack_set -s $IS_MODULE
 
@@ -18,6 +18,8 @@ pack_cmd "sed -i '$ a\
 OBJDIR = obj\n\
 LIBDIR = $libdir\n\
 FC = $MPIFC \n\
+BUILD = opt\n\
+USE_MPI = yes \n\
 USE_OPENMP = yes \n\
 MPIFLAGS = -DMPI \n\
 FFLAGS = $FCFLAGS $FLAG_OMP\n' $file"

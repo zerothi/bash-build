@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.5.tar.gz
+add_package https://bitbucket.org/blaze-lib/blaze/downloads/blaze-3.8.tar.gz
 
 pack_set -s $IS_MODULE
 

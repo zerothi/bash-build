@@ -10,7 +10,7 @@ function tmp_func {
 }
 
 
-v=3.3.8
+v=3.3.10
 add_package -alias fftw \
             -version $v \
             -package fftw \

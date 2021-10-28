@@ -1,4 +1,5 @@
-add_package https://github.com/NFFT/nfft/releases/download/3.4.1/nfft-3.4.1.tar.gz
+v=3.5.2
+add_package https://github.com/NFFT/nfft/releases/download/$v/nfft-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

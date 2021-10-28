@@ -1,4 +1,4 @@
-v=3.7.0
+v=3.8.0
 add_package \
     --archive arpack-ng-$v.tar.gz \
     https://github.com/opencollab/arpack-ng/archive/$v.tar.gz

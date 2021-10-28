@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/berkeleylab/upcxx/downloads/upcxx-2020.3.2.tar.gz
+add_package https://bitbucket.org/berkeleylab/upcxx/downloads/upcxx-2021.9.0.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

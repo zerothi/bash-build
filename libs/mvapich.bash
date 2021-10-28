@@ -1,4 +1,4 @@
-v=2.3.4
+v=2.3.5
 add_package --package mvapich --version $v \
     http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich2-$v.tar.gz
 

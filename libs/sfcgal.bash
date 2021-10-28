@@ -1,6 +1,7 @@
-v=1.3.8
-add_package -package sfcgal -archive SFCGAL-$v.tar.gz \
-	    https://github.com/Oslandia/SFCGAL/archive/v$v.tar.gz
+v=1.4.0
+add_package -package sfcgal \
+	    https://gitlab.com/Oslandia/SFCGAL/-/archive/v$v/SFCGAL-v$v.tar.bz2
+
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 

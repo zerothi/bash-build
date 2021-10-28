@@ -1,4 +1,4 @@
-v=3.3.7
+v=3.4.0
 add_package -package eigen \
 	    -archive eigen-$v.tar.bz2 \
             https://gitlab.com/libeigen/eigen/-/archive/$v/eigen-$v.tar.bz2

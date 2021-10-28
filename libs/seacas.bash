@@ -1,4 +1,4 @@
-v=2020-08-13
+v=2021-10-11
 add_package -archive seacas-$v.tar.gz \
 	    -package seacas \
 	    -version ${v//-/.} \

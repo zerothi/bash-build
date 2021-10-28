@@ -1,4 +1,4 @@
-add_package http://p4est.github.io/release/p4est-2.2.tar.gz
+add_package http://p4est.github.io/release/p4est-2.8.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

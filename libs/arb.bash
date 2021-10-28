@@ -1,4 +1,4 @@
-v=2.18.1
+v=2.21.1
 add_package -archive arb-$v.tar.gz https://github.com/fredrik-johansson/arb/archive/$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

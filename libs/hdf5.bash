@@ -1,5 +1,5 @@
 # Then install HDF5
-for p in 1.12.0 ; do
+for p in 1.12.1 ; do
 
 add_package \
     --package hdf5 \

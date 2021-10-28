@@ -1,7 +1,7 @@
 # MUMPS 4.10.0 only works with 5.1.12b, MUMPS 5 works with >=6.0.1
-for v in 6.0.9 ; do
+for v in 6.1.1 ; do
 add_package --package scotch --alias scotch --version $v \
-    http://gforge.inria.fr/frs/download.php/file/38187/scotch_$v.tar.gz
+	    https://gitlab.inria.fr/scotch/scotch/-/archive/v$z/scotch-v$v.tar.bz2
 
 pack_set -s $IS_MODULE
 

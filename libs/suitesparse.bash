@@ -1,10 +1,10 @@
 msg_install -message "Installing the SUITE SPARSE libraries..."
 
-v=5.8.0
+v=5.10.1
 add_package \
     -alias suitesparse \
     -archive SuiteSparse-$v.tar.gz \
-    https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v$v.tar.gz
+    https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $IS_MODULE
 

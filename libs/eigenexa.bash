@@ -1,4 +1,4 @@
-v=2.6
+v=2.10
 add_package --package eigenexa --version $v \
     https://www.r-ccs.riken.jp/labs/lpnctrt/assets/img/EigenExa-$v.tgz
 pack_set -s $IS_MODULE -s $BUILD_DIR

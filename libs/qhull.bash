@@ -1,6 +1,6 @@
-v=8.0.0
+v=8.0.2
 add_package -archive qhull-$v.tar.gz \
-	    https://github.com/qhull/qhull/archive/v8.0.0.tar.gz
+	    https://github.com/qhull/qhull/archive/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

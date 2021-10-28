@@ -1,4 +1,4 @@
-v=2.1.15.0
+v=2.3.8.0
 add_package -package openimageio -archive oiio-Release-$v.tar.gz \
 	    https://github.com/OpenImageIO/oiio/archive/Release-$v.tar.gz
 

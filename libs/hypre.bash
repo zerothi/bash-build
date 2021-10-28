@@ -1,4 +1,4 @@
-v=2.18.2
+v=2.23.0
 add_package -archive hypre-$v.tar.gz \
 	    https://github.com/hypre-space/hypre/archive/v$v.tar.gz
 

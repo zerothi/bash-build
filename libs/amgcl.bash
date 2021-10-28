@@ -1,4 +1,4 @@
-v=1.2.0
+v=1.4.2
 add_package -archive amgcl-$v.tar.gz https://github.com/ddemidov/amgcl/archive/$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

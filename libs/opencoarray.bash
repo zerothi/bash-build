@@ -1,4 +1,4 @@
-v=2.9.0
+v=2.9.2
 add_package -package opencoarrays \
 	    -archive OpenCoarrays-$v.tar.gz \
 	    https://github.com/sourceryinstitute/OpenCoarrays/archive/$v.tar.gz

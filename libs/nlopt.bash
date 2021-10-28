@@ -1,5 +1,5 @@
 return 0
-add_package http://ab-initio.mit.edu/nlopt/nlopt-2.4.2.tar.gz
+add_package http://ab-initio.mit.edu/nlopt/nlopt-2.6.2.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

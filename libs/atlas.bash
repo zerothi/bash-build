@@ -12,6 +12,8 @@ else
     add_package $tmp http://downloads.sourceforge.net/project/math-atlas/Developer%20%28unstable%29/$v/atlas$v.tar.bz2
 fi
 
+pack_set -host-reject $(get_hostname)
+
 pack_set -directory ATLAS
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE

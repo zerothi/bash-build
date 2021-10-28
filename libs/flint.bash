@@ -1,4 +1,4 @@
-add_package http://flintlib.org/flint-2.6.0.tar.gz
+add_package http://flintlib.org/flint-2.8.2.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE 
 

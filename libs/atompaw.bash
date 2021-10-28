@@ -1,4 +1,4 @@
-v=4.1.0.6
+v=4.1.1.0
 add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
