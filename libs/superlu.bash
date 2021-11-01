@@ -14,7 +14,7 @@ pack_cmd "echo '# Make file' > make.inc"
 pack_cmd "sed -i '1 a\
 PLAT =\n\
 SuperLUroot = ..\n\
-SUPERLULIB = \$(SuperLUroot)/lib/libsuperlu.a\n\
+SUPERLULIB = \$(SuperLUroot)/libsuperlu.a\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
 LIBS = \$(SUPERLULIB) \$(BLASLIB) \n\
 ARCH = $AR\n\
@@ -49,7 +49,7 @@ fi
 pack_cmd "make superlulib"
 
 pack_cmd "mkdir -p $(pack_get -LD)/"
-pack_cmd "cp lib/libsuperlu.a $(pack_get -LD)/"
+pack_cmd "cp libsuperlu.a $(pack_get -LD)/"
 pack_cmd "mkdir -p $(pack_get -prefix)/include"
 pack_cmd "cp SRC/*.h $(pack_get -prefix)/include"
 

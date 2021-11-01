@@ -1,5 +1,5 @@
 v=0.2.4
-add_package https://gitlab.com/ElectronicStructureLibrary/libpspio/-/archive/$v/libpspio-$v.tar.bz2
+add_package -package pspio https://gitlab.com/ElectronicStructureLibrary/libpspio/-/archive/$v/libpspio-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

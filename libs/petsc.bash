@@ -10,7 +10,7 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpetsc.so
 pack_set -lib -lpetsc
 
-pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse seacas)
+pack_set $(list -prefix '-mod-req ' zlib parmetis fftw-mpi hdf5 boost gen-libpng pnetcdf netcdf eigen mumps scotch suitesparse superlu-dist seacas)
 
 # seacas has zoltan, exodus
 

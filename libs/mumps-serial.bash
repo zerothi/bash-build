@@ -93,7 +93,7 @@ LIBS = \$(LIBSEQ) \n\
 LIBSEQNEEDED = libseqneeded \n' Makefile.inc"
 
 # Make commands
-pack_cmd "make $(get_make_parallel) alllib"
+pack_cmd "make $(get_make_parallel) all"
 pack_cmd "mkdir -p $(pack_get --prefix)/include"
 pack_cmd "cp include/*.h $(pack_get --prefix)/include/"
 pack_cmd "mkdir -p $(pack_get --LD)"
@@ -122,7 +122,7 @@ OPTL += $FLAG_OMP\n\
 OPTC += $FLAG_OMP\n' Makefile.inc"
 
 # Make commands
-pack_cmd "make $(get_make_parallel) alllib"
+pack_cmd "make $(get_make_parallel) all"
 pack_cmd "cp include/*.h $(pack_get --prefix)/include/"
 pack_cmd "cd lib"
 pack_cmd "for l in lib*.a ; do cp \$l $(pack_get --LD)/\${l//.a/_omp.a} ; done"
