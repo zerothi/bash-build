@@ -1,4 +1,4 @@
-v=4.0.0
+v=4.2.0
 add_package -archive scons-$v.tar.gz \
 	    https://github.com/SCons/scons/archive/$v.tar.gz
 

@@ -1,4 +1,4 @@
-v=2020.6.20
+v=2021.10.8
 add_package --version $v https://pypi.python.org/packages/source/c/certifi/certifi-$v.tar.gz
 
 pack_set --module-requirement $(get_parent)

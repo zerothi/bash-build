@@ -1,4 +1,4 @@
-for v in 3.18.2 3.19.1 3.20.1 ; do
+for v in 3.19.1 3.20.1 3.22.0 ; do
 
 add_package -archive ase-$v.tar.gz \
     https://gitlab.com/ase/ase/repository/archive.tar.gz?ref=$v

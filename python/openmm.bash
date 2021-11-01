@@ -1,4 +1,4 @@
-v=7.4.2
+v=7.6.0
 add_package -archive openmm-$v.tar.gz \
 	    https://github.com/openmm/openmm/archive/$v.tar.gz
 

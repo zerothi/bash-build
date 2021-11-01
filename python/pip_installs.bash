@@ -121,7 +121,7 @@ pip_append pep8 pep517
 pip_append pexpect
 pip_append pillow
 pip_append pipenv
-#pip_append pint
+pip_append pint
 pip_append pkgconfig
 pip_append ply
 pip_append psutil
@@ -140,7 +140,7 @@ pip_append pympler
 pip_append pytest pytest-cov
 pip_append pygments
 pip_append python-dateutil
-#pip_append pytz
+pip_append pytz
 pip_append pyupgrade
 pip_append pyyaml
 pip_append requests

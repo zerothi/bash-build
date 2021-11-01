@@ -1,4 +1,4 @@
-v=0.15.0
+v=0.16.10
 add_package \
     -archive quadpy-$v.tar.gz \
     https://github.com/nschloe/quadpy/archive/v$v.tar.gz

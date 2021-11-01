@@ -1,7 +1,7 @@
-v=1.77
+v=1.79
 add_package -version $v \
-        -package biopython \
-        -directory biopython-biopython-${v//./} \
+            -package biopython \
+            -directory biopython-biopython-${v//./} \
 	    https://github.com/biopython/biopython/archive/biopython-${v//./}.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

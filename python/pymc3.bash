@@ -1,4 +1,4 @@
-v=3.9.2
+v=3.11.4
 add_package -archive pymc3-$v.tar.gz \
 	    https://github.com/pymc-devs/pymc3/archive/v$v.tar.gz
 

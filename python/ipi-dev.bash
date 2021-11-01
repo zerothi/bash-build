@@ -1,5 +1,3 @@
-[ "x${pV:0:1}" == "x2" ] && return 0
-
 add_package --package ipi-dev --version 0 \
 	    https://github.com/i-pi/i-pi.git
 

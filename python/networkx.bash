@@ -1,6 +1,5 @@
 # apt-get install libpng(12)-dev libfreetype6-dev
-
-v=2.4
+v=2.6.2
 add_package \
     --directory networkx-networkx-$v \
     https://github.com/networkx/networkx/archive/networkx-$v.tar.gz

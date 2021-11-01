@@ -1,4 +1,4 @@
-v=0.6.1
+v=0.8.1
 add_package -version $v -package symengine.py -archive symengine.py-$v.tar.gz \
     https://github.com/symengine/symengine.py/archive/v$v.tar.gz
     

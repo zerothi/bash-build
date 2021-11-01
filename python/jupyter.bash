@@ -1,4 +1,4 @@
-v=5.7.9
+v=6.4.5
 add_package --archive jupyter-$v.tar.gz \
 	    --directory notebook-$v \
 	    https://github.com/jupyter/notebook/archive/$v.tar.gz

@@ -1,4 +1,5 @@
-add_package https://bitbucket.org/mpi4py/mpi4py/downloads/mpi4py-3.0.3.tar.gz
+v=3.1.1
+add_package https://github.com/mpi4py/mpi4py/releases/download/$v/mpi4py-$v.tar.gz
 
 pack_set -s $IS_MODULE
 

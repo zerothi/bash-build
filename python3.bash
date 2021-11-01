@@ -1,7 +1,7 @@
 # Install Python 3 versions
 # apt-get libbz2-dev libncurses5-dev zip
-pV=3.8
-IpV=$pV.5
+pV=3.10
+IpV=$pV.0
 add_package -alias python -package python \
     http://www.python.org/ftp/python/$IpV/Python-$IpV.tar.xz
 if $(is_host n-) ; then

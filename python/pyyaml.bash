@@ -1,4 +1,4 @@
-v=5.3.1
+v=6.0
 add_package \
     --archive pyyaml-$v.tar.gz \
     https://github.com/yaml/pyyaml/archive/$v.tar.gz

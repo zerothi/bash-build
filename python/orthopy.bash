@@ -1,4 +1,4 @@
-v=0.8.2
+v=0.9.3
 add_package \
     -archive orthopy-$v.tar.gz \
     https://github.com/nschloe/orthopy/archive/v$v.tar.gz

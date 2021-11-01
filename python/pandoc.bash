@@ -1,4 +1,4 @@
-v=2.10
+v=2.16
 add_package --package pandoc --archive pandoc-$v.tar.gz \
     --version $v \
     https://github.com/jgm/pandoc/archive/$v.tar.gz

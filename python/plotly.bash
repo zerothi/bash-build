@@ -1,4 +1,4 @@
-v=4.9.0
+v=5.3.1
 add_package -alias plotly -archive plotly.py-$v.tar.gz \
 	    https://github.com/plotly/plotly.py/archive/v$v.tar.gz
 

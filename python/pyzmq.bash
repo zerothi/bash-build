@@ -1,5 +1,5 @@
 # apt-get libzmq-dev
-v=19.0.0
+v=22.3.0
 add_package --archive pyzmq-$v.tar.gz \
     https://github.com/zeromq/pyzmq/archive/v$v.tar.gz
 

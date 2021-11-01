@@ -1,6 +1,6 @@
 # As LLVM is built with gnu-compiler, we should enforce this
 # here as well (this only works with 3.6.0)
-v=0.33.0
+v=0.37.0
 add_package -archive llvmlite-$v.tar.gz \
 	    https://github.com/numba/llvmlite/archive/v$v.tar.gz
 
