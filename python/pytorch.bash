@@ -3,7 +3,7 @@ add_package -version $v https://github.com/pytorch/pytorch/releases/download/v$v
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/pytorch
 
 pack_set -build-mod-req build-tools
 pack_set $(list -prefix ' -module-requirement ' numactl numpy mpi eigen llvm[7])
@@ -23,4 +23,4 @@ tmp_flags="$tmp_flags USE_MKLDNN=0"
 tmp_flags="$tmp_flags USE_DISTRIBUTED=1"
 tmp_flags="$tmp_flags CMAKE_PREFIX_PATH=$(pack_get -prefix)"
 
-pack_cmd "$tmp_flags $(get_parent_exec) setup.py install"
+pack_cmd "$tmp_flags $_pip_cmd ."

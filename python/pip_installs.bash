@@ -11,10 +11,6 @@
 # and extract it on the remote node.
 #
 
-# Ensure that pip is installed before we proceed...
-source_pack python/setuptools.bash
-source_pack python/pip.bash
-
 # Local package for the downloading and installation
 # of pip packages (locally in the python installation)
 add_package pip_installs.local
@@ -37,17 +33,18 @@ function pip_append {
     done
 }
 
+_pip_flags=
 function pip_install {
     if [[ -n "$_pip" ]]; then
 	# First try and download, always finish with a yes
 	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $_pip || echo forced"
-	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $_pip"
+	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $_pip_flags $_pip"
 	# Empty again
 	_pip=""
     fi
     while [[ $# -gt 0 ]]; do
 	pack_cmd "$_pip_cmd download -d $_pip_dwn/ $1 || echo forced"
-	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $1"
+	pack_cmd "$_pip_cmd install --no-index --find-links $_pip_dwn $_pip_flags $1"
 	shift
     done
 }
@@ -56,13 +53,16 @@ function pip_install {
 # is probably double with python -s
 pack_cmd "unset PYTHONUSERBASE"
 
-# First install its own usage (and update it)
-pip_install pip
+pip_install pip wheel setuptools
 
-pack_cmd "$_pip_cmd install -U pip"
+pack_cmd "$_pip_cmd install -U pip wheel"
 
 # Nose needs to be installed first
 pip_install nose
+
+_pip_flags="--no-deps"
+pip_install lazy-object-proxy
+_pip_flags=
 
 pip_append autopep8
 pip_append asteval
@@ -76,7 +76,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     # Therefore we need to install it without downloading it first.
     # Since 2020 Jan 1 we can't do this anymore... :(
     pack_cmd "$_pip_cmd install -U setuptools==44.1.0"
-    #pack_cmd "$_pip_cmd install --upgrade distribute"
+    #pack_cmd "$_pip_cmd install -U distribute"
     pip_append enum34
     pip_append six
     pip_append line_profiler
@@ -84,6 +84,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append lxml
     pip_append Pillow
 fi
+pip_append beniget
 pip_append certifi
 pip_append cffi
 pip_append Click
@@ -97,6 +98,7 @@ pip_append flake8
 pip_append flask $(list -prefix 'flask-' restx socketio cors login session)
 pip_append FORD
 pip_append fypp
+pip_append gast
 pip_append ipyvolume
 [[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append gitpython
 pip_append hypothesis
@@ -181,5 +183,7 @@ pip_install
 # This is because otherwise the "wrong" library will be used
 pack_cmd "$_pip_cmd uninstall -y numpy ; echo 'yes'"
 
+_pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation --no-deps"
+unset _pip _pip_flags
 unset pip_append
 unset pip_install

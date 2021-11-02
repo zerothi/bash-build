@@ -10,10 +10,7 @@ for v in 2.0.0 ; do
     pack_set --module-requirement phonopy
     
     # Install commands that it should run
-    pack_cmd "mkdir -p" \
-	"$(pack_get --LD)/python$pV/site-packages"
-    pack_cmd "CFLAGS='$CFLAGS $FLAG_OMP' $(get_parent_exec) setup.py build"
-    pack_cmd "$(get_parent_exec) setup.py install" \
-	"--prefix=$(pack_get --prefix)" \
+    pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
+    pack_cmd "CFLAGS='$CFLAGS $FLAG_OMP' $_pip_cmd . --prefix=$(pack_get -prefix)"
 	
 done

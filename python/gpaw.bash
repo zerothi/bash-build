@@ -114,8 +114,7 @@ else
 fi
 
 
-pack_cmd "GPAW_CONFIG='$file' $(get_parent_exec) setup.py $tmp build"
-pack_cmd "GPAW_CONFIG='$file' $(get_parent_exec) setup.py $tmp install --prefix=$(pack_get -prefix)"
+pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --install-option '$tmp' --prefix=$(pack_get -prefix)"
 
 add_test_package gpaw.exec.parallel
 

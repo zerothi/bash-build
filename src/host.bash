@@ -37,7 +37,7 @@ which nproc 2>/dev/null > dev/null
 if [ $? -eq 0 ]; then
    _n_procs=$(nproc)
 else
-    _n_procs=2
+    _n_procs=$(grep "cpu cores" /proc/cpuinfo | head -1 | awk '{print $NF}')
 fi
 function set_procs {
     _n_procs=$1

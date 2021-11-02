@@ -36,9 +36,7 @@ lib_dirs = \"$tmp_ld\".split()\n' $file"
     unset tmp_ld
 fi
 
-pack_cmd "$(get_parent_exec) setup.py build --customize"
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix)"
+pack_cmd "$_pip_cmd . --install-option '--customize' --prefix=$(pack_get --prefix)"
 
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
 pack_cmd "cd $(pack_get --prefix)/bin"

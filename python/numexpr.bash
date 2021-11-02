@@ -18,12 +18,8 @@ for v in 2.7.2 ; do
 	--module-requirement cython
     
     # Install commands that it should run
-    pack_cmd "mkdir -p" \
-	  "$(pack_get --LD)/python$pV/site-packages"
-    pack_cmd "$(get_parent_exec) setup.py build $pNumpyInstall"
-
-    pack_cmd "$(get_parent_exec) setup.py install" \
-	  "--prefix=$(pack_get --prefix)"
+    pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
+    pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
     add_test_package numexpr.test
     pack_cmd "nosetests --exe numexpr > $TEST_OUT 2>&1 || echo forced"

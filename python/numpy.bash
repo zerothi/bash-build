@@ -215,12 +215,7 @@ fi
 pack_cmd "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_cmd "unset LDFLAGS"
 
-#pack_cmd "$(get_parent_exec) setup.py config $pNumpyInstall"
-#pack_cmd "$(get_parent_exec) setup.py build_clib $pNumpyInstall"
-#pack_cmd "$(get_parent_exec) setup.py build_ext $pNumpyInstall"
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py build $pNumpyInstall"
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
-
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . $pNumpyInstall --prefix=$(pack_get -prefix)" 
 pack_cmd "unset LDSHARED"
 
 

@@ -1,7 +1,7 @@
 # Install Python 3 versions
 # apt-get libbz2-dev libncurses5-dev zip
-pV=3.10
-IpV=$pV.0
+pV=3.9
+IpV=$pV.7
 add_package -alias python -package python \
     http://www.python.org/ftp/python/$IpV/Python-$IpV.tar.xz
 if $(is_host n-) ; then
@@ -45,7 +45,7 @@ if [[ $(pack_get -installed readline) -eq 1 ]]; then
     fi
 fi
 
-pack_set -install-query $(pack_get -prefix)/bin/python3
+pack_set -install-query $(pack_get -prefix)/bin/python
 
 pack_set -module-opt "-set-ENV PYTHONUSERBASE=~/.local/python-$IpV-$(get_c)"
 pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
@@ -101,8 +101,8 @@ elif $(is_host frontend) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm asyncio httplib multiprocessing_forkserver ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
-elif $(is_host atto) ; then
-    tmp=$(list -p '-x test_' dbm httplib urllibnet urllib2_localnet gdb asyncio nntplib ssl multiprocessing_forkserver mailbox tarfile bz2)
+elif $(is_host nicpa-845gb) ; then
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net imaplib httplib ctypes)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1 ; echo force"
 
 else
@@ -123,7 +123,7 @@ fi
 tmp=libpython${pV}
 pack_cmd "if [ ! -e $(pack_get -LD)/${tmp}.a ]; then pushd $(pack_get -LD) ; ln -s ${tmp}m.a ${tmp}.a ; popd ; fi"
 unset tmp
-pack_cmd "if [ ! -e $(pack_get -prefix)/bin/python ]; then pushd $(pack_get -prefix)/bin ; ln -s python python3 ; popd ; fi"
+pack_cmd "if [ ! -e $(pack_get -prefix)/bin/python ]; then pushd $(pack_get -prefix)/bin ; ln -s python3 python ; popd ; fi"
 
 
 # Create a new build with this module

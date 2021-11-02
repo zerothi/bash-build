@@ -9,8 +9,7 @@ pack_set $(list --prefix ' --module-requirement ' scipy)
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
-pack_cmd "$(get_parent_exec) setup.py install" \
-	 "--prefix=$(pack_get --prefix)"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get --prefix)"
 
 # env.sh file
 pack_cmd "cp env.sh $(pack_get --prefix)/"

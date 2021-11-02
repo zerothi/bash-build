@@ -17,5 +17,4 @@ rpath = $(pack_get --LD sqlite)\n\
 libraries = sqlite3\n\
 define = SQLITE_OMIT_LOAD_EXTENSION\n' $file"
 
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix $(get_parent))"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix $(get_parent))"

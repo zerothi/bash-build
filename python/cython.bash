@@ -15,5 +15,4 @@ fi
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get -prefix)"
+pack_cmd "pip install . --prefix=$(pack_get -prefix)"

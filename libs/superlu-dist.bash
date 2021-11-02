@@ -26,9 +26,9 @@ if [[ $(vrs_cmp $(pack_get -version) 5) -ge 0 ]]; then
 pack_cmd "sed -i '1 a\
 PLAT =\n\
 VERSION = $(pack_get -version)\n\
-SuperLUroot = ..\n\
+SuperLUroot = ./\n\
 DSUPERLULIB = \$(SuperLUroot)/SRC/libsuperlu_dist.a\n\
-INCLUDEDIR = \$(SuperLUroot)/SRC\n\
+INCLUDEDIR = -I\$(SuperLUroot)/SRC\n\
 BLASDEF = -DUSE_VENDOR_BLAS\n\
 HAVE_PARMETIS = TRUE\n\
 METISLIB = $(list -LD-rp parmetis) -lmetis\n\

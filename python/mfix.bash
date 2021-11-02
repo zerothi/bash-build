@@ -35,7 +35,7 @@ pack_cmd "cd ../"
 pack_cmd 'sed -i -e "s/def conda_prefix/\ \ \ \ yield environ.get(\"MFIX_HOME\", None)\ndef conda_prefix/" mfixgui/tools/paths.py'
 pack_cmd 'sed -i -e "s/dirname(sys.executable)/join(os.environ.get(\"MFIX_HOME\", \".\"), \"bin\")/" mfixgui/solver/manager.py'
 
-pack_cmd "unset LDFLAGS && $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "unset LDFLAGS && $_pip_cmd . --prefix=$(pack_get -prefix)"
 
 pack_cmd "mkdir -p $(pack_get -prefix)/templates"
 pack_cmd "mv tests queue_templates tutorials $(pack_get -prefix)/templates/"

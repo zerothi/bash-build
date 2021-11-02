@@ -8,10 +8,11 @@ add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scipy
 
 pack_set -build-mod-req cython
 pack_set -build-mod-req pybind11
+pack_set -build-mod-req pythran
 pack_set -module-requirement numpy
 
 # Ensure directory exists (for writing)
@@ -47,7 +48,7 @@ if [[ $(vrs_cmp $v 1.2.0) -lt 0 ]]; then
     pack_cmd "sed -i 's/\([[:space:]]*\)\(.*extra_link_args.*\)/\1ext.extra_link_args = \[arg for arg in ext.extra_link_args if not \"version-script\" in arg\]\n\1\2/' setup.py"
 fi
 
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --prefix=$(pack_get -prefix)"
 
 
 if [[ $(pack_installed swig) -eq 1 ]]; then

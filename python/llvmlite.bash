@@ -18,7 +18,7 @@ pack_set -module-requirement $(get_parent)
 
 pack_cmd "sed -i -e \"s:'7.0:'7:\" ffi/build.py"
 
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
 
 add_test_package llvmlite.test

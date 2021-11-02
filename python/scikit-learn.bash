@@ -13,8 +13,7 @@ pack_set -module-requirement numpy \
 	 -module-requirement cython
 
 pack_cmd "unset LDFLAGS"
-pack_cmd "OMP_NUM_THREADS=$NPROCS $(get_parent_exec) setup.py build ${pNumpyInstallC}"
-pack_cmd "OMP_NUM_THREADS=$NPROCS $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "OMP_NUM_THREADS=$NPROCS $_pip_cmd . --prefix=$(pack_get -prefix)"
 
 add_test_package sklearn.test
 pack_set -module-requirement pandas

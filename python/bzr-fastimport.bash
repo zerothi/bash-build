@@ -12,5 +12,4 @@ pack_set --module-requirement $(get_parent) \
 
 
 # Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py install" \
-    "--prefix=$(pack_get --prefix bzr)" \
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix bzr)"

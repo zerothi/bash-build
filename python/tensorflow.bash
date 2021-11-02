@@ -7,7 +7,7 @@ if [[ $(pack_installed bazel[0.21.0]) -ne $_I_INSTALLED ]]; then
     pack_set -host-reject $(get_hostname)
 fi
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/tensorflow
 
 # As per github issue 14428 it seems MPI is not maintained! :(
 pack_set $(list -prefix ' -module-requirement ' numpy)

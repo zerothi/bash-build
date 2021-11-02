@@ -14,4 +14,4 @@ pack_set -install-query $(pack_get -prefix)/lib/python$pV/site-packages/Bio
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
 
-pack_cmd "$(get_parent_exec) -m pip install $pip_install_opts $(list -p '--global-option ' build ${pNumpyInstallC}) --prefix=$(pack_get -prefix) ."
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"

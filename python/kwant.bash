@@ -6,7 +6,7 @@ if [[ $(vrs_cmp $pV 3.5) -lt 0 ]]; then
     pack_set -host-reject $(get_hostname)
 fi
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/kwant
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 pack_set -module-opt "-lua-family kwant"
@@ -68,8 +68,7 @@ include_dirs = $(pack_get -prefix mumps-serial)/include\n\
 extra_link_args = $tmp_flags\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $(get_parent_exec) setup.py build --configfile=$file"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --global-option '--configfile=$file' --prefix=$(pack_get -prefix)"
 
 
 add_test_package kwant.test

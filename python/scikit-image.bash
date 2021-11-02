@@ -5,7 +5,7 @@ add_package -archive scikit-image-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/site.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scikit_image
 
 # Add requirments when creating the module
 pack_set $(list -prefix ' -module-requirement ' dask networkx cython scipy pywavelets matplotlib imageio)
@@ -13,5 +13,4 @@ pack_set $(list -prefix ' -module-requirement ' dask networkx cython scipy pywav
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages"
 
 # Install commands that it should run
-pack_cmd "$(get_parent_exec) setup.py build"
-pack_cmd "$(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"

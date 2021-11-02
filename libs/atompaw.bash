@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE
 libxc_v=4.3.4
 pack_set -module-requirement libxc[$libxc_v]
 
-pack_set -install-query $(pack_get -LD)/libatompaw.a
+pack_set -install-query $(pack_get -prefix)/bin/atompaw
 
 tmp=
 if $(is_c intel) ; then
