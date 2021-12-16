@@ -19,7 +19,7 @@ if [[ $(vrs_cmp 3.1.1 $v) -le 0 ]]; then
 fi
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
-pack_cmd "$_pip_cmd . --hdf5=$(pack_get -prefix hdf5-serial) --cflags='${pCFLAGS//-march=native/} -pthread' --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --install-option=--hdf5=$(pack_get -prefix hdf5-serial) --install-option=--cflags='${pCFLAGS//-march=native/} -pthread' --prefix=$(pack_get -prefix)"
     
 # The tables test is extremely extensive, and many are minor errors.
 # I have disabled it for now   

@@ -16,15 +16,17 @@ pack_cmd "patch -p1 < $o"
 tmp=Make.sys
 pack_cmd "echo '# NPA-script' > $tmp"
 
+# -fcommon should be added in GCC>=10
+
 pack_cmd "sed -i '1 a\
 MAKE = make \n\
-CFLAGS = $CFLAGS\n\
+CFLAGS = $CFLAGS -DUSE_FONTS -fcommon\n\
 CC     = $CC \n\
 #LDLIB  = -ldl\n\
 MATH   = -lm\n\
 \n\
 FFLAGS = $FCFLAGS\n\
-FC     = $FC \n\
+FC     = $FC -fdefault-double-8 -fdefault-real-8 \n\
 \n\
 # X-libraries & include files\n\
 X_LIB     = -lXmu -lX11 \n\

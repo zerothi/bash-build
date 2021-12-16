@@ -1,4 +1,4 @@
-rV=4.0
+rV=4.1
 IrV=$rV.2
 add_package -alias R -package R \
 	    https://cran.r-project.org/src/base/R-${rV:0:1}/R-$IrV.tar.gz

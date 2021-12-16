@@ -23,34 +23,28 @@ file=make.inc
 pack_cmd "echo '# Make file' > make.inc"
 if [[ $(vrs_cmp $(pack_get -version) 5) -ge 0 ]]; then
 
-pack_cmd "sed -i '1 a\
-PLAT =\n\
-VERSION = $(pack_get -version)\n\
-SuperLUroot = ./\n\
-DSUPERLULIB = \$(SuperLUroot)/SRC/libsuperlu_dist.a\n\
-INCLUDEDIR = -I\$(SuperLUroot)/SRC\n\
-BLASDEF = -DUSE_VENDOR_BLAS\n\
-HAVE_PARMETIS = TRUE\n\
-METISLIB = $(list -LD-rp parmetis) -lmetis\n\
-PARMETISLIB = $(list -LD-rp parmetis) -lparmetis\n\
-I_PARMETIS = $(list -INCDIRS parmetis)\n\
-LIBS = \$(DSUPERLULIB) \$(BLASLIB) \$(PARMETISLIB) \$(METISLIB) \$(FLIBS)\n\
-ARCH = $AR\n\
-ARCHFLAGS = cr\n\
-RANLIB = $RANLIB\n\
-CDEFS    = -DAdd_\n\
-CXX = $MPICXX\n\
-CXXFLAGS = $CFLAGS -std=c++11 \$(I_PARMETIS) \$(CDEFS)\n\
-CPP = $MPICXX\n\
-CPPFLAGS = $CFLAGS \$(I_PARMETIS) \$(CDEFS)\n\
-CC = $MPICC\n\
-CFLAGS = $CFLAGS -std=c99 \$(I_PARMETIS) \$(CDEFS)\n\
-NOOPTS = ${CFLAGS//-O./}\n\
-FORTRAN = $MPIF90\n\
-F90FLAGS = $FCFLAGS\n\
-LOADER   = \$(CPP)\n\
-LOADOPTS = \$(CFLAGS)\n\
-' $file"
+    pack_set -build-mod-req build-tools
+    opt=
+
+    opt="$opt -DTPL_ENABLE_INTERNAL_BLASLIB=off"
+    opt="$opt -DTPL_ENABLE_LAPACKLIB=on"
+    # These are standard options
+    if $(is_c intel) ; then
+	opt="$opt -DTPL_BLAS_LIBRARIES='-mkl=sequential'"
+	opt="$opt -DTPL_LAPACK_LIBRARIES='-mkl=sequential'"
+    else
+	la=lapack-$(pack_choice -i linalg)
+	pack_set -module-requirement $la
+	opt="$opt -DTPL_BLAS_LIBRARIES='$(pack_get -lib $la) -lgfortran'"
+	opt="$opt -DTPL_LAPACK_LIBRARIES='$(pack_get -lib $la) -lgfortran'"
+    fi
+
+    opt="$opt -DTPL_PARMETIS_LIBRARIES='$(list -LD-rp parmetis) -lparmetis -lmetis'"
+    opt="$opt -DTPL_PARMETIS_INCLUDE_DIRS='$(pack_get -prefix parmetis)/include'"
+
+    pack_cmd "cmake -Bbuild-tmp -S. $opt -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
+    pack_cmd "cmake --build build-tmp"
+    pack_cmd "cmake --build build-tmp --target install"
 
 else
     # this is versions prior to 5
@@ -77,8 +71,6 @@ LOADOPTS = \$(CFLAGS)\n\
 CDEFS    = -DAdd_\n\
 CFLAGS += -std=c99\n\
 ' $file"
-
-fi
 
 # These are standard options
 if $(is_c intel) ; then
@@ -108,5 +100,7 @@ pack_cmd "mkdir -p $(pack_get -LD)/"
 pack_cmd "cp SRC/libsuperlu_dist.a $(pack_get -LD)/"
 pack_cmd "mkdir -p $(pack_get -prefix)/include"
 pack_cmd "cp SRC/*.h $(pack_get -prefix)/include"
+
+fi
 
 done

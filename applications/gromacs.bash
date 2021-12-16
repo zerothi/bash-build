@@ -36,7 +36,7 @@ case $par in
 	;;
 esac
 
-for v in 2019.6 2020.2 ; do
+for v in 2020.6 2021.4 ; do
 add_package $tmp_add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
@@ -47,6 +47,15 @@ pack_set -install-query $(pack_get -prefix)/bin/GMXRC
 
 pack_set -build-mod-req build-tools
 pack_set -module-requirement fftw
+
+
+# fix building with a newer gcc (limits inclusion missing)
+if [[ $(vrs_cmp $v 2020.6) -le 0 ]]; then
+    pack_cmd "sed -i -e '/#include <algorithm>/a #include <limits>' ../src/gromacs/awh/biasparams.cpp"
+    pack_cmd "sed -i -e '/#include <algorithm>/a #include <limits>' ../src/gromacs/mdrun/minimize.cpp"
+    pack_cmd "sed -i -e '/#include <queue>/a #include <limits>' ../src/gromacs/modularsimulator/modularsimulator.h"
+fi
+
 
 tmp="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DGMX_BUILD_OWN_FFTW=OFF"
 
@@ -64,11 +73,11 @@ case $par in
 	tmp="$tmp -DGMX_GPU=ON -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_HOME"
 	;;
 esac
+tmp="$tmp -DBUILD_SHARED_LIBS=ON"
 
 case $par in
     *-plumed)
 	pack_set -mod-req plumed
-	tmp="$tmp -DBUILD_SHARED_LIBS=OFF -DGMX_PREFER_STATIC_LIBS=ON"
 	# Run the patch
 	if [[ $(vrs_cmp $(pack_get -version plumed) 2.5.1) -ge 0 ]]; then
 	    if [[ $(vrs_cmp $v 2018) -eq 0 ]]; then
@@ -121,7 +130,7 @@ clib=${clib// /}
 clib=${clib:1}
 
 # configure the build...
-pack_cmd "cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
+pack_cmd "CXXFLAGS='$CXXFLAGS' cmake .. $tmp -DCMAKE_PREFIX_PATH='$clib'"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 

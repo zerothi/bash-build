@@ -1,7 +1,6 @@
 for v in 4.6.2 ; do
     
-add_package http://qutip.org/downloads/$v/qutip-$v.tar.gz
-
+add_package -archive qutip-$v.tar.gz https://github.com/qutip/qutip/archive/v$v.tar.gz
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$p_name
@@ -19,6 +18,6 @@ pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 pack_cmd "unset LDFLAGS"
 
 # Install commands that it should run
-pack_cmd "$_pip_cmd . --global-option '--with-openmp' --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --install-option=--with-openmp --prefix=$(pack_get -prefix)"
     
 done

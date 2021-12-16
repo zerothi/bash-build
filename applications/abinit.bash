@@ -13,7 +13,7 @@ pack_set -install-query $(pack_get -prefix)/bin/abinit
 pack_set -module-requirement libxml2
 pack_set -module-requirement mpi
 pack_set -module-requirement gsl
-w90_v=3.0
+w90_v=3
 pack_set -module-requirement wannier90[$w90_v]
 pack_set -module-requirement fftw-mpi
 pack_set -module-requirement netcdf

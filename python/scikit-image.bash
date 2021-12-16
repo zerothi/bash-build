@@ -5,7 +5,7 @@ add_package -archive scikit-image-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scikit_image
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/skimage
 
 # Add requirments when creating the module
 pack_set $(list -prefix ' -module-requirement ' dask networkx cython scipy pywavelets matplotlib imageio)

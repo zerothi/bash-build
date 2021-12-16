@@ -1,6 +1,6 @@
-v=2.83.3
+v=3.0.0
 add_package -version $v -package blender -archive blender-$v.tar.gz \
-        https://github.com/blender/blender/archive/v$v.tar.gz
+       https://github.com/blender/blender/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 

@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --module-requirement dask
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/distributed*
+pack_set --install-query $(pack_get --LD)/python$pV/site-packages/distributed
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 

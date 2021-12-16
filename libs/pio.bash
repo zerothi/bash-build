@@ -10,6 +10,7 @@ pack_set -build-mod-req build-tools
 pack_set -mod-req netcdf
 
 pack_cmd "CC=$MPICC FC=$MPIFC cmake -DPIO_USE_PNETCDF_VARD=on" \
+	 -DPIO_ENABLE_EXAMPLES=off \
 	 -DPIO_ENABLE_DOC=off \
 	 -DNetCDF_PATH=$(pack_get -prefix netcdf) \
 	 -DPnetCDF_PATH=$(pack_get -prefix pnetcdf) \

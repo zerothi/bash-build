@@ -15,7 +15,7 @@ pack_set --module-requirement numpy \
     --module-requirement gsl
 
 # Install commands that it should run
-pack_cmd "$_pip_cmd . --global-option '--gsl-prefix=$(pack_get --prefix gsl)' --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --install-option='--gsl-prefix=$(pack_get --prefix gsl)' --prefix=$(pack_get -prefix)"
 
 add_test_package pygsl.test
 pack_cmd "nosetests --exe pygsl > $TEST_OUT 2>&1 || echo forced"

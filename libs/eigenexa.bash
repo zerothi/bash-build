@@ -1,10 +1,11 @@
 v=2.10
 add_package --package eigenexa --version $v \
-    https://www.r-ccs.riken.jp/labs/lpnctrt/assets/img/EigenExa-$v.tgz
+        https://www.r-ccs.riken.jp/labs/lpnctrt/projects/eigenexa/EigenExa-$v.tar.gz
 pack_set -s $IS_MODULE -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --LD)/libEigenExa.a
 
+pack_set --build-mod-req build-tools
 pack_set --module-requirement mpi
 
 if $(is_c intel) ; then
@@ -32,6 +33,7 @@ if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx2"
 fi
 
+pack_cmd "pushd .. ; ./bootstrap ; popd"
 
 flag=
 for thread in none openmp
@@ -46,7 +48,7 @@ do
 	fi
     fi
     # The ../src is a bug in the setup of the compilation
-    pack_cmd "../configure CC='$MPICC -I../src' CFLAGS='$CFLAGS $flag' F77='$MPIFC -I../src' FFLAGS='$FFLAGS $flag' LIBS='$tmp $flag'" \
+    pack_cmd "../configure CC='$MPICC' CFLAGS='$CFLAGS $flag' F77='$MPIFC' FCFLAGS='$FCFLAGS $flag'  FFLAGS='$FFLAGS $flag' LIBS='$tmp $flag'" \
 	     "LAPACK_LIBS='$tmp $flag' --prefix=$(pack_get --prefix)"
 
     if [[ $thread == "none" ]]; then

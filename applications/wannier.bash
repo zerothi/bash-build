@@ -1,4 +1,4 @@
-for v in 3.0.0 2.1 ; do
+for v in 3.1.0 2.1 ; do
 add_package --archive wannier90-$v.tar.gz \
 	    https://github.com/wannier-developers/wannier90/archive/v$v.tar.gz
 

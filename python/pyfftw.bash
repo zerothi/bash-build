@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set $(list -prefix ' -module-requirement ' cython scipy fftw)
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/pyFFTW
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/pyfftw
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages"
 

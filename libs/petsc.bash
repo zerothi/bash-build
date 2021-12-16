@@ -69,7 +69,7 @@ pack_cmd "./configure PETSC_DIR=\$(pwd)" \
 	 "CC='$MPICC' CFLAGS='$CFLAGS $tmp_ld'" \
 	 "CXX='$MPICXX' CXXFLAGS='$CFLAGS $tmp_ld'" \
 	 "FC='$MPIF90' FCFLAGS='$FCFLAGS $tmp_ld'" \
-	 "F77='$MPIF77' FFLAGS='$FFLAGS $tmp_ld'" \
+	 "F77='$MPIF77' FFLAGS='$FCFLAGS $tmp_ld'" \
 	 "F90='$MPIF90'" \
 	 "LDFLAGS='$tmp_ld -lmpi_cxx'" \
 	 "LIBS='$tmp_ld -lmpi_cxx'" \

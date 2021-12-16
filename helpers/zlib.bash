@@ -1,14 +1,16 @@
 # First install zlib, which is a simple library
-add_package --build generic --alias gen-zlib --package gen-zlib \
-	    http://zlib.net/zlib-1.2.11.tar.gz 
+v=2.0.5
+add_package -build generic -package gen-zlib -archive zlib-ng-$v.tar.gz \
+	https://github.com/zlib-ng/zlib-ng/archive/refs/tags/$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libz.a
+pack_set -install-query $(pack_get -LD)/libz.a
 
 # Install commands that it should run
 pack_cmd "./configure" \
-	 "--prefix $(pack_get --prefix)" \
+	 --zlib-compat --64 \
+	 "--prefix $(pack_get -prefix)" \
 	 "--static"
 
 # Make commands

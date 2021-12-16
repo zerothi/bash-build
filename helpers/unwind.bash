@@ -1,5 +1,5 @@
 add_package --build generic --package unwind \
-	    http://download.savannah.nongnu.org/releases/libunwind/libunwind-1.4.0.tar.gz
+	    http://download.savannah.nongnu.org/releases/libunwind/libunwind-1.5.0.tar.gz
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 

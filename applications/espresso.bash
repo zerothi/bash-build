@@ -1,4 +1,4 @@
-for v in 6.5 6.6 6.8 ; do
+for v in 6.8 ; do
     tmp="-package q-espresso -version $v"
     case $v in
 	6.2.1)
@@ -84,9 +84,10 @@ for v in 6.5 6.6 6.8 ; do
     if [[ $(vrs_cmp $v 6.0.0) -le 0 ]]; then
 	pack_cmd "sed -i -e '99,102s: \&:, \&:g' CPV/src/forces.f90"
     else
-	pack_set -module-requirement libxc
+	libxc_v=4.3.4
+	pack_set -module-requirement libxc[$libxc_v]
 	pack_set -module-requirement hdf5
-	tmp_lib="$tmp_lib --with-libxc=yes --with-libxc-prefix=$(pack_get -prefix libxc)"
+	tmp_lib="$tmp_lib --with-libxc=yes --with-libxc-prefix=$(pack_get -prefix libxc[$libxc_v])"
 	tmp_lib="$tmp_lib --with-hdf5=yes --with-hdf5-libs='$(list -LD-rp hdf5) $(pack_get -lib[fortran] hdf5)'"
     fi
 

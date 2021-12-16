@@ -1,6 +1,6 @@
 v=3.9
 add_package -package openmx \
-    -version $v.2 \
+    -version $v.9 \
     http://t-ozaki.issp.u-tokyo.ac.jp/openmx$v.tar.gz
 
 pack_set -module-opt "-lua-family openmx"
@@ -13,11 +13,11 @@ pack_set -module-requirement mpi -module-requirement fftw-mpi
 pack_cmd "cd source"
 
 if [[ $(vrs_cmp $v 3.9) -eq 0 ]]; then
-    o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch3.9.2.tar.gz
-    dwn_file http://www.openmx-square.org/bugfixed/20Feb11/patch3.9.2.tar.gz $o
+    o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch3.9.9.tar.gz
+    dwn_file http://www.openmx-square.org/bugfixed/21Oct17/patch3.9.9.tar.gz $o
     pack_cmd "tar xfz $o"
-    pack_cmd "mv kpoint.in ../work"
-    pack_cmd "sed -i -e 's:gcube2oned::g' makefile"
+    #pack_cmd "mv kpoint.in ../work"
+    #pack_cmd "sed -i -e 's:gcube2oned::g' makefile"
 fi
     
 if [[ $(vrs_cmp $v 3.8) -eq 0 ]]; then
@@ -59,8 +59,9 @@ LIB += $(list -LD-rp scalapack +$la) -lscalapack $(pack_get -lib[omp] $la)' $fil
     pack_cmd "sed -i '1 a\
 LIB += -lgfortran -lm' $file"
 
+    # to bypass gcc>=10 problems
     pack_cmd "sed -i '1 a\
-CC += $FLAG_OMP\nFC += $FLAG_OMP' $file"
+CC += -fcommon $FLAG_OMP\nFC += $FLAG_OMP' $file"
     
 fi
 pack_cmd "sed -i '1 a\

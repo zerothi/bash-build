@@ -13,10 +13,10 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/llvmlite
 
 pack_set -build-mod-req build-tools
-pack_set -mod-req llvm[9]
+pack_set -mod-req llvm[11]
 pack_set -module-requirement $(get_parent)
 
-pack_cmd "sed -i -e \"s:'7.0:'7:\" ffi/build.py"
+#pack_cmd "sed -i -e \"s:'7.0:'7:\" ffi/build.py"
 
 pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 

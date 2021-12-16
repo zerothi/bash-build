@@ -10,7 +10,7 @@ pack_set -module-requirement symengine
 pack_set -module-requirement scipy
     
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
-pack_cmd "$_pip_cmd . --global-option '--inplace --symengine-dir=$(pack_get -prefix symengine)' --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
 add_test_package symengine.test
 pack_cmd "OMP_NUM_THREADS=$NPROCS pytest --pyargs symengine > $TEST_OUT 2>&1 || echo forced"

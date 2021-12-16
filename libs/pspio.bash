@@ -19,5 +19,4 @@ pack_cmd "../configure" \
 	 "--with-gsl=$(pack_get --prefix gsl)" \
 	 "--prefix $(pack_get --prefix)"
 
-pack_cmd "make $(get_make_parallel)"
-pack_cmd "make install"
+pack_cmd "make $(get_make_parallel) install"

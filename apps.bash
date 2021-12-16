@@ -4,6 +4,19 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+# Valgrind is *important*
+source_pack applications/valgrind.bash
+
+# Graphics applications
+source_pack applications/gnuplot.bash
+source_pack applications/molden.bash
+source_pack applications/xmgrace.bash
+source_pack applications/xcrysden.bash
+source_pack applications/gdis.bash
+source_pack applications/povray.bash
+#source_pack applications/gracegtk.bash
+source_pack applications/vesta.bash
+
 source_pack applications/blender.bash
 source_pack applications/mopac.bash
 source_pack applications/tinker.bash
@@ -25,19 +38,10 @@ source_pack applications/oncvpsp.bash
 
 source_pack applications/lammps.bash
 
-# Graphics applications
-source_pack applications/gnuplot.bash
-source_pack applications/molden.bash
-source_pack applications/xmgrace.bash
-#source_pack applications/gracegtk.bash
-source_pack applications/xcrysden.bash
-source_pack applications/vesta.bash
 source_pack applications/vmd.bash
 # VTK is used through Python
 # Installed by source to get python support
 source_pack applications/vmd-python.bash
-source_pack applications/gdis.bash
-source_pack applications/povray.bash
 source_pack applications/getfem.bash
 
 source_pack applications/siesta.bash
@@ -99,7 +103,6 @@ source_pack applications/otf2.bash
 source_pack applications/opari2.bash
 source_pack applications/papi.bash
 source_pack applications/bsc-perf-tools.bash
-source_pack applications/valgrind.bash
 source_pack applications/scorep.bash
 source_pack applications/tau.bash
 source_pack applications/scalasca.bash

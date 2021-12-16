@@ -11,7 +11,7 @@ create_module \
     $(list --prefix '-L ' $(pack_get --module-requirement)) \
     -L $(pack_get --alias) 
 
-tmp=$(pack_get --version lua)
+tmp=$(pack_get -version lua)
 lua_V=$(str_version -1 $tmp).$(str_version -2 $tmp)
 
 # Immediately install lua-jit

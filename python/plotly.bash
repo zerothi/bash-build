@@ -10,4 +10,5 @@ pack_set $(list -prefix ' -module-requirement ' numpy scipy matplotlib xarray)
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 pack_cmd "cd packages/python/plotly"
+pack_cmd "sed -i -e 's:sys.path.append(:sys.path.insert(0, :' setup.py"
 pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"

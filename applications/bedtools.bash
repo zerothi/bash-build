@@ -1,4 +1,4 @@
-v=2.29.2
+v=2.30.0
 add_package -directory bedtools2 \
 	    https://github.com/arq5x/bedtools2/releases/download/v$v/bedtools-$v.tar.gz
 
@@ -16,6 +16,10 @@ if [[ $(vrs_cmp $(pack_get -version) 2.28.0) -le 0 ]]; then
     pack_cmd "sed -i -e 's/CXXFLAGS =.*/CXXFLAGS = $CXXFLAGS -D_FILE_OFFSET_BITS=64 -DWITH_HTS_CB_API \$(INCLUDES)/' Makefile"
 else
     tmp_flags="$tmp_flags CXXFLAGS='$CXXFLAGS'"
+fi
+which python
+if [ $? -ne 0 ]; then
+    pack_cmd "sed -is -e 's:python:python3:' Makefile src/utils/BamTools/Makefile.frag" 
 fi
 pack_cmd "make $tmp_flags $(get_make_parallel)"
 pack_cmd "make $tmp_flags test 2>&1 > bedtools.test || echo forced"

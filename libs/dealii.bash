@@ -1,4 +1,4 @@
-v=9.3.1
+v=9.3.2
 add_package https://github.com/dealii/dealii/releases/download/v$v/dealii-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
@@ -44,7 +44,7 @@ else
 
 fi
 
-pack_cmd "CC=$MPICC CXX=$MPICXX FC=$MPIFC cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .. $tmp_flags"
+pack_cmd "CC=$MPICC CXX=$MPICXX CXXFLAGS='$CXXFLAGS -std=c++14' FC=$MPIFC cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .. $tmp_flags"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test 2>&1 > dealii.test || echo forced" 
 pack_cmd "make install"

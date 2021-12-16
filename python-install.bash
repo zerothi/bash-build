@@ -69,7 +69,6 @@ source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
 source_pack python/statsmodels.bash
 source_pack python/theano.bash
-source_pack python/pymc3.bash
 source_pack python/dask.bash
 source_pack python/dask-distributed.bash
 source_pack python/pyamg.bash
@@ -91,6 +90,7 @@ source_pack python/pytorch.bash
 source_pack python/seaborn.bash
 
 source_pack python/xarray.bash
+source_pack python/pymc3.bash
 
 source_pack python/plotly.bash
 

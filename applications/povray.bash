@@ -9,9 +9,9 @@ if $(is_c gnu) ; then
     fi
 fi
 
-add_package --build $build --archive povray-3.7.0.7.tar.gz \
-	    https://github.com/POV-Ray/povray/archive/v3.7.0.7.tar.gz
-#    http://www.povray.org/ftp/pub/povray/Old-Versions/Official-3.62/Unix/povray-3.6.1.tar.bz2
+v=3.7.0.10
+add_package --build $build --archive povray-$v.tar.gz \
+	    https://github.com/POV-Ray/povray/archive/v$v.tar.gz
 
 pack_set -s $IS_MODULE -s $CRT_DEF_MODULE
 

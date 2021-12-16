@@ -69,6 +69,7 @@ pip_append asteval
 pip_append anaconda-client
 pip_append attrs
 pip_append backports.ssl_match_hostname
+pip_append black
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append bzr
     #pip_append bzr-fastimport
@@ -94,7 +95,8 @@ pip_append cycler # for matplotlib
 pip_append decorator
 pip_append docutils
 pip_append fastimport
-pip_append flake8
+pip_append fastprogress
+pip_append flake8 flake8-bugbear
 pip_append flask $(list -prefix 'flask-' restx socketio cors login session)
 pip_append FORD
 pip_append fypp
@@ -158,6 +160,7 @@ fi
 pip_append toml
 pip_append toolz
 pip_append tornado
+pip_append tox
 pip_append tqdm
 pip_append traitlets
 pip_append tuna
@@ -183,7 +186,7 @@ pip_install
 # This is because otherwise the "wrong" library will be used
 pack_cmd "$_pip_cmd uninstall -y numpy ; echo 'yes'"
 
-_pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation --no-deps"
+_pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation"
 unset _pip _pip_flags
 unset pip_append
 unset pip_install

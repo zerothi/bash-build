@@ -1,6 +1,6 @@
 v=1.0.3
-add_package --archive lmfit-$v.tar.gz --directory lmfit-py-$v \
-	    https://github.com/lmfit/lmfit-py/archive/$v.tar.gz
+add_package -directory lmfit-py-$v \
+	https://files.pythonhosted.org/packages/8c/2f/8af90d45e585692eca1922c53e239c7aa97a904d9254df5b08f2f32520ac/lmfit-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

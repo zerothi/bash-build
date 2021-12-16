@@ -1,4 +1,4 @@
-for v in 1.11.13 2.5.0
+for v in 1.11.13 2.7.0
 do
     sv=${v%.*}
     add_package http://www.open-mpi.org/software/hwloc/v$sv/downloads/hwloc-$v.tar.bz2

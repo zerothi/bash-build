@@ -1,4 +1,4 @@
-for v in 2.8.12.2 3.13.5 3.14.7 3.21.3
+for v in 2.8.12.2 3.11.4 3.12.4 3.13.5 3.14.7 3.16.8 3.18.6 3.21.3
 do
 
     if [[ $(vrs_cmp $(get_c -version) 4.5.0) -lt 0 ]]; then
@@ -7,10 +7,6 @@ do
 	fi
     fi
 
-    if $(is_host nicpa) ; then
-	pack_set -host-reject $(get_hostname)
-    fi
-    
     add_package -build generic https://cmake.org/files/v$(str_version -1 $v).$(str_version -2 $v)/cmake-$v.tar.gz
     pack_set -s $MAKE_PARALLEL -s $IS_MODULE
     

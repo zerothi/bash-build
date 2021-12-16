@@ -1,9 +1,6 @@
 for v in 3.19.1 3.20.1 3.22.0 ; do
 
-add_package -archive ase-$v.tar.gz \
-    https://gitlab.com/ase/ase/repository/archive.tar.gz?ref=$v
-
-pack_set -directory ase-$v-*
+add_package https://gitlab.com/ase/ase/-/archive/$v/ase-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

@@ -1,4 +1,4 @@
-v=2.6.1
+v=2.7.3
 add_package https://github.com/plumed/plumed2/releases/download/v$v/plumed-$v.tgz
 
 pack_set -s $MAKE_PARALLEL

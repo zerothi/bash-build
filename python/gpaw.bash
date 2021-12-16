@@ -1,10 +1,8 @@
 for v in 19.8.1 20.10.0 21.6.0 ; do
-add_package -archive gpaw-$v.tar.gz \
-    https://gitlab.com/gpaw/gpaw/repository/archive.tar.gz?ref=$v
+add_package https://gitlab.com/gpaw/gpaw/-/archive/$v/gpaw-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -directory gpaw-$v-*
 # Not working on py2
 [[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
 
@@ -22,7 +20,7 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version
 libxc_v=4.3.4
-pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc[$libxc_v] fftw)
+pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc[$libxc_v] fftw ase)
 
 # First we need to fix gpaw compilation
 pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
@@ -108,13 +106,11 @@ unset hdf
 pack_cmd "unset LDFLAGS"
 
 if [[ $(vrs_cmp $v 20) -lt 0 ]]; then
-    tmp="--customize=$file"
+    pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --install-option='--customize=$file' --prefix=$(pack_get -prefix)"
 else
-    tmp=""
+    pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --prefix=$(pack_get -prefix)"
 fi
 
-
-pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --install-option '$tmp' --prefix=$(pack_get -prefix)"
 
 add_test_package gpaw.exec.parallel
 
