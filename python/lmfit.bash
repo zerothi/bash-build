@@ -10,4 +10,4 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/lmfit
 
 pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 
-pack_cmd "unset LDFLAGS && SETUPTOOLS_SCM_PRETEND_VERSION=$v $(get_parent_exec) $_pip_cmd . --prefix=$(pack_get -prefix)"
+pack_cmd "unset LDFLAGS && SETUPTOOLS_SCM_PRETEND_VERSION=$v $_pip_cmd . --prefix=$(pack_get -prefix)"
