@@ -145,7 +145,8 @@ pip_append pyupgrade
 pip_append pyyaml
 pip_append requests
 pip_append retrying
-pip_append setuptools_scm
+# Get the latest and greatest....
+pack_cmd "$_pip_cmd install -U setuptools_scm"
 pip_append simplegeneric
 pip_append simplejson
 pip_append six
