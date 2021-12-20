@@ -1,10 +1,13 @@
-add_package -package pexsi https://bitbucket.org/berkeleylab/pexsi/downloads/pexsi_v1.2.0.tar.gz
+v=1.2.0
+add_package -package pexsi https://bitbucket.org/berkeleylab/pexsi/downloads/pexsi_v$v.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpexsi_linux.a
 pack_set -lib -lpexsi_linux
 
-pack_set $(list -p '-mod-req ' mpi parmetis scotch superlu-dist sympack)
+superlu_v=5
+
+pack_set $(list -p '-mod-req ' mpi parmetis scotch superlu-dist[$superlu_v] sympack)
 
 # Prepare the make file
 tmp="sed -i -e"
@@ -22,7 +25,7 @@ SUFFIX = linux\n\
 CC = $MPICC \n\
 CXX = $MPICXX \n\
 FC = $MPIFC \n\
-LOADER = \\\$(CXX) \n\
+LOADER = \\\$(CXX) $FLAG_OMP\n\
 AR = $AR \n\
 ARFLAGS = rvcu \n\
 RANLIB = $RANLIB \n\
@@ -31,26 +34,31 @@ RM = rm \n\
 RMFLAGS = -f \n\
 ##\n\
 PEXSI_LIB = \$(PEXSI_DIR)/src/libpexsi_\$(SUFFIX).a \n\
-DSUPERLU_DIR = $(pack_get -prefix superlu-dist)\n\
+DSUPERLU_DIR = $(pack_get -prefix superlu-dist[$superlu_v])\n\
 METIS_DIR = $(pack_get -prefix parmetis)\n\
 SCOTCH_DIR = $(pack_get -prefix scotch)\n\
 #\n\
 #\n\
-INCLUDES = -I\$(DSUPERLU_DIR)/include -I\$(PEXSI_DIR)/include \n\
+INCLUDES = -I\$(DSUPERLU_DIR)/include -I\$(METIS_DIR)/include -I\$(PEXSI_DIR)/include \n\
 #\n\
-CFLAGS = $CFLAGS \$(INCLUDES) \n\
-FFLAGS = $FFLAGS \n\
+CFLAGS = $CFLAGS $FLAG_OMP \$(INCLUDES) \n\
+FFLAGS = $FFLAGS $FLAG_OMP\n\
 CXXFLAGS = $CXXFLAGS \$(INCLUDES) \n\
 CCDEFS = -DRELEASE -DDEBUG=0 -DAdd_ \n\
 CPPDEFS = -std=c++11 \$(CCDEFS) \n\
 #\n\
 LIBS = \$(PEXSI_LIB) \n\
-LIBS += $(list -LD-rp superlu-dist parmetis scotch sympack)\n\
+LIBS += $(list -LD-rp superlu-dist[$superlu_v] parmetis scotch sympack)\n\
 LIBS += -Wl,--allow-multiple-definition -lsuperlu_dist \n\
 #LIBS += -lptscotchparmetis -lptscotch -lptscotcherr \n\
 LIBS += -lscotchmetis -lscotch -lscotcherr \n\
 LIBS += -lparmetis -lmetis -lsympack\n\
 ' $file"
+
+if [[ $(vrs_cmp $v 1.2.0) -eq 0 ]]; then
+    pack_cmd "sed -i -e '/#include <numeric>/a #include <limits>' include/pexsi/utility_impl.hpp"
+    pack_cmd "sed -si -e 's:LargeDiag\([^_]\):LargeDiag_MC64\1:g' src/superlu_dist_internal_{complex,real}.cpp src/p{d,z}symbfact.c"
+fi
 
 # Add LAPACK and BLAS libraries
 if $(is_c intel) ; then

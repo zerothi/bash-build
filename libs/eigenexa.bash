@@ -1,7 +1,8 @@
-v=2.10
+v=2.11
 add_package --package eigenexa --version $v \
         https://www.r-ccs.riken.jp/labs/lpnctrt/projects/eigenexa/EigenExa-$v.tar.gz
-pack_set -s $IS_MODULE -s $BUILD_DIR
+
+pack_set -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libEigenExa.a
 
@@ -33,7 +34,7 @@ if $(grep "avx2" /proc/cpuinfo > /dev/null) ; then
     tmp_flags="$tmp_flags --enable-avx2"
 fi
 
-pack_cmd "pushd .. ; ./bootstrap ; popd"
+pack_cmd "./bootstrap"
 
 flag=
 for thread in none openmp
@@ -48,7 +49,7 @@ do
 	fi
     fi
     # The ../src is a bug in the setup of the compilation
-    pack_cmd "../configure CC='$MPICC' CFLAGS='$CFLAGS $flag' F77='$MPIFC' FCFLAGS='$FCFLAGS $flag'  FFLAGS='$FFLAGS $flag' LIBS='$tmp $flag'" \
+    pack_cmd "./configure CC='$MPICC' CFLAGS='$CFLAGS $flag' F77='$MPIFC $FCFLAGS $flag' FC='$MPIFC $FCFLAGS $flag' FCFLAGS='$FCFLAGS $flag'  FFLAGS='$FFLAGS $flag' LIBS='$tmp $flag'" \
 	     "LAPACK_LIBS='$tmp $flag' --prefix=$(pack_get --prefix)"
 
     if [[ $thread == "none" ]]; then
@@ -71,7 +72,7 @@ do
 	    pack_cmd "popd"
 	    ;;
     esac
-    pack_cmd 'rm -rf *'
+    pack_cmd 'make clean'
 
 done
 
