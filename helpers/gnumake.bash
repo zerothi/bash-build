@@ -19,9 +19,9 @@ if [[ $(vrs_cmp $p_V 4.2.1) -eq 0 ]]; then
 	dwn_file https://raw.githubusercontent.com/osresearch/heads/make-4.2.1/patches/make-4.2.1.patch $o
 	#    pack_cmd "pushd .. ; patch -p1 < $o ; popd"
     fi
+    pack_cmd "sed -s -i -e 's:_GNU_GLOB_INTERFACE_VERSION ==:_GNU_GLOB_INTERFACE_VERSION >=:g' ../configure ../glob/glob.c"
 fi
 
-pack_cmd "sed -s -i -e 's:_GNU_GLOB_INTERFACE_VERSION ==:_GNU_GLOB_INTERFACE_VERSION >=:g' ../configure ../glob/glob.c"
 pack_cmd "../configure --prefix $(pack_get --prefix)"
 
 # Make commands
