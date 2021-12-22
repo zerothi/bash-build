@@ -1,4 +1,4 @@
-v=12.0.1
+v=13.0.0
 add_package -directory llvm-project-$v.src -package llvm -version $v \
 	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-project-$v.src.tar.xz
 
@@ -19,8 +19,6 @@ opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=2"
 # We have gold linker
 opt="$opt -DLLVM_USE_LINKER=gold"
 opt="$opt -DLLVM_BINUTILS_INCDIR=$(pack_get -prefix build-tools)/include"
-
-pack_cmd "sed -i -e '/#include <cstdio>/a #include <limits>' ../flang/runtime/unit.cpp"
 
 # Prepare Cmake setup
 pack_cmd "CC=$CC CXX=$CXX cmake -G 'Ninja' $opt ../llvm"
