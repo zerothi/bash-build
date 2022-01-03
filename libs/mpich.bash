@@ -22,6 +22,7 @@ tmp_flags="$tmp_flags --with-hwloc=$(pack_get -prefix hwloc)"
 if [[ $(pack_installed ucx) ]]; then
     pack_set -mod-req ucx
     tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx)"
+    tmp_flags="$tmp_flags --with-device=ch4:ucx"
 fi
 
 [[ -e /usr/include/slurm/pmi2.h ]] && tmp_flags="$tmp_flags --with-slurm --with-pmi=/usr"
