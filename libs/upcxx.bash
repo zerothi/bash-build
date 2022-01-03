@@ -15,6 +15,6 @@ pack_cmd "../configure --with-cxx=$MPICXX --enable-ucx --enable-ofi --prefix=$(p
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make check > upcxx.test 2>&1 || echo forced"
+pack_cmd "make check NETWORK=smp > upcxx.test 2>&1 || echo forced"
 pack_store upcxx.test
 pack_cmd "make install"
