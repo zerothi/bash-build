@@ -8,9 +8,10 @@ pack_set -install-query $(pack_get -prefix)/bin/upcxx
 pack_set -build-mod-req build-tools
 pack_set -mod-req numactl
 pack_set -mod-req mpi
+pack_set -mod-req ucx
 
 # Install commands that it should run
-pack_cmd "../configure --prefix=$(pack_get -prefix)"
+pack_cmd "CC=$MPICC CXX=$MPICXX ../configure --enable-ucx --enable-ofi --prefix=$(pack_get -prefix)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"
