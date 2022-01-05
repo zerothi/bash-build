@@ -113,6 +113,15 @@ function pack_install {
     if [[ $installed -eq $_I_INSTALLED ]]; then
 	msg_install -already-installed $idx
 	if [[ $FORCEMODULE -eq 0 ]]; then
+            # Fix the library path...
+            local _lib=""
+            for cmd in lib lib64 ; do
+                if [[ -d $prefix/$cmd ]]; then
+                   _lib="$_lib $cmd"
+                fi
+            done
+            [[ -n "$_lib" ]] && pack_set $idx -library-suffix "${_lib:1:}"
+
 	    return 0
 	fi
     fi

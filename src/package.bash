@@ -13,7 +13,7 @@ declare -A _libs
 # Too long for anybody to create
 _LIB_DEF='this_default_lib'
 # Where the package libraries are found
-declare -A _lib_prefix
+declare -A _lib_suffix
 # What to check for when installed
 declare -A _install_query
 # An aliased name
@@ -304,16 +304,16 @@ function add_package {
 
     if [[ -z "$lp" ]]; then
         # Just in case lib already exists
-	_lib_prefix[$_N_archives]=lib
+	_lib_suffix[$_N_archives]=lib
 	if [[ -d "${_install_prefix[$_N_archives]}/lib" ]]; then
 	    if [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
-		_lib_prefix[$_N_archives]='lib lib64'
+		_lib_suffix[$_N_archives]='lib lib64'
 	    fi
 	elif [[ -d "${_install_prefix[$_N_archives]}/lib64" ]]; then
-	    _lib_prefix[$_N_archives]=lib64
+	    _lib_suffix[$_N_archives]=lib64
 	fi
     else
-	_lib_prefix[$_N_archives]="$lp"
+	_lib_suffix[$_N_archives]="$lp"
     fi
     # Install default values
     _mod_req[$_N_archives]=''
@@ -481,7 +481,7 @@ function pack_set {
 	    lib='lib64'
 	fi
     fi
-    [[ -n "$lib" ]] && _lib_prefix[$index]="$lib"
+    [[ -n "$lib" ]] && _lib_suffix[$index]="$lib"
     if [[ -n "$libs_c" ]]; then
 	# Note that $libs already have the $_CHOICE_SEP as the first
 	# char...
@@ -640,20 +640,20 @@ function pack_get {
 	    fi
 	    ;;
 	-L|-LD|-library-path)
-	    for p in ${_lib_prefix[$index]} ; do
+	    for p in ${_lib_suffix[$index]} ; do
 		printf '%s' "${_install_prefix[$index]}/$p"
 		break
 	    done
 	    ;;
 	-L-all|-LD-all|-library-path-all)
 	    local i=0
-	    for p in ${_lib_prefix[$index]} ; do
+	    for p in ${_lib_suffix[$index]} ; do
 		[[ $i -ge 1 ]] && printf '%s' ' '
 		printf '%s' "${_install_prefix[$index]}/$p"
 		let i++
 	    done
 	    ;;
-	-L-suffix)    printf '%s' "${_lib_prefix[$index]}" ;;
+	-L-suffix)    printf '%s' "${_lib_suffix[$index]}" ;;
 	-MP|-module-prefix) 
             printf '%s' "${_mod_prefix[$index]}" ;;
 	-I|-install-prefix|-prefix) 
