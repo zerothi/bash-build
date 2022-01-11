@@ -1,6 +1,7 @@
 msg_install -message "Installing all libraries..."
 
 # Basic libraries
+source_pack libs/mold.bash
 source_pack libs/zlib.bash
 source_pack libs/szip.bash
 source_pack libs/expat.bash
