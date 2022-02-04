@@ -1,14 +1,16 @@
-add_package https://bitbucket.org/petsc/petsc4py/downloads/petsc4py-3.13.0.tar.gz
+add_package -package petsc4py \
+	    -directory $(pack_get -directory petsc-d) \
+	    $(pack_get -archive petsc-d)
 
 pack_set -s $IS_MODULE
 
-pack_set --module-requirement $(get_parent) \
-    --module-requirement petsc-d \
-    --module-requirement mpi4py --module-requirement numpy \
-    --module-requirement cython
+pack_set -module-requirement petsc-d \
+	 -module-requirement mpi4py -module-requirement numpy \
+	 -module-requirement cython
 
-pack_set --install-query $(pack_get --LD)/python$pV/site-packages/$(pack_get --alias)/__init__.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/$(pack_get -alias)/__init__.py
 
+pack_cmd "cd src/binding/petsc4py"
 pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
 add_test_package petsc4py.test
