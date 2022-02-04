@@ -1,5 +1,5 @@
-v=3.12.0
-add_package https://gitlab.com/slepc/slepc4py/-/archive/$v/slepc4py-$v.tar.bz2
+v=3.16.1
+add_package https://files.pythonhosted.org/packages/source/s/slepc4py/slepc4py-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
