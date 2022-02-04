@@ -4,7 +4,7 @@ add_package -archive oncvpsp-$v.tar http://www.mat-simresearch.com/oncvpsp-$v.ta
 pack_set -install-query $(pack_get -prefix)/bin/oncvpsp.x
 
 # Currently oncvpsp only works for 3.X
-_xc_v=3.0.1
+_xc_v=3
 pack_set -module-requirement libxc[$_xc_v]
 
 pack_set -module-opt "-lua-family oncvpsp"

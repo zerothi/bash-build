@@ -76,6 +76,7 @@ source_pack python/pywt.bash
 source_pack python/petsc4py.bash
 source_pack python/slepc4py.bash
 source_pack python/networkx.bash
+source_pack python/spglib.bash
 
 #source_pack python/pyccel-dev.bash
 source_pack python/pyfftw.bash

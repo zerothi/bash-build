@@ -3,8 +3,7 @@ add_package http://users.wfu.edu/natalie/papers/pwpaw/atompaw-$v.tar.gz
 
 pack_set -s $IS_MODULE
 
-libxc_v=4.3.4
-pack_set -module-requirement libxc[$libxc_v]
+pack_set -module-requirement libxc
 
 pack_set -install-query $(pack_get -prefix)/bin/atompaw
 
@@ -22,7 +21,7 @@ fi
 
 pack_cmd "./configure" \
 	 --enable-libxc \
-	 "--with-libxc-prefix=$(pack_get -prefix libxc[$libxc_v])" \
+	 "--with-libxc-prefix=$(pack_get -prefix libxc)" \
 	 "--with-linalg-libs='$tmp'" \
 	 "--prefix=$(pack_get -prefix)"
 

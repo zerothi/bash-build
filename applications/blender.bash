@@ -37,9 +37,12 @@ fi
 
 pack_cmd cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) \
 	 -DWITH_INSTALL_PORTABLE=off \
+	 -DPYTHON_VERSION=$pV \
+	 -DPYTHON_LIBRARY=$(pack_get -LD python) \
 	 -DWITH_PYTHON_INSTALL=$python_b \
 	 -DWITH_PYTHON_MODULE=$python_a \
 	 -DPYTHON_ROOT=$(pack_get -prefix python) \
+	 -DPYTHON_LIBPATH=$(pack_get -LD python) \
 	 -DPYTHON_INCLUDE_DIR=$(pack_get -prefix python)/include/python${pV} \
 	 -DPYTHON_SITE_PACKAGES=$(pack_get -prefix)/lib/python \
 	 -DWITH_INTERNATIONAL=off \

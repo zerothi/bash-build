@@ -67,6 +67,22 @@ LIBS += \$(METIS_LIB)\n\
 FPPFLAGS += -DSIESTA__METIS' arch.make"
 fi
 
+pack_set -module-requirement libgridxc
+pack_set -module-requirement libpsml
+pack_set -module-requirement xmlf90
+pack_cmd "sed -i '$ a\
+LIBXC_ROOT = $(pack_get -prefix libxc)\n\
+XMLF90_ROOT = $(pack_get -prefix xmlf90)\n\
+GRIDXC_ROOT = $(pack_get -prefix libgridxc)\n\
+PSML_ROOT = $(pack_get -prefix libpsml)\n\
+-include \$(XMLF90_ROOT)/share/org.siesta-project/xmlf90.mk\n\
+-include \$(PSML_ROOT)/share/org.siesta-project/psml.mk\n\
+-include \$(GRIDXC_ROOT)/share/org.siesta-project/gridxc_dp_mpi.mk\n\
+LIBS += -Wl,-rpath=$(pack_get -LD libxc)\n\
+LIBS += -Wl,-rpath=$(pack_get -LD xmlf90)\n\
+LIBS += -Wl,-rpath=$(pack_get -LD libpsml)\n\
+LIBS += -Wl,-rpath=$(pack_get -LD libgridxc)\n' arch.make"
+
 
 pack_cmd "sed -i '1 a\
 .SUFFIXES:\n\

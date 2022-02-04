@@ -12,7 +12,11 @@ pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scipy
 
 pack_set -build-mod-req cython
 pack_set -build-mod-req pybind11
-pack_set -build-mod-req pythran
+pack_set -build-mod-req pybind11
+if [[ $(pack_installed swig) -eq 1 ]]; then
+    pack_set -build-mod-req swig
+fi
+
 pack_set -module-requirement numpy
 
 # Ensure directory exists (for writing)
@@ -37,10 +41,6 @@ if [[ $(vrs_cmp $v 0.16.0) -eq 0 ]]; then
     fi
 fi
 
-if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module load $(list -mod-names ++swig)"
-fi
-
 pack_cmd "unset LDFLAGS"
 # Fix for GNU compilers
 # See github issue #8680
@@ -50,10 +50,6 @@ fi
 
 pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --prefix=$(pack_get -prefix)"
 
-
-if [[ $(pack_installed swig) -eq 1 ]]; then
-    pack_cmd "module unload $(list -mod-names ++swig)"
-fi
 
 if ! $(is_c intel) ; then
     add_test_package scipy.test

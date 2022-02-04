@@ -5,9 +5,8 @@ pack_set -s $BUILD_DIR
 
 pack_set --install-query $(pack_get --prefix)/bin/ape
 
-libxc_v=4.3.4
 pack_set --module-requirement gsl \
-    --module-requirement libxc[$libxc_v]
+    --module-requirement libxc
 
 pack_set --module-opt "--lua-family ape"
 # APE does not allow compilation of C-flags too long,
@@ -17,7 +16,7 @@ pack_cmd "unset CPP"
 
 pack_cmd "../configure FCFLAGS='$FCFLAGS -ffree-line-length-none'" \
      "--with-gsl-prefix=$(pack_get --prefix gsl)" \
-     "--with-libxc-prefix=$(pack_get --prefix libxc[$libxc_v])" \
+     "--with-libxc-prefix=$(pack_get --prefix libxc)" \
      "--prefix=$(pack_get --prefix)"
 
 # Make commands

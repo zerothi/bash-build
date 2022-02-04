@@ -7,8 +7,7 @@ pack_set -module-opt "--lua-family octopus"
 pack_set -install-query $(pack_get -prefix)/bin/octopus
 
 pack_set -module-requirement mpi
-libxc_v=5
-pack_set -module-requirement libxc[$libxc_v]
+pack_set -module-requirement libxc
 pack_set -module-requirement gsl
 pack_set -module-requirement arpack-ng
 pack_set -module-requirement etsf_io
@@ -37,9 +36,9 @@ else
 fi
 
 # The old versions had one library, the newer ones have Fortran and C divided.
-tmp_xc="$(pack_get -LD libxc[$libxc_v])/libxc.a"
-if [[ $(vrs_cmp $libxc_v 2.2.0) -ge 0 ]]; then
-    tmp_xc="$(pack_get -LD libxc[$libxc_v])/libxcf90.a $(pack_get -LD libxc[$libxc_v])/libxc.a"
+tmp_xc="$(pack_get -LD libxc)/libxc.a"
+if [[ $(vrs_cmp $(pack_get -version libxc) 2.2.0) -ge 0 ]]; then
+    tmp_xc="$(pack_get -LD libxc)/libxcf90.a $(pack_get -LD libxc)/libxc.a"
 fi
 tmp="$tmp --with-berkeleygw-prefix=$(pack_get -prefix bgw)"
 
@@ -51,7 +50,7 @@ if [[ 0 -eq 1 ]]; then
 	pack_cmd "../configure FCFLAGS_FFTW=-I$(pack_get -prefix fftw-mpi)/include LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_omp -lfftw3 ' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'" \
      "--enable-openmp" \
      "--enable-utils" \
-     "--with-libxc-include=$(pack_get -prefix libxc[$libxc_v])/include" \
+     "--with-libxc-include=$(pack_get -prefix libxc)/include" \
      "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
      "--with-elpa-prefix=$(pack_get -prefix elpa)" \
      "--with-gsl-prefix=$(pack_get -prefix gsl)" \
@@ -74,7 +73,7 @@ fi
 pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
      "--enable-mpi" \
      "--enable-openmp" \
-     "--with-libxc-include=$(pack_get -prefix libxc[$libxc_v])/include" \
+     "--with-libxc-include=$(pack_get -prefix libxc)/include" \
      "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get -prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \

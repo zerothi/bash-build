@@ -2,9 +2,8 @@ add_package https://sourceforge.net/projects/elk/files/elk-6.8.4.tgz
 
 pack_set -install-query $(pack_get -prefix)/bin/elk
 
-xc_v=5
 pack_set -module-requirement mpi \
-    -module-requirement libxc[$xc_v] \
+    -module-requirement libxc \
     -module-requirement fftw
 pack_set -module-requirement wannier90
 
@@ -34,7 +33,7 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list -LD-rp mpi libxc[$xc_v]) $(pack_get -lib[f90] libxc[$xc_v])\n\
+LIB_libxc = $(list -LD-rp mpi libxc) $(pack_get -lib[f90] libxc)\n\
 SRC_libxc = libxcf90.f90 libxcifc.f90\n\
 LIB_FFT = $(list -LD-rp fftw) -lfftw3\n\
 SRC_FFT = zfftifc_fftw.f90\n\

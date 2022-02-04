@@ -20,8 +20,7 @@ pack_set -module-requirement netcdf
 pack_set -module-requirement xmlf90
 # configure fails due to missing psml_die code
 #pack_set -module-requirement libpsml
-libxc_v=4.3.4
-pack_set -module-requirement libxc[$libxc_v]
+pack_set -module-requirement libxc
 
 # Correct mistakes in configure script...
 s="sed -i"
@@ -140,9 +139,9 @@ FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_
 #   atompaw
 #   bigdft
 pack_cmd "$s '$ a\
-LIBXC_CPPFLAGS=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
-LIBXC_FCFLAGS=\"$(list -INCDIRS libxc[$libxc_v])\"\n\
-LIBXC_LIBS=\"$(list -LD-rp libxc[$libxc_v]) $(pack_get -lib[f90] libxc[$libxc_v])\"' $file"
+LIBXC_CPPFLAGS=\"$(list -INCDIRS libxc)\"\n\
+LIBXC_FCFLAGS=\"$(list -INCDIRS libxc)\"\n\
+LIBXC_LIBS=\"$(list -LD-rp libxc) $(pack_get -lib[f90] libxc)\"' $file"
 
 pack_cmd "$s '$ a\
 XMLF90_CPPFLAGS=\"$(list -INCDIRS xmlf90)\"\n\

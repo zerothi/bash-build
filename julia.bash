@@ -1,13 +1,11 @@
 jV=1.7
-IjV=$jV.0
+IjV=$jV.1
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz
 
 # The settings
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
-pack_set -module-requirement suitesparse
-pack_set -module-requirement llvm
 
 pack_set -install-query $(pack_get -prefix)/bin/julia
 
@@ -20,11 +18,6 @@ pack_set --module-opt "--set-ENV JULIA_EXCLUSIVE=0"
 pack_cmd "echo '# BBUILD' > Make.user"
 pack_cmd "sed -i '1 a\
 prefix = $(pack_get -prefix)\n\
-USE_SYSTEM_LLVM = 1\n\
-USE_SYSTEM_GMP = 1\n\
-USE_SYSTEM_MPFR = 1\n\
-USE_SYSTEM_SUITESPARSE = 1\n\
-LDFLAGS += $(list -LD-rp suitesparse)\n\
 JULIA_NUM_THREADS = 1\n\
 ' Make.user"
 

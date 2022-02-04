@@ -167,6 +167,7 @@ source_pack libs/dealii.bash
 # PEXSI
 source_pack libs/sympack.bash
 source_pack libs/pexsi.bash
+source_pack libs/pexsi-dev.bash
 
 # Libraries for DFT
 source_pack libs/xmlf90.bash

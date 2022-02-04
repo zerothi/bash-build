@@ -2,7 +2,7 @@ v=1.7
 add_package https://ftp.gnu.org/gnu/pies/pies-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
-pack_set -install-query $(pack_get -LD)/libpies.a
+pack_set -install-query $(pack_get -prefix)/bin/piesctl
 
 pack_set -build-mod-req build-tools
 
