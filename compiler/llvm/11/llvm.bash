@@ -20,6 +20,9 @@ opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=2"
 # We have gold linker
 opt="$opt -DLLVM_USE_LINKER=gold"
 opt="$opt -DLLVM_BINUTILS_INCDIR=$(pack_get -prefix build-tools)/include"
+if $(is_host n-) ; then
+    opt="$opt -DLLDB_ENABLE_PYTHON=OFF"
+fi
 
 # add include limits
 pack_cmd "sed -i -e '/#include <vector>/a #include <limits>' ../llvm/utils/benchmark/src/benchmark_register.h"

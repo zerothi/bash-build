@@ -1,4 +1,5 @@
-add_package https://mfix.netl.doe.gov/s3/abb8f49f/f1599988c43836514926e200d9da5020//source/mfix/mfix-20.2.0.tar.gz
+v=20.2.0
+add_package https://mfix.netl.doe.gov/s3/abb8f49f/f1599988c43836514926e200d9da5020//source/mfix/mfix-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_DIR
 
@@ -12,21 +13,25 @@ pack_set -module-opt "-ld-library-path"
 
 pack_set -install-query $(pack_get -prefix)/bin/mfixsolver
 
+pack_set -build-mod-req cmake
 pack_set $(list -prefix ' -module-requirement ' mpi numpy)
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # First build the source code and install
 # Install commands that it should run
-pack_cmd "CC=$MPICC FC=$MPIFC cmake -DENABLE_POSTMFIX=1" \
+# -DENABLE_POSTMFIX=1
+pack_cmd "CC='$MPICC' FC='$MPIFC' cmake -DCMAKE_BUILD_TYPE=Release" \
 	 -DENABLE_MPI=1 \
-	 -DCMAKE_Fortran_COMPILER="$MPIFC" \
-	 -DMPI_Fortran_COMPILER="$MPIFC" \
-	 -DCMAKE_Fortran_FLAGS="$FFLAGS" \
+     -DVERSION=$v \
+     -DENABLE_OpenMP=1 \
+	 "-DCMAKE_Fortran_COMPILER='$MPIFC'" \
+	 "-DMPI_Fortran_COMPILER='$MPIFC'" \
+	 "-DCMAKE_Fortran_FLAGS='$FFLAGS'" \
 	 "-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)/bin .."
 # Make commands
 pack_cmd "make $(get_make_parallel)"
-pack_cmd "make $(get_make_parallel) postmfix"
+#pack_cmd "make $(get_make_parallel) postmfix"
 pack_cmd "make install"
 
 pack_cmd "cd ../"

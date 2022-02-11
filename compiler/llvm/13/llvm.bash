@@ -19,6 +19,9 @@ opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=2"
 # We have gold linker
 opt="$opt -DLLVM_USE_LINKER=gold"
 opt="$opt -DLLVM_BINUTILS_INCDIR=$(pack_get -prefix build-tools)/include"
+if $(is_host n-) ; then
+    opt="$opt -DLLDB_ENABLE_PYTHON=OFF"
+fi
 
 # Prepare Cmake setup
 pack_cmd "CC=$CC CXX=$CXX cmake -G 'Ninja' $opt ../llvm"

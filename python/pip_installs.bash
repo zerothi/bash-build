@@ -128,6 +128,7 @@ pip_append pipenv
 pip_append pint
 pip_append pkgconfig
 pip_append ply
+pip_append poetry
 pip_append psutil
 #if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
     # Currently it cannot be installed due to non-ascii characters

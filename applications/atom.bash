@@ -17,7 +17,7 @@ include \$(XMLF90_ROOT)/share/org.siesta-project/xmlf90.mk\n\
 include \$(GRIDXC_ROOT)/share/org.siesta-project/gridxc_dp.mk\n\
 FC = $FC \n\
 FFLAGS = $FFLAGS \n\
-LDFLAGS = $(list -LD-rp ++libgridxc) \n\
+LDFLAGS = -lxcf90 $(list -LD-rp ++libgridxc) \n\
 AR = $AR\n\
 RANLIB = $RANLIB \n\
 .F.o:\n\

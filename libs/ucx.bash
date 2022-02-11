@@ -20,7 +20,12 @@ if ! $(is_host nicpa) ; then
     tmp_flags="$tmp_flags --with-ib-hw-tm"
 fi
 
-tmp_flags="$tmp_flags --with-rc --with-ud --with-dc"
+tmp_flags="$tmp_flags --with-rc --with-ud"
+if [[ "x${CPUTYPEV}" == "xXeonGold6126" ]]; then
+    tmp_flags="$tmp_flags --without-dc"
+else
+    tmp_flags="$tmp_flags --with-dc"
+fi
 tmp_flags="$tmp_flags --with-dm"
 tmp_flags="$tmp_flags --with-mcpu --with-march"
 tmp_flags="$tmp_flags --disable-backtrace-detail"

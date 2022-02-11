@@ -1,10 +1,11 @@
-for v in 3.3.1 ; do
+for v in 4.0.1 ; do
 add_package -archive oncvpsp-$v.tar http://www.mat-simresearch.com/oncvpsp-$v.tar.gz
 
 pack_set -install-query $(pack_get -prefix)/bin/oncvpsp.x
 
-# Currently oncvpsp only works for 3.X
-_xc_v=3
+# 3.3.1 requires 3.X
+# 4.0.1 can do with 4 versions
+_xc_v=4
 pack_set -module-requirement libxc[$_xc_v]
 
 pack_set -module-opt "-lua-family oncvpsp"
@@ -17,7 +18,7 @@ F90 = $FC\n\
 CC = $CC\n\
 FCCPP = $CC -E -P\n\
 FLINKER = \$(F90)\n\
-FCCPPFLAGS = -ansi -DLIBXC_VERSION=${_xc_v//./}\n\
+FCCPPFLAGS = -ansi -DLIBXC_VERSION=${_xc_v//./}00\n\
 FFLAGS = $FFLAGS $(list -INCDIRS libxc[$_xc_v])\n\
 CFLAGS = $CFLAGS $(list -INCDIRS libxc[$_xc_v])\n\
 OBJS_LIBXC = functionals.o exc_libxc.o\n\
