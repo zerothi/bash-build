@@ -7,6 +7,7 @@ add_package -package nim \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set -module-requirement pcre
 pack_set -module-requirement openssl
+pack_set -module-requriement nodejs
 
 pack_set -install-query $(pack_get -prefix)/bin/nim
 
