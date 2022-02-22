@@ -1,5 +1,5 @@
 v=17.5.0
-add_package -package nodejs -version $v -build generic\
+add_package -package nodejs -version $v -build generic \
        https://nodejs.org/dist/v$v/node-v$v-linux-x64.tar.xz
 
 pack_set -s $IS_MODULE
