@@ -89,6 +89,7 @@ pack_cmd "JOBS=$NPROCS make config"
 pack_cmd "JOBS=$NPROCS make library"
 pack_cmd "JOBS=$NPROCS make static"
 pack_cmd "JOBS=$NPROCS make install"
+pack_cmd "cp $mk $(pack_get -prefix)/"
 
 # In 5.4.0 the lib*.a are not installed, we need to do this manually
 pack_cmd 'find ./ -name "lib*.a" -exec cp "{}" $(pack_get -prefix)/lib/ \;'
