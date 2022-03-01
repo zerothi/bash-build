@@ -44,49 +44,52 @@ R_append Rcpp
 R_install
 R_append openssl
 R_install
-R_append rstudioapi
+
 R_append base64enc
-R_append rmarkdown
-R_append jose
-R_append htmltools
-R_append openssl
-R_append sourcetools
-R_append fansi
-R_append R6
-R_append crayon
+R_append BH
+R_append classInt
 R_append cli
-R_append rlang
-R_append utf8
-R_append pillar
-R_append digest
-R_append isoband
-R_append praise
-R_append withr
-R_append magrittr
-R_append testthat
-R_append pkgconfig
-R_append glue
-R_append covr
-R_append stringi
-R_append ellipsis
 R_append clipr
+R_append covr
 R_append cpp11
+R_append crayon
+R_append DBI
+R_append digest
+R_append ellipsis
 R_append evaluate
-R_append yaml
-R_append knitr
-R_append hms
+R_append fansi
+R_append isoband
+R_append generics
+R_append glue
 R_append gtable
-R_append scales
+R_append hms
+R_append htmltools
+R_append jose
+R_append knitr
+R_append magrittr
+R_append pkgconfig
+R_append pillar
+R_append plogr
+R_append praise
 R_append prettyunits
 R_append progress
 R_append profmem
-R_append BH
-R_append plogr
+R_append openssl
 R_append reshape2
-R_append classInt
-R_append DBI
-R_append generics
-
+R_append rlang
+R_append rmarkdown
+R_append rstudioapi
+R_append R6
+R_append utf8
+R_append scales
+R_append sourcetools
+R_append stringi
+R_append testthat
+R_append tzdb
+R_append vroom
+R_append withr
+R_append wk
+R_append yaml
 
 R_install
 

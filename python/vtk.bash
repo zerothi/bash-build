@@ -1,5 +1,5 @@
 v=9.1.0
-add_package -package vtk https://www.vtk.org/files/release/${v:0:3}/VTK-$v.rc2.tar.gz
+add_package -package vtk https://www.vtk.org/files/release/${v:0:3}/VTK-$v.tar.gz
 
 pack_set -install-query $(pack_get -prefix)/bin/vtkpython
 

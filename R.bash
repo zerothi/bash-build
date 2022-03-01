@@ -35,8 +35,9 @@ fi
 pack_cmd "../configure CFLAGS='$CFLAGS $FLAG_OMP' $tmp" \
 	 "--enable-R-shlib --enable-R-static-lib" \
 	 "--with-blas --with-lapack" \
-	 "--enable-lto" \
-	 "--with-readline" \
+	 --enable-pcre2 \
+	 --enable-lto \
+	 --with-readline \
 	 "--prefix=$(pack_get -prefix)"
 
 # Make commands
@@ -107,7 +108,7 @@ build_set --default-build _internal-R$IrV
 
 
 # Install all R packages
-source R-install.bash
+source R/R-install.bash
 clear_parent
 
 # Initialize the module read path

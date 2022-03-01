@@ -49,9 +49,9 @@ function add_R_package {
     pack_set -module-opt "-prepend-ENV R_LIBS_SITE=$_prefix"
 }
 
-add_R_package Matrix 1.2-18
+add_R_package Matrix 1.4-0
 
-add_R_package RcppEigen 0.3.3.7.0
+add_R_package RcppEigen 0.3.3.9.1
 pack_set -mod-req Matrix
 
 add_R_package plyr 1.8.6
@@ -66,34 +66,34 @@ add_R_package plyr 1.8.6
 #  stringr
 #  forcats
 
-add_R_package tibble 3.0.3
+add_R_package tibble 3.1.6
 
-add_R_package bench 1.1.1
+add_R_package bench 1.1.2
 pack_set -mod-req tibble
 
-add_R_package tidyselect 1.1.0
+add_R_package tidyselect 1.1.2
 
-add_R_package dplyr 1.0.1
+add_R_package dplyr 1.0.8
 pack_set -mod-req tibble
 pack_set -mod-req tidyselect
 
 add_R_package stringr 1.4.0
 
-add_R_package forcats 0.5.0
+add_R_package forcats 0.5.1
 pack_set -mod-req tibble
 
 add_R_package purrr 0.3.4
 
-add_R_package readr 1.3.1
+add_R_package readr 2.1.2
 pack_set -mod-req tibble
 
-add_R_package tidyr 1.1.1
+add_R_package tidyr 1.2.0
 pack_set -mod-req purrr
 pack_set -mod-req dplyr
 
-add_R_package MASS 7.3-51.6
+add_R_package MASS 7.3-55
 
-add_R_package ggplot2 3.3.2
+add_R_package ggplot2 3.3.5
 pack_set -mod-req plyr
 pack_set -mod-req tibble
 pack_set -mod-req dplyr
@@ -134,6 +134,7 @@ source R/udunits2.bash
 source R/units.bash
 source R/sp.bash
 source R/rgeos.bash
+source R/s2.bash
 source R/sf.bash
 source R/rgdal.bash
 source R/lwgeom.bash

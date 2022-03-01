@@ -1,4 +1,4 @@
-add_R_package udunits2 0.13
+add_R_package udunits2 0.13.2
 pack_set -mod-req udunits
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"

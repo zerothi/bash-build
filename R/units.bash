@@ -1,4 +1,4 @@
-add_R_package units 0.6-7
+add_R_package units 0.8-0
 pack_set -mod-req udunits
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"

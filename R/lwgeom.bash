@@ -1,4 +1,4 @@
-add_R_package lwgeom 0.2-5
+add_R_package lwgeom 0.2-8
 pack_set -mod-req R.udunits2 -mod-req geos -mod-req R.sf
 
 mk_R_install_script new

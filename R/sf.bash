@@ -1,5 +1,5 @@
-add_R_package sf 0.9-5
-pack_set -mod-req R.rgeos -mod-req R.units -mod-req gdal -mod-req geos
+add_R_package sf 1.0-6
+pack_set -mod-req R.rgeos -mod-req R.units -mod-req gdal -mod-req geos -mod-req R.s2
 
 mk_R_install_script new
 mk_R_install_script "config_geos = '--with-geos-config=$(pack_get -prefix geos)/bin/geos-config'"

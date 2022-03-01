@@ -1,4 +1,4 @@
-add_R_package rgdal 1.5-16
+add_R_package rgdal 1.5-28
 pack_set -mod-req R.udunits2 -mod-req gdal -mod-req R.sp
 
 mk_R_install_script new
