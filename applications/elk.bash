@@ -1,9 +1,9 @@
-add_package https://sourceforge.net/projects/elk/files/elk-6.8.4.tgz
+add_package https://sourceforge.net/projects/elk/files/elk-8.3.22.tgz
 
 pack_set -install-query $(pack_get -prefix)/bin/elk
 
 pack_set -module-requirement mpi \
-    -module-requirement libxc \
+    -module-requirement libxc[5] \
     -module-requirement fftw
 pack_set -module-requirement wannier90
 
@@ -33,7 +33,7 @@ F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 F77 = $MPIF77\n\
 F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list -LD-rp mpi libxc) $(pack_get -lib[f90] libxc)\n\
+LIB_libxc = $(list -LD-rp mpi libxc[5]) $(pack_get -lib[f90] libxc[5])\n\
 SRC_libxc = libxcf90.f90 libxcifc.f90\n\
 LIB_FFT = $(list -LD-rp fftw) -lfftw3\n\
 SRC_FFT = zfftifc_fftw.f90\n\
@@ -55,13 +55,13 @@ elif $(is_c gnu) ; then
 
     la=lapack-$(pack_choice -i linalg)
     case $la in
-	openblas)
+	lapack-openblas)
 	    pack_cmd "sed -i '$ aSRC_OBLAS = \n' $file"
 	    ;;
-	blis)
+	lapack-blis)
 	    pack_cmd "sed -i '$ aSRC_BLIS = \n' $file"
 	    ;;
-	mkl)
+	lapack-mkl)
 	    pack_cmd "sed -i '$ aSRC_MKL = \n' $file"
 	    ;;
     esac

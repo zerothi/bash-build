@@ -13,7 +13,7 @@ pack_set $(list -prefix '-mod-req ' mpi cgal fftw boost scotch hypre petsc-d)
 
 
 o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-ThirdParty-v$v.tgz
-dwn_file https://sourceforge.net/projects/openfoamplus/files/v$v/ThirdParty-v$v.tgz $o
+dwn_file https://dl.openfoam.com/source/v$v/ThirdParty-v$v.tgz $o
 pack_cmd "tar xfz $o -C ."
 
 pack_cmd "mv ThirdParty-v$v ThirdParty"

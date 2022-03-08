@@ -1,4 +1,4 @@
-v=11.3
+v=11.4
 add_package https://octopus-code.org/download/$v/octopus-$v.tar.gz
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
@@ -12,7 +12,8 @@ pack_set -module-requirement gsl
 pack_set -module-requirement arpack-ng
 pack_set -module-requirement etsf_io
 pack_set -module-requirement fftw-mpi
-pack_set -module-requirement bgw
+# octopus 11.4 does not support bgw 3
+#pack_set -module-requirement bgw
 pack_set -module-requirement elpa
 
 tmp=
@@ -40,7 +41,7 @@ tmp_xc="$(pack_get -LD libxc)/libxc.a"
 if [[ $(vrs_cmp $(pack_get -version libxc) 2.2.0) -ge 0 ]]; then
     tmp_xc="$(pack_get -LD libxc)/libxcf90.a $(pack_get -LD libxc)/libxc.a"
 fi
-tmp="$tmp --with-berkeleygw-prefix=$(pack_get -prefix bgw)"
+#tmp="$tmp --with-berkeleygw-prefix=$(pack_get -prefix bgw)"
 
 # Correct berkeleyGW linking
 #pack_cmd "sed -i -e 's:/library -l:/lib -l:g;s:/library:/include:g' ../configure"
@@ -70,14 +71,14 @@ pack_store octopus.test octopus.test.serial
 pack_cmd "rm -rf *"
 fi
 
-pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+pack_cmd "../configure LIBS_LIBXC='$tmp_xc' LIBS='$(list -LD-rp $(pack_get -mod-req)) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz' CC='$MPICC' FC='$MPIFC' CXX='$MPICXX'"  \
+     "LIBS_FFTW='$(list -LD-rp fftw-mpi) -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3'" \
      "--enable-mpi" \
      "--enable-openmp" \
      "--with-libxc-include=$(pack_get -prefix libxc)/include" \
      "--with-etsf-io-prefix=$(pack_get -prefix etsf_io)" \
      "--with-gsl-prefix=$(pack_get -prefix gsl)" \
      "--with-netcdf-prefix=$(pack_get -prefix netcdf)" \
-     "--with-fftw-prefix=$(pack_get -prefix fftw-mpi)" \
      "--with-elpa-prefix=$(pack_get -prefix elpa)" \
      "--with-arpack='$(list -LD-rp arpack-ng) -lparpack -larpack'" \
      "--prefix=$(pack_get -prefix)" \
