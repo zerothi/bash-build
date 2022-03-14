@@ -12,7 +12,9 @@ pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scipy
 
 pack_set -build-mod-req cython
 pack_set -build-mod-req pybind11
-pack_set -build-mod-req pybind11
+if [[ "x${pV:0:1}" == "x3" ]]; then
+    pack_set -build-mod-req pythran
+fi
 if [[ $(pack_installed swig) -eq 1 ]]; then
     pack_set -build-mod-req swig
 fi
