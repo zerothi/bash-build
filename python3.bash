@@ -61,6 +61,8 @@ if $(is_c intel) ; then
     pack_cmd "unset LIBRARY_PATH"
 elif $(is_c pgi) ; then
     pack_set -host-reject $(get_hostname)
+elif $(is_c gnu) ; then
+    tmp="$tmp --with-lto"
 elif ! $(is_c gnu) ; then
     pack_set -mod-req openlibm
     tmp="$tmp --without-gcc --with-lto"
