@@ -1,21 +1,21 @@
-for v in 4.1-b4 ; do
+for v in 4.1.5 ; do
 
 bv=$(str_version -1 $v).$(str_version -2 $v)
 add_package --archive siesta-$v.tar.gz \
 	    --package siesta \
 	    --version $v \
-	    https://launchpad.net/siesta/$bv/$v/+download/siesta-$v.tar.gz
+	    https://gitlab.com/siesta-project/siesta/-/releases/v$v/downloads/siesta-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL
 
 # Add the lua family
-pack_set --module-opt "--lua-family siesta"
+pack_set -module-opt "--lua-family siesta"
 
-pack_set --install-query $(pack_get --prefix)/bin/hsx2hs
+pack_set -install-query $(pack_get -prefix)/bin/hsx2hs
 
-pack_set --module-requirement mpi --module-requirement netcdf
+pack_set -module-requirement mpi -module-requirement netcdf
 
-pack_set --module-requirement flook
+pack_set -module-requirement flook
 
 # Fix the __FILE__ content in the classes
 pack_cmd 'for f in Src/class* Src/fdf/utils.F90 ; do sed -i -e "s:__FILE__:\"$f\":g" $f ; done'
@@ -193,8 +193,8 @@ make_files denchar
 pack_cmd "cd ../../Eig2DOS"
 make_files Eig2DOS
 
-pack_cmd "cd ../Gen-basis"
-make_files gen-basis ioncat
+#pack_cmd "cd ../Gen-basis"
+#make_files gen-basis ioncat
 
 pack_cmd "cd ../Grid"
 make_files grid2val grid2cube grid_rotate grid_supercell
@@ -243,21 +243,17 @@ for omp in openmp none ; do
     pack_cmd "make clean"
     
 done
-pack_cmd "cd ../TB"
-pack_cmd "cp tbt_tb.py tbt_data.py pht_tb.py $(pack_get --prefix)/bin/"
-pack_set --module-opt "--prepend-ENV PYTHONPATH=$(pack_get --prefix)/bin"
-pack_cmd "cd ../"
 
 # end TS
 
-pack_cmd "cd ../VCA"
+pack_cmd "cd ../../VCA"
 make_files mixps fractional
 
 pack_cmd "cd ../Vibra/Src"
 make_files fcbuild vibra
 
 pack_cmd "cd ../../WFS"
-make_files info_wfsx readwf readwfx wfs2wfsx wfsx2wfs
+make_files readwf readwfx wfs2wfsx wfsx2wfs
 
 
 # Compile the 3m equivalent versions, if applicable
