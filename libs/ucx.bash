@@ -8,7 +8,6 @@ pack_set -install-query $(pack_get -prefix)/bin/ucx_info
 
 pack_set -build-mod-req build-tools
 pack_set -mod-req numactl
-pack_set -mod-req knem
 
 tmp_flags=
 if [[ -d /usr/include/infiniband ]]; then
@@ -20,23 +19,32 @@ if ! $(is_host nicpa) ; then
     tmp_flags="$tmp_flags --with-ib-hw-tm"
 fi
 
-tmp_flags="$tmp_flags --with-rc --with-ud"
-if [[ "x${CPUTYPEV}" == "xXeonGold6126" ]]; then
-    tmp_flags="$tmp_flags --without-dc"
-else
-    tmp_flags="$tmp_flags --with-dc"
+if [[ "$(get_c -n)" == *"debug"* ]]; then
+    tmp_flags="$tmp_flags --enable-debug"
+    pack_cmd "unset CFLAGS ; unset CXXFLAGS"
 fi
+
+#tmp_flags="$tmp_flags --with-rc --with-ud"
+#if [[ "x${CPUTYPEV}" == "xXeonGold6126" ]]; then
+#    tmp_flags="$tmp_flags --without-dc"
+#else
+#    tmp_flags="$tmp_flags --with-dc"
+#fi
 tmp_flags="$tmp_flags --with-dm"
+tmp_flags="$tmp_flags --enable-mt --enable-cma"
 tmp_flags="$tmp_flags --with-mcpu --with-march"
 tmp_flags="$tmp_flags --disable-backtrace-detail"
 tmp_flags="$tmp_flags --enable-devel-headers"
 tmp_flags="$tmp_flags --enable-optimizations"
 tmp_flags="$tmp_flags --enable-shared --disable-static"
+
+# knem is a sys module which we cannot override
+pack_set -mod-req knem
 tmp_flags="$tmp_flags --with-knem=$(pack_get -prefix knem)"
 
 # Install commands that it should run
 pack_cmd "unset MPICC ; unset MPICXX ; unset MPIFC"
-pack_cmd "../contrib/configure-release  $tmp_flags" \
+pack_cmd "../contrib/configure-release $tmp_flags" \
 	 "--prefix=$(pack_get -prefix)"
 
 # Make commands

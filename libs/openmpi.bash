@@ -48,13 +48,18 @@ if [[ -n $LSF_BINDIR ]]; then
     tmp_flags="$tmp_flags --with-lsf=$(dirname $tmp)"
     tmp_flags="$tmp_flags --with-lsf-libdir=$tmp/lib"
     tmp_flags="$tmp_flags --without-tm"
+    # for hpc
+    tmp_flags="$tmp_flags --with-ofi=no"
 
 else
     [[ -e /usr/include/lsf/lsbatch.h ]] && tmp_flags="$tmp_flags --with-lsf=/usr"
 fi
 
+if [[ "$(get_c -n)" == *"debug"* ]]; then
+    tmp_flags="$tmp_flags --enable-debug"
+fi
 
-if [[ $(vrs_cmp $(pack_get -version) 4) -eq 0 ]]; then
+if [[ $(vrs_cmp $(pack_get -version) 4) -ge 0 ]]; then
     tmp_flags="$tmp_flags --enable-mpi1-compatibility"
     if [[ $(pack_installed ucx) ]]; then
 	# The UCX library also has links to infiniband, so and for
