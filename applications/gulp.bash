@@ -1,4 +1,4 @@
-for v in 5.1 ; do
+for v in 5.2 6.0 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tar.gz
 
 if ! $(is_c intel) ; then
