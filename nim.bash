@@ -1,5 +1,5 @@
 nV=1.6
-InV=$nV.4
+InV=$nV.10
 add_package -package nim \
 	    https://nim-lang.org/download/nim-$InV.tar.xz
 
@@ -12,11 +12,12 @@ pack_set -module-requirement nodejs
 pack_set -install-query $(pack_get -prefix)/bin/nim
 
 # Create building nim
+pack_cmd "unset CFLAGS"
 pack_cmd "sh build.sh"
 pack_cmd "bin/nim c koch"
 pack_cmd "./koch boot -d:release"
 pack_cmd "./koch tools"
-pack_cmd "./koch docs -d:release"
+pack_cmd "./koch docs -d:release || echo 'failed doing documentation...'"
 pack_cmd "./koch geninstall $(pack_get -prefix)"
 pack_cmd "sed -i -e '/case/,/esac/{s:/nim::g}' install.sh"
 pack_cmd "sh install.sh $(pack_get -prefix)"

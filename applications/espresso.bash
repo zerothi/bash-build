@@ -1,4 +1,4 @@
-for v in 6.8 ; do
+for v in 6.8 7.1 ; do
     tmp="-package q-espresso -version $v"
     case $v in
 	6.2.1)
@@ -31,11 +31,8 @@ for v in 6.8 ; do
 	5.0.99)
 	    tmp="$tmp http://www.qe-forge.org/gf/download/frsrelease/151/519/espresso-5.0.99.tar.gz"
 	    ;;
-	6.*)
-	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
-	    ;;
 	*)
-	    doerr q-espresso "Version unknown"
+	    tmp="$tmp https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2"
 	    ;;
     esac
 
