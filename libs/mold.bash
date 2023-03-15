@@ -2,6 +2,11 @@ for v in 1.0.1
 do
     add_package -archive mold-$v.tar.gz \
 	https://github.com/rui314/mold/archive/refs/tags/v$v.tar.gz
+
+    if $(is_intel) ; then
+	pack_set --host-reject $(get_hostname)
+    fi
+
     
     pack_set -s $IS_MODULE
     
