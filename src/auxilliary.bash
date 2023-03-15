@@ -664,7 +664,7 @@ function choice {
 #    -Wlrpath (appends)
 #       Returns the constant running path for the compiler.
 #       Same as:
-#         -prefix -Wl,-rpath= -loop-cmd "pack_get --library-path"
+#         -prefix -Wl,-rpath, -loop-cmd "pack_get --library-path"
 #    -LDFLAGS (appends)
 #       Returns the library path for for the compiler
 #       Same as:
@@ -729,7 +729,7 @@ function list {
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
-		pre='-Wl,-rpath='
+		pre='-Wl,-rpath,'
 		suf='' 
 		lcmd='pack_get -library-path-all ' ;;
 	    -LDFLAGS)   
