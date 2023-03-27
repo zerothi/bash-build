@@ -19,8 +19,11 @@ pack_cmd "./koch boot -d:release"
 pack_cmd "./koch tools"
 pack_cmd "./koch docs -d:release || echo 'failed doing documentation...'"
 pack_cmd "./koch geninstall $(pack_get -prefix)"
+# Now also install nimble
+pack_cmd "./koch nimble"
 pack_cmd "sed -i -e '/case/,/esac/{s:/nim::g}' install.sh"
 pack_cmd "sh install.sh $(pack_get -prefix)"
+
 
 # Create a new build with this module
 new_build -name _internal-nim$InV \
