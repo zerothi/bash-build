@@ -87,10 +87,10 @@ while [ $# -gt 0 ]; do
 	-python-version|-pv)
 	    _python_version=$1
 	    case $_python_version in
-		2|3)
+		3)
 		    ;; # fine
 		*)
-		    doerr "option parsing" "Python version does not exist [2|3]"
+		    doerr "option parsing" "Python version does not exist [3]"
 		    ;;
 	    esac
 	    shift ;;
