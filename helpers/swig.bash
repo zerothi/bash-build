@@ -1,4 +1,4 @@
-for v in 4.0.2 3.0.12
+for v in 3.0.12 4.1.1
 do
 add_package -build generic http://prdownloads.sourceforge.net/swig/swig-$v.tar.gz
 

@@ -1,4 +1,4 @@
-v=2.0.14
+v=2.0.16
 add_package --build generic --archive numactl-$v.tar.gz \
     https://github.com/numactl/numactl/archive/v$v.tar.gz
 

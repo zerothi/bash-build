@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.gnu.org/pub/gnu/readline/readline-8.1.tar.gz
+add_package --build generic ftp://ftp.gnu.org/pub/gnu/readline/readline-8.2.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set --lib "-lreadline -lncurses"

@@ -1,5 +1,6 @@
+v=3.4.4
 add_package -build generic -alias gen-libffi -package gen-libffi \
-	    https://github.com/libffi/libffi/releases/download/v3.4.2/libffi-3.4.2.tar.gz
+	    https://github.com/libffi/libffi/releases/download/v$v/libffi-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

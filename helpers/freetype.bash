@@ -1,5 +1,5 @@
 add_package -build generic -alias gen-freetype -package gen-freetype \
-    https://sourceforge.net/projects/freetype/files/freetype2/2.11.0/freetype-2.11.0.tar.xz
+    https://sourceforge.net/projects/freetype/files/freetype2/2.13.0/freetype-2.13.0.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

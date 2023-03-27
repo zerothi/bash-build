@@ -1,4 +1,4 @@
-add_package --build generic https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.38/pcre2-10.38.tar.bz2
+add_package --build generic https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.42/pcre2-10.42.tar.bz2
 
 pack_set --host-reject ntch-2857
 

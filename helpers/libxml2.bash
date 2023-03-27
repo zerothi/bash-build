@@ -1,5 +1,5 @@
 add_package -build generic -package gen-libxml2 \
-	    ftp://xmlsoft.org/libxml2/libxml2-2.9.11.tar.gz
+	    https://download.gnome.org/sources/libxml2/2.10/libxml2-2.10.3.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

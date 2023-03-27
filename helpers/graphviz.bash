@@ -1,7 +1,5 @@
-v=2.49.3
 add_package -build generic \
-            -archive graphviz-$v.tar.bz2 \
-            https://gitlab.com/graphviz/graphviz/-/archive/$v/graphviz-$v.tar.bz2
+	    https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/7.1.0/graphviz-7.1.0.tar.xz
 
 pack_set -s $IS_MODULE
 

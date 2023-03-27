@@ -1,5 +1,5 @@
 # First install zlib, which is a simple library
-v=2.0.5
+v=2.0.7
 add_package -build generic -package gen-zlib -archive zlib-ng-$v.tar.gz \
 	https://github.com/zlib-ng/zlib-ng/archive/refs/tags/$v.tar.gz
 

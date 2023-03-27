@@ -1,4 +1,4 @@
-v=17.5.0
+v=18.15.0
 add_package -package nodejs -version $v -build generic \
        https://nodejs.org/dist/v$v/node-v$v-linux-x64.tar.xz
 

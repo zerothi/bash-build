@@ -1,4 +1,4 @@
-add_package --build generic ftp://ftp.gnu.org/gnu/make/make-4.3.tar.lz
+add_package --build generic ftp://ftp.gnu.org/gnu/make/make-4.4.1.tar.lz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 

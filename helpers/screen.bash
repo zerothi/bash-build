@@ -1,4 +1,4 @@
-add_package --build generic https://ftp.gnu.org/gnu/screen/screen-4.8.0.tar.gz
+add_package --build generic https://ftp.gnu.org/gnu/screen/screen-4.9.0.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 

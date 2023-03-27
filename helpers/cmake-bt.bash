@@ -2,7 +2,7 @@ if [[ $(vrs_cmp $(get_c -version) 4.5.0) -lt 0 ]]; then
     # This is the latest cmake release without C++ 11 requirements
     add_package -build generic https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
 else
-    add_package -build generic https://github.com/Kitware/CMake/releases/download/v3.21.3/cmake-3.21.3.tar.gz
+    add_package -build generic https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3.tar.gz
 fi
 pack_set -s $MAKE_PARALLEL
 

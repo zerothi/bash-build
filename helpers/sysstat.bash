@@ -1,4 +1,4 @@
-v=12.5.4
+v=12.7.2
 add_package --build generic \
 	    --archive sysstat-$v.tar.gz \
 	    https://github.com/sysstat/sysstat/archive/refs/tags/v$v.tar.gz

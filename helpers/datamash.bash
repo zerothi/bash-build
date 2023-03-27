@@ -1,4 +1,4 @@
-add_package --build generic https://ftp.gnu.org/gnu/datamash/datamash-1.7.tar.gz
+add_package --build generic https://ftp.gnu.org/gnu/datamash/datamash-1.8.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

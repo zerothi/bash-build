@@ -1,4 +1,4 @@
-add_package --build generic http://ftp.gnu.org/gnu/parallel/parallel-20211022.tar.bz2
+add_package --build generic http://ftp.gnu.org/gnu/parallel/parallel-20230322.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
 

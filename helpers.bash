@@ -27,7 +27,7 @@ source_pack helpers/m4.bash
 source_pack helpers/autoconf.bash
 source_pack helpers/automake.bash
 source_pack helpers/libtool.bash
-#source_pack helpers/pkgconfig.bash
+source_pack helpers/pkgconfig.bash
 source_pack helpers/pkgconf.bash
 # gnumake relies on libtool
 source_pack helpers/gnumake.bash
