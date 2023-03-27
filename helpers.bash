@@ -112,6 +112,8 @@ source_pack helpers/swig.bash
 
 source_pack helpers/bazel.bash
 
+source_pack helpers/neovim.bash
+
 # Install all compilers
 source compiler/compilers.bash
 
