@@ -78,6 +78,16 @@ source_pack compiler/gcc/11/isl.bash
 source_pack compiler/gcc/11/gcc.bash
 source_pack compiler/gcc/11/gdb.bash
 
+gcc_v=12.2.0
+gcc=gcc_$gcc_v
+source_pack compiler/gcc/prereq.bash
+source_pack compiler/gcc/12/gmp.bash
+source_pack compiler/gcc/12/mpfr.bash
+source_pack compiler/gcc/12/mpc.bash
+source_pack compiler/gcc/12/isl.bash
+source_pack compiler/gcc/12/gcc.bash
+source_pack compiler/gcc/12/gdb.bash
+
 
 # Local variables which should only be visible here...
 unset gcc_v

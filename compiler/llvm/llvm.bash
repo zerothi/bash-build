@@ -6,3 +6,5 @@ source_pack compiler/llvm/11/llvm.bash
 source_pack compiler/llvm/12/llvm.bash
 source_pack compiler/llvm/13/llvm.bash
 source_pack compiler/llvm/14/llvm.bash
+source_pack compiler/llvm/15/llvm.bash
+source_pack compiler/llvm/16/llvm.bash
