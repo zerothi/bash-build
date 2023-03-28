@@ -1,7 +1,7 @@
 # abinit has specific link to 2.2.3
 # 5.0.0 is broken, do not use
 # ALWAYS keep the default libxc version in the end
-for v in 3.0.1 5.2.2 4.3.4
+for v in 3.0.1 4.3.4 5.2.3 6.1.0
 do
 add_package http://www.tddft.org/programs/libxc/down/$v/libxc-$v.tar.gz
 pack_set -lib -lxcf03 -lxc

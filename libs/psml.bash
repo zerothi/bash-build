@@ -1,4 +1,4 @@
-v=1.1.10
+v=1.1.12
 add_package -package libpsml \
 	    https://gitlab.com/siesta-project/libraries/libpsml/-/archive/libpsml-$v/libpsml-libpsml-$v.tar.bz2
 

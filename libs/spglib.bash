@@ -1,4 +1,4 @@
-v=1.16.2
+v=2.0.2
 add_package -package spglib \
 	    -archive spglib-$v.tar.gz \
 	    https://github.com/atztogo/spglib/archive/v$v.tar.gz

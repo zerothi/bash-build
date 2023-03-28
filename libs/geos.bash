@@ -1,5 +1,6 @@
-v=3.10.0
-add_package http://download.osgeo.org/geos/geos-$v.tar.bz2
+v=3.11.2
+add_package \
+	https://github.com/libgeos/geos/releases/download/$v/geos-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

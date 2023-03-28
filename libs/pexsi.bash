@@ -1,11 +1,11 @@
-v=1.2.0
+v=2.0.0
 add_package -package pexsi https://bitbucket.org/berkeleylab/pexsi/downloads/pexsi_v$v.tar.gz
 
 pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -LD)/libpexsi_linux.a
 pack_set -lib -lpexsi_linux
 
-superlu_v=5
+superlu_v=7.2
 
 pack_set $(list -p '-mod-req ' mpi parmetis scotch superlu-dist[$superlu_v] sympack)
 

@@ -1,4 +1,4 @@
-v=2.4.1
+v=2.5.0
 add_package https://github.com/libexpat/libexpat/releases/download/R_${v//./_}/expat-$v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

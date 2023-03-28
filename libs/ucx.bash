@@ -1,4 +1,4 @@
-v=1.11.2
+v=1.14.0
 add_package https://github.com/openucx/ucx/releases/download/v$v/ucx-${v//-rc*/}.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE

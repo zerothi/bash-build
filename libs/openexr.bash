@@ -1,4 +1,4 @@
-v=3.1.3
+v=3.1.6
 add_package -archive openexr-$v.tar.gz \
 	    https://github.com/AcademySoftwareFoundation/openexr/archive/v$v.tar.gz
 

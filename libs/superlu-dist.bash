@@ -1,4 +1,4 @@
-for v in 5.4.0 6.4.1 7.2.0 7.1.1 ; do
+for v in 5.4.0 6.4.1 7.2.0 7.1.1 8.1.2 ; do
 
 if [[ $(vrs_cmp $v 5.0) -gt 0 ]]; then
     add_package -package superlu-dist \

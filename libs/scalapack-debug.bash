@@ -2,7 +2,7 @@
 # library
 # Hence any linking to scalapack will require an mpi compliant
 # linking.
-v=2.1.0
+v=2.2.0
 add_package --build debug --package scalapack-debug \
 	    --archive scalapack-$v.tar.gz \
 	    https://github.com/Reference-ScaLAPACK/scalapack/archive/v$v.tar.gz

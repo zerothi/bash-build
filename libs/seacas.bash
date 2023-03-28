@@ -1,8 +1,8 @@
-v=2021-10-11
+v=2023-02-03
 add_package -archive seacas-$v.tar.gz \
 	    -package seacas \
 	    -version ${v//-/.} \
-	    https://github.com/gsjaardema/seacas/archive/v$v.tar.gz
+	    https://github.com/sandialabs/seacas/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

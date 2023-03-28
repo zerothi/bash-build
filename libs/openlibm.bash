@@ -1,4 +1,4 @@
-v=0.8.0
+v=0.8.1
 add_package --archive openlibm-$v.tar.gz \
 	    https://github.com/JuliaMath/openlibm/archive/v$v.tar.gz
 

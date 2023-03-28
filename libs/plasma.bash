@@ -1,4 +1,6 @@
-add_package https://bitbucket.org/icl/plasma/downloads/plasma-21.8.29.tar.gz
+v=22.9.29
+add_package \
+	https://github.com/icl-utk-edu/plasma/releases/download/$v/plasma-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL 
 

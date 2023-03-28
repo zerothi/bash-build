@@ -1,5 +1,5 @@
 add_package --package osu-benchmarks \
-    http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-5.8.tgz
+    http://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-7.0.1.tgz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 pack_set -install-query $(pack_get -prefix)/libexec/osu-micro-benchmarks/mpi/pt2pt/osu_latency

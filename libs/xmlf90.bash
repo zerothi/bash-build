@@ -1,4 +1,4 @@
-add_package https://launchpad.net/xmlf90/trunk/1.5/+download/xmlf90-1.5.4.tar.gz
+add_package https://gitlab.com/siesta-project/libraries/xmlf90/uploads/a22bcf780219eda20423d8aae6e72331/xmlf90-1.5.6.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

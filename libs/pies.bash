@@ -1,4 +1,4 @@
-v=1.7
+v=1.8
 add_package https://ftp.gnu.org/gnu/pies/pies-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

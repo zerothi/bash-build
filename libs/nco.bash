@@ -1,4 +1,4 @@
-v=5.0.3
+v=5.1.5
 add_package -archive nco-$v.tar.gz \
 	    https://github.com/nco/nco/archive/refs/tags/$v.tar.gz
 

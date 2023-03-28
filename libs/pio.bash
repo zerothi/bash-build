@@ -1,4 +1,4 @@
-v=2.5.4
+v=2.5.10
 add_package https://github.com/NCAR/ParallelIO/releases/download/pio${v//./_}/pio-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

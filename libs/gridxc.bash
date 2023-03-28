@@ -1,5 +1,5 @@
 #add_package https://gitlab.com/siesta-project/libraries/libgridxc/uploads/e6e4ec1e3ec648a45b3613e724c7be04/libgridxc-0.9.6.tar.gz
-add_package https://gitlab.com/siesta-project/libraries/libgridxc/uploads/3c396bbafcbf20a38d34fb92bb90c211/libgridxc-0.10.1.tar.gz
+add_package https://gitlab.com/siesta-project/libraries/libgridxc/uploads/3c396bbafcbf20a38d34fb92bb90c211/libgridxc-1.1.0.tar.gz
 
 pack_set -s $IS_MODULE
 

@@ -1,4 +1,4 @@
-v=8.1.1
+v=9.2.0
 add_package https://github.com/OSGeo/PROJ/releases/download/$v/proj-$v.tar.gz
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 

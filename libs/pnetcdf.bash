@@ -1,5 +1,5 @@
 # Install the Parallel NetCDF
-v=1.12.2
+v=1.12.3
 add_package \
     -package pnetcdf \
     https://parallel-netcdf.github.io/Release/pnetcdf-$v.tar.gz

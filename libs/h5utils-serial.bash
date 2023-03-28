@@ -1,4 +1,4 @@
-v=1.13.1
+v=1.13.2
 add_package \
     --package h5utils-serial \
     https://github.com/NanoComp/h5utils/releases/download/$v/h5utils-$v.tar.gz

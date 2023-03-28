@@ -1,4 +1,4 @@
-v=4.1.0
+v=4.2.3
 add_package -package pmix \
 	    https://github.com/openpmix/openpmix/releases/download/v$v/pmix-$v.tar.bz2
 

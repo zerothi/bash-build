@@ -1,4 +1,4 @@
-v=1.16.3
+v=1.17
 add_package -archive libxsmm-$v.tar.gz \
 	    https://github.com/hfp/libxsmm/archive/$v.tar.gz
 

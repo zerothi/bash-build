@@ -1,4 +1,4 @@
-for v in 1.0.1
+for v in 1.11.0
 do
     add_package -archive mold-$v.tar.gz \
 	https://github.com/rui314/mold/archive/refs/tags/v$v.tar.gz

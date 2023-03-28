@@ -1,4 +1,4 @@
-for v in 5.4.1 ; do
+for v in 5.5.1 ; do
 add_package --package mumps \
 	    http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
 

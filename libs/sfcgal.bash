@@ -1,4 +1,4 @@
-v=1.4.0
+v=1.4.1
 add_package -package sfcgal \
 	    https://gitlab.com/Oslandia/SFCGAL/-/archive/v$v/SFCGAL-v$v.tar.bz2
 

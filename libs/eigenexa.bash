@@ -1,4 +1,4 @@
-v=2.11
+v=2.12
 add_package --package eigenexa --version $v \
         https://www.r-ccs.riken.jp/labs/lpnctrt/projects/eigenexa/EigenExa-$v.tar.gz
 

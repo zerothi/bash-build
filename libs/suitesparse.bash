@@ -1,6 +1,6 @@
 msg_install -message "Installing the SUITE SPARSE libraries..."
 
-v=5.10.1
+v=7.0.1
 add_package \
     -alias suitesparse \
     -archive SuiteSparse-$v.tar.gz \

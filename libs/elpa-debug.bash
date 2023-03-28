@@ -1,4 +1,4 @@
-v=2020.05.001
+v=2022.11.001
 add_package --build debug --package elpa-debug \
 	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
 

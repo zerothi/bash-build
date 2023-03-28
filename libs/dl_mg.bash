@@ -1,5 +1,5 @@
 add_package --package dlmg \
-	    https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/609/8974/dl_mg_3.0.0.tar
+	https://bitbucket.org/dlmgteam/dl_mg_code_public/downloads/dl_mg_4.0.1.tar.gz
 
 pack_set -s $IS_MODULE
 

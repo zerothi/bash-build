@@ -1,4 +1,4 @@
-v=3.3.2
+v=3.6.3
 add_package https://github.com/OSGeo/gdal/releases/download/v$v/gdal-$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE

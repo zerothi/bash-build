@@ -1,4 +1,4 @@
-v=0.8.0
+v=0.9.0
 add_package -archive fdict-$v.tar.gz \
 	    https://github.com/zerothi/fdict/archive/v$v.tar.gz
 

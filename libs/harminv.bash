@@ -1,5 +1,6 @@
 # We will only install this on the super computer
-add_package https://github.com/NanoComp/harminv/releases/download/v1.4.1/harminv-1.4.1.tar.gz
+v=1.4.2
+add_package https://github.com/NanoComp/harminv/releases/download/v$v/harminv-$v.tar.gz
 
 pack_set $(list --prefix "--host-reject " ntch zeroth)
 
