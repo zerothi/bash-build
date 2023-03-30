@@ -1,4 +1,4 @@
-add_package ftp://ftp.gnu.org/gnu/octave/octave-6.4.0.tar.lz
+add_package ftp://ftp.gnu.org/gnu/octave/octave-8.1.0.tar.lz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 

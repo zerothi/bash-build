@@ -1,6 +1,6 @@
 # 8.10.3 is broken
 # The current format only conforms to 9.X
-for v in 9.2.2 9.4.2
+for v in 9.8.3
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 
@@ -19,7 +19,7 @@ pack_set -module-requirement fftw-mpi
 pack_set -module-requirement netcdf
 pack_set -module-requirement xmlf90
 # configure fails due to missing psml_die code
-#pack_set -module-requirement libpsml
+pack_set -module-requirement libpsml
 pack_set -module-requirement libxc
 
 # Correct mistakes in configure script...

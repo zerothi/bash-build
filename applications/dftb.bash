@@ -1,4 +1,4 @@
-for v in 18.2 19.1
+for v in 18.2 19.1 22.2
 do
 add_package http://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/$v/dftbplus-$v.tar.xz
 

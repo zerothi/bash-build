@@ -1,4 +1,4 @@
-v=3.0.0
+v=3.3.5
 add_package -version $v -package blender -archive blender-$v.tar.gz \
        https://github.com/blender/blender/archive/refs/tags/v$v.tar.gz
 

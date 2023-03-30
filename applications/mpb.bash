@@ -1,4 +1,4 @@
-v=1.10.0
+v=1.11.0
 add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

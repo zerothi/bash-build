@@ -1,6 +1,6 @@
 # Install molden
 # apt-get install libglu1-mesa-dev libx11-dev mesa-common-dev libxmu-dev
-add_package -build generic https://ftp.science.ru.nl/Molden/molden6.9.tar.gz
+add_package -build generic https://ftp.science.ru.nl/Molden/molden7.2.1.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $CRT_DEF_MODULE
 

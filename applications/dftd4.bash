@@ -1,4 +1,4 @@
-v=2.3
+v=3.5.0
 add_package --archive dftd4-$v.tar.gz \
 	    https://github.com/dftd4/dftd4/archive/v$v.tar.gz
 

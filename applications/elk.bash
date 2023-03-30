@@ -1,4 +1,4 @@
-add_package https://sourceforge.net/projects/elk/files/elk-8.3.22.tgz
+add_package https://sourceforge.net/projects/elk/files/elk-8.7.10.tgz
 
 pack_set -install-query $(pack_get -prefix)/bin/elk
 

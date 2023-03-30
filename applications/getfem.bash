@@ -1,4 +1,4 @@
-add_package http://download-mirror.savannah.gnu.org/releases/getfem/stable/getfem-5.3.tar.gz
+add_package http://download-mirror.savannah.gnu.org/releases/getfem/stable/getfem-5.4.2.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 

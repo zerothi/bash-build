@@ -1,4 +1,4 @@
-add_package https://sourceforge.net/projects/gracegtk/files/gracegtk-1.0.1.tgz
+add_package https://sourceforge.net/projects/gracegtk/files/gracegtk-1.3.0.tgz
 
 pack_set -s $MAKE_PARALLEL
 

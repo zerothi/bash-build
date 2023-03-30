@@ -36,7 +36,7 @@ case $par in
 	;;
 esac
 
-for v in 2020.6 2021.5 2022.1 ; do
+for v in 2020.6 2021.5 2022.1 2023 ; do
 add_package $tmp_add_package ftp://ftp.gromacs.org/pub/gromacs/gromacs-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

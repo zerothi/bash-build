@@ -1,4 +1,5 @@
-add_package https://github.com/cp2k/cp2k/releases/download/v7.1.0/cp2k-7.1.tar.bz2
+v=2023.1
+add_package https://github.com/cp2k/cp2k/releases/download/v$v/cp2k-$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
 

@@ -1,4 +1,4 @@
-v=11.4
+v=12.2
 add_package https://octopus-code.org/download/$v/octopus-$v.tar.gz
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
