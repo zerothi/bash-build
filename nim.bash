@@ -1,5 +1,5 @@
 nV=1.6
-InV=$nV.10
+InV=$nV.12
 add_package -package nim \
 	    https://nim-lang.org/download/nim-$InV.tar.xz
 
@@ -72,7 +72,7 @@ build_set -default-build _internal-nim$InV
 
 
 # Install all nim packages
-source nim-install.bash
+[ -e nim-install.bash ] && source nim-install.bash
 clear_parent
 
 # Initialize the module read path

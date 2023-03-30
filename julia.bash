@@ -121,7 +121,7 @@ build_set -default-build _internal-julia$IjV
 
 
 # Install all julia packages
-source julia-install.bash
+[ -e julia-install.bash ] && source julia-install.bash
 clear_parent
 
 # Initialize the module read path
