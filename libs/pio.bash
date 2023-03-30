@@ -1,5 +1,6 @@
 v=2.5.10
-add_package https://github.com/NCAR/ParallelIO/releases/download/pio${v//./_}/pio-$v.tar.gz
+add_package -package pio -directory ParallelIO-pio${v//./_} -version $v \
+	https://github.com/NCAR/ParallelIO/archive/refs/tags/pio${v//./_}.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set -install-query $(pack_get -LD)/libpiof.a

@@ -30,7 +30,7 @@ fi
 #else
 #    tmp_flags="$tmp_flags --with-dc"
 #fi
-tmp_flags="$tmp_flags --with-dm"
+tmp_flags="$tmp_flags --with-dm --without-go"
 tmp_flags="$tmp_flags --enable-mt --enable-cma"
 tmp_flags="$tmp_flags --with-mcpu --with-march"
 tmp_flags="$tmp_flags --disable-backtrace-detail"

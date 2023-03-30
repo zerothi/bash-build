@@ -280,7 +280,7 @@ build_set -reset-module[debug] \
 source $(build_get -source)
 
 # Install all libraries
-source libs.bash
+source libs/00-packages.bash
 
 # These are "parent" installations...
 source python${_python_version}.bash

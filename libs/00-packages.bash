@@ -8,6 +8,7 @@ source_pack libs/expat.bash
 source_pack libs/libffi.bash
 source_pack libs/libxml2.bash
 source_pack libs/openlibm.bash
+source_pack libs/fmt.bash
 
 source_pack libs/hwloc.bash
 
@@ -67,7 +68,6 @@ source_pack libs/scalapack-debug.bash
 source_pack libs/spike.bash
 
 source_pack libs/blis.bash
-source_pack libs/atlas.bash
 source_pack libs/openblas.bash
 
 source_pack libs/libxsmm.bash

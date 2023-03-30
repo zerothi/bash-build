@@ -58,15 +58,16 @@ CCD = $CC $(list --INCDIRS mpi) \n\
 CFLAGS += $CFLAGS -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -DIDXSIZE64 \n\
 CFLAGS += -DCOMMON_PTHREAD -DSCOTCH_PTHREAD\n\
 CFLAGS += -DSCOTCH_METIS_PREFIX\n\
+CFLAGS += -DSCOTCH_MPI_ASYNC_COLL\n\
 CFLAGS += -DSCOTCH_METIS_VERSION=5\n\
 CLIBFLAGS = \n\
 LDFLAGS = $(list --LD-rp +mpi) -lz -lm -lrt -lpthread \n\
 CP = cp \n\
-LEX = flex -Pscotchyy -olex.yy.c \n\
+FLEX = flex\n\
 LN = ln \n\
 MKDIR = mkdir \n\
 RANLIB = ranlib \n\
-YACC = bison -pscotchyy -y -b y \n\
+BISON = bison\n\
 \n\
 prefix = $(pack_get --prefix)\n\
 \n' $file"

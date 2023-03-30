@@ -1,4 +1,4 @@
-add_package https://bitbucket.org/berkeleylab/upcxx/downloads/upcxx-2021.9.0.tar.gz
+add_package https://bitbucket.org/berkeleylab/upcxx/downloads/upcxx-2022.9.0.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
@@ -11,7 +11,12 @@ pack_set -mod-req mpi
 pack_set -mod-req ucx
 
 # Install commands that it should run
-pack_cmd "../configure --with-cxx=$MPICXX --enable-ucx --enable-ofi --prefix=$(pack_get -prefix)"
+opt=
+if ! $(is_host nicpa) ; then
+	opt="$opt --enable-ofi"
+fi
+
+pack_cmd "../configure --with-cxx=$MPICXX --enable-ucx $opt --prefix=$(pack_get -prefix)"
 
 # Make commands
 pack_cmd "make $(get_make_parallel)"

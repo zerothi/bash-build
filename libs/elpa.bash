@@ -1,6 +1,6 @@
 v=2022.11.001
 add_package -package elpa \
-	    http://elpa.mpcdf.mpg.de/html/Releases/$v/elpa-$v.tar.gz
+	https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/$v/elpa-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $BUILD_DIR
 

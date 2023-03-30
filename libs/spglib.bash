@@ -1,7 +1,7 @@
 v=2.0.2
 add_package -package spglib \
 	    -archive spglib-$v.tar.gz \
-	    https://github.com/atztogo/spglib/archive/v$v.tar.gz
+	    https://github.com/spglib/spglib/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 pack_set -lib -lsymspg

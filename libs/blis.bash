@@ -13,7 +13,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set -prefix-and-module $(pack_get -alias)/$(pack_get -version)
 
-pack_set -install-query $(pack_get -LD)/libblis.a
+pack_set -install-query $(pack_get -LD)/libblis_omp.a
 
 function blis_cpu {
     local flags="$1"
