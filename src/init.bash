@@ -178,6 +178,17 @@ function get_make_parallel {
     fi
 }
 
+# Returns number of processors for parallel runs
+# If the MAKE_PARALLEL setting has been enabled.
+#   $1 : <index of archive>
+# If not, it returns 1
+function get_parallel {
+    if $(has_setting $MAKE_PARALLEL $1) ; then
+	printf '%s' "$_n_procs"
+    else
+	printf '%s' "1"
+    fi
+}
 #################################################
 #################################################
 ###########     Helper functions     ############
