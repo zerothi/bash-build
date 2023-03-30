@@ -1,4 +1,4 @@
-v=0.8.2
+v=0.8.3
 add_package -build generic -archive neovim-$v.tar.gz \
 	https://github.com/neovim/neovim/archive/refs/tags/v$v.tar.gz
 

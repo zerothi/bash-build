@@ -1,3 +1,4 @@
+return 0
 add_package -build generic https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR

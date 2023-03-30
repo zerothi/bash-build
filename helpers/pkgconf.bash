@@ -3,6 +3,8 @@ add_package -build generic -directory pkgconf-pkgconf-$v \
 	https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-$v.tar.gz
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
+pack_set -module-requirement build-tools
+
 pack_set -prefix $(pack_get -prefix build-tools)
 
 pack_set -install-query $(pack_get -prefix)/bin/pkgconf
@@ -15,5 +17,5 @@ pack_cmd "../configure --prefix $(pack_get -prefix)"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
 
-pack_cmd "cd $(pack_get -prefix)/bin ; ln -s pkgconf pkg-config"
+pack_cmd "cd $(pack_get -prefix)/bin ; [ ! -e pkg-config ] && ln -s pkgconf pkg-config"
 

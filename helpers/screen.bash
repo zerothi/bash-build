@@ -6,6 +6,7 @@ pack_set -build-module-requirement build-tools
 
 pack_set --install-query $(pack_get -prefix)/bin/screen
 
+pack_cmd "./autogen.sh"
 pack_cmd "./configure --prefix $(pack_get -prefix)"
 
 pack_cmd "make $(get_make_parallel)"
