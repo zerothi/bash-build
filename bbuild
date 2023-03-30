@@ -251,7 +251,7 @@ fi
 source vendor.bash
 
 # Install the helper
-source helpers.bash
+source helpers/00-packages.bash
 
 # Install the lua-libraries
 source lua/install.bash
@@ -289,7 +289,7 @@ source julia.bash
 source nim.bash
 
 # We have installed all libraries needed for doing application installs
-source apps.bash
+source applications/00-packages.bash
 
 # Add the default modules
 source default.bash
