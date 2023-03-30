@@ -1,5 +1,5 @@
 add_package -build generic \
-	    http://ftp.download-by.net/gnu/gnu/gcc/gcc-$gcc_v/gcc-$gcc_v.tar.xz
+	https://ftp.mpi-inf.mpg.de/mirrors/gnu/mirror/gcc.gnu.org/pub/gcc/releases/gcc-$gcc_v/gcc-$gcc_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
@@ -10,10 +10,10 @@ pack_set -library-suffix "lib lib64"
 pre=$(pack_get -prefix)
 pack_set -install-query $pre/bin/gcc
 
-
 languages="c,c++,lto,fortran,objc,obj-c++,go"
 
 # Install commands that it should run
+pack_cmd "ansidecl_hide"
 pack_cmd "../configure --prefix $pre" \
 	 "--with-gmp=$pre" \
 	 "--with-mpfr=$pre" \
@@ -33,4 +33,5 @@ pack_cmd "make install"
 #pack_store gcc.test
 #pack_cmd 'for f in **/testsuite/*.log **/testsuite/*.sum ; do mv $f $pre/gcc.$(basename $f) ; gzip -f $pre/gcc.$(basename $f) ; done'
 
+pack_cmd "ansidecl_restore"
 source compiler/gcc/gcc-env.bash

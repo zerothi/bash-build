@@ -1,92 +1,25 @@
-for gcc_v in 4.9.4
+source compiler/gcc/ansidecl.h.fix
+
+for gcc_v in \
+	4.9.4 \
+	7.5.0 \
+	8.5.0 \
+	10.4.0 \
+	12.2.0
 do
-    gcc=gcc_$gcc_v
-    source_pack compiler/gcc/prereq.bash
-    source_pack compiler/gcc/4/gmp.bash
-    source_pack compiler/gcc/4/mpfr.bash
-    source_pack compiler/gcc/4/mpc.bash
-    source_pack compiler/gcc/4/isl.bash
-    source_pack compiler/gcc/4/gcc.bash
+gcc=gcc_$gcc_v
+
+source_pack compiler/gcc/prereq.bash
+for f in gmp mpfr mpc isl gcc gdb
+do
+   gcc_major_v=${gcc_v%%.*}
+   f=compiler/gcc/${gcc_major_v}/$f.bash 
+   if [ -e $f ]; then
+	source_pack $f
+   fi
+   unset gcc_major_v
 done
-
-gcc_v=5.5.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/5/gmp.bash
-source_pack compiler/gcc/5/mpfr.bash
-source_pack compiler/gcc/5/mpc.bash
-source_pack compiler/gcc/5/isl.bash
-source_pack compiler/gcc/5/gcc.bash
-
-gcc_v=6.5.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/6/gmp.bash
-source_pack compiler/gcc/6/mpfr.bash
-source_pack compiler/gcc/6/mpc.bash
-source_pack compiler/gcc/6/isl.bash
-source_pack compiler/gcc/6/gcc.bash
-source_pack compiler/gcc/6/gdb.bash
-
-gcc_v=7.5.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/7/gmp.bash
-source_pack compiler/gcc/7/mpfr.bash
-source_pack compiler/gcc/7/mpc.bash
-source_pack compiler/gcc/7/isl.bash
-source_pack compiler/gcc/7/gcc.bash
-source_pack compiler/gcc/7/gdb.bash
-
-gcc_v=8.5.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/8/gmp.bash
-source_pack compiler/gcc/8/mpfr.bash
-source_pack compiler/gcc/8/mpc.bash
-source_pack compiler/gcc/8/isl.bash
-source_pack compiler/gcc/8/gcc.bash
-source_pack compiler/gcc/8/gdb.bash
-
-gcc_v=9.4.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/9/gmp.bash
-source_pack compiler/gcc/9/mpfr.bash
-source_pack compiler/gcc/9/mpc.bash
-source_pack compiler/gcc/9/isl.bash
-source_pack compiler/gcc/9/gcc.bash
-source_pack compiler/gcc/9/gdb.bash
-
-gcc_v=10.3.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/10/gmp.bash
-source_pack compiler/gcc/10/mpfr.bash
-source_pack compiler/gcc/10/mpc.bash
-source_pack compiler/gcc/10/isl.bash
-source_pack compiler/gcc/10/gcc.bash
-source_pack compiler/gcc/10/gdb.bash
-
-gcc_v=11.2.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/11/gmp.bash
-source_pack compiler/gcc/11/mpfr.bash
-source_pack compiler/gcc/11/mpc.bash
-source_pack compiler/gcc/11/isl.bash
-source_pack compiler/gcc/11/gcc.bash
-source_pack compiler/gcc/11/gdb.bash
-
-gcc_v=12.2.0
-gcc=gcc_$gcc_v
-source_pack compiler/gcc/prereq.bash
-source_pack compiler/gcc/12/gmp.bash
-source_pack compiler/gcc/12/mpfr.bash
-source_pack compiler/gcc/12/mpc.bash
-source_pack compiler/gcc/12/isl.bash
-source_pack compiler/gcc/12/gcc.bash
-source_pack compiler/gcc/12/gdb.bash
+done
 
 
 # Local variables which should only be visible here...

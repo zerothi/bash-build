@@ -2,7 +2,7 @@ v=14.0.3
 add_package -directory llvm-project-$v.src -package llvm -version $v \
 	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-project-$v.src.tar.xz
 
-pack_set -s $IS_MODULE -s $BUILD_DIR -s $CRT_DEF_MODULE
+pack_set -s $IS_MODULE -s $BUILD_DIR -s $CRT_DEF_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
 
@@ -27,7 +27,12 @@ fi
 pack_cmd "CC=$CC CXX=$CXX cmake -G 'Ninja' $opt ../llvm"
 
 # Make commands (this cmake --build removes colors)
-pack_cmd "cmake --build . -- $(get_make_parallel) "
+for t in clang compiler-rt llc lld lldb lli omp
+do
+	pack_cmd "cmake --build . $(get_make_parallel) -t $t"
+done
+pack_cmd "cmake --build . -j 1 -t f18"
+pack_cmd "cmake --build ."
 pack_cmd "cmake --build . --target install"
 
 source compiler/llvm/llvm-env.bash

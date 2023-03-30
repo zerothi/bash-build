@@ -13,7 +13,7 @@ pack_set -prefix $pre
 pack_set -install-query $pre/lib/libmpfr.a
 
 o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-mpfr-4.1.0.patch
-dwn_file https://www.mpfr.org/mpfr-current/allpatches $o
+dwn_file https://www.mpfr.org/mpfr-4.1.0/allpatches $o
 
 # Install commands that it should run
 pack_cmd "pushd ../ ; patch -N -Z -p1 < $o ; popd"

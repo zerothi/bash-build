@@ -1,0 +1,17 @@
+function ansidecl_hide {
+    local p=$(pack_get -prefix build-tools)
+    # relocate ansidecl for clarity
+    pushd $p/include
+    mv ansidecl.h ansidecl.h.old
+    popd
+}
+
+function ansidecl_restore {
+    local p=$(pack_get -prefix build-tools)
+    pushd $p/include
+    if [ -e ansidecl.h.old ] ; then
+       mv ansidecl.h.old ansidecl.h
+    fi
+    popd
+}
+

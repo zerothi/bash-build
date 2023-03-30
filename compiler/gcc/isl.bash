@@ -1,6 +1,6 @@
-isl_v=0.24
+isl_v=0.25
 add_package --build generic \
-	    http://isl.gforge.inria.fr/isl-$isl_v.tar.xz
+	    https://libisl.sourceforge.io/isl-$isl_v.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $BUILD_TOOLS
 
