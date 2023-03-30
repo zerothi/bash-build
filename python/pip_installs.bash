@@ -71,8 +71,6 @@ pip_append attrs
 pip_append backports.ssl_match_hostname
 pip_append black
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
-    pip_append bzr
-    #pip_append bzr-fastimport
     # the distribute package is horrendeous!!!
     # Therefore we need to install it without downloading it first.
     # Since 2020 Jan 1 we can't do this anymore... :(
@@ -115,7 +113,7 @@ pip_append memory_profiler
 pip_append mistune
 pip_append mock
 pip_append mpmath # for sympy
-#pip_append monty
+pip_append monty
 pip_append nbsphinx
 pip_append nose nose2
 pip_append numpydoc

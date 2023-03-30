@@ -1,8 +1,4 @@
-if [ "x${pV:0:1}" == "x3" ]; then
-    v=2021.09.2
-else
-    v=2018.09.3
-fi
+v=2022.09.5
 add_package -package rdkit -version $v -archive rdkit-Release_${v//./_}.tar.gz \
 	    https://github.com/rdkit/rdkit/archive/Release_${v//./_}.tar.gz
 

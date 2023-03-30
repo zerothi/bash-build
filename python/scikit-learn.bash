@@ -1,5 +1,4 @@
-[ "x${pV:0:1}" == "x2" ] && return 0
-v=1.0.1
+v=1.2.2
 add_package -archive scikit-learn-$v.tar.gz \
     https://github.com/scikit-learn/scikit-learn/archive/$v.tar.gz
 

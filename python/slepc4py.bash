@@ -1,4 +1,4 @@
-v=3.16.1
+v=3.18.3
 add_package https://files.pythonhosted.org/packages/source/s/slepc4py/slepc4py-$v.tar.gz
 
 pack_set -s $IS_MODULE

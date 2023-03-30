@@ -1,4 +1,4 @@
-for v in 1.16.3 ; do
+for v in $(pack_get -version spglib) ; do
     add_package --archive spglib-$v.tar.gz --package pyspglib \
         https://github.com/spglib/spglib/archive/v$v.tar.gz
     

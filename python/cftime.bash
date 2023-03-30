@@ -1,4 +1,4 @@
-v=1.5.1
+v=1.6.2
 add_package \
     --version $v --package cftime \
     --archive cftime-${v}rel.tar.gz \

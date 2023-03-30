@@ -3,7 +3,6 @@ add_package --package pyquante \
     https://sourceforge.net/projects/pyquante/files/PyQuante-1.6/PyQuante-$v/PyQuante-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
-[ "x${pV:0:1}" == "x3" ] && pack_set -host-reject $(get_hostname)
 
 pack_set -module-requirement numpy
 

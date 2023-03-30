@@ -1,4 +1,4 @@
-v=1.3.4
+v=2.0.0
 add_package \
     https://github.com/pandas-dev/pandas/releases/download/v$v/pandas-$v.tar.gz
 
@@ -6,7 +6,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/pandas
 
-pack_set $(list -prefix ' -module-requirement ' cython numpy numexpr scipy pytables matplotlib)
+pack_set $(list -prefix ' -module-requirement ' cython numpy numexpr scipy pytables matplotlib numba)
 if $(is_host ntch) ; then
     echo "" > /dev/null
 else

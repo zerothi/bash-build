@@ -1,4 +1,4 @@
-for v in 4.6.2 ; do
+for v in 4.7.1 ; do
     
 add_package -archive qutip-$v.tar.gz https://github.com/qutip/qutip/archive/v$v.tar.gz
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

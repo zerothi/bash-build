@@ -1,4 +1,4 @@
-v=1.79
+v=1.81
 add_package -version $v \
             -package biopython \
             -directory biopython-biopython-${v//./} \

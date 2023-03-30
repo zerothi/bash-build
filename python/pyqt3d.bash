@@ -1,8 +1,7 @@
-v=5.15.4
+v=5.15.6
 add_package --version $v --package pyqt3d \
 	    https://sourceforge.net/projects/pyqt/files/PyQt3D/PyQt3D-$v/PyQt3D_gpl-$v.tar.gz
 
-[[ "x${pV:0:1}" != "x3" ]] && pack_set --host-reject $(get_hostname)
 pack_set --host-reject $(get_hostname)
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE

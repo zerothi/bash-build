@@ -1,4 +1,4 @@
-v=0.11.0
+v=0.12.1
 add_package -archive pythran-$v.tar.gz \
 	    https://github.com/serge-sans-paille/pythran/archive/refs/tags/$v.tar.gz
 

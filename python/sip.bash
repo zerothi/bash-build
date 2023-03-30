@@ -1,4 +1,4 @@
-v=4.19.25
+v=6.7.7
 add_package https://www.riverbankcomputing.com/static/Downloads/sip/$v/sip-$v.tar.gz
 pack_set -s $IS_MODULE
 

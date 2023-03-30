@@ -1,4 +1,4 @@
-v=3.6.0
+v=3.8.0
 add_package -archive h5py-$v.tar.gz \
 	    https://github.com/h5py/h5py/archive/$v.tar.gz
 

@@ -1,6 +1,6 @@
-for v in 2.12.0 ; do
+for v in 2.18.0 ; do
     add_package --archive phonopy-$v.tar.gz \
-        https://github.com/atztogo/phonopy/archive/v$v.tar.gz
+        https://github.com/phonopy/phonopy/archive/v$v.tar.gz
     
     pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

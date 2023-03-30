@@ -1,4 +1,4 @@
-v=1.9.7
+v=2.0.2
 add_package --archive fireworks-$v.tar.gz \
 	    https://github.com/materialsproject/fireworks/archive/v$v.tar.gz
 

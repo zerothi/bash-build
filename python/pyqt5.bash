@@ -1,4 +1,4 @@
-v=5.15.6
+v=5.15.9
 add_package --version $v --package pyqt \
 	    https://www.riverbankcomputing.com/static/Downloads/PyQt5/$v/PyQt5-$v.tar.gz
 

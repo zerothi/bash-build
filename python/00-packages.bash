@@ -30,8 +30,6 @@ source_pack python/meson.bash
 # Install the helper (mongodb)
 source_pack helpers/mongo.bash
 
-source_pack python/pysqlite.bash
-
 # Jupyter framework
 #source_pack python/jupyter.bash
 #source_pack python/ipython.bash
@@ -68,7 +66,7 @@ source_pack python/h5py.bash # [numpy,hdf5-serial]
 source_pack python/pytables.bash # [numpy,cython,hdf5-serial,numexpr]
 source_pack python/pandas.bash
 source_pack python/statsmodels.bash
-source_pack python/theano.bash
+source_pack python/aesara.bash
 source_pack python/dask.bash
 source_pack python/dask-distributed.bash
 source_pack python/pyamg.bash
@@ -81,17 +79,13 @@ source_pack python/spglib.bash
 #source_pack python/pyccel-dev.bash
 source_pack python/pyfftw.bash
 
-source_pack python/lmfit.bash
-
 # Tensorflow (CPU-only)
 source_pack python/tensorflow.bash
 source_pack python/pytorch.bash
 
 # Additional plotting stuff
-source_pack python/seaborn.bash
-
 source_pack python/xarray.bash
-source_pack python/pymc3.bash
+source_pack python/pymc.bash
 
 source_pack python/plotly.bash
 
@@ -102,9 +96,6 @@ source_pack python/pygsl.bash
 source_pack python/sisl.bash
 source_pack python/sisl-dev.bash
 source_pack python/ipi-dev.bash
-
-source_pack python/orthopy.bash
-source_pack python/quadpy.bash
 
 source_pack python/symengine.bash
 
@@ -127,7 +118,6 @@ source_pack python/gpaw-setups.bash
 source_pack python/ase.bash
 source_pack python/gpaw.bash
 source_pack python/hotbit.bash
-source_pack python/sgdml.bash
 
 source_pack python/pybinding.bash
 source_pack python/pythtb.bash
@@ -138,7 +128,6 @@ source_pack python/phono3py.bash
 source_pack python/biopython.bash
 source_pack python/pyquante.bash
 source_pack python/pyquante2.bash
-source_pack python/cclib.bash
 
 source_pack python/vtk.bash
 source_pack python/mfix.bash

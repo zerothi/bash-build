@@ -1,5 +1,5 @@
 add_package --package pygments \
-    https://pypi.python.org/packages/source/P/Pygments/Pygments-2.10.0.tar.gz
+    https://pypi.python.org/packages/source/P/Pygments/Pygments-2.14.0.tar.gz
 
 pack_set --install-query $(pack_get --prefix $(get_parent))/bin/pygmentize
 

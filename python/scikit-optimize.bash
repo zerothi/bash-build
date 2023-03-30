@@ -1,4 +1,4 @@
-v=0.8.1
+v=0.9.0
 add_package \
     -archive scikit-optimize-$v.tar.gz \
     -directory scikit.optimize-$v \

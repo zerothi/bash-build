@@ -1,12 +1,8 @@
 # As LLVM is built with gnu-compiler, we should enforce this
 # here as well (this only works with 3.6.0)
-v=0.37.0
+v=0.39.1
 add_package -archive llvmlite-$v.tar.gz \
 	    https://github.com/numba/llvmlite/archive/v$v.tar.gz
-
-if [[ "x${pV:0:1}" != "x3" ]]; then
-    pack_set -host-reject $(get_hostname)
-fi
 
 pack_set -s $IS_MODULE
 

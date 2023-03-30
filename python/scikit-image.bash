@@ -1,5 +1,4 @@
-[ "x${pV:0:1}" == "x2" ] && return 0
-v=0.18.3
+v=0.20.0
 add_package -archive scikit-image-$v.tar.gz \
 	    https://github.com/scikit-image/scikit-image/archive/v$v.tar.gz
 

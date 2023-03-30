@@ -1,4 +1,4 @@
-for v in 2.1.0 ; do
+for v in 2.18.0 ; do
     add_package --archive phono3py-$v.tar.gz \
 		https://github.com/atztogo/phono3py/archive/v$v.tar.gz
     

@@ -1,4 +1,4 @@
-v=0.12.0
+v=0.13.1
 add_package -package pyfftw -archive pyFFTW-$v.tar.gz \
 	    https://github.com/pyFFTW/pyFFTW/archive/v$v.tar.gz
 

@@ -1,4 +1,4 @@
-v=20.2.0
+v=22.4.0
 add_package https://mfix.netl.doe.gov/s3/abb8f49f/f1599988c43836514926e200d9da5020//source/mfix/mfix-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_DIR

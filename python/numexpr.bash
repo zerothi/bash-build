@@ -1,6 +1,5 @@
 # old_v 
-for v in 2.7.2 ; do
-    [ "x${pV:0:1}" == "x3" ] && [ "x$v" == "x1.4.2" ] && continue
+for v in 2.8.4 ; do
     fv=$v
     if [[ $(vrs_cmp $v 2.3.1 ) -ge 0 ]]; then
 	fv=v$v

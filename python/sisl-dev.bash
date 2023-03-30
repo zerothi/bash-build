@@ -3,10 +3,6 @@ add_package --package sisl-dev --version 0 \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-if [[ $(vrs_cmp $pV 3.5) -lt 0 ]]; then
-    pack_set -host-reject $(get_hostname)
-fi
-
 pack_set --install-query always-install-this-module
 
 pack_set $(list --prefix ' --module-requirement ' scipy netcdf4py)

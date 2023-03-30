@@ -1,18 +1,10 @@
-if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=1.21.5
-else
-    v=1.16.6
-fi
+v=1.24.2
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-if [[ "x${pV:0:1}" == "x3" ]]; then
-    pack_set -install-query $(pack_get -prefix)/bin/f2py3
-else
-    pack_set -install-query $(pack_get -prefix)/bin/f2py2
-fi
+pack_set -install-query $(pack_get -prefix)/bin/f2py3
 pack_set -module-requirement cython
 pack_set -module-requirement suitesparse
 

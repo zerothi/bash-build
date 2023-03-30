@@ -1,4 +1,4 @@
-v=4.2.0
+v=4.5.2
 add_package -archive scons-$v.tar.gz -directory SCons-$v \
 	    http://prdownloads.sourceforge.net/scons/scons-$v.tar.gz
 

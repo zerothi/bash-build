@@ -1,5 +1,4 @@
-# 1.0.0 requires numpy >= 1.9.1
-v=1.3.2
+v=1.3.7
 add_package -archive bottleneck-$v.tar.gz \
 	    https://github.com/pydata/bottleneck/archive/v$v.tar.gz
 

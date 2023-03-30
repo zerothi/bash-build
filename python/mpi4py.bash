@@ -1,4 +1,4 @@
-v=3.1.1
+v=3.1.4
 add_package https://github.com/mpi4py/mpi4py/releases/download/$v/mpi4py-$v.tar.gz
 
 pack_set -s $IS_MODULE

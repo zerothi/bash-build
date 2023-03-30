@@ -1,9 +1,4 @@
-if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=1.7.3
-else
-    v=1.2.3
-fi
-
+v=1.10.1
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
@@ -12,9 +7,7 @@ pack_set -install-query $(pack_get -LD)/python$pV/site-packages/scipy
 
 pack_set -build-mod-req cython
 pack_set -build-mod-req pybind11
-if [[ "x${pV:0:1}" == "x3" ]]; then
-    pack_set -build-mod-req pythran
-fi
+pack_set -build-mod-req pythran
 if [[ $(pack_installed swig) -eq 1 ]]; then
     pack_set -build-mod-req swig
 fi

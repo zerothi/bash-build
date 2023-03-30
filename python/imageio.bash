@@ -1,4 +1,4 @@
-v=2.10.1
+v=2.27.0
 add_package -archive imageio-$v.tar.gz \
 	    https://github.com/imageio/imageio/archive/v$v.tar.gz
 

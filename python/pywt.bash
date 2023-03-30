@@ -1,4 +1,4 @@
-v=1.1.1
+v=1.4.1
 add_package \
     -package pywavelets \
     -archive pywt-$v.tar.gz \

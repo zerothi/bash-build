@@ -1,8 +1,4 @@
-if [[ "x${pV:0:1}" == "x3" ]]; then
-    v=0.12.1
-else
-    v=0.9.8
-fi
+v=0.13.0
 add_package -archive sisl-$v.tar.gz \
     https://github.com/zerothi/sisl/archive/v$v.tar.gz
 

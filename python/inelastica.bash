@@ -1,7 +1,3 @@
-
-# Since v1.3.5 Inelastica supports Py3
-#[ "x${pV:0:1}" == "x3" ] && return 0
-
 v=1.3.7
 add_package -package Inelastica \
 	    -archive inelastica-$v.tar.gz \
