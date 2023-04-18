@@ -1,6 +1,6 @@
 v=4.5.2
 add_package -archive scons-$v.tar.gz -directory SCons-$v \
-	    http://prdownloads.sourceforge.net/scons/scons-$v.tar.gz
+	    http://prdownloads.sourceforge.net/scons/SCons-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

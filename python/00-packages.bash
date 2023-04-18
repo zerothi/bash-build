@@ -6,11 +6,11 @@ msg_install \
 
 # Create the numpy installation sequence
 if $(is_c intel) ; then
-    pNumpyInstallC="--compiler=intelem"
-    pNumpyInstallF="--fcompiler=intelem"
+    pNumpyInstallC="--install-option=--compiler=intelem"
+    pNumpyInstallF="--install-option=--fcompiler=intelem"
 elif $(is_c gnu) ; then
-    pNumpyInstallC="--compiler=unix"
-    pNumpyInstallF="--fcompiler=gnu95"
+    pNumpyInstallC="--install-option=--compiler=unix"
+    pNumpyInstallF="--install-option=--fcompiler=gnu95"
 else
     doerr "Compiler python" "Could not recognize compiler"
 fi
@@ -50,8 +50,17 @@ source_pack python/pyqt5.bash
 source_pack python/pyqt3d.bash
 source_pack python/wxpython.bash
 
-# Generic scientific libraries
+# Many packages depend on numpy
 source_pack python/numpy.bash
+
+source_pack python/py-blosc.bash
+source_pack python/py-blosc2.bash
+
+# Later versions of numba
+source_pack python/llvmlite.bash
+source_pack python/numba.bash
+
+# Generic scientific libraries
 source_pack python/pythran.bash
 source_pack python/scipy.bash
 source_pack python/mpi4py.bash
@@ -105,9 +114,6 @@ source_pack python/scikit-optimize.bash
 #source_pack python/scikit-nano.bash
 source_pack python/scikit-image.bash
 
-# Later versions of numba
-source_pack python/llvmlite.bash
-source_pack python/numba.bash
 
 # Physics related python modules
 source_pack python/inelastica.bash

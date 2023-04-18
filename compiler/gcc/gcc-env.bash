@@ -9,3 +9,5 @@ pack_set -module-opt "-undefined-ENV F90=gfortran"
 pack_set -module-opt "-undefined-ENV AR=gcc-ar"
 pack_set -module-opt "-undefined-ENV RANLIB=gcc-ranlib"
 pack_set -module-opt "-undefined-ENV NM=gcc-nm"
+#pack_set -module-opt '-undefined-ENV \"COMPILER_CMAKE="-DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_Fortran_COMPILER=gfortran"\"'
+

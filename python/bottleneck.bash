@@ -11,6 +11,7 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages
 pack_cmd "mkdir -p $(pack_get --install-query)"
 
 # Add requirments when creating the module
-pack_set $(list --prefix ' --module-requirement ' numpy cython)
+pack_set -build-mod-req cython
+pack_set -mod-req numpy
 
 pack_cmd "$_pip_cmd . --prefix=$(pack_get --prefix)"

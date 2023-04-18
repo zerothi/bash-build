@@ -1,11 +1,11 @@
-rV=4.3
-IrV=$rV.0
+rV=4.2
+IrV=$rV.3
 add_package -alias R -package R \
 	    https://cran.r-project.org/src/base/R-${rV:0:1}/R-$IrV.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
-pack_set $(list -prefix '-mod-req ' readline curl)
+pack_set $(list -prefix '-mod-req ' readline curl[7])
 pack_set -install-query $(pack_get -prefix)/bin/R
 
 # for openssl

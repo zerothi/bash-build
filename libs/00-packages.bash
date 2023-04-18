@@ -11,6 +11,8 @@ source_pack libs/openlibm.bash
 source_pack libs/fmt.bash
 
 source_pack libs/hwloc.bash
+source_pack libs/blosc.bash
+source_pack libs/blosc2.bash
 
 # Basic parallel libraries
 #source_pack libs/pmix.bash
@@ -209,7 +211,7 @@ if [ ! -z "$tmp" ]; then
 	$(list -prefix '-RL ' $tmp)
 fi
 
-for bl in blas atlas openblas blis ; do
+for bl in blas openblas blis ; do
     create_module \
 	-module-path $(build_get -module-path)-apps \
         -n mpi.$bl.scalapack \

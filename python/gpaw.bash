@@ -19,11 +19,13 @@ pack_set -install-query $(pack_get -prefix)/bin/gpaw
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version
-pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc fftw ase)
+pack_set -build-mod-req ase
+pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc fftw)
 
 # First we need to fix gpaw compilation
 pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
 pack_cmd "sed -i -e \"s:cfgDict.get('BLDLIBRARY:cfgDict.get('LIBDIR')+os.sep+cfgDict.get('BLDLIBRARY:\" config.py"
+pack_cmd "unset CC CXX MPICC"
 
 file=$(pack_get -prefix)/siteconfig.py
 pack_cmd "echo '#' > $file"
@@ -80,9 +82,10 @@ scalapack = True\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
 elpa = False\n\
-library_dirs += [\"$(pack_get -LD elpa)\"]\n\
-runtime_library_dirs += [\"$(pack_get -LD elpa)\"]\n\
-libraries += [\"elpa\"]\n\
+if elpa:\n\
+    library_dirs += [\"$(pack_get -LD elpa)\"]\n\
+    runtime_library_dirs += [\"$(pack_get -LD elpa)\"]\n\
+    libraries += [\"elpa\"]\n\
 \n\
 hdf5 = $hdf\n\
 library_dirs += [\"$(pack_get -LD hdf5)\"]\n\

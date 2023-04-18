@@ -84,6 +84,7 @@ if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append Pillow
 fi
 pip_append beniget
+pip_append build
 pip_append certifi
 pip_append cffi
 pip_append Click
@@ -157,6 +158,10 @@ pip_append sphinx sphinx_rtd_theme sphinx-autoapi
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
+pip_append pathspec
+pip_append scikit-build
+pip_append pyproject-metadata
+pip_append scikit-build-core
 pip_append toml
 pip_append toolz
 pip_append tornado
@@ -184,7 +189,7 @@ pip_install
 
 # Finally we need to remove the packages that are to be installed separately.
 # This is because otherwise the "wrong" library will be used
-pack_cmd "$_pip_cmd uninstall -y numpy ; echo 'yes'"
+pack_cmd "$_pip_cmd uninstall -y numpy pandas ; echo 'yes'"
 
 _pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation"
 unset _pip _pip_flags

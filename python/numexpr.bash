@@ -13,8 +13,8 @@ for v in 2.8.4 ; do
     pack_set --install-query $(pack_get --LD)/python$pV/site-packages
     
     # Add requirments when creating the module
-    pack_set --module-requirement numpy \
-	--module-requirement cython
+    pack_set -build-mod-req cython
+    pack_set --module-requirement numpy
     
     # Install commands that it should run
     pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"

@@ -1,4 +1,4 @@
-add_package ftp://sourceware.org/pub/valgrind/valgrind-3.18.1.tar.bz2
+add_package ftp://sourceware.org/pub/valgrind/valgrind-3.20.0.tar.bz2
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 

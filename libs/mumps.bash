@@ -1,6 +1,6 @@
 for v in 5.5.1 ; do
 add_package --package mumps \
-	    http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
+	    http://mumps-solver.org/MUMPS_$v.tar.gz
 
 pack_set -s $IS_MODULE
 

@@ -8,7 +8,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/matplotlib
 
-pack_set $(list -p '-mod-req ' numpy gen-freetype qhull)
+pack_set $(list -p '-mod-req ' numpy gen-freetype qhull pybind11)
 for m in wxpython pyqt ; do
     if [[ $(pack_installed $m) -eq $_I_INSTALLED ]]; then
 	pack_set -module-requirement $m

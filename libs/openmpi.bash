@@ -16,10 +16,15 @@ else
 fi
 pack_set -module-opt "-set-ENV OMPI_HOME=$(pack_get -prefix)"
 pack_set -module-opt "-set-ENV MPICC=mpicc"
+pack_set -module-opt "-set-ENV CMAKE_C_COMPILER=mpicc"
 pack_set -module-opt "-set-ENV MPICXX=mpicxx"
+pack_set -module-opt "-set-ENV CMAKE_CXX_COMPILER=mpicxx"
 pack_set -module-opt "-set-ENV MPIF77=mpif77"
 pack_set -module-opt "-set-ENV MPIF90=mpif90"
 pack_set -module-opt "-set-ENV MPIFC=mpifort"
+pack_set -module-opt "-set-ENV CMAKE_Fortran_COMPILER=mpifort"
+# We want to make it easy to create compiler flags for cmake-builds
+#pack_set -module-opt "-set-ENV MPI_CMAKE=\"'-DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_Fortran_COMPILER=mpifort'\""
 
 
 # Download zero size scatter/gather patch

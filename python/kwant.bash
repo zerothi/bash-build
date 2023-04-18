@@ -11,8 +11,8 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 pack_set -module-opt "-lua-family kwant"
 
-pack_set -module-requirement cython \
-    -module-requirement scipy \
+pack_set -build-mod-req cython
+pack_set -module-requirement scipy \
     -module-requirement sympy \
     -module-requirement mumps-serial \
     -module-requirement tinyarray
@@ -68,7 +68,7 @@ include_dirs = $(pack_get -prefix mumps-serial)/include\n\
 extra_link_args = $tmp_flags\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --global-option='--cython' --install-option='--configfile=$file' --prefix=$(pack_get -prefix)"
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --install-option='--cython' --install-option='--configfile=$file' --prefix=$(pack_get -prefix)"
 
 
 add_test_package kwant.test

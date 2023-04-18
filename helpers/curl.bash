@@ -1,4 +1,5 @@
-add_package -build generic https://curl.se/download/curl-8.0.1.tar.xz
+for v in 7.88.1 8.0.1 ; do
+add_package -build generic https://curl.se/download/curl-$v.tar.xz
 
 pack_set -s $BUILD_DIR -s $IS_MODULE
 
@@ -15,3 +16,5 @@ pack_cmd "../configure" \
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"
+
+done

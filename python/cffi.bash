@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/cffi
 
-pack_set --module-requirement cython
+pack_set -build-mod-req cython
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 

@@ -11,3 +11,4 @@ fi
 pack_set -module-opt "-undefined-ENV AR=llvm-ar"
 pack_set -module-opt "-undefined-ENV RANLIB=llvm-ranlib"
 pack_set -module-opt "-undefined-ENV NM=llvm-nm"
+#pack_set -module-opt "-undefined-ENV COMPILER_CMAKE='-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_Fortran_COMPILER=flang-new'"

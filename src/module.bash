@@ -457,7 +457,7 @@ EOF
     fi
     add_module_if -F $force -d "$path/lib/python" $mfile \
 	"$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.7 3.6 3.7 3.8 3.9 3.10 ; do
+    for PV in 2.7 3.6 3.7 3.8 3.9 3.10 3.11 3.12 3.13 3.14 ; do
 	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
 	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
 	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \

@@ -2,10 +2,10 @@ v=1.24.2
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
-pack_set -s $IS_MODULE -s $PRELOAD_MODULE
+pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -prefix)/bin/f2py3
-pack_set -module-requirement cython
+pack_set -build-mod-req cython
 pack_set -module-requirement suitesparse
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
@@ -72,7 +72,7 @@ blas_libs = mkl_blas95_lp64' $file"
     pack_cmd "sed -i -e 's/\(suitesparseconfig\)/\1,iomp5/' $file"
     pack_cmd "sed -i '1 a\
 [ALL]\n\
-libraries = umfpack,cholmod,ccolamd,camd,colamd,amd,suitesparseconfig,iomp5,pthread\n\
+libraries = umfpack,cholmod,cholmod_cuda,ccolamd,camd,colamd,amd,suitesparseconfig,iomp5,pthread\n\
 library_dirs = $tmp_lib:$MKL_PATH/lib/intel64:$INTEL_PATH/lib/intel64\n\
 runtime_library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc:$MKL_PATH/include/intel64/lp64:$MKL_PATH/include:$INTEL_PATH/include/intel64:$INTEL_PATH/include\n' $file"
@@ -181,7 +181,7 @@ runtime_library_dirs = $tmp\n' $file"
 
     pack_cmd "sed -i '1 a\
 [ALL]\n\
-libraries = umfpack,cholmod,ccolamd,camd,colamd,amd,suitesparseconfig,pthread\n\
+libraries = umfpack,cholmod,cholmod_cuda,ccolamd,camd,colamd,amd,suitesparseconfig,pthread\n\
 library_dirs = $tmp_lib\n\
 include_dirs = $tmp_inc\n\
 runtime_library_dirs = $tmp_lib\n' $file"
@@ -207,7 +207,7 @@ fi
 pack_cmd "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --install-option='$pNumpyInstall' --prefix=$(pack_get -prefix)" 
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --install-option='$(get_make_parallel)' $pNumpyInstall --prefix=$(pack_get -prefix)" 
 pack_cmd "unset LDSHARED"
 
 

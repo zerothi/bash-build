@@ -7,22 +7,21 @@ add_package \
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/ptdump
-# Not working on py2
-[[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
 
+pack_set -build-mod-req cython
 # Add requirments when creating the module
-pack_set -module-requirement hdf5-serial \
-    -module-requirement numexpr
+pack_set -mod-req hdf5-serial -mod-req numexpr \
+	-mod-req py-blosc2 -mod-req py-blosc
 
 if [[ $(vrs_cmp 3.1.1 $v) -le 0 ]]; then
     pack_cmd "sed -i -e 's:Cython.Compiler.Main:Cython.Compiler:' setup.py"
 fi
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
-pack_cmd "$_pip_cmd . --install-option=--hdf5=$(pack_get -prefix hdf5-serial) --install-option=--cflags='${pCFLAGS//-march=native/} -pthread' --prefix=$(pack_get -prefix)"
-    
-# The tables test is extremely extensive, and many are minor errors.
-# I have disabled it for now   
-#add_test_package tables.test
-#pack_cmd "nosetests --exe tables > $TEST_OUT 2>&1 || echo forced"
-#pack_store $TEST_OUT
+pack_cmd "sed -i -e 's:library_path = None:library_path = Path(\"$(pack_get -LD blosc2)\"):' setup.py"
+opts=
+opts="$opts --install-option=--hdf5=$(pack_get -prefix hdf5-serial)"
+opts="$opts --install-option=--blosc=$(pack_get -prefix blosc)"
+opts="$opts --install-option=--blosc2=$(pack_get -prefix blosc2)"
+opts="$opts --install-option=--cflags='${pCFLAGS//-march=native/} -pthread'"
+pack_cmd "$_pip_cmd . $opts --prefix=$(pack_get -prefix)"

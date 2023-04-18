@@ -1,11 +1,12 @@
-v=0.10.1
+v=0.10.0
 add_package -version $v -package symengine.py -archive symengine.py-$v.tar.gz \
-    https://github.com/symengine/symengine.py/archive/v$v.tar.gz
+    https://github.com/symengine/symengine.py/releases/download/v$v/symengine.py-$v.tar.gz
     
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query $(pack_get -LD)/python$pV/site-packages/symengine
-    
+   
+pack_set -build-mod-req cython
 pack_set -module-requirement symengine
 pack_set -module-requirement scipy
     

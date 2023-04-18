@@ -1,5 +1,5 @@
 v=$(pack_get -version mumps)
-add_package --package mumps-serial http://mumps.enseeiht.fr/MUMPS_$v.tar.gz
+add_package --package mumps-serial $(pack_get -url mumps)
 
 pack_set -s $IS_MODULE
 

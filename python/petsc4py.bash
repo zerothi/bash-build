@@ -4,9 +4,9 @@ add_package -package petsc4py \
 
 pack_set -s $IS_MODULE
 
+pack_set -build-mod-req cython
 pack_set -module-requirement petsc-d \
-	 -module-requirement mpi4py -module-requirement numpy \
-	 -module-requirement cython
+	 -module-requirement mpi4py -module-requirement numpy
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/$(pack_get -alias)/__init__.py
 

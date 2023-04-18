@@ -21,7 +21,7 @@ else
     tmp_flags="$tmp_flags -DBLAS_LIBRARIES='$tmp' -DLAPACK_LIBRARIES='$tmp'"
 fi
 
-pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)" \
+pack_cmd "cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) -DCMAKE_C_COMPILER=$MPICC -DCMAKE_CXX_COMPILER=$MPICXX" \
 	 "-Dmetis_PREFIX='$(pack_get -prefix metis)' -DENABLE_METIS=ON" \
 	 "-Dparmetis_PREFIX='$(pack_get -prefix parmetis)' -DENABLE_PARMETIS=ON" \
 	 "-Dscotch_PREFIX='$(pack_get -prefix scotch)' -DENABLE_SCOTCH=ON" \

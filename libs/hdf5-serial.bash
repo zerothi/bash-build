@@ -7,6 +7,7 @@ add_package \
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
 pack_set --install-query $(pack_get --LD)/libhdf5.a
+pack_set --lib -lhdf5_hl -lhdf5
 pack_set --lib[fortran] -lhdf5_fortran -lhdf5
 pack_set --lib[hl] -lhdf5_hl -lhdf5
 pack_set --lib[fortranhl] -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5
@@ -27,6 +28,7 @@ pack_cmd "../configure" \
 	 "--with-szlib=$(pack_get --prefix szip)" \
 	 "--enable-shared" \
 	 "--enable-static" \
+	 --enable-cxx \
 	 "--enable-fortran" $tmp
 
 # Make commands

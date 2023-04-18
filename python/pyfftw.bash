@@ -4,7 +4,8 @@ add_package -package pyfftw -archive pyFFTW-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set $(list -prefix ' -module-requirement ' cython scipy fftw)
+pack_set -build-mod-req cython
+pack_set $(list -prefix ' -module-requirement ' scipy fftw)
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/pyfftw
 

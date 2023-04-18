@@ -28,16 +28,14 @@ SRC_MKL = mkl_stub.f90\n\
 SRC_BLIS = blis_stub.f90\n\
 SRC_OBLAS = oblas_stub.f90\n\
 MAKE = make\n\
-F90 = $MPIF90\n\
-F90_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
-F77 = $MPIF77\n\
-F77_OPTS = $FCFLAGS $FLAG_OMP $tmp \n\
 AR = $AR \n\
-LIB_libxc = $(list -LD-rp mpi libxc[5]) $(pack_get -lib[f90] libxc[5])\n\
-SRC_libxc = libxcf90.f90 libxcifc.f90\n\
-LIB_FFT = $(list -LD-rp fftw) -lfftw3\n\
-SRC_FFT = zfftifc_fftw.f90\n\
+LIB_LIBXC = $(list -LD-rp mpi libxc[5]) $(pack_get -lib[f90] libxc[5])\n\
+SRC_LIBXC = libxcf90.f90 libxcifc.f90\n\
+LIB_FFT = $(list -LD-rp fftw) -lfftw3 -lfftw3f\n\
+SRC_FFT = cfftifc_fftw.f90 zfftifc_fftw.f90\n\
 LIB_W90 = $(list -LD-rp wannier90) -lwannier\n\
+F90 = $MPIF90\n\
+F90_OPTS = $FCFLAGS $FLAG_OMP $tmp $(list -INCDIRS libxc[5])\n\
 ' $file"
 
 unset xc_v
@@ -77,6 +75,12 @@ else
 
 fi
 
+pack_cmd "sed -i '$ a\
+LIB_W90 += \$(LIB_LPK)\n\
+F90_LIB = \$(LIB_FFT)\n\
+' $file"
+
+pack_cmd "cd src ; make libxcifc.o ; cd ../"
 pack_cmd "make $(get_make_parallel)"
 
 pack_cmd "mkdir -p $(pack_get -prefix)/bin"

@@ -6,7 +6,8 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $BUILD_DIR
 
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/psi4
 
-pack_set $(list -prefix '-mod-req ' fftw cython numpy networkx hdf5-serial pybind11 libxc)
+pack_set -build-mod-req cython -build-mod-req pybind11
+pack_set $(list -prefix '-mod-req ' fftw numpy networkx hdf5-serial libxc)
 
 tmp=
 tmp="$tmp -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"

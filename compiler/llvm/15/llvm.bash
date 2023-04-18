@@ -14,7 +14,7 @@ opt="$opt -DCMAKE_BUILD_TYPE=Release"
 opt="$opt -DCMAKE_CXX_LINK_FLAGS='$(list -LD-rp gcc)'"
 opt="$opt -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;compiler-rt;libcxx;libclc;libcxxabi;lld;lldb;openmp;polly;mlir;flang'"
 # To disable parallel build, comment this out:
-#opt="$opt -DLLVM_PARALLEL_LINK_JOBS=1"
+opt="$opt -DLLVM_PARALLEL_LINK_JOBS=1"
 #opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=2"
 # We have gold linker
 opt="$opt -DLLVM_USE_LINKER=gold"
@@ -31,7 +31,6 @@ for t in clang compiler-rt llc lld lldb lli omp
 do
 	pack_cmd "cmake --build . $(get_make_parallel) -t $t"
 done
-
 pack_cmd "cmake --build . -j 2"
 pack_cmd "cmake --build . --target install"
 

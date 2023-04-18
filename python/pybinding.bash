@@ -12,10 +12,10 @@ pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
 pack_set --module-opt "--lua-family pybinding"
 
-pack_set --module-requirement cython \
-	 --module-requirement scipy \
-	 --module-requirement matplotlib \
-	 --module-requirement pybind11
+pack_set -build-mod-req cython \
+	-build-mod-req pybind11
+pack_set --module-requirement scipy \
+	 --module-requirement matplotlib
 
 pack_cmd "echo 'Fake' > changelog.md"
 

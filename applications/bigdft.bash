@@ -2,8 +2,6 @@
 #  zapfchan ly1 tex4ht
 
 v=1.9.3
-add_package 
-
 add_package --directory bigdft-suite https://launchpad.net/bigdft/${v:0:3}/$v/+download/bigdft-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL

@@ -5,7 +5,7 @@ v=23Jun2022_update3
 add_package -package lammps \
 	    -directory 'lammps-*' \
 	    -archive lammps-$v.tar.gz \
-	    --version 2022.6.23.3
+	    --version 2022.6.23.3 \
 	    https://github.com/lammps/lammps/archive/refs/tags/stable_$v.tar.gz
 
 pack_set_file_version

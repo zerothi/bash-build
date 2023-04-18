@@ -11,7 +11,7 @@ pack_set --install-query $(pack_get --LD)/python$pV/site-packages/distributed
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
 
-pack_cmd "$_pip_cmd . --prefix=$(pack_get --prefix)"
+pack_cmd "SETUPTOOLS_SCM_PRETEND_VERSION=$v $_pip_cmd . --prefix=$(pack_get --prefix)"
 
 
 add_test_package distributed.test

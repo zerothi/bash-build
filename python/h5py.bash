@@ -7,9 +7,9 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 pack_set -install-query $(pack_get -LD)/python$pV/site-packages/h5py
 
 # Add requirments when creating the module
+pack_set -build-mod-req cython
 pack_set -module-requirement numpy \
-    -module-requirement hdf5-serial \
-    -module-requirement cython
+    -module-requirement hdf5-serial
 
 # create dir
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"

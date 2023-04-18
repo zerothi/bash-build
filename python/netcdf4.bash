@@ -2,7 +2,7 @@ v=1.6.3
 add_package \
     -version $v -package netcdf4py \
     -archive netcdf4-python-${v}rel.tar.gz \
-    https://github.com/Unidata/netcdf4-python/archive/v${v}rel.tar.gz
+    https://github.com/Unidata/netcdf4-python/archive/refs/tags/v${v}rel.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 

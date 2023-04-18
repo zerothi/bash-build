@@ -4,8 +4,8 @@ add_package -archive numba-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
+pack_set -build-mod-req cython
 pack_set -module-requirement numpy
-pack_set -module-requirement cython
 pack_set -module-requirement llvmlite
 
 pack_set -install-query $(pack_get -prefix)/bin/numba

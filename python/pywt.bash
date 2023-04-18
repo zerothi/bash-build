@@ -6,6 +6,7 @@ add_package \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
+pack_set -build-mod-req cython
 pack_set -module-requirement numpy
 # Not working on py2
 [[ ${pV:0:1} -eq 2 ]] && pack_set -host-reject $(get_hostname)
