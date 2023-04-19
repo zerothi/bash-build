@@ -4,9 +4,9 @@ add_package -package aesara -archive aesara-rel-$v.tar.gz \
     
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
-pack_set -install-query $(pack_get -prefix)/bin/aesara-nose
+pack_set -install-query $(pack_get -prefix)/bin/aesara-cache
     
 pack_set -module-requirement scipy
     
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
-pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
+pack_cmd "SETUPTOOLS_SCM_PRETEND_VERSION=$v $_pip_cmd . --prefix=$(pack_get -prefix)"

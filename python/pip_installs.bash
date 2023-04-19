@@ -158,6 +158,8 @@ pip_append sphinx sphinx_rtd_theme sphinx-autoapi
 if [[ $(vrs_cmp $pV 2) -eq 0 ]]; then
     pip_append subprocess32
 fi
+pip_append hatchling
+pip_append hatch-vcs
 pip_append pathspec
 pip_append scikit-build
 pip_append pyproject-metadata

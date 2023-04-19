@@ -25,8 +25,6 @@ pack_cmd 'sed -i -e "s/\(-o pvtsp \$(OBJS)\)/\1 \$(LIBS)/g" Util/SpPivot/Makefil
 # Remove vnl-operator compilation
 pack_cmd "sed -i -e '/Pseudo\/vnl-operator/d' Makefile"
 
-Pseudo/vnl-operator
-
 # Change to directory:
 pack_cmd "mkdir -p Obj ; cd Obj"
 

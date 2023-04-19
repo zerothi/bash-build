@@ -47,7 +47,6 @@ source_pack applications/getfem.bash
 source_pack applications/siesta.bash
 source_pack applications/siesta-master.bash # GitLab siesta
 source_pack applications/siesta-master-debug.bash
-source_pack applications/siesta-bulk-bias.bash # siesta trunk development
 source_pack applications/fhiaims.bash
 
 
