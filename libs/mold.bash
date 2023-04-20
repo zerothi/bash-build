@@ -3,7 +3,7 @@ do
     add_package -archive mold-$v.tar.gz \
 	https://github.com/rui314/mold/archive/refs/tags/v$v.tar.gz
 
-    if $(is_intel) ; then
+    if $(is_c intel) ; then
 	pack_set --host-reject $(get_hostname)
     fi
 
