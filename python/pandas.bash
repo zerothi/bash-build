@@ -23,7 +23,7 @@ pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
 
 
-v=2.0.0
+v=2.0.1
 add_package \
     https://github.com/pandas-dev/pandas/releases/download/v$v/pandas-$v.tar.gz
 

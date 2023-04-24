@@ -2,7 +2,9 @@ function ansidecl_hide {
     local p=$(pack_get -prefix build-tools)
     # relocate ansidecl for clarity
     pushd $p/include
-    mv ansidecl.h ansidecl.h.old
+    if [ -e ansidecl.h ]; then
+       mv ansidecl.h ansidecl.h.old
+    fi
     popd
 }
 
