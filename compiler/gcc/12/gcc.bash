@@ -13,7 +13,6 @@ pack_set -install-query $pre/bin/gcc
 languages="c,c++,lto,fortran,objc,obj-c++,go"
 
 # Install commands that it should run
-pack_cmd "ansidecl_hide"
 pack_cmd "../configure --prefix $pre" \
 	 "--with-gmp=$pre" \
 	 "--with-mpfr=$pre" \
@@ -33,5 +32,4 @@ pack_cmd "make install"
 #pack_store gcc.test
 #pack_cmd 'for f in **/testsuite/*.log **/testsuite/*.sum ; do mv $f $pre/gcc.$(basename $f) ; gzip -f $pre/gcc.$(basename $f) ; done'
 
-pack_cmd "ansidecl_restore"
 source compiler/gcc/gcc-env.bash
