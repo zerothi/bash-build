@@ -44,7 +44,12 @@ else
 
 fi
 
-pack_cmd "CC=$MPICC CXX=$MPICXX CXXFLAGS='$CXXFLAGS -std=c++14' FC=$MPIFC cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .. $tmp_flags"
+# in this version the limits were incorrectly included.
+# This should be fixed in v>9.4.2
+# Having it twice shouldn't be a problem
+pack_cmd "sed -i '1 a#include <limits>\n' ../source/base/geometric_utilities.cc"
+
+pack_cmd "CC=$MPICC CXX=$MPICXX FC=$MPIFC cmake -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix) .. $tmp_flags"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make test 2>&1 > dealii.test || echo forced" 
 pack_cmd "make install"
