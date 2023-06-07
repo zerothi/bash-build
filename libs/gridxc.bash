@@ -4,7 +4,7 @@ add_package https://gitlab.com/siesta-project/libraries/libgridxc/-/archive/$v/l
 pack_set -s $IS_MODULE
 
 pack_set -build-mod-req build-tools
-xc_v=4
+xc_v=5
 pack_set -module-requirement libxc[$xc_v]
 pack_set -module-requirement mpi
 

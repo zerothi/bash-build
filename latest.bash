@@ -67,15 +67,6 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta-master)" \
     -RL siesta-master
 
-rm_latest siesta-bulk-bias.latest
-create_module $cm_defs \
-    -n siesta-bulk-bias.latest \
-    -W "Siesta: $(get_c)" \
-    -M siesta-bulk-bias.latest \
-    -echo "$(echo_modules siesta-bulk-bias)" \
-    -RL siesta-bulk-bias
-
-
 msg_install --message "lammps"
 
 rm_latest lammps.latest

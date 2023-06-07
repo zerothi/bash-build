@@ -6,12 +6,14 @@ pack_set -s $IS_MODULE -s $BUILD_DIR -s $CRT_DEF_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
 
-pack_set $(list -p '-build-mod-req ' build-tools)
-pack_set $(list -p '-mod-req ' gcc[$gnu_v] gen-zlib gen-libxml2 gen-libffi)
+pack_set $(list -p '-build-mod-req ' build-tools gcc[$gnu_v])
+pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi)
 
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
 opt="$opt -DCMAKE_CXX_LINK_FLAGS='$(list -LD-rp gcc)'"
+opt="$opt -DCLANG_DEFAULT_CXX_STDLIB=libc++"
+opt="$opt -DCLANG_DEFAULT_RTLIB=compiler-rt"
 opt="$opt -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;compiler-rt;libcxx;libclc;libcxxabi;lld;lldb;openmp;polly;flang'"
 # To disable parallel build, comment this out:
 opt="$opt -DLLVM_PARALLEL_LINK_JOBS=1"

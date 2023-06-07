@@ -3,6 +3,8 @@ add_package https://github.com/fmtlib/fmt/releases/download/$v/fmt-$v.zip
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
+pack_set -build-mod-req build-tools -build-mod-req gcc[12]
+
 pack_set -install-query $(pack_get -LD)/libfmt.a
 pack_set -lib -lfmt
 
