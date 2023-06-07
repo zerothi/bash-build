@@ -1,5 +1,5 @@
 add_package -build generic -package $gcc-gdb \
-	    https://ftp.gnu.org/gnu/gdb/gdb-11.2.tar.xz
+	    https://ftp.gnu.org/gnu/gdb/gdb-13.2.tar.xz
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
