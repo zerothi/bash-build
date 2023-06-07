@@ -63,11 +63,11 @@ for omp in openmp serial ; do
 
     case $omp in
 	openmp)
-	    pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS $FLAG_OMP' FC='$MPIFC' FCFLAGS='$FCFLAGS $FLAG_OMP' SCALAPACK_LDFLAGS='$tmp'" \
+	    pack_cmd "../configure CPP='$CPP' CXX='$MPICXX' CXXFLAGS='$CXXFLAGS' CC='$MPICC' CFLAGS='$CFLAGS $FLAG_OMP' FC='$MPIFC' FCFLAGS='$FCFLAGS $FLAG_OMP' SCALAPACK_LDFLAGS='$tmp'" \
 		     "$tmp_flags --enable-openmp --prefix=$(pack_get -prefix)"
 	    ;;
 	*)
-	    pack_cmd "../configure CPP='$CPP' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
+	    pack_cmd "../configure CPP='$CPP' CXX='$MPICXX' CXXFLAGS='$CXXFLAGS' CC='$MPICC' CFLAGS='$CFLAGS' FC='$MPIFC' FCFLAGS='$FCFLAGS' SCALAPACK_LDFLAGS='$tmp'" \
 		     "$tmp_flags --prefix=$(pack_get -prefix)"
 	    ;;
     esac
