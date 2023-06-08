@@ -20,8 +20,8 @@ fi
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages/"
 pack_cmd "sed -i -e 's:library_path = None:library_path = Path(\"$(pack_get -LD blosc2)\"):' setup.py"
 opts=
-opts="$opts --install-option=--hdf5=$(pack_get -prefix hdf5-serial)"
-opts="$opts --install-option=--blosc=$(pack_get -prefix blosc)"
-opts="$opts --install-option=--blosc2=$(pack_get -prefix blosc2)"
-opts="$opts --install-option=--cflags='${pCFLAGS//-march=native/} -pthread'"
+opts="$opts --config-settings=--hdf5=$(pack_get -prefix hdf5-serial)"
+opts="$opts --config-settings=--blosc=$(pack_get -prefix blosc)"
+opts="$opts --config-settings=--blosc2=$(pack_get -prefix blosc2)"
+opts="$opts --config-settings=--cflags='${pCFLAGS//-march=native/} -pthread'"
 pack_cmd "$_pip_cmd . $opts --prefix=$(pack_get -prefix)"

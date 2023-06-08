@@ -4,7 +4,7 @@
 v=4.2.4
 v=4.5.1
 v=5.0.1
-v=5.2.0
+v=5.3.0
 add_package -build generic-no-version https://github.com/cea-hpc/modules/releases/download/v$v/modules-$v.tar.bz2
 
 pack_set -install-query $(pack_get -prefix)/$v/bin/envml

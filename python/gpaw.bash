@@ -108,7 +108,7 @@ unset hdf
 pack_cmd "unset LDFLAGS"
 
 if [[ $(vrs_cmp $v 20) -lt 0 ]]; then
-    pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --install-option='--customize=$file' --prefix=$(pack_get -prefix)"
+    pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --config-settings='--customize=$file' --prefix=$(pack_get -prefix)"
 else
     pack_cmd "GPAW_CONFIG='$file' $_pip_cmd . --prefix=$(pack_get -prefix)"
 fi

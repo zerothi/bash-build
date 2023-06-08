@@ -68,7 +68,7 @@ include_dirs = $(pack_get -prefix mumps-serial)/include\n\
 extra_link_args = $tmp_flags\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --install-option='--cython' --install-option='--configfile=$file' --prefix=$(pack_get -prefix)"
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --config-settings='--cython' --config-settings='--configfile=$file' --prefix=$(pack_get -prefix)"
 
 
 add_test_package kwant.test

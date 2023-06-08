@@ -6,11 +6,11 @@ msg_install \
 
 # Create the numpy installation sequence
 if $(is_c intel) ; then
-    pNumpyInstallC="--install-option=--compiler=intelem"
-    pNumpyInstallF="--install-option=--fcompiler=intelem"
+    pNumpyInstallC="--config-settings--compiler=intelem"
+    pNumpyInstallF="--config-settings=--fcompiler=intelem"
 elif $(is_c gnu) ; then
-    pNumpyInstallC="--install-option=--compiler=unix"
-    pNumpyInstallF="--install-option=--fcompiler=gnu95"
+    pNumpyInstallC="--config-settings=--compiler=unix"
+    pNumpyInstallF="--config-settings=--fcompiler=gnu95"
 else
     doerr "Compiler python" "Could not recognize compiler"
 fi
