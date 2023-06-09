@@ -18,6 +18,6 @@ pack_cmd "mkdir -p $(pack_get --prefix)/lib/python$pV/site-packages"
 pack_cmd "unset LDFLAGS"
 
 # Install commands that it should run
-pack_cmd "$_pip_cmd . --config-settings=--with-openmp --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --config-settings=--build-option=--with-openmp --prefix=$(pack_get -prefix)"
     
 done
