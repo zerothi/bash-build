@@ -5,6 +5,7 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set --install-query always-install-this-module
 
+pack_set -build-mod-req cython
 pack_set $(list --prefix ' --module-requirement ' scipy netcdf4py)
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages"

@@ -11,6 +11,9 @@ pack_set --module-requirement mpi
 
 pack_set --install-query $(pack_get --prefix)/bin/dftb+
 
+
+pack_cmd "sed -i -e 's:/bin/env python:/bin/env python3:' external/fypp/bin/fypp"
+
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     cc=intel

@@ -1,4 +1,4 @@
-v=0.56.4
+v=0.57.0
 add_package -archive numba-$v.tar.gz \
 	    https://github.com/numba/numba/archive/$v.tar.gz
 
