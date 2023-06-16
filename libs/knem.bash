@@ -8,7 +8,7 @@ pack_set -install-query $(pack_get -prefix)/bin/knem_cost
 
 pack_set -build-mod-req build-tools
 pack_set -mod-req hwloc
-if ! $(is_host nicpa) ;
+if ! $(is_host nicpa) ; then
   pack_set --host-reject $(get_hostname)
 fi
 
