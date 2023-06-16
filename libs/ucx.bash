@@ -39,8 +39,17 @@ tmp_flags="$tmp_flags --enable-optimizations"
 tmp_flags="$tmp_flags --enable-shared --disable-static"
 
 # knem is a sys module which we cannot override
-pack_set -mod-req knem
-tmp_flags="$tmp_flags --with-knem=$(pack_get -prefix knem)"
+if [[ $(pack_installed knem) -eq 1 ]]; then
+  pack_set -mod-req knem
+  tmp_flags="$tmp_flags --with-knem=$(pack_get -prefix knem)"
+elif [ -d /opt/knem/bin/knem_cost ]; then
+  tmp_flags="$tmp_flags --with-knem=/opt/knem"
+else
+  _dir=$(locate knem_cost | head -n 1)
+  _dir=$(dirname $_dir)
+  _dir=$(dirname $_dir)
+  tmp_flags="$tmp_flags --with-knem=$_dir"
+fi
 
 # Install commands that it should run
 pack_cmd "unset MPICC ; unset MPICXX ; unset MPIFC"

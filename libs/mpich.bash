@@ -24,7 +24,7 @@ fi
 pack_set -mod-req hwloc
 tmp_flags="$tmp_flags --with-hwloc=$(pack_get -prefix hwloc)"
 
-if [[ $(pack_installed ucx) ]]; then
+if [[ $(pack_installed ucx) -eq 1 ]]; then
     pack_set -mod-req ucx
     tmp_flags="$tmp_flags --with-ucx=$(pack_get -prefix ucx)"
     tmp_flags="$tmp_flags --with-device=ch4:ucx"
