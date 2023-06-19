@@ -1,3 +1,13 @@
+function _fix_versioneer {
+  # Fix the versioneer file
+  local v=$1 ; shift
+  # The versioneer file should be at the top directory
+  pack_cmd "sed -i -e '/def get_versions():/{
+  p
+  a\return \{\"version\": \"$1\", \"full-revisionid\": \"$1\", \"dirty\": False, \"date\": None\}
+}' versioneer.py"
+}
+
 msg_install \
     --message \
     "Installing the python-packages for $(pack_get --module-name $(get_parent))"

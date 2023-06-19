@@ -10,6 +10,7 @@ pack_set --module-requirement dask
 pack_set --install-query $(pack_get --LD)/python$pV/site-packages/distributed
 
 pack_cmd "mkdir -p $(pack_get --LD)/python$pV/site-packages"
+_fix_versioneer $v
 
 pack_cmd "SETUPTOOLS_SCM_PRETEND_VERSION=$v $_pip_cmd . --prefix=$(pack_get --prefix)"
 
