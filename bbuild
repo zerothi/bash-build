@@ -26,7 +26,7 @@ function _bbuild_failure() {
 # This should be the default for our installation
 umask 022
 
-_top_dir=`pwd`
+BBUILD_DIR=$(pwd)
 
 source ~/.bashrc
 module purge 1>/dev/null 2>/dev/null
@@ -35,7 +35,7 @@ module purge 1>/dev/null 2>/dev/null
 export OMP_NUM_THREADS=1
 
 # On thul and interactive nodes, sourching leads to going back
-cd $_top_dir
+cd $BBUILD_DIR
 
 # We have here the installation of all the stuff for gray....
 source src/init.bash

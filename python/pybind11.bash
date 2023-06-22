@@ -19,4 +19,4 @@ pack_cmd "make $(get_make_parallel)"
 #pack_store pybind11.test
 pack_cmd "make install"
 
-pack_cmd "cd .. ; $(get_parent_exec) -m pip install --no-deps --prefix=$(pack_get -prefix) ."
+pack_cmd "cd .. ; $_pip_cmd install --no-deps --prefix=$(pack_get -prefix) ."
