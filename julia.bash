@@ -1,5 +1,5 @@
-jV=1.8
-IjV=$jV.5
+jV=1.9
+IjV=$jV.1
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz
@@ -18,6 +18,7 @@ pack_set --module-opt "--set-ENV JULIA_EXCLUSIVE=0"
 pack_cmd "echo '# BBUILD' > Make.user"
 pack_cmd "sed -i '1 a\
 prefix = $(pack_get -prefix)\n\
+MARCH=native\n\
 JULIA_NUM_THREADS = 1\n\
 ' Make.user"
 
