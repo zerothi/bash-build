@@ -372,47 +372,6 @@ EOF
 	done
 	echo "" >> $mfile
     fi
-    # Add specific envs if needed
-    if [[ -n "${env// /}" ]]; then
-	cat <<EOF >> $mfile
-$fm_comment Specific environment variables:
-EOF
-	for tmp in $env ; do
-	    # Partition into [s|a|p]
-	    local opt=${tmp:0:1}
-	    local lenv=${tmp%%=*}
-	    lenv=${lenv:1}
-	    local lval=${tmp#*=}
-	    
-	    #echo "$opt, $lenv $lval $force"
-            # Add paths if they are available
-	    # We add explicit quotations as certain env-vars
-	    # might not adhere to simple text 
-	    case $opt in
-		u)
-		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
-		    ;;
-		s)
-		    opt="$(module_fmt_routine -set-env $lenv $lval)"
-		    ;;
-		p)
-		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
-		    ;;
-		a)
-		    opt="$(module_fmt_routine -append-path $lenv $lval)"
-		    ;;
-		*)
-		    opt=''
-		    ;;
-	    esac
-	    # These options should probably always
-	    # be "on" , they are specified by the options by the user
-	    # and not, per-see "optional"
-	    [[ -n "$opt" ]] && \
-		add_module_if -F 1 "$mfile" "$opt"
-	done
-	echo "" >> $mfile
-    fi
     # Always create an environment variable named:
     #   ${name}_PREFIX to have the installation
     #   directory accessible at all times.
@@ -458,14 +417,16 @@ EOF
 	add_module_if -F $force -d "$path/lib64" $mfile \
 		      "$(module_fmt_routine -prepend-path LD_LIBRARY_PATH $fpath/lib64)"
     fi
-    add_module_if -F $force -d "$path/lib/python" $mfile \
-	"$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
-    for PV in 2.7 3.6 3.7 3.8 3.9 3.10 3.11 3.12 3.13 3.14 3.15 3.16 3.17 3.18 ; do
-	add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
-	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
-	add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
-	    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
-    done
+    if [[ $name != python ]]; then
+      add_module_if -F $force -d "$path/lib/python" $mfile \
+    "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python)"
+      for PV in 2.7 3.6 3.7 3.8 3.9 3.10 3.11 3.12 3.13 3.14 3.15 3.16 3.17 3.18 ; do
+    add_module_if -F $force -d "$path/lib/python$PV/site-packages" $mfile \
+        "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib/python$PV/site-packages)"
+    add_module_if -F $force -d "$path/lib64/python$PV/site-packages" $mfile \
+        "$(module_fmt_routine -prepend-path PYTHONPATH $fpath/lib64/python$PV/site-packages)"
+      done
+    fi
     if [[ -n "$lua_family" ]]; then
 	case $_mod_format in
 	    $_mod_format_LMOD)
@@ -477,6 +438,48 @@ family("$lua_family")
 EOF
 		;;
 	esac
+    fi
+    
+    # Add specific envs if needed
+    if [[ -n "${env// /}" ]]; then
+	cat <<EOF >> $mfile
+$fm_comment Specific environment variables:
+EOF
+	for tmp in $env ; do
+	    # Partition into [s|a|p]
+	    local opt=${tmp:0:1}
+	    local lenv=${tmp%%=*}
+	    lenv=${lenv:1}
+	    local lval=${tmp#*=}
+	    
+	    #echo "$opt, $lenv $lval $force"
+            # Add paths if they are available
+	    # We add explicit quotations as certain env-vars
+	    # might not adhere to simple text 
+	    case $opt in
+		u)
+		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
+		    ;;
+		s)
+		    opt="$(module_fmt_routine -set-env $lenv $lval)"
+		    ;;
+		p)
+		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
+		    ;;
+		a)
+		    opt="$(module_fmt_routine -append-path $lenv $lval)"
+		    ;;
+		*)
+		    opt=''
+		    ;;
+	    esac
+	    # These options should probably always
+	    # be "on" , they are specified by the options by the user
+	    # and not, per-see "optional"
+	    [[ -n "$opt" ]] && \
+		add_module_if -F 1 "$mfile" "$opt"
+	done
+	echo "" >> $mfile
     fi
     
     if [[ -n "$echos" ]]; then
