@@ -1,5 +1,5 @@
 jV=1.9
-IjV=$jV.1
+IjV=$jV.2
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz

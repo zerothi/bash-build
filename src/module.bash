@@ -399,12 +399,12 @@ EOF
     add_module_if -F $force -d "$path" $mfile \
         "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath)"
     add_module_if -F $force -d "$path/share/cmake" $mfile \
-	"$(module_fmt_routine -prepend-path CMAKE_MODULE_PATH $fpath/share/cmake)"
+	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
     if [ -d $path/lib/cmake ]; then
 	    for d in $path/lib/cmake/* $path/lib64/cmake/* ; do
 		    [ ! -d $d ] && continue 
 		    add_module_if -F $force -d "$d" $mfile \
-		    	    "$(module_fmt_routine -prepend-path CMAKE_MODULE_PATH $fpath/lib/cmake)"
+		    	    "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/lib/cmake)"
 	    done
     fi
     tmp=$(ls -d $path/share/$name* 2>/dev/null)
