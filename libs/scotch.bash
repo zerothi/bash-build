@@ -29,7 +29,7 @@ pack_cmd "echo '# Makefile for easy installation ' > $file"
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '1 a\
-CFLAGS = -restrict\n' $file"
+CFLAGS = -restrict -Wno-error=implicit-function-declaration\n' $file"
     
 elif $(is_c gnu) ; then
     

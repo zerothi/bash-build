@@ -28,8 +28,8 @@ fi
 # Add lapack/blas
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    opts="$opts -DBLAS_LIBRARIES=\'$MKL_LIB $INTEL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread\'"
-    opts="$opts -DLAPACK_LIBRARIES=\'$MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread\'"
+    opts="$opts -DBLAS_LIBRARIES='$MKL_LIB $INTEL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread'"
+    opts="$opts -DLAPACK_LIBRARIES='$MKL_LIB $INTEL_LIB -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread'"
 
 else
     la=lapack-$(pack_choice -i linalg)

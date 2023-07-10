@@ -6,7 +6,8 @@ pack_set -s $IS_MODULE -s $CRT_DEF_MODULE -s $MAKE_PARALLEL -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/flang-new
 
-pack_set $(list -p '-build-mod-req ' build-tools gcc[$gnu_v])
+pack_set $(list -p '-build-mod-req ' build-tools)
+pack_set $(list -p '-mod-req ' gcc[$gnu_v])
 pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi)
 
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"

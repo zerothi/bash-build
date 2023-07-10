@@ -6,7 +6,8 @@ pack_set -s $IS_MODULE -s $BUILD_DIR -s $CRT_DEF_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -prefix)/bin/llvm-ar
 
-pack_set $(list -p '-build-mod-req ' build-tools gcc[$gnu_v])
+pack_set $(list -p '-build-mod-req ' build-tools)
+pack_set $(list -p '-mod-req ' gcc[$gnu_v])
 pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi)
 
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
