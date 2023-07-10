@@ -396,19 +396,21 @@ EOF
 	"$(module_fmt_routine -prepend-path M4PATH $fpath/share/aclocal)"
     add_module_if -F $force -d "$path/share/aclocal" $mfile \
 	"$(module_fmt_routine -prepend-path ACLOCAL_PATH $fpath/share/aclocal)"
+    add_module_if -F $force -d "$path" $mfile \
+        "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath)"
     add_module_if -F $force -d "$path/share/cmake" $mfile \
-	"$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/share/cmake)"
+	"$(module_fmt_routine -prepend-path CMAKE_MODULE_PATH $fpath/share/cmake)"
     if [ -d $path/lib/cmake ]; then
 	    for d in $path/lib/cmake/* $path/lib64/cmake/* ; do
 		    [ ! -d $d ] && continue 
 		    add_module_if -F $force -d "$d" $mfile \
-		    	    "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $fpath/lib/cmake)"
+		    	    "$(module_fmt_routine -prepend-path CMAKE_MODULE_PATH $fpath/lib/cmake)"
 	    done
     fi
     tmp=$(ls -d $path/share/$name* 2>/dev/null)
     if [[ -n "$tmp" ]]; then
 	add_module_if -F $force -d "$tmp" $mfile \
-	    "$(module_fmt_routine -prepend-path CMAKE_PREFIX_PATH $tmp)"
+	    "$(module_fmt_routine -prepend-path CMAKE_MODULE_PATH $tmp)"
     fi
     # The LD_LIBRARY_PATH is DANGEROUS!
     if [[ $ld_path -eq 1 ]]; then
