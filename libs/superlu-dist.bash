@@ -30,8 +30,8 @@ if [[ $(vrs_cmp $(pack_get -version) 5) -ge 0 ]]; then
     opt="$opt -DTPL_ENABLE_LAPACKLIB=on"
     # These are standard options
     if $(is_c intel) ; then
-	opt="$opt -DTPL_BLAS_LIBRARIES='-mkl=sequential'"
-	opt="$opt -DTPL_LAPACK_LIBRARIES='-mkl=sequential'"
+	opt="$opt -DTPL_BLAS_LIBRARIES='-qmkl=sequential'"
+	opt="$opt -DTPL_LAPACK_LIBRARIES='-qmkl=sequential'"
     else
 	la=lapack-$(pack_choice -i linalg)
 	pack_set -module-requirement $la
@@ -75,9 +75,9 @@ CFLAGS += -std=c99\n\
 # These are standard options
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
-BLASLIB = $MKL_LIB -mkl=sequential\n\
+BLASLIB = $MKL_LIB -qmkl=sequential\n\
 SLU_HAVE_LAPACK = TRUE\n\
-LAPACKLIB = $MKL_LIB -mkl=sequential\n\
+LAPACKLIB = $MKL_LIB -qmkl=sequential\n\
 ' $file"
     
 else

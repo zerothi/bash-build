@@ -63,8 +63,8 @@ LIBS += -ldl \n\
 if $(is_c intel) ; then
 
     pack_cmd "sed -i '$ a\
-LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential\n\
-SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 \n\
+LAPACK_L = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=sequential\n\
+SCALAPACK_L = -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 \n\
 FCFLAGS += -free\n\
 LDFLAGS += -nofor_main\n\
 DFLAGS += -D__MKL -D__INTEL_COMPILER \n\

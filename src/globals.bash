@@ -31,6 +31,7 @@ PIC=pic
 NO_PIC=no-pic
 PIE=pie
 NO_PIE=no-pie
+RPATH_LINE="-Wl,-rpath,"
 
 # To by-pass creating survey when using the install script
 export DCC__SURVEY_IN=1

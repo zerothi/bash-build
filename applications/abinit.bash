@@ -89,9 +89,9 @@ if $(is_c intel) ; then
     #pack_cmd "$s -e 's/CFLAGS=\"/CFLAGS=\"-openmp /g' $file"
     pack_cmd "sed -i -e 's:\[LloW\]:[A-Za-z]:g' ../configure"
     if [[ $mpila == elpa ]]; then
-	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=parallel"
     else
-	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+	tmp="$tmp $INTEL_LIB $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=parallel"
     fi
     pack_cmd "$s '$ a\
 FCLIBS=\"$tmp\"\n\

@@ -30,8 +30,8 @@ tmp="$tmp -DSuperLU_DIST_LIBRARIES='$(list -LD-rp superlu-dist[$superlu_v]) $(pa
 # Add LAPACK and BLAS libraries
 if $(is_c intel) ; then
 
-    tmp="$tmp -DBLAS_LIBRARIES='$MKL_LIB -mkl=parallel'"
-    tmp="$tmp -DLAPACK_LIBRARIES='$MKL_LIB -mkl=parallel'"
+    tmp="$tmp -DBLAS_LIBRARIES='$MKL_LIB -qmkl=parallel'"
+    tmp="$tmp -DLAPACK_LIBRARIES='$MKL_LIB -qmkl=parallel'"
 
 elif $(is_c gnu) ; then
     

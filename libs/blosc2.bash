@@ -11,6 +11,7 @@ pack_set -lib -lblosc2
 opts=
 opts="$opts -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opts="$opts -DPREFER_EXTERNAL_ZLIB=ON"
+opts="$opts -DZLIB_NG=$(pack_get -prefix zlib)"
 
 pack_cmd cmake $opts ..
 pack_cmd cmake --build . $(get_make_parallel)

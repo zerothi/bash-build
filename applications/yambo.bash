@@ -21,7 +21,7 @@ tmp_scalapack=
 # Check for Intel MKL or not
 if $(is_c intel) ; then
 
-    tmp_blas="-mkl=cluster"
+    tmp_blas="-qmkl=cluster"
     tmp_lapack="$tmp_blas"
     tmp_scalapack="$tmp_blas"
 

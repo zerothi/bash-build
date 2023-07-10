@@ -39,8 +39,8 @@ if $(is_c intel) ; then
 
     tmp_flag="-nofor-main"
     pack_cmd "sed -i '1 a\
-SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -mkl=sequential \n\
-LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -qmkl=sequential \n\
+LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -qmkl=sequential \n' Makefile.inc"
 
 else
     pack_set --module-requirement scalapack
@@ -126,7 +126,7 @@ pack_cmd "cp lib/lib*.a $(pack_get --LD)/"
 # Make clean and create threaded
 pack_cmd "make clean"
 if $(is_c intel) ; then
-    pack_cmd "sed -i -e 's:mkl=sequential:mkl=parallel:g' Makefile.inc"
+    pack_cmd "sed -i -e 's:qmkl=sequential:qmkl=parallel:g' Makefile.inc"
 
 else
 

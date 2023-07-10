@@ -41,8 +41,8 @@ fi
 # Check for Intel MKL or not
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
-LNOPT = -mkl=parallel $FLAG_OMP\n\
-LIB_SCALAPACK= $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64\n\
+LNOPT = -qmkl=parallel $FLAG_OMP\n\
+LIB_SCALAPACK= $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64\n\
 LIB_LAPACK = $MKL_LIB -lmkl_lapack95_lp64\n\
 LIB_BLAS = $MKL_LIB -lmkl_blas95_lp64\n' $file"
 

@@ -11,7 +11,7 @@ pack_set --module-requirement mpi
 
 if $(is_c intel) ; then
     # Here we need static blacs
-    tmp="-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
+    tmp="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64"
     tmp="$tmp -lmkl_intel_lp64 -lmkl_core -lmkl_sequential"
     if $(is_host slid muspel surt) ; then
         tmp="$tmp -L/usr/lib64"

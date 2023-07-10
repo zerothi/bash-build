@@ -32,7 +32,7 @@ CDEFS    = -DAdd_\n\
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
-BLASLIB = -mkl=sequential\n\
+BLASLIB = -qmkl=sequential\n\
 ' $file"
     
 else

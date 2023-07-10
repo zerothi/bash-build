@@ -45,7 +45,7 @@ pack_cmd "sed -i -e '/^DESTDIR*/d' $file"
 if $(is_c intel) ; then    
     # Added ifcore library to complie
     pack_cmd "sed -i '1 a\
-    LIB += -mkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
+    LIB += -qmkl=parallel -lifcore \nCC += $FLAG_OMP\nFC += $FLAG_OMP -nofor_main' $file"
     
 else
     pack_set -module-requirement scalapack

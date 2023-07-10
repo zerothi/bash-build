@@ -26,7 +26,7 @@ pack_cmd "echo '# Makefile for easy installation ' > Makefile.inc"
 if $(is_c intel) ; then
     tmp_flag="-nofor-main"
     pack_cmd "sed -i '1 a\
-LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -mkl=sequential \n' Makefile.inc"
+LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -qmkl=sequential \n' Makefile.inc"
 
 else
 
@@ -103,7 +103,7 @@ pack_cmd "cp libseq/lib*.a $(pack_get --LD)/"
 # Make clean and create threaded
 pack_cmd "make clean"
 if $(is_c intel) ; then
-    pack_cmd "sed -i -e 's:mkl=sequential:mkl=parallel:g' Makefile.inc"
+    pack_cmd "sed -i -e 's:qmkl=sequential:qmkl=parallel:g' Makefile.inc"
 
 else
 

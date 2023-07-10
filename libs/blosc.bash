@@ -5,7 +5,7 @@ add_package -archive c-blosc-$v.tar.gz -package blosc -version $v \
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR
 
 pack_set -mod-req zlib
-pack_set -install-query $(pack_get -LD)/libblosc.so
+pack_set -install-query $(pack_get -prefix)/include/blosc.h
 pack_set -lib -lblosc
 
 opts=

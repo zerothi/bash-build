@@ -15,8 +15,8 @@ pack_set --module-requirement mpi
 
 tmp_flags=""
 if $(is_c intel) ; then
-    tmp_flags="--with-blas='-mkl=sequential'"
-    tmp_flags="$tmp_flags --with-lapack='-mkl=sequential'"
+    tmp_flags="--with-blas='-qmkl=sequential'"
+    tmp_flags="$tmp_flags --with-lapack='-qmkl=sequential'"
 
 else
 

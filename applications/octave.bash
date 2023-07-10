@@ -46,8 +46,8 @@ for m in suitesparseconfig amd camd colamd ccolamd cholmod klu umfpack cxsparse 
 done
 
 if $(is_c intel) ; then
-    tmp_flags="$tmp_flags --with-blas='$MKL_LIB -mkl=parallel'"
-    tmp_flags="$tmp_flags --with-lapack='$MKL_LIB -mkl=parallel'"
+    tmp_flags="$tmp_flags --with-blas='$MKL_LIB -qmkl=parallel'"
+    tmp_flags="$tmp_flags --with-lapack='$MKL_LIB -qmkl=parallel'"
 
 else 
 

@@ -24,13 +24,7 @@ source_pack libs/mpich.bash
 source_pack libs/mvapich.bash
 
 # Set the default MPI version
-if $(is_c intel) ; then
-    # The current implementation does not abstract the
-    # mpi differences
-    pack_set -alias mpi openmpi
-else
-    pack_set -alias mpi $_mpi_version
-fi
+pack_set -alias mpi $_mpi_version
 
 source_pack libs/osu-benchmarks.bash
 source_pack libs/mpi-benchmarks.bash
@@ -136,7 +130,6 @@ source_pack libs/spglib.bash
 
 # sorting algorithms for matrices
 source_pack libs/metis.bash
-source_pack libs/metis-par-3.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 

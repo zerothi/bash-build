@@ -38,6 +38,9 @@ tmp_flags="$tmp_flags --enable-devel-headers"
 tmp_flags="$tmp_flags --enable-optimizations"
 tmp_flags="$tmp_flags --enable-shared --disable-static"
 
+# remove the wall stuff, shouldn't be needed
+pack_cmd "sed -i -e '/^BASE_CFLAGS=/d' ../configure"
+
 # knem is a sys module which we cannot override
 if [[ $(pack_installed knem) -eq 1 ]]; then
   pack_set -mod-req knem
@@ -53,7 +56,7 @@ fi
 
 # Install commands that it should run
 pack_cmd "unset MPICC ; unset MPICXX ; unset MPIFC"
-pack_cmd "../contrib/configure-release $tmp_flags" \
+pack_cmd "BASE_CFLAGS=-g ../contrib/configure-release $tmp_flags" \
 	 "--prefix=$(pack_get -prefix)"
 
 # Make commands

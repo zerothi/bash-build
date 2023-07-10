@@ -14,7 +14,7 @@ tmp_ld="$(list -LD-rp $(pack_get -mod-req))"
 tmp_lib=
 
 if $(is_c intel) ; then
-    tmp_lib="-lmkl_blacs_openmpi_lp64 -mkl=cluster"
+    tmp_lib="-lmkl_blacs_intelmpi_lp64 -qmkl=cluster"
 
 else
 

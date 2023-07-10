@@ -12,7 +12,7 @@ pack_set $(list -prefix '-mod-req ' mpi fftw gsl boost)
 
 tmp="$(list -LD-rp-lib[omp] gsl fftw)"
 if $(is_c intel) ; then
-    tmp="$tmp $MKL_LIB -mkl=parallel"
+    tmp="$tmp $MKL_LIB -qmkl=parallel"
     
 else
     la=lapack-$(pack_choice -i linalg)

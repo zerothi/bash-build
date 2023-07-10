@@ -35,7 +35,7 @@ if $(is_c intel) ; then
     # tmp="$tmp --with-lapack-lib='-lmkl_lapack95_lp64'"
     tmp="$tmp --with-scalapack=1"
     #tmp="$tmp --with-scalapack-dir=$MKL_PATH/lib/intel64" 
-    tmp="$tmp --with-scalapack-lib='-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+    tmp="$tmp --with-scalapack-lib='-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64'"
     tmp="$tmp --with-scalapack-include=$MKL_PATH/include"
     pack_cmd "unset AR RANLIB"
 

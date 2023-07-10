@@ -9,7 +9,7 @@ pack_set -install-query $(pack_get -prefix)/bin/atompaw
 
 tmp=
 if $(is_c intel) ; then
-    tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=sequential"
+    tmp="$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=sequential"
 
 else
 

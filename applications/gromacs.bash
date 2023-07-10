@@ -100,8 +100,8 @@ tmp="$tmp -DGMX_OPENMP_MAX_THREADS=256"
 
 if $(is_c intel) ; then
     # hopefully this should be enough
-    tmp="$tmp -DGMX_LAPACK_USER='-mkl=parallel'"
-    tmp="$tmp -DGMX_BLAS_USER='-mkl=parallel'"
+    tmp="$tmp -DGMX_LAPACK_USER='-qmkl=parallel'"
+    tmp="$tmp -DGMX_BLAS_USER='-qmkl=parallel'"
     
 elif $(is_c gnu) ; then
     la=lapack-$(pack_choice -i linalg)

@@ -60,9 +60,9 @@ for v in 6.8 7.2 ; do
     if $(is_c intel) ; then
         tmp="$tmp -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
-	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -mkl=parallel'"
+	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -qmkl=parallel'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK
-    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+    	tmp_lib="$tmp_lib SCALAPACK_LIBS='$tmp -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64'"
         tmp_lib="$tmp_lib LAPACK_LIBS='$tmp -lmkl_lapack95_lp64'"
 
     else

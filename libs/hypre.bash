@@ -11,8 +11,8 @@ pack_set $(list -prefix ' -mod-req ' mpi superlu)
 tmp_flags="--with-openmp --with-superlu-include=$(pack_get -prefix superlu)/include"
 if $(is_c intel) ; then
 
-    tmp_flags="$tmp_flags --with-blas-lib='$MKL_LIB -lmkl_blas95_lp64 -mkl=parallel'"
-    tmp_flags="$tmp_flags --with-lapack-lib='$MKL_LIB -lmkl_lapack95_lp64 -mkl=parallel'"
+    tmp_flags="$tmp_flags --with-blas-lib='$MKL_LIB -lmkl_blas95_lp64 -qmkl=parallel'"
+    tmp_flags="$tmp_flags --with-lapack-lib='$MKL_LIB -lmkl_lapack95_lp64 -qmkl=parallel'"
 
 else
     

@@ -16,7 +16,7 @@ fi
 
 tmp=
 if $(is_c intel) ; then
-    tmp=" $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel"
+    tmp=" $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=parallel"
 fi
 
 

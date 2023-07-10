@@ -10,8 +10,8 @@ pack_set --install-query $(pack_get --LD)/libharminv.a
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
-    tmp="--with-blas='$MKL_LIB -mkl=sequential -lmkl_blas95_lp64'" 
-    tmp="$tmp --with-lapack='$MKL_LIB -mkl=sequential -lmkl_lapack95_lp64'" 
+    tmp="--with-blas='$MKL_LIB -qmkl=sequential -lmkl_blas95_lp64'" 
+    tmp="$tmp --with-lapack='$MKL_LIB -qmkl=sequential -lmkl_lapack95_lp64'" 
 
 else
 

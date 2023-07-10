@@ -28,6 +28,10 @@ pack_cmd "$tmp 's;ARCH[[:space:]]*=.*;ARCH = $AR;g' $file"
 tmp_lib=
 if $(is_c intel) ; then
     tmp_lib="-lgfortran"
+    pack_cmd "echo 'CCFLAGS += -Wno-error=implicit-function-declaration' >> $file"
+fi
+if $(is_c llvm) ; then
+    pack_cmd "echo 'CCFLAGS += -Wno-error=implicit-function-declaration' >> $file"
 fi
 
 pack_cmd "$tmp 's?BLASLIB[[:space:]]*=.*?BLASLIB = $tmp_lib $(list --LD-rp blas) -lblas?g' $file"

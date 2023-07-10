@@ -14,6 +14,12 @@ pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' Makefile"
 pack_cmd "sed -i -e 's/^\(cputype\).*/\1 = unknown/' metis/Makefile"
 pack_cmd "sed -i -e 's/^\(systype\).*/\1 = linux/' metis/Makefile"
 pack_cmd "sed -i -e 's/^\(cc\).*/\1 = $CC/' metis/Makefile"
+if $(is_c intel) ; then
+    pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC -Wno-error=implicit-function-declaration/' Makefile"
+    pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC -Wno-error=implicit-function-declaration/' metis/Makefile"
+else
+    pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC/' Makefile.in"
+fi
 
 # Defaults to 32 bits information within METIS...
 pack_cmd "sed -i -e 's/\(define IDXTYPEWIDTH\).*/\1 32/' metis/include/metis.h"

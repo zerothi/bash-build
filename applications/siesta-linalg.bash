@@ -13,7 +13,7 @@ if $(is_c intel) ; then
     case $_mpi_version in
 	openmpi)
 	    pack_cmd "sed -i '$ a\
-SCALAPACK_LIBS = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64\n\
+SCALAPACK_LIBS = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64\n\
 LAPACK_LIBS = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n' arch.make"
 	    ;;
 	mpich)

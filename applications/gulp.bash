@@ -44,7 +44,7 @@ GULPENV = \n\
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
-SLIBS = $MKL_LIB -mkl=sequential -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64' $file"
+SLIBS = $MKL_LIB -qmkl=sequential -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lmkl_lapack95_lp64 -lmkl_blas95_lp64' $file"
     
 else
 
@@ -76,7 +76,7 @@ else
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
-    LIBS = $MKL_LIB -mkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' $file"
+    LIBS = $MKL_LIB -qmkl=sequential -lmkl_blas95_lp64 -lmkl_lapack95_lp64' $file"
     
 else
 

@@ -81,8 +81,8 @@ PLIBS = \$(PARPACKLIB) \$(ALIBS) \$(MPILIBS)\n\
 
 if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
-LAPACKLIB = -mkl=sequential\n\
-BLASLIB  = -mkl=sequential\n\
+LAPACKLIB = -qmkl=sequential\n\
+BLASLIB  = -qmkl=sequential\n\
 LDFLAGS = \n\
 ' $file"
 

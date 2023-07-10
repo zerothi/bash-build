@@ -20,7 +20,7 @@ if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
 CFLAGS  += -DHAVE_MKL \n\
 INC = -I$MKL_PATH/include\n\
-LIBS = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -mkl=parallel \n' $file"
+LIBS = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -qmkl=parallel \n' $file"
 
 else 
     

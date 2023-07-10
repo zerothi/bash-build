@@ -30,7 +30,7 @@ tmp_flags="$tmp_flags -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON"
 if $(is_c intel) ; then
     tmp_flags="$tmp_flags -DLAPACK_FOUND=true -DLAPACK_LIBRARIES='$MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential'"
 #    tmp_flags="$tmp_flags -DBLAS_FOUND=true -DBLAS_LIBRARIES='$MKL_LIB -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential'"
-    tmp_flags="$tmp_flags -DSCALAPACK_FOUND=true -DSCALAPACK_LIBRARIES='$MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64'"
+    tmp_flags="$tmp_flags -DSCALAPACK_FOUND=true -DSCALAPACK_LIBRARIES='$MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64'"
 
 else
 

@@ -63,7 +63,7 @@ LDFLAGS = $tmp_ld\n\
 if $(is_c intel) ; then
     pack_cmd "sed -i '$ a\
 LAPACKBLAS = $MKL_LIB -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_sequential\n\
-SCALAPACK = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64\n\
+SCALAPACK = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64\n\
 FFLAGS += -extend-source 132\n\
 F90FLAGS += -extend-source 132\n\
 ' $file"
