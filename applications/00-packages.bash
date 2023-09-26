@@ -44,6 +44,8 @@ source_pack applications/vmd.bash
 source_pack applications/vmd-python.bash
 source_pack applications/getfem.bash
 
+source_pack applications/conquest.bash
+
 source_pack applications/siesta.bash
 source_pack applications/siesta-master.bash # GitLab siesta
 source_pack applications/siesta-master-debug.bash
