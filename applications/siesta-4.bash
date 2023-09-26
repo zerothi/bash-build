@@ -59,12 +59,22 @@ ARFLAGS_EXTRA=\n\
 \n\
 NETCDF_INCFLAGS=$(list --INCDIRS netcdf)\n\
 NETCDF_LIBS=$(list --LD-rp netcdf)\n\
-ADDLIB=-lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lz\n\
-ADDLIB += #OMPPLACEHOLDER\n\
+LIBS += -lnetcdff -lnetcdf -lpnetcdf -lhdf5_hl -lhdf5 -lz\n\
+LIBS += #OMPPLACEHOLDER\n\
 INCFLAGS = $(list --INCDIRS $(pack_get --mod-req))\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
+.c.o:\n\
+\t\$(CC) -c \$(CFLAGS) \$(INCFLAGS) \$(CPPFLAGS) \$< \n\
+.F.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.F90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.f.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+.f90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
 \n\
 ' $file"
 
@@ -91,8 +101,9 @@ if [[ $(pack_installed mumps) -eq 1 ]]; then
     pack_cmd "sed -i '$ a\
 METIS_LIB = -lmetis\n\
 LIBS += \$(METIS_LIB)\n\
+INCFLAGS += -I$(pack_get -prefix mumps)/include \n\
 FPPFLAGS += -DSIESTA__METIS -DSIESTA__MUMPS\n\
-ADDLIB += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
+LIBS += -lzmumps -lmumps_common -lesmumps -lscotch -lscotcherr -lpord -lparmetis -lmetis' arch.make"
     
 elif [[ $(pack_installed metis) -eq 1 ]]; then
     pack_set --module-requirement metis
@@ -166,12 +177,14 @@ for omp in openmp none ; do
     pack_cmd "make clean"
     pack_cmd "make clean-transiesta"
 
+    pack_cmd "make libmpi_f90.a libfdf.a"
     # This should ensure a correct handling of the version info...
     pack_cmd "make $(get_make_parallel) siesta"
     pack_cmd "cp siesta $(pack_get --prefix)/bin/siesta$end"
     
     pack_cmd "make clean-transiesta"
     
+    pack_cmd "make libmpi_f90.a libfdf.a"
     pack_cmd "make $(get_make_parallel) transiesta"
     pack_cmd "cp transiesta $(pack_get --prefix)/bin/transiesta$end"
     
@@ -236,9 +249,12 @@ for omp in openmp none ; do
     pack_cmd "pushd ../../../Obj"
     set_flag $omp
     pack_cmd "popd ; make clean"
+    pack_cmd "make libmpi_f90.a libfdf.a"
     pack_cmd "make $(get_make_parallel)"
     pack_cmd "cp tbtrans $(pack_get --prefix)/bin/tbtrans$end"
-    pack_cmd "make clean-tbt ; make $(get_make_parallel) phtrans"
+    pack_cmd "make clean-tbt"
+    pack_cmd "make libmpi_f90.a libfdf.a"
+    pack_cmd "make $(get_make_parallel) phtrans"
     pack_cmd "cp phtrans $(pack_get --prefix)/bin/phtrans$end"
     pack_cmd "make clean"
     

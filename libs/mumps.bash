@@ -27,6 +27,14 @@ pack_set --module-requirement $parmetisV
 
 pack_cmd "echo '# Makefile for easy installation ' > Makefile.inc"
 
+
+# One can do:
+#  gemv + trsv (default)
+# or
+#  gemm + trsm (MUMPS_USE_BLAS2)
+# It is blas dependent
+tmp_flag="-DMUMPS_USE_BLAS2"
+
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c intel) ; then
     
@@ -37,7 +45,7 @@ if $(is_c intel) ; then
         pack_cmd "patch -p1 < $o"
     fi
 
-    tmp_flag="-nofor-main"
+    tmp_flag="$tmp_flag -nofor-main"
     pack_cmd "sed -i '1 a\
 SCALAP = $MKL_LIB -lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -qmkl=sequential \n\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -qmkl=sequential \n' Makefile.inc"
@@ -101,7 +109,7 @@ LIBPAR = \$(SCALAP)\n\
 LIBOTHERS = \n\
 \n\
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)\n\
-CDEFS   = -DAdd_ \n\
+CDEFS   = -DAdd_\n\
 #CDEFS   = -D \n\
 \n\
 #Begin Optimized options\n\

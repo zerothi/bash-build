@@ -1,5 +1,5 @@
-add_R_package rgeos 0.5-9
-pack_set -mod-req R.udunits2 -mod-req geos -mod-req R.sp
+add_R_package rgeos 0.6-4
+pack_set -mod-req geos -mod-req R.sp
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
 tmp="$tmp, repos=NULL, type='source'"

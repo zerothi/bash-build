@@ -1,4 +1,4 @@
-add_R_package sp 1.4-6
+add_R_package sp 2.0-0
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
 tmp="$tmp, repos=NULL, type='source'"

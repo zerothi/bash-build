@@ -134,6 +134,7 @@ source R/udunits2.bash
 source R/units.bash
 source R/sp.bash
 source R/rgeos.bash
+source R/wk.bash
 source R/s2.bash
 source R/sf.bash
 source R/rgdal.bash

@@ -1,5 +1,4 @@
-add_R_package units 0.8-0
-pack_set -mod-req udunits
+add_R_package units 0.8-3
 
 tmp="'$archive_path/$(pack_get -archive)', '$(pack_get -prefix)'"
 tmp="$tmp, repos=NULL, type='source'"

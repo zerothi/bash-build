@@ -22,9 +22,16 @@ pack_set --module-requirement metis
 
 pack_cmd "echo '# Makefile for easy installation ' > Makefile.inc"
 
+# One can do:
+#  gemv + trsv (default)
+# or
+#  gemm + trsm (MUMPS_USE_BLAS2)
+# It is blas dependent
+tmp_flag="-DMUMPS_USE_BLAS2"
+
 # We will create our own makefile from scratch (the included ones are ****)
 if $(is_c intel) ; then
-    tmp_flag="-nofor-main"
+    tmp_flag="$tmp_flag -nofor-main"
     pack_cmd "sed -i '1 a\
 LIBBLAS = $MKL_LIB -lmkl_blas95_lp64 -qmkl=sequential \n' Makefile.inc"
 

@@ -1,5 +1,5 @@
-add_R_package lwgeom 0.2-8
-pack_set -mod-req R.udunits2 -mod-req geos -mod-req R.sf
+add_R_package lwgeom 0.2-13
+pack_set -mod-req geos -mod-req R.sf
 
 mk_R_install_script new
 mk_R_install_script "config_geos = '--with-geos-config=$(pack_get -prefix geos)/bin/geos-config'"

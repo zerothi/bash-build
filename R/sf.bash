@@ -1,4 +1,4 @@
-add_R_package sf 1.0-6
+add_R_package sf 1.0-14
 pack_set -mod-req R.rgeos -mod-req R.units -mod-req gdal -mod-req geos -mod-req R.s2
 
 mk_R_install_script new
