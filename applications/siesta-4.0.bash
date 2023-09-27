@@ -39,7 +39,7 @@ SP_KIND=4\n\
 DP_KIND=8\n\
 KINDS=\$(SP_KIND) \$(DP_KIND)\n\
 \n\
-FFLAGS=$FCFLAGS\n\
+FFLAGS=$FFLAGS\n\
 FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF\n\
 \n\
 ARFLAGS_EXTRA=\n\
@@ -48,8 +48,17 @@ ADDLIB=-lnetcdff -lnetcdf\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
-\n\
-' arch.make"
+.F.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.F90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$< \n\
+.f.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+.c.o:\n\
+\t\$(CC) -c \$(CFLAGS) \$(INCFLAGS) \$(FPPFLAGS) \$<\n\
+.f90.o:\n\
+\t\$(FC) -c \$(FFLAGS) \$(INCFLAGS) \$<\n\
+\n' arch.make"
 
 
 source applications/siesta-linalg.bash
