@@ -43,8 +43,8 @@ FFLAGS=$FFLAGS\n\
 FPPFLAGS:=\$(FPPFLAGS) -DMPI -DFC_HAVE_FLUSH -DFC_HAVE_ABORT -DCDF\n\
 \n\
 ARFLAGS_EXTRA=\n\
-\n\
-ADDLIB=-lnetcdff -lnetcdf\n\
+LIBS += $(list -LD-rp ++netcdf-serial) -lnetcdff -lnetcdf\n\
+INCFLAGS += $(list -INCDIRS ++netcdf-serial)\n\
 \n\
 MPI_INTERFACE=libmpi_f90.a\n\
 MPI_INCLUDE=.\n\
