@@ -48,9 +48,9 @@ prefix=\"$(pack_get -prefix)\"\n\
 FC=\"$MPIFC\"\n\
 CC=\"$MPICC\"\n\
 CXX=\"$MPICXX\"\n\
-FCFLAGS_EXTRA=\"${tmpf//-floop-block/} $FLAG_OMP -I$(pack_get -prefix mpi)/include\"\n\
-CFLAGS_EXTRA=\"${tmpc//-floop-block/} $FLAG_OMP\"\n\
-CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/} $FLAG_OMP\"\n\
+FCFLAGS_EXTRA=\"${tmpf//-floop-block/} -I$(pack_get -prefix mpi)/include\"\n\
+CFLAGS_EXTRA=\"${tmpc//-floop-block/}\"\n\
+CXXFLAGS_EXTRA=\"${tmpcx//-floop-block/}\"\n\
 FCFLAGS_OPENMP=\"$FLAG_OMP\"\n\
 FC_LDFLAGS_EXTRA=\"$(list -LD-rp $(pack_get -mod-req))\"\n\
 with_libxml2=\"$(pack_get -prefix libxml2)\"\n\
@@ -58,7 +58,7 @@ LIBXML2_CPPFLAGS=\"$(list -INCDIRS gsl)\"\n\
 LIBXML2_LIBS=\"$(list -LD-rp libxml2) -lxml2\"\n\
 enable_fc_wrapper=\"no\"\n\
 enable_lotf=\"no\"\n\
-enable_openmp=\"yes\"\n\
+enable_openmp=\"no\"\n\
 enable_mpi_inplace=\"yes\"\n\
 with_mpi_inplace=\"yes\"\n\
 # The code does not implement level=3\n\
@@ -131,7 +131,7 @@ NETCDF_FORTRAN_CPPFLAGS=\"$(list -INCDIRS netcdf)\"\n\
 NETCDF_FORTRAN_FCFLAGS=\"$(list -INCDIRS netcdf)\"\n\
 NETCDF_FORTRAN_LIBS=\"$(list -LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
 FFTW3_CPPFLAGS=\"$(list -INCDIRS fftw-mpi)\"\n\
-FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_omp -lfftw3f_mpi -lfftw3f -lfftw3_omp -lfftw3_mpi -lfftw3\"\n' $file"
+FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_mpi -lfftw3f -lfftw3_mpi -lfftw3\"\n' $file"
 
 
 # Please see the following dependencies to ensure no duplicate
