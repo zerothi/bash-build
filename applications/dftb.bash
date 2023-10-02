@@ -1,4 +1,4 @@
-for v in 19.1 22.2 23.1
+for v in 22.2 23.1
 do
 add_package https://github.com/dftbplus/dftbplus/releases/download/$v/dftbplus-$v.tar.xz
 

@@ -1,6 +1,6 @@
 # 8.10.3 is broken
 # The current format only conforms to 9.X
-for v in 9.8.3
+for v in 9.10.3
 do
 add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
 
