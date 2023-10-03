@@ -102,10 +102,8 @@ LINALG_LIBS=\"$tmp\"\n' $file"
     pack_cmd "sed -i -e '/LDFLAGS_HINTS/{s:-static-intel::g;s:-static-libgcc::g}' ../configure"
 
 else
-    if [[ $mpila == scalapack ]]; then
-	pack_set -module-requirement scalapack
-	tmp="$tmp $(list -LD-rp scalapack) -lscalapack"
-    fi
+	  pack_set -module-requirement scalapack
+	  tmp="$tmp $(list -LD-rp scalapack) -lscalapack"
     
     la=lapack-$(pack_choice -i linalg)
     pack_set -module-requirement $la
@@ -131,7 +129,7 @@ NETCDF_FORTRAN_CPPFLAGS=\"$(list -INCDIRS netcdf)\"\n\
 NETCDF_FORTRAN_FCFLAGS=\"$(list -INCDIRS netcdf)\"\n\
 NETCDF_FORTRAN_LIBS=\"$(list -LD-rp ++netcdf) -lnetcdff -lnetcdf -lpnetcdf -lhdf5hl_fortran -lhdf5_fortran -lhdf5_hl -lhdf5 -lz\"\n\
 FFTW3_CPPFLAGS=\"$(list -INCDIRS fftw-mpi)\"\n\
-FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_mpi -lfftw3f -lfftw3_mpi -lfftw3\"\n' $file"
+FFTW3_LIBS=\"$(list -LD-rp fftw-mpi) -lfftw3f_mpi -lfftw3f -lfftw3_mpi -lfftw3 -lfftw3_threads\"\n' $file"
 
 
 # Please see the following dependencies to ensure no duplicate
