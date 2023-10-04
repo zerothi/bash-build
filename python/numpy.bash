@@ -1,4 +1,4 @@
-v=1.24.3
+v=1.26.0
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 

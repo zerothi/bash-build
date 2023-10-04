@@ -1,5 +1,5 @@
 # 0.11.3 and onwards are Py3 only!
-v=2023.03.0
+v=2023.09.0
 add_package \
     -archive xarray-$v.tar.gz \
     https://github.com/pydata/xarray/archive/v$v.tar.gz

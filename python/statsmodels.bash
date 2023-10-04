@@ -1,4 +1,4 @@
-v=0.13.5
+v=0.14.0
 add_package -archive statsmodels-$v.tar.gz \
     https://github.com/statsmodels/statsmodels/archive/v$v.tar.gz
 

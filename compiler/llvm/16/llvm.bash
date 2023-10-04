@@ -1,4 +1,4 @@
-v=16.0.5
+v=16.0.6
 add_package -directory llvm-project-$v.src -package llvm -version $v \
 	    https://github.com/llvm/llvm-project/releases/download/llvmorg-$v/llvm-project-$v.src.tar.xz
 
