@@ -34,6 +34,6 @@ else
 fi
 
 pack_cmd "cmake -B_build -S."
-pack_cmd "cmake --build _build --target install --config Release"
+pack_cmd "cmake --build _build --target install --config Release $opts"
 
 done
