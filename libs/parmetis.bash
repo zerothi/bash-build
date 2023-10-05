@@ -18,7 +18,7 @@ if $(is_c intel) ; then
     pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC -Wno-error=implicit-function-declaration/' Makefile"
     pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC -Wno-error=implicit-function-declaration/' metis/Makefile"
 else
-    pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC/' Makefile.in"
+    pack_cmd "sed -i -e 's/^\(CC\).*/\1 = $CC/' Makefile"
 fi
 
 # Defaults to 32 bits information within METIS...

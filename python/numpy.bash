@@ -1,4 +1,4 @@
-v=1.26.0
+v=1.25.2
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
@@ -10,6 +10,9 @@ pack_set -module-requirement suitesparse
 
 pack_cmd "mkdir -p $(pack_get -prefix)/lib/python$pV/site-packages/"
 
+opts=
+
+if [[ $(vrs_cmp 1.26 $v) -gt 0 ]]; then
 # For future maybe this flag is important: NPY_SEPARATE_COMPILATION=0
 
 file=site.cfg
@@ -202,12 +205,27 @@ else
     doerr numpy "Have not been configured with recognized compiler"
 
 fi
+else # >=1.26
+  pack_set -build-mod-req meson
+    
+  la=$(pack_choice -i linalg)
+  pack_set -module-requirement $la
+  pack_set -module-requirement lapack
+
+  npy_blas_order=$la
+  npy_lapack_order=lapack
+  opts="$opts -Csetup-args=-Dblas=\"$(list -LD-rp $la) $(pack_get -lib[omp] $la)\""
+  opts="$opts -Csetup-args=-Dlapack=\"$(list -LD-rp lapack) $(pack_get -lib[omp] lapack)\""
+ 
+  pNumpyInstall=
+
+fi
 
 # Enables distutils to setup correct LDFLAGS for current python installation
 pack_cmd "export LDSHARED='$CC -shared -pthread $LDFLAGS'"
 pack_cmd "unset LDFLAGS"
 
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . $pNumpyInstall --prefix=$(pack_get -prefix)" 
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . $pNumpyInstall $opts --prefix=$(pack_get -prefix)" 
 pack_cmd "unset LDSHARED"
 
 

@@ -1,4 +1,4 @@
-v=1.0.1
+v=1.2.2
 add_package https://github.com/mesonbuild/meson/releases/download/$v/meson-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
