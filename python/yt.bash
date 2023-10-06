@@ -12,5 +12,6 @@ pack_set $(list -prefix ' -module-requirement ' numpy scipy matplotlib sympy net
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
+pack_cmd "unset LDFLAGS && $_pip_cmd ewah-bool-utils --prefix=$(pack_get -prefix)"
 pack_cmd "unset LDFLAGS && $_pip_cmd . --prefix=$(pack_get -prefix)"
 

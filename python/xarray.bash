@@ -18,8 +18,8 @@ fi
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
-pack_cmd "echo 'Version: $v' > PKG-INFO"
-pack_cmd "sed -i -e 's/packages = xarray/packages = find:/' setup.cfg"
+#pack_cmd "echo 'Version: $v' > PKG-INFO"
+#pack_cmd "sed -i -e 's/packages = xarray/packages = find:/' setup.cfg"
 pack_cmd "$_pip_cmd install $pip_install_opts --prefix=$(pack_get -prefix) ."
 
 add_test_package xarray.test

@@ -1,4 +1,4 @@
-v=1.11.3
+v=1.10.1
 add_package https://github.com/scipy/scipy/releases/download/v$v/scipy-$v.tar.gz
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $MAKE_PARALLEL

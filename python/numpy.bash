@@ -1,4 +1,4 @@
-v=1.25.2
+v=1.24.4
 add_package \
      https://github.com/numpy/numpy/releases/download/v$v/numpy-$v.tar.gz
 
@@ -228,6 +228,7 @@ pack_cmd "unset LDFLAGS"
 pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . $pNumpyInstall $opts --prefix=$(pack_get -prefix)" 
 pack_cmd "unset LDSHARED"
 
+pack_cmd "$_pip_cmd ndindex --prefix=$(pack_get -prefix)"
 
 if ! $(is_c intel) ; then
     add_test_package numpy.test

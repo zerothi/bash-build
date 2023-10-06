@@ -136,6 +136,7 @@ pip_append psutil
 #fi
 pip_append pyparser
 pip_append pyparsing
+pip_append py-cpuinfo
 pip_append pycparser
 pip_append pyflakes
 [[ $(vrs_cmp $pV 2) -gt 0 ]] && pip_append pygithub
@@ -193,7 +194,7 @@ pip_install
 # This is because otherwise the "wrong" library will be used
 pack_cmd "$_pip_cmd uninstall -y numpy pandas ; echo 'yes'"
 
-_pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation"
+_pip_cmd="$(get_parent_exec) -s -m pip -vv install --no-build-isolation --no-deps"
 unset _pip _pip_flags
 unset pip_append
 unset pip_install
