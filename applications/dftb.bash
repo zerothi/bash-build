@@ -29,11 +29,10 @@ else
   pack_set --module-requirement $la
   
   opts="$opts -DLAPACK_LIBRARY='$(list -LD-rp ++$la) $(pack_get -lib[omp] $la)'"
-  opts="$opts -DSCALAPACK_LIBRARY='-qmkl=parallel'"
   opts="$opts -DSCALAPACK_LIBRARY='$(list -LD-rp scalapack) $(pack_get -lib[omp] scalapack)'"
 fi
 
-pack_cmd "cmake -B_build -S."
-pack_cmd "cmake --build _build --target install --config Release $opts"
+pack_cmd "cmake -B_build -S. --config Release $opts"
+pack_cmd "cmake --build _build --target install" 
 
 done

@@ -12,7 +12,7 @@ pack_set --module-requirement hdf5-serial
 pack_cmd "../configure" \
 	 "--prefix=$(pack_get --prefix)" \
 	 "--without-octave" \
-	 "LDFLAGS='$(list --LD-rp +hdf5-serial)'"
+	 "LDFLAGS='$(list --LD-rp ++hdf5-serial)'"
 
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make check > h5utils.test 2>&1"
