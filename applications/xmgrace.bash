@@ -13,7 +13,7 @@ pack_set -module-requirement netcdf-serial -build-mod-req fftw-2
 # Install commands that it should run
 pack_cmd "./configure" \
      "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
-     "LIBS='-lfftw -lnetcdff -lnetcdf'" \
+     "LIBS='$(list -LD-rp fftw-2) -lfftw -lnetcdff -lnetcdf'" \
      "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path)) $CPPFLAGS'" \
      "--enable-netcdf" \
      "--prefix=$(pack_get -prefix)" \

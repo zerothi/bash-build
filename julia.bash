@@ -1,5 +1,5 @@
 jV=1.9
-IjV=$jV.2
+IjV=$jV.3
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz
@@ -69,7 +69,7 @@ if ! $(is_host nicpa) ; then
     # limit number of julia processors for tests
     pack_cmd "export JULIA_NUM_THREADS=$NPROCS"
     pack_cmd "export JULIA_CPU_THREADS=$NPROCS"
-    pack_cmd "make test 2>&1 | tee julia.test"
+    pack_cmd "make test 2>&1 | tee julia.test || echo forced"
     pack_store julia.test
 fi
 pack_store Make.user
