@@ -3,7 +3,7 @@ add_package https://github.com/NanoComp/mpb/releases/download/v$v/mpb-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/mpbi
+pack_set -install-query $(pack_get -prefix)/bin/mpbi-mpi
 
 pack_set -module-opt "--lua-family mpb"
 
@@ -23,7 +23,7 @@ elif $(is_c gnu) ; then
 
     la=lapack-$(pack_choice -i linalg)
     pack_set --module-requirement $la
-    tmp_ld="$(list --LD-rp +$la)"
+    tmp_ld="$(list -LD-rp +$la)"
     tmp="$tmp --with-lapack='$tmp_ld $(pack_get -lib $la)'"
     tmp="$tmp --with-blas='$tmp_ld $(pack_get -lib $la)'"
 
@@ -38,19 +38,9 @@ do
     # Install the parallel version
     pack_cmd "../configure" \
 	     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
-	     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
+       "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $(pack_get -lib fftw-mpi)'" \
 	     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
-	     "--with-mpi --prefix=$(pack_get -prefix) $tmp $flag" 
-    pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make install"
-    pack_cmd "make distclean"
-    
-    # Install the serial version
-    pack_cmd "../configure" \
-	     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$CC' CXX='$CXX'" \
-	     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path))'" \
-	     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
-	     "--with-openmp --prefix=$(pack_get --prefix) $tmp $flag" 
+	     "--with-mpi --prefix=$(pack_get -prefix) $tmp $flag"
     pack_cmd "make $(get_make_parallel)"
     pack_cmd "make install"
     pack_cmd "make distclean"
