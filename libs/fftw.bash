@@ -56,13 +56,13 @@ fi
 for flag in --enable-single nothing ; do
     ext=f
     if [[ "$flag" == "nothing" ]]; then
-	flag=""
-	ext=d
+	  flag=""
+    ext=d
     else
-	if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
-	    # Only allow SSE for float
-	    flag="$flag --enable-sse"
-	fi
+    if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
+        # Only allow SSE for float
+        flag="$flag --enable-sse"
+    fi
     fi
     # Add default flags
     flag="$flag $tmp_flags"
@@ -93,7 +93,7 @@ add_package -alias fftw-mpi -package fftw-mpi \
 
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR -s $IS_MODULE
 
-pack_set -install-query $(pack_get -LD)/libfftw3_mpi.a
+pack_set -install-query $(pack_get -LD)/libfftw3_threads.a
 
 pack_set -lib -lfftw3_mpi -lfftw3 -lm
 pack_set -lib[omp] -lfftw3_mpi -lfftw3_omp -lfftw3 -lm
@@ -110,31 +110,29 @@ mpi_flags="$(list -LD-rp mpi)"
 for flag in --enable-single nothing ; do
     ext=f
     if [[ "$flag" == "nothing" ]]; then
-	flag=""
+	  flag=""
 	ext=d
     else
-	if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
-	    # Only allow SSE for float
-	    flag="$flag --enable-sse"
-	fi
+    if $(grep "sse " /proc/cpuinfo > /dev/null) ; then
+        # Only allow SSE for float
+        flag="$flag --enable-sse"
+    fi
     fi
     flag="$flag --enable-mpi $tmp_flags"
-    flag="$flag CC='$MPICC' \
-CFLAGS='$mpi_flags $CFLAGS' FC='$MPIF90' FFLAGS='$mpi_flags $FFLAGS'"
+    flag="$flag CC='$MPICC' FC='$MPIF90'"
 
-    pack_cmd "../configure $flag" \
+    pack_cmd "../configure $flag CFLAGS='$mpi_flags $CFLAGS' FFLAGS='$mpi_flags $FFLAGS'" \
 	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.$ext
 
     # create the SMP version
-    pack_cmd "../configure $flag" \
+    pack_cmd "../configure $flag CFLAGS='$mpi_flags $CFLAGS' FFLAGS='$mpi_flags $FFLAGS'" \
 	     "--enable-threads" \
 	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.smp.$ext
 
     # create the OpenMP version
-    flag="${flag//FLAGS='/FLAGS='$FLAG_OMP}"
-    pack_cmd "LIB='$FLAG_OMP' ../configure $flag" \
+    pack_cmd "LIB='$FLAG_OMP' ../configure $flag CFLAGS='$mpi_flags $CFLAGS $FLAG_OMP' FFLAGS='$mpi_flags $FFLAGS $FLAG_OMP'" \
 	     "--enable-openmp" \
 	     "--prefix $(pack_get -prefix)"
     tmp_func fftw.test.mpi.omp.$ext

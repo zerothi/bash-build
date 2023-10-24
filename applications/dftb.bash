@@ -16,7 +16,9 @@ opts="$opts -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opts="$opts -DWITH_MPI=TRUE"
 opts="$opts -DWITH_SOCKETS=TRUE"
 opts="$opts -DWITH_TRANSPORT=TRUE"
-opts="$opts -DWITH_ARPACK=TRUE"
+# ARPACK does not work with MPI
+#opts="$opts -DWITH_ARPACK=TRUE"
+opts="$opts -DCMAKE_BUILD_TYPE=Release"
 
 # Check for Intel MKL or not
 if $(is_c intel) ; then
@@ -32,7 +34,7 @@ else
   opts="$opts -DSCALAPACK_LIBRARY='$(list -LD-rp scalapack) $(pack_get -lib[omp] scalapack)'"
 fi
 
-pack_cmd "cmake -B_build -S. --config Release $opts"
+pack_cmd "cmake -B_build -S. $opts"
 pack_cmd "cmake --build _build --target install" 
 
 done

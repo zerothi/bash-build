@@ -68,7 +68,10 @@ include_dirs = $(pack_get -prefix mumps-serial)/include\n\
 extra_link_args = $tmp_flags\n\
 ' $file"
 
-pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd . --config-settings='--build-options=--cython' --config-settings='--configfile=$file' --prefix=$(pack_get -prefix)"
+# We will still cythonize (required to keep it up-to date)
+pack_cmd "$(get_parent_exec) setup.py --cython || echo 'no commands on purpose'"
+# Apparently the --config-settings is omitted...
+pack_cmd "CFLAGS='$pCFLAGS $tmp_flags' $_pip_cmd --use-pep517 . --config-settings='--build-options=--cython' --config-settings='--configfile=$file' --prefix=$(pack_get -prefix)"
 
 
 add_test_package kwant.test
