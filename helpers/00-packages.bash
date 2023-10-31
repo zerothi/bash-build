@@ -106,6 +106,10 @@ source_pack helpers/gts.bash
 source_pack helpers/graphviz.bash
 source_pack helpers/sqlite.bash
 
+source helpers/java/java.bash
+
+source_pack helpers/gprofng-gui.bash
+
 source_pack helpers/boost.bash
 
 source_pack helpers/swig.bash
