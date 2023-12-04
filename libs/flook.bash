@@ -1,4 +1,4 @@
-v=0.8.1
+v=0.8.4
 add_package -archive flook-$v.tar.gz \
    https://github.com/ElectronicStructureLibrary/flook/archive/v$v.tar.gz
 
