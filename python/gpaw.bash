@@ -1,4 +1,4 @@
-for v in 20.10.0 21.6.0 22.8.0 ; do
+for v in 20.10.0 21.6.0 22.8.0 23.9.1 ; do
 add_package https://gitlab.com/gpaw/gpaw/-/archive/$v/gpaw-$v.tar.bz2
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE
