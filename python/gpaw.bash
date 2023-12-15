@@ -12,6 +12,9 @@ if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
     hdf=False
 else
     hdf=True
+fi
+
+if [[ "$hdf" == "True" ]]; then
     pack_set -module-requirement hdf5
 fi
 
@@ -20,10 +23,11 @@ pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
 # should work with ELPA, but they are not using the correct version
 pack_set -build-mod-req ase
-pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc fftw)
+xc_v=5
+pack_set $(list -p '-mod-req ' mpi scipy matplotlib libxc[$xc_v] fftw)
 
 # First we need to fix gpaw compilation
-pack_cmd "sed -i -e 's/-Wl,-R/-Wl,-rpath=/g;s/-R/-Wl,-rpath=/g' config.py"
+pack_cmd "sed -i -e 's/-Wl,-R/$RPATH_LINE/g;s/-R/$RPATH_LINE/g' config.py"
 pack_cmd "sed -i -e \"s:cfgDict.get('BLDLIBRARY:cfgDict.get('LIBDIR')+os.sep+cfgDict.get('BLDLIBRARY:\" config.py"
 pack_cmd "unset CC CXX MPICC"
 
@@ -70,14 +74,12 @@ tmp="$(list -prefix ,\" -suffix /include\" -loop-cmd 'pack_get -prefix' $(pack_g
 pack_cmd "sed -i '$ a\
 library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD $(get_parent))\"]\n\
-library_dirs += [\"$(pack_get -LD libxc)\"]\n\
-runtime_library_dirs += [\"$(pack_get -LD libxc)\"]\n\
-include_dirs += [\"$(pack_get -prefix libxc)/include\"]\n\
+library_dirs += [\"$(pack_get -LD libxc[$xc_v])\"]\n\
+runtime_library_dirs += [\"$(pack_get -LD libxc[$xc_v])\"]\n\
+include_dirs += [\"$(pack_get -prefix libxc[$xc_v])/include\"]\n\
 libraries += [\"xc\"]\n\
 include_dirs += [\"$(pack_get -prefix mpi)/include\"]\n\
 extra_compile_args = \"$pCFLAGS -std=c99\".split(\" \")\n\
-mpi_runtime_library_dirs += [\"$(pack_get -LD mpi)\"]\n\
-mpi_runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
 scalapack = True\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CBLACS\", \"1\")]\n\
 define_macros += [(\"GPAW_NO_UNDERSCORE_CSCALAPACK\", \"1\")]\n\
@@ -87,10 +89,6 @@ if elpa:\n\
     runtime_library_dirs += [\"$(pack_get -LD elpa)\"]\n\
     libraries += [\"elpa\"]\n\
 \n\
-hdf5 = $hdf\n\
-library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
-runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
-libraries += \"hdf5_hl hdf5\".split()\n\
 library_dirs += [\"$(pack_get -LD zlib)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD zlib)\"]\n\
 libraries += [\"z\"]\n\
@@ -98,12 +96,36 @@ fftw = True\n\
 library_dirs += [\"$(pack_get -LD fftw)\"]\n\
 runtime_library_dirs += [\"$(pack_get -LD fftw)\"]\n\
 libraries += [\"fftw3\"]\n\
-extra_link_args += map(lambda s: \"-Wl,-rpath=\"+s,runtime_library_dirs)\n\
+extra_link_args += map(lambda s: \"$RPATH_LINE\"+s,runtime_library_dirs)\n\
 # distutils seems to break -R since it can not recognise GCC\n\
 runtime_library_dirs = []\n\
 # Add all directories for inclusion\n\
 include_dirs += [${tmp:1}]' $file"
+
+if [[ "$hdf" == "True" ]]; then
+  pack_cmd "sed -i '$ a\
+hdf5 = $hdf\n\
+if hdf5:
+    libraries += \"hdf5_hl hdf5\".split()\n\
+    library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
+    runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n' $file"
+fi
 unset hdf
+
+
+if [[ $(vrs_cmp $v 23) -ge 0 ]]; then
+  pack_cmd "sed -i '$ a\
+mpi = True\n\
+compiler = \"$MPICC $pCFLAGS $MKL_LIB\"\n\
+compiler = \"$MPICC\"\n\
+libraries += [\"m\"]\n\
+del mpicompiler\n' $file"
+else
+  pack_cmd "sed -i '$ a\
+    mpi_runtime_library_dirs += [\"$(pack_get -LD hdf5)\"]\n\
+mpi_runtime_library_dirs += [\"$(pack_get -LD mpi)\"]\n' $file"
+
+fi
 
 pack_cmd "unset LDFLAGS"
 
