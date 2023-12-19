@@ -6,7 +6,6 @@ pack_set -s $IS_MODULE -s $PRELOAD_MODULE
 
 pack_set -install-query $(pack_get -prefix)/bin/cython
 
-pack_set -module-requirement $(get_parent)
 if [[ $(pack_get -installed libffi) -eq 1 ]]; then
     pack_set -mod-req libffi
 else

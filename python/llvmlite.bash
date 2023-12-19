@@ -10,7 +10,6 @@ pack_set -install-query $(pack_get -LD)/python$pV/site-packages/llvmlite
 
 pack_set -build-mod-req build-tools
 pack_set -mod-req llvm[12]
-pack_set -module-requirement $(get_parent)
 
 pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 

@@ -1,7 +1,13 @@
 # Install Python 3 versions
 # apt-get libbz2-dev libncurses5-dev zip
 pV=3.11
-IpV=$pV.6
+IpV=$pV.7
+
+# Create a fake version
+add_hidden_package "python@$pV:" -version $pV
+pack_set --installed $_I_MOD
+
+
 add_package -alias python -package python \
     http://www.python.org/ftp/python/$IpV/Python-$IpV.tar.xz
 if $(is_host n-) ; then
@@ -25,6 +31,7 @@ if [[ $(pack_get -installed libffi) -eq 1 ]]; then
 else
     pack_set -mod-req gen-libffi
 fi
+
 lib_extra=
 tmp_lib=
 tmp=
@@ -47,9 +54,26 @@ fi
 
 pack_set -install-query $(pack_get -prefix)/bin/python
 
-pack_set -module-opt "-set-ENV PYTHONUSERBASE=~/.local/python-$IpV-$(get_c)"
-pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$IpV-$(get_c)/bin"
+pack_set -module-opt "-set-ENV PYTHONUSERBASE=~/.local/python-$pV-$(get_c)"
+pack_set -module-opt "-prepend-ENV PATH=~/.local/python-$pV-$(get_c)/bin"
 
+# Check for libtcl8.5.so (in which case we have to manually export it)
+tclp_set=0
+tclp=$(dirname $(locate libtcl8.6.so | grep -e '/usr' | head -n 1))
+if [[ $? -eq 0 ]]; then
+  tclp_set=1
+  pack_cmd "export TCLTK_LIBS='-L$tclp $RPATH_LINE$tclp -ltk8.6 -ltkstub8.6 -ltcl8.6'"
+  tclp=$(dirname $(locate tcl.h | grep -e '/usr/include' | grep -v private | head -n 1))
+  pack_cmd "export TCLTK_CFLAGS='-I$tclp'"
+else
+  tclp=$(dirname $(locate libtcl8.6.so | grep -e '/usr' | head -n 1))
+  if [[ $? -eq 0 ]]; then
+    tclp_set=1
+    pack_cmd "export TCLTK_LIBS='-L$tclp $RPATH_LINE$tclp -ltk8.5 -ltkstub8.5 -ltcl8.5'"
+    tclp=$(dirname $(locate tcl.h | grep -e '/usr/include' | grep -v private | head -n 1))
+    pack_cmd "export TCLTK_CFLAGS='-I$tclp'"
+  fi
+fi
 
 pCFLAGS="$CFLAGS"
 if $(is_c intel) ; then
@@ -74,13 +98,12 @@ pack_cmd "pushd ../Lib/distutils"
 pack_cmd "sed -i -e 's/\"cc\"/\"gcc\"/g' unixccompiler.py"
 pack_cmd "popd"
 
-
 # Install commands that it should run
 # When building non-shared it may break some builds.
 # We could later build python with static linking and then
 # later install the shared library (so that we both have .a and .so).
 # For now we require that builds requiring a shared build is "fixed".
-#    enable shared build with: --enable-shared and adding python[$IpV] to list -LD-rp
+#    enable shared build with: --enable-shared and adding python[$pV] to list -LD-rp
 pack_cmd "../configure" \
     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req) $lib_extra) $tmp_lib'" \
     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req) $lib_extra)' $tmp" \
@@ -117,6 +140,10 @@ if ! $(is_host n- sylg thul fjorm surt muspel slid) ; then
     pack_store python.test
 fi
 
+if [[ $tclp_set -eq 1 ]]; then
+  pack_cmd "unset TCLTK_LIBS TCLTK_CFLAGS"
+fi
+
 # Assert that libpython$pV.a exists
 # In certain cases libpython${pV}m.a 
 # is created and we want to symlink the two
@@ -129,13 +156,16 @@ pack_cmd "if [ ! -e $(pack_get -prefix)/bin/python ]; then pushd $(pack_get -pre
 
 
 # Create a new build with this module
+# NOTE the specification for the python version,
+# This should allow a pre-requisite as all of the python versions
+
 new_build -name _internal-python$IpV \
-    -module-path $(build_get -module-path)-python/$IpV \
+    -module-path $(build_get -module-path)-python/$pV \
     -source $(build_get -source) \
-    $(list -prefix "-default-module " $(pack_get -mod-req-module) python[$IpV]) \
+    $(list -prefix "-default-module " $(pack_get -mod-req-module) python@$pV:) \
     -installation-path $(dirname $(pack_get -prefix $(get_parent)))/packages \
     -build-module-path "-package -version" \
-    -build-installation-path "$IpV -package -version" \
+    -build-installation-path "$pV -package -version" \
     -build-path $(build_get -build-path)/py-$pV
 
 mkdir -p $(build_get -module-path[_internal-python$IpV])-apps

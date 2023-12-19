@@ -106,6 +106,7 @@ pip_append hypothesis
 pip_append jinja2
 pip_append joblib
 pip_append jsonschema
+pip_append lazy_loader
 # Until > 2.1.1 is out, we can't use it due to missing Cython updates
 #pip_append line_profiler
 pip_append markupsafe
