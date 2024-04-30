@@ -25,7 +25,6 @@ elif $(is_c gnu) ; then
 
 fi
 
-# Initial setup for new trunk with transiesta
 if [[ $(pack_installed flook) -eq 1 ]]; then
     pack_set -module-requirement flook
     opts="$opts -DWITH_FLOOK=on"

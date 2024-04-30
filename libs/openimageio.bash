@@ -1,5 +1,5 @@
 v=2.4.9.0
-add_package -package openimageio -archive oiio-$v.tar.gz \
+add_package -package openimageio -archive OpenImageIO-$v.tar.gz \
 	    https://github.com/OpenImageIO/oiio/archive/refs/tags/v$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE -s $BUILD_DIR

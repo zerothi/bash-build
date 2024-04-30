@@ -6,7 +6,7 @@ pack_set --module-requirement build-tools
 pack_set --prefix $(pack_get --prefix build-tools)
 
 if [ $(vrs_cmp $(pack_get -version) 1.4.18) -eq 0 ]; then
-    if $(is_host nicpa) ; then
+    if $(is_host comp-nb) ; then
 	o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
 	dwn_file https://raw.githubusercontent.com/openembedded/openembedded-core/master/meta/recipes-devtools/m4/m4/m4-1.4.18-glibc-change-work-around.patch $o
 	pack_cmd "pushd .. ; patch -p1 < $o ; popd"

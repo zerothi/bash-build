@@ -656,7 +656,9 @@ function pack_get {
 	-L-suffix)    printf '%s' "${_lib_suffix[$index]}" ;;
 	-MP|-module-prefix) 
             printf '%s' "${_mod_prefix[$index]}" ;;
-	-I|-install-prefix|-prefix) 
+	-I|-include-path) 
+            printf '%s' "${_install_prefix[$index]}/include" ;;
+	-install-prefix|-prefix) 
             printf '%s' "${_install_prefix[$index]}" ;;
 	-Q|-install-query)   printf '%s' "${_install_query[$index]}" ;;
 	-a|-alias)           printf '%s' "${_alias[$index]}" ;;

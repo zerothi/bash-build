@@ -14,7 +14,7 @@ if [[ -d /usr/include/infiniband ]]; then
     tmp_flags="$tmp_flags --with-verbs"
 fi
 
-if ! $(is_host nicpa) ; then
+if ! $(is_host comp-nb) ; then
     tmp_flags="$tmp_flags --with-mlx5-dv"
     tmp_flags="$tmp_flags --with-ib-hw-tm"
 fi

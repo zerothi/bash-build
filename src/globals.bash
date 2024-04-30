@@ -6,7 +6,7 @@ _cwd=$(pwd)
 if [[ -z "$LC_ALL" ]]; then
     # Set this for doing ANSI comparisons versus
     # unicode comparisons, much faster
-    export LC_ALL=en_GB.utf8
+    export LC_ALL=en_US.utf8
 fi
 
 # The error file
@@ -73,4 +73,4 @@ function help_() {
 
 
 # It is imperative that these packages are installed
-# apt-get build-essential gcc gfortran
+# apt-get build-essential gcc gfortran flex lzip bison linux-headers-amd64

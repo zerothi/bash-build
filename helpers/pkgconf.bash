@@ -1,4 +1,4 @@
-v=1.9.4
+v=2.2.0
 add_package -build generic -directory pkgconf-pkgconf-$v \
 	https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-$v.tar.gz
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR

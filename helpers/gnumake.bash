@@ -14,7 +14,7 @@ if [[ $(vrs_cmp $c_V $p_V) -ge 0 ]]; then
 fi
 
 if [[ $(vrs_cmp $p_V 4.2.1) -eq 0 ]]; then
-    if $(is_host nicpa) ; then
+    if $(is_host comp-nb) ; then
 	o=$(pwd_archives)/$(pack_get -package)-$(pack_get -version)-patch
 	dwn_file https://raw.githubusercontent.com/osresearch/heads/make-4.2.1/patches/make-4.2.1.patch $o
 	#    pack_cmd "pushd .. ; patch -p1 < $o ; popd"

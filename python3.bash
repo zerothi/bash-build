@@ -126,8 +126,9 @@ elif $(is_host frontend) ; then
     tmp=$(list -p '-x test_' urllib2_localnet gdb gdbm asyncio httplib multiprocessing_forkserver ssl)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1"
 
-elif $(is_host nicpa-845gb) ; then
-    tmp=$(list -p '-x test_' urllib urllib2 urllib2net imaplib httplib ctypes)
+elif $(is_host comp-nb) ; then
+    # zlib-ng yields problems
+    tmp=$(list -p '-x test_' urllib urllib2 urllib2net imaplib httplib ctypes zlib)
     pack_cmd "make EXTRATESTOPTS='$tmp' test > python.test 2>&1 ; echo force"
 
 else

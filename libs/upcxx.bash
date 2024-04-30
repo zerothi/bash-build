@@ -12,7 +12,7 @@ pack_set -mod-req ucx
 
 # Install commands that it should run
 opt=
-if ! $(is_host nicpa) ; then
+if ! $(is_host comp-nb) ; then
 	opt="$opt --enable-ofi"
 fi
 

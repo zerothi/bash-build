@@ -10,6 +10,10 @@ pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -LD)/libsuitesparseconfig.so
 
+# SuiteSparse dependencies will sometimes have problems because
+# they need nested linking
+pack_set --module-opt "-ld-library-path"
+
 # We do not use the build-in metis library
 # According to SuiteSparse the only changes are:
 #  default integers => long
