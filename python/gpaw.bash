@@ -42,7 +42,7 @@ if $(is_c intel) ; then
     pack_cmd "sed -i '1 a\
 compiler = \"$CC $pCFLAGS $MKL_LIB -mkl=sequential\"\n\
 mpicompiler = \"$MPICC $pCFLAGS $MKL_LIB\"\n\
-libraries = [\"mkl_scalapack_lp64\",\"mkl_blacs_openmpi_lp64\",\"mkl_lapack95_lp64\",\"mkl_blas95_lp64\"]\n\
+libraries = [\"mkl_scalapack_lp64\",\"mkl_blacs_intelmpi_lp64\",\"mkl_lapack95_lp64\",\"mkl_blas95_lp64\"]\n\
 extra_link_args = [\"$MKL_LIB\",\"-mkl=sequential\"]\n\
 platform_id = \"$(get_hostname)\"\n' $file"
 

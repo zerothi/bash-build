@@ -66,7 +66,7 @@ if [[ $? -eq 0 ]]; then
   tclp=$(dirname $(locate tcl.h | grep -e '/usr/include' | grep -v private | head -n 1))
   pack_cmd "export TCLTK_CFLAGS='-I$tclp'"
 else
-  tclp=$(dirname $(locate libtcl8.6.so | grep -e '/usr' | head -n 1))
+  tclp=$(dirname $(locate libtcl8.5.so | grep -e '/usr' | head -n 1))
   if [[ $? -eq 0 ]]; then
     tclp_set=1
     pack_cmd "export TCLTK_LIBS='-L$tclp $RPATH_LINE$tclp -ltk8.5 -ltkstub8.5 -ltcl8.5'"

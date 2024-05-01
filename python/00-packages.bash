@@ -2,8 +2,8 @@ function _fix_versioneer {
   # Fix the versioneer file
   local v=$1 ; shift
   # The versioneer file should be at the top directory
-  pack_cmd "echo 'def get_versions(): return dict(version=\"$1\", dirty=False, date=None)' >> versioneer.py"
-  pack_cmd "echo 'def get_version(): return \"$1\"' >> versioneer.py"
+  pack_cmd "echo 'def get_versions(): return dict(version=\"$v\", dirty=False, date=None)' >> versioneer.py"
+  pack_cmd "echo 'def get_version(): return \"$v\"' >> versioneer.py"
 }
 
 msg_install \
