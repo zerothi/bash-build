@@ -52,4 +52,3 @@ fi
 pack_cmd "cmake -Bbuild-tmp -S. $opts $lapack_opts"
 pack_cmd "cmake --build build-tmp $(get_make_parallel) --target install"
 
-

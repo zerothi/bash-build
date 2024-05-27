@@ -7,7 +7,7 @@ pack_set -s $MAKE_PARALLEL
 #pack_set --host-reject ntch-
 # --host-reject zeroth
 
-pack_set --install-query $(pack_get --prefix)/bin/openmolcas
+pack_set --install-query $(pack_get --prefix)/bin/caspt2.exe
 
 pack_set $(list -prefix '-mod-req ' mpi hdf5 globalarrays)
 xc_v=6
