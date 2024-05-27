@@ -4,8 +4,12 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+source_pack applications/openmolcas.bash
+
 # Valgrind is *important*
 source_pack applications/valgrind.bash
+
+source_pack applications/tblite.bash
 
 # Graphics applications
 source_pack applications/gnuplot.bash
@@ -47,6 +51,7 @@ source_pack applications/getfem.bash
 source_pack applications/conquest.bash
 
 source_pack applications/siesta.bash
+source_pack applications/siesta-5.0.bash
 source_pack applications/siesta-master.bash # GitLab siesta
 source_pack applications/siesta-master-debug.bash
 source_pack applications/fhiaims.bash
