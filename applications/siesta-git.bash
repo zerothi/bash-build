@@ -37,18 +37,19 @@ opts="$opts -DSIESTA_WITH_NCDF=on -DSIESTA_WITH_MPI=on"
 opts="$opts -DWITH_NCDF=on -DWITH_MPI=on"
 opts="$opts -DSIESTA_WITH_LIBXC=on"
 opts="$opts -DWITH_LIBXC=on"
+opts="$opts -Ds-dftd3_FIND_METHOD=fetch"
 
 if $(is_c gnu) ; then
   lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
 fi
     
-pack_cmd "cmake -Bbuild-tmp-omp -S. $opts -DWITH_OPENMP=true -DSIESTA_WITH_OPENMP=true -DSIESTA_EXECUTABLE_SUFFIX=_omp $lapack_opts"
+pack_cmd "cmake -Bbuild-tmp-omp -S. $opts -DWITH_OPENMP=true -DWITH_OpenMP=true -DSIESTA_WITH_OPENMP=true -DSIESTA_EXECUTABLE_SUFFIX=_omp $lapack_opts"
 pack_cmd "cmake --build build-tmp-omp $(get_make_parallel) --target install"
 
 if $(is_c gnu) ; then
   lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
 fi
 
-pack_cmd "cmake -Bbuild-tmp -S. $opts $lapack_opts"
+pack_cmd "cmake -Bbuild-tmp -S. $opts -DWITH_OpenMP=off $lapack_opts"
 pack_cmd "cmake --build build-tmp $(get_make_parallel) --target install"
 
