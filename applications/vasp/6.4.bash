@@ -1,5 +1,3 @@
-exit 0
-
 v=6.4.3
 add_package \
     -package vasp \
@@ -11,12 +9,14 @@ pack_set -host-reject zeroth
 
 pack_set -module-requirement mpi
 pack_set -module-requirement fftw
-pack_set -module-requirement wannier90
+v_w90=3
+pack_set -module-requirement wannier90[$v_w90]
 pack_set -module-requirement hdf5
+#pack_set -module-requirement elpa
 
 pack_set -module-opt "-lua-family vasp"
 
-pack_set -install-query "$(pack_get -prefix)/bin/vasp_tst_ncl_is2"
+pack_set -install-query "$(pack_get -prefix)/bin/vasp_ncl_is2"
 
 file=makefile.include
 
@@ -57,14 +57,15 @@ pack_cmd "sed -i -e 's/CACHE_SIZE=4000/CACHE_SIZE=6000/;\
 s/MPI_BLOCK=8000/MPI_BLOCK=60000/;\
 s:^FFTW_ROOT.*:FFTW_ROOT = $(pack_get -prefix fftw)\nLLIBS+= $(list -LD-rp fftw):;\
 s:^OFLAG .*:OFLAG = \$(FFLAGS):;\
-s:^FFLAGS .*:FFLAGS = $FFLAGS:;\
+s:^FFLAGS .*:FFLAGS = $FFLAGS $FFLAGS_OMP:;\
 ' $file"
 
 # For all compilations we want to add Wannier90 + HDF5 support
 pack_cmd "sed -i '$ a\
-INCS += $(list -INCDIRS wannier90 hdf5)\n\
+ELPA_ROOT = $(pack_ get -prefix elpa)\n\
+INCS += $(list -INCDIRS wannier90[$v_w90] hdf5) \n\
 LLIBS := -lwannier -lfftw3 -lfftw3_omp -lhdf5_fortran -lhdf5 \$(LLIBS)\n\
-LLIBS := $(list -LD-rp wannier90 hdf5) \$(LLIBS)\n\
+LLIBS := $(list -LD-rp wannier90[$v_w90] hdf5) \$(LLIBS)\n\
 CPP_OPTIONS += -DVASP_HDF5 -DVASP2WANNIER90\n' $file"
 
 
@@ -109,13 +110,14 @@ function compile_ispin {
 pack_cmd "mkdir -p $(pack_get -prefix)/bin"
 
 # Make commands
-#for i in 0 1 2 ; do
-#    compile_ispin $i vasp
-#done
+for i in 0 1 2 ; do
+    compile_ispin $i vasp
+done
+
 
 
 ###################### Prepare the TST code ##########################
-
+if [ 0 -eq 1 ]; then
 pack_cmd "tar xfz $o_code"
 pack_cmd "cp -r vtstcode-*/vtstcode6.4/* ./src/"
 
@@ -125,7 +127,8 @@ pack_cmd "pushd src"
 pack_cmd "sed -i -e 's:\(CHAIN_FORCE[^\&]*\):\1TSIF, :i' main.F"
 pack_cmd "sed -i -e 's:IF[[:space:]]*(LCHAIN) CALL chain_init:CALL chain_init:' main.F"
 pack_cmd "sed -s -i -e 's:[[:space:]]*\(\#[end]*if\):\1:i' chain.F"
-pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' .objects"
+pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dimer.o dynmat.o instanton.o lbfgs.o sd.o cg.o bbm.o fire.o lanczos.o neb.o qm.o pyamff_fortran/*.o ml_pyamff.o opt.o \1 :' .objects"
+pack_cmd "sed -i -e 's:^LIB=\(.*\):LIB=\1 pyamff_fortran:' makefile"
 
 pack_cmd "popd"
 
@@ -138,6 +141,7 @@ pack_cmd "cp -r vtstscripts-*/* $(pack_get -prefix)/bin/"
 for i in 0 1 2 ; do
     compile_ispin $i vasp_tst
 done
+fi
 
 unset compile_ispin
 

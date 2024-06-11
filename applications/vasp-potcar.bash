@@ -4,37 +4,44 @@ fi
 unset tmp_start tmp_end
 
 function tmp_start {
-    if [[ $(vrs_cmp $1 5.3.5) -ge 0 ]]; then
+    if [[ $(vrs_cmp $1 6.4) -ge 0 ]]; then
 	add_package \
-	    --build generic \
-	    --no-default-modules \
-	    --package vasp/POTCARS \
-	    --directory vasp \
-	    --version $2 \
+	    -build generic \
+	    -no-default-modules \
+	    -package vasp/POTCARS \
+	    -directory vasp \
+	    -version $2 \
+	    http://www.student.dtu.dk/~nicpa/packages/vasp-potcars-$1.tgz
+    elif [[ $(vrs_cmp $1 5.3.5) -ge 0 ]]; then
+	add_package \
+	    -build generic \
+	    -no-default-modules \
+	    -package vasp/POTCARS \
+	    -directory vasp \
+	    -version $2 \
 	    http://www.student.dtu.dk/~nicpa/packages/vasp-$1.tar
     else
 	add_package \
-	    --build generic \
-	    --no-default-modules \
-	    --package vasp/POTCARS \
-	    --directory VASP \
-	    --version $2 \
+	    -build generic \
+	    -no-default-modules \
+	    -package vasp/POTCARS \
+	    -directory VASP \
+	    -version $2 \
 	    http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
     fi
 
     pack_set -s $IS_MODULE
 
-    pack_set --host-reject ntch
-    pack_set --host-reject zeroth
-    pack_set --prefix-and-module \
-	$(pack_get --alias)/$1/$2
-    pack_set --module-opt "--lua-family vasp-potcar"
-    pack_cmd "mkdir -p $(dirname $(pack_get --prefix))"
-    pack_cmd "rm -rf $(pack_get --prefix)"
+    pack_set -host-reject ntch
+    pack_set -host-reject zeroth
+    pack_set -prefix-and-module \
+	$(pack_get -alias)/$1/$2
+    pack_set -module-opt "--lua-family vasp-potcar"
+    pack_cmd "mkdir -p $(dirname $(pack_get -prefix))"
+    pack_cmd "rm -rf $(pack_get -prefix)"
     pack_cmd "mkdir tmp"
     pack_cmd "cd tmp"
-
-}    
+}
 
 function tmp_end {
     pack_cmd "cd ../"
@@ -43,10 +50,11 @@ function tmp_end {
     pack_cmd "chmod 0755 -R tmp/"
     # Make files readable, but not executable
     pack_cmd 'find tmp -type f -exec chmod 444 {} \;'
-    pack_cmd "mv tmp $(pack_get --prefix)"
-    pack_set --module-opt "--set-ENV POTCARS=$(pack_get --prefix)"
+    pack_cmd "mv tmp $(pack_get -prefix)"
+    pack_set -module-opt "--set-ENV POTCARS=$(pack_get -prefix)"
+    pack_set -module-opt "--set-ENV VASP_POTCARS=$(pack_get -prefix)"
     # We only check for one
-    pack_set --install-query $(pack_get --prefix)/$3
+    pack_set -install-query $(pack_get -prefix)/$3
     pack_install
 }
 
@@ -65,6 +73,13 @@ for version in GGA LDA ; do
     tmp_start $v USPP_$version
     pack_cmd "tar xfz ../potUSPP_$version.t*"
     tmp_end $v USPP_$version H_soft/POTCAR.Z
+done
+
+v=6.4
+for version in LDA PBE ; do
+    tmp_start $v $version
+    pack_cmd "tar xfz ../potpaw_$version.64.tgz"
+    tmp_end $v $version H_AE/POTCAR
 done
 
 unset tmp_start tmp_end
