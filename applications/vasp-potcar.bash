@@ -9,9 +9,8 @@ function tmp_start {
 	    -build generic \
 	    -no-default-modules \
 	    -package vasp/POTCARS \
-	    -directory vasp \
 	    -version $2 \
-	    http://www.student.dtu.dk/~nicpa/packages/vasp-potcars-$1.tgz
+	    http://www.student.dtu.dk/~nicpa/packages/vasp-potcars-$1.tar
     elif [[ $(vrs_cmp $1 5.3.5) -ge 0 ]]; then
 	add_package \
 	    -build generic \
