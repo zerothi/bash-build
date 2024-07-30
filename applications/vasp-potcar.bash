@@ -8,14 +8,14 @@ function tmp_start {
 	add_package \
 	    -build generic \
 	    -no-default-modules \
-	    -package vasp/POTCARS \
+	    -package vasp-potcars \
 	    -version $2 \
 	    http://www.student.dtu.dk/~nicpa/packages/vasp-potcars-$1.tar
     elif [[ $(vrs_cmp $1 5.3.5) -ge 0 ]]; then
 	add_package \
 	    -build generic \
 	    -no-default-modules \
-	    -package vasp/POTCARS \
+	    -package vasp-potcars \
 	    -directory vasp \
 	    -version $2 \
 	    http://www.student.dtu.dk/~nicpa/packages/vasp-$1.tar
@@ -23,7 +23,7 @@ function tmp_start {
 	add_package \
 	    -build generic \
 	    -no-default-modules \
-	    -package vasp/POTCARS \
+	    -package vasp-potcars \
 	    -directory VASP \
 	    -version $2 \
 	    http://www.student.dtu.dk/~nicpa/packages/VASP-$1.zip
@@ -35,7 +35,7 @@ function tmp_start {
     pack_set -host-reject zeroth
     pack_set -prefix-and-module \
 	$(pack_get -alias)/$1/$2
-    pack_set -module-opt "--lua-family vasp-potcar"
+    pack_set -module-opt "--lua-family vasp-potcars"
     pack_cmd "mkdir -p $(dirname $(pack_get -prefix))"
     pack_cmd "rm -rf $(pack_get -prefix)"
     pack_cmd "mkdir tmp"
