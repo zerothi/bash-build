@@ -12,8 +12,9 @@ pack_set -lib[pt] -lopenblasp
 
 # Default flags for all compilations of OpenBLAS here 
 # Improve allocation for small matrices
-# Allow up to 128 threads, regardless of scheme
-def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=256"
+# Allow up to max threads, regardless of scheme
+_num_threads=256
+def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=$_num_threads"
 tmp_FFLAGS=${FFLAGS//-funroll-loops/}
 tmp_CFLAGS=${CFLAGS//-funroll-loops/}
 if $(is_c gnu-unsafe) ; then
@@ -30,7 +31,6 @@ def_flag="$def_flag FCOMMON_OPT='$tmp_FCFLAGS' COMMON_OPT='$tmp_CFLAGS'"
 # NO_LAPACK=1 means that we do not need -lgfortran
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 
-_num_threads=256
 
 for ver in thread none openmp ; do
     flag="$def_flag USE_THREAD=0"

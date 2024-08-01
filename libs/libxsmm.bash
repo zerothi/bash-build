@@ -1,6 +1,6 @@
 v=1.17
 add_package -archive libxsmm-$v.tar.gz \
-	    https://github.com/hfp/libxsmm/archive/$v.tar.gz
+	    https://github.com/libxsmm/libxsmm/archive/$v.tar.gz
 
 pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 
