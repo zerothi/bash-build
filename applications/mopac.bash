@@ -8,7 +8,7 @@ pack_set -s $IS_MODULE
 pack_set -install-query $(pack_get -prefix)/bin/mopac
 
 p=$(pack_get -prefix)
-pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$p/lib"
+pack_set -module-opt "-ld-library-path"
 pack_set -module-opt "-set-ENV MOPAC_LICENSE=$p/bin"
 #pack_set -module-opt "-echo \'\"Please read the Academic MOPAC license, it is your responsibility to uphold it.\"\'"
 

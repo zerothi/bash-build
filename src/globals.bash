@@ -31,6 +31,11 @@ PIC=pic
 NO_PIC=no-pic
 PIE=pie
 NO_PIE=no-pie
+USE_RPATH=rpath
+
+# Constants for linker, include and linker-rpath
+LINK_LINE="-L"
+INCLUDE_LINE="-I"
 RPATH_LINE="-Wl,-rpath,"
 
 # To by-pass creating survey when using the install script

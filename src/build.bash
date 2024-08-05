@@ -40,6 +40,7 @@ declare -A _b_build_path
 # and the .compile directory
 _b_build_path[$_b_def_idx]=$_cwd/.compile
 mkdir -p ${_b_build_path[$_b_def_idx]}
+
 # An installation prefix where <packages> are installed
 declare -A _b_prefix
 # The installation prefix for the module files
@@ -61,6 +62,7 @@ declare -A _b_def_mod_reqs
 # Defaults a bunch of settings for all packages associated with
 # this build.
 declare -A _b_def_settings
+_b_def_settings[$_b_def_idx]="$USE_RPATH"
 # An array containing the sources that are to be rejected for this
 # build.
 # This consists of all local.reject + $(get_c -n).reject
@@ -372,6 +374,7 @@ function new_build {
     local tmp
     # Simple command to initialize a new build
     let _N_b++
+
     # Initialize all the stuff
     _b_source[$_N_b]="${_b_source[$_b_def_idx]}"
     _b_prefix[$_N_b]="${_b_prefix[$_b_def_idx]}"
@@ -380,6 +383,13 @@ function new_build {
     _b_build_mod_prefix[$_N_b]="${_b_build_mod_prefix[$_b_def_idx]}"
     _b_build_path[$_N_b]="${_b_build_path[$_b_def_idx]}"
     _b_def_mod_reqs[$_N_b]=""
+    if [[ $_N_b -eq 0 ]]; then
+	    echo "soetuhoaesuh $_LIST_SEP$USE_RPATH"
+	_b_def_settings[$_N_b]="$_LIST_SEP$USE_RPATH"
+    else
+        _b_def_settings[$_N_b]="${_b_def_settings[$_b_def_idx]}"
+    fi
+
     # Read in options
     local opt
     while [[ $# -gt 1 ]]; do
@@ -504,18 +514,25 @@ function build_print {
     local build=$_N_b
     [[ $# -gt 0 ]] && build=$(get_index --hash-array "_b_index" $1)
     shift
-    echo " >> >> >> >> Build information"
+    echo " >> >> >> >> Build information (index=$build)"
     echo " NAM: $(build_get -name[$build])"
     echo " AP : $(build_get -ap[$build])"
     echo " IP : $(build_get -ip[$build])"
     echo " BP : $(build_get -bp[$build])"
-    echo " BP X $(pack_list -lf "-X -p /" $(build_get -bp[$build]))"
+    #echo " BP X $(pack_list -lf "-X -p /" $(build_get -bp[$build]))"
     echo " BIP: $(build_get -bip[$build])"
-    echo " BIPX $(pack_list -lf "-X -s /" $(build_get -bip[$build]))"
-    echo " BMP: $(build_get -bmp[$build])"
-    echo " BMPX $(pack_list -lf "-X -p /" $(build_get -bmp[$build]))"
+    #echo " BIPX $(pack_list -lf "-X -s /" $(build_get -bip[$build]))"
+    #echo " BMP: $(build_get -bmp[$build])"
+    #echo " BMPX $(pack_list -lf "-X -p /" $(build_get -bmp[$build]))"
     echo " DM : $(build_get -default-module[$build])"
     echo " S  : $(build_get -source[$build])"
     echo " SET: $(build_get -default-setting[$build])"
     echo "                                 << << << <<"
+}
+
+function build_print_all {
+    for i in $(seq 0 $_N_b)
+    do
+        build_print $i
+    done
 }

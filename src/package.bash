@@ -148,7 +148,7 @@ function pack_list {
     done
     local ret=''
     while [[ $# -gt 0 ]]; do
-	trim_em opt $1
+	trim_em opt "$1"
 	shift
 	case $opt in
 	    -*) ret="$ret$(list $lf -c "pack_get $opt" $_N_archives)" ;;
@@ -645,6 +645,14 @@ function pack_get {
 		break
 	    done
 	    ;;
+	-RL|-RLD|-library-rpath)
+	    if $(has_setting $USE_RPATH $index) ; then
+                for p in ${_lib_suffix[$index]} ; do
+		    printf '%s' "$RPATH_LINE${_install_prefix[$index]}/$p"
+		    break
+		done
+	    fi
+	    ;;
 	-L-all|-LD-all|-library-path-all)
 	    local i=0
 	    for p in ${_lib_suffix[$index]} ; do
@@ -652,6 +660,16 @@ function pack_get {
 		printf '%s' "${_install_prefix[$index]}/$p"
 		let i++
 	    done
+	    ;;
+	-RL-all|-RLD-all|-library-rpath-all)
+	    if $(has_setting $USE_RPATH $index) ; then
+	        local i=0
+	        for p in ${_lib_suffix[$index]} ; do
+		    [[ $i -ge 1 ]] && printf '%s' ' '
+		    printf '%s' "$RPATH_LINE${_install_prefix[$index]}/$p"
+		    let i++
+	        done
+	    fi
 	    ;;
 	-L-suffix)    printf '%s' "${_lib_suffix[$index]}" ;;
 	-MP|-module-prefix) 

@@ -12,8 +12,7 @@ pack_set_file_version
 pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set -module-opt "-lua-family lammps"
-pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib64"
-pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib"
+pack_set -module-opt "-ld-library-path"
 
 pack_set -install-query $(pack_get -prefix)/bin/lmp
 

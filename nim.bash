@@ -1,5 +1,5 @@
 nV=2.0
-InV=$nV.0
+InV=$nV.8
 add_package -package nim \
 	    https://nim-lang.org/download/nim-$InV.tar.xz
 
@@ -8,6 +8,7 @@ pack_set -s $MAKE_PARALLEL -s $IS_MODULE
 pack_set -module-requirement pcre
 pack_set -module-requirement openssl
 pack_set -module-requirement nodejs
+pack_set -rem-s $USE_RPATH
 
 pack_set -install-query $(pack_get -prefix)/bin/nim
 

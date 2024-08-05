@@ -98,6 +98,89 @@ function msg_install {
     echo '=================================='
 }
 
+# Can be used to return the index in the _arrays for the named variable
+# $1 is the shortname for what to search for
+function get_index {
+    # We defualt to the _index variable, located in the package.bash
+    local var=_index
+    local all=0
+    local v
+    while [[ $# -gt 1 ]]; do
+	case $1 in
+	    --all|-all|-a)
+		all=1
+		shift
+		;;
+	    --hash-array|-hash-array)
+		var="$2"
+		shift 2
+		;;
+	esac
+    done
+    local i="$1"
+    shift
+
+    if [[ -z "$i" ]]; then
+	return 1
+    fi
+    if (isnumber $i) ; then
+	# We do not check for correctness
+	# This just slows it down
+	#if [[ "$var" == "_index" ]]; then
+	#    [[ $name -gt $_N_archives ]] && return 1
+	#elif [[ "$var" == "_b_index" ]]; then
+	#    [[ $name -gt $_N_b ]] && return 1
+	#fi
+	#[[ $name -lt 0 ]] && return 1
+	printf '%s' "$i"
+	return 0
+    fi
+    
+    # Save the thing that we want to process...
+    typeset -l name="$(var_spec $i)"
+    local version=$(var_spec -s $i)
+    # do full variable (for ${!...})
+    var="$var[$name]"
+    #echo "get_index: $var name($name) version($version)" >&2
+
+    # Do full expansion.
+    local idx=${!var}
+    if [[ -z "$idx" ]]; then
+	return 1
+    fi
+    case $all in
+	1)
+	    if [[ -n "$version" ]]; then
+		for v in $idx ; do
+		    if [[ $(vrs_cmp $(pack_get -version $v) $version) -eq 0 ]]; then
+			printf '%s' "$v"
+			break
+		    fi
+		done
+	    else
+		printf '%s' "$idx"
+	    fi
+	    ;;
+	*)
+	    i=-1
+            # Select the latest per default..
+	    if [[ -n "$version" ]]; then
+		for v in $idx ; do
+		    if [[ $(vrs_cmp $(pack_get -version $v) $version) -eq 0 ]]; then
+			i="$v"
+			break
+		    fi
+		done
+	    else
+		for v in $idx ; do
+		    i="$v"
+		done
+	    fi
+	    printf '%s' "$i"
+	    ;;
+    esac
+}
+
 
 #  Function docmd
 # Runs all passed arguments by first informing the
@@ -729,15 +812,15 @@ function list {
     for opt in $opts ; do
 	case $opt in
 	    -Wlrpath)
-		pre="$RPATH_LINE"
+		pre=''
 		suf='' 
-		lcmd='pack_get -library-path-all ' ;;
+		lcmd='pack_get -library-rpath-all ' ;;
 	    -LDFLAGS)   
-		pre='-L'  
+		pre="$LINK_LINE"
 		suf='' 
 		lcmd='pack_get -library-path-all ' ;;
 	    -INCDIRS) 
-		pre='-I'
+		pre="$INCLUDE_LINE"
 		suf='/include'
 		lcmd='pack_get -prefix ' ;;
 	    -lib*)

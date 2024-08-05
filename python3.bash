@@ -17,6 +17,10 @@ fi
 # The settings
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 
+# Ensure that we can update python, without causing problems for nested installation stuff.
+pack_set -rem-s $USE_RPATH
+pack_set -module-opt "-ld-library-path"
+
 # --no-cache-dir: no wheels are saved in the $HOME/.cache directory
 # --no-deps: do not download any dependencies
 # --no-index: do not search the web for dependencies when building
