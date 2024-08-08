@@ -3,12 +3,11 @@ add_package --build generic ftp://ftp.gnu.org/pub/gnu/readline/readline-8.2.tar.
 pack_set -s $IS_MODULE
 pack_set --lib "-lreadline -lncurses"
 
-
-pack_set --install-query $(pack_get --prefix)/lib/libreadline.so
+pack_set --install-query $(pack_get -prefix)/lib/libreadline.so
 
 # Install commands that it should run
-pack_cmd "./configure --prefix=$(pack_get --prefix)"
+pack_cmd "./configure --prefix=$(pack_get -prefix)" \
+	--with-shared-termcap-library
 
-# Make commands
 pack_cmd "make"
 pack_cmd "make install"
