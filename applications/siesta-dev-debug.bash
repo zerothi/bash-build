@@ -1,4 +1,4 @@
-add_package -package siesta-master-debug -version 0 \
+add_package -package siesta-dev-debug -version 0 \
 	    -directory siesta \
 	    -build debug \
 	    https://gitlab.com/siesta-project/siesta.git
