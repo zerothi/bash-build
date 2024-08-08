@@ -14,4 +14,4 @@ fi
 
 pack_cmd "mkdir -p $(pack_get -LD)/python$pV/site-packages"
 
-pack_cmd "$_pip_cmd install . --prefix=$(pack_get -prefix)"
+pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"

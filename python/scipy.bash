@@ -24,8 +24,7 @@ pack_cmd "unset LDFLAGS"
 #pack_set -mod-req $bl
 #pack_cmd "BLAS='$(pack_get -LD $bl) $(pack_get -lib[omp] $bl)' LAPACK='$(pack_get -LD $la) $(pack_get -lib[omp] $la)' meson setup builddir $(list -prefix '--libdir=' -c 'pack_get -LD ' $la $bl)" 
 #pack_cmd "meson install -C builddir" 
-#pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --prefix=$(pack_get -prefix)"
-pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $(get_parent_exec) setup.py install --prefix=$(pack_get -prefix)"
+pack_cmd "NPY_LAPACK_ORDER=$npy_lapack_order NPY_BLAS_ORDER=$npy_blas_order $_pip_cmd . --prefix=$(pack_get -prefix)"
 
 if ! $(is_c intel) ; then
     add_test_package scipy.test
