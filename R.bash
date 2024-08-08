@@ -27,8 +27,8 @@ else
     la=$(pack_choice -i linalg)
     pack_set -module-requirement $la
 
-    tmp="$tmp BLAS_LIBS='-L$(pack_get -LD $la) -Wl,-rpath=$(pack_get -LD $la) $(pack_get -lib[omp] $la)'"
-    tmp="$tmp LAPACK_LIBS='-L$(pack_get -LD $la) -Wl,-rpath=$(pack_get -LD $la) $(pack_get -lib[omp] $la)'"
+    tmp="$tmp BLAS_LIBS='$(list -LD-rp $la) $(pack_get -lib[omp] $la)'"
+    tmp="$tmp LAPACK_LIBS='$(list -LD-rp $la) $(pack_get -lib[omp] $la)'"
 
 fi
 

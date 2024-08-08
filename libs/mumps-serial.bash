@@ -3,7 +3,7 @@ add_package --package mumps-serial $(pack_get -url mumps)
 
 pack_set -s $IS_MODULE
 
-pack_set --install-query $(pack_get --LD)/libmumps_common_omp.a
+pack_set --install-query $(pack_get -LD)/libmumps_common_omp.a
 
 pack_set --lib -lzmumps -ldmumps -lcmumps -lsmumps -lmumps_common -lpord -lmpiseq
 pack_set --lib[omp] -lzmumps_omp -ldmumps_omp -lcmumps_omp -lsmumps_omp -lmumps_common_omp -lpord_omp -lmpiseq
@@ -45,26 +45,20 @@ LIBBLAS = $(list --LD-rp +$la) $(pack_get -lib $la) \n' Makefile.inc"
 fi
 
 pack_cmd "sed -i '1 a\
-LMETISDIR = $(pack_get --prefix metis) \n\
-IMETIS = $(list --INCDIRS metis) \n\
-LMETIS = $(list --LD-rp metis) -lmetis \n\
+LMETISDIR = $(pack_get -prefix metis) \n\
+IMETIS = $(list -INCDIRS metis) \n\
+LMETIS = $(list -LD-rp metis) -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
-LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
-\n\
-#SCOTCHDIR = $(pack_get --prefix scotch)\n\
-#LSCOTCHDIR = -L\$SCOTCHDIR)/lib \n\
-#ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lscotch \n\
+LPORD = -L\$(LPORDDIR) $RPATH_LINE\$(LPORDDIR) -lpord \n\
 \n\
 ORDERINGSF = -Dpord -Dmetis #-Dscotch \n\
 ##ORDERINGSF = -Dpord -Dmetis # -Dptscotch \n\
 ORDERINGSC = \$(ORDERINGSF) \n\
 \n\
-LORDERINGS  = \$(LMETIS) \$(LPORD) \$(LSCOTCH) \n\
-IORDERINGSF = \$(ISCOTCH) \n\
-IORDERINGSC = \$(IMETIS) \$(IPORD) \$(ISCOTCH) \n\
+LORDERINGS  = \$(LMETIS) \$(LPORD) \n\
+IORDERINGSC = \$(IMETIS) \$(IPORD) \n\
 LORDERINGS  = \$(LMETIS) \$(LPORD) \n\
 IORDERINGSF = \n\
 IORDERINGSC = \$(IMETIS) \$(IPORD) \n\

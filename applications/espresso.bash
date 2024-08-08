@@ -58,7 +58,7 @@ for v in 6.8 7.2 ; do
     # BLACS is always empty (fully encompassed in scalapack)
     tmp_lib="$tmp_lib BLACS_LIBS="
     if $(is_c intel) ; then
-        tmp="$tmp -L$MKL_PATH/lib/intel64 -Wl,-rpath=$MKL_PATH/lib/intel64"
+        tmp="$tmp -L$MKL_PATH/lib/intel64 $RPATH_LINE$MKL_PATH/lib/intel64"
 	tmp=${tmp//\/\//}
 	tmp_lib="$tmp_lib BLAS_LIBS='$tmp -lmkl_blas95_lp64 -qmkl=parallel'"
 	# Newer versions does not rely on separation of BLACS and ScaLAPACK

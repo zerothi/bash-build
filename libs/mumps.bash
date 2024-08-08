@@ -70,13 +70,13 @@ LMETIS = $(list --LD-rp $parmetisV) -lparmetis -lmetis \n\
 \n\
 LPORDDIR = \$(topdir)/PORD/lib\n\
 IPORD = -I\$(topdir)/PORD/include\n\
-LPORD = -L\$(LPORDDIR) -Wl,-rpath=\$(LPORDDIR) -lpord \n\
+LPORD = -L\$(LPORDDIR) $RPATH_LINE\$(LPORDDIR) -lpord \n\
 \n\
-SCOTCHDIR = $(pack_get --prefix scotch)\n\
-LSCOTCHDIR = -L\$(SCOTCHDIR)/lib \n\
-ISCOTCH = -I\$(SCOTCHDIR)/include \n\
-LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr\n\
-#LSCOTCH = \$(LSCOTCHDIR) -Wl,-rpath=\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr -lscotch \n\
+SCOTCHDIR = $(pack_get -prefix scotch)\n\
+LSCOTCHDIR = $(pack_-LD scotch) \n\
+ISCOTCH = -I$(pack_get -I scotch) \n\
+LSCOTCH = -L\$(LSCOTCHDIR) $RPATH_LINE\$(LSCOTCHDIR) -lesmumps -lscotch -lscotcherr\n\
+#LSCOTCH = \$(LSCOTCHDIR) $RPATH_LINE\$(LSCOTCHDIR) -lptesmumps -lptscotch -lptscotcherr -lscotch \n\
 \n\
 #ORDERINGSF = -Dpord -Dparmetis -Dptscotch \n\
 ORDERINGSF = -Dpord -Dparmetis -Dscotch\n\
