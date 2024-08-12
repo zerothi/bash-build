@@ -59,13 +59,13 @@ create_module $cm_defs \
     -echo "$(echo_modules siesta)" \
     -RL siesta
 
-rm_latest siesta-master.latest
+rm_latest siesta-dev.latest
 create_module $cm_defs \
-    -n siesta-master.latest \
+    -n siesta-dev.latest \
     -W "Siesta: $(get_c)" \
-    -M siesta-master.latest \
-    -echo "$(echo_modules siesta-master)" \
-    -RL siesta-master
+    -M siesta-dev.latest \
+    -echo "$(echo_modules siesta-dev)" \
+    -RL siesta-dev
 
 msg_install --message "lammps"
 

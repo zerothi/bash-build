@@ -1,3 +1,4 @@
+return 0
 add_package -build generic -package $gcc-gdb \
 	    https://ftp.gnu.org/gnu/gdb/gdb-14.2.tar.xz
 
