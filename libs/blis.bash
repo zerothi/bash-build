@@ -32,9 +32,21 @@ function blis_cpu {
 # Get CPU info
 function blis_parse {
     local flags=$(grep flags /proc/cpuinfo | head -1)
-    # Check for avx2
+    if $(blis_cpu "$flags" avx2 avx512f intel_pt) ; then
+	printf '%s' 'skx'
+	return
+    fi
     if $(blis_cpu "$flags" avx2 intel_pt) ; then
 	printf '%s' 'haswell'
+	return
+    fi
+    if $(blis_cpu "$flags" avx2 vaes avx512) ; then
+        # zen4 will come, replace once known
+	printf '%s' 'zen3'
+	return
+    fi
+    if $(blis_cpu "$flags" avx2 vaes) ; then
+	printf '%s' 'zen3'
 	return
     fi
     if $(blis_cpu "$flags" avx2 clwb) ; then
