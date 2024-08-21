@@ -13,7 +13,7 @@ pack_set -lib[pt] -lopenblasp
 # Default flags for all compilations of OpenBLAS here 
 # Improve allocation for small matrices
 # Allow up to max threads, regardless of scheme
-_num_threads=256
+_num_threads=512
 def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=$_num_threads"
 tmp_FFLAGS=${FFLAGS//-funroll-loops/}
 tmp_CFLAGS=${CFLAGS//-funroll-loops/}
