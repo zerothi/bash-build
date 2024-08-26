@@ -34,16 +34,16 @@ if $(is_host n-) ; then
     opt="$opt -DLLDB_ENABLE_PYTHON=OFF"
 fi
 
-opt="$opt -DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx;libcxxabi;libunwind'"
+opt="$opt -DLLVM_ENABLE_RUNTIMES='all'"
 opt="$opt -DCMAKE_C_COMPILER='$CC'"
 opt="$opt -DCMAKE_CXX_COMPILER='$CXX'"
 opt="$opt -DCMAKE_CXX_LINK_FLAGS='$(list -LD-rp $(pack_get -mod-req))'"
 opt="$opt -DCMAKE_CXX_FLAGS='$CXXFLAGS -flarge-source-files'"
 
-add_opt="$opt -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;libclc;lld;lldb;openmp;polly;pstl;mlir'"
+add_opt="$opt -DLLVM_ENABLE_PROJECTS='clang;compiler-rt;clang-tools-extra;libclc;lld;lldb;openmp;polly;pstl;mlir'"
 pack_cmd "cmake -G 'Ninja' $add_opt -B build-clang ./llvm"
 pack_cmd "echo 'stage-1' ; cmake --build build-clang $(get_make_parallel)"
-add_opt="$opt -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;libclc;lld;lldb;openmp;polly;pstl;mlir;flang'"
+add_opt="$opt -DLLVM_ENABLE_PROJECTS='clang;compiler-rt;clang-tools-extra;libclc;lld;lldb;openmp;polly;pstl;mlir;flang'"
 pack_cmd "cmake -G 'Ninja' $add_opt -B build-clang ./llvm"
 pack_cmd "echo 'stage-2' ; cmake --build build-clang -j 2 -t flang-new"
 pack_cmd "echo 'stage-3' ; cmake --build build-clang --target install"
