@@ -24,13 +24,14 @@ elif $(is_c intel-unsafe) ; then
     tmp_FFLAGS=${tmp_FFLAGS//-Ofast/-O3}
     tmp_CFLAGS=${tmp_CFLAGS//-Ofast/-O3}
 fi
-def_flag="$def_flag LAPACK_FFLAGS='$tmp_FFLAGS' LAPACK_CFLAGS='$tmp_CFLAGS'"
-def_flag="$def_flag FCFLAGS='$tmp_FFLAGS' CFLAGS='$tmp_CFLAGS'"
-def_flag="$def_flag FCOMMON_OPT='$tmp_FCFLAGS' COMMON_OPT='$tmp_CFLAGS'"
+#def_flag="$def_flag LAPACK_FFLAGS='$tmp_FFLAGS' LAPACK_CFLAGS='$tmp_CFLAGS'"
+#def_flag="$def_flag FCFLAGS='$tmp_FFLAGS' CFLAGS='$tmp_CFLAGS'"
+#def_flag="$def_flag FCOMMON_OPT='$tmp_FCFLAGS' COMMON_OPT='$tmp_CFLAGS'"
 
 # NO_LAPACK=1 means that we do not need -lgfortran
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 
+pack_cmd "unset FCFLAGS FFLAGS CFLAGS"
 
 for ver in thread none openmp ; do
     flag="$def_flag USE_THREAD=0"
