@@ -84,7 +84,6 @@ do
 
     pack_cmd "./configure -p $(pack_get -prefix) -t $model --enable-blas --enable-cblas $(blis_parse)"
     
-    # versions prior to 0.5.0 used LIBBLIS_NAME
     pack_cmd "make LIBBLIS=libblis$name $(get_make_parallel)"
     pack_cmd "make LIBBLIS=libblis$name install"
     pack_cmd "make LIBBLIS=libblis$name check 2>&1 > $model.test"
