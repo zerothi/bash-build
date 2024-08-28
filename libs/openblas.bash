@@ -1,8 +1,8 @@
 for v in 0.3.28 ; do
 add_package -package openblas -archive OpenBLAS-$v.tar.gz \
-	    https://github.com/xianyi/OpenBLAS/archive/v$v.tar.gz
+	    https://github.com/OpenMathLib/OpenBLAS/archive/v$v.tar.gz
 
-pack_set -s $IS_MODULE
+pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
 pack_set -install-query $(pack_get -LD)/libopenblas.a
 
@@ -14,7 +14,7 @@ pack_set -lib[pt] -lopenblasp
 # Improve allocation for small matrices
 # Allow up to max threads, regardless of scheme
 _num_threads=512
-def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=$_num_threads"
+def_flag="BINARY=64 SANITY_CHECK=1 MAX_STACK_ALLOC=2048 NUM_THREADS=$_num_threads NO_AFFINITY=1"
 tmp_FFLAGS=${FFLAGS//-funroll-loops/}
 tmp_CFLAGS=${CFLAGS//-funroll-loops/}
 if $(is_c gnu-unsafe) ; then
@@ -32,24 +32,27 @@ fi
 #pack_cmd "sed -i -s -e 's:-lgfortran::g' f_check"
 
 pack_cmd "unset FCFLAGS FFLAGS CFLAGS"
+pack_cmd "unset OPENBLAS_NUM_THREADS"
 
 for ver in thread none openmp ; do
     flag="$def_flag USE_THREAD=0"
     test_end=""
     case $ver in
 	thread)
-	    flag="$def_flag USE_THREAD=1 NUM_THREADS=$_num_threads"
+	    flag="$def_flag USE_THREAD=1"
 	    test_end="_pt"
 	    ;;
 	openmp)
-	    flag="$def_flag USE_OPENMP=1 USE_THREAD=1 NUM_THREADS=$_num_threads LIBNAMESUFFIX=omp"
+	    flag="$def_flag USE_THREAD=1 USE_OPENMP=1 LIBNAMESUFFIX=omp"
 	    test_end="_omp"
 	    ;;
     esac
 
     # Ensure it is clean
     pack_cmd "make clean"
-    pack_cmd "make $flag libs netlib shared"
+    pack_cmd "make $flag $(get_make_parallel) libs"
+    pack_cmd "make $flag $(get_make_parallel) netlib"
+    pack_cmd "make $flag shared"
     pack_cmd "make $flag tests 2>&1 > openblas.test || echo forced"
     pack_cmd "make $flag PREFIX=$(pack_get -prefix) install"
     pack_store openblas.test openblas.test.${test_end}
