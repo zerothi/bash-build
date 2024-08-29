@@ -13,6 +13,8 @@ pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi)
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DGCC_INSTALL_PREFIX=$(pack_get -prefix gcc[$gnu_v])"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
+opt="$opt -DBUILD_SHARED_LIBS=FALSE"
+opt="$opt -DLLVM_BUILD_EXAMPLES=TRUE"
 #opt="$opt -DLIBUNWIND_USE_COMPILER_RT=ON"
 opt="$opt -DLIBCXXABI_USE_LLVM_UNWINDER=YES"
 #opt="$opt -DLIBCXXABI_USE_COMPILER_RT=YES"

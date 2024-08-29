@@ -1,5 +1,6 @@
 # Common options for each of the LLVM-compliers
 pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib"
+pack_set -module-opt "-prepend-ENV LD_LIBRARY_PATH=$(pack_get -prefix)/lib/*-linux-*"
 pack_set -module-opt "-undefined-ENV CC=clang"
 pack_set -module-opt "-undefined-ENV CXX=clang++"
 # we currently do not have "flang" in LLVM, so in LLVM 9 we should have it

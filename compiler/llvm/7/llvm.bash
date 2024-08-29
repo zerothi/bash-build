@@ -54,6 +54,8 @@ done
 
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
+opt="$opt -DBUILD_SHARED_LIBS=FALSE"
+opt="$opt -DLLVM_BUILD_EXAMPLES=TRUE"
 opt="$opt -DLLVM_PARALLEL_COMPILE_JOBS=$NPROCS"
 opt="$opt -DLLVM_BINUTILS_INCDIR=$(pack_get -prefix build-tools)/include"
 

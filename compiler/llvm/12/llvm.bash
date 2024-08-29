@@ -12,6 +12,8 @@ pack_set $(list -p '-mod-req ' gen-zlib gen-libxml2 gen-libffi)
 
 opt="-DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opt="$opt -DCMAKE_BUILD_TYPE=Release"
+opt="$opt -DBUILD_SHARED_LIBS=FALSE"
+opt="$opt -DLLVM_BUILD_EXAMPLES=TRUE"
 opt="$opt -DCMAKE_CXX_LINK_FLAGS='$(list -LD-rp gcc)'"
 opt="$opt -DCLANG_DEFAULT_CXX_STDLIB=libc++"
 opt="$opt -DCLANG_DEFAULT_RTLIB=compiler-rt"

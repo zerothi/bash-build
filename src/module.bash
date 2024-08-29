@@ -300,10 +300,58 @@ whatis("Loads " .. modulename .. " (" .. version .. ") using " .. compiler .. " 
 EOF
 	    ;;
     esac
+    
+    # We need to define env-vars before we load other packages
+    # Otherwise, we could end up in wrong env-vars
+    add_module_if -F $force -d "$path" $mfile \
+        "$(module_fmt_routine -set-env ${name//[-.\/]/_}_PREFIX $fpath)"
+    
+    # Add specific envs if needed
+    if [[ -n "${env// /}" ]]; then
+	cat <<EOF >> $mfile
+
+$fm_comment Specific environment variables:
+EOF
+	for tmp in $env ; do
+	    # Partition into [s|a|p]
+	    local opt=${tmp:0:1}
+	    local lenv=${tmp%%=*}
+	    lenv=${lenv:1}
+	    local lval=${tmp#*=}
+	    
+	    #echo "$opt, $lenv $lval $force"
+            # Add paths if they are available
+	    # We add explicit quotations as certain env-vars
+	    # might not adhere to simple text 
+	    case $opt in
+		u)
+		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
+		    ;;
+		s)
+		    opt="$(module_fmt_routine -set-env $lenv $lval)"
+		    ;;
+		p)
+		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
+		    ;;
+		a)
+		    opt="$(module_fmt_routine -append-path $lenv $lval)"
+		    ;;
+		*)
+		    opt=''
+		    ;;
+	    esac
+	    # These options should probably always
+	    # be "on" , they are specified by the options by the user
+	    # and not, per-see "optional"
+	    [[ -n "$opt" ]] && \
+		add_module_if -F 1 "$mfile" "$opt"
+	done
+	echo "" >> $mfile
+    fi
 
     # Add pre loaders if needed
     if [[  -n "${load// /}" ]]; then
-	cat <<EOF >> "$mfile"
+	cat <<EOF >> $mfile
 $fm_comment This module will load the following modules:
 EOF
 	for tmp in $load ; do
@@ -377,8 +425,6 @@ EOF
     #   directory accessible at all times.
     # This is nice for header only projects etc.
     # Change name to a usable env-var
-    add_module_if -F $force -d "$path" $mfile \
-        "$(module_fmt_routine -set-env ${name//[-.\/]/_}_PREFIX $fpath)"
     # Add paths if they are available
     add_module_if -F $force -d "$path/bin" $mfile \
 	"$(module_fmt_routine -prepend-path PATH $fpath/bin)"
@@ -445,48 +491,6 @@ family("$lua_family")
 EOF
 		;;
 	esac
-    fi
-    
-    # Add specific envs if needed
-    if [[ -n "${env// /}" ]]; then
-	cat <<EOF >> $mfile
-$fm_comment Specific environment variables:
-EOF
-	for tmp in $env ; do
-	    # Partition into [s|a|p]
-	    local opt=${tmp:0:1}
-	    local lenv=${tmp%%=*}
-	    lenv=${lenv:1}
-	    local lval=${tmp#*=}
-	    
-	    #echo "$opt, $lenv $lval $force"
-            # Add paths if they are available
-	    # We add explicit quotations as certain env-vars
-	    # might not adhere to simple text 
-	    case $opt in
-		u)
-		    opt="$(module_fmt_routine -undefined-env $lenv $lval)"
-		    ;;
-		s)
-		    opt="$(module_fmt_routine -set-env $lenv $lval)"
-		    ;;
-		p)
-		    opt="$(module_fmt_routine -prepend-path $lenv $lval)"
-		    ;;
-		a)
-		    opt="$(module_fmt_routine -append-path $lenv $lval)"
-		    ;;
-		*)
-		    opt=''
-		    ;;
-	    esac
-	    # These options should probably always
-	    # be "on" , they are specified by the options by the user
-	    # and not, per-see "optional"
-	    [[ -n "$opt" ]] && \
-		add_module_if -F 1 "$mfile" "$opt"
-	done
-	echo "" >> $mfile
     fi
     
     if [[ -n "$echos" ]]; then

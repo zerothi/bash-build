@@ -1,6 +1,15 @@
 old_ulimit_n=$(ulimit -n)
 ulimit -n 32768
 
+# The documentation for building LLVM is sparse.
+# And generally not applicable between different versions.
+# It is getting better but...
+#
+# Here are some sites:
+#
+# https://llvm.org/docs/BuildingADistribution.html
+# https://llvm.org/docs/CMake.html
+# https://llvm.org/docs/AdvancedBuilds.html
 
 gnu_v=9
 #source_pack compiler/llvm/7/llvm.bash
