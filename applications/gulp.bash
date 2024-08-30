@@ -1,9 +1,5 @@
-for v in 5.2 6.1.2 ; do
+for v in 5.2 6.1.2 6.2 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tgz
-
-if ! $(is_c intel) ; then
-    pack_set -s $MAKE_PARALLEL
-fi
 
 pack_set --module-opt "--lua-family gulp"
 
