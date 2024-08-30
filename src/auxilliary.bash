@@ -79,16 +79,17 @@ function msg_install {
 	    module list 2>&1
 	    ;;
 	1)
-	    echo " File    : $(pack_get -archive $pack)"
-	    local _e=$(pack_get -ext $pack)
-	    echo " Ext     : $_e"
-	    echo " Ext CMD : $(arc_cmd $_e)"
-	    echo " Installation directory: $(pack_get -prefix $pack)"
+        echo " File    : $(pack_get -archive $pack)"
+        echo " DATE    : $(date +'%Y/%m/%d %R')"
+        local _e=$(pack_get -ext $pack)
+        echo " Ext     : $_e"
+        echo " Ext CMD : $(arc_cmd $_e)"
+        echo " Installation directory: $(pack_get -prefix $pack)"
 	    ;;
 	*)
-	    local _p=$(pack_get -package $pack)
-	    local _a=$(pack_get -alias $pack)
-	    echo " Package : $_p"
+        local _p=$(pack_get -package $pack)
+        local _a=$(pack_get -alias $pack)
+        echo " Package : $_p"
 	    if [[ "$_p" != "$_a" ]]; then
 		echo " Alias   : $_a"
 	    fi	
@@ -203,6 +204,7 @@ function docmd {
     echo ''
     echo ' # ================================================================'
     echo " # $message"
+    echo " # DATE: $(date +'%Y/%m/%d %R')"
     echo " # PWD: $(pwd)"
     echo " # CMD: ${cmd[@]}"
     echo ' # ================================================================'
