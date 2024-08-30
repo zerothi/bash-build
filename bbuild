@@ -213,7 +213,6 @@ export LMOD_IGNORE_CACHE=1
 # Far more often than not, we need Modules to be installed before
 source_pack helpers/modules.bash
 
-
 # Check that modules was installed previously, and if
 # that isn't the case, error out and denote the user should
 # rerun the script..
@@ -280,6 +279,7 @@ build_set -reset-module[debug] \
 # versions has been set etc.
 source $(build_get -source)
 
+
 # Install all libraries
 source libs/00-packages.bash
 
@@ -288,6 +288,7 @@ source python${_python_version}.bash
 source R.bash
 source julia.bash
 source nim.bash
+source rust.bash
 
 # We have installed all libraries needed for doing application installs
 source applications/00-packages.bash
