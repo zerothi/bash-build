@@ -1,5 +1,5 @@
-v=24.02
-add_package --version $v -package openmolcas \
+v=24.06
+add_package -version $v -package openmolcas \
 	https://gitlab.com/Molcas/OpenMolcas/-/archive/v$v/OpenMolcas-v$v.tar.bz2
 
 pack_set -s $MAKE_PARALLEL
@@ -7,14 +7,14 @@ pack_set -s $MAKE_PARALLEL
 #pack_set --host-reject ntch-
 # --host-reject zeroth
 
-pack_set --install-query $(pack_get --prefix)/bin/caspt2.exe
+pack_set -install-query $(pack_get -prefix)/bin/caspt2.exe
 
 pack_set $(list -prefix '-mod-req ' mpi hdf5 globalarrays)
 xc_v=6
-pack_set --module-requirement libxc[$xc_v]
+pack_set -module-requirement libxc[$xc_v]
 
 # Add the lua family
-pack_set --module-opt "--lua-family openmolcas"
+pack_set -module-opt "--lua-family openmolcas"
 
 # Todo add GA
 #
@@ -51,16 +51,16 @@ if $(is_c intel) ; then
 
 elif $(is_c gnu) ; then
 
-    pack_set --module-requirement scalapack
-    tmp_scalapack="$(list --LD-rp scalapack)"
+    pack_set -module-requirement scalapack
+    tmp_scalapack="$(list -LD-rp scalapack)"
     la=lapack-$(pack_choice -i linalg)
-    pack_set --module-requirement $la
-    tmp_blas="$(list --LD-rp +$la)"
+    pack_set -module-requirement $la
+    tmp_blas="$(list -LD-rp +$la)"
     tmp_lapack="$tmp_blas $(pack_get -lib $la)"
     tmp_scalapack="$tmp_scalapack -lscalapack $tmp_lapack $tmp_blas"
 
 else
-    doerr "$(pack_get --package)" "Could not recognize the compiler: $(get_c)"
+    doerr "$(pack_get -package)" "Could not recognize the compiler: $(get_c)"
 
 fi
 opts="$opts -DLINALG_LIBRARIES='${tmp_blas// /;};${tmp_lapack// /;};${tmp_scalapack// /;}'"
