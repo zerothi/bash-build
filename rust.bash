@@ -2,7 +2,7 @@
 for v in 1.80.1
 do
   add_package -build generic -no-default-modules -alias rust -package rust \
-    https://static.rust-lang.org/dist/rust-$IRV-$(uname -m)-$(uname -i)-linux-gnu.tar.xz
+    https://static.rust-lang.org/dist/rust-$v-$(uname -m)-unknown-linux-gnu.tar.xz
 
   pack_set -s $IS_MODULE
 

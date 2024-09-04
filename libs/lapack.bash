@@ -74,12 +74,12 @@ pack_cmd "for f in *.out ; do mv \$f $(pack_get -prefix)/ ; done"
 pack_cmd "popd"
 
 # Installation commands
-pack_cmd "mkdir -p $(pack_get --LD)"
-pack_cmd "mkdir -p $(pack_get --prefix)/include/"
-pack_cmd "cp libcblas.a $(pack_get --LD)/"
-pack_cmd "cp librefblas.a $(pack_get --LD)/libblas.a"
-pack_cmd "cp liblapack.a liblapacke.a $(pack_get --LD)/"
-pack_cmd "cp libtmglib.a $(pack_get --LD)/libtmg.a"
+pack_cmd "mkdir -p $(pack_get -LD)"
+pack_cmd "mkdir -p $(pack_get -prefix)/include/"
+pack_cmd "cp libcblas.a $(pack_get -LD)/"
+pack_cmd "cp librefblas.a $(pack_get -LD)/libblas.a"
+pack_cmd "cp liblapack.a liblapacke.a $(pack_get -LD)/"
+pack_cmd "cp libtmglib.a $(pack_get -LD)/libtmg.a"
 # Install header-files
 pack_cmd "cp CBLAS/include/*.h $(pack_get -prefix)/include/"
 pack_cmd "cp LAPACKE/include/*.h $(pack_get -prefix)/include/"
@@ -89,23 +89,23 @@ pack_cmd 'for f in *.out ; do gzip $f ; done'
 
 
 add_hidden_package blas/$v
-pack_set --prefix $(pack_get --prefix lapack)
+pack_set -prefix $(pack_get -prefix lapack)
 # Denote the default libraries
-pack_set --installed $_I_REQ
+pack_set -installed $_I_REQ
 pack_set -lib -lblas
 pack_set -lib[omp] -lblas
 pack_set -lib[pt] -lblas
 
 add_hidden_package cblas/$v
-pack_set --prefix $(pack_get --prefix lapack)
-pack_set --installed $_I_REQ
+pack_set -prefix $(pack_get -prefix lapack)
+pack_set -installed $_I_REQ
 pack_set -lib -lcblas -lblas
 pack_set -lib[omp] -lcblas -lblas
 pack_set -lib[pt] -lcblas -lblas
 
 add_hidden_package lapack-blas/$v
-pack_set --prefix $(pack_get --prefix lapack)
-pack_set --installed $_I_REQ
+pack_set -prefix $(pack_get -prefix lapack)
+pack_set -installed $_I_REQ
 pack_set -mod-req lapack
 pack_set -lib -llapack -lblas
 pack_set -lib[omp] -llapack -lblas

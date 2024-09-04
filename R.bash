@@ -1,7 +1,7 @@
-rV=4.2
-IrV=$rV.3
+rV=4.4
+IrV=$rV.1
 add_package -alias R -package R \
-	    https://cran.r-project.org/src/base/R-${rV:0:1}/R-$IrV.tar.gz
+	    https://cran.r-project.org/src/base/R-${rV:0:1}/R-$IrV.tar.xz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

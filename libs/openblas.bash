@@ -4,7 +4,7 @@ add_package -package openblas -archive OpenBLAS-$v.tar.gz \
 
 pack_set -s $IS_MODULE -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -LD)/libopenblas.a
+pack_set -install-query $(pack_get -LD)/libopenblas_omp.a
 
 pack_set -lib -lopenblas
 pack_set -lib[omp] -lopenblas_omp
@@ -40,10 +40,10 @@ for ver in thread none openmp ; do
     case $ver in
 	thread)
 	    flag="$def_flag USE_THREAD=1"
-	    test_end="_pt"
+	    test_end="p"
 	    ;;
 	openmp)
-	    flag="$def_flag USE_THREAD=1 USE_OPENMP=1 LIBNAMESUFFIX=omp"
+	    flag="$def_flag USE_THREAD=1 USE_OPENMP=1 LIBNAMESUFFIX=_omp"
 	    test_end="_omp"
 	    ;;
     esac

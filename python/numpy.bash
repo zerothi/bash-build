@@ -4,7 +4,7 @@ add_package \
 
 pack_set -s $IS_MODULE -s $PRELOAD_MODULE -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/f2py3
+pack_set -install-query $(pack_get -prefix)/lib/python$pV/site-packages/numpy/__init__.py
 pack_set -build-mod-req cython
 pack_set -module-requirement suitesparse
 
