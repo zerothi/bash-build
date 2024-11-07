@@ -1,4 +1,4 @@
-for v in 6.8 7.2 7.3 ; do
+for v in 6.8 7.2 7.3.1 7.4 ; do
     tmp="-package q-espresso -version $v"
     case $v in
 	6.2.1)

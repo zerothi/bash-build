@@ -51,7 +51,7 @@ source_pack applications/getfem.bash
 source_pack applications/conquest.bash
 
 source_pack applications/siesta.bash
-source_pack applications/siesta-5.0.bash
+source_pack applications/siesta-5.bash
 source_pack applications/siesta-dev.bash # GitLab siesta
 source_pack applications/siesta-dev-debug.bash
 source_pack applications/fhiaims.bash
