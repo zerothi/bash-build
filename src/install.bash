@@ -1,3 +1,5 @@
+_INSTALL_BUILD_TMP=build-tmp
+
 # Install the package
 function pack_install {
     local tmp
@@ -208,11 +210,11 @@ function pack_install {
 
         # We are now in the package, check for optional build-directory
 	if $(has_setting $BUILD_DIR $idx) ; then
-	    rm -rf build-tmp
-	    mkdir -p build-tmp
+	    rm -rf $_INSTALL_BUILD_TMP
+	    mkdir -p $_INSTALL_BUILD_TMP
 	    {
 		popd
-		pushd $directory/build-tmp
+		pushd $directory/$_INSTALL_BUILD_TMP
 	    } 1> /dev/null 
 	fi
 	
@@ -332,17 +334,21 @@ function pack_install {
 	fi
 
 	# If configuration files exists, we will copy them
+    local tmpd
+    for tmpd in "." $_INSTALL_BUILD_TMP
+    do
 	for tmp in config.log CMakeFiles/CMakeOutput.log CMakeFiles/CMakeError.log CMakeCache.txt
 	do
-	    if [[ -e $tmp ]]; then
+	    if [[ -e $tmpd/$tmp ]]; then
 		if [[ -d $prefix ]]; then
 		    # copy the config.log to the prefix location
-		    mv $tmp $prefix/
+		    mv $tmpd/$tmp $prefix/
 		    pushd $prefix 2>/dev/null
-		    gzip -f -9 $(basename $tmp)
+		    gzip -f -9 $(basename $tmp) &
 		    popd 2>/dev/null
 		fi
 	    fi
+	done
 	done
 
 	popd 1> /dev/null

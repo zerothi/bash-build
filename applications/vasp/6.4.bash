@@ -62,7 +62,7 @@ s:^FFLAGS .*:FFLAGS = $FFLAGS $FFLAGS_OMP:;\
 
 # For all compilations we want to add Wannier90 + HDF5 support
 pack_cmd "sed -i '$ a\
-ELPA_ROOT = $(pack_ get -prefix elpa)\n\
+ELPA_ROOT = $(pack_get -prefix elpa)\n\
 INCS += $(list -INCDIRS wannier90[$v_w90] hdf5) \n\
 LLIBS := -lwannier -lfftw3 -lfftw3_omp -lhdf5_fortran -lhdf5 \$(LLIBS)\n\
 LLIBS := $(list -LD-rp wannier90[$v_w90] hdf5) \$(LLIBS)\n\
@@ -108,6 +108,7 @@ function compile_ispin {
 
 # Prepare the installation directory
 pack_cmd "mkdir -p $(pack_get -prefix)/bin"
+pack_store $file
 
 # Make commands
 for i in 0 1 2 ; do

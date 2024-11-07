@@ -1,19 +1,19 @@
 pack_cmd "cd vasp.5.lib"
 
-tmp=makefile.linux_npa_vasp_lib
-pack_cmd "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_lib_$v -O $tmp"
+file=makefile.linux_npa_vasp_lib
+pack_cmd "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_lib_$v -O $file"
 pack_cmd "sed -i -e 's:include \(.*\):include \1\n\
 CPP = gcc -E -P -C \$*.F >\$*.f\n\
 FC  = $FC\n\
 FFLAGS = $FCFLAGS\n\
-CC  = $CC\n:' $tmp"
+CC  = $CC\n:' $file"
 
-pack_cmd "make -f $tmp"
+pack_cmd "make -f $file"
 
 pack_cmd "cd ../vasp.5.3"
 
-tmp=makefile.linux_npa_vasp
-pack_cmd "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_$v -O $tmp"
+file=makefile.linux_npa_vasp
+pack_cmd "wget http://www.student.dtu.dk/~nicpa/packages/makefile.linux_npa_vasp_$v -O $file"
 
 # Prepare the installation directory
 pack_cmd "mkdir -p $(pack_get --prefix)/bin"
@@ -25,7 +25,7 @@ function compile_ispin {
     pack_cmd "sed -i -e 's/ISPIN_SELECT[ ]*=[ ]*[0-2]/ISPIN_SELECT=$i/' pardens.F"
     # Ensure we re-compile pardens
     pack_cmd "rm -f pardens.o"
-    pack_cmd "make -f $tmp"
+    pack_cmd "make -f $file"
     pack_cmd "cp vasp $(pack_get --prefix)/bin/${exe}_is$i"
     if [[ $i -eq 0 ]]; then
 	pack_cmd "pushd $(pack_get --prefix)/bin"
@@ -34,12 +34,14 @@ function compile_ispin {
     fi
 }
 
+pack_store $file
+
 # Make commands
 for i in 0 1 2 ; do
     compile_ispin $i vasp
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 # Prepare the next installation
 pack_cmd "sed -i -e 's:#PLACEHOLDER#.*:CPP += -DNGZhalf :' ../mymakefile"
@@ -47,7 +49,7 @@ for i in 0 1 2 ; do
     compile_ispin $i vaspNGZhalf
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 # Prepare the next installation
 pack_cmd "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
@@ -55,7 +57,7 @@ for i in 0 1 2 ; do
     compile_ispin $i vaspGNGZhalf
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 ###################### Prepare the TST code ##########################
 
@@ -73,7 +75,7 @@ pack_cmd "sed -i -e 's:<NBAS>:10000:gi' bbm.F"
 # Install module compilations...
 pack_cmd "sed -i -e 's:\(CHAIN_FORCE[^\&]*\):\1TSIF, :i' main.F"
 pack_cmd "sed -s -i -e 's:[[:space:]]*\(\#[end]*if\):\1:i' chain.F dimer.F"
-pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' $tmp"
+pack_cmd "sed -i -e 's:\(chain.o\):bfgs.o dynmat.o instanton.o lbfgs.o sd.o cg.o dimer.o bbm.o fire.o lanczos.o neb.o qm.o opt.o \1 :' $file"
 
 # Install vtst scripts
 # old link: http://theory.cm.utexas.edu/vtsttools/code/vtstscripts.tar.gz"
@@ -88,7 +90,7 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp_tst
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 # Prepare the next installation
 pack_cmd "sed -i -e 's:-DNPA_PLACEHOLDER.*:-DNGZhalf :' ../mymakefile"
@@ -96,7 +98,7 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp_tstNGZhalf
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 # Prepare the next installation
 pack_cmd "sed -i -e 's:NGZhalf:NGZhalf -DwNGZhalf:' ../mymakefile"
@@ -104,7 +106,7 @@ for i in 0 1 2 ; do
     compile_ispin $i vasp_tstGNGZhalf
 done
 
-pack_cmd "make -f $tmp clean"
+pack_cmd "make -f $file clean"
 
 unset compile_ispin
 

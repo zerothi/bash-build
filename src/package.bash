@@ -789,7 +789,7 @@ function pack_store {
     [[ $# -gt 0 ]] && o=$1 ; shift
     # move and gzip
     pack_cmd "mkdir -p $(pack_get -prefix)"
-    pack_cmd "mv $f $(pack_get -prefix)/$o"
+    pack_cmd "cp $f $(pack_get -prefix)/$o"
     pack_cmd "gzip -f $(pack_get -prefix)/$o"
 }
 
