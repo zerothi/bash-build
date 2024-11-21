@@ -38,6 +38,7 @@ opts="$opts -DWITH_NCDF=on -DWITH_MPI=on"
 opts="$opts -DSIESTA_WITH_LIBXC=on"
 opts="$opts -DWITH_LIBXC=on"
 opts="$opts -Ds-dftd3_FIND_METHOD=fetch"
+opts="$opts -DSIESTA_WITH_ELSI=OFF"
 
 if $(is_c gnu) ; then
   lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
