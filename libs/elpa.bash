@@ -1,4 +1,5 @@
-v=2022.11.001
+for v in 2024.05.001 2022.11.001
+do
 add_package -package elpa \
 	https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/$v/elpa-$v.tar.gz
 
@@ -88,3 +89,5 @@ pack_cmd "cd $(pack_get -prefix)/include"
 pack_cmd "ln -s elpa-$v/elpa elpa"
 pack_cmd "cd elpa-$v/elpa"
 pack_cmd 'for f in ../modules/*.mod ; do ln -s $f . ; done'
+
+done

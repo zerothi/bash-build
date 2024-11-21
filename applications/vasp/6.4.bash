@@ -11,7 +11,7 @@ pack_set -module-requirement mpi
 pack_set -module-requirement fftw
 v_w90=3
 pack_set -module-requirement wannier90[$v_w90]
-pack_set -module-requirement hdf5
+pack_set -module-requirement hdf5[1.14.5]
 #pack_set -module-requirement elpa
 
 pack_set -module-opt "-lua-family vasp"
