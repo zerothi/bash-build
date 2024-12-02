@@ -1,8 +1,9 @@
-for p in $(pack_get -version hdf5) ; do
+for v in $(pack_get -version hdf5) ; do
 
+pv=${v%.*}
 add_package \
     --package hdf5-serial \
-    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-$p/src/hdf5-$p.tar.bz2
+    https://support.hdfgroup.org/releases/hdf5/v${pv//\./_}/v${v//\./_}/downloads/hdf5-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

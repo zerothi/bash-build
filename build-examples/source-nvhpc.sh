@@ -1,22 +1,19 @@
-set_c pgi-13.10-0
+source $BBUILD_DIR/2023-aug/source-nvhpc-version.sh
+set_c nvhpc-$nvhpc_v
 
-AR=ar
-RANLIB=ranlib
-CC=pgcc
-CXX=pgcpp
-#CPP="gcc -E"
-#CXXCPP="g++ -E"
-#FPP="pgf77 -E -C -x none"
-F77=pgf77
-F90=pgf95
-FC=pgf95
-common_flags="-m64 -fPIC -O3 -Munroll -Mvect=prefetch -Mnofpapprox -Mnofprelaxed"
+#CPP="nvc -E "
+#CXXCPP="nvc++ -E"
+#FPP="nvfortran -cpp -E -C -x none"
+
+common_flags="-tp host -fPIC -O3 -Munroll,vect,prefetch,simd"
 CFLAGS="$common_flags"
 CXXFLAGS="$common_flags"
+#CPPFLAGS="$common_flags"
 FCFLAGS="$common_flags -Mnosecond_underscore"
-FFLAGS="$common_flags -Mnosecond_underscore"
+FFLAGS="$FCFLAGS"
 
 FLAG_OMP="-mp"
+FLAG_ACC="-acc"
 MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
@@ -28,6 +25,7 @@ MPIF90=mpifort
 LDFLAGS=
 
 export FLAG_OMP
+export FLAG_ACC
 export AR
 export RANLIB
 export CC
@@ -39,6 +37,7 @@ export F77
 export F90
 export LDFLAGS
 export CFLAGS
+export CXXFLAGS
 export FCFLAGS
 export FFLAGS
 export MPICC

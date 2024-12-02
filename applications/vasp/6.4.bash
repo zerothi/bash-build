@@ -16,7 +16,7 @@ pack_set -module-requirement hdf5[1.14.5]
 
 pack_set -module-opt "-lua-family vasp"
 
-pack_set -install-query "$(pack_get -prefix)/bin/vasp_ncl_is2"
+pack_set -install-query "$(pack_get -prefix)/bin/vasp_ncl_is2x"
 
 file=makefile.include
 
@@ -63,9 +63,9 @@ s:^FFLAGS .*:FFLAGS = $FFLAGS $FFLAGS_OMP:;\
 # For all compilations we want to add Wannier90 + HDF5 support
 pack_cmd "sed -i '$ a\
 ELPA_ROOT = $(pack_get -prefix elpa)\n\
-INCS += $(list -INCDIRS wannier90[$v_w90] hdf5) \n\
+INCS += $(list -INCDIRS wannier90[$v_w90] hdf5[1.14.5]) \n\
 LLIBS := -lwannier -lfftw3 -lfftw3_omp -lhdf5_fortran -lhdf5 \$(LLIBS)\n\
-LLIBS := $(list -LD-rp wannier90[$v_w90] hdf5) \$(LLIBS)\n\
+LLIBS := $(list -LD-rp wannier90[$v_w90] hdf5[1.14.5]) \$(LLIBS)\n\
 CPP_OPTIONS += -DVASP_HDF5 -DVASP2WANNIER90\n' $file"
 
 

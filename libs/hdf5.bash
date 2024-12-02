@@ -1,9 +1,10 @@
 # Then install HDF5
-for p in 1.14.5 1.14.0 ; do
+for v in 1.14.5 1.14.0 ; do
 
+pv=${v%.*}
 add_package \
     --package hdf5 \
-    https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${p%.*}/hdf5-$p/src/hdf5-$p.tar.bz2
+    https://support.hdfgroup.org/releases/hdf5/v${pv//\./_}/v${v//\./_}/downloads/hdf5-$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL -s $IS_MODULE
 

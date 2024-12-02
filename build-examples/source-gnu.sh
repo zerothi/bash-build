@@ -18,6 +18,7 @@ FCFLAGS="$common_flags -fno-second-underscore"
 FFLAGS="$common_flags -fno-second-underscore"
 
 FLAG_OMP="-fopenmp"
+FLAG_ACC="-fopenacc"
 MPICC=mpicc
 #MPICPP="mpicc -E"
 MPICXX=mpicxx
@@ -29,6 +30,7 @@ MPIF90=mpifort
 LDFLAGS=
 
 export FLAG_OMP
+export FLAG_ACC
 export AR
 export RANLIB
 export CC
