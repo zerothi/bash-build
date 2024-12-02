@@ -2,6 +2,8 @@
 # different libraries.
 
 # Set options
+# Hash function calls (typically enabled by default)
+# Should reduce overhead of function calls
 set -o hashall
 shopt -s globstar
 # disable win-resizing

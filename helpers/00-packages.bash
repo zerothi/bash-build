@@ -118,6 +118,8 @@ source_pack helpers/bazel.bash
 
 source_pack helpers/neovim.bash
 
+source_pack helpers/nvptx-tools.bash
+
 # Install all compilers
 source compiler/compilers.bash
 

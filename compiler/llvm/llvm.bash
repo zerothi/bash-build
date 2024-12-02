@@ -24,6 +24,7 @@ source_pack compiler/llvm/12/llvm.bash
 #source_pack compiler/llvm/14/llvm.bash
 source_pack compiler/llvm/15/llvm.bash
 source_pack compiler/llvm/16/llvm.bash
-source_pack compiler/llvm/18/llvm.bash
+#source_pack compiler/llvm/18/llvm.bash
+source_pack compiler/llvm/19/llvm.bash
 
 ulimit -n $old_ulimit_n

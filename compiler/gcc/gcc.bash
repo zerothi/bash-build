@@ -26,7 +26,8 @@ install_gcc 4.9.4
 #install_gcc 7.5.0
 #install_gcc 8.5.0
 install_gcc 10.5.0
-install_gcc 13.2.0
+install_gcc 14.2.0
+install_gcc 13.3.0
 install_gcc 12.3.0
 
 # restore ansidecl.h

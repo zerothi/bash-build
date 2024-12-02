@@ -1,5 +1,4 @@
-
-for v in 1.80.1
+for v in 1.83.0
 do
   add_package -build generic -no-default-modules -alias rust -package rust \
     https://static.rust-lang.org/dist/rust-$v-$(uname -m)-unknown-linux-gnu.tar.xz
