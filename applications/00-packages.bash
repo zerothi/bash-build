@@ -80,6 +80,7 @@ create_module \
     $(list --prefix '-RL ' $tmp)
 
 # DFT codes
+source_pack applications/yambo.bash
 source_pack applications/gromacs.bash
 source_pack applications/dftb.bash
 source_pack applications/dftb_slako.bash
