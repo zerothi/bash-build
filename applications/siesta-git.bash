@@ -15,13 +15,13 @@ if $(is_c intel) ; then
   siesta_la=mkl
 
 elif $(is_c gnu) ; then
-    
+
   pack_set -module-requirement scalapack
   siesta_la=$(pack_choice -i linalg)
   la=lapack-$siesta_la
   pack_set -module-requirement $la
   opts="$opts -DSCALAPACK_LIBRARY='$(pack_get -lib scalapack)'"
-  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib $la)'"
+  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
 
 fi
 
@@ -40,15 +40,12 @@ opts="$opts -DWITH_LIBXC=on"
 opts="$opts -Ds-dftd3_FIND_METHOD=fetch"
 opts="$opts -DSIESTA_WITH_ELSI=OFF"
 
-if $(is_c gnu) ; then
-  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
-fi
-    
+
 pack_cmd "cmake -Bbuild-tmp-omp -S. $opts -DWITH_OPENMP=true -DWITH_OpenMP=true -DSIESTA_WITH_OPENMP=true -DSIESTA_EXECUTABLE_SUFFIX=_omp $lapack_opts"
 pack_cmd "cmake --build build-tmp-omp $(get_make_parallel) --target install"
 
 if $(is_c gnu) ; then
-  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
+  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib $la)'"
 fi
 
 pack_cmd "cmake -Bbuild-tmp -S. $opts -DWITH_OpenMP=off $lapack_opts"
