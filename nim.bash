@@ -1,5 +1,5 @@
-nV=2.0
-InV=$nV.8
+nV=2.2
+InV=$nV.0
 add_package -package nim \
 	    https://nim-lang.org/download/nim-$InV.tar.xz
 
