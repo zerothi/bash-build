@@ -5,7 +5,7 @@ add_package -package q-espresso -version $v \
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -prefix)/bin/pw.x
+pack_set -install-query $(pack_get -prefix)/lib/libqe_epw.a
 
 pack_set -module-opt "-lua-family q-espresso"
 
