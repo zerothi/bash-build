@@ -77,6 +77,7 @@ source_pack libs/parpack.bash
 
 source_pack libs/qhull.bash
 
+source_pack libs/mbd.bash
 source_pack libs/elpa.bash
 source_pack libs/elpa-debug.bash
 source_pack libs/eigenexa.bash

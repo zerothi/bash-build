@@ -9,7 +9,7 @@ pack_set -install-query $(pack_get -prefix)/lib/libqe_epw.a
 
 pack_set -module-opt "-lua-family q-espresso"
 
-pack_set $(list -prefix '-mod-req ' mpi hdf5 fftw libxc wannier90 elpa)
+pack_set $(list -prefix '-mod-req ' mpi hdf5 fftw libxc wannier90 elpa libmbd)
 
 if [ -z "$FLAG_OMP" ]; then
   doerr q-espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
@@ -34,6 +34,8 @@ opts="$opts -DQE_ENABLE_MPI_INPLACE=on"
 opts="$opts -DQE_ENABLE_OPENMP=on"
 opts="$opts -DQE_ENABLE_SCALAPACK=on"
 opts="$opts -DQE_ENABLE_ELPA=on"
+opts="$opts -DQE_MBD_INTERNAL=OFF"
+opts="$opts -DMBD_ROOT=$(pack_get -prefix libmbd)"
 opts="$opts -DELPA_Fortran_MODS_DIR=$(pack_get -I elpa)/elpa"
 opts="$opts -DQE_ENABLE_LIBXC=on"
 opts="$opts -DLIBXC_ROOT=$(pack_get -prefix libxc)"
