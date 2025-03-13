@@ -1,3 +1,4 @@
+return 0
 add_package --package npb \
     https://www.nas.nasa.gov/assets/npb/NPB3.4.3.tar.gz
 
@@ -7,9 +8,7 @@ pack_set -install-query $(pack_get -prefix)/bin/lu.x
 pack_set -module-requirement mpi
 pack_set -module-opt "-set-ENV NPB_HOME=$(pack_get -prefix)"
 
-pack_cmd "../configure --prefix=$(pack_get -prefix) CC=$MPICC CXX=$MPICXX FC=$MPIFC"
-pack_cmd "make"
-pack_cmd "make install"
+# not done
 
 
 
