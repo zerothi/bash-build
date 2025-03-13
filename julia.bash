@@ -1,5 +1,5 @@
-jV=1.9
-IjV=$jV.3
+jV=1.11
+IjV=$jV.2
 add_package -package julia \
 	    -directory julia-$IjV \
 	    https://github.com/JuliaLang/julia/releases/download/v$IjV/julia-$IjV-full.tar.gz
@@ -36,29 +36,6 @@ LIBLAPACKNAME = libmkl_rt\n\
 ' Make.user"
 
 else
-
-    la=$(pack_choice -i linalg)
-    case $la in
-	openblas)
-	    noop
-	    ;;
-	*)
-	    # always prefer openblas (for now)
-	    la=openblas
-	    ;;
-    esac
-    pack_set -module-requirement lapack-$la
-
-    pack_cmd "sed -i '1 a\
-USEGCC = 1\n\
-USE_SYSTEM_BLAS = 1\n\
-LIBBLAS = $(list -LD-rp-lib[omp] +lapack-$la)\n\
-LIBBLASNAME = lib${la}_omp\n\
-USE_SYSTEM_LAPACK = 1\n\
-LIBLAPACK = $(list -LD-rp-lib[omp] +lapack-$la)\n\
-LIBLAPACKNAME = \$(LIBBLASNAME)\n\
-LDFLAGS += $(list -LD-rp lapack-$la)\n\
-' Make.user"
 
     pack_cmd "make -C deps distclean-openblas"
 fi

@@ -72,6 +72,7 @@ source_pack python/numba.bash
 source_pack python/pythran.bash
 source_pack python/scipy.bash
 source_pack python/mpi4py.bash
+source_pack python/mpi4py-debug.bash
 source_pack python/imageio.bash
 source_pack python/cftime.bash
 source_pack python/netcdf4.bash

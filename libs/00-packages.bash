@@ -27,6 +27,7 @@ source_pack libs/mvapich.bash
 pack_set -alias mpi $_mpi_version
 
 source_pack libs/osu-benchmarks.bash
+source_pack libs/nasa-benchmarks.bash
 source_pack libs/mpi-benchmarks.bash
 
 source_pack libs/flint.bash

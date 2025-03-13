@@ -11,8 +11,12 @@ pack_set -module-requirement mpi \
     -module-requirement hdf5 \
     -module-requirement libctl \
     -module-requirement fftw-mpi \
-    -module-requirement mpb
-pack_set -module-requirement numpy
+    -module-requirement mpb \
+    -module-requirement harminv
+pack_set -module-requirement numpy \
+    -module-requirement matplotlib \
+    -module-requirement mpi4py \
+    -module-requirement scipy
 
 # Check for Intel MKL or not
 tmp=
@@ -32,7 +36,6 @@ else
     doerr "$(pack_get -package)" "Could not recognize the compiler: $(get_c)"
 
 fi
-pack_set -module-requirement harminv
 
 tmp="$tmp --with-libctl=$(pack_get -prefix libctl)/share/libctl"
 
