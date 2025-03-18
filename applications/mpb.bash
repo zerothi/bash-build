@@ -33,15 +33,24 @@ else
 fi
 tmp="$tmp --with-libctl=$(pack_get -prefix libctl)"
 
-for flag in "" "--with-inv-symmetry" "--with-mpi" "--with-mpi --with-inv-symmetry"
-do
-    # Install the parallel version
-    pack_cmd "../configure" \
-	     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io CC='$MPICC' CXX='$MPICXX'" \
-       "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $(pack_get -lib fftw-mpi)'" \
-	     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
-	     "--prefix=$(pack_get -prefix) $tmp $flag"
-    pack_cmd "make $(get_make_parallel)"
-    pack_cmd "make install"
-    pack_cmd "make distclean"
-done
+function run_install {
+  local flags="$@"
+  shift $#
+  pack_cmd "../configure" \
+     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io" \
+     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $(pack_get -lib fftw-mpi)'" \
+     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
+     "--prefix=$(pack_get -prefix) $tmp $flags"
+  pack_cmd "make $(get_make_parallel)"
+  pack_cmd "make install"
+  pack_cmd "make distclean"
+}
+
+run_install --with-mpi CC="$MPICC" MPICC="$MPICC" CXX="$MPICXX"
+run_install --with-mpi --with-inv-symmetry CC="$MPICC" CXX="$MPICXX"
+pack_cmd "unset MPICC"
+pack_cmd "unset MPICXX"
+run_install --without-mpi CC="$CC" CXX="$CXX"
+run_install --without-mpi --with-inv-symmetry CC="$CC" CXX="$CXX"
+
+unset run_install

@@ -7,7 +7,7 @@ pack_set -s $IS_MODULE
 pack_set -module-requirement mpi
 pack_set -module-requirement numpy
 
-pack_set -install-query $(pack_get -LD)/python$pV/site-packages/$(pack_get -alias)/__init__.py
+pack_set -install-query $(pack_get -LD)/python$pV/site-packages/mpi4py/__init__.py
 
 pack_cmd "$_pip_cmd . --prefix=$(pack_get -prefix)"
 
