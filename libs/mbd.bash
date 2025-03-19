@@ -5,7 +5,7 @@ pack_set -lib -lmbd
 
 pack_set -s $IS_MODULE -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set -install-query $(pack_get -LD)/libmbd.a
+pack_set -install-query $(pack_get -LD)/libmbd.so
 
 pack_set $(list -prefix '-mod-req ' mpi)
 

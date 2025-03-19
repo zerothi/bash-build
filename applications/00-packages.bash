@@ -61,6 +61,7 @@ source_pack applications/octave.bash
 
 # Specfial photonics applications
 source_pack applications/mpb.bash # [gmp,libunistring,guile]
+source_pack applications/mpb-dev.bash # [gmp,libunistring,guile]
 source_pack applications/meep.bash # [gmp,libunistring,guile]
 
 # Create a module with default all plotting tools

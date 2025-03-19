@@ -1,0 +1,59 @@
+add_package -package mpb-dev --version 1.11.2-dev \
+  https://github.com/NanoComp/mpb.git
+
+pack_set -s $MAKE_PARALLEL
+
+pack_set -install-query $(pack_get -prefix)/bin/mpbi
+
+pack_set -module-opt "--lua-family mpb"
+
+pack_set -build-mod-req build-tools
+pack_set -module-requirement mpi \
+	 -module-requirement libctl \
+	 -module-requirement zlib \
+	 -module-requirement hdf5 \
+	 -module-requirement fftw-mpi
+
+pack_cmd "autoreconf -i -f -s ; autoreconf -i -f -s ; autoreconf -i -f -s"
+
+# Check for Intel MKL or not
+tmp=
+if $(is_c intel) ; then
+    tmp="--with-blas='$MKL_LIB -qmkl=sequential -lmkl_blas95_lp64'"
+    tmp="$tmp --with-lapack='$MKL_LIB -qmkl=sequential -lmkl_lapack95_lp64'"
+
+elif $(is_c gnu) ; then
+
+    la=lapack-$(pack_choice -i linalg)
+    pack_set --module-requirement $la
+    tmp_ld="$(list -LD-rp +$la)"
+    tmp="$tmp --with-lapack='$tmp_ld $(pack_get -lib $la)'"
+    tmp="$tmp --with-blas='$tmp_ld $(pack_get -lib $la)'"
+
+else
+    doerr "$(pack_get -package)" "Could not recognize the compiler: $(get_c)"
+
+fi
+tmp="$tmp --with-libctl=$(pack_get -prefix libctl)"
+
+function run_install {
+  local flags="$@"
+  shift $#
+  pack_cmd "./configure --enable-maintainer-mode" \
+     "GEN_CTL_IO=$(pack_get -prefix libctl)/bin/gen-ctl-io" \
+     "LDFLAGS='$(list -LD-rp $(pack_get -mod-req-path)) $(pack_get -lib fftw-mpi)'" \
+     "CPPFLAGS='$(list -INCDIRS $(pack_get -mod-req-path))'" \
+     "--prefix=$(pack_get -prefix) $tmp $flags"
+  pack_cmd "make $(get_make_parallel)"
+  pack_cmd "make install"
+  pack_cmd "make distclean"
+}
+
+run_install --with-mpi CC="$MPICC" MPICC="$MPICC" CXX="$MPICXX"
+run_install --with-mpi --with-inv-symmetry CC="$MPICC" CXX="$MPICXX"
+pack_cmd "unset MPICC"
+pack_cmd "unset MPICXX"
+run_install --without-mpi CC="$CC" CXX="$CXX"
+run_install --without-mpi --with-inv-symmetry CC="$CC" CXX="$CXX"
+
+unset run_install
