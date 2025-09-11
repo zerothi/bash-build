@@ -107,6 +107,7 @@ source_pack helpers/graphviz.bash
 source_pack helpers/sqlite.bash
 
 source helpers/java/java.bash
+source helpers/go/all.bash
 
 source_pack helpers/gprofng-gui.bash
 
