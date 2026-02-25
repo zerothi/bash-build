@@ -1,4 +1,4 @@
-for v in 7.2 7.3.1 7.4 ; do
+for v in 7.2 7.3.1 7.4.1 7.5 ; do
 
 add_package -package q-espresso -version $v \
   https://gitlab.com/QEF/q-e/-/archive/qe-$v/q-e-qe-$v.tar.bz2
