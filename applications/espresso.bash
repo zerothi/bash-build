@@ -15,6 +15,9 @@ if [ -z "$FLAG_OMP" ]; then
   doerr q-espresso "Can not find the OpenMP flag (set FLAG_OMP in source)"
 fi
 
+# Fix the gcc-12 bug that limits the tree-vectorizer-loop
+pack_cmd "echo 'target_compile_options(qe_devxlib PRIVATE -fno-tree-vectorize)' >> ../external/devxlib.cmake"
+
 # Create the CMAKE flags
 opts=
 
@@ -22,6 +25,7 @@ opts=
 opts="$opts --log-level=debug"
 opts="$opts -DCMAKE_INSTALL_PREFIX=$(pack_get -prefix)"
 opts="$opts -DCMAKE_BUILD_TYPE=Release"
+opts="$opts -DCMAKE_VERBOSE_MAKEFILE=on"
 opts="$opts -DCMAKE_C_COMPILER='$MPICC'"
 opts="$opts -DCMAKE_C_FLAGS='$CFLAGS'"
 opts="$opts -DCMAKE_Fortran_COMPILER='$MPIFC'"
@@ -43,17 +47,17 @@ opts="$opts -DQE_ENABLE_HDF5=on"
 opts="$opts -DHDF5_ROOT=$(pack_get -prefix hdf5)"
 opts="$opts -DQE_ENABLE_FOX=on"
 
-opts="$opts -DQE_FFTW3_VENDOR=FFTW3"
+opts="$opts -DQE_FFTW_VENDOR=FFTW3"
 opts="$opts -DFFTW3_ROOT=$(pack_get -prefix fftw)"
 
-opts="$opts -DQE_ENABLE_WANNIER90=on"
+#opts="$opts -DQE_ENABLE_WANNIER90=on"
 opts="$opts -DWANNIER90_ROOT=$(pack_get -prefix wannier90)"
 
 lapack_opts=
 if $(is_c intel) ; then
   qe_la=mkl
   opts="$opts -DSCALAPACK_LIBRARY=-mkl=cluster"
-  lapack_opts="-DLAPACK_LIBRARY=-mkl=cluster"
+  lapack_opts="-DLAPACK_LIBRARIES=-mkl=cluster"
 
 elif $(is_c gnu) ; then
   pack_set -module-requirement scalapack
@@ -61,7 +65,8 @@ elif $(is_c gnu) ; then
   la=lapack-$qe_la
   pack_set -module-requirement $la
   opts="$opts -DSCALAPACK_LIBRARY='$(pack_get -lib scalapack)'"
-  lapack_opts="-DLAPACK_LIBRARY='$(pack_get -lib[omp] $la)'"
+  lapack_opts="-DBLAS_LIBRARIES='$(pack_get -lib[omp] $qe_la)'"
+  lapack_opts="$lapack_opts -DLAPACK_LIBRARIES='$(pack_get -lib[omp] $la)'"
 fi
 
 pack_cmd "cmake -B. -S.. $opts $lapack_opts"
