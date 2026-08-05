@@ -1,6 +1,8 @@
 add_package https://apps.fz-juelich.de/scalasca/releases/cube/4.9/dist/cubew-4.9.1.tar.gz
 
-pack_set -install-query $(pack_get -prefix)/bin/cubew
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
+
+pack_set -install-query $(pack_get -prefix)/bin/cubew-config
 
 pack_set -module-requirement build-tools
 

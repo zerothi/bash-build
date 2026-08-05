@@ -1,9 +1,11 @@
-add_package https://www.vi-hps.org/upload/packages/opari2/opari2-2.0.4.tar.gz
+add_package https://perftools.pages.jsc.fz-juelich.de/cicd/opari2/tags/opari2-2.0.10/opari2-2.0.10.tar.gz
 
-pack_set --install-query $(pack_get --prefix)/bin/opari2
+pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
-pack_set --module-requirement build-tools
+pack_set -install-query $(pack_get -prefix)/bin/opari2
 
-pack_cmd "./configure --prefix=$(pack_get --prefix)"
+pack_set -module-requirement build-tools
+
+pack_cmd "./configure --prefix=$(pack_get -prefix)"
 pack_cmd "make $(get_make_parallel)"
 pack_cmd "make install"

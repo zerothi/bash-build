@@ -4,6 +4,15 @@ msg_install --message "Installing the applications..."
 build_set --default-setting $IS_MODULE
 build_set --default-setting $CRT_DEF_MODULE
 
+# analysis tools
+source_pack applications/otf2.bash
+source_pack applications/opari2.bash
+source_pack applications/cubelib.bash
+source_pack applications/cubew.bash
+source_pack applications/papi.bash
+source_pack applications/bsc-perf-tools.bash
+source_pack applications/scorep.bash
+
 source_pack applications/openmolcas.bash
 
 # Valgrind is *important*
@@ -109,6 +118,8 @@ source_pack applications/atk.bash
 # analysis tools
 source_pack applications/otf2.bash
 source_pack applications/opari2.bash
+source_pack applications/cubelib.bash
+source_pack applications/cubew.bash
 source_pack applications/papi.bash
 source_pack applications/bsc-perf-tools.bash
 source_pack applications/scorep.bash
