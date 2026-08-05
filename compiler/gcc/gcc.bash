@@ -21,7 +21,7 @@ function install_gcc {
 }
 
 # GCC 5-8 uses linux/cyclades.h
-# However, this got removed in 9 
+# However, this got removed in 9
 install_gcc 4.9.4
 #install_gcc 7.5.0
 #install_gcc 8.5.0
@@ -29,7 +29,8 @@ install_gcc 10.5.0
 install_gcc 16.1.0
 install_gcc 15.3.0
 install_gcc 14.4.0
-install_gcc 13.3.0
+install_gcc 13.4.0
+# 12.5 is out
 install_gcc 12.3.0
 
 # restore ansidecl.h
