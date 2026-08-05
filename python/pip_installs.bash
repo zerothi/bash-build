@@ -186,7 +186,6 @@ if ! $(is_host atto) ; then
     if [[ $(vrs_cmp $pV 3) -ge 0 ]]; then
        pip_append jupyterhub
     fi
-    pip_append spyder
 fi
 
 pip_install
