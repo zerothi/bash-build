@@ -64,6 +64,9 @@ if [[ "$(get_c -n)" == *"debug"* ]]; then
     tmp_flags="$tmp_flags --enable-debug"
 fi
 
+if [[ $(vrs_cmp $(pack_get -version) 5) -lt 0 ]]; then
+  tmp_flags="$tmp_flags --enable-mpi-cxx"
+fi
 if [[ $(vrs_cmp $(pack_get -version) 4) -ge 0 ]]; then
     tmp_flags="$tmp_flags --enable-mpi1-compatibility"
     if [[ $(pack_installed ucx) ]]; then
@@ -96,8 +99,7 @@ pack_cmd "../configure $tmp_flags" \
 	 "--enable-mpirun-prefix-by-default" \
 	 "--with-hwloc=$(pack_get -prefix $(pack_get -mod-req[hwloc]))" \
 	 "--with-zlib=$(pack_get -prefix zlib)" \
-	 "--enable-mpi-thread-multiple" \
-	 "--enable-mpi-cxx"
+	 "--enable-mpi-thread-multiple"
 
 # Fix for the GNU-compiler (it just removes erroneous library linkers)
 pack_cmd "sed -i -e '/postdeps/{s:-l ::gi}' libtool"
