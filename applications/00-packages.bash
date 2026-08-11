@@ -7,8 +7,6 @@ build_set --default-setting $CRT_DEF_MODULE
 # analysis tools
 source_pack applications/otf2.bash
 source_pack applications/opari2.bash
-source_pack applications/cubelib.bash
-source_pack applications/cubew.bash
 source_pack applications/papi.bash
 source_pack applications/bsc-perf-tools.bash
 source_pack applications/scorep.bash

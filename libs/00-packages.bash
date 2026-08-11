@@ -135,6 +135,9 @@ source_pack libs/metis.bash
 source_pack libs/parmetis.bash
 source_pack libs/scotch.bash
 
+source_pack libs/cubelib.bash
+source_pack libs/cubew.bash
+
 source_pack libs/seacas.bash
 
 source_pack libs/geos.bash
