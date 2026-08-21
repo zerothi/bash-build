@@ -1,4 +1,4 @@
-for v in 5.2 6.1.2 6.2 ; do
+for v in 5.2 6.1.2 6.2 6.4 ; do
 add_package http://www.student.dtu.dk/~nicpa/packages/gulp-$v.tgz
 
 pack_set --module-opt "--lua-family gulp"
