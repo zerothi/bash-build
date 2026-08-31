@@ -1,4 +1,4 @@
-v=5.2.4
+v=5.3.0
 add_package --version $v \
 	-archive yambo-$v.tar.gz \
 	https://github.com/yambo-code/yambo/archive/refs/tags/$v.tar.gz
@@ -61,7 +61,10 @@ pack_cmd "BLAS_LIBS='$tmp $tmp_blas' CPP='$CC -E -P' FPP='$FC -cpp -E -P'" ./con
     --with-libxc-path=$(pack_get -prefix libxc) \
     "--with-libxc-libs='$(list -LD-rp libxc) $(pack_get -lib[f03] libxc)'" \
     --with-fft-path=$(pack_get -prefix fftw) \
+    --disable-netcdf-par-io \
     --enable-3d-fft
+# netcd-par-io not compatible with hdf5-par-io
+#--enable-yaml-output # requires futile
 
 # Correct setup file
 pack_cmd "sed -i -e 's:lnetcdf[ ]*=:lnetcdf = $(list -LD-rp netcdf):' config/setup"
@@ -69,9 +72,12 @@ pack_cmd "sed -i -e 's:lnetcdff[ ]*=:lnetcdff = $(list -LD-rp netcdf):' config/s
 pack_cmd "sed -i -e 's:lhdf5[ ]*=:lhdf5 = $(list -LD-rp hdf5):' config/setup"
 
 # Remove a2y+c2y from ALL
+# he problem could be resolved if the linker line comes out correct, -l_Y_Yio should be a
+# final line.
 pack_cmd "sed -i -e 's: a2y : :' config/mk/global/targets.mk"
 pack_cmd "sed -i -e 's: c2y : :' config/mk/global/targets.mk"
 pack_cmd "make $(get_make_parallel) all"
 
 # check that version works (basically check that it links correctly)
 pack_cmd "$(pack_get -prefix)/bin/yambo --version"
+pack_cmd "cp config.log config/report config/setup $(pack_get -prefix)/"
