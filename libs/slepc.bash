@@ -6,9 +6,9 @@ add_package -package slepc-$d_type \
 pack_set -s $IS_MODULE
 
 pack_set -install-query $(pack_get -LD)/libslepc.so
+pack_set -lib -lslepc
 
-pack_set -module-requirement petsc-$d_type \
-	 -module-requirement parpack
+pack_set $(list -prefix '-mod-req ' petsc-$d_type parpack)
 
 tmp_ld="$(list -LD-rp $(pack_get -mod-req))"
 tmp_lib=

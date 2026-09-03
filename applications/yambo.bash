@@ -1,13 +1,13 @@
 v=5.3.0
 add_package --version $v \
-	-archive yambo-$v.tar.gz \
-	https://github.com/yambo-code/yambo/archive/refs/tags/$v.tar.gz
+  -archive yambo-$v.tar.gz \
+  https://github.com/yambo-code/yambo/archive/refs/tags/$v.tar.gz
 
-pack_set -s $MAKE_PARALLEL
+pack_set -s $MAKE_PARALLEL -s $BUILD_DIR
 
 pack_set -install-query $(pack_get -prefix)/bin/yambo
 
-pack_set $(list -prefix '-mod-req ' mpi hdf5 netcdf libxc fftw)
+pack_set $(list -prefix '-mod-req ' mpi hdf5 netcdf libxc fftw slepc-d)
 
 # Add the lua family
 pack_set --module-opt "--lua-family yambo"
@@ -40,7 +40,7 @@ else
 
 fi
 
-pack_cmd "BLAS_LIBS='$tmp $tmp_blas' CPP='$CC -E -P' FPP='$FC -cpp -E -P'" ./configure \
+pack_cmd "BLAS_LIBS='$tmp $tmp_blas' CPP='$CC -E -P' FPP='$FC -cpp -E -P'" ../configure \
     --prefix=$(pack_get -prefix) \
     "--with-blas-libs='$tmp_blas'" \
     "--with-lapack-libs='$tmp_lapack'" \
@@ -61,6 +61,17 @@ pack_cmd "BLAS_LIBS='$tmp $tmp_blas' CPP='$CC -E -P' FPP='$FC -cpp -E -P'" ./con
     --with-libxc-path=$(pack_get -prefix libxc) \
     "--with-libxc-libs='$(list -LD-rp libxc) $(pack_get -lib[f03] libxc)'" \
     --with-fft-path=$(pack_get -prefix fftw) \
+    "--with-fft-libs='$(list -LD-rp fftw) $(pack_get -lib[omp] fftw)'" \
+    --with-petsc-path=$(pack_get -prefix petsc-d) \
+    "--with-petsc-libs='$(list -LD-rp petsc-d) $(pack_get -libs petsc-d)'" \
+    --with-petsc-libdir=$(pack_get -LD petsc-d) \
+    --with-petsc-includedir=$(pack_get -I petsc-d) \
+    --with-slepc-path=$(pack_get -prefix slepc-d) \
+    "--with-slepc-libs='$(list -LD-rp slepc-d) $(pack_get -libs slepc-d)'" \
+    --with-slepc-libdir=$(pack_get -LD slepc-d) \
+    --with-slepc-includedir=$(pack_get -I slepc-d) \
+    --enable-slepc-linalg \
+    "--with-netcdf-libs='$(list -LD-rp netcdf) $(pack_get -lib netcdf)'" \
     --disable-netcdf-par-io \
     --enable-3d-fft
 # netcd-par-io not compatible with hdf5-par-io
