@@ -2,7 +2,8 @@
 # The current format only conforms to 9.X
 for v in 9.10.3 10.8.3
 do
-add_package https://www.abinit.org/sites/default/files/packages/abinit-$v.tar.gz
+add_package --archive abinit-$v.tar.gz \
+     https://github.com/abinit/abinit/archive/refs/tags/$v.tar.gz
 
 pack_set -s $BUILD_DIR -s $MAKE_PARALLEL
 
