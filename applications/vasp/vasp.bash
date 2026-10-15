@@ -6,4 +6,5 @@ source_pack applications/vasp/5.3-intel.bash
 source_pack applications/vasp/5.4.bash
 source_pack applications/vasp/6.4.bash
 source_pack applications/vasp/6.5.bash
+source_pack applications/vasp/6.6.bash
 
