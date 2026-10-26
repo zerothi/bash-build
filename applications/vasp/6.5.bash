@@ -16,7 +16,7 @@ pack_set -module-requirement hdf5[1.14.5]
 
 pack_set -module-opt "-lua-family vasp"
 
-pack_set -install-query "$(pack_get -prefix)/bin/vasp_ncl_is2x"
+pack_set -install-query "$(pack_get -prefix)/bin/vasp_ncl_is2"
 
 file=makefile.include
 
