@@ -1,4 +1,4 @@
-for v in 22.23.2 24.21.0 26.8.2
+for v in 22.23.4 24.22.1 26.12.1
 do
   add_package -package nodejs -version $v -build generic \
          https://nodejs.org/dist/v$v/node-v$v-linux-x64.tar.xz
